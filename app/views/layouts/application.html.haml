@@ -1,0 +1,61 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "UTF-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "A website for the northeast Citroen enthusiasts gathering", :name => "description"}/
+    %meta{:content => "Citroen Rendezvous, LLC", :name => "author"}/
+    %title Citroen Rendezvous
+    = stylesheet_link_tag 'application', :media  => 'all'
+    %link{:href => "http://fonts.googleapis.com/css?family=Open+Sans:600italic,400,800,700,300", :rel => "stylesheet", :type => "text/css"}/
+
+    = javascript_include_tag 'application'
+    = csrf_meta_tags
+    = yield :header_tags
+    
+    /
+      [if lt IE 9]
+      = javascript_include_tag "html5shiv"
+      = javascript_include_tag "respond"
+  %body
+    %header.top-header
+      .container
+        .row.header-row
+          .col-md-12
+            %nav.navbar.navbar-default
+              %a{:href => "index.html"}
+                %span{:class => 'site-name'} CITROEN RENDEZVOUS
+              .container-fluid
+                / Brand and toggle get grouped for better mobile display
+                .navbar-header
+                  %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+                    %span.sr-only Toggle navigation
+                    %span.icon-bar
+                    %span.icon-bar
+                    %span.icon-bar
+                / Collect the nav links, forms, and other content for toggling
+                #bs-example-navbar-collapse-1.collapse.navbar-collapse
+                  %ul.nav.navbar-nav.navbar-right
+                    %li
+                      %a{:href => "#sec1"} Home
+                    %li
+                      %a{:href => "#sec2"} Schedule
+                    %li
+                      %a{:href => "#sec3"} About
+                    %li
+                      %a{:href => "#sec4"} Photos
+                    %li
+                      %a{:href => "#sec5"} contact me
+                / /.navbar-collapse
+              / /.container-fluid
+    = yield
+
+    / footer starts here
+    %footer.footer.text-center
+      %p 
+        © Citroen Rendezvous LLC | Terms of use | Legal disclaimer
+        %br Original theme by mostafizur, adapted by wordsareimages
+    #modal
+      .modal-wrapper
+      
