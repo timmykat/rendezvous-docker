@@ -3,6 +3,7 @@ class MainPagesController < ApplicationController
 
   # GET /
   def index
+    @pictures = Picture.front_page_set
   end
 
   private

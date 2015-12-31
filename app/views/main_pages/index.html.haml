@@ -9,7 +9,9 @@
         %br Citroen owners, enthusiasts and friends
       = image_tag "chevrons.png"
       %br/
-      %button.register Register
+      %button#register Register
+      - if !user_signed_in?
+        %button#login User Login
 / end of banner section
 / about section
 %section#sec2.about.text-center
@@ -94,89 +96,26 @@
       = image_tag "chevrons.png"
       %p
         The best things about the Rendezvous are the cars and the people!
-        %br/
-        %br/
-        ut labore et dolore magna aliqua.
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio.jpg"}
-        %i.fa.fa-search
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio2.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio2.jpg"}
-        %i.fa.fa-search
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio3.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio3.jpg"}
-        %i.fa.fa-search
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio4.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio4.jpg"}
-        %i.fa.fa-search
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio5.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio5.jpg"}
-        %i.fa.fa-search
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio6.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio6.jpg"}
-        %i.fa.fa-search
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio7.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio7.jpg"}
-        %i.fa.fa-search
-    .col-md-3.single-portfolio.col-sm-6
-      %figure.portfolio-item
-        = image_tag "portfolio8.jpg", :class => 'img-responsive'
-        %figcaption.portfolio-details
-          %h4 Title goes here
-          %p
-            onsectetur adipisicing elit, sedo eiusmod tempor incidi
-            et dolorerserss eerhfre mag.
-      %a{:href => "portfolio8.jpg"}
-        %i.fa.fa-search
+    - if @pictures.count == 8 
+      - @pictures.each do |pic|
+        .col-md-3.single-portfolio.col-sm-6
+          %figure.portfolio-item
+            = image_tag pic.image.portfolio.url, :class => 'img-responsive'
+            %figcaption.portfolio-details
+              %h4= pic.caption
+              %p= pic.credit
+          %a{:href => pic.image.url}
+            %i.fa.fa-search
+    - else
+      - (1..8).each do |n|
+        .col-md-3.single-portfolio.col-sm-6
+          %figure.portfolio-item
+            = image_tag "portfolio#{n}.jpg", :class => 'img-responsive'
+            %figcaption.portfolio-details
+              %h4 Photo #{n}
+              %p Placeholder photo
+          %a{:href => "portfolio#{n}.jpg"}
+            %i.fa.fa-search
 / end of portfolio section
 %section#sec5.contact.text-center
   .container
@@ -185,7 +124,8 @@
         %h2 CONTACT US
         = image_tag "chevrons.png"
         %p
-          Please register using the online registration form. 
+          Please register using the 
+          %a{ :href => '/registration', :title => 'Go to registration form' } online registration form. 
           %br/
           If you have any questions that haven't been answered here, please let us know!
 / end of contact section

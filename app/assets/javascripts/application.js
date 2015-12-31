@@ -17,3 +17,6 @@
 //= require html5shiv
 //= require respond.min
 //= require smoothscroll
+//= require cocoon
+//= require dropzone
+//= require_tree .
