@@ -1,0 +1,30 @@
+.logged-in-spacer
+.container
+  %h2 Your photos
+  .row.upload-area
+    .col-md-12
+      %form{ :action => '/pictures/upload', :class => 'dropzone', :id => 'dropzone-upload' }
+        = hidden_field_tag :authenticity_token, form_authenticity_token
+  .row
+    .col-md-12
+      %table.pictures
+        %thead
+          %tr
+            %th Thumbnail
+            %th Caption/title
+            %th Credit
+            %th
+        %tbody
+          - @pictures.each do |pic|
+            %tr
+              = form_for pic do |f|
+                %td.thumbnail 
+                  = image_tag pic.image.thumb.url
+                %td.caption
+                  = f.text_field :caption, :value => pic.caption, :size => "80", :class => 'form-control'
+                %td.credit
+                  = f.text_field :credit, :value => pic.credit, :class => 'form-control'
+                %td.actions
+                  = f.submit "Update", :class => 'btn btn-info'
+                  %button.btn.btn-danger.delete{ :id => "delete_#{pic.id}" } Delete 
+  

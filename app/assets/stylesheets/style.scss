@@ -20,6 +20,17 @@ $hover-color:  #94171B;     /*  darker red */
   #1B77AE;  light medium blue
   #E6E351:  acid green
 */
+$facebook-blue: #4C66A4;
+$twitter-blue: #55ACEF;
+
+a.btn-facebook, a:visited.btn.facebook {
+  background-color: $facebook-blue;
+  color: white;
+}
+a.btn-twitter, a:visited.btn-twitter {
+  background-color: $twitter-blue;
+  color: white;
+}
 
 .site-name {
   font-size: 24px;
@@ -47,6 +58,21 @@ a:hover, a:visited, a{
 .header-row{
 	margin: 0;
 	padding: 0;
+}
+.logged-in {
+  background-color: #454545;
+  color: #ccc;
+  padding: 5px 30px 5px 0;
+  text-align: right;
+  position: fixed;
+  z-index: 500;
+  width: 100%;
+  p {
+    margin: 0;
+  }
+  a, a:visited {
+    color: #ccc;
+  }
 }
 .top-header img.logo{
 	float: left;
@@ -97,6 +123,14 @@ ul.nav{
   border-color: #fff;
   margin-top: 4px;
 }
+/* spacer to allow for header */
+.spacer {
+  height: 110px;
+}
+.logged-in-spacer {
+  height: 150px;
+}
+
 /*banner area*/
 .banner{
 	background: image-url('banner.jpg');
@@ -449,6 +483,11 @@ color:#EFEFEF;
 .nivo-lightbox-image img{
 	width: 600px;
 	height: 400px;
+}
+
+/* Secondary pages */
+.account {
+  text-align: center;
 }
 
 

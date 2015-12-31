@@ -1,13 +1,28 @@
 Rails.application.routes.draw do
+  resources :pictures
   resources :main_pages
-  devise_for :users
+  devise_for :users, :controllers => 
+    { :users => 'users', 
+      :omniauth_callbacks => "users/omniauth_callbacks" 
+    }
+  resources :users
   
   # Omniauth authentication
   get '/auth/:provider/callback', to: 'sessions#create'
   
   root 'main_pages#index'
   
+  # User management
+  get '/sign_up_or_in', to: 'users#sign_up_or_in'
   
+  # Picture upload
+  get '/my-pictures', to: 'pictures#my_pictures'
+  post '/pictures/upload', to:'pictures#upload'
+  
+
+  # AJAX routes
+  get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -20,11 +20,23 @@
       = javascript_include_tag "respond"
   %body
     %header.top-header
+      - if user_signed_in?
+        .logged-in
+          %p #{logged_in_user(current_user)}
+          %p
+            = link_to "Sign out", destroy_user_session_path
+            |
+            %a{ :href => "/user/profile", :title => "Edit my profile"}
+              %i.fa.fa-gear
+            |
+            %a{ :href => "/my-pictures", :title => "Edit my pictures"}
+              %i.fa.fa-image
+            
       .container
         .row.header-row
           .col-md-12
             %nav.navbar.navbar-default
-              %a{:href => "index.html"}
+              %a{:href => "/"}
                 %span{:class => 'site-name'} CITROEN RENDEZVOUS
               .container-fluid
                 / Brand and toggle get grouped for better mobile display
@@ -38,15 +50,15 @@
                 #bs-example-navbar-collapse-1.collapse.navbar-collapse
                   %ul.nav.navbar-nav.navbar-right
                     %li
-                      %a{:href => "#sec1"} Home
+                      %a{:href => "#sec1"} home
                     %li
-                      %a{:href => "#sec2"} Schedule
+                      %a{:href => "#sec2"} schedule
                     %li
-                      %a{:href => "#sec3"} About
+                      %a{:href => "#sec3"} about
                     %li
-                      %a{:href => "#sec4"} Photos
+                      %a{:href => "#sec4"} photos
                     %li
-                      %a{:href => "#sec5"} contact me
+                      %a{:href => "#sec5"} contact us
                 / /.navbar-collapse
               / /.container-fluid
     = yield
