@@ -8,6 +8,7 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
 server 'ec2-54-165-108-181.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{app db web}
+set :repo_url, 'ssh://ec2-54-165-108-181.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
 
 
 
@@ -32,6 +33,8 @@ server 'ec2-54-165-108-181.compute-1.amazonaws.com', user: 'ec2-user', roles: %w
 # For available Capistrano configuration variables see the documentation page.
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
+
+
 
 # Custom SSH Options
 # ==================
