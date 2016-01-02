@@ -55,7 +55,7 @@
           .field
             = f.label "First and last names"
             %br/
-            = f.first_name_field :first_name
-            = f.last_name_field :last_name
+            = f.text_field :first_name
+            = f.text_field :last_name
           .actions
             = f.submit "Sign up", :class => "btn btn-info"
