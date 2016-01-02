@@ -9,6 +9,7 @@
 
 server 'ec2-54-165-108-181.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{app db web}
 set :repo_url, 'ssh://ec2-54-165-108-181.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
+set :rails_env, 'production'
 
 
 
