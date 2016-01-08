@@ -4,6 +4,13 @@ class MainPagesController < ApplicationController
   # GET /
   def index
     @pictures = Picture.front_page_set
+    @cache_buster = "?cb=#{Time.now.to_i}"
+  end
+  
+  def history
+  end
+  
+  def vendors
   end
 
   private

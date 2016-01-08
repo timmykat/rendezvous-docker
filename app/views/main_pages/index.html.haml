@@ -9,9 +9,26 @@
         %br Citroen owners, enthusiasts and friends
       = image_tag "40th-badge.png"
       %br/
-      %button#register Register
-      - if !user_signed_in?
-        %button#login User Login
+      %button#register.not-yet Register (coming soon)
+      -#
+        - if !user_signed_in?
+          %button#login User Login
+    .row
+      .col-md-offset-4.col-md-4
+        .well.well-sm
+          / Begin MailChimp Signup Form
+          #mc_embed_signup
+            %form#mc-embedded-subscribe-form.validate{:action => "//citroenrendezvous.us12.list-manage.com/subscribe/post?u=198c738ff80668ca4d472c590&id=604b961a7d", :method => "post", :name => "mc-embedded-subscribe-form", :novalidate => "", :target => "_blank"}
+              #mc_embed_signup_scroll
+                %label{:for => "mce-EMAIL"} Subscribe to Rendezvous updates
+                %input#mce-EMAIL.email{:name => "EMAIL", :placeholder => "Email address", :required => "", :type => "email", :value => ""}/
+                / real people should not fill this in and expect good things - do not remove this or risk form bot signups
+                %div{"aria-hidden" => "true", :style => "position: absolute; left: -5000px;"}
+                  %input{:name => "b_198c738ff80668ca4d472c590_604b961a7d", :tabindex => "-1", :type => "text", :value => ""}/
+                .clear
+                  %input#mc-embedded-subscribe.btn.btn-info{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
+          / End mc_embed_signup            
+<!--End mc_embed_signup-->          
 / end of banner section
 / about section
 %section#sec2.about.text-center
@@ -62,27 +79,36 @@
     .row
       .service-overlay
       .col-md-12
-        %h2 ABOUT
+        %h2 INFO
         = image_tag "chevrons.png"
-        %p
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          %br/
-          %br/
-          tempor incididunt ut labore et dolore magna aliqua.
+        %p          
+          The Citroen Rendezvous may be the largest gathering of Citroens 
+          %br in North America, but above all, it is about the people. 
+          We encourage you to bring friends and family, and we welcome 
+          %br not just Citroens, but all French marques. In fact, we won't 
+          turn you away, whatever you bring!
       .col-md-12.services
         .col-md-2.single-service.col-xs-6.col-sm-3
           %i.fa.fa-hotel
           %h3 Accommodations
-          %p Onsectetur adipisicing elit, sedo eiusmod tempor incidiet dolorerserss eerhfre mag.
+          %p 
+            Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Let the
+            = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { :target => '_blank' }
+            be your guide, or use your favorite travel website.
         .col-md-2.col-md-push-1.single-service.col-xs-6.col-sm-3
           %i.fa.fa-shopping-cart
           %h3 Supporting Vendors
-          %p Onsectetur adipisicing elit, sedo eiusmod tempor incidiet dolorerserss eerhfre mag.
+          %p 
+            We couldn't put on the Rendezvous (nor could we keep our cars going) without our
+            = link_to 'friendly and knowledgeable supporting vendors', '/vendors'
       .col-md-12.services.bottom-services
         .col-md-2.single-service.col-sm-3.col-xs-6
           %i.fa.fa-calendar
           %h3 History
-          %p Onsectetur adipisicing elit, sedo eiusmod tempor incidiet dolorerserss eerhfre mag.
+          %p 
+            Lance Hellmann, one of the original organizers of the Rendezvous has kindly written a 
+            = link_to 'charming little history', '/history'
+            of the event. Enjoy!
         .col-md-2.col-md-push-1.single-service.col-sm-3.col-xs-6
           %i.fa.fa-empire
           %h3 Organization
@@ -100,7 +126,7 @@
       - @pictures.each do |pic|
         .col-md-3.single-portfolio.col-sm-6
           %figure.portfolio-item
-            = image_tag pic.image.portfolio.url, :class => 'img-responsive'
+            = image_tag pic.image.portfolio.url + @cache_buster, :class => 'img-responsive'
             %figcaption.portfolio-details
               %h4= pic.caption
               %p= pic.credit

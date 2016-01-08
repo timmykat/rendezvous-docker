@@ -7,6 +7,7 @@
     %meta{:content => "A website for the northeast Citroen enthusiasts gathering", :name => "description"}/
     %meta{:content => "Citroen Rendezvous, LLC", :name => "author"}/
     %title Citroen Rendezvous
+    = stylesheet_link_tag "//cdn-images.mailchimp.com/embedcode/slim-081711.css"
     = stylesheet_link_tag 'application', :media  => 'all'
     %link{:href => "http://fonts.googleapis.com/css?family=Open+Sans:600italic,400,800,700,300", :rel => "stylesheet", :type => "text/css"}/
 
@@ -50,15 +51,15 @@
                 #bs-example-navbar-collapse-1.collapse.navbar-collapse
                   %ul.nav.navbar-nav.navbar-right
                     %li
-                      %a{:href => "#sec1"} home
+                      %a{:href => "/#sec1"} home
                     %li
-                      %a{:href => "#sec2"} schedule
+                      %a{:href => "/#sec2"} schedule
                     %li
-                      %a{:href => "#sec3"} about
+                      %a{:href => "/#sec3"} info
                     %li
-                      %a{:href => "#sec4"} photos
+                      %a{:href => "/#sec4"} photos
                     %li
-                      %a{:href => "#sec5"} contact us
+                      %a{:href => "/#sec5"} contact us
                 / /.navbar-collapse
               / /.container-fluid
     = yield

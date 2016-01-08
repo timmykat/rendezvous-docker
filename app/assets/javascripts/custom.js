@@ -11,8 +11,7 @@ jQuery(document).ready(function() {
     $(document).on("scroll", onScroll);
     
     //smoothscroll
-    $('a[href^="#"]').on('click', function (e) {
-        e.preventDefault();
+    $('a[href^="/#"]').on('click', function (e) {
         $(document).off("scroll");
         
         $('a').each(function () {
@@ -23,12 +22,15 @@ jQuery(document).ready(function() {
         var target = this.hash,
             menu = target;
         $target = $(target);
-        $('html, body').stop().animate({
-            'scrollTop': $target.offset().top+2
-        }, 500, 'swing', function () {
-            window.location.hash = target;
-            $(document).on("scroll", onScroll);
-        });
+        if (typeof($target.offset()) != 'undefined') {
+          e.preventDefault();
+          $('html, body').stop().animate({
+              'scrollTop': $target.offset().top+2
+          }, 500, 'swing', function () {
+              window.location.hash = target;
+              $(document).on("scroll", onScroll);
+          });
+        } 
     });
 });
 

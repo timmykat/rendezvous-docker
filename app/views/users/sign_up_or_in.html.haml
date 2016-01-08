@@ -25,11 +25,11 @@
           .field
             = f.label :email
             %br/
-            = f.email_field :email, autofocus: true
+            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
           .field
             = f.label :password
             %br/
-            = f.password_field :password, autocomplete: "off"
+            = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Password'
           .actions
             = f.submit "Log in", :class => "btn btn-info"
         
@@ -40,22 +40,28 @@
           .field
             = f.label :email
             %br/
-            = f.email_field :email, autofocus: true
+            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
           .field
             = f.label :password
             - if @minimum_password_length
               %em
                 (#{@minimum_password_length} characters minimum)
             %br/
-            = f.password_field :password, autocomplete: "off"
+            = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Set password'
           .field
             = f.label :password_confirmation
             %br/
-            = f.password_field :password_confirmation, autocomplete: "off"
+            = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control', :placeholder => 'Confirm password'
           .field
-            = f.label "First and last names"
+            = f.label "Name"
             %br/
-            = f.text_field :first_name
-            = f.text_field :last_name
+            = f.text_field :first_name, :class => 'form-control inline-form-element', :placeholder => 'First'
+            = f.text_field :last_name, :class => 'form-control inline-form-element', :placeholder => 'Last'
+          .field
+            = f.check_box :receive_mailings, :checked => true
+            = f.label "Receive mailings"
+            %p We recommend that you leave this checked because we promise to send you only useful information, we promise not to bombard you with stupid crap, and we promise not to give out your email address. And you can change it later if you think we lied.
+          .field
+            = recaptcha_tags
           .actions
             = f.submit "Sign up", :class => "btn btn-info"
