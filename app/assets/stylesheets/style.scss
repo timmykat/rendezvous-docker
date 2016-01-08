@@ -23,6 +23,19 @@ $hover-color:  #94171B;     /*  darker red */
 $facebook-blue: #4C66A4;
 $twitter-blue: #55ACEF;
 
+a, a:visited {
+  color: $secondary-color;
+  text-decoration: underline;
+}
+.navbar a, .navbar a:visited {
+  text-decoration: none;
+}
+a:hover {
+  color: #ccc;
+  text-decoration: none;
+  background-color: transparent;
+}
+
 a.btn-facebook, a:visited.btn.facebook {
   background-color: $facebook-blue;
   color: white;
@@ -45,9 +58,20 @@ body{
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
 }
-a:hover, a:visited, a{
-	text-decoration: none;
+/* Mailchimp sign-up */
+#mc_embed_signup{
+  clear: left; 
+  font: 14px Helvetica,Arial,sans-serif; 
+  text-align: center; 
+  form {
+    text-align: center; 
+  }
+  input.email {
+    display: inline;
+    margin: 0 5px 10px 0;
+  }
 }
+
 /*header area*/
 .top-header{
 	background: $primary-color;
@@ -168,7 +192,10 @@ ul.nav{
 	border-radius: 2px;
 	border: 0px;
 	font-weight: 800;
+	/*
 	margin-bottom: 205px;
+	*/
+	margin-bottom: 45px;
 	transition: all .5s ease 0s;
 	-webkit-transition: all .5s ease 0s;
 	-moz-transition: all .5s ease 0s;
@@ -176,9 +203,19 @@ ul.nav{
 	-ms-transition: all .5s ease 0s;
 
 }
-.banner button:hover{
+.banner button:hover {
 	background: $hover-color;
 	color: #fff;
+}
+.banner button.not-yet, .banner button:hover.not-yet {
+  background: #666;
+  color: #999;
+}
+.banner .well {
+  color: $secondary-color;
+  text-shadow: none;
+  font-size: 16px;
+  text-align: center;
 }
 /*about section*/
 .about{
@@ -466,6 +503,10 @@ color:#EFEFEF;
 
 .form-input:-ms-input-placeholder {  
    color:#EFEFEF;  
+}
+.inline-form-element {
+  width: auto;
+  display: inline-block;
 }
 /*footer area*/
 

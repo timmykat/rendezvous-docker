@@ -4,6 +4,9 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
 
+# Load environment variables in development
+gem 'dotenv-rails', :groups => [:development, :test]
+
 # MySQL the database for Active Record
 gem 'mysql2', '~> 0.3.18'
 
@@ -26,7 +29,7 @@ gem 'jquery-ui-rails'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-
+gem 'dotenv'
 gem 'devise'
 gem 'bootstrap-sass', '~> 3.1.1'
 gem 'tinymce-rails'
@@ -41,6 +44,7 @@ gem 'dropzonejs-rails'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
+gem 'gibbon'
 
 group :development do
   gem 'byebug'

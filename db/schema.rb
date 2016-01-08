@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230194627) do
+ActiveRecord::Schema.define(version: 20160103205046) do
 
   create_table "main_pages", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -29,25 +29,27 @@ ActiveRecord::Schema.define(version: 20151230194627) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "email",                  limit: 255, default: "",   null: false
+    t.string   "encrypted_password",     limit: 255, default: "",   null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.string   "provider",               limit: 255
     t.string   "uid",                    limit: 255
     t.integer  "role_mask",              limit: 4
     t.string   "first_name",             limit: 255
     t.string   "last_name",              limit: 255
     t.string   "avatar",                 limit: 255
+    t.boolean  "receive_mailings",                   default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["first_name"], name: "index_users_on_first_name", using: :btree
   add_index "users", ["last_name"], name: "index_users_on_last_name", using: :btree
   add_index "users", ["provider"], name: "index_users_on_provider", using: :btree
+  add_index "users", ["receive_mailings"], name: "index_users_on_receive_mailings", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
