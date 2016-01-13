@@ -7,6 +7,9 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
+server 'ec2-52-90-187-198.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{app db web}
+set :repo_url, 'ssh://ec2-52-90-187-198.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
+set :rails_env, 'production'
 
 
 # role-based syntax

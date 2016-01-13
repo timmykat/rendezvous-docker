@@ -147,6 +147,19 @@ ul.nav{
   border-color: #fff;
   margin-top: 4px;
 }
+.flash-wrapper {
+  position: fixed;
+  top: 30px;
+}
+.flash {
+  margin: 0 auto;
+  width: 30%;
+  min-width: 300px;
+  background: rgba(255,255,255,0.8)
+  border: solid 2px #ccc;
+  border-radius: 15px;
+  padding: 30px;
+}
 /* spacer to allow for header */
 .spacer {
   height: 110px;

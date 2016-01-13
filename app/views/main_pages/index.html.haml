@@ -82,37 +82,46 @@
         %h2 INFO
         = image_tag "chevrons.png"
         %p          
-          The Citroen Rendezvous may be the largest gathering of Citroens 
-          %br in North America, but above all, it is about the people. 
-          We encourage you to bring friends and family, and we welcome 
-          %br not just Citroens, but all French marques. In fact, we won't 
-          turn you away, whatever you bring!
+          The Citroen Rendezvous is the largest gathering of Citroens in 
+          %br North America, taking place annually on Father's Day weekend 
+          in Saratoga Springs, NY.  It is the people who make the event special. 
+          %br Friends, family, and other enthusiasts are warmly welcomed, 
+          as are other French, European, and just plain quirky cars.
       .col-md-12.services
-        .col-md-2.single-service.col-xs-6.col-sm-3
+        .col-md-3.single-service.col-xs-12
           %i.fa.fa-hotel
           %h3 Accommodations
           %p 
             Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Let the
             = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { :target => '_blank' }
             be your guide, or use your favorite travel website.
-        .col-md-2.col-md-push-1.single-service.col-xs-6.col-sm-3
+        .col-md-3.single-service.col-xs-12
           %i.fa.fa-shopping-cart
           %h3 Supporting Vendors
           %p 
             We couldn't put on the Rendezvous (nor could we keep our cars going) without our
             = link_to 'friendly and knowledgeable supporting vendors', '/vendors'
       .col-md-12.services.bottom-services
-        .col-md-2.single-service.col-sm-3.col-xs-6
+        .col-md-3.single-service.col-xs-12
           %i.fa.fa-calendar
           %h3 History
           %p 
             Lance Hellmann, one of the original organizers of the Rendezvous has kindly written a 
             = link_to 'charming little history', '/history'
             of the event. Enjoy!
-        .col-md-2.col-md-push-1.single-service.col-sm-3.col-xs-6
+        .col-md-3.single-service.col-xs-12
           %i.fa.fa-empire
           %h3 Organization
-          %p Onsectetur adipisicing elit, sedo eiusmod tempor incidiet dolorerserss eerhfre mag.
+          %p 
+            The Rendezvous is run by volunteers, with a small group of 
+            %em chauffeurs  
+            at the wheel organizing things and making sure all the details are in place to host a fun-filled event. If you are 
+            interested in volunteering during the event, 
+            by all means get in touch with us using the form below.
+          %p 
+            Your 
+            %em chauffeurs: 
+            Michaela Hellman, David Cossitt-Levy, Chris "Toaph" Brown, and Tim Kinnel.
 / about section ends
 / portfolio section
 %section#sec4.portfolio.text-center
@@ -150,16 +159,17 @@
         %h2 CONTACT US
         = image_tag "chevrons.png"
         %p
-          Please register using the 
-          %a{ :href => '/registration', :title => 'Go to registration form' } online registration form. 
-          %br/
+          -#
+            Please register using the 
+            %a{ :href => '/registration', :title => 'Go to registration form' } online registration form. 
+            %br/
           If you have any questions that haven't been answered here, please let us know!
 / end of contact section
 %section.contact-form
   .container
     .row
       .form
-        %form{:action => "contact.php"}
+        %form{:action => "/contact"}
           .sbtn.col-md-12.text-center
             %input.name.form-input{:placeholder => "NAME", :type => "text"}/
             %input.email.form-input{:placeholder => "EMAIL", :type => "email"}/

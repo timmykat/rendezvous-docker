@@ -20,6 +20,16 @@
       = javascript_include_tag "html5shiv"
       = javascript_include_tag "respond"
   %body
+    - if flash[:alert] || flash[:notice]
+      .flash-wrapper
+        .flash
+          - if flash[:alert]
+            .alert-danger{ :role => 'alert' }
+              = flash[:alert]
+          - if flash[:notice]
+            .alert-info{ :role => 'alert' }
+              = flash[:notice]
+      
     %header.top-header
       - if user_signed_in?
         .logged-in
@@ -38,7 +48,7 @@
           .col-md-12
             %nav.navbar.navbar-default
               %a{:href => "/"}
-                %span{:class => 'site-name'} CITROEN RENDEZVOUS
+                = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo', :style => 'margin-top: 0px; border-bottom: 0px none; margin-bottom: 10px;'
               .container-fluid
                 / Brand and toggle get grouped for better mobile display
                 .navbar-header
