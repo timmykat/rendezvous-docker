@@ -1,0 +1,36 @@
+:mailer:
+ :development:
+    :delivery_method: :smtp
+    :settings:
+      :address:               smtp.gmail.com
+      :domain:                localhost
+      :port:                  587
+      :user_name:             <%= ENV['GMAIL_USER'] %>
+      :password:              <%= ENV['GMAIL_PASS'] %>
+      :authentication:        :plain
+      :enable_starttls_auto:  true
+      ssl:                    true
+ :staging:
+    :delivery_method: :smtp
+    :settings:
+      :address:               email-smtp.us-east-1.amazonaws.com            
+      :domain:                rendezvous.wordsareimages.com
+      :port:                  587
+      :user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
+      :password:              <%= ENV['RENDEZVOUS_SES_PASSWORD'] %>
+      :authentication:        :login
+      :enable_starttls_auto:  true
+ :production:
+    :delivery_method: :smtp
+    :settings:
+      :address:               email-smtp.us-east-1.amazonaws.com            
+      :domain:                citroenrendezvous.org
+      :port:                  587
+      :user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
+      :password:              <%= ENV['RENDEZVOUS_SES_PASSWORD'] %>
+      :authentication:        :login
+      :enable_starttls_auto:  true
+      
+ :test:
+    :delivery_method: :test
+

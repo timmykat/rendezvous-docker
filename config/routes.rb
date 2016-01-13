@@ -21,10 +21,12 @@ Rails.application.routes.draw do
   get '/my-pictures', to: 'pictures#my_pictures'
   post '/pictures/upload', to:'pictures#upload'
   
+  # Contact form
+  post '/contact_us', to:'main_pages#contact_us'
+  
 
   # AJAX routes
   get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'
-  post '/ajax/join-mailing-list', to: 'users#join_mailing_list'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

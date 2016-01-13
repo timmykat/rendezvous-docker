@@ -12,6 +12,15 @@ class MainPagesController < ApplicationController
   
   def vendors
   end
+  
+  def contact_us
+    @name = params[:name]
+    @email = params[:email]
+    @message = params[:message]
+    Mailer.send_to_us(@name, @email, @message)
+    Mailer.autoresponse(@name, @email, @message)
+    redirect_to :index, :notice => 'Thank you for sending us a message: you should receive a confirmation email shortly.'
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
