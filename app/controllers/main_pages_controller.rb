@@ -17,9 +17,10 @@ class MainPagesController < ApplicationController
     @name = params[:name]
     @email = params[:email]
     @message = params[:message]
-    Mailer.send_to_us(@name, @email, @message)
-    Mailer.autoresponse(@name, @email, @message)
-    redirect_to :index, :notice => 'Thank you for sending us a message: you should receive a confirmation email shortly.'
+
+    Mailer.send_to_us(@name, @email, @message).deliver_now
+    Mailer.autoresponse(@name, @email, @message).deliver_now
+    redirect_to :root, :notice => 'Thank you for sending us a message: you should receive a confirmation email shortly.'
   end
 
   private

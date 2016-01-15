@@ -14,12 +14,12 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.
-  mailer_data = YAML.load(ERB.new(File.read("#{Rails.root}/config/mailer.yml")).result)
-  config.action_mailer.raise_delivery_errors = false
-  mailconf = mailer_data[:mailer][:staging]
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  mailconf = Rails.configuration.rendezvous[:development][:mailer]
   config.action_mailer.delivery_method = mailconf[:delivery_method]
   config.action_mailer.smtp_settings = mailconf[:settings].clone
-  config.action_mailer.default_url_options = { :protocol => 'http://', :host => mailconf[:settings][:domain] }
+  config.action_mailer.default_url_options = { :protocol => 'http://', :host => 'localhost:3000' }
 
 
   # Print deprecation notices to the Rails logger.

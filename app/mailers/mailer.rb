@@ -4,7 +4,8 @@ class Mailer < ApplicationMailer
     @name = name
     @email = email
     @message = message
-    mail(to: Rails.configuration.recipients, subject: "New Rendezvous query from #{@name}")
+    recipients = ['tim@wordsareimages.com']
+    mail(to: recipients, subject: "New Rendezvous query from #{@name}")
   end
   
   def autoresponse(name, email, message)
