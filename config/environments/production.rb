@@ -62,9 +62,8 @@ Rails.application.configure do
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  mailer_data = YAML.load(ERB.new(File.read("#{Rails.root}/config/mailer.yml")).result)
   config.action_mailer.raise_delivery_errors = true
-  mailconf = mailer_data[:mailer][:production]
+  mailconf = Rails.configuration.rendezvous[:production][:mailer]
   config.action_mailer.delivery_method = mailconf[:delivery_method]
   config.action_mailer.smtp_settings = mailconf[:settings].clone
   config.action_mailer.default_url_options = { :protocol => 'http://', :host => mailconf[:settings][:domain] }

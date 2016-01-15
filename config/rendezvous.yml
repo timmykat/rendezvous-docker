@@ -1,0 +1,58 @@
+development:
+  facebook:
+    app_id: <%= ENV['FACEBOOK_APP_ID'] %>
+    app_secret: <%= ENV['FACEBOOK_APP_SECRET'] %>
+  twitter:
+    consumer_key: <%= ENV['TWITTER_CONSUMER_KEY'] %>
+    consumer_secret: <%= ENV['TWITTER_CONSUMER_SECRET'] %>
+  mailer:
+   delivery_method: smtp
+   settings:
+      address:               smtp.gmail.com
+      domain:                gmail.com
+      port:                  587
+      user_name:             <%= ENV['GMAIL_USER'] %>
+      password:              <%= ENV['GMAIL_PASS'] %>
+      authentication:        plain
+      enable_starttls_auto:  true
+      ssl:                   true
+  
+staging:
+  facebook:
+    app_id: <%= ENV['RENDEZVOUS_FACEBOOK_APP_ID'] %>
+    app_secret: <%= ENV['RENDEZVOUS_FACEBOOK_APP_SECRET'] %>
+  twitter:
+    consumer_key: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_KEY'] %>
+    consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
+  mailer:
+    delivery_method: smtp
+    settings:
+      address:               email-smtp.us-east-1.amazonaws.com            
+      domain:                rendezvous.wordsareimages.com
+      port:                  587
+      user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
+      password:              <%= ENV['RENDEZVOUS_SES_PASSWORD'] %>
+      authentication:        login
+      enable_starttls_auto:  true
+
+production:
+  facebook:
+    app_id: <%= ENV['RENDEZVOUS_FACEBOOK_APP_ID'] %>
+    app_secret: <%= ENV['RENDEZVOUS_FACEBOOK_APP_SECRET'] %>
+  twitter:
+    consumer_key: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_KEY'] %>
+    consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
+  mailer:
+    delivery_method: smtp
+    settings:
+      address:               email-smtp.us-east-1.amazonaws.com            
+      domain:                citroenrendezvous.org
+      port:                  587
+      user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
+      password:              <%= ENV['RENDEZVOUS_SES_PASSWORD'] %>
+      authentication:        login
+      enable_starttls_auto:  true
+      
+test:
+  mailer:
+    delivery_method: test

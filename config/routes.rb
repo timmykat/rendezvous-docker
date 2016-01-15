@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   post '/pictures/upload', to:'pictures#upload'
   
   # Contact form
-  post '/contact_us', to:'main_pages#contact_us'
+  post '/contact-us', to:'main_pages#contact_us'
   
 
   # AJAX routes
