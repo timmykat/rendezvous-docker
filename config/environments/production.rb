@@ -64,7 +64,8 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
   mailconf = Rails.configuration.rendezvous[:production][:mailer]
-  config.action_mailer.delivery_method = mailconf[:delivery_method]
+  config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
+  config.action_mailer.default_options = { :from => 'no-reply@citroenrendezvous.org' }
   config.action_mailer.smtp_settings = mailconf[:settings].clone
   config.action_mailer.default_url_options = { :protocol => 'http://', :host => mailconf[:settings][:domain] }
 
