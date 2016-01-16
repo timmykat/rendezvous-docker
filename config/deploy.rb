@@ -3,7 +3,6 @@ lock '3.4.0'
 
 set :application, 'rendezvous'
 set :deploy_via, :copy
-set :repo_url, 'ssh://ec2-54-165-108-181.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
 
 # set :repo_url, 'git@example.com:me/my_repo.git'
 

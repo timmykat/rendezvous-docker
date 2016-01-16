@@ -18,7 +18,7 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   mailconf = Rails.configuration.rendezvous[:development][:mailer]
   config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
-  config.action_mailer.default_options = { :from => 'tkinnel@gmail.com' }
+  config.action_mailer.default_options = { :from => 'tim@wordsareimages.com' }
   config.action_mailer.sendmail_settings = mailconf[:settings].clone
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
