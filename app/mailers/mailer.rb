@@ -4,7 +4,7 @@ class Mailer < ApplicationMailer
     @name = name
     @email = email
     @message = message
-    recipients = ['tim@wordsareimages.com']
+    recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
     mail(to: recipients, subject: "New Rendezvous query from #{@name}")
   end
   
