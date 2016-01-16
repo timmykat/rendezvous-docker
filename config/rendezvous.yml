@@ -38,6 +38,9 @@ staging:
       enable_starttls_auto:  true
 
   inquiry_recipients:
+    - hellman.michaela@gmail.com
+    - david.cossitt.levy@gmail.com
+    - toaph@yahoo.com
     - tim@wordsareimages.com 
 
 production:
