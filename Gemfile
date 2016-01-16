@@ -45,6 +45,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'gibbon'
+gem 'aws-sdk', '~> 2'
 
 group :development do
   gem 'byebug'
