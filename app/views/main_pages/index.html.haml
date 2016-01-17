@@ -174,4 +174,6 @@
             = text_field_tag 'name', nil, :class => 'name form-input', :placeholder => "NAME"
             = email_field_tag 'email', nil, :class => 'email form-input', :placeholder => "EMAIL"
             = text_field_tag 'message', nil, :class => 'message form-input', :placeholder => "MESSAGE"
+            .captcha
+              = recaptcha_tags
             = submit_tag 'SEND', :class => 'submit-btn'
