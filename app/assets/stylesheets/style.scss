@@ -337,10 +337,12 @@ ul.nav{
 	margin-top: 50px;
 	background: #F5F5F1;
 }
+/* Remove hover styling
 .single-service:hover{
 	background: red;
 	cursor: pointer;
 }
+*/
 .single-service i.fa{
 	color: $secondary-color;
 	font-size: 30px;
@@ -355,6 +357,7 @@ ul.nav{
 	color: #7e8287;
 	margin-top: 5px;
 }
+/* Remove hover styling
 .single-service:hover.single-service i.fa{
 	color: #fff;
 }
@@ -364,6 +367,7 @@ ul.nav{
 .single-service:hover.single-service p{
 	color: #fff;
 }
+*.
 /*portfolio area*/
 .portfolio h2{
 	font-size: 46px;
@@ -525,6 +529,11 @@ color:#EFEFEF;
 .g-recaptcha {
   display: inline-block;
   margin-bottom: 20px;
+}
+
+/* Vendors */
+#vendors .name {
+  font-weight: bold;
 }
 
 /*footer area*/
