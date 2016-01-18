@@ -15,7 +15,7 @@
           %button#login User Login
     .row
       .col-md-offset-4.col-md-4
-        .well.well-sm
+        .connect.well.well-sm
           / Begin MailChimp Signup Form
           #mc_embed_signup
             %form#mc-embedded-subscribe-form.validate{:action => "//citroenrendezvous.us12.list-manage.com/subscribe/post?u=198c738ff80668ca4d472c590&id=604b961a7d", :method => "post", :name => "mc-embedded-subscribe-form", :novalidate => "", :target => "_blank"}
@@ -27,7 +27,10 @@
                   %input{:name => "b_198c738ff80668ca4d472c590_604b961a7d", :tabindex => "-1", :type => "text", :value => ""}/
                 .clear
                   %input#mc-embedded-subscribe.btn.btn-info{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
-          / End mc_embed_signup            
+          / End mc_embed_signup
+          %p.facebook
+            %i.fa.fa-facebook-square
+            = link_to 'Check out our Facebook page and like us!', 'https://www.facebook.com/groups/1796592930566951', :target => '_blank'
 <!--End mc_embed_signup-->          
 / end of banner section
 / about section
@@ -196,6 +199,7 @@
             = text_field_tag 'name', nil, :class => 'name form-input', :placeholder => "NAME"
             = email_field_tag 'email', nil, :class => 'email form-input', :placeholder => "EMAIL"
             = text_field_tag 'message', nil, :class => 'message form-input', :placeholder => "MESSAGE"
-            .captcha
-              = recaptcha_tags
+            - if Rails.env != 'development'
+              .captcha
+                = recaptcha_tags
             = submit_tag 'SEND', :class => 'submit-btn'

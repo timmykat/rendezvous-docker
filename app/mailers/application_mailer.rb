@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
   default from: "no-reply@citroenrendezvous.org"
-  layout 'mailer'
+  layout 'mailer'  
 end
