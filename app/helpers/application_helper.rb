@@ -10,4 +10,5 @@ module ApplicationHelper
       display = "You are signed in as #{user.email}"
     end
   end
+  
 end

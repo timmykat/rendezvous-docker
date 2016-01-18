@@ -23,6 +23,21 @@ $hover-color:  #94171B;     /*  darker red */
 $facebook-blue: #4C66A4;
 $twitter-blue: #55ACEF;
 
+.fa.fa-facebook-square {
+  font-size: 18px;
+  color: $facebook-blue;
+}
+#social {
+  position: absolute;
+  top: 10px;
+  left: -5px;
+  width: 55px;
+  background-color: rgba(0,0,0,0.50);
+  padding: 10px 5px 5px 10px;
+  border-radius: 7px;
+  z-index: 200;
+}
+
 a, a:visited {
   color: $secondary-color;
   text-decoration: underline;
@@ -230,6 +245,11 @@ ul.nav{
   font-size: 16px;
   text-align: center;
 }
+.banner .well p.facebook {
+  color: #999;
+  font-size: 14px;
+}
+
 /*about section*/
 .about{
 	background: #fff;
