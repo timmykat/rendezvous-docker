@@ -526,6 +526,10 @@ input.message{
 	background: $hover-color;
 	color: #fff;
 }
+.contact-form input.submit-btn[disabled=disabled], .contact-form input.submit-btn[disabled=disabled]:hover {
+  background: #666;
+  color: #999;
+}
 
 .form-input::-webkit-input-placeholder {
 color:#EFEFEF;
