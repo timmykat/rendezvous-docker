@@ -195,4 +195,4 @@
             - if Rails.env != 'development'
               .captcha
                 = recaptcha_tags
-            = submit_tag 'SEND', :class => 'submit-btn'
+            = submit_tag 'SEND', :class => 'submit-btn', :disabled => true

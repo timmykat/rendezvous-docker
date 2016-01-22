@@ -12,4 +12,17 @@ $(function() {
     var liHeight = $('.logged-in').height();
     $('.header-row').css({'marginTop': liHeight});
   }
+  
+  // Inquiry form validation
+  $('.contact-form .form-input').keyup(function() {
+    var email_regex = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+    var passName = ($('.contact-form input#name').val().length >= 3);
+    var passEmail = email_regex.test($('.contact-form input#email').val());
+    var passMessage=  ($('.contact-form input#message').val().length >= 10);
+    if (passName && passEmail && passMessage) {
+      $('.contact-form .submit-btn').removeAttr('disabled');
+    } else {
+      $('.contact-form .submit-btn').attr('disabled','disabled');
+    } 
+  });
 });
