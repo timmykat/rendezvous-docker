@@ -22,11 +22,11 @@
       .well
         %h3 Got an account? Sign in here.
         = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-          .field
+          .form-group
             = f.label :email
             %br/
             = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
-          .field
+          .form-group
             = f.label :password
             %br/
             = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Password'
@@ -37,31 +37,31 @@
       .well
         %h3 Want an account? Sign up here.
         = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-          .field
+          .form-group
             = f.label :email
             %br/
             = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
-          .field
+          .form-group
             = f.label :password
             - if @minimum_password_length
               %em
                 (#{@minimum_password_length} characters minimum)
             %br/
             = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Set password'
-          .field
+          .form-group
             = f.label :password_confirmation
             %br/
             = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control', :placeholder => 'Confirm password'
-          .field
+          .form-group
             = f.label "Name"
             %br/
             = f.text_field :first_name, :class => 'form-control inline-form-element', :placeholder => 'First'
             = f.text_field :last_name, :class => 'form-control inline-form-element', :placeholder => 'Last'
-          .field
+          .form-group
             = f.check_box :receive_mailings, :checked => true
             = f.label "Receive mailings"
             %p We recommend that you leave this checked because we promise to send you only useful information, we promise not to bombard you with stupid crap, and we promise not to give out your email address. And you can change it later if you think we lied.
-          .field
+          .form-group
             = recaptcha_tags
           .actions
             = f.submit "Sign up", :class => "btn btn-info"

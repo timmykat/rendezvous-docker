@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get '/register', to: 'rendezvous_registrations#new'
+  
   resources :pictures
   devise_for :users, :controllers => 
     { :users => 'users', 

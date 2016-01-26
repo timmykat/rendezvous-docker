@@ -41,13 +41,14 @@
       = javascript_include_tag "respond"
   
     - # ShareThis scripts
-    %script{ :type => 'text/javascript' } var switchTo5x=true;
-    %script{ :type => 'text/javascript', :src => "http://w.sharethis.com/button/buttons.js" }
-    %script{ :type => 'text/javascript' } 
+    :javascript
+      var switchTo5x=true;
+    = javascript_include_tag "http://w.sharethis.com/button/buttons.js" }
+    :javascript
       stLight.options({publisher: "1cb126ce-1123-4660-9a5a-2f72547b6a80", doNotHash: true, doNotCopy: true, hashAddressBar: false});
 
     - # Google Analytics script
-    %script{ :type => 'text/javascript' }
+    :javascript
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -55,7 +56,11 @@
 
       ga('create', 'UA-4773340-9', 'auto');
       ga('send', 'pageview');
-
+      
+    = javascript_include_tag "//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js", "data-dojo-config" => 'usePlainJson: true, isDebug: false'
+    :javascript
+      require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us12.list-manage.com","uuid":"198c738ff80668ca4d472c590","lid":"9e696fe93f"}) });
+      
   %body
     - if flash[:alert] || flash[:notice]
       .flash-wrapper

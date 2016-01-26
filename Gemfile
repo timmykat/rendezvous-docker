@@ -40,6 +40,7 @@ gem 'recaptcha', require: 'recaptcha/rails'
 gem 'font-awesome-sass'
 gem 'role_model'
 gem 'dropzonejs-rails'
+gem 'braintree'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
