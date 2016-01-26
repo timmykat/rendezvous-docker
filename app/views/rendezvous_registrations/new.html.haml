@@ -1,0 +1,73 @@
+.spacer
+.container
+  .row
+    .col-md-offset-2.col-md-8.col-xs12
+      %h1 2016 Citroen Rendezvous Registration
+      %p You are registering for the Citroen Rendezvous, 16-19 June, 2016.
+      %p
+        %strong Note: This registration does not include accommodations.
+
+      = form_tag '/checkout',  :id => 'checkout', :role => 'form' do
+        .well.well-md
+          %h2 Personal Information
+          .row
+            .col-md-5.col-xs-12
+              .form-group
+                %label First Name
+                = text_field_tag 'registration[first_name]', (user_signed_in? ? current_user.first_name : ''), :class => 'form-control'
+            .col-md-7.col-xs-12
+              .form-group
+                %label Last Name
+                = text_field_tag 'registration[last_name]', (user_signed_in? ? current_user.last_name : ''), :class => 'form-control'
+          = field_set_tag 'Address' do
+            .form-group
+              = text_field_tag 'registration[address_1]', nil, :class => 'form-control', :placeholder => 'Address 1'
+            .form-group
+              = text_field_tag 'registration[address_2]', nil, :class => 'form-control', :placeholder => 'Address 2'
+            .form-group
+              %label City
+              = text_field_tag 'registration[city]', nil, :class => 'form-control', :placeholder => 'City'
+            .row
+              .col-md-6.col-xs-12
+                .form-group
+                  %label State or Province
+                  = text_field_tag 'registration[state]', nil, :class => 'form-control', :placeholder => 'State or Province'
+              .col-md-6.col-xs-12
+                .form-group
+                  %label Zip/Post Code
+                  = text_field_tag 'registration[postcode]', nil, :class => 'form-control', :placeholder => 'Zip/Post Code'
+
+        .well.well-md
+          %h2 Payment Information
+          #payment-form
+            .form-group
+              %label Card Number
+              #card-number.form-control
+            .form-group
+              %label CVV
+              #cvv.form-control
+            .form-group
+              %label Expiration Date
+              #expiration-date.form-control    
+            
+            = submit_tag 'Register', :confirm => 'Are you sure?'
+  
+      = javascript_include_tag "https://js.braintreegateway.com/v2/braintree.js" 
+  
+      :javascript
+        var clientToken = "#{@client_token}";
+  
+        braintree.setup(clientToken, "custom", {
+          id: 'payment-form',
+          hostedFields: {
+            number: {
+              slector: '#card-number'
+            },
+            cvv: {
+              slector: '#cvv'
+            },
+            expirationDate: {
+              slector: '#expiration-date'
+            }
+          }
+        });
