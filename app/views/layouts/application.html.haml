@@ -65,13 +65,12 @@
   %body
     - if flash[:alert] || flash[:notice]
       .flash-wrapper
-        .flash
-          - if flash[:alert]
-            .alert-danger{ :role => 'alert' }
-              = flash[:alert]
-          - if flash[:notice]
-            .alert-info{ :role => 'alert' }
-              = flash[:notice]
+        - if flash[:alert]
+          .flash.alert-danger{ :role => 'alert' }
+            = flash[:alert]
+        - if flash[:notice]
+          .flash.alert-info{ :role => 'alert' }
+            = flash[:notice]
       
     %header.top-header
       - if user_signed_in?
