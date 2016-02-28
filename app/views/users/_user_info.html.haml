@@ -15,6 +15,16 @@
     .col-md-12
       .form-group
         = email_field_tag :email_confirmation, nil, :class => 'form-control', :placeholder => 'Confirm e-mail *'
+
+- if !user_signed_in?
+  %label Password
+  .row
+    .col-md-12
+      .form-group
+        = f.input_field :password, :as => :password, :placeholder => 'Password *', :class => 'form-control' 
+    .col-md-12
+      .form-group
+        = f.input_field :password_confirmation, :as => :password, :placeholder => 'Password confirmation *', :class => 'form-control' 
 %label Address
 .row
   .col-md-12

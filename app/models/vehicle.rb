@@ -2,7 +2,7 @@ class Vehicle < ActiveRecord::Base
 
   belongs_to :user
   
-  validates :year, :inclusion => { :in => 1919..2015 }
+  validates :year, :inclusion => { :in => (1919..2015).map{ |int| int.to_s }}
   
   validate :marque_must_exist, :model_must_exist
   
@@ -37,5 +37,9 @@ class Vehicle < ActiveRecord::Base
      'CX (series 2)',
      'Other'
     ]
+  end
+  
+  def full_spec
+    year.to_s + " " + ((marque == 'Other' || marque.blank?) ? other_marque : marque) + " " + ((model == 'Other' || model.blank?) ? other_model : model)
   end
 end

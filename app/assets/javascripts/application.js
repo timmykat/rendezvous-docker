@@ -11,12 +11,14 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
+//= require jquery-ui
+//= require jquery-ujs/src/rails
 //= require bootstrap
 //= require custom
 //= require html5shiv
 //= require respond.min
 //= require smoothscroll
 //= require cocoon
-//= require dropzone
+//= require dropzone/dist/dropzone
+//= require braintree-web/dist/braintree
 //= require_tree .

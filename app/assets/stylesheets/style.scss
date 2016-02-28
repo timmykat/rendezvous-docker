@@ -50,6 +50,10 @@ a:hover {
   text-decoration: none;
   background-color: transparent;
 }
+a.btn, a:visited.btn {
+  text-decoration: none;
+  color: white;
+}
 
 a.btn-facebook, a:visited.btn.facebook {
   background-color: $facebook-blue;
@@ -79,6 +83,22 @@ body{
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
 }
+
+/* flash */
+.flash-wrapper {
+  width: 60%;
+  z-index: 2000;
+  top: 100px;
+  width: 100%;
+}
+.flash {
+  width: 60%;
+  background: white;
+  border-radius: 10px;
+  font-weight: bold;
+  
+}
+
 /* Mailchimp sign-up */
 #mc_embed_signup{
   clear: left; 
@@ -587,6 +607,16 @@ color:#EFEFEF;
 /* Secondary pages */
 .account {
   text-align: center;
+}
+
+/* Registration */
+.amount {
+  font-size: 1.2em;
+}
+input#rendezvous_registration_amount {
+  border: none;
+  background: transparent;
+  font-weight: bold;
 }
 
 

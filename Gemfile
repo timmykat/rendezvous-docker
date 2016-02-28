@@ -23,8 +23,8 @@ gem 'uglifier', '>= 1.3.0'
 # gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
+# gem 'jquery-rails'
+# gem 'jquery-ui-rails'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
@@ -32,16 +32,17 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'dotenv'
 gem 'devise'
 gem 'bootstrap-sass', '~> 3.1.1'
-gem 'tinymce-rails'
+# gem 'tinymce-rails'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'cocoon'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'font-awesome-sass'
 gem 'role_model'
-gem 'dropzonejs-rails'
+# gem 'dropzonejs-rails'
 gem 'braintree'
 gem 'simple_form'
+gem "bower-rails", "~> 0.10.0"
 
 gem 'omniauth'
 gem 'omniauth-facebook'
