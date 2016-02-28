@@ -1,58 +1,91 @@
 class RendezvousRegistrationsController < ApplicationController
 
-  def get_client_token
-    client_token = Braintree::ClientToken.generate
-    render :text => client_token
-  end
-
   def new
+    @app_data = ActiveSupport::JSON.encode(
+      {
+        :clientToken => Braintree::ClientToken.generate,
+        :fees => RendezvousRegistration.fees
+      }
+    )
+ 
     @rendezvous_registration = RendezvousRegistration.new
     user = @rendezvous_registration.build_user
     user.vehicles.build
   end
 
   def create
-    @rendezvous_registration = RendezvousRegistration.new(rendezvous_registration_params)
-    result = Braintree::Transaction.sale 
+    unless params[:rendezvous_registration][:paid_method] == 'check' || params[:payment_method_nonce].blank?
+      result = Braintree::Transaction.sale(
+        :amount => params[:rendezvous_registration][:amount],
+        :payment_method_nonce => params[:payment_method_nonce],
+        :options => {
+          :submit_for_settlement => true
+        },
+      )
+      
+    
+      if result.success?
+        params[:rendezvous_registration][:amount] = params[:rendezvous_registration][:amount].to_f
+        params[:rendezvous_registration][:paid_amount] = params[:rendezvous_registration][:amount]
+        params[:rendezvous_registration][:paid_method] = 'credit card'
+        params[:rendezvous_registration][:paid_date] = Time.new
+        
+        @rendezvous_registration = RendezvousRegistration.new(rendezvous_registration_params)
+        if @rendezvous_registration.save!
+          flash[:alert] = "You have successfully registered for the Rendezvous. Looking forward to seeing you!"
+          redirect_to :root
+        else
+          flash[:error] = ''
+          @rendezvous_registration.each do |error|
+            flash[:error] += "<p>#{error}</p>".html_safe
+          end
+          render 'rendezvous_registrations/new'
+        end
+          
+      elsif result.transaction
+        flash[:error] = ''
+        result.errors.for(:customer).each do |error|
+          flash[:error] += "<p>#{error}</p>".html_safe
+        end
+        render 'rendezvous_registrations/new'
+      end
+    else
+      params[:rendezvous_registration][:amount] = params[:rendezvous_registration][:amount].to_f
+      params[:rendezvous_registration][:paid_amount] = 0.00
+      params[:rendezvous_registration][:paid_method] = 'none'
+      @rendezvous_registration = RendezvousRegistration.new(rendezvous_registration_params)
+      if @rendezvous_registration.save!
+        flash[:alert] = "You have registered for the Rendezvous but you have not paid. Please send a check for $#{@rendezvous_registration.amount} payable to Citroen Rendezvous, LLC to #{RendezvousRegistration.mailing_address_array.join(', ')}."
+        redirect_to :root
+      else
+        flash[:error] = "There was a problem saving your registration."
+        render 'rendezvous_registrations/new'
+      end
+    end
   end
   
-  # This handles the submission of the payment details via ajax
-  def process_transaction
-    result = Braintree::Transaction.sale(
-      :amount => params[:rendezvous_registration][:amount],
-      :payment_method_nonce => nonce_from_the_client,
-      :billing => {
-        :street_address => params[:rendezvous_registration][:user_attributes][:address_1],
-        :extended_address => params[:rendezvous_registration][:user_attributes][:address_2],
-        :locality_name => params[:rendezvous_registration][:user_attributes][:city], 
-        :postal_code => params[:rendezvous_registration][:user_attributes][:postal_code], 
-        :region => params[:rendezvous_registration][:user_attributes][:state_or_province],
-        :country_code_alpha2 => params[:rendezvous_registration][:user_attributes][:country],
-      },
-      :options => {
-        :submit_for_settlement => true
-      },
-      :cardholder_name => "#{params[:rendezvous_registration][:user_attributes][:first_name]} #{params[:rendezvous_registration][:user_attributes][:last_name]}",
-      :cvv => params[:cvv],
-      :expiration_month => params[:expiration_month],
-      :expiration_month => params[:expiration_year]    
-    )
+  def index
+    @rendezvous_registrations = RendezvousRegistration.all
   end
+  
   
   private
     def rendezvous_registration_params
       params.require(:rendezvous_registration).permit(
         {:user_attributes => 
-          [:id, :email, :first_name, :last_name, :address1, :address2, :city, :state_province, :post_code, :country,
-            {:vehicle_attributes => 
-              [:year, :marque, :other_marque, :model, :other_model, :other_info]
+          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country,
+            {:vehicles_attributes => 
+              [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
             }
           ]
         },
         :number_of_adults,
         :number_of_children,
         :amount,
-        :year
+        :year, 
+        :paid_amount,
+        :paid_method,
+        :paid_date
       )
     end
 end
