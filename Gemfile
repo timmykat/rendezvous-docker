@@ -41,6 +41,7 @@ gem 'font-awesome-sass'
 gem 'role_model'
 gem 'dropzonejs-rails'
 gem 'braintree'
+gem 'simple_form'
 
 gem 'omniauth'
 gem 'omniauth-facebook'

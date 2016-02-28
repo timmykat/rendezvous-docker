@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230194627) do
+ActiveRecord::Schema.define(version: 20160225032918) do
 
   create_table "main_pages", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -29,41 +29,65 @@ ActiveRecord::Schema.define(version: 20151230194627) do
   end
 
   create_table "rendezvous_registrations", force: :cascade do |t|
-    t.integer  "user_id",                   limit: 4
-    t.integer  "transaction_id",            limit: 4
-    t.integer  "registrations_events_id",   limit: 4
-    t.integer  "registrations_vehicles_id", limit: 4
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.integer  "number_of_adults",   limit: 4
+    t.integer  "number_of_children", limit: 4
+    t.decimal  "amount",                           precision: 6, scale: 2
+    t.text     "events",             limit: 65535
+    t.integer  "user_id",            limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "rendezvous_registrations", ["registrations_events_id"], name: "index_rendezvous_registrations_on_registrations_events_id", using: :btree
-  add_index "rendezvous_registrations", ["registrations_vehicles_id"], name: "index_rendezvous_registrations_on_registrations_vehicles_id", using: :btree
-  add_index "rendezvous_registrations", ["transaction_id"], name: "index_rendezvous_registrations_on_transaction_id", using: :btree
-  add_index "rendezvous_registrations", ["user_id"], name: "index_rendezvous_registrations_on_user_id", using: :btree
-
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "email",                  limit: 255, default: "",   null: false
+    t.string   "encrypted_password",     limit: 255, default: "",   null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.string   "provider",               limit: 255
     t.string   "uid",                    limit: 255
     t.integer  "role_mask",              limit: 4
     t.string   "first_name",             limit: 255
     t.string   "last_name",              limit: 255
     t.string   "avatar",                 limit: 255
+    t.boolean  "receive_mailings",                   default: true
+    t.string   "address1",               limit: 255
+    t.string   "address2",               limit: 255
+    t.string   "city",                   limit: 255
+    t.string   "state_or_province",      limit: 255
+    t.string   "postal_code",            limit: 255
+    t.string   "country",                limit: 255
   end
 
+  add_index "users", ["country"], name: "index_users_on_country", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["first_name"], name: "index_users_on_first_name", using: :btree
   add_index "users", ["last_name"], name: "index_users_on_last_name", using: :btree
   add_index "users", ["provider"], name: "index_users_on_provider", using: :btree
+  add_index "users", ["receive_mailings"], name: "index_users_on_receive_mailings", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["state_or_province"], name: "index_users_on_state_or_province", using: :btree
   add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
-  add_foreign_key "rendezvous_registrations", "users"
+  create_table "vehicles", force: :cascade do |t|
+    t.string  "year",         limit: 255
+    t.string  "marque",       limit: 255
+    t.string  "other_marque", limit: 255
+    t.string  "model",        limit: 255
+    t.string  "other_model",  limit: 255
+    t.text    "other_info",   limit: 65535
+    t.integer "user_id",      limit: 4
+  end
+
+  add_index "vehicles", ["marque", "model"], name: "index_vehicles_on_marque_and_model", using: :btree
+  add_index "vehicles", ["marque", "year", "model"], name: "index_vehicles_on_marque_and_year_and_model", using: :btree
+  add_index "vehicles", ["marque"], name: "index_vehicles_on_marque", using: :btree
+  add_index "vehicles", ["model"], name: "index_vehicles_on_model", using: :btree
+  add_index "vehicles", ["other_marque"], name: "index_vehicles_on_other_marque", using: :btree
+  add_index "vehicles", ["user_id"], name: "index_vehicles_on_user_id", using: :btree
+  add_index "vehicles", ["year"], name: "index_vehicles_on_year", using: :btree
+
+  add_foreign_key "vehicles", "users"
 end

@@ -1,0 +1,29 @@
+.nested-fields
+  .row
+    .col-md-4.col-xs-12
+      .form-group
+        = f.input :year, as: :select, :collection => [*1919..2015].reverse
+  .row
+    .col-md-4.col-xs-12
+      .form-group
+        = f.input :marque, as: :select, :collection => Vehicle.marques, :include_blank => '-- Select marque --', :input_html => {:class => 'form-control'}
+    .col-md-4.col-xs-12
+      .form-group
+        = f.input :other_marque, :input_html => { :class => 'form-control' }
+  .row
+    .col-md-6.col-xs-12
+      .form-group
+        = f.input :model, as: :select, :collection => Vehicle.models, :include_blank => '-- Select Citroën model --', :input_html => {:class => 'form-control'}
+    .col-md-6.col-xs-12
+      .form-group
+        = f.input :other_model, :input_html => { :class => 'form-control' }
+  .row
+    .col-md-12
+      %p If you'd like to provide any distinguishing characteristics or interesting historical notes, this is the place.
+      .form-group
+        = f.input :other_info
+  .row
+    .col-md-12
+      = link_to_remove_association "Remove vehicle", f
+
+  

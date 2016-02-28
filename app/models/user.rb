@@ -11,7 +11,21 @@ class User < ActiveRecord::Base
   has_one :avatar
 
   has_many :pictures
+  has_many :vehicles
+  has_many :rendezvous_registrations
+  
+  validates :first_name, :presence => true
+  validates :last_name, :presence => true
+  validates:email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :create }
+  validates :address1, :presence => true
+  validates :city, :presence => true
+  validates :state_or_province, :presence => true
+  
+  # US or Canadian postal code
+  validates :postal_code, :presence => true, :format => { :with => /\A((\d{5})(-\d{4})?)|(\w\d\w\s?\d\w\d)\z/}
+  
   accepts_nested_attributes_for :pictures, allow_destroy: true
+  accepts_nested_attributes_for :vehicles, allow_destroy: true, :reject_if => lambda { |a| (a[:marque].blank? && a[:other_marque].blank?) || (a[:model].blank? && a[:other_model].blank?) }
   
   roles :admin, :organizer, :registrant
 

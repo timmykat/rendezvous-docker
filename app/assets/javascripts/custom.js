@@ -22,6 +22,8 @@ jQuery(document).ready(function() {
         var target = this.hash,
             menu = target;
         $target = $(target);
+        
+        
         if (typeof($target.offset()) != 'undefined') {
           e.preventDefault();
           $('html, body').stop().animate({

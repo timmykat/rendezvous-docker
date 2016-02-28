@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       :omniauth_callbacks => "users/omniauth_callbacks" 
     }
   resources :users
+  resources :rendezvous_registrations
   
   # Omniauth authentication
   get '/auth/:provider/callback', to: 'sessions#create'
@@ -29,6 +30,8 @@ Rails.application.routes.draw do
 
   # AJAX routes
   get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'
+  
+  get '/client_token', to: 'rendezvous_registrations#get_client_token'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

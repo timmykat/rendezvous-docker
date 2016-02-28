@@ -1,73 +1,62 @@
 .spacer
 .container
   .row
-    .col-md-offset-2.col-md-8.col-xs12
+    .col-md-offset-1.col-md-10.col-xs-12
       %h1 2016 Citroen Rendezvous Registration
-      %p You are registering for the Citroen Rendezvous, 16-19 June, 2016.
-      %p
-        %strong Note: This registration does not include accommodations.
-
-      = form_tag '/checkout',  :id => 'checkout', :role => 'form' do
+      %p.bg-info
+        %strong 
+          By registering for the Rendezvous, you will be setting up a user account on our server. 
+          %br We process your credit card information securely but we do not save it.
+      %p 
+        This registration does not include accommodations. You can find accommodation information at the 
+        = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', :target => '_blank'
+        %br
+        %br * = required
+      = simple_form_for @rendezvous_registration do |f|
         .well.well-md
           %h2 Personal Information
-          .row
-            .col-md-5.col-xs-12
-              .form-group
-                %label First Name
-                = text_field_tag 'registration[first_name]', (user_signed_in? ? current_user.first_name : ''), :class => 'form-control'
-            .col-md-7.col-xs-12
-              .form-group
-                %label Last Name
-                = text_field_tag 'registration[last_name]', (user_signed_in? ? current_user.last_name : ''), :class => 'form-control'
-          = field_set_tag 'Address' do
-            .form-group
-              = text_field_tag 'registration[address_1]', nil, :class => 'form-control', :placeholder => 'Address 1'
-            .form-group
-              = text_field_tag 'registration[address_2]', nil, :class => 'form-control', :placeholder => 'Address 2'
-            .form-group
-              %label City
-              = text_field_tag 'registration[city]', nil, :class => 'form-control', :placeholder => 'City'
-            .row
-              .col-md-6.col-xs-12
-                .form-group
-                  %label State or Province
-                  = text_field_tag 'registration[state]', nil, :class => 'form-control', :placeholder => 'State or Province'
-              .col-md-6.col-xs-12
-                .form-group
-                  %label Zip/Post Code
-                  = text_field_tag 'registration[postcode]', nil, :class => 'form-control', :placeholder => 'Zip/Post Code'
+          = f.simple_fields_for :user do |u|
+            = render :partial => 'users/user_info', :locals => { :f => u }
 
+        .well.well-md
+          %h2 Registration Information
+          %p.bg-info The registration fees are $#{RendezvousRegistration.fees[:registration][:adult]} per adult and $#{RendezvousRegistration.fees[:registration][:child]} per child. 
+          .row
+            .col-md-4
+              .form-group
+                = f.input :number_of_adults, :collection => [1, 2, 3, 4, 5, 6, 7, 8], :include_blank => '-- Select --', :input_html => {:class => 'form-control'}
+          .row
+            .col-md-4
+              .form-group
+                = f.input :number_of_children, :collection => [1, 2, 3, 4, 5, 6, 7, 8], :include_blank => '-- Select --', :input_html => {:class => 'form-control'}
+
+          .row
+            .col-md-6.col-xs-12
+              %p.amount.bg-success.form-group
+                %label Total: $
+                %span#calculated_amount
+                = f.input :amount, as: :hidden 
         .well.well-md
           %h2 Payment Information
           #payment-form
-            .form-group
-              %label Card Number
-              #card-number.form-control
-            .form-group
-              %label CVV
-              #cvv.form-control
-            .form-group
-              %label Expiration Date
-              #expiration-date.form-control    
-            
-            = submit_tag 'Register', :confirm => 'Are you sure?'
-  
+          .row
+            .col-md-5
+              .form-group
+                %label{ :for => 'card-number' } Card Number
+                #card-number
+          .row
+            .col-md-3              
+              .form-group
+                %label{ :for => 'expiration-date' } Expiration Date  (MM/YYYY)
+                #expiration-date
+            .col-md-2
+              .form-group
+                %label{ :for => 'cvv' } CVV
+                #cvv
+          .row
+            .col-md-2
+              .form-group
+                = f.button :submit, 'Register', :confirm => 'Are you sure?', :class => 'btn btn-primary'
+
       = javascript_include_tag "https://js.braintreegateway.com/v2/braintree.js" 
-  
-      :javascript
-        var clientToken = "#{@client_token}";
-  
-        braintree.setup(clientToken, "custom", {
-          id: 'payment-form',
-          hostedFields: {
-            number: {
-              slector: '#card-number'
-            },
-            cvv: {
-              slector: '#cvv'
-            },
-            expirationDate: {
-              slector: '#expiration-date'
-            }
-          }
-        });
+      = javascript_include_tag 'braintree_transaction'
