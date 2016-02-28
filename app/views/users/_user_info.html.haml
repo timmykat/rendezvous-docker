@@ -1,0 +1,42 @@
+%label Name
+.row
+  .col-md-6.col-xs-12
+    .form-group
+      = f.input :first_name, :input_html => { :value => (user_signed_in? ? current_user.first_name : ''), :placeholder => 'First name *' }
+  .col-md-6.col-xs-12
+    .form-group
+      = f.input :last_name, :input_html => { :value => (user_signed_in? ? current_user.last_name : ''), :placeholder => 'Last name *' }
+%label E-mail
+.row
+  .col-md-12
+    .form-group
+      = f.input_field :email,:input_html => { :value =>  (user_signed_in? ? current_user.email : '')},  :placeholder => 'E-mail *', :class => 'form-control' 
+  - if !user_signed_in?
+    .col-md-12
+      .form-group
+        = email_field_tag :email_confirmation, nil, :class => 'form-control', :placeholder => 'Confirm e-mail *'
+%label Address
+.row
+  .col-md-12
+    .form-group
+      = f.input_field :address1, :class => 'form-control', :placeholder => 'Address 1 *'
+    .form-group
+      = f.input_field :address2, :class => 'form-control', :placeholder => 'Address 2'
+    .form-group
+      = f.input :city, :input_html => { :class => 'form-control', :placeholder => 'City *' }
+    .row
+      .col-md-6.col-xs-12
+        .form-group
+          = f.input :state_or_province, :input_html => { :class => 'form-control', :placeholder => 'State or Province *' }
+      .col-md-6.col-xs-12
+        .form-group
+          = f.input :postal_code, :input_html => { :class => 'form-control', :placeholder => 'Zip/Postal Code *' }
+
+= field_set_tag 'Vehicles' do
+  %p Please add the vehicles you are bringing to the Rendezvous.
+  #vehicles
+    = f.simple_fields_for :vehicles do |v|
+      = render 'vehicle_fields', :f => v
+    .links
+      = link_to_add_association 'Add vehicle', f, :vehicles
+

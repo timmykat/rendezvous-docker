@@ -60,6 +60,12 @@ a.btn-twitter, a:visited.btn-twitter {
   color: white;
 }
 
+p {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
 .site-name {
   font-size: 24px;
   font-weight: bold;
@@ -177,7 +183,7 @@ ul.nav{
 }
 /* spacer to allow for header */
 .spacer {
-  height: 110px;
+  height: 155px;
 }
 .logged-in-spacer {
   height: 150px;

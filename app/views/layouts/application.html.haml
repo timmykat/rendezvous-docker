@@ -35,18 +35,12 @@
     = csrf_meta_tags
     = yield :header_tags
     
+    %script{:scrc => 'https://js.braintreegateway.com/js/braintree-2.21.0.min.js' }
     /
       [if lt IE 9]
       = javascript_include_tag "html5shiv"
       = javascript_include_tag "respond"
   
-    - # ShareThis scripts
-    :javascript
-      var switchTo5x=true;
-    = javascript_include_tag "http://w.sharethis.com/button/buttons.js" }
-    :javascript
-      stLight.options({publisher: "1cb126ce-1123-4660-9a5a-2f72547b6a80", doNotHash: true, doNotCopy: true, hashAddressBar: false});
-
     - # Google Analytics script
     :javascript
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -107,15 +101,15 @@
                 #bs-example-navbar-collapse-1.collapse.navbar-collapse
                   %ul.nav.navbar-nav.navbar-right
                     %li
-                      %a{:href => "/#sec1"} home
+                      %a{:href => "/#home"} home
                     %li
-                      %a{:href => "/#sec2"} schedule
+                      %a{:href => "/#schedule"} schedule
                     %li
-                      %a{:href => "/#sec3"} info
+                      %a{:href => "/#info"} info
                     %li
-                      %a{:href => "/#sec4"} photos
+                      %a{:href => "/#photos"} photos
                     %li
-                      %a{:href => "/#sec5"} contact us
+                      %a{:href => "/#contact"} contact us
                 / /.navbar-collapse
               / /.container-fluid
     = yield
