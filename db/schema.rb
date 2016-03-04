@@ -11,7 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160228213009) do
+ActiveRecord::Schema.define(version: 20160304034928) do
+
+  create_table "attendees", force: :cascade do |t|
+    t.string   "name",                       limit: 255
+    t.string   "adult_or_child",             limit: 255
+    t.boolean  "volunteer"
+    t.boolean  "sunday_dinner"
+    t.integer  "rendezvous_registration_id", limit: 4
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
+  add_index "attendees", ["adult_or_child"], name: "index_attendees_on_adult_or_child", using: :btree
+  add_index "attendees", ["sunday_dinner"], name: "index_attendees_on_sunday_dinner", using: :btree
+  add_index "attendees", ["volunteer"], name: "index_attendees_on_volunteer", using: :btree
 
   create_table "main_pages", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -40,8 +54,11 @@ ActiveRecord::Schema.define(version: 20160228213009) do
     t.string   "paid_method",        limit: 255
     t.datetime "paid_date"
     t.string   "year",               limit: 255
+    t.string   "invoice_number",     limit: 255
+    t.decimal  "donation",                         precision: 6, scale: 2
   end
 
+  add_index "rendezvous_registrations", ["invoice_number"], name: "index_rendezvous_registrations_on_invoice_number", using: :btree
   add_index "rendezvous_registrations", ["paid_amount"], name: "index_rendezvous_registrations_on_paid_amount", using: :btree
   add_index "rendezvous_registrations", ["paid_date"], name: "index_rendezvous_registrations_on_paid_date", using: :btree
   add_index "rendezvous_registrations", ["paid_method"], name: "index_rendezvous_registrations_on_paid_method", using: :btree
