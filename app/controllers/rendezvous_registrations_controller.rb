@@ -9,6 +9,7 @@ class RendezvousRegistrationsController < ApplicationController
     )
  
     @rendezvous_registration = RendezvousRegistration.new
+    @rendezvous_registration.attendees.build
     user = @rendezvous_registration.build_user
     user.vehicles.build
   end
@@ -79,9 +80,13 @@ class RendezvousRegistrationsController < ApplicationController
             }
           ]
         },
+        { :attendee_attributes =>
+          [:id, :name, :adult_or_child, :volunteer, :sunday_dinner, :_destroy]
+        },
         :number_of_adults,
         :number_of_children,
         :amount,
+        :donation,
         :year, 
         :paid_amount,
         :paid_method,

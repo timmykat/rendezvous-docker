@@ -1,9 +1,12 @@
 class RendezvousRegistration < ActiveRecord::Base
   belongs_to :user
+  has_many :attendees, :dependent => :destroy
   accepts_nested_attributes_for :user, :reject_if => lambda { |a| a[:email].blank? || a[:first_name].blank? || a[:last_name].blank? }
+  accepts_nested_attributes_for :attendees
   
   validate :minimum_number_of_adults
   validates :paid_method, :inclusion => ['credit card', 'check']
+  validates :invoice_number, :uniqueness => true
   
   serialize :events, JSON
   
@@ -16,8 +19,8 @@ class RendezvousRegistration < ActiveRecord::Base
   def self.fees
     {
       :registration => {
-        :adult => 75,
-        :child => 75
+        :adult => 50,
+        :child => 0
       },
       :events => {
         :ice_cream_social => 5
@@ -48,5 +51,9 @@ class RendezvousRegistration < ActiveRecord::Base
   
   def self.mailing_address_array
     [ 'Citroen Rendezvous, LLC', '245 Harvester Road', 'Orange, CT 06477-2929', 'United States' ]
+  end
+  
+  def invoice_number
+    @invoice_number || "RR#{Time.now.year}-#{RendezvousRegistration.last.pluck(:id) + 101}"
   end
 end

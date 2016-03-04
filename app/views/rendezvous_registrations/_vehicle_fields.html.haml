@@ -1,4 +1,4 @@
-.nested-fields.well.well-md
+.nested-fields.well.well-sm
   .row
     .col-md-4.col-xs-12
       .form-group
@@ -24,6 +24,6 @@
         = f.input :other_info
   .row
     .col-md-12
-      = link_to_remove_association "Remove vehicle", f
+      = link_to_remove_association '<i class="fa fa-minus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :class => 'btn btn-danger btn-sm'
 
 
