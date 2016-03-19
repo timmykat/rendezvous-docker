@@ -23,6 +23,6 @@ class Mailer < ApplicationMailer
   def registration_notification(rendezvous_registration)
     @rr = rendezvous_registration
     recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
-    mail(to: recipients, subject: "New Rendezvous registration from #{@rr.user.display_name}"
+    mail(to: recipients, subject: "New Rendezvous registration from #{@rr.user.display_name}")
   end
 end
