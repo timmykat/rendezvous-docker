@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :attendee do
-    name "MyString"
-    adult_or_child "MyString"
+    name "Andre Citroen"
+    adult_or_child "adult"
     volunteer false
     sunday_dinner false
   end
