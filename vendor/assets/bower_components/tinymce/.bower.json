@@ -18,12 +18,12 @@
     ".npmignore",
     "changelog.txt"
   ],
-  "version": "4.3.4",
-  "_release": "4.3.4",
+  "version": "4.3.7",
+  "_release": "4.3.7",
   "_resolution": {
     "type": "version",
-    "tag": "4.3.4",
-    "commit": "4db115aff381c7e881193eede8cb8d8172d01963"
+    "tag": "4.3.7",
+    "commit": "19611cd875c27eed9a96c7734952bc34a41ba397"
   },
   "_source": "git://github.com/tinymce/tinymce-dist.git",
   "_target": "*",
