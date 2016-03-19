@@ -1,0 +1,90 @@
+.container
+  .row
+    .col-md-12
+      %h1 Administrative Info
+      #tabbed
+        %ul
+          %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
+          %li= link_to '<i class="fa fa-female"></i> Users'.html_safe, '#tabbed-2'
+          %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-3'
+        #tabbed-1
+          .well.well-sm
+            %h2 Summary for #{Time.now.year}
+            %p Number of registrations: #{@data[:registrants].count}
+            %p 
+              Number of attendees:
+              %br Adults: #{@data[:adult]}
+              Kids:   #{@data[:child]}
+              %br Sunday dinner: #{@data[:sunday_dinner]}
+              Volunteers: #{@data[:volunteer]}
+            %p Number of vehicles: #{@vehicles.count}
+            %p 
+              Braintree account:
+              = link_to '<i class="fa fa-bank"></i>'.html_safe, 'https://sandbox.braintreegateway.com/login', :target => '_blank'
+          %table.table.striped
+            %thead
+              %tr
+                %th Name
+                %th.text-center Adults
+                %th.text-center Children
+                %th.text-center Vehicles
+                %th.text-center Registration Fee
+                %th.text-center Donation
+                %th.text-center Total
+                %th.text-center Paid
+                %th.text-center Due
+            %tbody
+              - @registrations.each do |registration|
+                %tr
+                  %td= link_to last_name_first(registration.user), rendezvous_registration_path(registration.id)
+                  %td.text-center= registration.number_of_adults
+                  %td.text-center= registration.number_of_children
+                  %td.text-center= vehicles_list(registration.user.vehicles)
+                  %td.text-center= number_to_currency(registration.registration_fee)
+                  %td.text-center= number_to_currency(registration.donation)
+                  %td.text-center= number_to_currency(registration.total)
+                  %td.text-center= number_to_currency(registration.paid_amount)
+                  - due = amount_due(registration)
+                  %td{:class => (due > 0.0 ? 'text-center alert-danger' : 'text-center alert-success')}= number_to_currency(due)
+        #tabbed-2
+          %table.table
+            %thead
+              %tr
+                %th Admin
+                %th Name
+                %th.text-center Email
+                %th.text-center Sign-in
+                %th.text-left Address
+                %th.text-center Vehicles
+            %tbody
+              - @data[:registrants].each do |user|
+                %tr{ :class => ((user.has_role? :admin) ? 'bg-success' : '' ) }
+                  %td.text-center= check_box_tag "is_admin_user_#{user.id}", 1, (user.has_role? :admin), :class => "admin_check", :disabled => (user.id == current_user.id)
+                  %td.text-center= last_name_first(user)
+                  %td.text-center= user.email
+                  %td.text-center= user.provider.blank? ? 'E-mail' : user.provider.titlecase
+                  %td.text-left= address_of(user)
+                  %td.text-center= vehicles_list(user.vehicles)
+        #tabbed-3
+          .well.well-sm
+            %h2 Summary
+            %p Number of Citroens: #{@data[:citroens].count}
+            %p Number of non-Citroens: #{@data[:non_citroens].count}
+            %p Total: #{@vehicles.count}
+          %table.table
+            %thead
+              %tr
+                %th Model
+                %th Year
+                %th Marque
+                %th Other Info
+                %th Registrant
+            %tbody
+              - @vehicles.each do |vehicle|
+                %tr
+                  %td= vehicle.model
+                  %td= vehicle.year
+                  %td= vehicle.marque
+                  %td
+                    %p= vehicle.other_info
+                  %td= full_name(vehicle.user)

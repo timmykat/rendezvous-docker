@@ -1,25 +1,13 @@
 - resource = :user
 - resource_name = 'user'
-.spacer
 .container
-  .row
-    .col-md-12
-      .account.social-media
-        %h2 Sign in with social media
-        %a.btn.btn-facebook.btn-lg.facebook{ :href => user_omniauth_authorize_path(:facebook) }
-          %i.fa.fa-facebook
-          Sign in with Facebook
-        %a.btn.btn-twitter.btn-lg.twitter{ :href => user_omniauth_authorize_path(:twitter) }
-          %i.fa.fa-twitter
-          Sign in with Twitter
-
   .row
     .col-md-12
       %hr
       .account.email
-        %h2 Sign in with an email address
+        %h2 Sign In or Sign Up
     .col-md-6
-      .well
+      .well.sign-in
         %h3 Got an account? Sign in here.
         = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
           .form-group
@@ -34,24 +22,33 @@
             = f.submit "Log in", :class => "btn btn-info"
         
     .col-md-6
-      .well
+      .well.sign-up
         %h3 Want an account? Sign up here.
         = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
           .form-group
             = f.label :email
             %br/
             = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
+          %p{ :class => 'help-block' } 
+            Your password must be 8-20 characters long and must include one each:
+            %br
+            lower case:
+            %i.fa.fa-check.pass.lower 
+            upper case:
+            %i.fa.fa-check.pass.upper 
+            digit:
+            %i.fa.fa-check.pass.digit 
           .form-group
             = f.label :password
             - if @minimum_password_length
               %em
                 (#{@minimum_password_length} characters minimum)
             %br/
-            = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Set password'
+            = f.password_field :password, autocomplete: "off", :class => 'form-control primary', :placeholder => 'Set password'
           .form-group
             = f.label :password_confirmation
             %br/
-            = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control', :placeholder => 'Confirm password'
+            = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control confirm', :placeholder => 'Confirm password'
           .form-group
             = f.label "Name"
             %br/

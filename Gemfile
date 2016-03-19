@@ -29,7 +29,6 @@ gem 'uglifier', '>= 1.3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'dotenv'
 gem 'devise'
 gem 'bootstrap-sass', '~> 3.1.1'
 # gem 'tinymce-rails'
@@ -39,7 +38,8 @@ gem 'cocoon'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'font-awesome-sass'
 gem 'role_model'
-# gem 'dropzonejs-rails'
+gem 'delayed_job_active_record'
+gem 'daemons'
 gem 'braintree'
 gem 'simple_form'
 gem "bower-rails", "~> 0.10.0"
@@ -60,6 +60,8 @@ group :development do
 end
 
 group :development, :test do
+  gem 'dotenv'
   gem 'rspec-rails'
   gem 'factory_girl_rails', '4.4.0'
+  gem 'database_cleaner'
 end

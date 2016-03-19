@@ -9,7 +9,8 @@
         %br Citroen owners, enthusiasts and friends
       = image_tag "40th-badge.png"
       %br/
-      = link_to 'Register', '/register', :class => 'btn btn-primary btn-lg'
+      = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
+      = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
       -#
         - if !user_signed_in?
           %button#login User Login

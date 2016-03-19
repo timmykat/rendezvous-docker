@@ -48,7 +48,7 @@ class PicturesController < ApplicationController
     end
     
     @picture = Picture.new(picture_params)
-    if @picture.save!
+    if @picture.save
       respond_to do |format|
         format.json { render :json => @picture }
       end

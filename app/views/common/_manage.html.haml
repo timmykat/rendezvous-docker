@@ -1,0 +1,20 @@
+.manage
+  .pull-left
+    %ul.list-inline
+      %li= link_to '<i class="fa fa-arrow-left"></i> Back to info page'.html_safe, :root
+      - if user_signed_in?
+        - current_registration = current_user.rendezvous_registrations.current.first
+        - if current_user.has_role? :admin
+          %li= link_to 'Admin page', admin_index_path
+        - if current_registration.blank?
+          %li (no registration for #{Time.now.year})
+        - else
+          %li= link_to 'My registration', rendezvous_registration_path(current_registration)
+  .pull-right
+    - if user_signed_in?
+      %ul.list-inline
+        %li 
+          Signed in with 
+          %em #{sign_in_method(current_user)}
+        %li= link_to 'Sign out', destroy_user_session_path, :method => :delete
+            
