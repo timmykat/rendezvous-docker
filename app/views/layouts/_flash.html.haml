@@ -1,0 +1,10 @@
+- if flash[:alert] || flash[:notice]
+  .flash-wrapper
+    .flash
+      %i.fa.fa-close
+      - if flash[:alert]
+        .text-danger{ :role => 'alert' }
+          = flash[:alert].html_safe
+      - if flash[:notice]
+        .text-primary{ :role => 'alert' }
+          = flash[:notice].html_safe

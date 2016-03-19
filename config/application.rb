@@ -32,6 +32,9 @@ module Rendezvous
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     
+    # Use Delayed Job for queueing emails
+    config.active_job.queue_adapter = :delayed_job
+    
     config.rendezvous = YAML::load(ERB.new(File.read("#{Rails.root}/config/rendezvous.yml")).result).deep_symbolize_keys
   end
 end

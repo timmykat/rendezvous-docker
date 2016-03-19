@@ -1,0 +1,95 @@
+- config = Rails.configuration.rendezvous
+:javascript
+  var appData = #{ActiveSupport::JSON.encode(@app_data)};
+  braintree.setup(appData.clientToken, "custom", {
+    id: 'rendezvous_registration_payment',
+    hostedFields: {
+      number: {
+        selector: '#card-number'
+      },
+      cvv: {
+        selector: '#cvv',
+        placeholder: '3 or 4 digits'
+      },
+      expirationDate: {
+        selector: '#expiration-date',
+        placeholder: 'MM/YYYY'
+      },
+      styles: {
+        "input": {
+          "color": '#555',
+          "font-size": '14px',
+        }
+      }
+    }
+  });
+.container
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12
+      %h1 2016 Registration
+      %h2 Payment
+      %section
+        %h3 Help Out
+        = simple_form_for @rendezvous_registration, :url => complete_rendezvous_registration_path(@rendezvous_registration), :html => { :id => 'rendezvous_registration_payment' } do |f|
+          .row
+            .col-md-12
+              %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated!
+              .form-group
+                %label Donation
+                = f.input :donation, :label => false, :collection => donation_list(config[:suggested_donations]), :as => :radio_buttons, :input_html => { :class => 'total-calculation' }, :item_label_class => 'radio-inline', :item_wrapper_tag => false
+              .row
+                .col-md-2
+                  .form-group
+                    = f.input :donation, :label => false, :input_html => { :placeholder => 'Other amount', :class => 'total-calculation'}, :disabled => true
+
+              .row
+                .col-md-6.col-xs-12
+                  %p.amount.bg-success.form-group
+                    %label Total: $
+                    = f.input_field :total, :value => @rendezvous_registration.total.to_s , :disabled => false, :class => 'calculated'
+          %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
+          %section
+            %h2 Payment Information
+            .row
+              .col-md-12
+                .form-group
+                  = f.input :paid_method, :label => 'Payment method', :collection => payment_options, :as => :radio_buttons, :checked => 'credit card', :input_html => { :class => 'payment' }
+            .row
+              .col-md-6.col-xs-12
+                #payment-form
+                  .row
+                    .col-md-12
+                      .form-group
+                        %label{ :for => 'card-number' } Card Number
+                        #card-number.form-control
+                  .row
+                    .col-md-8            
+                      .form-group
+                        %label{ :for => 'expiration-date' } Expiration Date
+                        #expiration-date.form-control
+                    .col-md-4
+                      .form-group
+                        %label{ :for => 'cvv' } CVV
+                        #cvv.form-control
+                = f.input_field :status, :as => :hidden, :value => 'complete'  
+          %section#mailing-address.hidden
+            %p
+              %em Please make your check payable to Citroen Rendezvous, LLC:
+            %p 
+              Please include your registration code on the check: 
+              %strong #{@invoice_number}
+            %p 
+              %strong Please mail your check to:
+              %br= rendezvous_mailing_address()
+            = f.input_field :status, :as => :hidden, :value => 'payment due'  
+          %section
+            - if !Rails.env = 'development'
+              .row
+                .col-md-12
+                  .captcha
+                    = recaptcha_tags
+            .row
+              .col-md-12
+                .form-group
+                  = f.button :submit, 'Complete registration'.html_safe, :class => 'btn btn-primary'
+

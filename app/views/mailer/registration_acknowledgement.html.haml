@@ -1,0 +1,35 @@
+%p Dear #{full_name(@rr.user)},
+
+%p You have successfully registered for the the 40th Citroen Rendezvous, which will take place June 16-19 in Saratoga Springs, New York. We hope you're as excited as we are!
+
+- if @rr.paid_method == 'credit card'
+  %p Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
+- else
+  %p An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied. 
+
+%p Your Rendezvous details:
+%ul
+  %li Registration fee: number_to_currency(@rr.registration_fee)
+  %li Donation: number_to_currency(@rr.donation)
+  %li Total: number_to_currency(@rr.total)
+  %li Due: number_to_currency(@rr.amount_due)
+
+%p Attendees:
+%table
+- @rr.attendees.each do |a|
+  %tr
+    %td #{a.name}
+    %td #{a.adult_or_child.titlecase}
+    %td Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'} 
+    %td Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
+
+%p Vehicles:
+- @rr.user.vehicles.each do |vehicle|
+  %br full_spec(vehicle)
+
+%p If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
+%p Here's to a great milestone Rendezvous!
+
+%p Warmest regards,
+  %br Your chauffeurs
+  *Michaela Hellman, David Cossitt Levy, Christoper (Toaph) Westfall, Tim Kinnel

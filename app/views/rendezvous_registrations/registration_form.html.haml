@@ -1,0 +1,76 @@
+- config = Rails.configuration.rendezvous
+:javascript
+  var appData = #{ActiveSupport::JSON.encode(@app_data)};
+.container
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12
+      %h1  2016 Registration
+      %p.bg-primary 
+        %strong 
+          The registration fee is $#{config[:fees][:registration][:adult]} per adult (16+). Kids 15 and under are free! You may pay by credit card or by check.
+      .well.well-sm
+        %p
+          Registration consists of four steps:
+        %ol
+          %li Create an account
+          %li Enter registration information
+          %li Review information
+          %li Enter payment method and submit
+        - if !user_signed_in?
+          %p 
+            %strong
+              Please create an account if you haven't got one yet, or sign in if you do. You can sign up via email, Facebook, or Twitter:
+              = link_to 'Sign up or sign in', sign_up_or_in_path
+          %p.printed-form
+            If you prefer not to register on line, please print this registration form and send it in with your registration fee payment:
+            = link_to '<i class="fa  fa-file-pdf-o"></i>'.html_safe, 'Rendezvous-registration-form.pdf', :target => '_blank'
+      %p 
+        This registration does not include accommodations. You can find accommodation information at the 
+        = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', :target => '_blank'
+
+      #registration-form
+        - if !user_signed_in?
+          .cover      
+        = simple_form_for @rendezvous_registration do |f|
+          %section
+            %h2 Personal Information
+            %p * = required
+            = f.simple_fields_for :user do |u|
+              = render :partial => 'users/user_info', :locals => { :f => u }
+
+          %section
+            %h2 Registration Information
+            %h3 Attendees
+            .row
+              .col-md-12
+                #attendees
+                  = f.simple_fields_for :attendees do |a|
+                    = render :partial => 'attendee_fields', :locals => { :f => a }
+                  .links
+                    = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, :class => 'btn btn-primary btn-sm'
+                %br
+                %br
+            .row
+              .col-md-4
+                .form-group
+                  %label Total adults:
+                  = f.input_field :number_of_adults, :disabled => true, :class => 'calculated fee-calculation'
+            .row
+              .col-md-4
+                .form-group
+                  %label Total kids:
+                  = f.input_field :number_of_children, :disabled => true, :class => 'calculated fee-calculation'
+
+            .row
+              .col-md-6.col-xs-12
+                %p.amount.bg-success.form-group
+                  %label Total: $
+                  = f.input_field :registration_fee, :disabled => true, :class => 'calculated'
+            = f.input_field :year, :as => :hidden, :value => Time.new.year
+            = f.input_field :status, :as => :hidden, :value => 'initiated'
+
+          .row
+            .col-md-12
+              .form-group
+                = f.button :submit, :input_html => { :value => 'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, :class => 'btn btn-primary'
+

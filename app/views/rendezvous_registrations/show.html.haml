@@ -1,0 +1,77 @@
+.container.invoice
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12
+      %h1 R#{Time.new.year} Registration
+      %p 
+        %b Registration number: 
+        #{@rendezvous_registration.invoice_number}
+
+      .well.well-sm.registrant
+        %h3 Registrant
+        %p 
+          %br #{full_name(@rendezvous_registration.user)}
+          #{@rendezvous_registration.user.address1}
+          - unless @rendezvous_registration.user.address2.blank?
+            @rendezvous_registration.user.address2
+          %br #{@rendezvous_registration.user.city}, #{@rendezvous_registration.user.state_or_province}
+          #{@rendezvous_registration.user.postal_code}
+          %br #{@rendezvous_registration.user.country}
+ 
+      .well.well-sm.attendees
+        %h3 Attendees
+        %table.table
+          %thead
+            %th Name
+            %th Adult or Child
+            %th Sunday Dinner
+            %th Volunteer
+          %tbody
+            -@rendezvous_registration.attendees.each do |a|
+              %tr
+                %td= a.name
+                %td= a.adult_or_child
+                %td #{a.sunday_dinner? ? 'yes' : 'no'}
+                %td #{a.volunteer? ? 'yes' : 'no'}
+          
+      .well.well-sm.payment
+        %h3 Registration fees
+        %p 
+          %label Payment method: 
+          #{@rendezvous_registration.paid_method.titlecase}
+        %p 
+          %label Registration fee: 
+          #{number_to_currency(@rendezvous_registration.registration_fee)} (US)
+        %p 
+          %label Donation:
+          - if @rendezvous_registration.donation.blank?
+            (no donation)
+          - else 
+            #{number_to_currency(@rendezvous_registration.donation)} (US)
+        %p 
+          %label Total: 
+          #{number_to_currency(@rendezvous_registration.total)} (US)
+        %p 
+          %label Paid: 
+          #{number_to_currency(@rendezvous_registration.paid_amount)} (US)
+        %p 
+          %label Due: 
+          #{number_to_currency(@rendezvous_registration.amount_due)} (US)
+        
+      .well.well-sm.vehicles
+        %h3 Vehicles
+        %table.table
+          %thead
+            %th Marque
+            %th Model
+            %th Year
+            %th Other info
+          %tbody
+            -@rendezvous_registration.user.vehicles.each do |v|
+              %td= v.marque
+              %td= v.model
+              %td= v.year
+              %td= v.other_info
+      
+    
+  
+  

@@ -20,8 +20,26 @@ $hover-color:  #94171B;     /*  darker red */
   #1B77AE;  light medium blue
   #E6E351:  acid green
 */
+
+/* sticky footer */
+html, body {
+  height: 100%;
+}
+.body_wrapper {
+  height: auto !important;
+  margin: 0 auto -90px;
+  min-height: 100%;
+}
+.footer, .push {
+  height: 90px;
+}
+
+$success: #3c763d;
+
 $facebook-blue: #4C66A4;
 $twitter-blue: #55ACEF;
+
+$field-success: #e2f7d3;
 
 .fa.fa-facebook-square {
   font-size: 18px;
@@ -38,8 +56,21 @@ $twitter-blue: #55ACEF;
   z-index: 200;
 }
 
+/* Set background for field inputs with success  */
+.has-success .form-control {
+  background-color: $field-success;
+}
+
+i.fa.fa-check.pass {
+  color: $success;
+  visibility: hidden;
+  &.success {
+    visibility: visible;
+  }
+}
+
 a, a:visited {
-  color: $secondary-color;
+  color: $primary-color;
   text-decoration: underline;
 }
 .navbar a, .navbar a:visited {
@@ -69,6 +100,12 @@ p {
   margin-top: 10px;
   border-radius: 4px;
 }
+section {
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(200, 220, 250, 0.3);
+}
 
 .site-name {
   font-size: 24px;
@@ -93,10 +130,23 @@ body{
 }
 .flash {
   width: 60%;
+  min-width: 320px;
   background: white;
-  border-radius: 10px;
+  border-radius: 7px;
   font-weight: bold;
-  
+  text-align: center;
+  position: relative;
+}
+i.fa-close {
+  color: $primary-color;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+table tr:hover {
+  background-color: #eee;
 }
 
 /* Mailchimp sign-up */
@@ -114,11 +164,24 @@ body{
 }
 
 /*header area*/
+.manage {
+  background-color: #333;
+  position: fixed;
+  z-index: 500;
+  width: 100%;
+  color: #ddd;
+  padding: 10px 30px;
+  height: 55px;
+  ul {
+    margin-bottom: 0;
+  }
+}  
 .top-header{
 	background: $primary-color;
 	position: fixed;
 	width: 100%;
 	z-index: 333;
+	top: 40px;
 }
 .header-row{
 	margin: 0;
@@ -126,12 +189,7 @@ body{
 }
 .logged-in {
   background-color: #454545;
-  color: #ccc;
-  padding: 5px 30px 5px 0;
   text-align: right;
-  position: fixed;
-  z-index: 500;
-  width: 100%;
   p {
     margin: 0;
   }
@@ -196,8 +254,8 @@ ul.nav{
   margin: 0 auto;
   width: 30%;
   min-width: 300px;
-  background: rgba(255,255,255,0.8);
-  border: solid 2px #ccc;
+  background: white;
+  border: solid 2px #666;
   border-radius: 15px;
   padding: 30px;
 }
@@ -613,12 +671,21 @@ color:#EFEFEF;
 .amount {
   font-size: 1.2em;
 }
-input#rendezvous_registration_amount {
+input.calculated {
   border: none;
   background: transparent;
   font-weight: bold;
 }
 
+/******************************
+simple layout
+*******************************/
+
+.simple h1 {
+  background: image-url('rendezvous-logo.png') no-repeat right bottom;
+  background-size: auto 100%;
+  padding-top: 40px;
+}
 
 
 
