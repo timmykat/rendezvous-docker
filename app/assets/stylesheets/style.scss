@@ -680,15 +680,18 @@ input.calculated {
 /******************************
 simple layout
 *******************************/
-
-.simple h1 {
-  background: image-url('rendezvous-logo.png') no-repeat right bottom;
-  background-size: auto 100%;
-  padding-top: 40px;
+.simple .heading {
+  margin-top: 40px;
 }
-
-
-
+.simple h3 {
+  margin-top: 5px;
+}
+.simple .table {
+  margin-bottom: 10px;
+}
+.simple .invoice .fa-print {
+  font-size: 1.5em;
+}
 
 /******************************
 responsive area
@@ -768,6 +771,17 @@ responsive area
 	.about-inside{
 		padding: 0px;
 	}
+}
+@media print {
+  .manage, .flash-wrapper, .back-bar, .push, .footer, #modal {
+    display: none;
+  }
+  .simple .heading {
+    margin-top: 0;
+  }
+  .fa.fa-print {
+    display: none;
+  }
 }
 
 

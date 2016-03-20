@@ -1,12 +1,9 @@
 class RendezvousRegistrationsController < ApplicationController
 
-  before_action :check_admin, :only => :index
+  before_action :require_admin, :only => :index
   before_action :authenticate_user!, :except => [:new]
   before_action :get_app_data
   
-  def check_admin
-    # redirect_to :root unless current_user && (current_user.has_role? :admin)
-  end
   
   def get_app_data
     @app_data = 
@@ -14,11 +11,9 @@ class RendezvousRegistrationsController < ApplicationController
         :fees => Rails.configuration.rendezvous[:fees]
       }
   end
-  
+    
   def new
   
-    session[:destination] = register_path
-    
     @rendezvous_registration = RendezvousRegistration.new
     @rendezvous_registration.attendees.build
     if user_signed_in?

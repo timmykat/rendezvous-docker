@@ -21,7 +21,7 @@ $(function() {
     var lower = $(this).val().match(/[a-z]/);  
     var upper = $(this).val().match(/[A-Z]/);  
     var digit = $(this).val().match(/[0-9]/);
-    var length = $(this).val().length >= 8;
+    var length = $(this).val().length >= 6;
 
     if ($(this).hasClass('primary')) {
       if (lower) {
