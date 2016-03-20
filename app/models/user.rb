@@ -17,14 +17,14 @@ class User < ActiveRecord::Base
   
   validates :first_name, :presence => true
   validates :last_name, :presence => true
-  validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :create }
-  validates :address1, :presence => true
-  validates :city, :presence => true
-  validates :state_or_province, :presence => true
+  validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
+  validates :address1, :presence => true, :on => :update
+  validates :city, :presence => true, :on => :update
+  validates :state_or_province, :presence => true, :on => :update
 #   validates :password, :length => { :in => 6..20 }
   
   # US or Canadian postal code
-  validates :postal_code, :presence => true, :format => { :with => /\A((\d{5})(-\d{4})?)|(\w\d\w\s?\d\w\d)\z/}
+  validates :postal_code, :presence => true, :format => { :with => /\A((\d{5})(-\d{4})?)|(\w\d\w\s?\d\w\d)\z/}, :on => :update
   
   # Password policy
   validate :password_complexity

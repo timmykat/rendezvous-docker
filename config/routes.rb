@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   devise_for :users, 
     :controllers => { 
       :users => 'users',
-      :passwords => 'passwords'
-#       :omniauth_callbacks => "users/omniauth_callbacks" 
+      :passwords => 'custom_devise/passwords',
+      :registrations => 'custom_devise/registrations'
     },
     :path => ''
   resources :users

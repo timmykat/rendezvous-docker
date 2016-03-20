@@ -28,15 +28,15 @@
           .form-group
             = f.label :email
             %br/
-            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
+            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail', :required => true
           %p{ :class => 'help-block' } 
-            Your password must be 8-20 characters long and must include one each:
+            Your password must be at least 6 characters and must include one each:
             %br
-            lower case:
+            Lower case:
             %i.fa.fa-check.pass.lower 
-            upper case:
+            Upper case:
             %i.fa.fa-check.pass.upper 
-            digit:
+            Digit:
             %i.fa.fa-check.pass.digit 
           .form-group
             = f.label :password
@@ -44,20 +44,16 @@
               %em
                 (#{@minimum_password_length} characters minimum)
             %br/
-            = f.password_field :password, autocomplete: "off", :class => 'form-control primary', :placeholder => 'Set password'
+            = f.password_field :password, autocomplete: "off", :class => 'form-control primary', :placeholder => 'Set password', :required => true
           .form-group
             = f.label :password_confirmation
             %br/
-            = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control confirm', :placeholder => 'Confirm password'
+            = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control confirm', :placeholder => 'Confirm password', :required => true
           .form-group
             = f.label "Name"
             %br/
-            = f.text_field :first_name, :class => 'form-control inline-form-element', :placeholder => 'First'
-            = f.text_field :last_name, :class => 'form-control inline-form-element', :placeholder => 'Last'
-          .form-group
-            = f.check_box :receive_mailings, :checked => true
-            = f.label "Receive mailings"
-            %p We recommend that you leave this checked because we promise to send you only useful information, we promise not to bombard you with stupid crap, and we promise not to give out your email address. And you can change it later if you think we lied.
+            = f.text_field :first_name, :class => 'form-control inline-form-element', :placeholder => 'First', :required => true
+            = f.text_field :last_name, :class => 'form-control inline-form-element', :placeholder => 'Last', :required => true
           .form-group
             = recaptcha_tags
           .actions
