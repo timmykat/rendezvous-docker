@@ -1,6 +1,4 @@
 - config = Rails.configuration.rendezvous
-:javascript
-  var appData = #{ActiveSupport::JSON.encode(@app_data)};
 .container
   .row
     .col-md-offset-1.col-md-10.col-xs-12
@@ -36,11 +34,12 @@
             %h2 Personal Information
             %p * = required
             = f.simple_fields_for :user do |u|
-              = render :partial => 'users/user_info', :locals => { :f => u }
+              = render :partial => 'common/user_info', :locals => { :f => u }
 
           %section
             %h2 Registration Information
             %h3 Attendees
+            %p.hint (Adults are 16 and up, children are 15 and under)
             .row
               .col-md-12
                 #attendees

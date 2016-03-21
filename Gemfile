@@ -44,9 +44,13 @@ gem 'braintree'
 gem 'simple_form'
 gem "bower-rails", "~> 0.10.0"
 
-gem 'omniauth'
-gem 'omniauth-facebook'
-gem 'omniauth-twitter'
+# Pdf creation
+gem 'wkhtmltopdf-binary'
+gem 'wicked_pdf'
+
+# gem 'omniauth'
+# gem 'omniauth-facebook'
+# gem 'omniauth-twitter'
 gem 'gibbon'
 gem 'aws-sdk', '~> 2'
 

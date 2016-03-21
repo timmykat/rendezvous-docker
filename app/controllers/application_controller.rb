@@ -3,6 +3,17 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   
+  before_action :get_app_data
+  
+  def get_app_data
+    @app_data = 
+      {
+        :fees => Rails.configuration.rendezvous[:fees],
+        :marques => Rails.configuration.rendezvous[:vehicle_marques],
+        :models => Rails.configuration.rendezvous[:vehicle_models]
+      }
+  end
+      
   helper ApplicationHelper
   
   def require_admin

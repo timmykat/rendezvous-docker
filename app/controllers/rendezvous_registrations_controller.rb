@@ -2,17 +2,17 @@ class RendezvousRegistrationsController < ApplicationController
 
   before_action :require_admin, :only => :index
   before_action :authenticate_user!, :except => [:new]
-  before_action :get_app_data
   
-  
-  def get_app_data
-    @app_data = 
-      {
-        :fees => Rails.configuration.rendezvous[:fees]
-      }
-  end
-    
   def new
+  
+    if user_signed_in?
+      @rendezvous_registration = current_user.rendezvous_registrations.current.first
+      if !@rendezvous_registration.blank?
+        flash[:notice] = "You've already created a registration."
+        redirect_to edit_user_path(current_user)
+        return
+      end
+    end
   
     @rendezvous_registration = RendezvousRegistration.new
     @rendezvous_registration.attendees.build
@@ -43,8 +43,8 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration.invoice_number = RendezvousRegistration.invoice_number
     
     if !@rendezvous_registration.save
-      flash[:error] = 'There was a problem creating your registration: '
-      flash[:error] += @rendezvous_registration.errors.full_messages.to_sentence
+      flash[:alert] = 'There was a problem creating your registration: '
+      flash[:alert] += @rendezvous_registration.errors.full_messages.to_sentence
       render 'registration_form'
     else
       if !user_signed_in?
@@ -82,7 +82,7 @@ class RendezvousRegistrationsController < ApplicationController
       @credit_connection = true
     rescue e
       @credit_connection = false
-      flash[:error] = "We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check."
+      flash[:alert] = "We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check."
       redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
     end
   end
@@ -129,10 +129,12 @@ class RendezvousRegistrationsController < ApplicationController
         @rendezvous_registration.paid_date = Time.new
         @rendezvous_registration.status = 'complete'
         @rendezvous_registration.save!
+        Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
+        Mailer.registration_notification(@rendezvous_registration).deliver_later
         redirect_to @rendezvous_registration, :notice => 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         return
       elsif result.errors
-        flash[:error] = result.message.to_sentence
+        flash[:alert] = result.message
         render rendzvous_registration_path(@rendezvous_registration)
         return
       end
@@ -149,10 +151,11 @@ class RendezvousRegistrationsController < ApplicationController
     
     # Update the registration
     if !@rendezvous_registration.update_attributes(rendezvous_registration_params)
-      flash[:error] = @rendzvous.errors.messages.to_sentence
+      flash[:alert] = @rendzvous.errors.messages.to_sentence
       render 'payment'
     else
       Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
+      Mailer.registration_notification(@rendezvous_registration).deliver_later
       redirect_to rendezvous_registration_path(@rendezvous_registration)
     end
   end

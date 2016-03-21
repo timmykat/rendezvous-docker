@@ -3,13 +3,15 @@
     %ul.list-inline
       %li= link_to '<i class="fa fa-arrow-left"></i> Back to info page'.html_safe, :root
       - if user_signed_in?
+        = link_to 'My user profile', edit_user_path(current_user)
         - current_registration = current_user.rendezvous_registrations.current.first
-        - if current_user.has_role? :admin
-          %li= link_to 'Admin page', admin_index_path
         - if current_registration.blank?
-          %li (no registration for #{Time.now.year})
+          %li
+            = link_to "Register for #{Time.now.year}", register_path
         - else
           %li= link_to 'My registration', rendezvous_registration_path(current_registration)
+        - if current_user.has_role? :admin
+          %li= link_to 'Admin page (admins only)', admin_index_path
   .pull-right
     - if user_signed_in?
       %ul.list-inline

@@ -1,0 +1,22 @@
+.container
+  .row
+    .col-md-12
+      %h1 My User Profile
+      %p.bg-primary View and change your user info and vehicles, and view your registration.
+      #tabbed
+        %ul
+          %li= link_to '<i class="fa fa-car"></i> User Info + Vehicles <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
+          - if !@rendezvous_registration.blank?
+            %li= link_to '<i class="fa fa-registered"></i> My Registration'.html_safe, '#tabbed-2'
+        #tabbed-1
+          = simple_form_for @user do |f|
+            = render :partial => 'common/user_info', :locals => { :f => f }
+            %br
+            .form-group
+              = f.button :submit, :input_html => { :value => 'Update' }, :class => 'btn btn-primary'
+                           
+        - if !@rendezvous_registration.blank?
+          #tabbed-2
+            = render :partial => 'common/registration_info'
+        
+      

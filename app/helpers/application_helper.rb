@@ -69,13 +69,45 @@ module ApplicationHelper
   end
   
   def marques
-    Rails.configuration.rendezvous[:vehicle_marques]
+    Rails.configuration.rendezvous[:vehicle_marques].map{ |m| [m, m] }
   end
   
   def models
-    Rails.configuration.rendezvous[:vehicle_models]
+    Rails.configuration.rendezvous[:vehicle_models].map{ |m| [m, m] }
   end
   
+  def selected_marque(vehicle)
+    if marques.include? vehicle.marque
+      vehicle.marque
+    elsif vehicle.marque.blank?
+      'Citroen'
+    else
+      'Other'
+    end
+  end
+  
+  def other_marque(vehicle)
+    if !marques.include? vehicle.marque
+      vehicle.marque
+    end
+  end
+  
+  def selected_model(vehicle)
+    if models.include? vehicle.model
+      vehicle.model
+    else
+      nil
+    end
+  end
+  
+  def other_model(vehicle)
+    if !models.include? vehicle.model
+      vehicle.model
+    else
+      nil
+    end
+  end
+
   def month_list
     [
       ['[01]  January', '01'],
