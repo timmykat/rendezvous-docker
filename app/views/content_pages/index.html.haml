@@ -10,10 +10,8 @@
       = image_tag "40th-badge.png"
       %br/
       = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
-      = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
-      -#
-        - if !user_signed_in?
-          %button#login User Login
+      - if !user_signed_in?
+        = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
     .row
       .col-md-offset-4.col-md-4
         .connect.well.well-sm
@@ -39,8 +37,8 @@
   .container
     .row
       .col-md-8.col-md-offset-2.about-heading
-        %h2
-          SCHEDULE
+        %h2.main-heading
+          Schedule
         = image_tag "chevrons.png"
         %p
           This is a tentative overview activity schedule, based on previous years. There's a new organizing group in town, and we're reviewing the activities, so this is subject to change (but we intend to keep favorites!) and more details will be available later.
@@ -102,7 +100,7 @@
   .container
     .row
       .col-md-5.col-sm-5.col-xs-5
-        %h2 INFO
+        %h2.main-heading Info
         = image_tag "chevrons.png"
         %p          
           The Citroen Rendezvous is the largest gathering of Citroens in North America, taking place annually on Father's Day weekend in Saratoga Springs, NY.  It is the people who make the event special. Friends, family, and other enthusiasts are warmly welcomed, as are other French, European, and just plain quirky cars.
@@ -147,7 +145,7 @@
 %section#photos.portfolio.text-center
   .row.portfolio-row
     .portfolio-heading
-      %h2 PHOTOS
+      %h2.main-heading Photos
       = image_tag "chevrons.png"
       %p
         The best things about the Rendezvous are the cars and the people!
@@ -176,7 +174,7 @@
   .container
     .row
       %article.contact-heading
-        %h2 CONTACT US
+        %h2.main-heading Contact us
         = image_tag "chevrons.png"
         %p
           -#

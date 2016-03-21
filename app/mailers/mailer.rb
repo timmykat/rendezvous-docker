@@ -17,7 +17,8 @@ class Mailer < ApplicationMailer
   
   def registration_acknowledgement(rendezvous_registration)
     @rr = rendezvous_registration
-    mail(to: @rr.user.email, subject: "Thanks for registering for the 2016 Rendezvous!")
+    pdf = Wicked.pdf.new.pdf_from_url(rendezvous_registration_url(@rr))
+    mail(to: @rr.user.email, subject: "Thanks for registering for the 2016 Rendezvous!", :attachments => { "Rendezvous-2016-registration.pdf" => pdf })
   end
   
   def registration_notification(rendezvous_registration)

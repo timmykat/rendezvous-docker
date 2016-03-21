@@ -1,4 +1,4 @@
-- if user_signed_in?
+- if user_signed_in? 
   %p.bg-info You are signed in with your user account.
 .row
   .col-md-12
@@ -7,7 +7,9 @@
       - if user_signed_in?
         = f.input :id, :as => :hidden, :input_html => { :value => current_user.id }
        
-%label Name
+.row
+  .col-md-12
+    %label Name
 .row
   .col-md-6.col-xs-12
     .form-group
@@ -16,10 +18,10 @@
     .form-group
       = f.input :last_name, :input_html => { :value => (user_signed_in? ? current_user.last_name : ''), :placeholder => 'Last name *' }
 
-%label Address
 .row
   .col-md-12
     %p If you intend to pay by credit card, please use your billing address.
+    %label Address
     .form-group
       = f.input_field :address1, :input_html => { :value => (user_signed_in? ? current_user.address1 : '') }, :class => 'form-control', :placeholder => 'Address 1 *'
     .form-group
@@ -43,7 +45,7 @@
   %p Please add the vehicles you are bringing to the Rendezvous.
   #vehicles
     = f.simple_fields_for :vehicles do |v|
-      = render 'vehicle_fields', :f => v
+      = render 'common/vehicle_fields', :f => v
     .links
-      = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, :class => "btn btn-primary btn-sm"
+      = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, :class => "btn btn-primary btn-sm", :partial => 'common/vehicle_fields'
       Add a vehicle

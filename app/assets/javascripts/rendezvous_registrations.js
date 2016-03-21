@@ -27,33 +27,6 @@ $(function() {
   });
   
 
-  // Toggle access to vehicle other fields
-  $('#vehicles').on('change', 'select.  _select', function(e) {
-    if ($(this).val() != 'Other') {
-      $('input.other_marque').attr('disabled', true);
-      
-      if ($(this).val() != 'Citroen') {
-        $('input.other_model').attr('disabled', false);
-        $('select.model_select').attr('selected', null);
-        $('select.model_select').attr('disabled', true);
-      } else {
-        $('input.other_model').attr('disabled', true);
-        $('select.model_select').attr('disabled', false);
-      }
-    } else {
-      $('input.other_marque').attr('disabled', false);
-      $('input.other_model').attr('disabled', false);
-      $('select.model_select').attr('disabled', true);
-    }
-  });
-  $('#vehicles').on('change', 'select.model_select', function(e) {
-    if ($(this).val() == 'Other') {
-      $('input.other_model').attr('disabled', false);
-    } else {
-      $('input.other_model').attr('disabled', true).val('');
-    }
-  });
-  
   // Get adult and kid totals
   $('#attendees').on('click', 'input[type=radio], i.fa-minus', function(e) {  
     var adult = $('#attendees input[value="adult"]:checked').length;

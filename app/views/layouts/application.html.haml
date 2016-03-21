@@ -20,8 +20,10 @@
       [if lt IE 9]
       = javascript_include_tag "html5shiv"
       = javascript_include_tag "respond"
+    :javascript
+      var appData = #{ActiveSupport::JSON.encode(@app_data)};
 
-  %body.simple
+  %body{ :class => "c_#{controller_name()} simple" }
     .body_wrapper
       = render :partial => 'common/manage'
       = render :partial => 'layouts/flash'
