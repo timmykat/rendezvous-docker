@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     },
     :path => ''
   resources :users
-  resources :rendezvous_registrations, { :except => [ :destroy ] }
+  resources :rendezvous_registrations, :except => [:index]
   resources :rendezvous_registrations do
     get :review, :on => :member
     get :payment, :on => :member

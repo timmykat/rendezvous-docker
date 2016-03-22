@@ -11,7 +11,8 @@
             %th.text-center Children
             %th.text-center Vehicles
             %th.text-center Fee
-            %th.text-center (Donation)
+            %th.text-center Donation
+            %th.text-center Total
             %th.text-center Paid
             %th.text-center Due
         %tbody
@@ -22,8 +23,9 @@
               %td.text-center= registration.number_of_adults
               %td.text-center= registration.number_of_children
               %td.text-center= vehicles_list(registration.user.vehicles)
-              %td.text-center= number_to_currency(registration.amount)
+              %td.text-center= number_to_currency(registration.registration_fee)
               %td.text-center= number_to_currency(registration.donation)
+              %td.text-center= number_to_currency(registration.total)
               %td.text-center= number_to_currency(registration.paid_amount)
               - due = amount_due(registration)
               - if due > 0.0

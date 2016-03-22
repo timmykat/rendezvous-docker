@@ -34,41 +34,56 @@
         
     .well.well-sm.payment
       %h3 Fees
-      %p 
-        %label Registration fee: 
-        #{number_to_currency(@rendezvous_registration.registration_fee)} (US)
-        - if @rendezvous_registration.status == 'complete'
-          %br 
-            %label Payment method: 
-            #{@rendezvous_registration.paid_method.titlecase}
-          %br 
-          %label Donation:
-          - if @rendezvous_registration.donation.blank?
-            (no donation)
-          - else 
-            #{number_to_currency(@rendezvous_registration.donation)} (US)
-          %br
-            %label Total: 
-            #{number_to_currency(@rendezvous_registration.total)} (US)
+      .row 
+        .col-md-6.col-xs-12
+          %p
+            %label Registration fee: 
+            #{number_to_currency(@rendezvous_registration.registration_fee)} (US)
+            - if @rendezvous_registration.status != 'initiated'
+              %br  
+              %label Donation:
+              - if @rendezvous_registration.donation.blank?
+                (no donation)
+              - else 
+                #{number_to_currency(@rendezvous_registration.donation)} (US)
+              %br
+              %br
+                %label Total: 
+                #{number_to_currency(@rendezvous_registration.total)} (US)
       
-          %label Paid: 
-          #{number_to_currency(@rendezvous_registration.paid_amount)} (US)
+              - if @rendezvous_registration.paid_method
+                %label Payment method: 
+                #{@rendezvous_registration.paid_method.titlecase}
+                %br
+                %label Paid: 
+                #{number_to_currency(@rendezvous_registration.paid_amount)} (US)
+      
+                %br
+                  %strong
+                    %label Due
+                    #{number_to_currency(@rendezvous_registration.amount_due)} (US)
+        - if (@rendezvous_registration.status == 'payment due')
+          .col-md-6.col-xs-12
+            %p
+              Please print this invoice or the one you received via email and send with a check for the amount due to:
+              %br= rendezvous_mailing_address()
+
         
-          %br        
-            %label Due: 
-            #{number_to_currency(@rendezvous_registration.amount_due)} (US)
       
     .well.well-sm.vehicles
       %h3 Vehicles
-      %table.table
-        %thead
-          %th Marque
-          %th Model
-          %th Year
-          %th Other info
-        %tbody
-          -@rendezvous_registration.user.vehicles.each do |v|
-            %td= v.marque
-            %td= v.model
-            %td= v.year
-            %td= v.other_info
+      - if @rendezvous_registration.user.vehicles.blank?
+        %p You are not bringing any vehicles to the Rendezvous.
+      - else
+        %table.table
+          %thead
+            %th Marque
+            %th Model
+            %th Year
+            %th Other info
+          %tbody
+            - @rendezvous_registration.user.vehicles.each do |v|
+              %td= v.marque
+              %td= v.model
+              %td= v.year
+              %td= v.other_info

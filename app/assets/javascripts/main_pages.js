@@ -26,7 +26,7 @@ $(function() {
   
   // Fade out the flash wrapper when it appears
   $('.flash-wrapper').delay(5000).fadeOut();
-  $('.flash-wrapper').on('click', 'i.fa-close', function() {
-    $(this).parent().parent().fadeOut('fast');
+  $('body').on('click', 'i.fa-close', function() {
+    $('.flash-wrapper').hide();
   });
 });

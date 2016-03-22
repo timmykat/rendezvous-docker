@@ -25,6 +25,19 @@ $hover-color:  #94171B;     /*  darker red */
 html, body {
   height: 100%;
 }
+
+/* Turn off spinners on number fields */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0;
+}
+
 .body_wrapper {
   height: auto !important;
   margin: 0 auto -90px;
@@ -778,14 +791,11 @@ responsive area
 	}
 }
 @media print {
-  .manage, .flash-wrapper, .back-bar, .push, .footer, #modal {
+  .manage, .flash-wrapper, .back-bar, .push, .footer, #modal, .fa-print {
     display: none;
   }
   .simple .heading {
     margin-top: 0;
-  }
-  .fa.fa-print {
-    display: none;
   }
 }
 

@@ -9,10 +9,10 @@
 
 %p Your Rendezvous details:
 %ul
-  %li Registration fee: number_to_currency(@rr.registration_fee)
-  %li Donation: number_to_currency(@rr.donation)
-  %li Total: number_to_currency(@rr.total)
-  %li Due: number_to_currency(@rr.amount_due)
+  %li Registration fee: #{number_to_currency(@rr.registration_fee)}
+  %li Donation: #{number_to_currency(@rr.donation)}
+  %li Total: #{number_to_currency(@rr.total)}
+  %li Due: #{number_to_currency(@rr.amount_due)}
 
 %p Attendees:
 %table
@@ -25,7 +25,7 @@
 
 %p Vehicles:
 - @rr.user.vehicles.each do |vehicle|
-  %br full_spec(vehicle)
+  %br #{full_spec(vehicle)}
 
 %p If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
 %p Here's to a great milestone Rendezvous!

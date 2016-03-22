@@ -12,9 +12,6 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
-    
-    binding.pry;
-    
     if !@user.update(user_params)
       flash[:alert] = 'We had a problem saving your updated information'
       render :action => :edit
@@ -55,7 +52,7 @@ class UsersController < ApplicationController
       params.require(:user).permit(
         [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country,
           {:vehicles_attributes => 
-            [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
+            [:id, :year, :marque, :model, :other_info, :_destroy]
           }
         ]
       )

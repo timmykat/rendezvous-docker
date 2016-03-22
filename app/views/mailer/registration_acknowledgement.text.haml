@@ -10,10 +10,10 @@ You have successfully registered for the the 40th Citroen Rendezvous, which will
 -------
 Your Rendezvous details:
 
-Registration fee: number_to_currency(@rr.registration_fee)
-Donation: number_to_currency(@rr.donation)
-Total: number_to_currency(@rr.total)
-Due: number_to_currency(@rr.amount_due)
+Registration fee: #{number_to_currency(@rr.registration_fee)}
+Donation: #{number_to_currency(@rr.donation)}
+Total: #{number_to_currency(@rr.total)}
+Due: #{number_to_currency(@rr.amount_due)}
 
 Attendees:
 - @rr.attendees.each do |a|
