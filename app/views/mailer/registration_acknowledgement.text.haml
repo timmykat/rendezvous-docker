@@ -7,7 +7,7 @@ You have successfully registered for the the 40th Citroen Rendezvous, which will
 - else
   An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied. 
 
--------
+
 Your Rendezvous details:
 
 Registration fee: #{number_to_currency(@rr.registration_fee)}
@@ -23,7 +23,6 @@ Vehicles:
 - @rr.user.vehicles.each do |v|
   #{v.year} #{v.marque} #{v.model}
 
--------
 
 If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
 
