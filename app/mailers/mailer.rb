@@ -1,5 +1,7 @@
 class Mailer < ApplicationMailer
 
+  helper ApplicationHelper
+
   def send_to_us(name, email, message)
     @name = name
     @email = email
