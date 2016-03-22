@@ -1,22 +1,25 @@
 .manage
   .pull-left
     %ul.list-inline
-      %li= link_to '<i class="fa fa-arrow-left"></i> Back to info page'.html_safe, :root
+      %li= link_to '<i class="fa fa-arrow-left"></i> Back to info page'.html_safe, :root, :class => 'btn btn-sm btn-info'
       - if user_signed_in?
-        = link_to 'My user profile', edit_user_path(current_user)
+        = link_to 'My user profile', edit_user_path(current_user), :class => 'btn btn-sm btn-primary'
         - current_registration = current_user.rendezvous_registrations.current.first
         - if current_registration.blank?
           %li
-            = link_to "Register for #{Time.now.year}", register_path
+            = link_to "Register for #{Time.now.year}", register_path, :class => 'btn btn-sm btn-primary'
         - else
-          %li= link_to 'My registration', rendezvous_registration_path(current_registration)
+          %li= link_to 'My registration', rendezvous_registration_path(current_registration), :class => 'btn btn-sm btn-primary'
         - if current_user.has_role? :admin
-          %li= link_to 'Admin page (admins only)', admin_index_path
+          %li= link_to 'Admin page (admins only)', admin_index_path, :class => 'btn btn-sm btn-info'
+          - if Rails.env != 'production' && !current_registration.blank?
+            %li= link_to 'Delete my registration (admin testing only)', rendezvous_registration_path(current_registration), :method => :delete, :class => 'btn btn-sm btn-danger', :confirmation => 'Are you sure?'
+            
   .pull-right
     - if user_signed_in?
       %ul.list-inline
         %li 
           Signed in with 
           %em #{sign_in_method(current_user)}
-        %li= link_to 'Sign out', destroy_user_session_path, :method => :delete
+        %li= link_to 'Sign out', destroy_user_session_path, :method => :delete, :class => 'btn btn-sm btn-warning'
             

@@ -42,6 +42,8 @@ vehicle_models:
   - CX (series 1)
   - CX (series 2)
   - Other
+  
+print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
 
 development:
   facebook:
@@ -53,13 +55,13 @@ development:
   mailer:
     delivery_method: :smtp
     settings:
-      address:               email-smtp.us-east-1.amazonaws.com            
-      domain:                rendezvous.wordsareimages.com
-      port:                  587
-      user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
-      password:              <%= ENV['RENDEZVOUS_SES_PASSWORD'] %>
-      authentication:        login
-      enable_starttls_auto:  true
+      :address:             smtp.gmail.com
+      :domain:              localhost
+      :port:                587
+      :user_name:           <%= ENV['GMAIL_USER'] %>
+      :password:            <%= ENV['GMAIL_PASS'] %>
+      :authentication:      :plain
+      :enable_starttls_auto: true
 
   inquiry_recipients:
     - tim@wordsareimages.com 

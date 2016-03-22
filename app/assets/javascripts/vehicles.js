@@ -17,7 +17,6 @@ $(function() {
       disableTextField($marque.find('input[type=text]'));      
       disableTextField($model.find('input[type=text]'));
       $model.find('select').prop('disabled', false);
-      $model.find('select').val(null);
     } else {
       $model.find('select').prop('disabled', true);
       $model.find('input[type=text]').prop('disabled', false);
@@ -67,7 +66,7 @@ $(function() {
       var $select = $selectWithOther.find('select');
       var $other = $selectWithOther.find('input[type=text]');
           
-      if ($select.val().match(/other/i)) {
+      if ($select.val() && $select.val().match(/other/i)) {
         $other.prop('disabled', false);
       }
       handleFieldInteractions();

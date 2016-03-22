@@ -1,27 +1,51 @@
 - config = Rails.configuration.rendezvous
 :javascript
   var appData = #{ActiveSupport::JSON.encode(@app_data)};
-  braintree.setup(appData.clientToken, "custom", {
-    id: 'rendezvous_registration_payment',
-    hostedFields: {
-      number: {
-        selector: '#card-number'
+  
+  var myIntegration;
+  
+  var buildBraintree = function() {
+    console.log('Setting up Braintree');
+    braintree.setup(appData.clientToken, "custom", {
+      onReady: function(integration) {
+        myIntegration = integration;
       },
-      cvv: {
-        selector: '#cvv',
-        placeholder: '3 or 4 digits'
-      },
-      expirationDate: {
-        selector: '#expiration-date',
-        placeholder: 'MM/YYYY'
-      },
-      styles: {
-        "input": {
-          "color": '#555',
-          "font-size": '14px',
+      id: 'rendezvous_registration_payment',
+      hostedFields: {
+        number: {
+          selector: '#card-number'
+        },
+        cvv: {
+          selector: '#cvv',
+          placeholder: '3 or 4 digits'
+        },
+        expirationDate: {
+          selector: '#expiration-date',
+          placeholder: 'MM/YYYY'
+        },
+        styles: {
+          "input": {
+            "color": '#555',
+            "font-size": '14px',
+          }
         }
       }
-    }
+    });    
+  }
+  var teardownBraintree = function() {
+    console.log('Tearing down Braintree');
+    myIntegration.teardown();
+  }
+  $(function() {
+    buildBraintree();
+    
+    $('#rendezvous_registration_paid_method_credit_card').on('click', function() {
+      buildBraintree();
+    });
+    
+    $('#rendezvous_registration_paid_method_check').on('click', function() {
+      teardownBraintree();
+    });
   });
 .container
   .row

@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   validate :password_complexity
   
   accepts_nested_attributes_for :pictures, allow_destroy: true
-  accepts_nested_attributes_for :vehicles, allow_destroy: true, :reject_if => lambda { |v| ( v[:marque].blank? || v[:model].blank? ) }
+  accepts_nested_attributes_for :vehicles, allow_destroy: true, :reject_if => lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
   
   roles :admin, :organizer, :registrant
     

@@ -20,11 +20,9 @@ $(function() {
   $('input#rendezvous_registration_number_of_children').val(0);
   setRegistrationFee();
   
-  $('input#rendezvous_registration_user_attributes_first_name, input#rendezvous_registration_user_attributes_last_name').on('blur', function(e) {
-    var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
-    var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
-    $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
-  });
+  var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
+  var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
+  $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
   
 
   // Get adult and kid totals
@@ -54,12 +52,13 @@ $(function() {
       } else {
         donation = 0.
       }
-      $('input#rendezvous_registration_total').val(appData.total + donation);
+      var total = parseFloat(appData.registration_fee) + donation;
+      $('input#rendezvous_registration_total').val(total);
     }
   };
   
   // Update total
-  $('.total-calculation').on('click keyup', function(e) {
+  $('.total-calculation').on('click blur', function(e) {
     setTotal();
   });
 

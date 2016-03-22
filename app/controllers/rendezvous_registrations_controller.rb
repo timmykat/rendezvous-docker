@@ -1,7 +1,8 @@
 class RendezvousRegistrationsController < ApplicationController
 
   before_action :require_admin, :only => :index
-  before_action :authenticate_user!, :except => [:new]
+  before_action :authenticate_user!, :except => [:new, :show]
+  before_action :authenticate_or_token, :only => [:show]
   
   def new
   
@@ -78,7 +79,7 @@ class RendezvousRegistrationsController < ApplicationController
     begin
       @rendezvous_registration = RendezvousRegistration.find(params[:id])
       @app_data[:clientToken] =  Braintree::ClientToken.generate
-      @app_data[:total] = @rendezvous_registration.total
+      @app_data[:registration_fee] = @rendezvous_registration.registration_fee
       @credit_connection = true
     rescue e
       @credit_connection = false
@@ -141,10 +142,9 @@ class RendezvousRegistrationsController < ApplicationController
     end 
     
     # Set the paid amounts
-    params[:rendezvous_registration][:amount] = params[:rendezvous_registration][:amount].to_f
-    if paid_with_credit_card
-      params[:rendezvous_registration][:paid_amount] = params[:rendezvous_registration][:amount]
-      params[:rendezvous_registration][:paid_method] = 'credit card'
+    params[:rendezvous_registration][:total] = params[:rendezvous_registration][:total].to_f
+    if params[:rendezvous_registration][:paid_method] == 'credit card'
+      params[:rendezvous_registration][:paid_amount] = params[:rendezvous_registration][:total]
     else
       params[:rendezvous_registration][:paid_amount] = 0.00
     end
@@ -155,7 +155,7 @@ class RendezvousRegistrationsController < ApplicationController
       render 'payment'
     else
       Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
-      Mailer.registration_notification(@rendezvous_registration).deliver_later
+      Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
       redirect_to rendezvous_registration_path(@rendezvous_registration)
     end
   end
@@ -168,9 +168,24 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
   end
   
+  def destroy
+    @rendezvous_registration = RendezvousRegistration.find(params[:id])
+    @rendezvous_registration.destroy
+    
+    redirect_to edit_user_path(current_user), :notice => 'Your registration has been deleted.'
+  end
+  
   
   private
-      
+    
+    # Otherwise printing the url requires authentication  
+    def authenticate_or_token
+      if params[:print_token] == Rails.configuration.rendezvous[:print_token]
+        return true
+      end
+      authenticate_user!
+    end
+  
     def rendezvous_registration_params
       params.require(:rendezvous_registration).permit(
         :number_of_adults,
