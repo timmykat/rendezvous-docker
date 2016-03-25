@@ -19,12 +19,12 @@
     "script",
     "test"
   ],
-  "version": "1.2.0",
-  "_release": "1.2.0",
+  "version": "1.2.1",
+  "_release": "1.2.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.2.0",
-    "commit": "15515b20722b955224db00caffaa8f28ac845875"
+    "tag": "v1.2.1",
+    "commit": "72ca4f1a4ea205f94cf6c42c1bf7f0b90c429858"
   },
   "_source": "git://github.com/rails/jquery-ujs.git",
   "_target": "*",

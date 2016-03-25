@@ -6,6 +6,7 @@
     "jquery-ui": "latest",
     "dropzone": "latest",
     "tinymce": "latest",
-    "braintree-web": "latest"
+    "braintree-web": "latest",
+    "dropdown": "latest"
   }
 }
