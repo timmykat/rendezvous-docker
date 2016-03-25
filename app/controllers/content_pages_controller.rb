@@ -21,7 +21,8 @@ class ContentPagesController < ApplicationController
 
     Mailer.send_to_us(@name, @email, @message).deliver_later
     Mailer.autoresponse(@name, @email, @message).deliver_later
-    redirect_to :root, :notice => 'Thank you for sending us a message: you should receive a confirmation email shortly.'
+    flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
+    redirect_to :root
   end
 
   private

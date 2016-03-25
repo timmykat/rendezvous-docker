@@ -53,7 +53,8 @@
                 %th Admin
                 %th Name
                 %th.text-center Email
-                %th.text-center Sign-in
+                %th.text-center Mailing List
+                %th.text-center Citroenenvie
                 %th.text-left Address
                 %th.text-center Vehicles
             %tbody
@@ -62,7 +63,8 @@
                   %td.text-center= check_box_tag "is_admin_user_#{user.id}", 1, (user.has_role? :admin), :class => "admin_check", :disabled => (user.id == current_user.id)
                   %td.text-center= last_name_first(user)
                   %td.text-center= user.email
-                  %td.text-center= user.provider.blank? ? 'E-mail' : user.provider.titlecase
+                  %td.text-center= (user.receive_mailings? ? 'Subscribed' : '')
+                  %td.text-center= (user.citroenvie? ? 'yes' : '')
                   %td.text-left= address_of(user)
                   %td.text-center= vehicles_list(user.vehicles)
         #tabbed-3

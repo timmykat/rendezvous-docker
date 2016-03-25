@@ -68,18 +68,19 @@ class User < ActiveRecord::Base
     end
   end
   
-  def self.mailchimp_init
-    gibbon = Gibbon::Request.new(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key]) 
+  def self.mailchimp_init_request
+    gibbon = Gibbon::Request.new  #(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key]) 
     gibbon.timeout = 10
     gibbon
   end
   
   def self.synchronize_with_mailchimp_data
-    gibbon = User.mailchimp_init
+    gibbon = User.mailchimp_init_request
+    list_id = Rails.configuration.rendezvous[:mailchimp][:list][:list_id]
     
     # Get list data from Mailchimp
     begin
-      subscriber_list = gibbon.lists(Rails.configuration.rendezvous[:mailchimp][:list][:list_id]).members.retrieve( :params => { :fields => 'members.email_address,members.status', :count => "1000" } )
+      subscriber_list = gibbon.lists(list_id).members.retrieve( :params => { :fields => 'members.email_address,members.status', :count => "1000" } )
 
       subscriber_emails = subscriber_list['members'].reduce([]) { |subscriber_emails, s| 
         subscriber_emails << s['email_address'] if s['status'] == 'subscribed' 
@@ -100,7 +101,7 @@ class User < ActiveRecord::Base
     rescue Gibbon::MailChimpError => e
       response = {
         :status => :error,
-        :message => "#{e.message} - #{e.raw_body}"
+        :message => "MailChimp Error: #{e.details}"
       }
     end
     response
@@ -108,13 +109,11 @@ class User < ActiveRecord::Base
   
   def mailchimp_action(action)
   
-    gibbon = User.mailchimp_init
+    gibbon = User.mailchimp_init_request
     list_id = Rails.configuration.rendezvous[:mailchimp][:list][:list_id]
     
     require 'digest'
     hashed_email = Digest::MD5.hexdigest email.downcase
-    
-    binding.pry
     
     case action
       when 'get_status'
@@ -127,13 +126,14 @@ class User < ActiveRecord::Base
         rescue Gibbon::MailChimpError => e
           response = {
             :status => :error,
-            :message => e.detail
+            :message => "MailChimp Error: #{e.detail}"
           }
         end
         
       when 'subscribe'
         begin
-          gibbon.lists(list_id).members.upsert( :body => { :email_address => email, :status => 'subscribed', :merge_fields => { :FNAME => first_name, :LNAME => last_name }} )
+          # MMERGE3 ==> Thinking about coming to the Rendezvous 2016 'Yes', 'No', 'Maybe'
+          gibbon.lists(list_id).members.upsert( :body => { :email_address => email, :status => 'subscribed', :merge_fields => { :FNAME => first_name, :LNAME => last_name, :MMERGE3 => 'Yes' }} )
           receive_mailings = true
           self.save(:validate => false)
            response = {
@@ -143,14 +143,14 @@ class User < ActiveRecord::Base
         rescue Gibbon::MailChimpError => e
           response = {
             :status => :error,
-            :message => e.detail
+            :message => "MailChimp Error: #{e.detail}"
           }
         end
         
       when 'unsubscribe'
         begin
           gibbon.lists(list_id).members(hashed_email).update( :body => { :status => 'unsubscribed' } )
-          receive_mailings = true
+          receive_mailings = false
           self.save!
            response = {
             :status => :ok,
@@ -159,7 +159,7 @@ class User < ActiveRecord::Base
         rescue Gibbon::MailChimpError => e
           response = {
             :status => :error,
-            :message => e.detail
+            :message => "MailChimp Error: #{e.detail}"
           }
         end
     end 

@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
   before_action :authenticate_user!, :only => [:edit, :update]
+  before_action :require_admin, :only => [:toggle_admin, :synchronize_with_mailchimp]
 
   def sign_up_or_in
   end
@@ -12,11 +13,23 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
+    mailchimp_init = @user.receive_mailings
     if !@user.update(user_params)
-      flash[:alert] = 'We had a problem saving your updated information'
+      flash_alert('We had a problem saving your updated information')
       render :action => :edit
     else
-      flash[:notice] = 'Your user/vehicle information was updated.'
+      if @user.receive_mailings != mailchimp_init
+        action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'
+        response = @user.mailchimp_action(action)
+        if response[:status] == :ok
+          flash_notice('Your user information and mailing list status were updated.')
+        else
+          flash_alert('Your user information was updated, but there was a problem updating your mailing list status.')
+          flash_alert(response[:message])
+        end
+      else
+        flash_notice('Your user information was updated.')
+      end
       redirect_to edit_user_path(@user)
     end
   end
@@ -46,11 +59,22 @@ class UsersController < ApplicationController
     end
     render :json => true
   end
+  
+  def synchronize_with_mailchimp
+    response = User.synchronize_with_mailchimp_data
+    subscriber_count = response[:user_list].reject { |k,v| v != 'subscribed' }.count
+    if response[:status] == :ok
+      flash_notice("Synchronization successfull. There are #{subscriber_count} subscribers with accounts.")
+    else
+      flash_alert(response[:message])
+    end
+    redirect_to admin_index_path
+  end
 
   private
     def user_params
       params.require(:user).permit(
-        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country,
+        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
           {:vehicles_attributes => 
             [:id, :year, :marque, :model, :other_info, :_destroy]
           }

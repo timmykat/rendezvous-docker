@@ -4,6 +4,16 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   before_action :get_app_data
+  before_action :flash_array
+  
+  # Need this for other gems that might set flash
+  def flash_array
+    unless flash.keys.blank?
+      flash.keys.each do |type|
+        flash[type] = [ flash[type] ] if flash[type].is_a? String
+      end
+    end
+  end
   
   def get_app_data
     @app_data = 
@@ -17,15 +27,10 @@ class ApplicationController < ActionController::Base
   helper ApplicationHelper
   
   def require_admin
-    if !current_user 
-      flash[:alert] = "You must be logged in and a site admin to view that page (<a href='#{sign_up_or_in_path}'>sign in</a>)"
-      redirect_to :root
-      return
-    elsif !(current_user.has_role? :admin)
-      flash[:alert] = "You must be an admin to view that page."
-      redirect_to :root
-      return
-    end
+    return if current_user && (current_user.has_role? :admin)
+    
+    flash_alert("You must be a site admin to do that.")
+    redirect_to :root
   end
   
   def after_sign_in_path_for(resource)
@@ -41,5 +46,23 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource_or_scope)
     root_path
-  end  
+  end
+  
+  def method_missing(method_sym, *arguments, &block)
+    if method_sym.to_s =~ /^flash_(.*)$/
+      type = $1.to_sym
+      flash[type] ||= []
+      flash[type] << arguments.first
+    else
+      super
+    end
+  end
+  
+  def respond_to? (method_sym, include_private = false)
+    if method_sym.to_s =~ /^flash_(.*)$/
+      true
+    else
+      super
+    end
+  end
 end
