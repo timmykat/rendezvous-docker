@@ -69,6 +69,11 @@ $field-success: #e2f7d3;
   z-index: 200;
 }
 
+.bg-rendezvous {
+  background-color: $primary-color;
+  color: white;
+}
+
 /* Set background for field inputs with success  */
 .has-success .form-control {
   background-color: $field-success;
@@ -187,6 +192,9 @@ table tr:hover {
   height: 55px;
   ul {
     margin-bottom: 0;
+  }
+  .dropdown-menu {
+    padding: 0;
   }
 }  
 .top-header{

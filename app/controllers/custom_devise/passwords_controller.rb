@@ -9,7 +9,7 @@ class  CustomDevise::PasswordsController < Devise::PasswordsController
     if successfully_sent?(resource)
       respond_with({}, :location => after_sending_reset_password_instructions_path_for(resource_name))
     else
-      flash[:alert] = "Sorry, that is not a valid email."
+      flash_alert("Sorry, that is not a valid email.")
       redirect_to root_path
       # respond_with(resource)
     end

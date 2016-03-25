@@ -9,7 +9,9 @@ Rails.application.routes.draw do
       :registrations => 'custom_devise/registrations'
     },
     :path => ''
+  get '/users/synchronize_mailchimp', to: 'users#synchronize_with_mailchimp'
   resources :users
+  
   resources :rendezvous_registrations, :except => [:index]
   resources :rendezvous_registrations do
     get :review, :on => :member

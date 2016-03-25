@@ -9,7 +9,7 @@ class RendezvousRegistrationsController < ApplicationController
     if user_signed_in?
       @rendezvous_registration = current_user.rendezvous_registrations.current.first
       if !@rendezvous_registration.blank?
-        flash[:notice] = "You've already created a registration."
+        flash_notice("You've already created a registration.")
         redirect_to edit_user_path(current_user)
         return
       end
@@ -32,7 +32,11 @@ class RendezvousRegistrationsController < ApplicationController
     # complicated because Rails doesn't gracefully handle nested associations where the nest is a parent
     if user_signed_in?
       user = User.find(current_user.id)
+      mailchimp_init = user.receive_mailings
       user.update(rendezvous_registration_user_params)
+      
+      handle_mailchimp(user) unless user.receive_mailings == mailchimp_init
+      
       params[:rendezvous_registration][:user_id] = current_user.id
       params[:rendezvous_registration][:user_attributes] = nil
     end
@@ -44,8 +48,8 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration.invoice_number = RendezvousRegistration.invoice_number
     
     if !@rendezvous_registration.save
-      flash[:alert] = 'There was a problem creating your registration: '
-      flash[:alert] += @rendezvous_registration.errors.full_messages.to_sentence
+      flash_alert('There was a problem creating your registration: ')
+      flash_alert(@rendezvous_registration.errors.full_messages.to_sentence)
       render 'registration_form'
     else
       if !user_signed_in?
@@ -53,6 +57,17 @@ class RendezvousRegistrationsController < ApplicationController
       end
       redirect_to review_rendezvous_registration_path(@rendezvous_registration)
     end    
+  end
+  
+  def handle_mailchimp(user)
+    action = user.receive_mailings? ? 'subscribe' : 'unsubscribe'
+    response = @user.mailchimp_action(action)
+    if response[:status] == :ok
+      flash_notice 'Your user information and mailing list status were updated.'
+    else
+      flash_alert 'Your user information was updated, but there was a problem updating your mailing list status.'
+    end
+    message
   end
   
   def edit
@@ -65,9 +80,11 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     
     if @rendezvous_registration.update(rendezvous_registration_params)
-      redirect_to :show, :notice => 'Your registration was updated.'
+      flash_notice 'Your registration was updated.'
+      redirect_to :show
     else
-      redirect_to edit_rendezvous_registration_path(@rendezvous_registration), :alert => 'There was a problem updating your registration.'
+      flash_alert 'There was a problem updating your registration.'
+      redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
     end
   end
   
@@ -83,7 +100,7 @@ class RendezvousRegistrationsController < ApplicationController
       @credit_connection = true
     rescue e
       @credit_connection = false
-      flash[:alert] = "We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check."
+      flash_alert("We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check.")
       redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
     end
   end
@@ -132,10 +149,11 @@ class RendezvousRegistrationsController < ApplicationController
         @rendezvous_registration.save!
         Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
         Mailer.registration_notification(@rendezvous_registration).deliver_later
-        redirect_to @rendezvous_registration, :notice => 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
+        flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
+        redirect_to @rendezvous_registration
         return
       elsif result.errors
-        flash[:alert] = result.message
+        flash_alert(result.message)
         render rendzvous_registration_path(@rendezvous_registration)
         return
       end
@@ -151,7 +169,7 @@ class RendezvousRegistrationsController < ApplicationController
     
     # Update the registration
     if !@rendezvous_registration.update_attributes(rendezvous_registration_params)
-      flash[:alert] = @rendzvous.errors.messages.to_sentence
+      flash_alert(@rendzvous.errors.messages.to_sentence)
       render 'payment'
     else
       Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
@@ -171,8 +189,8 @@ class RendezvousRegistrationsController < ApplicationController
   def destroy
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     @rendezvous_registration.destroy
-    
-    redirect_to edit_user_path(current_user), :notice => 'Your registration has been deleted.'
+    flash_notice('Your registration has been deleted.')
+    redirect_to edit_user_path(current_user)
   end
   
   
@@ -204,7 +222,7 @@ class RendezvousRegistrationsController < ApplicationController
           [:id, :name, :adult_or_child, :volunteer, :sunday_dinner, :_destroy]
         },
         {:user_attributes=>
-          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country,
+          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
             {:vehicles_attributes => 
               [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
             }
@@ -216,7 +234,7 @@ class RendezvousRegistrationsController < ApplicationController
     def rendezvous_registration_user_params
       params[:user] = params[:rendezvous_registration][:user_attributes]
       params.require(:user).permit(
-        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country,
+        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
           {:vehicles_attributes => 
             [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
           }

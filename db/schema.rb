@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160317013543) do
+ActiveRecord::Schema.define(version: 20160323182625) do
 
   create_table "attendees", force: :cascade do |t|
     t.string   "name",                       limit: 255
@@ -107,8 +107,10 @@ ActiveRecord::Schema.define(version: 20160317013543) do
     t.string   "postal_code",            limit: 255
     t.string   "country",                limit: 255
     t.integer  "roles_mask",             limit: 4
+    t.boolean  "citroenvie"
   end
 
+  add_index "users", ["citroenvie"], name: "index_users_on_citroenvie", using: :btree
   add_index "users", ["country"], name: "index_users_on_country", using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["first_name"], name: "index_users_on_first_name", using: :btree

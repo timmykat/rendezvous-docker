@@ -45,7 +45,6 @@ $(function() {
         $(this).parent().removeClass('has-feedback has-success');
       }
     } else if ($(this).hasClass('confirm')) {
-      console.log('Hittin it');
       if (passwordMatch()) {
         $(this).parent().addClass('has-feedback has-success');
       } else {

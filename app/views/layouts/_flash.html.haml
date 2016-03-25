@@ -1,10 +1,13 @@
-- if flash[:alert] || flash[:notice]
+- unless flash.keys.blank?
   .flash-wrapper
-    .flash
-      %i.fa.fa-close
-      - if flash[:alert]
-        .text-danger{ :role => 'alert' }
-          = flash[:alert].html_safe
-      - if flash[:notice]
-        .text-primary{ :role => 'alert' }
-          = flash[:notice].html_safe
+    - flash.keys.each do |type| 
+      .flash
+        %i.fa.fa-close
+        - if type == 'alert'
+          .text-danger{ :role => 'alert' }
+            - flash[type].each do |m|
+              #{m}<br/>
+        - else 
+          .text-primary{ :role => 'notice' }
+            - flash[type].each do |m|
+              #{m}<br/>

@@ -51,7 +51,7 @@ gem 'wicked_pdf'
 # gem 'omniauth'
 # gem 'omniauth-facebook'
 # gem 'omniauth-twitter'
-gem 'gibbon'
+gem 'gibbon'               
 gem 'aws-sdk', '~> 2'
 
 group :development do

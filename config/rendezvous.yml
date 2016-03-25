@@ -44,6 +44,11 @@ vehicle_models:
   - Other
   
 print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
+mailchimp: 
+#  api_key: <%= ENV['RENDEZVOUS_MAILCHIMP_API_KEY'] %>
+  list:
+    name: Citroen Rendezvous
+    list_id: 9e696fe93f
 
 development:
   facebook:

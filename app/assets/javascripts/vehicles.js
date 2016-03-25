@@ -2,7 +2,6 @@ $(function() {
   // Toggle access to vehicle other fields
   
   var disableTextField = function($field) {
-    console.log($field);
     $field.val('');
     $field.prop('disabled', true);
   }
