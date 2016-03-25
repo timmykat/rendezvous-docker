@@ -67,4 +67,102 @@ class User < ActiveRecord::Base
       return self.email
     end
   end
+  
+  def self.mailchimp_init
+    gibbon = Gibbon::Request.new(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key]) 
+    gibbon.timeout = 10
+    gibbon
+  end
+  
+  def self.synchronize_with_mailchimp_data
+    gibbon = User.mailchimp_init
+    
+    # Get list data from Mailchimp
+    begin
+      subscriber_list = gibbon.lists(Rails.configuration.rendezvous[:mailchimp][:list][:list_id]).members.retrieve( :params => { :fields => 'members.email_address,members.status', :count => "1000" } )
+
+      subscriber_emails = subscriber_list['members'].reduce([]) { |subscriber_emails, s| 
+        subscriber_emails << s['email_address'] if s['status'] == 'subscribed' 
+        subscriber_emails
+      }
+    
+      user_list = {}
+      User.all.each do |u|
+        init = u.receive_mailings
+        u.receive_mailings = subscriber_emails.include?(u.email)
+        u.save(:validate => false) unless (u.receive_mailings == init)
+        user_list[u.email] = u.receive_mailings? ? 'subscribed' : 'not subscribed'
+      end
+      response = {
+        :status => :ok,
+        :user_list => user_list
+      }
+    rescue Gibbon::MailChimpError => e
+      response = {
+        :status => :error,
+        :message => "#{e.message} - #{e.raw_body}"
+      }
+    end
+    response
+  end
+  
+  def mailchimp_action(action)
+  
+    gibbon = User.mailchimp_init
+    list_id = Rails.configuration.rendezvous[:mailchimp][:list][:list_id]
+    
+    require 'digest'
+    hashed_email = Digest::MD5.hexdigest email.downcase
+    
+    binding.pry
+    
+    case action
+      when 'get_status'
+        begin
+          member = gibbon.lists(list_id).members(hashed_email)
+          response = {
+            :status => :ok,
+            :member_status => member['status'],
+          }
+        rescue Gibbon::MailChimpError => e
+          response = {
+            :status => :error,
+            :message => e.detail
+          }
+        end
+        
+      when 'subscribe'
+        begin
+          gibbon.lists(list_id).members.upsert( :body => { :email_address => email, :status => 'subscribed', :merge_fields => { :FNAME => first_name, :LNAME => last_name }} )
+          receive_mailings = true
+          self.save(:validate => false)
+           response = {
+            :status => :ok,
+            :member_status => 'subscribed',
+          }
+        rescue Gibbon::MailChimpError => e
+          response = {
+            :status => :error,
+            :message => e.detail
+          }
+        end
+        
+      when 'unsubscribe'
+        begin
+          gibbon.lists(list_id).members(hashed_email).update( :body => { :status => 'unsubscribed' } )
+          receive_mailings = true
+          self.save!
+           response = {
+            :status => :ok,
+            :member_status => 'unsubscribed',
+          }
+        rescue Gibbon::MailChimpError => e
+          response = {
+            :status => :error,
+            :message => e.detail
+          }
+        end
+    end 
+    response
+  end
 end
