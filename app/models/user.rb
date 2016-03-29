@@ -53,19 +53,18 @@ class User < ActiveRecord::Base
       user.password = Devise.friendly_token[0,20]
     end
   end
+    
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+  alias_method :display_name, :full_name
   
-  def display_name
-    if self.first_name
-      if self.last_name
-        return "#{self.first_name} #{self.last_name}"
-      else 
-        return self.first_name
-      end
-    elsif self.last_name
-      return self.last_name
-    else
-      return self.email
-    end
+  def last_name_first
+    "#{last_name}, #{first_name}"
+  end
+  
+  def attending
+    !self.rendezvous_registrations.where(:year => Time.now.year).blank?
   end
   
   def self.mailchimp_init_request
@@ -118,16 +117,23 @@ class User < ActiveRecord::Base
     case action
       when 'get_status'
         begin
-          member = gibbon.lists(list_id).members(hashed_email)
+          member = gibbon.lists(list_id).members(hashed_email).retrieve
           response = {
             :status => :ok,
             :member_status => member['status'],
           }
         rescue Gibbon::MailChimpError => e
-          response = {
-            :status => :error,
-            :message => "MailChimp Error: #{e.detail}"
-          }
+          if e.body['status'] == 404
+            response = {
+              :status => :not_found,
+              :message => "That user is not in the list."
+            }            
+          else
+            response = {
+              :status => :error,
+              :message => "MailChimp Error: #{e.detail}"
+            }
+          end
         end
         
       when 'subscribe'
@@ -149,6 +155,16 @@ class User < ActiveRecord::Base
         end
         
       when 'unsubscribe'
+        # First have to check to see if the member exists
+        response = mailchimp_action('get_status')
+        if response[:status] == :not_found
+          response = {
+            :status => :ok,
+            :member_status => 'unsubscribed'
+          }
+          return response
+        end
+          
         begin
           gibbon.lists(list_id).members(hashed_email).update( :body => { :status => 'unsubscribed' } )
           receive_mailings = false

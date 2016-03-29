@@ -1,0 +1,26 @@
+.container
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12.heading
+      %h1 User Profile
+      .well.well-sm
+        %p
+          %em Name: #{@user.full_name}
+        %p
+          %em Email: #{@user.email}
+        %p
+          %em Address:
+          %blockquote
+            = address_of(@user)
+        %p
+          %em Attending the #{Time.now.year} Rendezvous: #{@user.attending ? 'Yes' : 'No'}
+        %p
+          %em Receiving mailings: #{@user.receive_mailings? ? 'Yes' : 'No'}
+        %p
+          %em Interested in Citroenvie: #{@user.citroenvie? ? 'Yes' : 'No'}
+      - unless @user.vehicles.blank?
+        .well.well-sm
+          %h2 Vehicles
+          %ul
+            - @user.vehicles.each do |v|
+              %li= v.full_spec
+      =link_to 'Edit Profile', edit_user_path(@user), :class => 'btn btn-warning'      

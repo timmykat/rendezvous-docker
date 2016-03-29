@@ -6,6 +6,10 @@ class UsersController < ApplicationController
   def sign_up_or_in
   end
   
+  def show
+    @user = User.find(params[:id])
+  end
+  
   def edit
     @user = current_user
     @rendezvous_registration = current_user.rendezvous_registrations.current.first

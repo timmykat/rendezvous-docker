@@ -42,18 +42,16 @@ class RendezvousRegistrationsController < ApplicationController
     else
       user = User.find_by_email(params[:rendezvous_registration][:user_attributes][:email])
       if user.blank?
-        password = SecureRandom.base64(10).gsub(/(=+$)/,'')
+        password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
         params[:rendezvous_registration][:user_attributes][:password] = password
         params[:rendezvous_registration][:user_attributes][:password_confirmation] = password
         user = User.new(rendezvous_registration_user_params)
         if !user.save
           flash_alert 'There was a problem saving your user information.'
-          binding.pry
           user.errors.full_messages.each { |msg| flash_alert msg }
-  #         @rendezvous_registration = RendezvousRegistration.new
-  #         @rendezvous_registration.attendees.build
-  #         @rendezvous_registration.build_user
-  #         @rendezvous_registration.user.vehicles.build
+          @rendezvous_registration = RendezvousRegistration.new
+          @rendezvous_registration.attendees.build
+          @rendezvous_registration.user = user
           render 'registration_form'
           return  
         end

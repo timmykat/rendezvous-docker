@@ -19,14 +19,6 @@ module ApplicationHelper
     end
   end
 
-  def full_name(user)
-    "#{user.first_name} #{user.last_name}"
-  end
-  
-  def last_name_first(user)
-    "#{user.last_name}, #{user.first_name}"
-  end
-  
   def address_of(user)
     address  = '<div class="text-left">'
     address += user.address1 + "<br />\n" if !user.address1.blank? 
@@ -53,15 +45,11 @@ module ApplicationHelper
     if vehicles
       output = "<ul class='list-unstyled'>\n"
       vehicles.each do |vehicle|
-        output += " <li>#{full_spec(vehicle)}</li>\n"
+        output += " <li>#{vehicle.full_spec}</li>\n"
       end
       output += "</ul>\n"
       output.html_safe
     end
-  end
-  
-  def full_spec(vehicle)
-    "#{vehicle.year} #{vehicle.marque} #{vehicle.model}"
   end
   
   def rendezvous_mailing_address(delimiter = "<br />\n")

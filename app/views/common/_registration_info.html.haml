@@ -9,7 +9,7 @@
     .well.well-sm.registrant
       %h3 Registrant
       %p 
-        #{full_name(@rendezvous_registration.user)}
+        #{@rendezvous_registration.user.full_name}
         %br= @rendezvous_registration.user.email
       %p
         #{@rendezvous_registration.user.address1}
