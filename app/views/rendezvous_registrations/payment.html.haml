@@ -1,55 +1,10 @@
 - config = Rails.configuration.rendezvous
-:javascript
-  var appData = #{ActiveSupport::JSON.encode(@app_data)};
-  
-  var myIntegration;
-  
-  var buildBraintree = function() {
-    braintree.setup(appData.clientToken, "custom", {
-      onReady: function(integration) {
-        myIntegration = integration;
-      },
-      id: 'rendezvous_registration_payment',
-      hostedFields: {
-        number: {
-          selector: '#card-number'
-        },
-        cvv: {
-          selector: '#cvv',
-          placeholder: '3 or 4 digits'
-        },
-        expirationDate: {
-          selector: '#expiration-date',
-          placeholder: 'MM/YYYY'
-        },
-        styles: {
-          "input": {
-            "color": '#555',
-            "font-size": '14px',
-          }
-        }
-      }
-    });    
-  }
-  var teardownBraintree = function() {
-    myIntegration.teardown();
-  }
-  $(function() {
-    buildBraintree();
-    
-    $('#rendezvous_registration_paid_method_credit_card').on('click', function() {
-      buildBraintree();
-    });
-    
-    $('#rendezvous_registration_paid_method_check').on('click', function() {
-      teardownBraintree();
-    });
-  });
+= render :partial => 'common/braintree_javascript'
 .container
   .row
     .col-md-offset-1.col-md-10.col-xs-12
       %h1 2016 Registration
-      = simple_form_for @rendezvous_registration, :url => complete_rendezvous_registration_path(@rendezvous_registration), :html => { :id => 'rendezvous_registration_payment' } do |f|
+      = simple_form_for @rendezvous_registration, :url => complete_rendezvous_registration_path(@rendezvous_registration), :html => { :id => 'rendezvous_registration_form' } do |f|
         %section  
           %h2 Payment
           %section
@@ -80,8 +35,6 @@
                 #payment-form
                   .row
                     .col-md-12
-                  .row
-                    .col-md-12
                       .form-group
                         %label{ :for => 'card-number' } Card Number
                         #card-number.form-control
@@ -94,21 +47,16 @@
                       .form-group
                         %label{ :for => 'cvv' } CVV
                         #cvv.form-control
-                = f.input_field :status, :as => :hidden, :value => 'complete'  
+                  = f.input_field :status, :as => :hidden, :value => 'complete'  
+                #mailing-address.hidden
+                  %p
+                    %em You will be able to print your receipt once you complete the registration; it will also be emailed to you in PDF format. Please send it with a check payable to Citroen Rendezvous LLC to:
+                    %p= rendezvous_mailing_address()
+                  = f.input_field :status, :as => :hidden, :value => 'payment due'  
               .col-md-6.col-xs-12
                 %p We take the security of your financial information seriously and have taken steps to ensure that the encryption of your sensitive information is as secure as possible.
                 .ssl
                   = image_tag 'ssl-assurance.gif', :style => 'width: 100%;'
-          %section#mailing-address.hidden
-            %p
-              %em Please make your check payable to Citroen Rendezvous, LLC:
-            %p 
-              Please include your registration code on the check: 
-              %strong #{@invoice_number}
-            %p 
-              %strong Please mail your check to:
-              %br= rendezvous_mailing_address()
-            = f.input_field :status, :as => :hidden, :value => 'payment due'  
           %section
             - if !Rails.env = 'development'
               .row
@@ -118,5 +66,5 @@
             .row
               .col-md-12
                 .form-group
-                  = f.button :submit, 'Complete registration'.html_safe, :class => 'btn btn-primary'
+                  = f.button :submit, 'Complete Registration'.html_safe, :class => 'btn btn-primary'
 

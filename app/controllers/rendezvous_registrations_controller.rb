@@ -1,12 +1,12 @@
 class RendezvousRegistrationsController < ApplicationController
 
-  before_action :require_admin, :only => :index
+  before_action :require_admin, :only => [:index]
   before_action :authenticate_user!, :except => [:new, :show]
   before_action :authenticate_or_token, :only => [:show]
   
   def new
-  
-    if user_signed_in?
+      
+    if user_signed_in? && !session[:admin_user]
       @rendezvous_registration = current_user.rendezvous_registrations.current.first
       if !@rendezvous_registration.blank?
         flash_notice("You've already created a registration.")
@@ -17,7 +17,8 @@ class RendezvousRegistrationsController < ApplicationController
   
     @rendezvous_registration = RendezvousRegistration.new
     @rendezvous_registration.attendees.build
-    if user_signed_in?
+    
+    if user_signed_in? && !session[:admin_user]
       @rendezvous_registration.user = current_user
     else
       @rendezvous_registration.build_user
@@ -25,65 +26,84 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration.user.vehicles.build
     render 'registration_form'
   end
-
+  
   def create
-
-    # Create the registration and update or create the user - 
-    # complicated because Rails doesn't gracefully handle nested associations where the nest is a parent
-    if user_signed_in?
+  
+    # Create or update the user
+    if user_signed_in? && !session[:admin_user]
       user = User.find(current_user.id)
-      mailchimp_init = user.receive_mailings
-      user.update(rendezvous_registration_user_params)
-      
-      handle_mailchimp(user) unless user.receive_mailings == mailchimp_init
-      
-      params[:rendezvous_registration][:user_id] = current_user.id
-      params[:rendezvous_registration][:user_attributes] = nil
+      user.update(rendezvous_registration_user_params) 
+      if !user.save
+        flash_alert 'There was a problem saving the user.'
+        user.errors.full_messages.each { |msg| flash_alert msg }
+        render 'registration_form'
+        return  
+      end
+    else
+      user = User.find_by_email(params[:rendezvous_registration][:user_attributes][:email])
+      if user.blank?
+        password = SecureRandom.base64(10).gsub(/(=+$)/,'')
+        params[:rendezvous_registration][:user_attributes][:password] = password
+        params[:rendezvous_registration][:user_attributes][:password_confirmation] = password
+        user = User.new(rendezvous_registration_user_params)
+        if !user.save
+          flash_alert 'There was a problem saving your user information.'
+          binding.pry
+          user.errors.full_messages.each { |msg| flash_alert msg }
+  #         @rendezvous_registration = RendezvousRegistration.new
+  #         @rendezvous_registration.attendees.build
+  #         @rendezvous_registration.build_user
+  #         @rendezvous_registration.user.vehicles.build
+          render 'registration_form'
+          return  
+        end
+      end
     end
     
-    # Set total to registration fee. Donation happens later
+    # Done updating the user so remove those parameters
+    params[:rendezvous_registration][:user_id] = user.id
+    params[:rendezvous_registration][:user_attributes] = nil
+    
+    
+    # Set total to registration fee. Donation happens in payment
     params[:rendezvous_registration][:total] = params[:rendezvous_registration][:registration_fee]
-
+    
     @rendezvous_registration = RendezvousRegistration.new(rendezvous_registration_params)
     @rendezvous_registration.invoice_number = RendezvousRegistration.invoice_number
     
     if !@rendezvous_registration.save
-      flash_alert('There was a problem creating your registration: ')
-      flash_alert(@rendezvous_registration.errors.full_messages.to_sentence)
+      flash_alert('There was a problem creating your registration.')
+      @rendezvous_registration.errors.full_messages.each { |msg| flash_alert msg }
       render 'registration_form'
     else
-      if !user_signed_in?
-        sign_in(@rendezvous_registration.user)
-      end
+      handle_mailchimp(@rendezvous_registration.user)     
+      sign_in(@rendezvous_registration.user) unless (session[:user_admin] || user_signed_in?)
       redirect_to review_rendezvous_registration_path(@rendezvous_registration)
     end    
   end
   
-  def handle_mailchimp(user)
-    action = user.receive_mailings? ? 'subscribe' : 'unsubscribe'
-    response = @user.mailchimp_action(action)
-    if response[:status] == :ok
-      flash_notice 'Your user information and mailing list status were updated.'
-    else
-      flash_alert 'Your user information was updated, but there was a problem updating your mailing list status.'
-    end
-    message
-  end
-  
   def edit
-    
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
+    @create_by_admin = (current_user.email != @rendezvous_registration.user.email)  
     render 'registration_form'
   end
 
   def update
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
+    user = @rendezvous_registration.user
+    mailchimp_init = user.receive_mailings
+    
+    user.update(rendezvous_registration_user_params)
+    
+    handle_mailchimp(user) unless user.receive_mailings == mailchimp_init
+    params[:rendezvous_registration][:user_id] = user.id
+    params[:rendezvous_registration][:user_attributes] = nil
     
     if @rendezvous_registration.update(rendezvous_registration_params)
-      flash_notice 'Your registration was updated.'
-      redirect_to :show
+      flash_notice 'The registration was updated.'
+      redirect_to review_rendezvous_registration_path(@rendezvous_registration)
     else
-      flash_alert 'There was a problem updating your registration.'
+      flash_alert 'There was a problem updating the registration.'
       redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
     end
   end
@@ -169,7 +189,7 @@ class RendezvousRegistrationsController < ApplicationController
     
     # Update the registration
     if !@rendezvous_registration.update_attributes(rendezvous_registration_params)
-      flash_alert(@rendzvous.errors.messages.to_sentence)
+      @rendezvous_registration.errors.full_messages.each { |msg| flash_alert msg }
       render 'payment'
     else
       Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
@@ -177,7 +197,7 @@ class RendezvousRegistrationsController < ApplicationController
       redirect_to rendezvous_registration_path(@rendezvous_registration)
     end
   end
-  
+    
   def index
     @rendezvous_registrations = RendezvousRegistration.all
   end
@@ -204,6 +224,18 @@ class RendezvousRegistrationsController < ApplicationController
       authenticate_user!
     end
   
+    def handle_mailchimp(user)
+      action = user.receive_mailings? ? 'subscribe' : 'unsubscribe'
+      response = user.mailchimp_action(action)
+      if response[:status] == :ok
+        flash_notice 'Your user information and mailing list status were updated.'
+      else
+        flash_alert 'Your user information was updated, but there was a problem updating your mailing list status.'
+        flash_alert response[:message]
+      end
+      response
+    end
+  
     def rendezvous_registration_params
       params.require(:rendezvous_registration).permit(
         :number_of_adults,
@@ -222,7 +254,7 @@ class RendezvousRegistrationsController < ApplicationController
           [:id, :name, :adult_or_child, :volunteer, :sunday_dinner, :_destroy]
         },
         {:user_attributes=>
-          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
+          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
             {:vehicles_attributes => 
               [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
             }
@@ -234,7 +266,7 @@ class RendezvousRegistrationsController < ApplicationController
     def rendezvous_registration_user_params
       params[:user] = params[:rendezvous_registration][:user_attributes]
       params.require(:user).permit(
-        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
+        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
           {:vehicles_attributes => 
             [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
           }

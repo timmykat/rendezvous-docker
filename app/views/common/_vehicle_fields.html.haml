@@ -5,21 +5,28 @@
       .form-group
         = f.input :year, :collection => [*1919..2015].reverse, :selected => (f.object.year.blank? ? nil : f.object.year), :include_blank => '-- Select year --'
   .row
-    .col-md-4.col-xs-12
-      %label Marque
+    .col-md-12
       .select-with-other.marques
-        .form-group
-          = select_tag :select_marque, options_for_select(marques), :selected => selected_marque(f.object), :class => 'form-control'
-        .form-group
-          = text_field_tag :other_marque, nil, :label => 'Other marque', :class => 'form-control', :placeholder => 'Specify non-French marque'
+        %label Marque
+        .row
+          .col-md-4.col-xs-12
+            .form-group
+              = select_tag :select_marque, options_for_select(marques), :selected => selected_marque(f.object), :class => 'form-control'
+          .col-md-4.col-xs-12
+            .form-group
+              = text_field_tag :other_marque, nil, :label => 'Other marque', :class => 'form-control', :placeholder => 'Specify non-French marque'
         = f.input :marque, :as => :hidden, :value => f.object.marque
-    .col-md-4.col-xs-12
-      %label Model
+  .row
+    .col-md-12
       .select-with-other.models
-        .form-group
-          = select_tag :select_model, options_for_select(models), :include_blank => '-- Select Citroën model --', :selected => selected_model(f.object), :class => 'form-control'
-        .form-group
-          = text_field_tag :other_model, nil, :label => 'Other model', :class => 'form-control', :placeholder => 'Specify non-Citroen model'
+        %label Model
+        .row
+          .col-md-4.col-xs-12
+            .form-group
+              = select_tag :select_model, options_for_select(models), :include_blank => '-- Select Citroën model --', :selected => selected_model(f.object), :class => 'form-control'
+          .col-md-4.col-xs-12
+            .form-group
+              = text_field_tag :other_model, nil, :label => 'Other model', :class => 'form-control', :placeholder => 'Specify non-Citroen model'
         = f.input :model, :as => :hidden, :value => f.object.marque
   .row
     .col-md-12

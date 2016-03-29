@@ -33,11 +33,5 @@
           Back to main page
       .content
         = yield
-      .push  
-    %footer.footer.text-center
-      %p 
-        ©#{Time.now.year} Citroen Rendezvous LLC | Terms of use | Legal disclaimer
-        %br Original theme by mostafizur, adapted by wordsareimages
-    #modal
-      .modal-wrapper
-      
+      .push
+    = render :partial => 'common/footer'  

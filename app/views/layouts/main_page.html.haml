@@ -54,7 +54,7 @@
     :javascript
       require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us12.list-manage.com","uuid":"198c738ff80668ca4d472c590","lid":"9e696fe93f"}) });
       
-  %body
+  %body{ :class => (user_signed_in? ? 'logged-in' : 'guest') }
     - if user_signed_in?
       = render :partial => 'common/manage'
     = render :partial => 'layouts/flash'
@@ -97,11 +97,4 @@
               / /.container-fluid
     = yield
 
-    / footer starts here
-    %footer.footer.text-center
-      %p 
-        ©#{Time.now.year} Citroen Rendezvous LLC | Terms of use | Legal disclaimer
-        %br Original theme by mostafizur, adapted by wordsareimages
-    #modal
-      .modal-wrapper
-      
+    = render :partial => 'common/footer'
