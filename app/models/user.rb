@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
   end
   
   def self.mailchimp_init_request
-    gibbon = Gibbon::Request.new  #(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key]) 
+    gibbon = Gibbon::Request.new(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key]) 
     gibbon.timeout = 10
     gibbon
   end
