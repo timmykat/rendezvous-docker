@@ -31,7 +31,9 @@
       #registration-form
         - if !user_signed_in?
           .cover      
-        = simple_form_for @rendezvous_registration do |f|
+        = simple_form_for @rendezvous_registration, :id => 'rendezvous_registration_form' do |f|
+          - if @create_by_admin
+            = hidden_field_tag :creator, :value => 'omniscia'
           %section
             %h2 Personal Information
             %p * = required
@@ -65,7 +67,7 @@
             .row
               .col-md-6.col-xs-12
                 %p.amount.bg-success.form-group
-                  %label Total: $
+                  %label Registration fee: $
                   = f.input_field :registration_fee, :disabled => true, :class => 'calculated'
             = f.input_field :year, :as => :hidden, :value => Time.new.year
             = f.input_field :status, :as => :hidden, :value => 'initiated'

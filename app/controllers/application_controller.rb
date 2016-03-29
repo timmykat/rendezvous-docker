@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   
   before_action :get_app_data
   before_action :flash_array
-  
+    
   # Need this for other gems that might set flash
   def flash_array
     unless flash.keys.blank?
@@ -34,8 +34,10 @@ class ApplicationController < ActionController::Base
   end
   
   def after_sign_in_path_for(resource)
+    session[:admin_user] = false
     @rendezvous_registration = current_user.rendezvous_registrations.current.first
-    if current_user.has_role? :admin    
+    if current_user.has_role? :admin
+      session[:admin_user] = true   
       admin_index_path
     elsif @rendezvous_registration.blank? || @rendezvous_registration.status != 'complete'
       register_path
@@ -56,6 +58,10 @@ class ApplicationController < ActionController::Base
     else
       super
     end
+  end
+  
+  def after_sending_reset_password_instructions_path_for(resource)
+    sign_up_or_in_path
   end
   
   def respond_to? (method_sym, include_private = false)

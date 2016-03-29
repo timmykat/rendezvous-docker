@@ -12,13 +12,16 @@ Rails.application.routes.draw do
   get '/users/synchronize_mailchimp', to: 'users#synchronize_with_mailchimp'
   resources :users
   
-  resources :rendezvous_registrations, :except => [:index]
   resources :rendezvous_registrations do
-    get :review, :on => :member
-    get :payment, :on => :member
-    patch :complete, :on => :member
+    member do
+      get :review
+      get :payment
+      patch :complete
+    end
   end
+  resources :rendezvous_registrations, :except => [:index]
   
+  get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   resources :admin, { :only => [:index] }
   
   # Omniauth authentication
@@ -29,6 +32,7 @@ Rails.application.routes.draw do
   get '/', to: 'content_pages#index'
   get '/vendors', to: 'content_pages#vendors'
   get '/history', to: 'content_pages#history'
+  get '/legal_information', to: 'content_pages#legal_information'
   
   # User management
   get '/sign_up_or_in', to: 'users#sign_up_or_in'

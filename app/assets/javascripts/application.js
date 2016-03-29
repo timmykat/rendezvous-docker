@@ -16,4 +16,5 @@
 //= require bootstrap
 //= require dropzone/dist/dropzone
 //= require braintree-web/dist/braintree
+//= require cocoon
 //= require_tree .

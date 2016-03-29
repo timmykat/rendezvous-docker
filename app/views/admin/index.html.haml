@@ -5,8 +5,9 @@
       #tabbed
         %ul
           %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
-          %li= link_to '<i class="fa fa-female"></i> Users'.html_safe, '#tabbed-2'
+          %li= link_to '<i class="fa fa-female"></i> Registrants'.html_safe, '#tabbed-2'
           %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-3'
+          %li= link_to '<i class="fa fa-male"></i> Site Users'.html_safe, '#tabbed-4'
         #tabbed-1
           .well.well-sm
             %h2 Summary for #{Time.now.year}
@@ -50,21 +51,15 @@
           %table.table
             %thead
               %tr
-                %th Admin
                 %th Name
                 %th.text-center Email
-                %th.text-center Mailing List
-                %th.text-center Citroenenvie
                 %th.text-left Address
                 %th.text-center Vehicles
             %tbody
               - @data[:registrants].each do |user|
                 %tr{ :class => ((user.has_role? :admin) ? 'bg-success' : '' ) }
-                  %td.text-center= check_box_tag "is_admin_user_#{user.id}", 1, (user.has_role? :admin), :class => "admin_check", :disabled => (user.id == current_user.id)
                   %td.text-center= last_name_first(user)
                   %td.text-center= user.email
-                  %td.text-center= (user.receive_mailings? ? 'Subscribed' : '')
-                  %td.text-center= (user.citroenvie? ? 'yes' : '')
                   %td.text-left= address_of(user)
                   %td.text-center= vehicles_list(user.vehicles)
         #tabbed-3
@@ -90,3 +85,20 @@
                   %td
                     %p= vehicle.other_info
                   %td= full_name(vehicle.user)
+        #tabbed-4
+          %table.table
+            %thead
+              %tr
+                %th.text-center Admin
+                %th Name
+                %th Email
+                %th.text-center Mailing List
+                %th.text-center Citroenenvie
+              %tbody
+                - @users.each do |user|
+                  %tr{ :class => ((user.has_role? :admin) ? 'bg-info' : '' ) }
+                    %td.text-center= check_box_tag "is_admin_user_#{user.id}", 1, (user.has_role? :admin), :class => "admin_check", :disabled => (user.id == current_user.id)
+                    %td= user.display_name
+                    %td= user.email
+                    %td.text-center= (user.receive_mailings? ? 'Subscribed' : '')
+                    %td.text-center= (user.citroenvie? ? 'yes' : '')

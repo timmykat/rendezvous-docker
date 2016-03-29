@@ -14,6 +14,9 @@ class ContentPagesController < ApplicationController
   def vendors
   end
   
+  def legal_information
+  end
+  
   def contact_us
     @name = params[:name]
     @email = params[:email]

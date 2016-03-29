@@ -2,7 +2,7 @@ class  CustomDevise::PasswordsController < Devise::PasswordsController
   skip_before_action :require_admin  
 
   # POST /resource/password
-  def reset
+  def create
     self.resource = resource_class.send_reset_password_instructions(resource_params)
     yield resource if block_given?
 

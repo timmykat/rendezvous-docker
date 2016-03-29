@@ -4,19 +4,25 @@
       %li= link_to '<i class="fa fa-arrow-left"></i> Back to info page'.html_safe, :root, :class => 'btn btn-sm btn-info'
       - if user_signed_in?
         = link_to 'My user profile', edit_user_path(current_user), :class => 'btn btn-sm btn-primary'
-        - current_registration = current_user.rendezvous_registrations.current.first
-        - if current_registration.blank?
-          %li
-            = link_to "Register for #{Time.now.year}", register_path, :class => 'btn btn-sm btn-primary'
-        - else
-          %li= link_to 'My registration', rendezvous_registration_path(current_registration), :class => 'btn btn-sm btn-primary'
+        - if !session[:admin_user]
+          - current_registration = current_user.rendezvous_registrations.current.first
+          - if current_registration.blank?
+            %li
+              = link_to "Register for #{Time.now.year}", register_path, :class => 'btn btn-sm btn-primary'
+          - elsif current_registration.status == 'initiated' && !session[:admin_user]
+            %li= link_to 'My registration (in progress)', review_rendezvous_registration_path(current_registration), :class => 'btn btn-sm btn-primary'
+          - else
+            %li= link_to 'My registration', rendezvous_registration_path(current_registration), :class => 'btn btn-sm btn-primary'
         - if current_user.has_role? :admin
           %li.dropdown
             %button{ :class =>  'btn btn-sm btn-warning dropdown-toggle', :type => 'button', :id => 'adminDropdown', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'true' }
               Admin
               %i.caret
             %ul{ :class => 'dropdown-menu', 'aria-labelledby' => 'adminDropdown' }
-              %li= link_to 'Info', admin_index_path, :class => 'btn btn-sm btn-info'
+              %li= link_to 'Info Overview', admin_index_path, :class => 'btn btn-sm btn-info'
+              - if session[:admin_user]
+                %li= link_to 'Create Registration', register_path, :class => 'btn btn-sm btn-info'
+              %li= link_to "Admin Session #{session[:admin_user] ? 'On' : 'Off'}", admin_toggle_user_session_path, :class => 'btn btn-sm btn-info'
               %li= link_to 'Synchronize with Mailchimp', users_synchronize_mailchimp_path, :class => 'btn btn-sm btn-info'
               - if Rails.env != 'production' && !current_registration.blank?
                 %li= link_to 'Delete my registration', rendezvous_registration_path(current_registration), :method => :delete, :class => 'btn btn-sm btn-danger', :confirmation => 'Are you sure?'

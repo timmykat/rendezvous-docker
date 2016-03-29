@@ -196,13 +196,19 @@ table tr:hover {
   .dropdown-menu {
     padding: 0;
   }
+}
+.dropdown-menu > li > a, .dropdown-menu > li  > a:visited {
+  color: white;
 }  
-.top-header{
+.top-header {
 	background: $primary-color;
 	position: fixed;
 	width: 100%;
 	z-index: 333;
-	top: 40px;
+	top: 0;
+}
+.logged-in .top-header {
+  top: 40px;
 }
 .header-row{
 	margin: 0;
@@ -215,7 +221,7 @@ table tr:hover {
     margin: 0;
   }
   a, a:visited {
-    color: #ccc;
+    color: white;
   }
 }
 .top-header img.logo{
@@ -283,9 +289,6 @@ ul.nav{
 /* spacer to allow for header */
 .spacer {
   height: 155px;
-}
-.logged-in-spacer {
-  height: 150px;
 }
 
 /*banner area*/

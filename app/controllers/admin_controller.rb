@@ -34,5 +34,12 @@ class AdminController < ApplicationController
     end
     
     @vehicles = @data[:citroens] + @data[:non_citroens]
+    
+    @users = User.all
+  end
+  
+  def toggle_user_session
+    session[:admin_user] = !session[:admin_user]
+    redirect_to :back
   end
 end
