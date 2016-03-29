@@ -1,7 +1,7 @@
 .container
   .row
     .col-md-offset-1.col-md-10.col-xs-12.heading
-      %h1 User Profile
+      %h1= (@user == current_user) ? 'My Profile' : "Profile for #{@user.full_name}"
       .well.well-sm
         %p
           %em Name: #{@user.full_name}

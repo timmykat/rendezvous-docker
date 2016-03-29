@@ -37,6 +37,10 @@
           %section
             %h2 Personal Information
             %p * = required
+            - if session[:admin_user]
+              %p.bg-warning You are creating a registration for another user.
+            - else
+              %p.bg-info You are signed in with your user account.
             = f.simple_fields_for :user do |u|
               = render :partial => 'common/user_info', :locals => { :f => u }
 

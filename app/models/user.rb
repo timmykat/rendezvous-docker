@@ -156,13 +156,16 @@ class User < ActiveRecord::Base
         
       when 'unsubscribe'
         # First have to check to see if the member exists
-        response = mailchimp_action('get_status')
-        if response[:status] == :not_found
-          response = {
-            :status => :ok,
-            :member_status => 'unsubscribed'
-          }
-          return response
+        begin
+          member = gibbon.lists(list_id).members(hashed_email).retrieve
+        rescue Gibbon::MailChimpError => e
+          if e.body['status'] == 404
+            response = {
+              :status => :ok,
+              :member_status => 'unsubscribed',
+            }
+            return response           
+          end
         end
           
         begin

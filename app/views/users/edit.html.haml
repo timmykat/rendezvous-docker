@@ -1,8 +1,8 @@
 .container
   .row
     .col-md-offset-1.col-md-10.col-xs-12.heading
-      %h1 My User Profile
-      %p.bg-primary View and change your user info and vehicles
+      %h1= (@user == current_user) ? 'My Profile' : "Profile for #{@user.full_name}"
+      %p.bg-primary View and change user info and vehicles
       = simple_form_for @user do |f|
         = render :partial => 'common/user_info', :locals => { :f => f }
         %br
