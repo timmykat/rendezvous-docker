@@ -51,7 +51,6 @@ class RendezvousRegistrationsController < ApplicationController
           user.errors.full_messages.each { |msg| flash_alert msg }
           @rendezvous_registration = RendezvousRegistration.new
           @rendezvous_registration.attendees.build
-          @rendezvous_registration.user = user
           render 'registration_form'
           return  
         end
@@ -82,7 +81,6 @@ class RendezvousRegistrationsController < ApplicationController
   
   def edit
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
-    @create_by_admin = (current_user.email != @rendezvous_registration.user.email)  
     render 'registration_form'
   end
 
