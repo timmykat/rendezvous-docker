@@ -11,28 +11,23 @@ class UsersController < ApplicationController
   end
   
   def edit
-    @user = current_user
-    @rendezvous_registration = current_user.rendezvous_registrations.current.first
+    @user = User.find(params[:id])
+    @rendezvous_registration = @user.rendezvous_registrations.current.first
   end
   
   def update
     @user = User.find(params[:id])
-    mailchimp_init = @user.receive_mailings
     if !@user.update(user_params)
       flash_alert('We had a problem saving your updated information')
       render :action => :edit
     else
-      if @user.receive_mailings != mailchimp_init
-        action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'
-        response = @user.mailchimp_action(action)
-        if response[:status] == :ok
-          flash_notice('Your user information and mailing list status were updated.')
-        else
-          flash_alert('Your user information was updated, but there was a problem updating your mailing list status.')
-          flash_alert(response[:message])
-        end
+      action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'
+      response = @user.mailchimp_action(action)
+      if response[:status] == :ok
+        flash_notice('Your user information and mailing list status were updated.')
       else
-        flash_notice('Your user information was updated.')
+        flash_alert('Your user information was updated, but there was a problem updating your mailing list status.')
+        flash_alert(response[:message])
       end
       redirect_to edit_user_path(@user)
     end
