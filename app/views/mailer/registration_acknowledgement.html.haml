@@ -1,4 +1,4 @@
-%p Dear #{full_name(@rr.user)},
+%p Dear #{@rr.user.full_name},
 
 %p You have successfully registered for the the 40th Citroen Rendezvous, which will take place June 16-19 in Saratoga Springs, New York. We hope you're as excited as we are!
 
@@ -25,7 +25,7 @@
 
 %p Vehicles:
 - @rr.user.vehicles.each do |vehicle|
-  %br #{full_spec(vehicle)}
+  %br #{vehicle.full_spec}
 
 %p If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
 %p Here's to a great milestone Rendezvous!

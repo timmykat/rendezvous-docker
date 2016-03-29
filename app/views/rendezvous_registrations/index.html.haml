@@ -19,7 +19,7 @@
           - @rendezvous_registrations.each do |registration|
             %tr
               %td
-                = link_to last_name_first(registration.user), rendezvous_registration_path(registration.id)
+                = link_to registration.user.last_name_first, rendezvous_registration_path(registration.id)
               %td.text-center= registration.number_of_adults
               %td.text-center= registration.number_of_children
               %td.text-center= vehicles_list(registration.user.vehicles)

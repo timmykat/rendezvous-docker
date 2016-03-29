@@ -2,7 +2,7 @@ class AdminController < ApplicationController
   before_action :require_admin
   
   def index
-    @registrations = RendezvousRegistration.where(:year => Time.now.year)
+    @registrations = RendezvousRegistration.where("year = ? AND status IN (?)", Time.now.year, ['complete', 'payment due'])
     
     @data = {
       :registrants    => [],
@@ -12,10 +12,23 @@ class AdminController < ApplicationController
       :adult          => 0,
       :child          => 0,
       :sunday_dinner  => 0,
-      :volunteer      => 0
+      :volunteer      => 0,
+      :financials     => {
+        :registration_fees  => 0.0,
+        :donations          => 0.0,
+        :total              => 0.0,
+        :paid               => 0.0,
+        :due                => 0.0
+      }
     }
     @registrations.each do |registration|
       @data[:registrants] << registration.user
+      
+      @data[:financials][:total]                += registration.total.to_f unless registration.total.blank?
+      @data[:financials][:registration_fees]    += registration.registration_fee.to_f unless registration.registration_fee.blank?
+      @data[:financials][:paid]                 += registration.paid_amount.to_f unless registration.paid_amount.blank?
+      @data[:financials][:due]                  += registration.amount_due.to_f unless registration.amount_due.blank?
+      @data[:financials][:donations]            += registration.donation.to_f unless registration.donation.blank?
       
       registration.user.vehicles.each do |v|
         if v.marque == 'Citroen'
