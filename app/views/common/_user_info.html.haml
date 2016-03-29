@@ -25,14 +25,14 @@
     .form-group
       = f.input_field :address2, :class => 'form-control', :placeholder => 'Address 2'
     .form-group
-      = f.input :city, :class => 'form-control', :placeholder => 'City *'
+      = f.input_field :city, :class => 'form-control', :placeholder => 'City *'
     .row
       .col-md-4.col-xs-12
         .form-group
-          = f.input :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- Select State or Province --'
+          = f.input_field :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- Select State or Province --', :class => 'form-control'
       .col-md-4.col-xs-12
         .form-group
-          = f.input :postal_code, :class => 'form-control', :placeholder => 'Zip/Postal Code *'
+          = f.input_field :postal_code, :class => 'form-control', :placeholder => 'Zip/Postal Code *'
     .row
       .col-md-12
         %label Country
