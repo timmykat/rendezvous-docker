@@ -30,17 +30,6 @@ module ApplicationHelper
     return address.html_safe if address
   end
   
-  def full_country_name(code)
-    case
-      when 'US'
-        'UNITED STATES'
-      when 'CA'
-        'CANADA'
-      when 'FR'
-        'FRANCE'
-    end
-  end
-
   def vehicles_list(vehicles)
     if vehicles
       output = "<ul class='list-unstyled'>\n"
@@ -118,7 +107,7 @@ module ApplicationHelper
   end
   
   def country_list
-    [[ 'UNITED STATES', 'US' ], [ 'CANADA', 'CA' ]]
+    Rails.configuration.rendezvous[:countries].map{|code| [c[:name].uppercase, c[:code]] }
   end
   
   def state_province_list

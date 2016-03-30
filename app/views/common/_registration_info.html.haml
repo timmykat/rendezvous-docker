@@ -16,7 +16,7 @@
         - unless @rendezvous_registration.user.address2.blank?
           @rendezvous_registration.user.address2
         %br #{@rendezvous_registration.user.city}, #{@rendezvous_registration.user.state_or_province} #{@rendezvous_registration.user.postal_code}
-        #{full_country_name(@rendezvous_registration.user.country)}
+        #{@rendezvous_registration.user.display_country}
 
     .well.well-sm.attendees
       %h3 Attendees

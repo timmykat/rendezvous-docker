@@ -20,7 +20,9 @@ class ApplicationController < ActionController::Base
       {
         :fees => Rails.configuration.rendezvous[:fees],
         :marques => Rails.configuration.rendezvous[:vehicle_marques],
-        :models => Rails.configuration.rendezvous[:vehicle_models]
+        :models => Rails.configuration.rendezvous[:vehicle_models],
+        :provinces => Rails.configuration.rendezvous[:provinces],
+        :countries => Rails.configuration.rendezvous[:countries]
       }
   end
       

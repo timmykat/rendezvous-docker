@@ -14,6 +14,24 @@ $(function() {
     var password_confirmation = $('.sign-up #user_password_confirmation').val()
     return password == password_confirmation && $('.sign-up #user_password').parent().hasClass('has-success');
   }
+  
+  // Set the country
+  var provinces = appData.provinces;
+  $('#country').text(appData.countries[$('.hidden-country-field').val()]);
+  $('#rendezvous_registration_user_attributes_state_or_province').on('change', function() {
+    console.log($(this).val());
+    console.log(appData.provinces);
+    if (appData.provinces.indexOf($(this).val()) >= 0) {
+      $('#country').text(appData.countries.CA);
+      $('input[class=hidden-country-field]').val('CA');
+    } else if ($(this).val() == '') {
+      $('#country').text(appData.countries.Other);
+      $('input[class=hidden-country-field]').val('Other');
+    } else {
+      $('#country').text(appData.countries.US);
+      $('input[class=hidden-country-field]').val('US');
+    }
+  });
     
   
   // Password validation & confirmation

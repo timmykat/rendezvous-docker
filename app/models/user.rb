@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
 
   include RoleModel
   
+  before_save :set_country
+  
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -20,11 +22,10 @@ class User < ActiveRecord::Base
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
   validates :address1, :presence => true, :on => :update
   validates :city, :presence => true, :on => :update
-  validates :state_or_province, :presence => true, :on => :update
 #   validates :password, :length => { :in => 6..20 }
   
   # US or Canadian postal code
-  validates :postal_code, :presence => true, :format => { :with => /\A((\d{5})(-\d{4})?)|(\w\d\w\s?\d\w\d)\z/}, :on => :update
+  validate :postal_code_by_country, :on => :update
   
   # Password policy
   validate :password_complexity
@@ -42,6 +43,30 @@ class User < ActiveRecord::Base
       unless lower && upper && digit
         errors.add :password, "must include 1 of each: lower case letter, upper case letter, digit"
       end
+    end
+  end
+  
+  def postal_code_by_country
+    if Rails.configuration.rendezvous[:provinces].include? (state_or_province)
+      country_format = 'Canadian'
+      valid = /\A(\w\d\w\s?\d\w\d)\z/.match(postal_code)
+    elsif !state_or_province.blank?
+      country_format = 'US'
+      valid = /\A((\d{5})(-\d{4})?)\z/.match(postal_code)
+    else
+      valid = true
+    end
+    
+    errors.add :postal_code, "does not appear to be consistent with #{country_format} format" unless valid
+  end
+  
+  def set_country
+    if Rails.configuration.rendezvous[:provinces].include? (state_or_province)
+      country = 'CA' 
+    elsif !state_or_province.blank?
+      country = 'US'
+    else
+      country = 'Other'
     end
   end
 
@@ -65,6 +90,10 @@ class User < ActiveRecord::Base
   
   def attending
     !self.rendezvous_registrations.where(:year => Time.now.year).blank?
+  end
+  
+  def display_country
+    Rails.configuration.rendezvous[:countries][country.to_sym]
   end
   
   def self.mailchimp_init_request
