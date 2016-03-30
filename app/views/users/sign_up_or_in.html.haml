@@ -1,67 +1,71 @@
 - resource = :user
 - resource_name = 'user'
-.spacer
 .container
-  .row
-    .col-md-12
-      .account.social-media
-        %h2 Sign in with social media
-        %a.btn.btn-facebook.btn-lg.facebook{ :href => user_omniauth_authorize_path(:facebook) }
-          %i.fa.fa-facebook
-          Sign in with Facebook
-        %a.btn.btn-twitter.btn-lg.twitter{ :href => user_omniauth_authorize_path(:twitter) }
-          %i.fa.fa-twitter
-          Sign in with Twitter
-
   .row
     .col-md-12
       %hr
       .account.email
-        %h2 Sign in with an email address
+        %h2 Sign In or Sign Up
     .col-md-6
-      .well
-        %h3 Got an account? Sign in here.
+      .well.sign-in
+        %h3 Got an account? 
+        %p Sign in here:
         = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-          .field
+          .form-group
             = f.label :email
             %br/
             = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
-          .field
+          .form-group
             = f.label :password
             %br/
             = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Password'
           .actions
             = f.submit "Log in", :class => "btn btn-info"
-        
+      
+      .well.reset-password
+        %h3 Don't know your password? 
+        %p We'll send you a link to reset it:
+        = form_for(:user, :as => 'user', :url => user_password_path, :html => { :method => :post, :class => "form" }) do |f|
+          .form-group
+            %label Email
+            = f.text_field :email, :required => false, :class => "form-control"
+          .form-group
+            = f.submit "Reset my password", :class => "btn btn-large btn-primary"
     .col-md-6
-      .well
-        %h3 Want an account? Sign up here.
+      .well.sign-up
+        %h3 Want an account? 
+        %p Sign up here:
         = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-          .field
+          .form-group
             = f.label :email
             %br/
-            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
-          .field
+            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail', :required => true
+          %p{ :class => 'help-block' } 
+            Your password must be at least 6 characters and must include one each:
+            %br
+            Lower case:
+            %i.fa.fa-check.pass.lower 
+            Upper case:
+            %i.fa.fa-check.pass.upper 
+            Digit:
+            %i.fa.fa-check.pass.digit 
+          .form-group
             = f.label :password
             - if @minimum_password_length
               %em
                 (#{@minimum_password_length} characters minimum)
             %br/
-            = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Set password'
-          .field
+            = f.password_field :password, autocomplete: "off", :class => 'form-control primary', :placeholder => 'Set password', :required => true
+          .form-group
             = f.label :password_confirmation
             %br/
-            = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control', :placeholder => 'Confirm password'
-          .field
+            = f.password_field :password_confirmation, autocomplete: "off", :class => 'form-control confirm', :placeholder => 'Confirm password', :required => true
+          .form-group
             = f.label "Name"
             %br/
-            = f.text_field :first_name, :class => 'form-control inline-form-element', :placeholder => 'First'
-            = f.text_field :last_name, :class => 'form-control inline-form-element', :placeholder => 'Last'
-          .field
-            = f.check_box :receive_mailings, :checked => true
-            = f.label "Receive mailings"
-            %p We recommend that you leave this checked because we promise to send you only useful information, we promise not to bombard you with stupid crap, and we promise not to give out your email address. And you can change it later if you think we lied.
-          .field
+            = f.text_field :first_name, :class => 'form-control inline-form-element', :placeholder => 'First', :required => true
+            = f.text_field :last_name, :class => 'form-control inline-form-element', :placeholder => 'Last', :required => true
+          .form-group
             = recaptcha_tags
           .actions
             = f.submit "Sign up", :class => "btn btn-info"

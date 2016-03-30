@@ -1,0 +1,44 @@
+:javascript  
+  var myIntegration;
+  
+  var buildBraintree = function() {
+    braintree.setup(appData.clientToken, "custom", {
+      onReady: function(integration) {
+        myIntegration = integration;
+      },
+      id: 'rendezvous_registration_form',
+      hostedFields: {
+        number: {
+          selector: '#card-number'
+        },
+        cvv: {
+          selector: '#cvv',
+          placeholder: '3 or 4 digits'
+        },
+        expirationDate: {
+          selector: '#expiration-date',
+          placeholder: 'MM/YYYY'
+        },
+        styles: {
+          "input": {
+            "color": '#555',
+            "font-size": '14px',
+          }
+        }
+      }
+    });    
+  }
+  var teardownBraintree = function() {
+    myIntegration.teardown();
+  }
+  $(function() {
+    buildBraintree();
+    
+    $('#rendezvous_registration_paid_method_credit_card').on('click', function() {
+      buildBraintree();
+    });
+    
+    $('#rendezvous_registration_paid_method_check').on('click', function() {
+      teardownBraintree();
+    });
+  });

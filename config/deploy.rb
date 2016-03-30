@@ -7,7 +7,7 @@ set :deploy_via, :copy
 # set :repo_url, 'git@example.com:me/my_repo.git'
 
 # Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, '/var/www/my_app_name'
@@ -40,6 +40,7 @@ namespace :deploy do
 
   desc 'Restart application'
   task :restart do
+    invoke 'delayed_job:restart'
     on roles(:app), in: :sequence, wait: 5 do
       execute :touch, release_path.join('tmp/restart.txt')
     end
