@@ -1,0 +1,12 @@
+{
+  "name": "dsl-generated dependencies",
+  "dependencies": {
+    "jquery": "latest",
+    "jquery-ujs": "latest",
+    "jquery-ui": "latest",
+    "dropzone": "latest",
+    "tinymce": "latest",
+    "braintree-web": "latest",
+    "dropdown": "latest"
+  }
+}

@@ -20,8 +20,39 @@ $hover-color:  #94171B;     /*  darker red */
   #1B77AE;  light medium blue
   #E6E351:  acid green
 */
+
+/* sticky footer */
+html, body {
+  height: 100%;
+}
+
+/* Turn off spinners on number fields */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0;
+}
+
+.body_wrapper {
+  height: auto !important;
+  margin: 0 auto -90px;
+  min-height: 100%;
+}
+.footer, .push {
+  height: 90px;
+}
+
+$success: #3c763d;
+
 $facebook-blue: #4C66A4;
 $twitter-blue: #55ACEF;
+
+$field-success: #e2f7d3;
 
 .fa.fa-facebook-square {
   font-size: 18px;
@@ -38,8 +69,26 @@ $twitter-blue: #55ACEF;
   z-index: 200;
 }
 
+.bg-rendezvous {
+  background-color: $primary-color;
+  color: white;
+}
+
+/* Set background for field inputs with success  */
+.has-success .form-control {
+  background-color: $field-success;
+}
+
+i.fa.fa-check.pass {
+  color: $success;
+  visibility: hidden;
+  &.success {
+    visibility: visible;
+  }
+}
+
 a, a:visited {
-  color: $secondary-color;
+  color: $primary-color;
   text-decoration: underline;
 }
 .navbar a, .navbar a:visited {
@@ -50,6 +99,10 @@ a:hover {
   text-decoration: none;
   background-color: transparent;
 }
+a.btn, a:visited.btn {
+  text-decoration: none;
+  color: white;
+}
 
 a.btn-facebook, a:visited.btn.facebook {
   background-color: $facebook-blue;
@@ -58,6 +111,22 @@ a.btn-facebook, a:visited.btn.facebook {
 a.btn-twitter, a:visited.btn-twitter {
   background-color: $twitter-blue;
   color: white;
+}
+
+p {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+blockquote {
+  font-size: 1em;
+  border: none;
+}
+.simple section {
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(200, 220, 250, 0.3);
 }
 
 .site-name {
@@ -73,6 +142,35 @@ body{
 	padding: 0;
 	font-family: 'Open Sans', sans-serif;
 }
+
+/* flash */
+.flash-wrapper {
+  width: 60%;
+  z-index: 2000;
+  top: 100px;
+  width: 100%;
+}
+.flash {
+  width: 60%;
+  min-width: 320px;
+  background: white;
+  border-radius: 7px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+}
+i.fa-close {
+  color: $primary-color;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+table tr:hover {
+  background-color: #eee;
+}
+
 /* Mailchimp sign-up */
 #mc_embed_signup{
   clear: left; 
@@ -88,30 +186,47 @@ body{
 }
 
 /*header area*/
-.top-header{
+.manage {
+  background-color: #333;
+  position: fixed;
+  z-index: 500;
+  width: 100%;
+  color: #ddd;
+  padding: 10px 30px;
+  height: 55px;
+  ul {
+    margin-bottom: 0;
+  }
+  .dropdown-menu {
+    padding: 0;
+  }
+}
+.dropdown-menu > li > a, .dropdown-menu > li  > a:visited {
+  color: white;
+}  
+.top-header {
 	background: $primary-color;
 	position: fixed;
 	width: 100%;
 	z-index: 333;
+	top: 0;
 }
-.header-row{
-	margin: 0;
-	padding: 0;
+.logged-in .top-header {
+  top: 40px;
 }
-.logged-in {
+.manage {
   background-color: #454545;
-  color: #ccc;
-  padding: 5px 30px 5px 0;
   text-align: right;
-  position: fixed;
-  z-index: 500;
-  width: 100%;
   p {
     margin: 0;
   }
   a, a:visited {
-    color: #ccc;
+    color: white;
   }
+}
+.header-row {
+	margin: 0;
+	padding: 0;
 }
 .top-header img.logo{
 	float: left;
@@ -175,15 +290,14 @@ ul.nav{
   margin: 0 auto;
   width: 33%;
   min-width: 300px;
+  background: white;
+  border: solid 2px #666;
   border-radius: 15px;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 }
 /* spacer to allow for header */
 .spacer {
-  height: 110px;
-}
-.logged-in-spacer {
-  height: 150px;
+  height: 155px;
 }
 
 /*banner area*/
@@ -251,6 +365,11 @@ ul.nav{
 .banner .well p.facebook {
   color: #999;
   font-size: 14px;
+}
+
+/* info/main page */
+h2.main-heading {
+  text-transform: uppercase;
 }
 
 /*about section*/
@@ -586,9 +705,31 @@ color:#EFEFEF;
   text-align: center;
 }
 
+/* Registration */
+.amount {
+  font-size: 1.2em;
+}
+input.calculated {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+}
 
-
-
+/******************************
+simple layout
+*******************************/
+.simple .heading {
+  margin-top: 40px;
+}
+.simple h3 {
+  margin-top: 30px;
+}
+.simple .table {
+  margin-bottom: 10px;
+}
+.simple .invoice .fa-print {
+  font-size: 1.5em;
+}
 
 /******************************
 responsive area
@@ -668,6 +809,14 @@ responsive area
 	.about-inside{
 		padding: 0px;
 	}
+}
+@media print {
+  .manage, .flash-wrapper, .back-bar, .push, .footer, #modal, .fa-print {
+    display: none;
+  }
+  .simple .heading {
+    margin-top: 0;
+  }
 }
 
 

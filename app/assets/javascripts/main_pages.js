@@ -8,10 +8,8 @@ $(function() {
     window.location.assign('/sign_up_or_in');
   });
   
-  if ($('.logged-in')) {
-    var liHeight = $('.logged-in').height();
-    $('.header-row').css({'marginTop': liHeight});
-  }
+  var $b = $('body');
+  $b.offset({top: 0});
   
   // Inquiry form validation
   $('.contact-form .form-input').keyup(function() {
@@ -24,5 +22,11 @@ $(function() {
     } else {
       $('.contact-form .submit-btn').attr('disabled','disabled');
     } 
+  });
+  
+  // Fade out the flash wrapper when it appears
+  $('.flash-wrapper').delay(5000).fadeOut();
+  $('body').on('click', 'i.fa-close', function() {
+    $('.flash-wrapper').hide();
   });
 });

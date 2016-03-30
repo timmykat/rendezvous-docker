@@ -1,12 +1,93 @@
+info_pages:
+  - faq
+  - history
+  - legal_information
+  - vendors
+fees:
+  registration:
+    adult: 50
+    child: 0
+
+suggested_donations:
+    - 10
+    - 25
+    - 50
+    - 100  
+payment_methods:
+  - credit card
+  - check
+registration_statuses:
+  - initiated
+  - payment due
+  - complete
+  - "cancelled - refund pending"
+  - cancelled
+mailing_address_array:
+  - "Citroen Rendezvous, LLC"
+  - "245 Harvester Road"
+  - "Orange, CT 06477-2929"
+  - "United States"
+vehicle_marques:
+  - Citroen
+  - Panhard
+  - Peugeot
+  - Renault
+  - Other
+vehicle_models:
+  - Traction Avant (11)
+  - Traction Avant (15) 
+  - 2CV (sedan) 
+  - 2CV (truckette) 
+  - Dyane 
+  - D (early) 
+  - D (late) 
+  - D (wagon) 
+  - D (Chapron) 
+  - SM 
+  - CX (series 1)
+  - CX (series 2)
+countries:
+  US: UNITED STATES
+  CA: CANADA
+  Other: FRANCE (or other)
+provinces:
+  - AB
+  - BC
+  - MB
+  - NB
+  - NF
+  - NT
+  - NS
+  - 'ON'
+  - PE
+  - QC
+  - SK
+  - YT
+
+print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
+mailchimp: 
+  api_key: <%= ENV['RENDEZVOUS_MAILCHIMP_API_KEY'] %>
+  list:
+    name: Citroen Rendezvous
+    list_id: 9e696fe93f
+
 development:
   facebook:
-    app_id: <%= ENV['FACEBOOK_APP_ID'] %>
-    app_secret: <%= ENV['FACEBOOK_APP_SECRET'] %>
+    app_id: <%= ENV['RENDEZVOUS_FACEBOOK_APP_ID'] %>
+    app_secret: <%= ENV['RENDEZVOUS_FACEBOOK_APP_SECRET'] %>
   twitter:
-    consumer_key: <%= ENV['TWITTER_CONSUMER_KEY'] %>
-    consumer_secret: <%= ENV['TWITTER_CONSUMER_SECRET'] %>
+    consumer_key: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_KEY'] %>
+    consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
   mailer:
-    delivery_method: :sendmail
+    delivery_method: :smtp
+    settings:
+      :address:             smtp.gmail.com
+      :domain:              localhost
+      :port:                587
+      :user_name:           <%= ENV['GMAIL_USER'] %>
+      :password:            <%= ENV['GMAIL_PASS'] %>
+      :authentication:      :plain
+      :enable_starttls_auto: true
 
   inquiry_recipients:
     - tim@wordsareimages.com 
@@ -60,5 +141,11 @@ production:
     - tim@wordsareimages.com 
       
 test:
+  facebook:
+    app_id: <%= ENV['FACEBOOK_APP_ID'] %>
+    app_secret: <%= ENV['FACEBOOK_APP_SECRET'] %>
+  twitter:
+    consumer_key: <%= ENV['TWITTER_CONSUMER_KEY'] %>
+    consumer_secret: <%= ENV['TWITTER_CONSUMER_SECRET'] %>
   mailer:
     delivery_method: test

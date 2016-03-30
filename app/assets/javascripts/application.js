@@ -10,13 +10,11 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
+//= require jquery/dist/jquery
+//= require jquery-ui/jquery-ui
+//= require jquery-ujs/src/rails
 //= require bootstrap
-//= require custom
-//= require html5shiv
-//= require respond.min
-//= require smoothscroll
+//= require dropzone/dist/dropzone
+//= require braintree-web/dist/braintree
 //= require cocoon
-//= require dropzone
 //= require_tree .

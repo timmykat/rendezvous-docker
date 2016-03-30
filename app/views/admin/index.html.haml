@@ -1,0 +1,142 @@
+.container
+  .row
+    .col-md-12
+      %h1 Administrative Info
+      #tabbed
+        %ul
+          %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
+          %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-2'
+          %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-3'
+          %li= link_to '<i class="fa fa-female"></i> Site Users'.html_safe, '#tabbed-4'
+        #tabbed-1
+          .well.well-sm
+            %h2 Summary for #{Time.now.year}
+            .row
+              .col-md-6.col-xs-12
+                .well.well-sm
+                  %h3 Financials
+                  %table.table
+                    %tbody
+                      %tr
+                        %td
+                          %em  Registration fees 
+                        %td.text-right= number_to_currency(@data[:financials][:registration_fees])
+                      %tr
+                        %td
+                          %em  Donations 
+                        %td.text-right= number_to_currency(@data[:financials][:donations])
+                      %tr
+                        %td
+                          %em  Paid 
+                        %td.text-right= number_to_currency(@data[:financials][:paid])
+                      %tr
+                        %td
+                          %em  Due 
+                        %td.text-right= number_to_currency(@data[:financials][:due])
+                      %tr
+                        %td
+                          %em  Total 
+                        %td.text-right= number_to_currency(@data[:financials][:total])
+                  %p 
+                    Braintree account:
+                    = link_to '<i class="fa fa-bank"></i>'.html_safe, 'https://sandbox.braintreegateway.com/login', :target => '_blank'
+              .col-md-6.col-xs-12
+                .well.well-sm
+                  %h3 The Numbers
+                  %table.table
+                    %tbody
+                      %tr
+                        %td
+                          %em  Registrations 
+                        %td.text-right= @data[:registrants].count
+                      %tr
+                        %td
+                          %em  Attendees 
+                        %td.text-right
+                          Adults: #{@data[:adult]}
+                          %br 
+                            Kids:   #{@data[:child]}
+                      %tr
+                        %td
+                          %em  Sunday dinner 
+                        %td.text-right= @data[:sunday_dinner]
+                      %tr
+                        %td
+                          %em  Volunteers 
+                        %td.text-right= @data[:volunteer]
+                      %tr
+                        %td
+                          %em  Vehicles 
+                        %td.text-right= @vehicles.count
+        #tabbed-2
+          %h2 Registrations
+          %table.table.striped
+            %thead
+              %tr
+                %th Reg. number
+                %th.text-center Status
+                %th Name
+                %th.text-center Adults
+                %th.text-center Children
+                %th.text-center Vehicles
+                %th.text-center Registration Fee
+                %th.text-center Donation
+                %th.text-center Total
+                %th.text-center Paid
+                %th.text-center Due
+            %tbody
+              - @registrations.each do |registration|
+                %tr{:class => (registration.status == 'payment due' ? 'text-center alert-danger' : 'text-center alert-success')}
+                  %td= link_to registration.invoice_number, rendezvous_registration_path(registration.id)
+                  %td.text-center= registration.status
+                  %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
+                  %td.text-center= registration.number_of_adults
+                  %td.text-center= registration.number_of_children
+                  %td.text-center= vehicles_list(registration.user.vehicles)
+                  %td.text-center= number_to_currency(registration.registration_fee)
+                  %td.text-center= number_to_currency(registration.donation)
+                  %td.text-center= number_to_currency(registration.total)
+                  %td.text-center= number_to_currency(registration.paid_amount)
+                  %td= number_to_currency(registration.amount_due)
+        #tabbed-3
+          %h2 Vehicles
+          .well.well-sm
+            %h2 Summary
+            %p Number of Citroens: #{@data[:citroens].count}
+            %p Number of non-Citroens: #{@data[:non_citroens].count}
+            %p Total: #{@vehicles.count}
+          %table.table
+            %thead
+              %tr
+                %th Model
+                %th Year
+                %th Marque
+                %th Other Info
+                %th Registrant
+            %tbody
+              - @vehicles.each do |vehicle|
+                %tr
+                  %td= vehicle.model
+                  %td= vehicle.year
+                  %td= vehicle.marque
+                  %td
+                    %p= vehicle.other_info
+                  %td= vehicle.user.full_name
+        #tabbed-4
+          %h2 Site Users
+          %table.table
+            %thead
+              %tr
+                %th.text-center Admin
+                %th Name
+                %th Email
+                %th.text-center Mailing List
+                %th.text-center Citroenenvie
+              %tbody
+                - @users.each do |user|
+                  %tr{ :class => ((user.has_role? :admin) ? 'bg-info' : '' ) }
+                    %td.text-center= check_box_tag "is_admin_user_#{user.id}", 1, (user.has_role? :admin), :class => "admin_check", :disabled => (user.id == current_user.id)
+                    %td= link_to user.display_name, user_path(user)
+                    %td= user.email
+                    %td.text-center= (user.receive_mailings? ? 'Subscribed' : '')
+                    %td.text-center= (user.citroenvie? ? 'yes' : '')
