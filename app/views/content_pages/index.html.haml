@@ -2,17 +2,18 @@
 %section#home.banner.text-center
   .container
     .row
-      %h3 Saratoga Springs, New York
-      %h1 June 16&ndash;19, 2016
-      %p 
-        The Northeast's fun and fabulous gathering of 
-        %br Citroen owners, enthusiasts and friends
-      = image_tag "40th-badge.png"
-      %br/
       .col-md-12
-        = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
-        - if !user_signed_in?
-          = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
+        %h3 Saratoga Springs, New York
+        %h1 June 16&ndash;19, 2016
+        %p 
+          The Northeast's fun and fabulous gathering of 
+          %br Citroen owners, enthusiasts and friends
+        = image_tag "40th-badge.png"
+        %br/
+        - if user_signed_in?
+          = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
+          - if !user_signed_in?
+            = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
     .row
       .col-md-offset-4.col-md-4.col-xs-12
         %p{:style => 'text-shadow: none;', :class => 'facebook bg-secondary'}
@@ -29,7 +30,7 @@
           Schedule
         = image_tag "chevrons.png"
         %p
-          This is a tentative overview activity schedule, based on previous years. There's a new organizing group in town, and we're reviewing the activities, so this is subject to change (but we intend to keep favorites!) and more details will be available later.
+          This schedule is subject to change, but you'll find that it's pretty similar to events of the previous years.
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
