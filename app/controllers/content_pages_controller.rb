@@ -8,14 +8,34 @@ class ContentPagesController < ApplicationController
     render :layout => 'main_page'
   end
   
-  def history
+  def faq
   end
   
-  def vendors
+  def history
   end
   
   def legal_information
   end
+
+  def vendors
+  end
+  
+  def method_missing(method_sym, *arguments, &block)
+    if Rails.configuration.rendezvous[:info_pages].include? method_sym.to_s
+      render method_sym.to_s
+    else
+      super
+    end
+  end
+  
+  def respond_to? (method_sym, include_private = false)
+    if Rails.configuration.rendezvous[:info_pages].include? method_sym.to_s
+      true
+    else
+      super
+    end
+  end
+  
   
   def contact_us
     @name = params[:name]

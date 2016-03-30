@@ -30,9 +30,10 @@ Rails.application.routes.draw do
   
   root 'content_pages#index'
   get '/', to: 'content_pages#index'
-  get '/vendors', to: 'content_pages#vendors'
+  get '/faq', to: 'content_pages#faq'
   get '/history', to: 'content_pages#history'
   get '/legal_information', to: 'content_pages#legal_information'
+  get '/vendors', to: 'content_pages#vendors'
   
   # User management
   get '/sign_up_or_in', to: 'users#sign_up_or_in'
