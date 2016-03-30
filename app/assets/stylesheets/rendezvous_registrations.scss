@@ -37,6 +37,22 @@ label.radio-inline {
 #country {
   font-size: 18px;
 }
+td#logo {
+  padding: 0 10px;
+  background-image: image-url('credit_card_logos_13.gif');
+  background-position: 400px 0;
+  background-repeat: no-repeat;
+  width: 55px;
+  &.visa {
+    background-position: 0 0;
+  }
+  &.master-card {
+    background-position: -60px 0;
+  }
+  &.discover {
+    background-position: -120px 0;
+  }
+}
 
 body {
   .simple {
