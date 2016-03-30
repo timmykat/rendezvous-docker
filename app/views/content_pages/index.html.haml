@@ -9,27 +9,15 @@
         %br Citroen owners, enthusiasts and friends
       = image_tag "40th-badge.png"
       %br/
-      = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
-      - if !user_signed_in?
-        = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
+      .col-md-12
+        = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
+        - if !user_signed_in?
+          = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
     .row
-      .col-md-offset-4.col-md-4
-        .connect.well.well-sm
-          / Begin MailChimp Signup Form
-          #mc_embed_signup
-            %form#mc-embedded-subscribe-form.validate{:action => "//citroenrendezvous.us12.list-manage.com/subscribe/post?u=198c738ff80668ca4d472c590&amp;id=9e696fe93f", :method => "post", :name => "mc-embedded-subscribe-form", :novalidate => "", :target => "_blank"}
-              #mc_embed_signup_scroll
-                %label{:for => "mce-EMAIL"} Get Rendezvous updates
-                %input#mce-EMAIL.email{:name => "EMAIL", :placeholder => "Email address", :required => "", :type => "email", :value => ""}/
-                / real people should not fill this in and expect good things - do not remove this or risk form bot signups
-                %div{"aria-hidden" => "true", :style => "position: absolute; left: -5000px;"}
-                  %input{:name => "b_198c738ff80668ca4d472c590_9e696fe93f", :tabindex => "-1", :type => "text", :value => ""}/
-                .clear
-                  %input#mc-embedded-subscribe.btn.btn-info{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
-          / End mc_embed_signup
-          %p.facebook
-            %i.fa.fa-facebook-square
-            = link_to 'Check us out on Facebook!', 'https://www.facebook.com/groups/1796592930566951', :target => '_blank'
+      .col-md-offset-4.col-md-4.col-xs-12
+        %p{:style => 'text-shadow: none;', :class => 'facebook bg-secondary'}
+          %i.fa.fa-facebook-square
+          = link_to 'Check us out on Facebook!', 'https://www.facebook.com/groups/1796592930566951', :target => '_blank'
 <!--End mc_embed_signup-->          
 / end of banner section
 / about section
@@ -73,8 +61,8 @@
               %strong 4-5:30pm
               Downtime: RELAX!
             %li 
-              %strong 5:30-6:00pm
-              Silent auction perusal and 50-50 raffle
+              %strong 5:30
+              Browsing begins for the silent auction and tickets go on sale for the 50-50 raffle. Winers are announced after dinner.
             %li 
               %strong 6-8pm
               Banquet dinner
@@ -87,11 +75,12 @@
           %h3 Sunday
           %ul.text-left
             %li 
-              %strong 8:30-11:30am
-              Continental breakfast and People's Choice award winners viewing, Springs Motel
+              %strong 8:30-11:00am
+              Continental breakfast and viewing of People's Choice award winners, Springs Motel
             %li 
-              %strong 11:30am
-              Rally (more like a convoy, really, since no stopwatches are involved). Vehicle hopping encouraged!
+              %strong 11:00am (arrive by 10:30 for orientation)
+              = link_to 'Rally', faq_path(:anchor => 'rally')
+              (more like a convoy, really, since no stopwatches are involved). Vehicle hopping encouraged!
             %li 
               %strong 5pm - PJ's Bar-B-QSA dinner, Springs Motel
 / end of about section
@@ -104,6 +93,10 @@
         = image_tag "chevrons.png"
         %p          
           The Citroen Rendezvous is the largest gathering of Citroens in North America, taking place annually on Father's Day weekend in Saratoga Springs, NY.  It is the people who make the event special. Friends, family, and other enthusiasts are warmly welcomed, as are other French, European, and just plain quirky cars.
+        %p
+          In addition to the information below, please checkout out our
+          = succeed '.' do
+            = link_to 'faq', faq_path
       .col-md-12.services
         .col-md-3.single-service.col-xs-12
           %i.fa.fa-hotel
@@ -111,7 +104,9 @@
           %p 
             The Springs Motel at 189 Broadway is the center of Rendezvous action when not at the show field. The Springs is usually booked by now, but Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Just remember that June is high season, so book early; let the
             = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { :target => '_blank' }
-            be your guide, or use your favorite travel website.
+            be your guide, or use your favorite travel website. Also see
+            = succeed '.' do
+              = link_to 'this', faq_path(:anchor => 'accommodations')
         .col-md-3.single-service.col-xs-12
           %i.fa.fa-shopping-cart
           %h3 Supporting Vendors
@@ -139,7 +134,7 @@
           %p 
             Your 
             %em chauffeurs: 
-            Michaela Hellman, David Cossitt-Levy, Chris "Toaph" Brown, and Tim Kinnel.
+            Michaela Hellman, David Cossitt-Levy, Christopher (Toaph) Westfall, and Tim Kinnel.
 / about section ends
 / portfolio section
 %section#photos.portfolio.text-center

@@ -9,6 +9,10 @@
         %strong 
           The registration fee is $#{config[:fees][:registration][:adult]} per adult (16+). Kids 15 and under are free! You may pay by credit card or by check.
       .well.well-sm
+        %p 
+          Bienvenue &aacute; tous! Welcome to the new Rendezvous registration system. We're excited to offer this, and we've tried to iron out as many of the kinks as possible, but if you do have problems, please
+          = succeed '.' do
+            = link_to 'let us know', root_path(:anchor => 'contact')
         %p
           Registration consists of four steps:
         %ol
