@@ -26,6 +26,10 @@ html, body {
   height: 100%;
 }
 
+body, p, ul, ol, a {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+}
+
 /* Turn off spinners on number fields */
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 

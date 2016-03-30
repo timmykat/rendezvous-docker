@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   
   before_action :get_app_data
   before_action :flash_array
+  
     
   # Need this for other gems that might set flash
   def flash_array
