@@ -1,7 +1,8 @@
 :javascript  
   var myIntegration;
-  
+    
   var buildBraintree = function() {
+    var event;
     braintree.setup(appData.clientToken, "custom", {
       onReady: function(integration) {
         myIntegration = integration;
@@ -23,6 +24,41 @@
           "input": {
             "color": '#555',
             "font-size": '14px',
+          }
+        },
+        onFieldEvent:  function(e) {
+          if (e.type === 'fieldStateChange') {
+            if (e.target.fieldKey === 'number') {
+              if (e.isValid) {
+                if (typeof(e.card) != 'undefined')
+                  $('td#logo').addClass(e.card.type);
+                  $('.submit-status .credit-card i').removeClass('hidden');
+                  $('.submit-status .credit-card').removeClass('text-danger').addClass('text-success');
+                }
+              } else {
+                $('td#logo').removeClass();
+                $('.submit-status .credit-card i').addClass('hidden');
+                $('.submit-status .credit-card').removeClass('text-success').addClass('text-danger');
+              }
+            }
+            if (e.target.fieldKey === 'expirationDate') {
+              if (e.isValid) {
+                $('.submit-status .expiration i').removeClass('hidden');
+                $('.submit-status .expiration').removeClass('text-danger').addClass('text-success');
+              } else {
+                $('.submit-status .expiration i').addClass('hidden');
+                $('.submit-status .expiration').removeClass('text-success').addClass('text-danger');
+              }
+            }
+            if (e.target.fieldKey === 'cvv') {
+              if (e.isValid) {
+                $('.submit-status .cvv i').removeClass('hidden');
+                $('.submit-status .cvv').removeClass('text-danger').addClass('text-success');
+              } else {
+                $('.submit-status .cvv i').addClass('hidden');
+                $('.submit-status .cvv').removeClass('text-success').addClass('text-danger');
+              }
+            }
           }
         }
       }
