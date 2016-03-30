@@ -8,6 +8,13 @@ $(function() {
       $('input#rendezvous_registration_registration_fee').val(total);
     }
   };
+  var getAttendeeTotals = function() {
+    var adult = $('#attendees input[value="adult"]:checked').length;
+    $('input#rendezvous_registration_number_of_adults').val(adult);  
+    var child = $('#attendees input[value="child"]:checked').length;
+    $('input#rendezvous_registration_number_of_children').val(child);  
+    setRegistrationFee();  
+  }
       
   // Remove the remove button from the first attendee and lock the child selection
   $('#attendees a.remove_fields:first').remove();
@@ -16,9 +23,7 @@ $(function() {
   
   // Initialize - set the first attendee info and get totals
   $('#attendees input[value="adult"]:first').attr('checked', 'checked');
-  $('input#rendezvous_registration_number_of_adults').val(1);
-  $('input#rendezvous_registration_number_of_children').val(0);
-  setRegistrationFee();
+  getAttendeeTotals(); 
   
   var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
   var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
@@ -26,12 +31,8 @@ $(function() {
   
 
   // Get adult and kid totals
-  $('#attendees').on('click', 'input[type=radio], i.fa-minus', function(e) {  
-    var adult = $('#attendees input[value="adult"]:checked').length;
-    $('input#rendezvous_registration_number_of_adults').val(adult);  
-    var child = $('#attendees input[value="child"]:checked').length;
-    $('input#rendezvous_registration_number_of_children').val(child);  
-    setRegistrationFee();  
+  $('#attendees').on('click', 'input[type=radio], i.fa-minus', function(e) { 
+    getAttendeeTotals(); 
   });
   
 

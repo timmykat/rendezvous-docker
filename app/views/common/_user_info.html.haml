@@ -18,7 +18,7 @@
 
 .row
   .col-md-12
-    %p If you intend to pay by credit card, please use your billing address.
+    %p If you intend to pay by credit card, please use your North American billing address.
     %label Address
     .form-group
       = f.input_field :address1, :class => 'form-control', :placeholder => 'Address 1 *'
@@ -29,16 +29,14 @@
     .row
       .col-md-4.col-xs-12
         .form-group
-          = f.input_field :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- Select State or Province --', :class => 'form-control'
+          = f.input_field :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- Non-US/Canadian --', :class => 'form-control'
       .col-md-4.col-xs-12
         .form-group
           = f.input_field :postal_code, :class => 'form-control', :placeholder => 'Zip/Postal Code *'
     .row
       .col-md-12
-        %label Country
-        .form-group
-          = f.input :country, :label_html => { :class => 'sr-only' }, :collection => country_list, :as => :radio_buttons, :item_label_class => 'radio-inline', :item_wrapper_tag => false, :checked => 'US'
-
+        #country
+        = f.hidden_field :country, :class => 'hidden-country-field'
 .row
   .col-md-12
     %h3 Connect

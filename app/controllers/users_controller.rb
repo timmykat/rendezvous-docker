@@ -17,8 +17,10 @@ class UsersController < ApplicationController
   
   def update
     @user = User.find(params[:id])
+    binding.pry
     if !@user.update(user_params)
       flash_alert('We had a problem saving your updated information')
+      flash_alert @user.errors.full_messages.to_sentence
       render :action => :edit
     else
       action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'
@@ -29,7 +31,7 @@ class UsersController < ApplicationController
         flash_alert('Your user information was updated, but there was a problem updating your mailing list status.')
         flash_alert(response[:message])
       end
-      redirect_to edit_user_path(@user)
+      redirect_to user_path(@user)
     end
   end
   

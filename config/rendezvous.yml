@@ -41,8 +41,24 @@ vehicle_models:
   - SM 
   - CX (series 1)
   - CX (series 2)
-  - Other
-  
+countries:
+  US: UNITED STATES
+  CA: CANADA
+  Other: FRANCE (or other)
+provinces:
+  - AB
+  - BC
+  - MB
+  - NB
+  - NF
+  - NT
+  - NS
+  - 'ON'
+  - PE
+  - QC
+  - SK
+  - YT
+
 print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
 mailchimp: 
   api_key: <%= ENV['RENDEZVOUS_MAILCHIMP_API_KEY'] %>

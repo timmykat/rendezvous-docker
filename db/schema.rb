@@ -11,16 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160325230626) do
+ActiveRecord::Schema.define(version: 20160330022356) do
 
   create_table "attendees", force: :cascade do |t|
     t.string   "name",                       limit: 255
-    t.string   "adult_or_child",             limit: 255
+    t.string   "adult_or_child",             limit: 255, default: "adult"
     t.boolean  "volunteer"
     t.boolean  "sunday_dinner"
     t.integer  "rendezvous_registration_id", limit: 4
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
   end
 
   add_index "attendees", ["adult_or_child"], name: "index_attendees_on_adult_or_child", using: :btree

@@ -35,7 +35,7 @@ class RendezvousRegistrationsController < ApplicationController
       user.update(rendezvous_registration_user_params) 
       if !user.save
         flash_alert 'There was a problem saving the user.'
-        user.errors.full_messages.each { |msg| flash_alert msg }
+        flash_alert user.errors.full_messages.to_sentence
         render 'registration_form'
         return  
       end
@@ -48,7 +48,7 @@ class RendezvousRegistrationsController < ApplicationController
         user = User.new(rendezvous_registration_user_params)
         if !user.save
           flash_alert 'There was a problem saving your user information.'
-          user.errors.full_messages.each { |msg| flash_alert msg }
+          flash_alert user.errors.full_messages.to_sentence
           @rendezvous_registration = RendezvousRegistration.new
           @rendezvous_registration.attendees.build
           render 'registration_form'
@@ -70,7 +70,7 @@ class RendezvousRegistrationsController < ApplicationController
     
     if !@rendezvous_registration.save
       flash_alert('There was a problem creating your registration.')
-      @rendezvous_registration.errors.full_messages.each { |msg| flash_alert msg }
+      flash_alert @rendezvous_registration.errors.full_messages.to_sentence
       render 'registration_form'
     else
       handle_mailchimp(@rendezvous_registration.user)     
@@ -100,6 +100,7 @@ class RendezvousRegistrationsController < ApplicationController
       redirect_to review_rendezvous_registration_path(@rendezvous_registration)
     else
       flash_alert 'There was a problem updating the registration.'
+      flash_alert @rendezvous_registration.errors.full_messages.to_sentence
       redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
     end
   end
