@@ -29,8 +29,6 @@
     %title Citroen Rendezvous #{Time.new.year}
     = stylesheet_link_tag "//cdn-images.mailchimp.com/embedcode/slim-081711.css"
     = stylesheet_link_tag 'application', :media  => 'all'
-    %link{:href => "//fonts.googleapis.com/css?family=Open+Sans:600italic,400,800,700,300", :rel => "stylesheet", :type => "text/css"}/
-
     = javascript_include_tag 'application'
     = csrf_meta_tags
     = yield :header_tags
