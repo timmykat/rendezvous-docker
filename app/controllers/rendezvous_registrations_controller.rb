@@ -3,9 +3,9 @@ class RendezvousRegistrationsController < ApplicationController
   before_action :require_admin, :only => [:index]
   before_action :authenticate_user!, :except => [:new, :show]
   before_action :authenticate_or_token, :only => [:show]
+  before_action :owner_or_admin, :only => [:show]
   
-  def new
-      
+  def new     
     if user_signed_in? && !session[:admin_user]
       @rendezvous_registration = current_user.rendezvous_registrations.current.first
       if !@rendezvous_registration.blank?
@@ -213,6 +213,14 @@ class RendezvousRegistrationsController < ApplicationController
   
   
   private
+  
+    # Only allows admins and owners to see registration
+    def owner_or_admin
+      unless (current_user.id == RendezvousRegistration.find(params[:id]).user_id) || (current_user.has_role? :admin)
+        flash_alert 'Sorry, you must be an admin to see that.'
+        redirect_to :root
+      end
+    end 
     
     # Otherwise printing the url requires authentication  
     def authenticate_or_token
