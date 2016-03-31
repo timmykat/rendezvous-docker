@@ -19,7 +19,7 @@ class Mailer < ApplicationMailer
   
   def registration_acknowledgement(rendezvous_registration)
     @rr = rendezvous_registration
-    registration_pdf = ::WickedPdf.new.pdf_from_url(rendezvous_registration_url(@rr, :protocol => (Rails.env.development? ? 'http' : 'https'), :print_token => Rails.configuration.rendezvous[:print_token]), :print_media_type => true)
+    registration_pdf = ::WickedPdf.new.pdf_from_url(rendezvous_registration_url(@rr, :protocol => (Rails.env.development? ? 'http' : 'https'), :print_token => Rails.configuration.rendezvous[:print_token]), :print_media_type => true, :ignore_load_errors => true)
     attachments["Rendezvous-2016-registration.pdf"] = registration_pdf
     mail(to: @rr.user.email, subject: "Thanks for registering for the 2016 Rendezvous!")
   end
