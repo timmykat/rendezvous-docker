@@ -93,7 +93,11 @@ class User < ActiveRecord::Base
   end
   
   def display_country
-    Rails.configuration.rendezvous[:countries][country.to_sym]
+    if Rails.configuration.rendezvous[:countries].include? country
+      Rails.configuration.rendezvous[:countries][country.to_sym]
+    else
+      ''
+    end
   end
   
   def self.mailchimp_init_request

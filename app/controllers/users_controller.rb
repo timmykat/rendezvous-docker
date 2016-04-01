@@ -18,8 +18,8 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if !@user.update(user_params)
-      flash_alert('We had a problem saving your updated information')
-      flash_alert @user.errors.full_messages.to_sentence
+      flash_alert_now 'We had a problem saving your updated information'
+      flash_alert_now  @user.errors.full_messages.to_sentence
       render :action => :edit
     else
       action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'

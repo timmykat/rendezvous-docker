@@ -32,13 +32,11 @@ class RendezvousRegistrationsController < ApplicationController
   
     # Create or update the user
     if user_signed_in? && !session[:admin_user]
-      user = User.find(current_user.id)
-      user.update(rendezvous_registration_user_params) 
-      if !user.save
+      user = User.find(current_user.id)      
+      if !user.update(rendezvous_registration_user_params) 
         flash_alert 'There was a problem saving the user.'
         flash_alert user.errors.full_messages.to_sentence
-        render 'registration_form'
-        return  
+        redirect_to register_path and return
       end
     else
       user = User.find_by_email(params[:rendezvous_registration][:user_attributes][:email])
@@ -48,12 +46,11 @@ class RendezvousRegistrationsController < ApplicationController
         params[:rendezvous_registration][:user_attributes][:password_confirmation] = password
         user = User.new(rendezvous_registration_user_params)
         if !user.save
-          flash_alert 'There was a problem saving your user information.'
-          flash_alert user.errors.full_messages.to_sentence
+          flash_alert_now 'There was a problem saving your user information.'
+          flash_alert_now user.errors.full_messages.to_sentence
           @rendezvous_registration = RendezvousRegistration.new
           @rendezvous_registration.attendees.build
-          render 'registration_form'
-          return  
+          render 'registration_form' and return  
         end
       end
     end
@@ -70,9 +67,9 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration.invoice_number = RendezvousRegistration.invoice_number
     
     if !@rendezvous_registration.save
-      flash_alert('There was a problem creating your registration.')
-      flash_alert @rendezvous_registration.errors.full_messages.to_sentence
-      render 'registration_form'
+      flash_alert_now('There was a problem creating your registration.')
+      flash_alert_now @rendezvous_registration.errors.full_messages.to_sentence
+      render 'registration_form' and return
     else
       handle_mailchimp(@rendezvous_registration.user)     
       sign_in(@rendezvous_registration.user) unless (session[:user_admin] || user_signed_in?)
