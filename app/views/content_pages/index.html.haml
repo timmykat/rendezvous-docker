@@ -30,7 +30,9 @@
           Schedule
         = image_tag "chevrons.png"
         %p
-          This schedule is subject to change, but you'll find that it's pretty similar to events of the previous years.
+          For more detailed information, check the 
+          = succeed '.' do
+            = link_to 'schedule page', schedule_path
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
@@ -38,7 +40,7 @@
           %ul.text-left
             %li 
               %strong 6-9pm
-              Dinner, Mama Mia's
+              Dinner, Max London's
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-automobile
@@ -46,7 +48,7 @@
           %ul.text-left
             %li 
               %strong 2-4pm
-              Ice cream social, location TBD
+              Ice cream social, Furlong's Family Fun
             %li 
               %strong 6-8pm
               Rendezvous 2016 Welcome poolside reception and pizza party, Springs Motel
@@ -83,7 +85,7 @@
               = link_to 'Rally', faq_path
               (more like a convoy, really, since no stopwatches are involved). Vehicle hopping encouraged!
             %li 
-              %strong 5pm - PJ's Bar-B-QSA dinner, Springs Motel
+              %strong 5pm - Dinner, Springs Motel, with food from PJ's Bar-B-QSA
 / end of about section
 / service section
 %section#info.service.text-left

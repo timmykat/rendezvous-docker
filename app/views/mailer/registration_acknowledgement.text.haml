@@ -1,26 +1,28 @@
-Dear #{@rr.user.full_name},
+Dear #{@rendezvous_registration.user.full_name},
 
 You have successfully registered for the the 40th Citroen Rendezvous, which will take place June 16-19 in Saratoga Springs, New York. We hope you're as excited as we are!
 
-- if @rr.paid_method == 'credit card'
+- if @rendezvous_registration.paid_method == 'credit card'
   Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
 - else
   An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied. 
 
+You may also view your registration information at
+= rendezvous_registration_url(@rendezvous_registration, :protocol => 'https')
 
 Your Rendezvous details:
 
-Registration fee: #{number_to_currency(@rr.registration_fee)}
-Donation: #{number_to_currency(@rr.donation)}
-Total: #{number_to_currency(@rr.total)}
-Due: #{number_to_currency(@rr.amount_due)}
+Registration fee: #{number_to_currency(@rendezvous_registration.registration_fee)}
+Donation: #{number_to_currency(@rendezvous_registration.donation)}
+Total: #{number_to_currency(@rendezvous_registration.total)}
+Due: #{number_to_currency(@rendezvous_registration.amount_due)}
 
 Attendees:
-- @rr.attendees.each do |a|
+- @rendezvous_registration.attendees.each do |a|
   #{a.name}  #{a.adult_or_child}  Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'} Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
 
 Vehicles:
-- @rr.user.vehicles.each do |v|
+- @rendezvous_registration.user.vehicles.each do |v|
   #{v.year} #{v.marque} #{v.model}
 
 

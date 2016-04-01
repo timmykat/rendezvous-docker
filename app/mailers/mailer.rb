@@ -18,15 +18,17 @@ class Mailer < ApplicationMailer
   end
   
   def registration_acknowledgement(rendezvous_registration)
-    @rr = rendezvous_registration
-    registration_pdf = ::WickedPdf.new.pdf_from_url(rendezvous_registration_url(@rr, :protocol => (Rails.env.development? ? 'http' : 'https'), :print_token => Rails.configuration.rendezvous[:print_token]), :print_media_type => true, :ignore_load_errors => true)
-    attachments["Rendezvous-2016-registration.pdf"] = registration_pdf
-    mail(to: @rr.user.email, subject: "Thanks for registering for the 2016 Rendezvous!")
+    @rendezvous_registration = rendezvous_registration
+#     registration_pdf = ::WickedPdf.new.pdf_from_url(rendezvous_registration_url(@rr, :protocol => (Rails.env.development? ? 'http' : 'https'), :print_token => Rails.configuration.rendezvous[:print_token]), :print_media_type => true, :ignore_load_errors => true)
+    filename = "#{@rendezvous_registration.invoice_number}.pdf"
+    attachments[filename] =File.read(Rails.root.join('public','registrations', filename))
+    binding.pry
+    mail(to: @rendezvous_registration.user.email, subject: "Thanks for registering for the 2016 Rendezvous!")
   end
   
   def registration_notification(rendezvous_registration)
-    @rr = rendezvous_registration
+    @rendezvous_registration = rendezvous_registration
     recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
-    mail(to: recipients, subject: "New Rendezvous registration from #{@rr.user.display_name}")
-  end
+    mail(to: recipients, subject: "New Rendezvous registration from #{@rendezvous_registration.user.display_name}")
+  end  
 end
