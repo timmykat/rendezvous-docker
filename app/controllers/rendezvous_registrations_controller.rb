@@ -1,9 +1,10 @@
 class RendezvousRegistrationsController < ApplicationController
 
   before_action :require_admin, :only => [:index]
-  before_action :authenticate_user!, :except => [:new, :show]
-  before_action :authenticate_or_token, :only => [:show]
+  before_action :authenticate_user!, :except => [:new]
   before_action :owner_or_admin, :only => [:show]
+  skip_before_action :verify_authenticity_token, :only => [:show]
+
   
   def new     
     if user_signed_in? && !session[:admin_user]
@@ -165,8 +166,7 @@ class RendezvousRegistrationsController < ApplicationController
         @rendezvous_registration.paid_date = Time.new
         @rendezvous_registration.status = 'complete'
         @rendezvous_registration.save!
-        Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
-        Mailer.registration_notification(@rendezvous_registration).deliver_later
+        send_registration_success_emails
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         redirect_to @rendezvous_registration
         return
@@ -190,8 +190,8 @@ class RendezvousRegistrationsController < ApplicationController
       @rendezvous_registration.errors.full_messages.each { |msg| flash_alert msg }
       render 'payment'
     else
-      Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
-      Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
+      send_registration_success_emails
+      flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
       redirect_to rendezvous_registration_path(@rendezvous_registration)
     end
   end
@@ -208,11 +208,27 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     @rendezvous_registration.destroy
     flash_notice('Your registration has been deleted.')
-    redirect_to edit_user_path(current_user)
+    redirect_to user_path(current_user)
   end
   
   
   private
+    
+    # Create pdf and send acknowledgement emails
+    def send_registration_success_emails
+      filename = "#{@rendezvous_registration.invoice_number}.pdf"
+      registration_pdf = ::WickedPdf.new.pdf_from_string(
+        render_to_string('rendezvous_registrations/show', :layout => 'layouts/registration_mailer', :encoding => 'UTF-8')
+      )
+      save_dir =  Rails.root.join('public','registrations')   
+      save_path = Rails.root.join('public','registrations', filename)
+      File.open(save_path, 'wb') do |file|
+        file << registration_pdf
+      end
+      Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
+      Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
+    end
+    
   
     # Only allows admins and owners to see registration
     def owner_or_admin
@@ -221,15 +237,7 @@ class RendezvousRegistrationsController < ApplicationController
         redirect_to :root
       end
     end 
-    
-    # Otherwise printing the url requires authentication  
-    def authenticate_or_token
-      if params[:print_token] == Rails.configuration.rendezvous[:print_token]
-        return true
-      end
-      authenticate_user!
-    end
-  
+      
     def handle_mailchimp(user)
       action = user.receive_mailings? ? 'subscribe' : 'unsubscribe'
       response = user.mailchimp_action(action)
