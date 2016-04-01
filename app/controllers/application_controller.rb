@@ -54,10 +54,15 @@ class ApplicationController < ActionController::Base
   end
   
   def method_missing(method_sym, *arguments, &block)
-    if method_sym.to_s =~ /^flash_(.*)$/
+    if method_sym.to_s =~ /^flash_([a-z]+)(_(now))?$/
       type = $1.to_sym
-      flash[type] ||= []
-      flash[type] << arguments.first
+      if $3 == 'now'
+        flash.now[type] ||= []
+        flash.now[type] << arguments.first
+      else
+        flash[type] ||= []
+        flash[type] << arguments.first
+      end
     else
       super
     end
@@ -68,7 +73,7 @@ class ApplicationController < ActionController::Base
   end
   
   def respond_to? (method_sym, include_private = false)
-    if method_sym.to_s =~ /^flash_(.*)$/
+    if method_sym.to_s =~ /^flash_([a-z]+)(_(now))?$/
       true
     else
       super
