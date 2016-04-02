@@ -9,10 +9,10 @@ $(function() {
     }
   };
   var getAttendeeTotals = function() {
-    var adult = $('#attendees input[value="adult"]:checked').length;
-    $('input#rendezvous_registration_number_of_adults').val(adult);  
-    var child = $('#attendees input[value="child"]:checked').length;
-    $('input#rendezvous_registration_number_of_children').val(child);  
+    var adults = $('#attendees input[value="adult"]:visible:checked').length;
+    $('input#rendezvous_registration_number_of_adults').val(adults);  
+    var children = $('#attendees input[value="child"]_visible:checked').length;
+    $('input#rendezvous_registration_number_of_children').val(children);  
     setRegistrationFee();  
   }
       
@@ -31,8 +31,11 @@ $(function() {
   
 
   // Get adult and kid totals
-  $('#attendees').on('click', 'input[type=radio], i.fa-minus', function(e) { 
+  $('#attendees').on('click', 'input[type=radio]', function(e) { 
     getAttendeeTotals(); 
+  });
+  $('#attendees').on('cocoon:after-insert cocoon:after-remove', function(e) {
+    getAttendeeTotals();
   });
   
 
