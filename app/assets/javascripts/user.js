@@ -19,9 +19,7 @@ $(function() {
   if (typeof(appData) != 'undefined') {
     var provinces = appData.provinces;
     $('#country').text(appData.countries[$('.hidden-country-field').val()]);
-    $('#rendezvous_registration_user_attributes_state_or_province').on('change', function() {
-      console.log($(this).val());
-      console.log(appData.provinces);
+    $('#rendezvous_registration_user_attributes_state_or_province, #user_state_or_province').on('change', function() {
       if (appData.provinces.indexOf($(this).val()) >= 0) {
         $('#country').text(appData.countries.CA);
         $('input[class=hidden-country-field]').val('CA');

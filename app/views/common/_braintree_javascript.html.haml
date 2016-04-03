@@ -28,9 +28,10 @@
         },
         onFieldEvent:  function(e) {
           if (e.type === 'fieldStateChange') {
+            console.log(e.type)
             if (e.target.fieldKey === 'number') {
-              if (e.isValid) {
-                if (typeof(e.card) != 'undefined')
+               if (e.isValid) {
+                if (typeof(e.card) != 'undefined') {
                   $('td#logo').addClass(e.card.type);
                   $('.submit-status .credit-card i').removeClass('hidden');
                   $('.submit-status .credit-card').removeClass('text-danger').addClass('text-success');
@@ -62,7 +63,7 @@
           }
         }
       }
-    );    
+    });    
   }
   var teardownBraintree = function() {
     myIntegration.teardown();
