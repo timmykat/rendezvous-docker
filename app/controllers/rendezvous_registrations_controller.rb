@@ -168,8 +168,8 @@ class RendezvousRegistrationsController < ApplicationController
         redirect_to @rendezvous_registration
         return
       elsif result.errors
-        flash_alert(result.message)
-        render rendezvous_registration_path(@rendezvous_registration)
+        flash_alert_now(result.message)
+        render 'rendezvous_registrations/payment'
         return
       end
     end 
