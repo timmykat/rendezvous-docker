@@ -169,7 +169,7 @@ class RendezvousRegistrationsController < ApplicationController
         return
       elsif result.errors
         flash_alert(result.message)
-        render rendzvous_registration_path(@rendezvous_registration)
+        render rendezvous_registration_path(@rendezvous_registration)
         return
       end
     end 
