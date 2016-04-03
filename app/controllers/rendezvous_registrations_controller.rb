@@ -3,8 +3,15 @@ class RendezvousRegistrationsController < ApplicationController
   before_action :require_admin, :only => [:index]
   before_action :authenticate_user!, :except => [:new]
   before_action :owner_or_admin, :only => [:show]
+  before_action :set_cache_buster
+
   skip_before_action :verify_authenticity_token, :only => [:show]
 
+  def set_cache_buster
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
   
   def new     
     if user_signed_in? && !session[:admin_user]
