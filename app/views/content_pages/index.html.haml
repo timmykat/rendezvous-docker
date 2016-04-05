@@ -10,10 +10,9 @@
           %br Citroen owners, enthusiasts and friends
         = image_tag "40th-badge.png"
         %br/
-        - if user_signed_in?
-          = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
-          - if !user_signed_in?
-            = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
+        = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
+        - if !user_signed_in?
+          = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
     .row
       .col-md-offset-4.col-md-4.col-xs-12
         %p{:style => 'text-shadow: none;', :class => 'facebook bg-secondary'}
@@ -30,9 +29,9 @@
           Schedule
         = image_tag "chevrons.png"
         %p
-          For more detailed information, check the 
+          For more information, check the 
           = succeed '.' do
-            = link_to 'schedule page', schedule_path
+            = link_to 'detailed schedule page', schedule_path
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
@@ -40,7 +39,7 @@
           %ul.text-left
             %li 
               %strong 6-9pm
-              Dinner, Max London's
+              Dinner, Mama Mia's Pizza & Cafe
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-automobile

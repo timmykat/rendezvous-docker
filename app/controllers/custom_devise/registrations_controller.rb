@@ -7,7 +7,7 @@ class CustomDevise::RegistrationsController < Devise::RegistrationsController
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
-        flash_notice :signed_up
+        flash_notice "Congratulations, you've successfully signed up!"
         sign_up(resource_name, resource)
         respond_with resource, location: after_sign_up_path_for(resource)
       else

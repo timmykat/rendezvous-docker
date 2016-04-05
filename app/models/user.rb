@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
       upper = password.match(/[A-Z]/)
       digit = password.match(/[0-9]/)
       unless lower && upper && digit
-        errors.add :password, "must include 1 of each: lower case letter, upper case letter, digit"
+        errors.add :password, "must include 1 of each: lower case letter, upper case letter, number"
       end
     end
   end
