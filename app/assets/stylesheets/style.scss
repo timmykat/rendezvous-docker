@@ -719,6 +719,15 @@ input.calculated {
   font-weight: bold;
 }
 
+.day {
+  .title {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.1em;
+    margin-top: 20px;
+  }
+}
+
 /******************************
 simple layout
 *******************************/

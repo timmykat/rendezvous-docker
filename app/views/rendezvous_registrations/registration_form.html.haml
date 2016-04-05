@@ -23,7 +23,7 @@
         - if !user_signed_in?
           %p 
             %strong
-              Please create an account if you haven't got one yet, or sign in if you do. You can sign up via email, Facebook, or Twitter:
+              Please create an account if you haven't got one yet, or sign in if you do.
               = link_to 'Sign up or sign in', sign_up_or_in_path
           %p.printed-form
             If you prefer not to register on line, please print this registration form and send it in with your registration fee payment:
@@ -59,6 +59,7 @@
                     = render :partial => 'attendee_fields', :locals => { :f => a }
                   .links
                     = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, :class => 'btn btn-primary btn-sm'
+                    Add a person
                 %br
                 %br
             .row

@@ -36,6 +36,10 @@ class ApplicationController < ActionController::Base
     redirect_to :root
   end
   
+  def after_sign_up_path_for(resource)
+    register_path
+  end
+  
   def after_sign_in_path_for(resource)
     session[:admin_user] = false
     @rendezvous_registration = current_user.rendezvous_registrations.current.first
