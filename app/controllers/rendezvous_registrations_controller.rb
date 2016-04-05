@@ -175,8 +175,9 @@ class RendezvousRegistrationsController < ApplicationController
         redirect_to @rendezvous_registration
         return
       elsif result.errors
-        flash_alert_now(result.message)
-        render 'rendezvous_registrations/payment'
+        flash_alert 'There was a problem with your credit card payment.'
+        flash_alert result.message
+        redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
         return
       end
     end 
@@ -191,8 +192,9 @@ class RendezvousRegistrationsController < ApplicationController
     
     # Update the registration
     if !@rendezvous_registration.update_attributes(rendezvous_registration_params)
-      @rendezvous_registration.errors.full_messages.each { |msg| flash_alert msg }
-      render 'payment'
+      flash_alert 'There was a problem completing your registration.'
+      flash_alert @rendezvous_registration.errors.full_messages.to_sentence
+      redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
     else
       send_registration_success_emails
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
