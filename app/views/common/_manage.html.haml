@@ -3,7 +3,7 @@
     %ul.list-inline
       %li= link_to '<i class="fa fa-arrow-left"></i> Back to info page'.html_safe, :root, :class => 'btn btn-sm btn-info'
       - if user_signed_in?
-        = link_to 'My user profile', user_path(current_user), :class => 'btn btn-sm btn-primary'
+        = link_to 'My user profile/vehicles', user_path(current_user), :class => 'btn btn-sm btn-primary'
         - if !session[:admin_user]
           - current_registration = current_user.rendezvous_registrations.current.first
           - if current_registration.blank?
