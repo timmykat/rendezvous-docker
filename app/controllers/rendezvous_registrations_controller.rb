@@ -100,6 +100,9 @@ class RendezvousRegistrationsController < ApplicationController
     params[:rendezvous_registration][:user_id] = user.id
     params[:rendezvous_registration][:user_attributes] = nil
     
+    # Set total to registration fee. Donation happens in payment
+    params[:rendezvous_registration][:total] = params[:rendezvous_registration][:registration_fee]
+
     if @rendezvous_registration.update(rendezvous_registration_params)
       flash_notice 'The registration was updated.'
       redirect_to review_rendezvous_registration_path(@rendezvous_registration)
