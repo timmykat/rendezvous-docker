@@ -19,9 +19,8 @@ class Mailer < ApplicationMailer
   
   def registration_acknowledgement(rendezvous_registration)
     @rendezvous_registration = rendezvous_registration
-#     registration_pdf = ::WickedPdf.new.pdf_from_url(rendezvous_registration_url(@rr, :protocol => (Rails.env.development? ? 'http' : 'https'), :print_token => Rails.configuration.rendezvous[:print_token]), :print_media_type => true, :ignore_load_errors => true)
     filename = "#{@rendezvous_registration.invoice_number}.pdf"
-    attachments[filename] =File.read(Rails.root.join('public','registrations', filename))
+    attachments[filename] = File.read(Rails.root.join('public','registrations', filename))
     mail(to: @rendezvous_registration.user.email, subject: "Thanks for registering for the 2016 Rendezvous!")
   end
   
@@ -29,5 +28,18 @@ class Mailer < ApplicationMailer
     @rendezvous_registration = rendezvous_registration
     recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
     mail(to: recipients, subject: "New Rendezvous registration from #{@rendezvous_registration.user.display_name}")
-  end  
+  end
+  
+  def registration_update(type_and_method, rendezvous_registration)
+    @rendezvous_registration = rendezvous_registration
+
+    case type
+    when 'cancellation - credit card'
+    when 'cancellation - check'
+    when 'update - credit card'
+    when 'update - check'
+    end
+    
+    mail(to: @rendezvous_registration.user.email, subject: "Your registration #{/(update|cancellation)/.match('cancellation - credit card').to_s} for the 2016 Rendezvous")
+  end
 end

@@ -1,0 +1,39 @@
+#payment-form
+  .row
+    .col-md-12
+      .logos
+        = image_tag 'credit_card_logos_13'
+      .form-group
+        %label{ :for => 'card-number' } Card Number
+        #card-number.form-control
+  .row
+    .col-md-8            
+      .form-group
+        %label{ :for => 'expiration-date' } Expiration Date
+        #expiration-date.form-control
+    .col-md-4
+      .form-group
+        %label{ :for => 'cvv' } CVV
+        #cvv.form-control
+  .row
+    .col-md-12
+      %table.table.submit-status
+        %tr.credit-card.text-danger
+          %td
+            Credit card valid?
+          %td
+            &nbsp;
+            %i.fa.fa-check.hidden
+          %td{ :id => 'logo', :rowspan => '3' }
+        %tr.expiration.text-danger
+          %td
+            Expiration date valid?
+          %td
+            &nbsp;
+            %i.fa.fa-check.hidden
+        %tr.cvv.text-danger
+          %td
+            CVV valid?
+          %td
+            &nbsp;
+            %i.fa.fa-check.hidden

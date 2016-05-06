@@ -225,6 +225,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
+    twitter-bootstrap-rails-confirm (1.0.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -270,6 +271,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 5.0)
   simple_form
+  twitter-bootstrap-rails-confirm
   uglifier (>= 1.3.0)
   wicked_pdf
   wkhtmltopdf-binary

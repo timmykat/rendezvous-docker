@@ -31,6 +31,7 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'devise'
 gem 'bootstrap-sass', '~> 3.1.1'
+gem 'twitter-bootstrap-rails-confirm'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'cocoon'

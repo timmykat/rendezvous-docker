@@ -3,7 +3,7 @@
 .container
   .row
     .col-md-offset-1.col-md-10.col-xs-12
-      %h1 2016 Registration
+      %h1 #{Time.now.year} Registration
       = simple_form_for @rendezvous_registration, :url => complete_rendezvous_registration_path(@rendezvous_registration), :html => { :id => 'rendezvous_registration_form' } do |f|
         %section  
           %h2 Payment
@@ -32,46 +32,8 @@
               .col-md-6.col-xs-12
                 .form-group
                   = f.input :paid_method, :label => 'Payment method', :collection => payment_options, :as => :radio_buttons, :checked => 'credit card', :input_html => { :class => 'payment' }
-                #payment-form
-                  .row
-                    .col-md-12
-                      .logos
-                        = image_tag 'credit_card_logos_13'
-                      .form-group
-                        %label{ :for => 'card-number' } Card Number
-                        #card-number.form-control
-                  .row
-                    .col-md-8            
-                      .form-group
-                        %label{ :for => 'expiration-date' } Expiration Date
-                        #expiration-date.form-control
-                    .col-md-4
-                      .form-group
-                        %label{ :for => 'cvv' } CVV
-                        #cvv.form-control
-                  .row
-                    .col-md-12
-                      %table.table.submit-status
-                        %tr.credit-card.text-danger
-                          %td
-                            Credit card valid?
-                          %td
-                            &nbsp;
-                            %i.fa.fa-check.hidden
-                          %td{ :id => 'logo', :rowspan => '3' }
-                        %tr.expiration.text-danger
-                          %td
-                            Expiration date valid?
-                          %td
-                            &nbsp;
-                            %i.fa.fa-check.hidden
-                        %tr.cvv.text-danger
-                          %td
-                            CVV valid?
-                          %td
-                            &nbsp;
-                            %i.fa.fa-check.hidden
-                  = f.input_field :status, :as => :hidden, :value => 'complete'  
+                = render :partial => 'common/credit_card_payment'
+                = f.input_field :status, :as => :hidden, :value => 'complete'  
                 #mailing-address.hidden
                   %p
                     %em You will be able to print your receipt once you complete the registration; it will also be emailed to you in PDF format. Please send it with a check payable to Citroen Rendezvous LLC to:

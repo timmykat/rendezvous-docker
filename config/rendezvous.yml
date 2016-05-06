@@ -20,8 +20,15 @@ registration_statuses:
   - initiated
   - payment due
   - complete
+  - "updated - refund pending"
+  - updating
   - "cancelled - refund pending"
   - cancelled
+transaction_types:
+  - payment
+  - updated payment
+  - partial refund
+  - full refund
 mailing_address_array:
   - "Citroen Rendezvous, LLC"
   - "245 Harvester Road"

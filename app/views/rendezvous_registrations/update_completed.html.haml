@@ -1,0 +1,63 @@
+- config = Rails.configuration.rendezvous
+- if @rendezvous_registration.paid_method == 'credit card'
+  = render :partial => 'common/braintree_javascript'
+.container
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12
+      %h1 Update #{(current_user == @rendezvous_registration.user) ? 'my' : (@rendezvous_registration.user.full_name +"'s")} #{Time.now.year} registration
+      %p 
+        Update your attendees below, or 
+        = link_to 'Cancel', rendezvous_registration_path(@rendezvous_registration, :cancellation => true), :method => :put, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-xs btn-danger'
+      %p 
+        %strong If you paid by credit card
+        your card will be refunded for cancellations and removed attendees. If you are adding attendees, you will need to supply your credit card information.
+      %p 
+        %strong If you paid by check
+        you will need to send an additional check or you will receive a refund check, depending on whether you are adding or removing attendees.
+       
+      = simple_form_for @rendezvous_registration, :url => rendezvous_registration_path(@rendezvous_registration), :method => :put, :html => { :id => 'rendezvous_registration_form' } do |f|
+        .well.well-sm
+          %h3 Attendees
+          %p.hint (Adults are 16 and up, children are 15 and under)
+          .row
+            .col-md-12
+              #attendees
+                = f.simple_fields_for :attendees do |a|
+                  = render :partial => 'attendee_fields', :locals => { :f => a }
+                .links
+                  = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, :class => 'btn btn-primary btn-sm'
+                  Add a person
+              %br
+              %br
+          .row
+            .col-md-4
+              .form-group
+                %label Total adults:
+                = f.input_field :number_of_adults, :disabled => true, :class => 'calculated fee-calculation'
+          .row
+            .col-md-4
+              .form-group
+                %label Total kids:
+                = f.input_field :number_of_children, :disabled => true, :class => 'calculated fee-calculation'
+
+          .row
+            .col-md-6.col-xs-12
+              %p.amount.bg-success.form-group
+                %label Registration fee: $
+                = f.input_field :registration_fee, :disabled => true, :class => 'calculated'
+
+          = f.input_field :status, :as => :hidden, :value => 'updating'
+        - if @rendezvous_registration.paid_method == 'credit card'
+          #credit-card-information.hidden
+            .well.well-sm
+              %h3 Credit Card Information     
+              .row
+                .col-md-6.col-xs-12
+                  = render :partial => 'common/credit_card_payment'
+                .col-md-6.col-xs-12
+                  %p 
+                    %strong We only need your credit card if you are adding people.
+        .row
+          .col-md-12
+            .form-group
+              = f.button :submit, 'Update Registration'.html_safe, :class => 'btn btn-primary'

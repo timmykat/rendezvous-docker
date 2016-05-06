@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       get :review
       get :payment
       patch :complete
+      get :update_completed
     end
   end
   resources :rendezvous_registrations, :except => [:index]

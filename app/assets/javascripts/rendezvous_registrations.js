@@ -6,6 +6,13 @@ $(function() {
       var total = $('input#rendezvous_registration_number_of_adults').val() * appData.fees.registration.adult
          + $('input#rendezvous_registration_number_of_children').val() * appData.fees.registration.child;
       $('input#rendezvous_registration_registration_fee').val(total);
+      
+      // For updates, hide or display the credit card fields
+      if (total > appData.current_registration.registration_fee) {
+        $('#credit-card-information').removeClass('hidden');
+      } else {
+        $('#credit-card-information').addClass('hidden');
+      }
     }
   };
   var getAttendeeTotals = function() {
@@ -21,15 +28,15 @@ $(function() {
   $('#attendees input[value="child"]:first').attr('disabled', true);
   $('#attendees .rendezvous_registration_attendees_name input:first').attr('placeholder', 'Your name *');
   
-  // Initialize - set the first attendee info and get totals
-  $('#attendees input[value="adult"]:first').attr('checked', 'checked');
+  // Initialize - set the first attendee info if this is registration and get totals
+  if ($('#user-information').length > 0) {
+    $('#attendees input[value="adult"]:first').attr('checked', 'checked');
+    var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
+    var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
+    $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
+  }
   getAttendeeTotals(); 
   
-  var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
-  var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
-  $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
-  
-
   // Get adult and kid totals
   $('#attendees').on('click', 'input[type=radio]', function(e) { 
     getAttendeeTotals(); 

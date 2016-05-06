@@ -3,7 +3,14 @@
     .col-md-offset-1.col-md-10.col-xs-12.heading
       %h1.pull-left R#{Time.new.year} Registration
       .pull-right= image_tag('rendezvous-logo.png')
-  = render :partial => 'common/registration_info'      
-    
+.container
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12
+      %p
+        I need to
+        = link_to 'update or cancel', update_completed_rendezvous_registration_path(@rendezvous_registration)
+        my registration.
+  = render :partial => 'common/registration_info' 
   
+        
   

@@ -1,73 +1,74 @@
-.row
-  .col-md-12
-    .form-group
-      = f.input :email, :label_html => { :class => 'sr-only' }, :class => 'primary', :placeholder => 'E-mail *', :disabled => !session[:admin_user]
-      - if user_signed_in? && !session[:admin_user]
-        = f.input :id, :as => :hidden, :input_html => { :value => current_user.id }
-       
-.row
-  .col-md-12
-    %label Name
-.row
-  .col-md-6.col-xs-12
-    .form-group
-      = f.input :first_name, :placeholder => 'First name *'
-  .col-md-6.col-xs-12
-    .form-group
-      = f.input :last_name, :placeholder => 'Last name *' 
-
-.row
-  .col-md-12
-    %p If you intend to pay by credit card, please use your North American billing address.
-    %label Address
-    .form-group
-      = f.input_field :address1, :class => 'form-control', :placeholder => 'Address 1 *'
-    .form-group
-      = f.input_field :address2, :class => 'form-control', :placeholder => 'Address 2'
-    .form-group
-      = f.input_field :city, :class => 'form-control', :placeholder => 'City *'
-    .row
-      .col-md-4.col-xs-12
-        .form-group
-          = f.input_field :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- Non-US/Canadian --', :class => 'form-control'
-      .col-md-4.col-xs-12
-        .form-group
-          = f.input_field :postal_code, :class => 'form-control', :placeholder => 'Zip/Postal Code *'
-    .row
-      .col-md-12
-        #country
-        = f.hidden_field :country, :class => 'hidden-country-field'
-.row
-  .col-md-12
-    %h3 Connect
-    .well.well-sm
-      %p.bg-rendezvous
-        %label Rendezvous Mailing List
-        .form-group
-          = f.input :receive_mailings, :inline_label => "Yes! I'd like to receive occasional informational mailings from the Rendezvous organizers."
-
-    .well.well-sm  
-      %label Citroenvie
-      %p 
-        Citroenvie is a publication for Citroen enthusiasts, with an active online presence at
-        = link_to 'Citroenvie.com', 'http://citroenvie.com', :target => '_blank'
-        who have been long-time supporters of the Rendezvous. If you would like to be put on their mailing list, check below.
-      %p Citroen Rendezvous LLC and Citroenvie are separate entities, but we do share a love of Citroens.
-      %p 
-        %strong Note:
-        This does not obligate you to become a member of Citroenvie. We are simply sharing your name and email address with them. 
+#user-information
+  .row
+    .col-md-12
       .form-group
-        = f.input :citroenvie, :inline_label => "Yes! I'd like to receive email from Citroenvie."
+        = f.input :email, :label_html => { :class => 'sr-only' }, :class => 'primary', :placeholder => 'E-mail *', :disabled => !session[:admin_user]
+        - if user_signed_in? && !session[:admin_user]
+          = f.input :id, :as => :hidden, :input_html => { :value => current_user.id }
+       
+  .row
+    .col-md-12
+      %label Name
+  .row
+    .col-md-6.col-xs-12
+      .form-group
+        = f.input :first_name, :placeholder => 'First name *'
+    .col-md-6.col-xs-12
+      .form-group
+        = f.input :last_name, :placeholder => 'Last name *' 
 
-.row
-  .col-md-12
-    = field_set_tag 'Vehicles' do
-      %p Please add the vehicles you are bringing to the Rendezvous. 
-      %p 
-        %em Note: If you don't know what vehicle(s) you are bringing, you can register now and update your vehicle(s) via your user profile later.
-      #vehicles
-        = f.simple_fields_for :vehicles do |v|
-          = render 'common/vehicle_fields', :f => v
-        .links
-          = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, :class => "btn btn-primary btn-sm", :partial => 'common/vehicle_fields'
-          Add a vehicle
+  .row
+    .col-md-12
+      %p If you intend to pay by credit card, please use your North American billing address.
+      %label Address
+      .form-group
+        = f.input_field :address1, :class => 'form-control', :placeholder => 'Address 1 *'
+      .form-group
+        = f.input_field :address2, :class => 'form-control', :placeholder => 'Address 2'
+      .form-group
+        = f.input_field :city, :class => 'form-control', :placeholder => 'City *'
+      .row
+        .col-md-4.col-xs-12
+          .form-group
+            = f.input_field :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- Non-US/Canadian --', :class => 'form-control'
+        .col-md-4.col-xs-12
+          .form-group
+            = f.input_field :postal_code, :class => 'form-control', :placeholder => 'Zip/Postal Code *'
+      .row
+        .col-md-12
+          #country
+          = f.hidden_field :country, :class => 'hidden-country-field'
+  .row
+    .col-md-12
+      %h3 Connect
+      .well.well-sm
+        %p.bg-rendezvous
+          %label Rendezvous Mailing List
+          .form-group
+            = f.input :receive_mailings, :inline_label => "Yes! I'd like to receive occasional informational mailings from the Rendezvous organizers."
+
+      .well.well-sm  
+        %label Citroenvie
+        %p 
+          Citroenvie is a publication for Citroen enthusiasts, with an active online presence at
+          = link_to 'Citroenvie.com', 'http://citroenvie.com', :target => '_blank'
+          who have been long-time supporters of the Rendezvous. If you would like to be put on their mailing list, check below.
+        %p Citroen Rendezvous LLC and Citroenvie are separate entities, but we do share a love of Citroens.
+        %p 
+          %strong Note:
+          This does not obligate you to become a member of Citroenvie. We are simply sharing your name and email address with them. 
+        .form-group
+          = f.input :citroenvie, :inline_label => "Yes! I'd like to receive email from Citroenvie."
+
+  .row
+    .col-md-12
+      = field_set_tag 'Vehicles' do
+        %p Please add the vehicles you are bringing to the Rendezvous. 
+        %p 
+          %em Note: If you don't know what vehicle(s) you are bringing, you can register now and update your vehicle(s) via your user profile later.
+        #vehicles
+          = f.simple_fields_for :vehicles do |v|
+            = render 'common/vehicle_fields', :f => v
+          .links
+            = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, :class => "btn btn-primary btn-sm", :partial => 'common/vehicle_fields'
+            Add a vehicle

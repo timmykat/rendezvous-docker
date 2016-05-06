@@ -1,0 +1,9 @@
+.container.invoice
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12.heading
+      %h1.pull-left R#{Time.new.year} Registration (updated)
+      .pull-right= image_tag('rendezvous-logo.png')
+  = render :partial => 'common/registration_info' 
+  
+        
+  

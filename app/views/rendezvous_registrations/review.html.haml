@@ -12,5 +12,5 @@
       .row
         .col-md-12.text-center    
           .form-group
-            = link_to '<i class="fa fa-arrow-left"></i> Go back '.html_safe, edit_rendezvous_registration_path(@rendezvous_registration), :class => 'btn btn-primary'
+            = link_to '<i class="fa fa-arrow-left"></i> Go back '.html_safe, edit_rendezvous_registration_path(@rendezvous_registration, :review => true), :class => 'btn btn-primary'
             = link_to 'Go to payment <i class="fa fa-arrow-right"></i>'.html_safe, payment_rendezvous_registration_path(@rendezvous_registration), :class => 'btn btn-primary correct_form'

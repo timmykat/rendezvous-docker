@@ -91,35 +91,249 @@ class RendezvousRegistrationsController < ApplicationController
 
   def update
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
-    user = @rendezvous_registration.user
-    mailchimp_init = user.receive_mailings
+    email = true
     
-    user.update(rendezvous_registration_user_params)
+    if params[:review]
+      email = false
+      user = @rendezvous_registration.user
+      mailchimp_init = user.receive_mailings
     
-    handle_mailchimp(user) unless user.receive_mailings == mailchimp_init
-    params[:rendezvous_registration][:user_id] = user.id
-    params[:rendezvous_registration][:user_attributes] = nil
+      user.update(rendezvous_registration_user_params)
     
-    # Set total to registration fee. Donation happens in payment
-    params[:rendezvous_registration][:total] = params[:rendezvous_registration][:registration_fee]
+      handle_mailchimp(user) unless user.receive_mailings == mailchimp_init
+      params[:rendezvous_registration][:user_id] = user.id
+      params[:rendezvous_registration][:user_attributes] = nil
+    
+      # Set total to registration fee. Donation happens in payment
+      params[:rendezvous_registration][:total] = params[:rendezvous_registration][:registration_fee]
+      
+      if @rendezvous_registration.update(rendezvous_registration_params)
+        flash_notice 'The registration was updated.'
+        send_registration_update_emails(type) if email
+        redirect_to review_rendezvous_registration_path(@rendezvous_registration)
+        return
+      else
+        flash_alert 'There was a problem updating the registration.'
+        flash_alert @rendezvous_registration.errors.full_messages.to_sentence
+        redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
+        return
+      end
+    
+    elsif params[:cancellation]
+      refund = @rendezvous_registration.registration_fee
+      if @rendezvous_registration.paid_method ==  'credit card'
+        
+        # Get the transaction
+        begin
+          get_transaction = Braintree::Transaction.find(@rendezvous_registration.cc_transaction_id)
+        rescue Braintree::NotFoundError => e
+          flash_alert 'We could not find a transaction that matches what we have on record. Please contact us through the web form.'
+          redirect_to root_path
+        end
+        
+        # Refund or void depending on the state
+        if get_transaction.status == 'settled' || get_transaction.status == 'settling'
+          result = Braintree::Transaction.refund(@rendezvous_registration.cc_transaction_id)
+          if result.success?
+            flash_notice "The registration portion of your payment has been refunded. Any donations are non-refundable."
+            flash_notice "You will receive a confirmation email shortly."
+            operation = 'refund'
+          else
+            flash_alert_now "There was a problem refunding your registration."
+            flash_alert_now result.message
+            render :update_completed
+            return
+          end
+        else
+          result = Braintree::Transaction.void(@rendezvous_registration.cc_transaction_id)
+          if result.success?
+            flash_notice "Your entire registration payment, including any donation, has been voided."
+            flash_notice "You will receive a confirmation email shortly."
+            operation = 'void'
+          else
+            flash_alert_now "There was a problem refunding your registration."
+            flash_alert_now result.message
+            render :update_completed
+            return
+          end
+        
+          # All transactions taken care of, fully cancelled
+          params[:rendezvous_registration][:status] = 'cancelled'
+        end
+        
+      elsif  @rendezvous_registration.paid_method ==  'check'
+        # Check must be written before the registration is fully cancelled
+        params[:rendezvous_registration][:status] = 'cancelled - refund pending'
+      end
+        
+      # Update the registration and transaction records
+      params[:rendezvous_registration][:number_of_adults] = 0
+      params[:rendezvous_registration][:number_of_children] = 0
+      params[:rendezvous_registration][:registration_fee] = 0.0
+      if operation == 'void'
+        params[:rendezvous_registration][:paid_amount]  = 0.0
+        params[:rendezvous_registration][:total]        = 0.0
+      else
+        params[:rendezvous_registration][:paid_amount]  = @rendezvous_registration.paid_amount - refund
+        params[:rendezvous_registration][:total]        = @rendezvous_registration.total - refund
+      end
+    
+      if @rendezvous_registration.update(rendezvous_registration_params)
+        flash_notice 'The registration was updated.'
+        send_registration_update_emails('cancellation') if email
+        redirect_to review_rendezvous_registration_path(@rendezvous_registration)
+        return
+      else
+        flash_alert 'There was a problem updating the registration.'
+        flash_alert @rendezvous_registration.errors.full_messages.to_sentence
+        redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
+        return
+      end
 
-    if @rendezvous_registration.update(rendezvous_registration_params)
-      flash_notice 'The registration was updated.'
-      redirect_to review_rendezvous_registration_path(@rendezvous_registration)
-    else
-      flash_alert 'There was a problem updating the registration.'
-      flash_alert @rendezvous_registration.errors.full_messages.to_sentence
-      redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
-    end
+    elsif params[:rendezvous_registration][:status] == 'updating'
+      attendee_change = params[:rendezvous_registration][:number_of_adults].to_i - @rendezvous_registration.number_of_adults 
+      if attendee_change < 0
+      
+        # Refund is a positive number
+        refund =  - attendee_change * Rails.configuration.rendezvous[:fees][:registration][:adult]
+
+        if @rendezvous_registration.paid_method ==  'credit card'       
+          # Get the transaction
+          begin
+            result = Braintree::Transaction.find(@rendezvous_registration.cc_transaction_id)
+          rescue Braintree::NotFoundError => e
+            flash_alert 'We could not find a transaction that matches what we have on record. Please contact us through the web form.'
+            redirect_to root_path
+            return
+          end
+        
+          # Refund or hold if still authorizing
+          if result.status == 'settled' || result.status == 'settling'
+            result = Braintree::Transaction.refund(@rendezvous_registration.cc_transaction_id, refund.to_s)
+            if result.success?
+              flash_notice "We have refunded you the registration fee for #{attendee_change.abs} adult(s)"
+              flash_notice "You will receive a confirmation email shortly."
+              operation = 'refund'
+            else
+              flash_alert_now "There was a problem with the partial refund of your registration fee."
+              flash_alert_now result.message
+              render :update_completed
+              return
+            end
+          else
+            flash_alert "Your credit card transaction is still authorizing, please try later."
+            redirect_to rendezvous_registration_path(@rendezvous_registration)
+          end
+        end   
+      elsif attendee_change > 0
+        additional_charge = attendee_change * Rails.configuration.rendezvous[:fees][:registration][:adult]
+        if params[:rendezvous_registration][:paid_method] == 'credit card' && !params[:payment_method_nonce].blank? 
+          braintree_transaction_params = {
+            :order_id             => "#{@rendezvous_registration.invoice_number}-UPDATE",
+            :amount               => additional_charge,
+            :payment_method_nonce => params[:payment_method_nonce],
+            :customer             => {
+              :first_name               => @rendezvous_registration.user.first_name,
+              :last_name                => @rendezvous_registration.user.last_name,
+              :email                    => @rendezvous_registration.user.email,
+            },
+            :billing               => {
+              :first_name               => @rendezvous_registration.user.first_name,
+              :last_name                => @rendezvous_registration.user.last_name,
+              :street_address           => @rendezvous_registration.user.address1,
+              :extended_address         => @rendezvous_registration.user.address2,
+              :locality                 => @rendezvous_registration.user.city,
+              :region                   => @rendezvous_registration.user.state_or_province,
+              :postal_code              => @rendezvous_registration.user.postal_code,
+              :country_code_alpha2      => @rendezvous_registration.user.country
+            },
+            :options => {
+              :submit_for_settlement => true
+            },
+          }
+      
+          result = Braintree::Transaction.sale(braintree_transaction_params)
+      
+          if result.success?
+            @rendezvous_registration.paid_amount = @rendezvous_registration.total + additional_charge
+            @rendezvous_registration.registration_fee = @rendezvous_registration.registration_fee + additional_charge
+            
+            # Keep original transaction ID as the id associated with the registration, but create new transaction
+            @rendezvous_registration.cc_transaction_id = result.transaction.id
+        
+            # Create a new transaction
+            @rendezvous_registration.transactions << Transaction.new(
+              :transaction_method => 'credit card',
+              :transaction_type => 'updated payment',
+              :cc_transaction_id => result.transaction.id,
+              :amount => additional_charge
+            )
+            
+            @rendezvous_registration.status = 'complete'
+             
+            if @rendezvous_registration.save!
+              send_registration_update_emails('update')
+              flash_notice 'Your registration for the #{Time.now.year} Rendezvous has been updated. You should receive a confirmation by email shortly.'
+              redirect_to @rendezvous_registration
+              return
+            else
+              flash_alert_now "There was a problem updating your registration."
+              flash_alert_now @rendezvous_registration.errors.messages.to_sentence
+              render :update_completed
+              return
+            end
+          elsif result.errors
+            flash_alert 'There was a problem with your credit card payment.'
+            flash_alert result.message
+            redirect_to update_completed_rendezvous_registration_path(@rendezvous_registration)
+            return
+          end
+        end 
+        
+      end
+      
+      if @rendezvous_registration.update(rendezvous_registration_params)
+        flash_notice 'The registration was updated.'
+        send_registration_update_emails('update') if email
+        redirect_to review_rendezvous_registration_path(@rendezvous_registration)
+        return
+      else
+        flash_alert 'There was a problem updating the registration.'
+        flash_alert @rendezvous_registration.errors.full_messages.to_sentence
+        redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
+        return
+      end        
+    end    
   end
   
+  def update_completed
+    @rendezvous_registration = RendezvousRegistration.find(params[:id])
+    begin
+      @app_data[:clientToken] =  Braintree::ClientToken.generate
+      @app_data[:registration_fee] = @rendezvous_registration.registration_fee
+      @credit_connection = true
+    rescue BraintreeError => e
+      @credit_connection = false
+      flash_alert("We're sorry but the connection to our credit card processor isn't available. Please update later.")
+      flash_alert e.inspect
+      redirect_to update_completed_rendezvous_registration_path(@rendezvous_registration)
+    end
+    @app_data[:current_registration] = {
+      :attendees => {
+        :adults => @rendezvous_registration.number_of_adults,
+        :children => @rendezvous_registration.number_of_children
+      },
+      :registration_fee => @rendezvous_registration.registration_fee
+    }
+  end
+
   def review
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
   end
   
   def payment
+    @rendezvous_registration = RendezvousRegistration.find(params[:id])
     begin
-      @rendezvous_registration = RendezvousRegistration.find(params[:id])
       @app_data[:clientToken] =  Braintree::ClientToken.generate
       @app_data[:registration_fee] = @rendezvous_registration.registration_fee
       @credit_connection = true
@@ -172,11 +386,23 @@ class RendezvousRegistrationsController < ApplicationController
         @rendezvous_registration.cc_transaction_id = result.transaction.id
         @rendezvous_registration.paid_date = Time.new
         @rendezvous_registration.status = 'complete'
-        @rendezvous_registration.save!
-        send_registration_success_emails
-        flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to @rendezvous_registration
-        return
+        
+        # Create a new transaction
+        @rendezvous_registration.transactions << Transaction.new(
+          :transaction_method => 'credit card',
+          :transaction_type => 'payment',
+          :cc_transaction_id => result.transaction.id,
+          :amount => @rendezvous_registration.total
+        )
+        if @rendezvous_registration.save!
+          send_registration_success_emails
+          flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
+          redirect_to @rendezvous_registration
+          return
+        else
+          flash_alert "There was a problem saving your registration."
+          flash_alert @rendezvous_registration.errors.messages.to_sentence
+        end
       elsif result.errors
         flash_alert 'There was a problem with your credit card payment.'
         flash_alert result.message
@@ -238,6 +464,20 @@ class RendezvousRegistrationsController < ApplicationController
       Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
     end
     
+    def send_registration_update_emails(type)
+      filename = "#{@rendezvous_registration.invoice_number}-#{type == 'cancellation' ? 'CANCELLED' : 'UPDATE'}.pdf"
+      registration_change_pdf = ::WickedPdf.new.pdf_from_string(
+        render_to_string('rendezvous_registrations/update_receipt', :layout => 'layouts/registration_mailer', :encoding => 'UTF-8')
+      )
+      save_dir =  Rails.root.join('public','registrations')   
+      save_path = Rails.root.join('public','registrations', filename)
+      File.open(save_path, 'wb') do |file|
+        file << registration_change_pdf
+      end
+      type_and_method = "#{type} - #{@rendezvous_registration.paid_method}"
+      Mailer.registration_update(type_and_method, @rendezvous_registration).deliver_later
+    end
+    
   
     # Only allows admins and owners to see registration
     def owner_or_admin
@@ -276,12 +516,15 @@ class RendezvousRegistrationsController < ApplicationController
         { :attendees_attributes =>
           [:id, :name, :adult_or_child, :volunteer, :sunday_dinner, :_destroy]
         },
-        {:user_attributes=>
+        { :user_attributes =>
           [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
             {:vehicles_attributes => 
               [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
             }
           ]
+        },
+        { :transactions_attributes => 
+          [ :id, :transaction_method, :transaction_type, :cc_transaction_id, :amount ]
         }
       )
     end

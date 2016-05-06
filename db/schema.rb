@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160330022356) do
+ActiveRecord::Schema.define(version: 20160417170008) do
 
   create_table "attendees", force: :cascade do |t|
     t.string   "name",                       limit: 255
@@ -84,6 +84,20 @@ ActiveRecord::Schema.define(version: 20160330022356) do
   add_index "rendezvous_registrations", ["paid_method"], name: "index_rendezvous_registrations_on_paid_method", using: :btree
   add_index "rendezvous_registrations", ["status"], name: "index_rendezvous_registrations_on_status", using: :btree
   add_index "rendezvous_registrations", ["year"], name: "index_rendezvous_registrations_on_year", using: :btree
+
+  create_table "transactions", force: :cascade do |t|
+    t.string   "transaction_method",         limit: 255
+    t.string   "transaction_type",           limit: 255
+    t.string   "cc_transaction_id",          limit: 255
+    t.decimal  "amount",                                 precision: 6, scale: 2, default: 0.0
+    t.integer  "rendezvous_registration_id", limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "transactions", ["cc_transaction_id"], name: "index_transactions_on_cc_transaction_id", using: :btree
+  add_index "transactions", ["transaction_method"], name: "index_transactions_on_transaction_method", using: :btree
+  add_index "transactions", ["transaction_type"], name: "index_transactions_on_transaction_type", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "",   null: false
