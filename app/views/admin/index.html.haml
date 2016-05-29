@@ -13,10 +13,12 @@
             %h2 Summary for #{Time.now.year}
             .row
               .col-md-12
-                - if File.exist? @file_path
-                  %p
-                    Summary data in CSV format:
-                    =link_to '<i class="fa fa-file-excel-o"></i>'.html_safe, "/#{@file_name}"
+                %h3 Data Files
+                .data_files
+                  - @files.each do |ftype, fdata|
+                    - if File.exist? fdata['path']
+                      %span
+                        =link_to "#{fdata['descriptor']} <i class='fa fa-file-excel-o'></i>".html_safe, "/#{fdata['name']}"
             .row
               .col-md-6.col-xs-12
                 .well.well-sm

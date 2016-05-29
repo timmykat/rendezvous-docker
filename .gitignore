@@ -16,6 +16,6 @@
 /tmp
 
 # Ignore user files
-/public/registration_data.csv
+/public/*.csv
 /public/uploads/*
 /public/registrations/*
