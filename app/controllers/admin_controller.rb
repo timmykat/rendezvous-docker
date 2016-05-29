@@ -46,9 +46,10 @@ class AdminController < ApplicationController
     csv_object['vehicles'] << [
       'Number',
       'Registrant',
+      'Year'
       'Marque',
       'Model',
-      'Notes'
+      'Info'
     ]
 
     @registrations = RendezvousRegistration.where("year = ? AND status IN (?)", Time.now.year, ['complete', 'payment due'])
@@ -92,9 +93,10 @@ class AdminController < ApplicationController
         csv_object['vehicles'] << [
           "#{registration.invoice_number}-#{nvehicle.to_s}",
           registration.user.full_name,
+          v.year,
           v.marque,
           v.model,
-          v.notes
+          v.other_info
         ]
       end
     
