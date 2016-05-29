@@ -46,7 +46,7 @@ class AdminController < ApplicationController
     csv_object['vehicles'] << [
       'Number',
       'Registrant',
-      'Year'
+      'Year',
       'Marque',
       'Model',
       'Info'
