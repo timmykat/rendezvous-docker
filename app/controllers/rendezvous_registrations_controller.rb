@@ -167,6 +167,15 @@ class RendezvousRegistrationsController < ApplicationController
       result = Braintree::Transaction.sale(braintree_transaction_params)
       
       if result.success?
+
+        # Create a new transaction
+        @rendezvous_registration.transactions << Transaction.new(
+          :transaction_method => 'credit card',
+          :transaction_type => 'payment',
+          :cc_transaction_id => result.transaction.id,
+          :amount => @rendezvous_registration.total
+        )
+
         @rendezvous_registration.paid_amount = @rendezvous_registration.total
         @rendezvous_registration.paid_method = 'credit card'
         @rendezvous_registration.cc_transaction_id = result.transaction.id
