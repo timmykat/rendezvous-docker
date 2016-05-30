@@ -2,8 +2,11 @@ class RendezvousRegistration < ActiveRecord::Base
   
   belongs_to :user
   has_many :attendees, :dependent => :destroy
+  has_many :transactions, :dependent => :destroy
+  
   accepts_nested_attributes_for :user
   accepts_nested_attributes_for :attendees, :allow_destroy => true
+  accepts_nested_attributes_for :transactions, :allow_destroy => true
   
   scope :current, -> { where(:year => Time.now.year) }
   
