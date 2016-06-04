@@ -20,9 +20,8 @@ registration_statuses:
   - initiated
   - payment due
   - complete
-  - "updated - refund pending"
+  - updated
   - updating
-  - "cancelled - refund pending"
   - cancelled
 transaction_types:
   - payment

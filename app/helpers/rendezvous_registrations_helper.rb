@@ -1,12 +1,4 @@
-module RendezvousRegistrationsHelper
-  def amount_due(registration)
-    if registration.paid_amount.blank?
-     registration.total
-    else
-      registration.total - registration.paid_amount
-    end
-  end
-  
+module RendezvousRegistrationsHelper  
   def donation_list(raw_values)
     list = raw_values.map{ |v| ["$#{v.to_s}", v]  }
     list << ['Other', 'other']

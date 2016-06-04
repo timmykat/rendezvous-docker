@@ -77,7 +77,7 @@ class AdminController < ApplicationController
       @data[:financials][:total]                += registration.total.to_f unless registration.total.blank?
       @data[:financials][:registration_fees]    += registration.registration_fee.to_f unless registration.registration_fee.blank?
       @data[:financials][:paid]                 += registration.paid_amount.to_f unless registration.paid_amount.blank?
-      @data[:financials][:due]                  += registration.amount_due.to_f unless registration.amount_due.blank?
+      @data[:financials][:due]                  += registration.balance.to_f unless registration.balance.blank?
       @data[:financials][:donations]            += registration.donation.to_f unless registration.donation.blank?
 
 

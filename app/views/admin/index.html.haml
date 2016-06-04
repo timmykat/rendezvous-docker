@@ -95,7 +95,7 @@
             %tbody
               - @registrations.each do |registration|
                 %tr{:class => (registration.status == 'payment due' ? 'text-center alert-danger' : 'text-center alert-success')}
-                  %td= link_to registration.invoice_number, rendezvous_registration_path(registration.id)
+                  %td= link_to registration.invoice_number, admin_rendezvous_registration_path(registration.id)
                   %td.text-center= registration.status
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
                   %td.text-center= registration.number_of_adults
@@ -105,7 +105,7 @@
                   %td.text-center= number_to_currency(registration.donation)
                   %td.text-center= number_to_currency(registration.total)
                   %td.text-center= number_to_currency(registration.paid_amount)
-                  %td= number_to_currency(registration.amount_due)
+                  %td= number_to_currency(registration.balance)
         #tabbed-3
           %h2 Vehicles
           .well.well-sm

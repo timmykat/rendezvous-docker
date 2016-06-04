@@ -27,7 +27,7 @@
               %td.text-center= number_to_currency(registration.donation)
               %td.text-center= number_to_currency(registration.total)
               %td.text-center= number_to_currency(registration.paid_amount)
-              - due = amount_due(registration)
+              - due = registration.balance
               - if due > 0.0
                 %td.text-center.alert-danger= number_to_currency(due)
               - else

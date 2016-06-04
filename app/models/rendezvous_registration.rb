@@ -13,7 +13,7 @@ class RendezvousRegistration < ActiveRecord::Base
   validate :minimum_number_of_adults
   validate :payment
   validates :paid_method, :inclusion => { :in => Rails.configuration.rendezvous[:payment_methods] }, :allow_blank => true
-  validates :invoice_number, :uniqueness => true, :format => { :with => /\ARR20\d{2}-\d{3,4}\z/, :on => :new }, :allow_blank => true
+  # validates :invoice_number, :uniqueness => true, :format => { :with => /\ARR20\d{2}-\d{3,4}\z/, :on => :new }, :allow_blank => true
   
   validates :status, :inclusion => { :in => Rails.configuration.rendezvous[:registration_statuses] }
   
@@ -33,7 +33,7 @@ class RendezvousRegistration < ActiveRecord::Base
     end
   end
   
-  def amount_due
+  def balance
     total.to_f - paid_amount.to_f
   end
   
