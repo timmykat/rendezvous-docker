@@ -17,7 +17,7 @@ $(function() {
   }
       
   // Remove the remove button from the first attendee and lock the child selection
-  $('#attendees a.remove_fields:first').remove();
+  $('#attendees .remove_association_action:first').remove();
   $('#attendees input[value="child"]:first').attr('disabled', true);
   $('#attendees .rendezvous_registration_attendees_name input:first').attr('placeholder', 'Your name *');
   
@@ -25,9 +25,11 @@ $(function() {
   $('#attendees input[value="adult"]:first').attr('checked', 'checked');
   getAttendeeTotals(); 
   
-  var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
-  var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
-  $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
+  if ($('input#rendezvous_registration_user_attributes_last_name').length > 0) {
+    var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
+    var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
+    $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
+  }
   
 
   // Get adult and kid totals

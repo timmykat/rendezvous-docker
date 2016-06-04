@@ -18,26 +18,10 @@
         %br #{@rendezvous_registration.user.city}, #{@rendezvous_registration.user.state_or_province} #{@rendezvous_registration.user.postal_code}
         #{@rendezvous_registration.user.display_country}
 
-    .well.well-sm.attendees
-      %h3 Attendees
-      %table.table
-        %thead
-          %th Name
-          %th Adult or Child
-          %th Sunday Dinner
-          %th Volunteer
-        %tbody
-          -@rendezvous_registration.attendees.each do |a|
-            %tr
-              %td= a.name
-              %td= a.adult_or_child
-              %td #{a.sunday_dinner? ? 'yes' : 'no'}
-              %td #{a.volunteer? ? 'yes' : 'no'}
-        
     .well.well-sm.payment
       %h3 Fees
       .row 
-        .col-md-6.col-xs-12
+        .col-md-12
           %p
             %label Registration fee: 
             #{number_to_currency(@rendezvous_registration.registration_fee)} (US)
@@ -52,40 +36,63 @@
               %br
                 %label Total: 
                 #{number_to_currency(@rendezvous_registration.total)} (US)
-      
-              - if @rendezvous_registration.paid_method
-                %label Payment method: 
-                #{@rendezvous_registration.paid_method.titlecase}
-                %br
-                %label Paid: 
-                #{number_to_currency(@rendezvous_registration.paid_amount)} (US)
-      
-                %br
-                  %strong
-                    %label Due
-                    #{number_to_currency(@rendezvous_registration.amount_due)} (US)
+                
+              %h4 Transactions
+              %table.table
+                %thead
+                  %tr
+                    %th Transaction Type
+                    %th Transaction Method
+                    %th Credit Card Transaction ID
+                    %th Amount
+                %tbody
+                  - @rendezvous_registration.transactions.each do |transaction|
+                    %tr
+                      %td= transaction.transaction_type
+                      %td= transaction.transaction_method
+                      %td= transaction.cc_transaction_id
+                      %td #{number_to_currency(transaction.amount)} (US) 
+            
+              %strong
+                %label Balance:
+                #{number_to_currency(@rendezvous_registration.balance)} (US)
         - if (@rendezvous_registration.status == 'payment due')
           .col-md-6.col-xs-12
             %p
               Please print this invoice or the one you received via email and send with a check for the amount due to:
               %br= rendezvous_mailing_address()
 
-        
-      
-    .well.well-sm.vehicles
-      %h3 Vehicles
-      - if @rendezvous_registration.user.vehicles.blank?
-        %p You are not bringing any vehicles to the Rendezvous.
-      - else
+    - if current_user == @rendezvous_registration.user   
+      .well.well-sm.attendees
+        %h3 Attendees
         %table.table
           %thead
-            %th Marque
-            %th Model
-            %th Year
-            %th Other info
+            %th Name
+            %th Adult or Child
+            %th Sunday Dinner
+            %th Volunteer
           %tbody
-            - @rendezvous_registration.user.vehicles.each do |v|
-              %td= v.marque
-              %td= v.model
-              %td= v.year
-              %td= v.other_info
+            -@rendezvous_registration.attendees.each do |a|
+              %tr
+                %td= a.name
+                %td= a.adult_or_child
+                %td #{a.sunday_dinner? ? 'yes' : 'no'}
+                %td #{a.volunteer? ? 'yes' : 'no'}
+        
+      .well.well-sm.vehicles
+        %h3 Vehicles
+        - if @rendezvous_registration.user.vehicles.blank?
+          %p You are not bringing any vehicles to the Rendezvous.
+        - else
+          %table.table
+            %thead
+              %th Marque
+              %th Model
+              %th Year
+              %th Other info
+            %tbody
+              - @rendezvous_registration.user.vehicles.each do |v|
+                %td= v.marque
+                %td= v.model
+                %td= v.year
+                %td= v.other_info

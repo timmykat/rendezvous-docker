@@ -21,9 +21,15 @@ Rails.application.routes.draw do
   end
   resources :rendezvous_registrations, :except => [:index]
   
+  
+  # Admin routes
   get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   resources :admin, { :only => [:index] }
-  
+  namespace :admin do
+    resources  :rendezvous_registrations, { :only => [ :show, :update ] }
+    resources :transactions, { :only => [ :create ] }
+  end
+    
   # Omniauth authentication
   get '/auth/:provider/callback', to: 'sessions#create'
   

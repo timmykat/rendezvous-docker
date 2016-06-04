@@ -15,7 +15,7 @@ Your Rendezvous details:
 Registration fee: #{number_to_currency(@rendezvous_registration.registration_fee)}
 Donation: #{number_to_currency(@rendezvous_registration.donation)}
 Total: #{number_to_currency(@rendezvous_registration.total)}
-Due: #{number_to_currency(@rendezvous_registration.amount_due)}
+Due: #{number_to_currency(@rendezvous_registration.balance)}
 
 Attendees:
 - @rendezvous_registration.attendees.each do |a|

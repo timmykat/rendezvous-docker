@@ -1,6 +1,9 @@
 class Transaction < ActiveRecord::Base
 
   belongs_to :rendezvous_registration
+  
+  validates :transaction_type, :inclusion => { :in => ['payment', 'refund'] }
+  validates :transaction_method, :inclusion => { :in => Rails.configuration.rendezvous[:payment_methods] }
 
   validate :amount_and_type
   
