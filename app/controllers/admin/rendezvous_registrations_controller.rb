@@ -18,7 +18,6 @@ class Admin::RendezvousRegistrationsController < AdminController
       @rendezvous_registration.save!
       flash_notice 'The registration was updated.'
     else
-      binding.pry
       flash_alert 'There was a problem updating the registration.'
       flash_alert @rendezvous_registration.errors.full_messages.to_sentence
     end

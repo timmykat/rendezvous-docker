@@ -36,7 +36,6 @@
               %p.amount.bg-success.form-group
                 %label Registration fee: $
                 = f.input_field :registration_fee, :disabled => true, :class => 'calculated'
-          = f.input_field :status, :as => :hidden, :value => 'updated'
           = f.button :submit, 'Update registration', :class => 'btn btn-primary'
           
       %section
