@@ -10,9 +10,12 @@
           %br Citroen owners, enthusiasts and friends
         = image_tag "40th-badge.png"
         %br/
-        = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
-        - if !user_signed_in?
-          = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
+        - if Time.now <= AdminController::CUTOFF
+          = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
+          - if !user_signed_in?
+            = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
+        - else
+          .alert.alert-info{:role => 'alert'} Online registration is now closed. Please register upon arrival at the Rendezvous
     .row
       .col-md-offset-4.col-md-4.col-xs-12
         %p{:style => 'text-shadow: none;', :class => 'facebook bg-secondary'}
