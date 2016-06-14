@@ -1,11 +1,19 @@
 class RendezvousRegistrationsController < ApplicationController
 
+  before_action :check_cutoff, :only => [:new, :create, :complete, :edit]
   before_action :require_admin, :only => [:index]
   before_action :authenticate_user!, :except => [:new]
   before_action :owner_or_admin, :only => [:show]
   before_action :set_cache_buster
 
   skip_before_action :verify_authenticity_token, :only => [:show]
+  
+  def check_cutoff
+    if Time.now > AdminController::CUTOFF
+      flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
+      redirect_to :root
+    end      
+  end
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -13,7 +21,8 @@ class RendezvousRegistrationsController < ApplicationController
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
   
-  def new     
+  def new
+      
     if user_signed_in? && !session[:admin_user]
       @rendezvous_registration = current_user.rendezvous_registrations.current.first
       if !@rendezvous_registration.blank?
@@ -85,11 +94,13 @@ class RendezvousRegistrationsController < ApplicationController
   end
   
   def edit
+      
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     render 'registration_form'
   end
 
   def update
+      
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     user = @rendezvous_registration.user
     mailchimp_init = user.receive_mailings

@@ -2,6 +2,8 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :require_admin
+  CUTOFF = Time.new(2016,6,13)
+
   
   def index
   
