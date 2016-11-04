@@ -4,7 +4,7 @@
     .row
       .col-md-12
         %h3 Saratoga Springs, New York
-        %h1 June 16&ndash;19, 2016
+        %h1 June 15&ndash;18, 2017
         %p 
           The Northeast's fun and fabulous gathering of 
           %br Citroen owners, enthusiasts and friends
@@ -15,7 +15,7 @@
           - if !user_signed_in?
             = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
         - else
-          .alert.alert-info{:role => 'alert'} Online registration is now closed. Please register upon arrival at the Rendezvous
+          .alert.alert-info{:role => 'alert'} We'll let you know when online registration will start.
     .row
       .col-md-offset-4.col-md-4.col-xs-12
         %p{:style => 'text-shadow: none;', :class => 'facebook bg-secondary'}
@@ -29,12 +29,10 @@
     .row
       .col-md-8.col-md-offset-2.about-heading
         %h2.main-heading
-          Schedule
+          2016 Schedule
         = image_tag "chevrons.png"
         %p
-          For more information, check the 
-          = succeed '.' do
-            = link_to 'detailed schedule page', schedule_path
+          The 2017 schedule should be similar, but this is by no means written in stone!
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
