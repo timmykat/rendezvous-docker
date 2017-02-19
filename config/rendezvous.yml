@@ -26,13 +26,14 @@ registration_statuses:
 transaction_types:
   - payment
   - refund
-official_mailing_address_array:
-  - "Citroen Rendezvous, LLC"
-  - "245 Harvester Road"
-  - "Orange, CT 06477-2929"
-  - "United States"
-chief_officer: David Cossitt Levy
-official_email: david.cossitt.levy@gmail.com
+official_contact:
+  mailing_address_array:
+    - "Citroen Rendezvous, LLC"
+    - "245 Harvester Road"
+    - "Orange, CT 06477-2929"
+    - "United States"
+  chief_officer: David Cossitt Levy
+  email: david.cossitt.levy@gmail.com
 vehicle_marques:
   - Citroen
   - Panhard
