@@ -41,8 +41,11 @@ module ApplicationHelper
     end
   end
   
-  def rendezvous_mailing_address(delimiter = "<br />\n")
-    Rails.configuration.rendezvous[:mailing_address_array].join(delimiter).html_safe
+  def official_contact(delimiter = "<br />\n")
+    output =  Rails.configuration.rendezvous[:official_mailing_address_array].join(delimiter)
+    output += '<p>Chief officer: ' + Rails.configuration.rendezvous[:chief_officer] + "</p>\n"
+    output += '<p>Official email: ' + Rails.configuration.rendezvous[:official_email] + "</p>\n"
+    output.html_safe
   end
   
   def marques
