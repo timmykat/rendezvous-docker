@@ -42,9 +42,10 @@ module ApplicationHelper
   end
   
   def official_contact(delimiter = "<br />\n")
-    output =  Rails.configuration.rendezvous[:official_mailing_address_array].join(delimiter)
-    output += '<p>Chief officer: ' + Rails.configuration.rendezvous[:chief_officer] + "</p>\n"
-    output += '<p>Official email: ' + Rails.configuration.rendezvous[:official_email] + "</p>\n"
+    output = '<p><em>Mailing address: </em><br />'
+    output +=  Rails.configuration.rendezvous[:official_contact][:mailing_address_array].join(delimiter) + '</p>'
+    output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
+    output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
     output.html_safe
   end
   
