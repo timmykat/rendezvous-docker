@@ -53,6 +53,28 @@ td#logo {
     background-position: -120px 0;
   }
 }
+.registration-progress {
+  text-align: center;
+  .step {
+    background-color: $primary-color;
+    color: white;
+    display: inline-block;
+    padding: 10px 50px;
+    border-radius: 3px;
+    font-size: 2em;
+    margin: 20px 0;
+  }
+  .indicator i {
+    margin: 10px 20px;
+    color: #999;
+    padding: 2px;
+    &.active {
+      color: $primary-color;
+      border: solid 2px #999;
+      border-radius: 5px;
+    }
+  }
+}
 
 body {
   .simple {

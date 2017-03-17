@@ -2,29 +2,30 @@
 = render :partial => 'common/braintree_v3_javascript'
 .container
   .row
-    = render :partial => 'common/registration_header', :locals => { :step => 'payment' }
-  .row
-    .col-md-offset-2.col-md-8.col-xs-12
+    .col-md-offset-1.col-md-10.col-xs-12
+      %h1 2016 Registration
       = simple_form_for @rendezvous_registration, :url => complete_rendezvous_registration_path(@rendezvous_registration), :html => { :id => 'rendezvous_registration_form' } do |f|
-        %section
-          %h3 Help Out
-          .row
-            .col-md-12
-              %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated!
-              .form-group
-                %label Donation
-                = f.input :donation, :label => false, :collection => donation_list(config[:suggested_donations]), :as => :radio_buttons, :input_html => { :class => 'total-calculation' }, :item_label_class => 'radio-inline', :item_wrapper_tag => false
-              .row
-                .col-md-2
-                  .form-group
-                    = f.input :donation, :label => false, :input_html => { :placeholder => 'Other amount', :class => 'total-calculation'}, :disabled => true
+        %section  
+          %h2 Payment
+          %section
+            %h3 Help Out
+            .row
+              .col-md-12
+                %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated!
+                .form-group
+                  %label Donation
+                  = f.input :donation, :label => false, :collection => donation_list(config[:suggested_donations]), :as => :radio_buttons, :input_html => { :class => 'total-calculation' }, :item_label_class => 'radio-inline', :item_wrapper_tag => false
+                .row
+                  .col-md-2
+                    .form-group
+                      = f.input :donation, :label => false, :input_html => { :placeholder => 'Other amount', :class => 'total-calculation'}, :disabled => true
 
-              .row
-                .col-md-6.col-xs-12
-                  %p.amount.bg-success.form-group
-                    %label Total: $
-                    = f.input_field :total, :value => @rendezvous_registration.total.to_s , :disabled => false, :class => 'calculated'
-            %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
+                .row
+                  .col-md-6.col-xs-12
+                    %p.amount.bg-success.form-group
+                      %label Total: $
+                      = f.input_field :total, :value => @rendezvous_registration.total.to_s , :disabled => false, :class => 'calculated'
+              %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
           %section
             %h2 Payment Information
             .row

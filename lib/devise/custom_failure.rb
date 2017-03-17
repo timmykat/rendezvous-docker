@@ -1,7 +1,7 @@
 class Devise::CustomFailure < Devise::FailureApp 
   def redirect_url 
     if warden_options[:scope] == :user 
-      sign_up_or_in_path 
+      user_sign_in_path 
     end
   end
    

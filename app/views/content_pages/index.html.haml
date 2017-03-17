@@ -1,19 +1,21 @@
+- config = Rails.configuration.rendezvous
 / banner area starts here
 %section#home.banner.text-center
   .container
     .row
       .col-md-12
         %h3 Saratoga Springs, New York
-        %h1 June 15&ndash;18, 2017
+        %h1 June #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
         %p 
           The Northeast's fun and fabulous gathering of 
           %br Citroen owners, enthusiasts and friends
         = image_tag "rendezvous-year-badge.png"
         %br/
-        - if Time.now <= AdminController::CUTOFF
-          = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
-          - if !user_signed_in?
-            = link_to 'Sign up/in', sign_up_or_in_path, :class => 'btn btn-primary btn-lg'
+        - if Time.now >= AdminController::REG_WINDOW[:open] && Time.now <= AdminController::REG_WINDOW[:close]
+          - if user_signed_in?
+            = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
+          - else 
+          = link_to 'Sign in to register', user_sign_in_path, :class => 'btn btn-primary btn-lg'
         - else
           .alert.alert-info{:role => 'alert'} We'll let you know when online registration will start.
     .row
@@ -29,14 +31,12 @@
     .row
       .col-md-8.col-md-offset-2.about-heading
         %h2.main-heading
-          2016 Schedule
+          #{config[:dates][:year]} Schedule
         = image_tag "chevrons.png"
-        %p
-          The 2017 schedule should be similar, but this is by no means written in stone!
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
-          %h3 Thursday
+          %h3 Thursday, June #{config[:dates][:start]}
           %ul.text-left
             %li 
               %strong 6-9pm
@@ -44,7 +44,7 @@
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-automobile
-          %h3 Friday
+          %h3 Friday, June #{config[:dates][:start] + 1}
           %ul.text-left
             %li 
               %strong 2-4pm
@@ -55,7 +55,7 @@
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-automobile
-          %h3 Saturday
+          %h3 Saturday June #{config[:dates][:start] + 2}
           %ul.text-left
             %li 
               %strong 9am-4pm
@@ -75,7 +75,7 @@
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
-          %h3 Sunday
+          %h3 Sunday June #{config[:dates][:end]}
           %ul.text-left
             %li 
               %strong 8:30-11:00am
@@ -109,7 +109,7 @@
             = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { :target => '_blank' }
             be your guide, or use your favorite travel website. Also see
             = succeed '.' do
-              = link_to 'this', faq_path(:anchor => 'accommodations')
+              = link_to 'this FAQ', faq_path(:anchor => 'accommodations')
         .col-md-3.single-service.col-xs-12
           %i.fa.fa-shopping-cart
           %h3 Supporting Vendors
@@ -147,6 +147,9 @@
       = image_tag "chevrons.png"
       %p
         The best things about the Rendezvous are the cars and the people!
+        %br
+        %br
+          =link_to 'New! Photo Gallery', gallery_path, :class => 'btn btn-info'
     - if @pictures.count == 8 
       - @pictures.each do |pic|
         .col-md-3.single-portfolio.col-sm-6

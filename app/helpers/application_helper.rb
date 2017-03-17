@@ -41,9 +41,13 @@ module ApplicationHelper
     end
   end
   
-  def official_contact(delimiter = "<br />\n")
+  def mailing_address(delimiter = "<br />\n")
+    Rails.configuration.rendezvous[:official_contact][:mailing_address_array].join(delimiter).html_safe
+  end
+  
+  def official_contact
     output = '<p><em>Mailing address: </em><br />'
-    output +=  Rails.configuration.rendezvous[:official_contact][:mailing_address_array].join(delimiter) + '</p>'
+    output +=  mailing_address + '</p>'
     output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
     output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
     output.html_safe
@@ -87,6 +91,29 @@ module ApplicationHelper
     else
       nil
     end
+  end
+  
+  def step_text(step)
+    case step
+    when 'welcome'
+      'Welcome / Bienvenue!'
+    when 'sign-in'
+      'Sign In'
+    when 'sign-up'
+      'Sign Up'
+    when 'register'
+      'Register'
+    when 'review'
+      'Review'
+    when 'payment'
+      'Payment'
+    when 'vehicles'
+      "Vehicle(s)"
+    end
+  end
+  
+  def progress_indicator(step)
+    
   end
 
   def month_list

@@ -1,6 +1,6 @@
 .logged-in-spacer
 .container
-  %h2 Your photos
+  %h2 My Photos
   .row.upload-area
     .col-md-12
       %form{ :action => '/pictures/upload', :class => 'dropzone', :id => 'dropzone-upload' }
@@ -11,6 +11,7 @@
         %thead
           %tr
             %th Thumbnail
+            %th Rendezvous Year
             %th Caption/title
             %th Credit
             %th
@@ -20,6 +21,10 @@
               = form_for pic do |f|
                 %td.thumbnail 
                   = image_tag pic.image.thumb.url
+                %td.year
+                  .form-group
+                    - options = options_for_select((1976..2020).to_a.reverse, pic.year)
+                    = f.select :year, options, {}, { :class => 'form-control', :selected => pic.year }
                 %td.caption
                   = f.text_field :caption, :value => pic.caption, :size => "80", :class => 'form-control'
                 %td.credit

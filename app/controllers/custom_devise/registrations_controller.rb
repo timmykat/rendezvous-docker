@@ -18,7 +18,7 @@ class CustomDevise::RegistrationsController < Devise::RegistrationsController
     else
       clean_up_passwords resource
       set_minimum_password_length
-      render :template => 'users/sign_up_or_in'
+      render :template => 'users/sign_in'
     end
   end
 

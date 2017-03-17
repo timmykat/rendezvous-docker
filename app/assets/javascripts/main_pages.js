@@ -5,7 +5,7 @@ $(function() {
     window.location.assign('/register');
   });
   $('#login').on('click', function() {
-    window.location.assign('/sign_up_or_in');
+    window.location.assign('/sign_in');
   });
   
   var $b = $('body');
