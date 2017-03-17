@@ -4,9 +4,9 @@
     "jquery": "latest",
     "jquery-ujs": "latest",
     "jquery-ui": "latest",
+    "magnific-popup": "latest",
     "dropzone": "latest",
     "tinymce": "latest",
-    "braintree-web": "latest",
-    "dropdown": "latest"
+    "braintree-web": "latest"
   }
 }
