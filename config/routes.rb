@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   get '/register', to: 'rendezvous_registrations#new'
+  get '/register-welcome', to: 'rendezvous_registrations#welcome'
   
-  resources :pictures
+  resources :pictures, except: :index
+  get '/gallery',      to: 'pictures#index'
+  get '/pictures_recreate_versions', to: 'pictures#recreate_versions' 
+  
   devise_for :users, 
     :controllers => { 
       :users => 'users',
@@ -17,6 +21,7 @@ Rails.application.routes.draw do
       get :review
       get :payment
       patch :complete
+      get :vehicles
     end
   end
   resources :rendezvous_registrations, :except => [:index]
@@ -37,13 +42,15 @@ Rails.application.routes.draw do
   root 'content_pages#index'
   get '/',                  to: 'content_pages#index'
   get '/faq',               to: 'content_pages#faq'
+  get '/gallery',           to: 'content_pages#gallery'
   get '/history',           to: 'content_pages#history'
   get '/legal_information', to: 'content_pages#legal_information'
   get '/schedule',          to: 'content_pages#schedule'
   get '/vendors',           to: 'content_pages#vendors'
   
   # User management
-  get '/sign_up_or_in', to: 'users#sign_up_or_in'
+  get '/user_sign_up', to: 'users#sign_up'
+  get '/user_sign_in', to: 'users#sign_in'
   
   # Picture upload
   get '/my-pictures', to: 'pictures#my_pictures'

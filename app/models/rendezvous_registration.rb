@@ -38,13 +38,13 @@ class RendezvousRegistration < ActiveRecord::Base
   end
   
   def self.invoice_number
-    prefix = "CR#{Time.now.year}-"
+    prefix = "CR#{Rails.configuration.rendezvous[:dates][:year]}"
     previous_code = RendezvousRegistration.pluck(:invoice_number).last
     if previous_code.blank?
       next_number = 101
-    else 
-      next_number = previous_code.match(/#{prefix}(\d+)/)[1].to_i + 1
+    else
+      next_number = /-(\d+)\z/.match(previous_code)[1].to_i + 1
     end
-    "#{prefix}#{next_number}"
+    "#{prefix}-#{next_number}"
   end
 end

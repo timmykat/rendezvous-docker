@@ -1,0 +1,3 @@
+#gallery.owl-carousel.owl-theme
+  - @pictures.each do |picture|
+    render :partial => 'gallery_image', :locals => { :pic => picture }

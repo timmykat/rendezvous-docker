@@ -57,7 +57,7 @@ group :development do
   gem 'byebug'
   gem 'pry-rails'
   gem 'puma'
-  gem 'capistrano', '~> 3.4.0'
+  gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
 end

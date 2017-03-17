@@ -29,6 +29,9 @@ html, body {
 body, p, ul, ol, a {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
+h1 {
+  margin-top: 60px;
+}
 
 /* Turn off spinners on number fields */
 input[type=number]::-webkit-inner-spin-button, 

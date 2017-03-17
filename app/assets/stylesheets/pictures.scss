@@ -27,3 +27,24 @@ table.pictures {
 .row.upload-area {
   margin-bottom: 20px;
 }
+.gallery-image {
+  display: inline-block;
+  position:relative;
+  height: 100px;
+  .credit {
+    position:absolute;
+    left: 2px;
+    bottom: 2px;
+    color: white;
+  }
+}
+.owl-carousel {
+  display:block;
+}
+
+@media (min-width: 480px) {
+  .gallery-image {
+    height: 350px;
+  }
+}
+  

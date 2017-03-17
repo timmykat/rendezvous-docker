@@ -2,7 +2,10 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :require_admin
-  CUTOFF = Time.new(2016,6,13)
+  REG_WINDOW = {
+    :open => Time.new(2017,1,1),
+    :close  => Time.new(2017,6,18)
+  }
 
   
   def index

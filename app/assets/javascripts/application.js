@@ -15,6 +15,8 @@
 //= require jquery-ujs/src/rails
 //= require bootstrap
 //= require dropzone/dist/dropzone
-//= require braintree-web/dist/braintree
+//= require braintree-web/client
+//= require braintree-web/hosted-fields
 //= require cocoon
+//= require magnific-popup/dist/jquery.magnific-popup.js
 //= require_tree .

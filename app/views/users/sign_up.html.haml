@@ -2,39 +2,13 @@
 - resource_name = 'user'
 .container
   .row
-    .col-md-12
+    .col-md-offset-3.col-md-6
       %hr
-      .account.email
-        %h2 Sign In or Sign Up
-    .col-md-6
-      .well.sign-in
-        %h3 Got an account? 
-        %p Sign in here:
-        = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-          .form-group
-            = f.label :email
-            %br/
-            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
-          .form-group
-            = f.label :password
-            %br/
-            = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Password'
-          .actions
-            = f.submit "Log in", :class => "btn btn-info"
-      
-      .well.reset-password
-        %h3 Don't know your password? 
-        %p We'll send you a link to reset it:
-        = form_for(:user, :as => 'user', :url => user_password_path, :html => { :method => :post, :class => "form" }) do |f|
-          .form-group
-            %label Email
-            = f.text_field :email, :required => false, :class => "form-control"
-          .form-group
-            = f.submit "Reset my password", :class => "btn btn-large btn-primary"
-    .col-md-6
       .well.sign-up
-        %h3 Want an account? 
-        %p Sign up here:
+        %h2 Sign Up 
+        %p 
+          If you already have an account,
+          %a{ :href => '/user_sign_in' } sign in here.
         = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
           .form-group
             = f.label :email

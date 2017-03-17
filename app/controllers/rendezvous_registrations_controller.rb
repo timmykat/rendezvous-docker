@@ -9,7 +9,7 @@ class RendezvousRegistrationsController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => [:show]
   
   def check_cutoff
-    if Time.now > AdminController::CUTOFF
+    unless Time.now >= AdminController::REG_WINDOW[:open] && Time.now <= AdminController::REG_WINDOW[:close]
       flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
       redirect_to :root
     end      
@@ -41,7 +41,8 @@ class RendezvousRegistrationsController < ApplicationController
       @rendezvous_registration.build_user
     end
     @rendezvous_registration.user.vehicles.build
-    render 'registration_form'
+    render 'new_registration_form'
+#    render 'registration_form'
   end
   
   def create
@@ -221,8 +222,14 @@ class RendezvousRegistrationsController < ApplicationController
     else
       send_registration_success_emails
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-      redirect_to rendezvous_registration_path(@rendezvous_registration)
+      redirect_to vehicles_rendezvous_registration_path(@rendezvous_registration)
+#      redirect_to rendezvous_registration_path(@rendezvous_registration)
     end
+  end
+  
+  def vehicles
+    @rendezvous_registration = RendezvousRegistration.find(params[:id])
+    @user = @rendezvous_registration.user
   end
     
   def index
@@ -240,6 +247,8 @@ class RendezvousRegistrationsController < ApplicationController
     redirect_to user_path(current_user)
   end
   
+  def welcome
+  end
   
   private
     

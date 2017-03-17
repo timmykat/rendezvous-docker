@@ -3,7 +3,10 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, :only => [:edit, :update]
   before_action :require_admin, :only => [:toggle_admin, :synchronize_with_mailchimp]
 
-  def sign_up_or_in
+  def sign_up
+  end
+  
+  def sign_in
   end
   
   def show

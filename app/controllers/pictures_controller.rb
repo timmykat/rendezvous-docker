@@ -3,7 +3,14 @@ class PicturesController < ApplicationController
 
   # GET /pictures
   def index
-    @pictures = Picture.all
+    @pictures = Picture.all.group('year')
+    binding.pry
+    @pictures.each do |pic|
+      unless File.exist?(File.join(Rails.root, pic.image.gallery.path)) && File.exist?(File.join(Rails.root, pic.image.display.path))
+        pic.image.recreate_versions!(:gallery, :display)
+        pic.save!
+      end
+    end
   end
   
   # GET /my-pictures
@@ -69,6 +76,10 @@ class PicturesController < ApplicationController
   def destroy
     @picture.destroy
     redirect_to pictures_url, notice: 'Picture was successfully destroyed.'
+  end
+  
+  # Recreate picture versions
+  def recreate_versions
   end
   
   # Ajax delete

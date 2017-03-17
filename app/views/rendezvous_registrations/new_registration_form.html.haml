@@ -1,52 +1,9 @@
-- config = Rails.configuration.rendezvous
 .container
   .row
-    .col-md-offset-1.col-md-10.col-xs-12
-      %h1  #{config[:dates][:year]} Citroen Rendezvous Registration
-      %h2 June #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, Saratoga Springs, New York
-      .well.well-sm
-        %h3 Welcome / Bienvenue! 
-        %p.bg-info The registration fee is $#{config[:fees][:registration][:adult]} per adult (16+). Kids 15 and under are free! You may pay by credit card or by check.
-
-        %p.bg-info 
-          Your registration does not include accommodations. 
-          %br 
-            You can find accommodation information at the 
-            = succeed '.' do
-              = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', :target => '_blank'
-        %p Registration consists of the following steps:
-        %ol
-          %li 
-            = link_to('Sign in', user_sign_in_path)
-            if you already have an account
-            %ul
-              %li You have an account if you registered on line last year
-              %li If you've forgotten your password, use the reset password form on the sign-in page
-          %li Enter your registration information
-          %li Review information
-          %li Enter payment method and submit
-          %li Once you register, please let us know what vehicles you will be bringing to the Rendezvous
-          
-        - if !user_signed_in?
-          %p 
-            %strong
-              Please 
-              = link_to 'create an account', user_sign_up_path
-              if you haven't got one yet, or 
-              = link_to 'sign in', user_sign_in_path
-              if you do.
-        %p 
-          If you have problems registering, please
-          = succeed '.' do
-            = link_to 'let us know', root_path(:anchor => 'contact')
-        %p.printed-form
-          If you prefer not to register on line, or are having problems registering, please print this registration form and send it in with your registration fee payment:
-          = link_to '<i class="fa  fa-file-pdf-o"></i>'.html_safe, 'Rendezvous-registration-form.pdf', :target => '_blank'
-
+    = render :partial => 'common/registration_header', :locals => { :step => 'register' }
       #registration-form
         - if !user_signed_in?
           .cover
-        %p.bg-primary Begin registration      
         = simple_form_for @rendezvous_registration, :id => 'rendezvous_registration_form' do |f|
           - if @create_by_admin
             = hidden_field_tag :creator, :value => 'omniscia'
@@ -58,7 +15,7 @@
             - else
               %p.bg-info You are signed in with your user account.
             = f.simple_fields_for :user do |u|
-              = render :partial => 'common/user_info', :locals => { :f => u }
+              = render :partial => 'common/user_info', :locals => { :f => u, :user_fields => true, :address => true  }
 
           %section
             %h2 Registration Information

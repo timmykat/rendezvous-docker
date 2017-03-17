@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
   end
   
   def after_sending_reset_password_instructions_path_for(resource)
-    sign_up_or_in_path
+    sign_in_path
   end
   
   def respond_to? (method_sym, include_private = false)

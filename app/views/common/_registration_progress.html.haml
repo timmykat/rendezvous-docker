@@ -1,0 +1,10 @@
+.registration-progress
+  .step= step_text(step)
+  .indicator
+    %i{ :class => "fa fa-circle" + ((step == 'welcome') ? ' active' : '') }
+    %i{ :class => "fa fa-circle" + ((step == 'sign-in' || step == 'sign-up') ? ' active' : '') }
+    %i{ :class => "fa fa-circle" + ((step == 'register') ? ' active' : '') }
+    %i{ :class => "fa fa-circle" + ((step == 'review') ? ' active' : '') }
+    %i{ :class => "fa fa-circle" + ((step == 'payment') ? ' active' : '') }
+    %i{ :class => "fa fa-circle" + ((step == 'vehicles') ? ' active' : '') }
+    

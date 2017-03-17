@@ -10,8 +10,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :validatable
 #          :omniauthable, :omniauth_providers => [:facebook, :twitter]
          
-  has_one :avatar
-
   has_many :pictures, :dependent => :destroy
   has_many :vehicles, :dependent => :destroy
   has_many :rendezvous_registrations
