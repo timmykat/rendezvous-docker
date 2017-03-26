@@ -7,8 +7,8 @@ class Picture < ActiveRecord::Base
     Picture.limit(8).order("RAND()")
   end
   
-  def initialize
-    super
-    @year ||= Time.now.year
+  def initialize(attributes = {})
+    attributes[:year] ||= Time.now.year.to_s
+    super(attributes)
   end
 end

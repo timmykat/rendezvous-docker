@@ -11,6 +11,7 @@
 
     = stylesheet_link_tag 'application', :media  => 'all'
     = javascript_include_tag 'application'
+
     = csrf_meta_tags
     = yield :header_tags
     
@@ -20,11 +21,6 @@
       = javascript_include_tag "respond"
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data)};
-
-      //<![CDATA[ 
-      var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.comodo.com/" : "http://www.trustlogo.com/");
-      document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
-      //]]>  
 
   %body{ :class => "c_#{controller_name()} simple" }
     .body_wrapper
@@ -39,6 +35,3 @@
       .push
       = render :partial => 'common/footer'  
 
-    :javascript
-      TrustLogo("https://citroenrendezvous.org/comodo_secure_seal_100x85_transp.png", "CL1", "none");
-    <a  href="https://www.instantssl.com/" id="comodoTL">Essential SSL</a>

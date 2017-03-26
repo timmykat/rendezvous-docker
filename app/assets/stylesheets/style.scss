@@ -26,8 +26,10 @@ html, body {
   height: 100%;
 }
 
-body, p, ul, ol, a {
+body, p, ul, ol, a, td, .btn {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
 }
 h1 {
   margin-top: 60px;
@@ -118,6 +120,23 @@ a.btn-facebook, a:visited.btn.facebook {
 a.btn-twitter, a:visited.btn-twitter {
   background-color: $twitter-blue;
   color: white;
+}
+.btn-default {
+  background-color: #666;
+}
+
+.dropdown-menu > li > a.btn-default:hover {
+  color: #666;
+}
+.btn-mainpage {
+  background-color: $primary-color;
+}
+.dropdown-menu > li > a.btn-mainpage:hover {
+  color: #666;
+}
+.dropdown #userDropdown {
+  display: inline-block;
+  cursor: pointer;
 }
 
 p {
@@ -264,7 +283,7 @@ ul.nav{
 	padding: 0;
 }
 .navbar-default .navbar-nav>li>a {
- 	font-size: 12px;
+ 	font-size: 16px;
 	color: #fff;
 	text-transform: uppercase;
 	font-weight: 800;
@@ -306,6 +325,9 @@ ul.nav{
 .spacer {
   height: 155px;
 }
+.text-citroen {
+  color: $primary-color;
+}
 
 /*banner area*/
 .banner{
@@ -338,7 +360,7 @@ ul.nav{
 .banner button{
 	width: 190px;
 	height: 50px;
-	font-size: 14px;
+	font-size: 16px;
 	color: #ddd;
 	background: $secondary-color;
 	border-radius: 2px;
@@ -424,7 +446,7 @@ h2.main-heading {
 	font-weight: 800;
 }
 .about-inside p{
-	font-size: 11px;
+	font-size: 14px;
 	color: #7e8287;
 }
 .about-inside i.fa{
@@ -502,7 +524,7 @@ h2.main-heading {
 	color: #7e8287;
 }
 .single-service p{
-	font-size: 11px;
+	font-size: 14px;
 	color: #7e8287;
 	margin-top: 5px;
 }
@@ -586,7 +608,7 @@ h2.main-heading {
 	margin-top: 55px;
 }
 .portfolio-details p{
-	font-size: 13px;
+	font-size: 16px;
 	color: #fff;
 	padding: 5px 20px;
 }

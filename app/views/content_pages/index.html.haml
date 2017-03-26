@@ -149,7 +149,9 @@
         The best things about the Rendezvous are the cars and the people!
         %br
         %br
-          =link_to 'New! Photo Gallery', gallery_path, :class => 'btn btn-info'
+          %b Check out our new photo gallery!
+          =link_to 'Go', gallery_path, :class => 'btn btn-info'
+      %p Members, you can contribute photos by signing in and going to the upload page.
     - if @pictures.count == 8 
       - @pictures.each do |pic|
         .col-md-3.single-portfolio.col-sm-6

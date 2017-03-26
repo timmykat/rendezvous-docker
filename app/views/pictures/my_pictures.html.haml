@@ -1,6 +1,15 @@
 .logged-in-spacer
 .container
   %h2 My Photos
+  .row
+    .col-md-12
+      .well
+        %p
+          We're pleased to have users to upload photos from the Rendezvous for our photo gallery.
+        %p
+          We have limited server space, so please choose your images carefully and avoid duplication.
+        %p 
+          Drag your photos, singly or as a group, to the area below to upload.
   .row.upload-area
     .col-md-12
       %form{ :action => '/pictures/upload', :class => 'dropzone', :id => 'dropzone-upload' }
@@ -10,26 +19,13 @@
       %table.pictures
         %thead
           %tr
-            %th Thumbnail
-            %th Rendezvous Year
-            %th Caption/title
+            %th{ :style => 'width: 15%' } Thumbnail
+            %th{ :style => 'width: 15%' } Rendezvous Year
+            /
+              %th Caption/title
             %th Credit
             %th
         %tbody
           - @pictures.each do |pic|
-            %tr
-              = form_for pic do |f|
-                %td.thumbnail 
-                  = image_tag pic.image.thumb.url
-                %td.year
-                  .form-group
-                    - options = options_for_select((1976..2020).to_a.reverse, pic.year)
-                    = f.select :year, options, {}, { :class => 'form-control', :selected => pic.year }
-                %td.caption
-                  = f.text_field :caption, :value => pic.caption, :size => "80", :class => 'form-control'
-                %td.credit
-                  = f.text_field :credit, :value => pic.credit, :class => 'form-control'
-                %td.actions
-                  = f.submit "Update", :class => 'btn btn-info'
-                  %button.btn.btn-danger.delete{ :id => "delete_#{pic.id}" } Delete 
+            = render :partial => 'common/picture_form', :locals => { :pic => pic }
   

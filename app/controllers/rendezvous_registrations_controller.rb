@@ -248,6 +248,7 @@ class RendezvousRegistrationsController < ApplicationController
   end
   
   def welcome
+    
   end
   
   private
