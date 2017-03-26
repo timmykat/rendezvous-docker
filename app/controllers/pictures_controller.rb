@@ -3,14 +3,17 @@ class PicturesController < ApplicationController
 
   # GET /pictures
   def index
-    @pictures = Picture.all.group('year')
-    binding.pry
-    @pictures.each do |pic|
+    pictures = Picture.all
+    @pictures_by_year = {}
+    pictures.each do |pic|
       unless File.exist?(File.join(Rails.root, pic.image.gallery.path)) && File.exist?(File.join(Rails.root, pic.image.display.path))
         pic.image.recreate_versions!(:gallery, :display)
         pic.save!
       end
+      @pictures_by_year[pic.year] ||= []
+      @pictures_by_year[pic.year] << pic
     end
+    @pictures_by_year
   end
   
   # GET /my-pictures
@@ -54,10 +57,11 @@ class PicturesController < ApplicationController
       params[:picture][:caption] = params[:picture][:image].original_filename
     end
     
-    @picture = Picture.new(picture_params)
-    if @picture.save
+    picture = Picture.new(picture_params)
+    if picture.save
       respond_to do |format|
-        format.json { render :json => @picture }
+        format.html { render :partial => 'common/picture_form', :locals => { :pic => picture } }
+        format.json { render :json => picture }
       end
     end
   end

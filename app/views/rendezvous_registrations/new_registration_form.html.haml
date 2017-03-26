@@ -1,6 +1,7 @@
 .container
   .row
     = render :partial => 'common/registration_header', :locals => { :step => 'register' }
+    .col-md-offset-2.col-md-8.col-xs-12
       #registration-form
         - if !user_signed_in?
           .cover

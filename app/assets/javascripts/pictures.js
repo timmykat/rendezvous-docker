@@ -1,17 +1,27 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 Dropzone.options.dropzoneUpload = {
-  paramName: "picture[image]"
+  paramName: "picture[image]",
+  url: '/pictures/upload.html',
+  init: function() {
+    this.on('success', function(file, htmlResponse) {
+      // update the picture table
+      $('table.pictures').prepend(htmlResponse);
+      this.removeFile(file);
+    });
+  }
 }
 
 $(function() {
-  $('.pictures button.delete').on('click', function(e) {
+  $('table.pictures').on('click', 'button.delete', function(e) {
     e.preventDefault();
-    var $button = $(this);
-    var id = $(this).attr('id').replace('delete_','');
-    $.get('/ajax/picture/delete/' + id, function() {
-      $button.parent(),parent().remove();
-    });
+    var $button = $(e.target);
+    if ($button.hasClass('delete')) {
+      var id = $button.attr('id').replace('delete_','');
+      $.get('/ajax/picture/delete/' + id, function() {
+        $button.parent().parent().remove();
+      });
+    }
   });
   
   $('#gallery').magnificPopup({

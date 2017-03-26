@@ -1,0 +1,16 @@
+%tr
+  = form_for pic do |f|
+    %td.thumbnail 
+      = image_tag pic.image.thumb.url
+    %td.year
+      .form-group
+        - options = options_for_select((1976..2020).to_a.reverse, pic.year)
+        = f.select :year, options, {}, { :class => 'form-control', :selected => pic.year }
+    /
+      %td.caption
+        = f.text_field :caption, :value => pic.caption, :size => "80", :class => 'form-control'
+    %td.credit
+      = f.text_field :credit, :value => pic.credit, :class => 'form-control'
+    %td.actions{ :style => 'text-align: center' }
+      = f.submit "Update", :class => 'btn btn-info'
+      %button.btn.btn-danger.delete{ :id => "delete_#{pic.id}" } Delete 

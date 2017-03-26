@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   
   # Picture upload
   get '/my-pictures', to: 'pictures#my_pictures'
-  post '/pictures/upload', to:'pictures#upload'
+  post '/pictures/upload(.:format)', to:'pictures#upload'
   
   # Contact form
   post '/contact-us', to:'content_pages#contact_us'

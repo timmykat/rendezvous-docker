@@ -19,4 +19,9 @@
 //= require braintree-web/hosted-fields
 //= require cocoon
 //= require magnific-popup/dist/jquery.magnific-popup.js
-//= require_tree .
+//= require admin
+//= require main_pages
+//= require pictures
+//= require rendezvous_registrations
+//= require user
+//= require vehicles

@@ -11,6 +11,13 @@ module ApplicationHelper
     end
   end
   
+  def my_registration_path(user)
+    id = user.rendezvous_registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
+    if (!id.blank?)
+      "/rendezvous_registrations/#{id.to_s}"
+    end
+  end
+  
   def sign_in_method(user)
     if user.provider
       user.provider.titlecase
@@ -92,30 +99,7 @@ module ApplicationHelper
       nil
     end
   end
-  
-  def step_text(step)
-    case step
-    when 'welcome'
-      'Welcome / Bienvenue!'
-    when 'sign-in'
-      'Sign In'
-    when 'sign-up'
-      'Sign Up'
-    when 'register'
-      'Register'
-    when 'review'
-      'Review'
-    when 'payment'
-      'Payment'
-    when 'vehicles'
-      "Vehicle(s)"
-    end
-  end
-  
-  def progress_indicator(step)
     
-  end
-
   def month_list
     [
       ['[01]  January', '01'],
