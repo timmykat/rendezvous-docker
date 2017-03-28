@@ -57,6 +57,25 @@ vehicle_models:
   - SM 
   - CX (series 1)
   - CX (series 2)
+  - CXA
+  - GS
+  - GSA
+  - Ami
+  - Dyane
+  - Mehari
+  - XM
+  - C6
+  - 'H-Van'
+judging_categories:
+  - 'Traction Avant'
+  - 'ID / DS'
+  - '2CV / Truckette'
+  - 'SM'
+  - 'CX / CXA'
+  - 'Ami / Dyane / Mehari'
+  - 'GS / GSA / XM / C6 / H-Van' 
+  - 'Other French'
+  - 'Non-French'
 countries:
   US: UNITED STATES
   CA: CANADA

@@ -7,5 +7,33 @@ class Vehicle < ActiveRecord::Base
   
   def full_spec
     "#{year} #{marque} #{model}"
+  end
+  
+  def judging_category
+    category = ''
+        
+    if %W(Panhard Peugeot Renault).include? @arque
+      category == 'Other French'
+    elsif marque == 'Citroen'
+      case model
+      when /traction/i
+        category = 'Traction Avant'
+      when /D \(\w+\)/
+        category = 'ID / DS'
+      when /2CV/
+        category = '2CV / Truckette'
+      when /SM/
+        category = 'SM'
+      when /CX/
+        category = 'CX /  CXA'
+      when /(Ami|Dyane|Mehari)/
+        category = 'Ami / Dyane / Mehari'
+      when /(GS|GSA|XM|C6|H-Van)/
+        category = 'GS / GSA / XM / C6 / H-Van'
+      end
+    elsif !model.blank? && !marque.blank?
+      category = 'Non-French'
+    end
+    category
   end   
 end
