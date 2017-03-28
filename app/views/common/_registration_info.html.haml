@@ -90,9 +90,11 @@
               %th Model
               %th Year
               %th Other info
+              %th Judging category
             %tbody
               - @rendezvous_registration.user.vehicles.each do |v|
                 %td= v.marque
                 %td= v.model
                 %td= v.year
                 %td= v.other_info
+                %td= v.judging_category

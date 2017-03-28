@@ -30,6 +30,11 @@
         = f.input :model, :as => :hidden, :value => f.object.marque
   .row
     .col-md-12
+      .judging-category
+        %label Judging Category:
+        = f.object.judging_category
+  .row
+    .col-md-12
       .form-group
         = f.input :other_info, :input_html => { :placeholder => 'Unusual Citroen model, distinguishing features, historical notes, etc.' }
   .row

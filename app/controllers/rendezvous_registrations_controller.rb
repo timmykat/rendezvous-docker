@@ -2,7 +2,7 @@ class RendezvousRegistrationsController < ApplicationController
 
   before_action :check_cutoff, :only => [:new, :create, :complete, :edit]
   before_action :require_admin, :only => [:index]
-  before_action :authenticate_user!, :except => [:new]
+  before_action :authenticate_user!, :except => [:new, :welcome]
   before_action :owner_or_admin, :only => [:show]
   before_action :set_cache_buster
 

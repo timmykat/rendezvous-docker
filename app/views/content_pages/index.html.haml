@@ -15,7 +15,7 @@
           - if user_signed_in?
             = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
           - else 
-          = link_to 'Sign in to register', user_sign_in_path, :class => 'btn btn-primary btn-lg'
+          = link_to 'Go to registration', registration_welcome_path, :class => 'btn btn-primary btn-lg'
         - else
           .alert.alert-info{:role => 'alert'} We'll let you know when online registration will start.
     .row
@@ -33,6 +33,10 @@
         %h2.main-heading
           #{config[:dates][:year]} Schedule
         = image_tag "chevrons.png"
+        %p.text-center
+          See
+          = link_to 'here', schedule_path
+          for a more detailed schedule.
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
@@ -48,10 +52,10 @@
           %ul.text-left
             %li 
               %strong 2-4pm
-              Ice cream social, Furlong's Family Fun
+              Yaddo Gardens excursion
             %li 
               %strong 6-8pm
-              Rendezvous 2016 Welcome poolside reception and pizza party, Springs Motel
+              Rendezvous #{Time.now.year} poolside welcome reception and pizza party, Springs Motel
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-automobile
@@ -59,33 +63,43 @@
           %ul.text-left
             %li 
               %strong 9am-4pm
-              Showfield is open, including vendors! Lakeside Farms (Ballston Spa)
+              Showfield is open, Lakeside Farms (Ballston Lake)
+            %li
+              %strong 11am-3pm
+              Silent auction. Winners announced at 3pm sharp.
+            %li
+              %strong 11am-12pm
+              Panhard presentation by U.S. club president John Peterson
+            %li
+              %strong 1-2pm
+              How to Adjust your Citromatic - tech talk by Lon Price
             %li 
               %strong 4-5:30pm
               Downtime: RELAX!
-            %li 
-              %strong 5:30
-              Browsing begins for the silent auction and tickets go on sale for the 50-50 raffle. Winers are announced after dinner.
             %li 
               %strong 6-8pm
               Banquet dinner
             %li 
               %strong 8pm
-              Auction results, raffle winner, and People's Choice awards!
+              Raffle winner and People's Choice awards!
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
           %h3 Sunday June #{config[:dates][:end]}
           %ul.text-left
             %li 
-              %strong 8:30-11:00am
-              Continental breakfast and viewing of People's Choice award winners, Springs Motel
+              %strong 8:30-11:30am
+              Saratoga Auto Musuem: continental breakfast and viewing of People's Choice award winners
             %li 
-              %strong 11:00am (arrive by 10:30 for orientation)
-              = link_to 'Rally', faq_path
-              (more like a convoy, really, since no stopwatches are involved). Vehicle hopping encouraged!
+              %strong 11:30am-2 or 3pm
+              = link_to 'Driving tour', faq_path(:anchor => 'rally')
+              Vehicle hopping encouraged!
             %li 
-              %strong 5pm - Dinner, Springs Motel, with food from PJ's Bar-B-QSA
+              %strong 2 or 3-5pm
+              Downtime
+            %li 
+              %strong 5-8pm
+              Saratoga Auto Museum: the Last Supper
 / end of about section
 / service section
 %section#info.service.text-left

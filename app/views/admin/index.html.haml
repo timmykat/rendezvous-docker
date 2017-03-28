@@ -116,6 +116,7 @@
           %table.table
             %thead
               %tr
+                %th Judging Category
                 %th Model
                 %th Year
                 %th Marque
@@ -124,6 +125,7 @@
             %tbody
               - @vehicles.each do |vehicle|
                 %tr
+                  %td= vehicle.judging_category
                   %td= vehicle.model
                   %td= vehicle.year
                   %td= vehicle.marque

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get '/register', to: 'rendezvous_registrations#new'
-  get '/register-welcome', to: 'rendezvous_registrations#welcome'
+  get '/registration-welcome', to: 'rendezvous_registrations#welcome'
   
   resources :pictures, except: :index
   get '/gallery',      to: 'pictures#index'
