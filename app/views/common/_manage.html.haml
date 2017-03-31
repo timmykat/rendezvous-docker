@@ -11,7 +11,7 @@
               %li= link_to 'Info Overview', admin_index_path, :class => 'btn btn-sm btn-info'
               - if session[:admin_user]
                 %li= link_to 'Create Registration', register_path, :class => 'btn btn-sm btn-info'
-              %li= link_to "#{session[:admin_user] ? 'Start' : 'Stop'} Admin Session", admin_toggle_user_session_path, :class => 'btn btn-sm btn-info'
+              %li= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, :class => 'btn btn-sm btn-info'
               %li= link_to 'Synchronize with Mailchimp', users_synchronize_mailchimp_path, :class => 'btn btn-sm btn-info'
               - if Rails.env != 'production' && (defined? current_registration) && !current_registration.blank?
                 %li= link_to 'Delete my registration', rendezvous_registration_path(current_registration), :method => :delete, :class => 'btn btn-sm btn-danger', :confirmation => 'Are you sure?'
