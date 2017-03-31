@@ -3,6 +3,7 @@
 Dropzone.options.dropzoneUpload = {
   paramName: "picture[image]",
   url: '/pictures/upload.html',
+  maxFilesize: 2,
   init: function() {
     this.on('success', function(file, htmlResponse) {
       // update the picture table
