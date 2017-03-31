@@ -10,7 +10,7 @@
           %br/
           - if @minimum_password_length
             %em
-              (#{@minimum_password_length} characters minimum)
+              (#{@minimum_password_length} characters minimum, at least one capital, one lowercase, and one digit)
             %br/
           = f.password_field :password, autofocus: true, autocomplete: "off", :class => 'form-control'
         .form-group
