@@ -11,7 +11,7 @@ $(function() {
   var getAttendeeTotals = function() {
     var adults = $('#attendees input[value="adult"]:visible:checked').length;
     $('input#rendezvous_registration_number_of_adults').val(adults);  
-    var children = $('#attendees input[value="child"]_visible:checked').length;
+    var children = $('#attendees input[value="child"]:visible:checked').length;
     $('input#rendezvous_registration_number_of_children').val(children);  
     setRegistrationFee();  
   }
