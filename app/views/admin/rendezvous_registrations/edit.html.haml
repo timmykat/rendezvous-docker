@@ -1,13 +1,16 @@
+- config = Rails.configuration.rendezvous
 .container.invoice
   .row
-    .col-md-offset-1.col-md-10.col-xs-12.heading
+    .col-md-12.heading
       %h1.pull-left R#{Time.new.year} Registration
       .pull-right= image_tag('rendezvous-logo.png')
-  = render :partial => 'common/registration_info' 
   .row
-    .col-md-offset-1.col-md-10.col-xs-12.heading
+    .col-md-6.col-xs-12
+      = render :partial => 'common/registration_info' 
+
+    .col-md-6.col-xs-12
       %section
-        %h2 Registration Data
+        %h2 Modify Attendees
         = simple_form_for @rendezvous_registration, :url => admin_rendezvous_registration_path(@rendezvous_registration), :method => :put, :id => 'rendezvous_registration_form' do |f|
           %h3 Attendees
           .row
@@ -32,31 +35,31 @@
                 = f.input_field :number_of_children, :disabled => true, :class => 'calculated fee-calculation'
 
           .row
-            .col-md-6.col-xs-12
+            .col-md-12
               %p.amount.bg-success.form-group
                 %label Registration fee: $
                 = f.input_field :registration_fee, :disabled => true, :class => 'calculated'
           = f.button :submit, 'Update registration', :class => 'btn btn-primary'
           
       %section
-        %h2 New Transaction
+        %h2 Payment or Refund
         %p For credit card transactions, please process the payment or refund in the Braintree account. Note the transaction code and enter here.
         = simple_form_for @transaction, :url => admin_transactions_path do |f|
           .row
-            .col-md-3.col-xs-12
-              = f.input :transaction_type, :collection => [['Payment', 'payment'], ['Refund', 'refund']], :prompt => '-- Select transaction type'
-            .col-md-3.col-xs-12
-              = f.input :transaction_method, :collection => [['Credit card', 'credit card'], ['Check', 'check']], :prompt => '-- Select payment method'
+            .col-md-6.col-xs-12
+              = f.input :transaction_type, :collection => [['Payment', 'payment'], ['Refund', 'refund']], :selected => 'payment'
+            .col-md-6.col-xs-12
+              = f.input :transaction_method, :collection => config[:payment_methods].map { |m| [m.titlecase, m] }, :prompt => '-- Select payment method'
           .row
             .col-md-4.col-xs-12
               = f.input :amount, :hint => 'Enter a positive amount. The transaction type will determine the sign.'
           .row
             .col-md-4.col-xs-12
-              = f.input :cc_transaction_id, :label => 'Credit card transaction ID', :hint => 'Leave blank if this is not a credit card transaction.'
+              = f.input :cc_transaction_id, :label => 'Credit card transaction ID', :disabled => true
           .row
             .col-md-12
               = hidden_field_tag :rendezvous_registration_id, @rendezvous_registration.id
-              = f.button :submit, 'Add transaction', :class => 'btn btn-primary'
+              = f.button :submit, 'Update Registration', :class => 'btn btn-primary'
   
 
               

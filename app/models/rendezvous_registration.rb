@@ -10,8 +10,8 @@ class RendezvousRegistration < ActiveRecord::Base
   
   scope :current, -> { where(:year => Time.now.year) }
   
-  validate :minimum_number_of_adults
-  validate :payment
+  validate :validate_minimum_number_of_adults
+  validate :validate_payment
   validates :paid_method, :inclusion => { :in => Rails.configuration.rendezvous[:payment_methods] }, :allow_blank => true
   # validates :invoice_number, :uniqueness => true, :format => { :with => /\ARR20\d{2}-\d{3,4}\z/, :on => :new }, :allow_blank => true
   
@@ -19,20 +19,20 @@ class RendezvousRegistration < ActiveRecord::Base
   
   serialize :events, JSON
   
-  def minimum_number_of_adults
+  def validate_minimum_number_of_adults
     if (number_of_adults < 1) 
-      errors.add_to_base "You must register at least one adult."
+      errors[:base] << "You must register at least one adult."
     end
   end
   
-  def payment
+  def validate_payment
     if !paid_amount.nil?
       if (paid_amount.to_f > total.to_f)
-        errors.add_to_base "The paid amount is more than the owed amount."
+        errors[:base] << "The paid amount is more than the owed amount."
       end
     end
   end
-  
+    
   def balance
     total.to_f - paid_amount.to_f
   end
