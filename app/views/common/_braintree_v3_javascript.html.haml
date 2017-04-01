@@ -1,5 +1,6 @@
-:javascript  
-  var myIntegration;
+:javascript 
+
+  var myHostedFields; 
     
   function buildBraintree() {
     var form = document.querySelector('#rendezvous_registration_form');
@@ -14,7 +15,7 @@
         return;
       }
       
-      var options = {
+      var hostedFieldOptions = {
         client: clientInstance, 
 
         id: 'rendezvous_registration_form',
@@ -39,7 +40,9 @@
         }
       }
       
-      braintree.hostedFields.create(options, function(hostedFieldsErr, hostedFieldsInstance) {
+      braintree.hostedFields.create(hostedFieldOptions, function(hostedFieldsErr, hostedFieldsInstance) {
+        
+        myHostedFields = hostedFieldsInstance;
 
         if (hostedFieldsErr) {
           console.error(hostedFieldsErr);
@@ -64,9 +67,7 @@
           } else if (e.emittedBy == 'number') {
             fieldClass = '.credit-card';
           } 
-          
-          console.log(fieldClass);
-          
+                    
           if (field.isValid) {
             $('.submit-status ' + fieldClass + ' i').removeClass('hidden');
             $('.submit-status ' + fieldClass ).removeClass('text-danger').addClass('text-success');
@@ -79,35 +80,42 @@
         submit.removeAttribute('disabled');
         
         form.addEventListener('submit', function(event) {
-          event.preventDefault();
-          hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
-            if (tokenizeErr) {
-              console.error(tokenizeErr);
-              return;
-            }
-            document.querySelector('input[name="payment_method_nonce"]').value = payload.nonce;
-            form.submit();
-          });
+          console.log(myHostedFields);
+          if (myHostedFields) {
+            event.preventDefault();
+            hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
+              if (tokenizeErr) {
+                console.error(tokenizeErr);
+                return;
+              }
+              document.querySelector('input[name="payment_method_nonce"]').value = payload.nonce;
+              form.submit();
+            });
+          }
         }, false);
       });
     });
   };
     
     
-  function teardownBraintree() {
-    myIntegration.teardown();
-  }
-  
   $(function() {
+
     buildBraintree();
     
     $('#rendezvous_registration_paid_method_credit_card').on('click', function() {
       buildBraintree();
     });
-    
     $('#rendezvous_registration_paid_method_check').on('click', function() {
-      teardownBraintree();
+      myHostedFields.teardown( function(teardownErr) {
+        if (teardownErr) {
+          console.error('Could not tear down HostedFields.');
+        } else { 
+          console.log('HostedFields has been torn down.');
+          myHostedFields = null;
+        }
+      });
     });
+    
   });
 
 :javascript
