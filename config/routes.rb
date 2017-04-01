@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   resources :admin, { :only => [:index] }
   namespace :admin do
-    resources  :rendezvous_registrations, { :only => [ :show, :update ] }
+    resources  :rendezvous_registrations, { :only => [ :edit, :update ] }
     resources :transactions, { :only => [ :create ] }
   end
     

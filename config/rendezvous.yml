@@ -20,6 +20,7 @@ suggested_donations:
 payment_methods:
   - credit card
   - check
+  - cash
 registration_statuses:
   - initiated
   - payment due

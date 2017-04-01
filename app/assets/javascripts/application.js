@@ -25,3 +25,4 @@
 //= require rendezvous_registrations
 //= require user
 //= require vehicles
+//= require transactions
