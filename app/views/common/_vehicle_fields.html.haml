@@ -30,15 +30,15 @@
         = f.input :model, :as => :hidden, :value => f.object.marque
   .row
     .col-md-12
-      .judging-category
-        %label Judging Category:
-        = f.object.judging_category
-  .row
-    .col-md-12
       .form-group
         = f.input :other_info, :input_html => { :placeholder => 'Unusual Citroen model, distinguishing features, historical notes, etc.' }
   .row
     .col-md-12
+      .judging-category
+        %label Judging Category:
+        = f.object.judging_category
+ 
+      %br
       = link_to_remove_association '<i class="fa fa-minus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :class => 'btn btn-danger btn-sm'
       Remove this vehicle
 

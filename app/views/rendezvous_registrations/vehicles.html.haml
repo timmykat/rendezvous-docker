@@ -13,4 +13,5 @@
         %em Note: If you don't know what vehicle(s) you are bringing, you can update this in your user profile later.
       = simple_form_for @user, :id => 'rendezvous_registration_vehicles' do |u|      
         = render :partial => 'common/user_info', :locals => { :f => u, :vehicles => true }
-        = u.button :submit, 'Complete Registration'.html_safe, :class => 'btn btn-primary'
+        %br
+        = u.button :submit, 'Save Vehicle(s)'.html_safe, :class => 'btn btn-primary'
