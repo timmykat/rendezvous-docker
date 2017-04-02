@@ -41,8 +41,7 @@ class RendezvousRegistrationsController < ApplicationController
       @rendezvous_registration.build_user
     end
     @rendezvous_registration.user.vehicles.build
-    render 'new_registration_form'
-#    render 'registration_form'
+    render 'registration_form'
   end
   
   def create
@@ -196,7 +195,7 @@ class RendezvousRegistrationsController < ApplicationController
         @rendezvous_registration.save!
         send_registration_success_emails
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to @rendezvous_registration
+        redirect_to vehicles_rendezvous_registration_path(@rendezvous_registration)
         return
       elsif result.errors
         flash_alert 'There was a problem with your credit card payment.'
