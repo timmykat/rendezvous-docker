@@ -20,6 +20,8 @@
             = f.label :password
             %br/
             = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Password'
+          .form-group
+            = recaptcha_tags
           .actions
             = f.submit "Log in", :class => "btn btn-info"
       
