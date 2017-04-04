@@ -3,15 +3,15 @@
     = render :partial => 'common/registration_header', :locals => { :step => 'vehicles' }
   .row
     .col-md-offset-2.col-md-8.col-xs-12
-      %p Congratulations, you have completed your registration for the Rendezvous!
-      %p Please tell us the show vehicles you will be bringing.
       %p 
-        If the information below is correct, you may go directly to 
+        %strong Congratulations, you have completed your registration for the Rendezvous!
+      %p 
+        It's helps us plan if we know what show vehicles you will be bringing. If the information below is correct, you may go directly to 
         = succeed '.' do
           = link_to 'your registration information', rendezvous_registration_path(@rendezvous_registration)
-      %p 
-        %em Note: If you don't know what vehicle(s) you are bringing, you can update this in your user profile later.
+        Otherwise, please enter the correct information below.
       = simple_form_for @user, :id => 'rendezvous_registration_vehicles' do |u|      
         = render :partial => 'common/user_info', :locals => { :f => u, :vehicles => true }
         %br
-        = u.button :submit, 'Save Vehicle(s)'.html_safe, :class => 'btn btn-primary'
+        = u.button :submit, 'Save Vehicle(s)', :class => 'btn btn-primary hidden', :id => 'save-vehicle'
+        = link_to 'View My Registration', rendezvous_registration_path(@user.rendezvous_registrations.last), :class => 'btn btn-info', :id => 'view-registration'

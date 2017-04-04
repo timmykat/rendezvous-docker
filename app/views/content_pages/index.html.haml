@@ -12,9 +12,6 @@
         = image_tag "rendezvous-year-badge.png"
         %br/
         - if Time.now >= AdminController::REG_WINDOW[:open] && Time.now <= AdminController::REG_WINDOW[:close]
-          - if user_signed_in?
-            = link_to 'Register', register_path, :class => 'btn btn-primary btn-lg'
-          - else 
           = link_to 'Go to registration', registration_welcome_path, :class => 'btn btn-primary btn-lg'
         - else
           .alert.alert-info{:role => 'alert'} We'll let you know when online registration will start.
