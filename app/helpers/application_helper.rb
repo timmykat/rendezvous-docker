@@ -54,7 +54,7 @@ module ApplicationHelper
   
   def official_contact
     output = '<p><em>Mailing address: </em><br />'
-    output +=  mailing_address + '</p>'
+    output +=  mailing_address
     output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
     output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
     output.html_safe
