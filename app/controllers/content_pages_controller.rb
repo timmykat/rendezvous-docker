@@ -9,15 +9,19 @@ class ContentPagesController < ApplicationController
   end
   
   def faq
+    @title = 'FAQ'
   end
   
   def history
+    @title = 'History'
   end
-  
+    
   def legal_information
+    @title = 'Legal Information'
   end
 
   def vendors
+    @title = 'Vendors'
   end
   
   def method_missing(method_sym, *arguments, &block)
