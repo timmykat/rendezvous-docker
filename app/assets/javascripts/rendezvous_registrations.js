@@ -87,5 +87,16 @@ $(function() {
   $('input.payment').on('click', function() {
     $('#payment-form').toggleClass('hidden');
     $('#mailing-address').toggleClass('hidden');
-  });  
+  }); 
+  
+  // Toggle the vehicle page call-to-action buttons
+  $('.c_rendezvous_registrations #vehicles').on('cocoon:after-insert cocoon:after-remove', function(e) {
+    if ($('#vehicles .nested-fields').length > 0) {
+      $('#save-vehicle').removeClass('hidden');
+      $('#view-registration').addClass('hidden');
+    } else {
+      $('#save-vehicle').addClass('hidden');
+      $('#view-registration').removeClass('hidden');
+    }
+  });
 });
