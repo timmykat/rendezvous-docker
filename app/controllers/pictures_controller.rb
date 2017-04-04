@@ -3,6 +3,7 @@ class PicturesController < ApplicationController
 
   # GET /pictures
   def index
+    @title = 'Photo Gallery'
     pictures = Picture.all
     @pictures_by_year = {}
     pictures.each do |pic|
@@ -18,6 +19,7 @@ class PicturesController < ApplicationController
   
   # GET /my-pictures
   def my_pictures
+    @title = 'My Photos'
     @pictures = current_user.pictures
   end
   

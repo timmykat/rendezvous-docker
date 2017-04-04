@@ -22,6 +22,8 @@ class RendezvousRegistrationsController < ApplicationController
   end
   
   def new
+  
+    @title = 'Registration - Start'
       
     if user_signed_in? && !session[:admin_user]
       @rendezvous_registration = current_user.rendezvous_registrations.current.first
@@ -94,6 +96,7 @@ class RendezvousRegistrationsController < ApplicationController
   end
   
   def edit
+    @title = 'Edit Registration'
       
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     render 'registration_form'
@@ -125,11 +128,14 @@ class RendezvousRegistrationsController < ApplicationController
   end
   
   def review
+    @title = 'Review Registration Information'
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
   end
   
   def payment
+    @title = 'Registration - Payment'
     begin
+      @title = 'Registration - Payment'
       @rendezvous_registration = RendezvousRegistration.find(params[:id])
       @app_data[:clientToken] =  Braintree::ClientToken.generate
       @app_data[:registration_fee] = @rendezvous_registration.registration_fee
@@ -144,6 +150,7 @@ class RendezvousRegistrationsController < ApplicationController
 
   
   def complete
+    @title = 'Complete Registration'
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     @rendezvous_registration.update(rendezvous_registration_params) 
 
@@ -227,11 +234,14 @@ class RendezvousRegistrationsController < ApplicationController
   end
   
   def vehicles
+    @title = 'Vehicle Information'
+
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     @user = @rendezvous_registration.user
   end
     
   def index
+    @title = 'All Registrations'
     @rendezvous_registrations = RendezvousRegistration.all
   end
   
