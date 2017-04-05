@@ -14,6 +14,7 @@ Dropzone.options.dropzoneUpload = {
 }
 
 $(function() {
+  // Picture actions
   $('table.pictures').on('click', 'button.delete', function(e) {
     e.preventDefault();
     var $button = $(e.target);
@@ -23,6 +24,36 @@ $(function() {
         $button.parent().parent().remove();
       });
     }
+  });
+  $('table.pictures').on('blur', '.credit input', function(e) {
+    var $row = $(e.target).closest('tr');
+    var picId = $row.attr('class').split('-')[1]
+    $.ajax({
+      url: '/pictures/' + picId,
+      method: 'put',
+      data: { 'picture[credit]': $(e.target).val() },
+      dataType: 'json',
+      success: function() {
+        $row.css({ 'backgroundColor': '#CFC' });
+        $row.animate({ 'backgroundColor': 'none' }, 1000);
+      }
+    }); 
+    return false;  
+  });
+  $('table.pictures').on('change', '.year select', function(e) {
+    var $row = $(e.target).closest('tr');
+    var picId = $row.attr('class').split('-')[1]
+    $.ajax({
+      url: '/pictures/' + picId,
+      method: 'put',
+      data: { 'picture[year]': $(e.target).val() },
+      dataType: 'json',
+      success: function() {
+        $row.css({ 'backgroundColor': '#CFC' });
+        $row.animate({ 'backgroundColor': 'none' }, 1000);
+      }
+    });
+    return false;   
   });
   
   $('#gallery').magnificPopup({

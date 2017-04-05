@@ -1,4 +1,4 @@
-%tr
+%tr{ :class => "id-#{pic.id}" }
   = form_for pic do |f|
     %td.thumbnail 
       = image_tag pic.image.thumb.url
@@ -12,5 +12,4 @@
     %td.credit
       = f.text_field :credit, :value => pic.credit, :class => 'form-control'
     %td.actions{ :style => 'text-align: center' }
-      = f.submit "Update", :class => 'btn btn-info'
       %button.btn.btn-danger.delete{ :id => "delete_#{pic.id}" } Delete 
