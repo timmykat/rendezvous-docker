@@ -72,10 +72,10 @@ class PicturesController < ApplicationController
   # PATCH/PUT /pictures/1
   def update
     if @picture.update(picture_params)
-      redirect_to @picture, notice: 'Picture was successfully updated.'
-    else
-      render :edit
-    end
+      respond_to do |format|
+        format.json { render :json => { :status => :ok } }
+      end
+     end
   end
 
   # DELETE /pictures/1
