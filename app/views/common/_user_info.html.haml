@@ -1,24 +1,25 @@
 - if defined?(user_fields) && user_fields
-  .row
-    .col-md-12
-      .form-group
-        = f.input :email, :label_html => { :class => 'sr-only' }, :class => 'primary', :placeholder => 'E-mail *', :disabled => !session[:admin_user]
-        - if user_signed_in? && !session[:admin_user]
-          = f.input :id, :as => :hidden, :input_html => { :value => current_user.id }
+  .user_fields
+    .row
+      .col-md-12
+        .form-group
+          = f.input :email, :label_html => { :class => 'sr-only' }, :class => 'primary', :placeholder => 'E-mail *', :disabled => !session[:admin_user]
+          - if user_signed_in? && !session[:admin_user]
+            = f.input :id, :as => :hidden, :input_html => { :value => current_user.id }
        
-  .row
-    .col-md-12
-      %h3 Personal Information
-  .row
-    .col-md-12
-      %label Name
-  .row
-    .col-md-6.col-xs-12
-      .form-group
-        = f.input :first_name, :placeholder => 'First name *'
-    .col-md-6.col-xs-12
-      .form-group
-        = f.input :last_name, :placeholder => 'Last name *' 
+    .row
+      .col-md-12
+        %h3 Personal Information
+    .row
+      .col-md-12
+        %label Name
+    .row
+      .col-md-6.col-xs-12
+        .form-group
+          = f.input :first_name, :placeholder => 'First name *'
+      .col-md-6.col-xs-12
+        .form-group
+          = f.input :last_name, :placeholder => 'Last name *' 
 
 - if defined?(address) && address
   .row
