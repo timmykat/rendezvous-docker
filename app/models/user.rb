@@ -169,7 +169,7 @@ class User < ActiveRecord::Base
         
       when 'subscribe'
         begin
-          # MMERGE3 ==> Thinking about coming to the Rendezvous 2016 'Yes', 'No', 'Maybe'
+          # MMERGE3 ==> Thinking about coming to the Rendezvous 2017 'Yes', 'No', 'Maybe'
           hashed_email = Digest::MD5.hexdigest email.downcase
           gibbon.lists(list_id).members(hashed_email).upsert( :body => { :email_address => email, :status => 'subscribed', :merge_fields => { :FNAME => first_name, :LNAME => last_name, :MMERGE3 => 'Yes' }} )
           receive_mailings = true
