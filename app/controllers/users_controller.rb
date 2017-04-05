@@ -19,7 +19,6 @@ class UsersController < ApplicationController
   end
   
   def update
-    binding.pry
     @user = User.find(params[:id])
     if !@user.update(user_params)
       flash_alert_now 'We had a problem saving your updated information'

@@ -11,7 +11,6 @@
           = link_to 'your registration information', rendezvous_registration_path(@rendezvous_registration)
         Otherwise, please enter the correct information below.
       = simple_form_for @user, :id => 'rendezvous_registration_vehicles' do |u|      
-        = render :partial => 'common/user_info', :locals => { :f => u, :vehicles => true }
+        = render :partial => 'common/user_info', :locals => { :f => u, :user_fields => true,:vehicles => true }
         %br
-        = u.button :submit, 'Save Vehicle(s)', :class => 'btn btn-primary hidden', :id => 'save-vehicle'
-        = link_to 'View My Registration', rendezvous_registration_path(@user.rendezvous_registrations.last), :class => 'btn btn-info', :id => 'view-registration'
+        = u.button :submit, 'Save Vehicle(s)', :class => 'btn btn-primary', :id => 'save-vehicle'
