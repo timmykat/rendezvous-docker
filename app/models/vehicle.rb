@@ -6,7 +6,7 @@ class Vehicle < ActiveRecord::Base
   validates :marque, :presence => true
   
   def full_spec
-    "#{year} #{marque} #{model}  <br /><em>Judging category: #{judging_category}</em>".html_safe
+    "#{year} #{marque} #{model}  <br />new(<em>Judging category: #{judging_category}</em>".html_safe
   end
   
   def judging_category
@@ -26,10 +26,10 @@ class Vehicle < ActiveRecord::Base
         category = 'SM'
       when /CX/
         category = 'CX /  CXA'
-      when /(Ami|Dyane|Mehari)/
-        category = 'Ami / Dyane / Mehari'
-      when /(GS|GSA|XM|C6|H-Van)/
-        category = 'GS / GSA / XM / C6 / H-Van'
+      when /(Ami|Dyane|Mehari|Visa)/
+        category = 'Ami / Dyane / Mehari / Visa'
+      when /(GS|GSA|XM|Xantia|C6|H-Van)/
+        category = 'GS / GSA / XM / Xantia / C6 / H-Van'
       end
     elsif !model.blank? && !marque.blank?
       category = 'Non-French'
