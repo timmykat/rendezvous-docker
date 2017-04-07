@@ -122,7 +122,7 @@ module ApplicationHelper
   end
   
   def country_list
-    Rails.configuration.rendezvous[:countries].map{|code| [c[:name].uppercase, c[:code]] }
+    Rails.configuration.rendezvous[:countries].map{|code, name| [name, code] }
   end
   
   def state_province_list

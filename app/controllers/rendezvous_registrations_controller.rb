@@ -175,7 +175,7 @@ class RendezvousRegistrationsController < ApplicationController
           :locality                 => @rendezvous_registration.user.city,
           :region                   => @rendezvous_registration.user.state_or_province,
           :postal_code              => @rendezvous_registration.user.postal_code,
-          :country_code_alpha2      => @rendezvous_registration.user.country
+          :country_code_alpha3      => @rendezvous_registration.user.country
         },
         :options => {
           :submit_for_settlement => true

@@ -29,19 +29,24 @@
         = f.input_field :address1, :class => 'form-control', :placeholder => 'Address 1 *'
       .form-group
         = f.input_field :address2, :class => 'form-control', :placeholder => 'Address 2'
+  .row
+    .col-md-8.col-xs-12
       .form-group
+        %label City
         = f.input_field :city, :class => 'form-control', :placeholder => 'City *'
-      .row
-        .col-md-4.col-xs-12
-          .form-group
-            = f.input_field :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- Non-US/Canadian --', :class => 'form-control'
-        .col-md-4.col-xs-12
-          .form-group
-            = f.input_field :postal_code, :class => 'form-control', :placeholder => 'Zip/Postal Code *'
-      .row
-        .col-md-12
-          #country
-          = f.hidden_field :country, :class => 'hidden-country-field'
+    .col-md-4.col-xs-12
+      .form-group
+        %label Zip/Postal Code
+        = f.input_field :postal_code, :class => 'form-control', :placeholder => 'Zip/Postal Code *'
+  .row
+    .col-md-6.col-xs-12
+      .form-group
+        %label State/Province (US & Canada only)
+        = f.input_field :state_or_province, :collection => state_province_list, :as => :grouped_select, :group_method => :last, :include_blank => '-- State/Prov (US/Can) --', :class => 'form-control'
+    .col-md-6.col-xs-12
+      #country
+        %label Country
+        = f.input_field :country, :collection => country_list, :as => :select, :selected => 'USA', :class => 'form-control'
 
 - if defined?(connect) && connect
   .row

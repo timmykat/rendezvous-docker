@@ -90,8 +90,8 @@ class User < ActiveRecord::Base
     !self.rendezvous_registrations.where(:year => Time.now.year).blank?
   end
   
-  def display_country
-    if Rails.configuration.rendezvous[:countries].include? country
+  def country_name
+    if Rails.configuration.rendezvous[:countries].map{ |code, name| code.to_s }.include? country
       Rails.configuration.rendezvous[:countries][country.to_sym]
     else
       ''
