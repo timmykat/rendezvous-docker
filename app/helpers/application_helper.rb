@@ -41,7 +41,7 @@ module ApplicationHelper
     if vehicles
       output = "<ul class='list-unstyled'>\n"
       vehicles.each do |vehicle|
-        output += " <li>#{vehicle.full_spec}</li>\n"
+        output += " <li>#{vehicle.year_marque_model}</li>\n"
       end
       output += "</ul>\n"
       output.html_safe
