@@ -65,6 +65,7 @@ vehicle_models:
   - Dyane
   - Mehari
   - XM
+  - Xantia
   - C6
   - 'H-Van'
 judging_categories:
@@ -73,8 +74,8 @@ judging_categories:
   - '2CV / Truckette'
   - 'SM'
   - 'CX / CXA'
-  - 'Ami / Dyane / Mehari'
-  - 'GS / GSA / XM / C6 / H-Van' 
+  - 'Ami / Dyane / Mehari / Visa'
+  - 'GS / GSA / XM / Xantia / C6 / H-Van' 
   - 'Other French'
   - 'Non-French'
 countries:
