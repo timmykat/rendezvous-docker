@@ -6,7 +6,11 @@ class Vehicle < ActiveRecord::Base
   validates :marque, :presence => true
   
   def full_spec
-    "#{year} #{marque} #{model}  <br />new(<em>Judging category: #{judging_category}</em>".html_safe
+    "#{year} #{marque} #{model}  <br /><em>Judging category: #{judging_category}</em>".html_safe
+  end
+  
+  def year_marque_model
+    "#{year} #{marque} #{model} "
   end
   
   def judging_category
