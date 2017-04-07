@@ -33,7 +33,7 @@ module ApplicationHelper
     address += user.city if !user.city.blank? 
     address += ", " + user.state_or_province if !user.state_or_province.blank? 
     address += " " + user.postal_code + "<br />\n" if !user.postal_code.blank? 
-    address += user.display_country + "</div>\n"
+    address += user.country_name + "</div>\n"
     return address.html_safe if address
   end
   
