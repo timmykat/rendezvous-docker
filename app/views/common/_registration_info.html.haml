@@ -11,7 +11,7 @@
     - unless @rendezvous_registration.user.address2.blank?
       %br #{@rendezvous_registration.user.address2}
     %br #{@rendezvous_registration.user.city}, #{@rendezvous_registration.user.state_or_province} #{@rendezvous_registration.user.postal_code}
-    #{@rendezvous_registration.user.display_country}
+    #{@rendezvous_registration.user.country_name.upcase}
 
 
 .well.well-sm.payment

@@ -79,9 +79,25 @@ judging_categories:
   - 'Other French'
   - 'Non-French'
 countries:
-  US: UNITED STATES
-  CA: CANADA
-  Other: FRANCE (or other)
+  USA: United States
+  CAN: Canada
+  MEX: Mexico
+  AUT: Austria
+  BEL: Belgium
+  HRV: Croatia
+  DNK: Denmark
+  FRA: France
+  DEU: Germany
+  IRL: Ireland
+  ITA: Italy
+  NLD: Netherlands
+  NOR: Norway
+  PRT: Portugal
+  ESP: Spain
+  SWE: Sweden
+  CHE: Switzerland
+  GBR: United Kingdom
+  
 provinces:
   - AB
   - BC

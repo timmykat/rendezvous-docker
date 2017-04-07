@@ -9,6 +9,7 @@ class AdminController < ApplicationController
 
   
   def index
+    @title = 'Admin'
   
     # Create CSV data files
     @files = {}
