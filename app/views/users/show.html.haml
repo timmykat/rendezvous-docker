@@ -17,7 +17,7 @@
           %em Receiving mailings: #{@user.receive_mailings? ? 'Yes' : 'No'}
         %p
           %em Interested in Citroenvie: #{@user.citroenvie? ? 'Yes' : 'No'}
-        - if @user.rendezvous_registrations.current
+        - if @user.rendezvous_registrations.last
           %p
             = link_to 'View my registration', rendezvous_registration_path(@user.rendezvous_registrations.last)
       - unless @user.vehicles.blank?
