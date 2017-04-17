@@ -1,5 +1,10 @@
 class Admin::RendezvousRegistrationsController < AdminController
 
+  def show
+    @rendezvous_registration = RendezvousRegistration.includes(:user, :transactions, :attendees).find(params[:id])
+    render 'admin/rendezvous_registrations/show'
+  end
+
   def edit
     @rendezvous_registration = RendezvousRegistration.includes(:user, :transactions, :attendees).find(params[:id])
     @rendezvous_registration.transactions.build
