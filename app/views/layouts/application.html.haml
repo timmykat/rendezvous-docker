@@ -23,7 +23,15 @@
       = javascript_include_tag "respond"
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data)};
-
+      
+    - if @rendezvous_registration
+      :javascript
+        Cookies.set('registration_status', "#{@rendezvous_registration.status}", {expires: 180 });
+        Cookies.set('registration_id', "#{@rendezvous_registration.id}", {expires: 180 });
+    
+    = render :partial => 'common/status_bar'
+      
+        
   %body{ :class => "c_#{controller_name()} simple" }
     .body_wrapper
       = render :partial => 'common/manage'
@@ -32,6 +40,11 @@
         %a{:href => '/'}
           %i.fa.fa-arrow-left
           Back to main page
+      .registration-status
+        .container
+          .row
+            .col-md-12.status
+              Status here
       .content
         = yield
       .push

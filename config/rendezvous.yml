@@ -23,6 +23,7 @@ payment_methods:
   - cash
 registration_statuses:
   - initiated
+  - in review
   - payment due
   - complete
   - updated

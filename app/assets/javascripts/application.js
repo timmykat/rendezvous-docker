@@ -13,6 +13,7 @@
 //= require jquery/dist/jquery
 //= require jquery-ui/jquery-ui
 //= require jquery-ujs/src/rails
+//= require js-cookie/src/js.cookie.js
 //= require bootstrap
 //= require dropzone/dist/dropzone
 //= require braintree-web/client

@@ -57,7 +57,9 @@
     :javascript
       require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us12.list-manage.com","uuid":"198c738ff80668ca4d472c590","lid":"9e696fe93f"}) });
       
-  %body{ :class => (user_signed_in? ? 'logged-in' : 'guest') }
+    = render :partial => 'common/status_bar'
+    
+  %body{ :class => "main #{(user_signed_in? ? 'logged-in' : 'guest')}" }
     - if user_signed_in?
       = render :partial => 'common/manage'
     = render :partial => 'layouts/flash'
@@ -93,6 +95,12 @@
                       %a{:href => "/#contact"} contact us
                 / /.navbar-collapse
               / /.container-fluid
+      .registration-status
+        .container
+          .row
+            .col-md-12.status
+              Status here
+
     = yield
 
     = render :partial => 'common/footer'

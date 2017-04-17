@@ -146,6 +146,32 @@ a.btn-twitter, a:visited.btn-twitter {
 .c_rendezvous_registrations .last-step-vehicles .user_fields {
   display: none;
 }
+.registration-status {
+  padding:5px 0;
+  display: none;
+}
+.registration-status {
+  .fa-check-circle, .payment-due {
+    color: orange;
+  }
+  .complete {
+    color: #6f6;
+  }
+}
+body.main {
+  .registration-status {
+    background-color: white;
+    color: #333;
+  }
+}
+body.simple {
+  .registration-status {
+    background-color: #666;
+    color: white;
+    padding:15px 0 5px;
+  }
+}
+
 
 p {
   padding: 10px;
