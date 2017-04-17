@@ -130,6 +130,8 @@ class RendezvousRegistrationsController < ApplicationController
   def review
     @title = 'Review Registration Information'
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
+    @rendezvous_registration.status = 'in review'
+    @rendezvous_registration.save!
   end
   
   def payment
@@ -137,6 +139,7 @@ class RendezvousRegistrationsController < ApplicationController
     begin
       @title = 'Registration - Payment'
       @rendezvous_registration = RendezvousRegistration.find(params[:id])
+      @rendezvous_registration.status = 'payment due'
       @app_data[:clientToken] =  Braintree::ClientToken.generate
       @app_data[:registration_fee] = @rendezvous_registration.registration_fee
       @credit_connection = true
