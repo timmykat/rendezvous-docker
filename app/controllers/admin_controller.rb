@@ -87,7 +87,7 @@ class AdminController < ApplicationController
       @data[:financials][:donations]            += registration.donation.to_f unless registration.donation.blank?
 
 
-      nvehicle = 0    
+      nvehicle = 0
       registration.user.vehicles.each do |v|
          if v.marque == 'Citroen'
           @data[:citroens]      << v
