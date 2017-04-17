@@ -58,7 +58,7 @@ class AdminController < ApplicationController
       'Info'
     ]
 
-    @registrations = RendezvousRegistration.where("year = ? AND status IN (?)", Time.now.year, ['complete', 'payment due'])
+    @registrations = RendezvousRegistration.where("year = ?", Time.now.year)
   
     @data = {
       :registrants    => [],
