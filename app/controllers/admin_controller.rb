@@ -68,7 +68,10 @@ class AdminController < ApplicationController
       :adult          => 0,
       :child          => 0,
       :sunday_dinner  => 0,
-      :volunteer      => 0,
+      :volunteers      => {
+        :number => 0,
+        :list => [],
+      },
       :financials     => {
         :registration_fees  => 0.0,
         :donations          => 0.0,
@@ -110,7 +113,10 @@ class AdminController < ApplicationController
         @data[:attendees] << a.name
         @data[a.adult_or_child.to_sym]  += 1
         @data[:sunday_dinner]           += 1  if a.sunday_dinner?
-        @data[:volunteer]               += 1  if a.volunteer?
+        if a.volunteer?
+          @data[:volunteers][:number]               += 1
+          @data[:volunteers][:list] << { :name => a.name, :email =>  registration.user.email }
+        end
       
         #Write to CSV
         # Registered attendees
