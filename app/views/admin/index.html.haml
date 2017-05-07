@@ -6,9 +6,10 @@
         %ul
           %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
           %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-2'
-          %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-3'
-          %li= link_to '<i class="fa fa-bullhorn"></i> Volunteer List'.html_safe, '#tabbed-4'
-          %li= link_to '<i class="fa fa-female"></i><i class="fa fa-male"></i> Site Users'.html_safe, '#tabbed-5'
+          %li= link_to '<i class="fa fa-bullhorn"></i> Volunteer List'.html_safe, '#tabbed-3'
+          %li= link_to '<i class="fa fa-bullhorn"></i> Sunday Dinner List'.html_safe, '#tabbed-4'
+          %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-5'
+          %li= link_to '<i class="fa fa-female"></i><i class="fa fa-male"></i> Site Users'.html_safe, '#tabbed-6'
         #tabbed-1
           %h2 Registrations
           %table.table.striped
@@ -69,6 +70,42 @@
                     %p= vehicle.other_info
                   %td= vehicle.user.full_name
         #tabbed-3
+          %h2 Volunteer List
+          %p Total volunteers: #{@data[:volunteers][:number]}
+          - file = @files['volunteers']
+          - if File.exist? file['path']
+            %p
+              Data file:
+              =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, "/#{file['name']}"
+          %table.table
+            %thead
+              %tr
+                %th Name
+                %th Email (of registered user)
+              %tbody
+                - @data[:volunteers][:list].each do |volunteer|
+                  %tr
+                    %td= volunteer[:name]
+                    %td= volunteer[:email]
+        #tabbed-4
+          %h2 Sunday Dinner List
+          %p Total diners: #{@data[:sunday_dinner][:number]}
+          - file = @files['sunday_dinner']
+          - if File.exist? file['path']
+            %p
+              Data file:
+              =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, "/#{file['name']}"
+          %table.table
+            %thead
+              %tr
+                %th Name
+                %th Email (of registered user)
+              %tbody
+                - @data[:sunday_dinner][:list].each do |volunteer|
+                  %tr
+                    %td= volunteer[:name]
+                    %td= volunteer[:email]
+        #tabbed-5
           .well.well-sm
             %h2 Summary for #{Time.now.year}
             .row
@@ -136,20 +173,7 @@
                         %td
                           %em  Vehicles 
                         %td.text-right= @vehicles.count
-        #tabbed-4
-          %h2 Volunteer List
-          %p Total volunteers: #{@data[:volunteers][:number]}
-          %table.table
-            %thead
-              %tr
-                %th Name
-                %th Email (of registered user)
-              %tbody
-                - @data[:volunteers][:list].each do |volunteer|
-                  %tr
-                    %td= volunteer[:name]
-                    %td= volunteer[:email]
-        #tabbed-5
+        #tabbed-6
           %h2 Site Users
           %table.table
             %thead

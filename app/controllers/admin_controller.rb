@@ -45,9 +45,9 @@ class AdminController < ApplicationController
       ('As of: ' + Time.now.strftime('%Y%m%d'))
     ]
     
-    csv_object['volunteers'] << [ 'Name' ]
+    csv_object['volunteers'] << [ 'Name', 'Email' ]
     
-    csv_object['sunday_dinner'] << [ 'Name' ]
+    csv_object['sunday_dinner'] << [ 'Name', 'Email' ]
     
     csv_object['vehicles'] << [
       'Number',
@@ -67,7 +67,10 @@ class AdminController < ApplicationController
       :attendees      => [],
       :adult          => 0,
       :child          => 0,
-      :sunday_dinner  => 0,
+      :sunday_dinner  => {
+        :number => 0,
+        :list => [],
+      },
       :volunteers      => {
         :number => 0,
         :list => [],
@@ -112,7 +115,10 @@ class AdminController < ApplicationController
       registration.attendees.each do |a|
         @data[:attendees] << a.name
         @data[a.adult_or_child.to_sym]  += 1
-        @data[:sunday_dinner]           += 1  if a.sunday_dinner?
+        if a.sunday_dinner?
+          @data[:sunday_dinner][:number]            += 1
+          @data[:sunday_dinner][:list] << { :name => a.name, :email =>  registration.user.email }
+        end
         if a.volunteer?
           @data[:volunteers][:number]               += 1
           @data[:volunteers][:list] << { :name => a.name, :email =>  registration.user.email }
@@ -133,12 +139,12 @@ class AdminController < ApplicationController
         
         # Volunteers
         if a.volunteer?
-          csv_object['volunteers'] << [ a.name ]
+          csv_object['volunteers'] << [ a.name, registration.user.email ]
         end
         
         # Volunteers
         if a.sunday_dinner?
-          csv_object['sunday_dinner'] << [ a.name ]
+          csv_object['sunday_dinner'] << [ a.name, registration.user.email ]
         end
       end
     end
