@@ -7,7 +7,8 @@
           %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
           %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-2'
           %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-3'
-          %li= link_to '<i class="fa fa-female"></i><i class="fa fa-male"></i> Site Users'.html_safe, '#tabbed-4'
+          %li= link_to '<i class="fa fa-bullhorn"></i> Volunteer List'.html_safe, '#tabbed-4'
+          %li= link_to '<i class="fa fa-female"></i><i class="fa fa-male"></i> Site Users'.html_safe, '#tabbed-5'
         #tabbed-1
           %h2 Registrations
           %table.table.striped
@@ -136,6 +137,19 @@
                           %em  Vehicles 
                         %td.text-right= @vehicles.count
         #tabbed-4
+          %h2 Volunteer List
+          %p Total volunteers: #{@data[:volunteers][:number]}
+          %table.table
+            %thead
+              %tr
+                %th Name
+                %th Email (of registered user)
+              %tbody
+                - @data[:volunteers][:list].each do |name, email|
+                  %tr{ :class => ((user.has_role? :admin) ? 'bg-info' : '' ) }
+                    %td= name
+                    %td= email
+        #tabbed-5
           %h2 Site Users
           %table.table
             %thead
