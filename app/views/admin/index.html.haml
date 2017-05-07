@@ -145,10 +145,10 @@
                 %th Name
                 %th Email (of registered user)
               %tbody
-                - @data[:volunteers][:list].each do |name, email|
+                - @data[:volunteers][:list].each do |volunteer|
                   %tr
-                    %td= name
-                    %td= email
+                    %td= volunteer[:name]
+                    %td= volunteer[:email]
         #tabbed-5
           %h2 Site Users
           %table.table
