@@ -146,7 +146,7 @@
                 %th Email (of registered user)
               %tbody
                 - @data[:volunteers][:list].each do |name, email|
-                  %tr{ :class => ((user.has_role? :admin) ? 'bg-info' : '' ) }
+                  %tr
                     %td= name
                     %td= email
         #tabbed-5
