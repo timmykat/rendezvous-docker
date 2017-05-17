@@ -21,7 +21,7 @@ class Vehicle < ActiveRecord::Base
     elsif marque == 'Citroen'
       case model
       when /(c2|traction)/i
-        category = 'Traction Avant'
+        category = 'C2 / Traction Avant'
       when /D \(\w+\)/
         category = 'ID / DS'
       when /2CV/
