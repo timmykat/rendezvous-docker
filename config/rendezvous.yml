@@ -47,6 +47,7 @@ vehicle_marques:
   - Renault
   - Other
 vehicle_models:
+  - C2
   - Traction Avant (11)
   - Traction Avant (15) 
   - 2CV (sedan) 
@@ -71,7 +72,7 @@ vehicle_models:
   - C6
   - 'H-Van'
 judging_categories:
-  - 'Traction Avant'
+  - 'C2 / Traction Avant'
   - 'ID / DS'
   - '2CV / Truckette'
   - 'SM'

@@ -16,11 +16,11 @@ class Vehicle < ActiveRecord::Base
   def judging_category
     category = ''
         
-    if %W(Panhard Peugeot Renault).include? @arque
+    if %W(Panhard Peugeot Renault).include? @marque
       category == 'Other French'
     elsif marque == 'Citroen'
       case model
-      when /traction/i
+      when /(c2|traction)/i
         category = 'Traction Avant'
       when /D \(\w+\)/
         category = 'ID / DS'
