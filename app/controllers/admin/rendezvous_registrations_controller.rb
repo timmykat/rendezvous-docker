@@ -30,6 +30,27 @@ class Admin::RendezvousRegistrationsController < AdminController
     redirect_to admin_rendezvous_registration_path(@rendezvous_registration)
   end
   
+  def cancel
+    @rendezvous_registration = RendezvousRegistration.find(params[:id])
+    
+    # Delete all attendees
+    @rendezvous_registration.attendees.destroy_all
+    @rendezvous_registration.number_of_adults = 0
+    @rendezvous_registration.number_of_children = 0
+    
+    # Set registration fee to 0.0
+    @refund = @rendezvous_registration.paid_amount - @rendezvous_registration.donation
+    @rendezvous_registration.total  -= @rendezvous_registration.registration_fee
+    @rendezvous_registration.registration_fee = 0.0
+    
+    # Set status
+    @rendezvous_registration.status = 'cancelled'
+    
+    @rendezvous_registration.save!
+    flash_notice "This registration was cancelled. Amount to be refunded: $#{@refund}"
+    redirect_to admin_rendezvous_registration_path(@rendezvous_registration)
+  end
+  
   
   private
   

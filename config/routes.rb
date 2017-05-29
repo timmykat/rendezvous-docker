@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources  :rendezvous_registrations, { :only => [ :show, :edit, :update ] }
     resources :transactions, { :only => [ :create ] }
+    get 'rendezvous_registrations/:id/cancel', to: 'rendezvous_registrations#cancel', as: 'cancel_rendezvous_registration'
   end
     
   # Omniauth authentication

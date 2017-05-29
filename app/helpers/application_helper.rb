@@ -25,6 +25,21 @@ module ApplicationHelper
       user.email
     end
   end
+  
+  def registration_row_class(registration)
+    klass = 'text-center '
+    case registration.status
+      when 'complete'
+        klass += 'alert-success'
+      when 'initiated'
+        klass += 'alert-warning'
+      when 'payment due'
+      when 'in review'
+        klass += 'alert-danger'
+      when 'cancelled'
+        klass += 'alert-cancelled'
+    end
+  end
 
   def address_of(user)
     address  = '<div class="text-left">'

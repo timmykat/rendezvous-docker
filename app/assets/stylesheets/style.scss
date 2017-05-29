@@ -83,6 +83,10 @@ $field-success: #e2f7d3;
   z-index: 200;
 }
 
+.alert-cancelled {
+  background-color: #ccc;
+}
+
 .bg-rendezvous {
   background-color: $primary-color;
   color: white;
