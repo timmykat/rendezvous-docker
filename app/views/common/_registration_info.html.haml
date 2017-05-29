@@ -19,6 +19,8 @@
   .row 
     .col-md-12
       %p
+        %label Registration Status - #{@rendezvous_registration.status}
+      %p
         %label Registration fee: 
         #{number_to_currency(@rendezvous_registration.registration_fee)} (US)
         - if @rendezvous_registration.status != Rails.configuration.rendezvous[:registration_statuses][0]

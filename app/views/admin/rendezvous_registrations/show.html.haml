@@ -8,7 +8,11 @@
       %h2 Admin Review
       %p
         = link_to 'Edit', edit_admin_rendezvous_registration_path(@rendezvous_registration), :class => 'btn btn-sm btn-warning'                   
-      = render :partial => 'common/registration_info'      
+      = render :partial => 'common/registration_info'
+      
+      - if @refund
+        %p 
+          %b Refund due: #{number_to_currency(@refund)}
     
   
   
