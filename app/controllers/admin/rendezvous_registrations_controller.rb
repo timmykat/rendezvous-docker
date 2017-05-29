@@ -39,7 +39,12 @@ class Admin::RendezvousRegistrationsController < AdminController
     @rendezvous_registration.number_of_children = 0
     
     # Set registration fee to 0.0
-    @refund = @rendezvous_registration.paid_amount - @rendezvous_registration.donation
+    if !@rendezvous_registration.paid_amount.nil?
+      @refund = @rendezvous_registration.paid_amount - @rendezvous_registration.donation
+    else 
+      @refund = 0.0
+    end
+    
     @rendezvous_registration.total  -= @rendezvous_registration.registration_fee
     @rendezvous_registration.registration_fee = 0.0
     
