@@ -83,6 +83,11 @@ $field-success: #e2f7d3;
   z-index: 200;
 }
 
+.alert {
+  text-shadow: none;
+  font-weight: bold;
+}
+
 .alert-cancelled {
   background-color: #ccc;
 }
