@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-
+ruby '2.4.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.9'
 
 # Load environment variables in development
 gem 'dotenv-rails', :groups => [:development, :test]
