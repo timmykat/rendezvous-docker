@@ -59,7 +59,7 @@ group :development do
   gem 'puma'
   gem 'capistrano'
   gem 'capistrano-rails'
-  gem 'capistrano-rvm'
+  gem 'capistrano-rbenv'
 end
 
 group :development, :test do

@@ -1,10 +1,12 @@
 # Load DSL and set up stages
+lock '3.10.1'
+
 require 'capistrano/setup'
 require 'capistrano/deploy'
 
 # Include default deployment tasks
 require 'capistrano/rails'
-require 'capistrano/rvm'
+require 'capistrano/rbenv'
 
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
