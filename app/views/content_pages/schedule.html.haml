@@ -2,8 +2,13 @@
 .container
   .row
     .col-md-offset-1.col-md-10.col-xs-12.heading
-      %h1.pull-left Rendezvous Schedule
-      .pull-right= image_tag('rendezvous-logo.png')    
+      %h1.pull-left 
+        = Time.now.year
+        Rendezvous Schedule
+      .pull-right= image_tag('rendezvous-logo.png')
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12  
+      %p (tentative, based on last year)  
   .row
     .col-md-offset-1.col-md-10.col-xs-12
       .day.well.well-sm
@@ -21,7 +26,7 @@
         %h2 Friday, June #{config[:dates][:start] + 1}th
         .event
           .title 
-            2&ndash;4pm Yaddo Gardens
+            2&ndash;4pm Yaddo Gardens  (tentative)
           .details
             %p 312 Union Ave., Saratoga Springs
             %p We’d like to introduce you to one of Saratoga’s hidden gems, Yaddo Gardens. The gardens are part of the Yaddo artists’s community and modeled after classical Italian gardens of Europe. 
@@ -59,16 +64,9 @@
                 = link_to 'Lakeside Country Market & Restaurant', 'http://www.lakesidefarmscidermill.com/', :target => '_blank' 
               right on site. Soups, salads, & sandwiches, burgers & hot dogs are all available at the restaurant, while the market has lots of light snacks.
         .event
-          .title 11am&ndash;12pm Panhard presentation
+          .title Presentations/Tech Talks
           .details
-            %p John Peterson, president of the U.S. Panhard Club will be speaking in the barn.
-        .event
-          .title 1&ndash;2pm Tech talk by Lon Price
-          .details
-            %p 
-              How to adjust your Citromatic transmission (your
-              = succeed '!)' do
-                %em boîte à vitesses hydraulique
+            %p TBD
          
         .event
           .title 4&ndash;5:30pm Downtime 
@@ -89,7 +87,7 @@
       .day.well.well-sm
         %h2 Sunday, June #{config[:dates][:end]}th
         %p
-          %strong Thanks to a generous donation from CitroënVie, we are able to enjoy the Saratoga Auto Museum for our Sunday activities. 
+          %strong Saratoga Auto Museum? TBD
         .event
           .title 8:30&ndash;11:30am Continental breakfast at the Saratoga Auto Museum
         .details
@@ -99,10 +97,10 @@
             11:30am&ndash;2 or 3pm Driving tour
           .details
             %p
-              Art Harvey has mapped out a drive to Cambridge, New York, making a half loop & staying close to Saratoga. The landscape is mostly farm country and small towns. 
+              TBD
         .event
           .title 2 or 3&ndash;5pm Downtime - take a break!
         .event
-          .title 5&ndash;8pm Dinner at the Saratoga Auto Museum
+          .title 5&ndash;8pm Dinner
         .details
           %p Last chance to hang out with your fellow Citroënistes ... until #{Time.now.year + 1}!
