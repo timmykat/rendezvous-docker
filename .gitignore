@@ -7,6 +7,9 @@
 #Ignore .env file
 /.env
 
+#Ignore database file
+database.yml
+
 # Ignore bundler config.
 /.bundle
 
