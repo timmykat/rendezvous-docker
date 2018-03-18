@@ -22,3 +22,4 @@ database.yml
 /public/*.csv
 /public/uploads/*
 /public/registrations/*
+/public/assets/*

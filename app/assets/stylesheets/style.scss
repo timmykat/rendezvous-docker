@@ -160,6 +160,12 @@ a.btn-twitter, a:visited.btn-twitter {
   display: none;
 }
 .registration-status {
+  a, a:visited {
+    color: #ccc
+  }
+  a:hover {
+    color: $primary-color
+  }
   .fa-check-circle, .payment-due {
     color: orange;
   }

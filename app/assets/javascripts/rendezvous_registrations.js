@@ -1,11 +1,22 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
+Number.prototype.currency = function(c, d, t){
+var n = this, 
+    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+    d = d == undefined ? "." : d, 
+    t = t == undefined ? "," : t, 
+    s = n < 0 ? "-" : "", 
+    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+};
+
 $(function() {
   var setRegistrationFee = function() {
     if (typeof appData != 'undefined') {
       var total = $('input#rendezvous_registration_number_of_adults').val() * appData.fees.registration.adult
          + $('input#rendezvous_registration_number_of_children').val() * appData.fees.registration.child;
-      $('input#rendezvous_registration_registration_fee').val(total);
+      $('input#rendezvous_registration_registration_fee').val((total).currency());
     }
   };
   var getAttendeeTotals = function() {
@@ -59,7 +70,7 @@ $(function() {
         donation = 0.
       }
       var total = parseFloat(appData.registration_fee) + donation;
-      $('input#rendezvous_registration_total').val(total);
+      $('input#rendezvous_registration_total').val((total).currency());
     }
   };
   

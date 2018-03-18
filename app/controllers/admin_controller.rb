@@ -2,11 +2,6 @@ require 'csv'
 
 class AdminController < ApplicationController
   before_action :require_admin
-  REG_WINDOW = {
-    :open => Time.new(2017,1,1),
-    :close  => Time.new(2017,6,10,23,59)
-  }
-
   
   def index
     @title = 'Admin'

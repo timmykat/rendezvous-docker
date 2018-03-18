@@ -22,7 +22,7 @@
       = javascript_include_tag "html5shiv"
       = javascript_include_tag "respond"
     :javascript
-      var appData = #{ActiveSupport::JSON.encode(@app_data)};
+      var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
       
     - if @rendezvous_registration
       :javascript

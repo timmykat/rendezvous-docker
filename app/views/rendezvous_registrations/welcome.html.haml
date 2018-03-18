@@ -7,7 +7,13 @@
       = render :partial => 'common/registration_progress', :locals => { :step => 'welcome' }
       .well.well-sm
 
-        %p.bg-info The registration fee is $#{config[:fees][:registration][:adult]} per adult (16+). Kids 15 and under are free! You may pay by credit card or by check.
+        %p.bg-info 
+          Your chauffeurs have decided to make a small increase to the registration fee this year. 
+          We are doing this to ensure the long-term continuation of the Rendezvous. 
+          We think you still get a lot of bang for your francs. We hope you agree. Thanks for your understanding.
+          %br
+          %br
+          The registration fee is $#{config[:fees][:registration][:adult]} per adult (16+). Kids 15 and under are free! You may pay by credit card or by check.
 
         %p.bg-info 
           Your registration does not include accommodations. 
