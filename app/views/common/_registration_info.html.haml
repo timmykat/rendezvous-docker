@@ -79,6 +79,8 @@
     
   .well.well-sm.vehicles
     %h3 Vehicles
+    %p This is the vehicle information we have for you. 
+    %p If you are bringing different vehicles, please update after you finish registering.
     - if @rendezvous_registration.user.vehicles.blank?
       %p You are not bringing any vehicles to the Rendezvous.
     - else

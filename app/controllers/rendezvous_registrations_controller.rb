@@ -9,7 +9,7 @@ class RendezvousRegistrationsController < ApplicationController
   skip_before_action :verify_authenticity_token, :only => [:show]
   
   def check_cutoff
-    unless Time.now >= AdminController::REG_WINDOW[:open] && Time.now <= AdminController::REG_WINDOW[:close]
+    unless Time.now >= Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
       flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
       redirect_to :root
     end      

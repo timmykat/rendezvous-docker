@@ -1,17 +1,22 @@
+# The following will most likely change from year to year
 dates:
   start: 14
   end: 17
   year: 2018
+registration_window:
+  open: 2018-01-01
+  close: 2018-06-10T23:59
+fees:
+  registration:
+    adult: 60
+    child: 0
+
+# The following should rarely change
 info_pages:
   - faq
   - history
   - legal_information
   - vendors
-fees:
-  registration:
-    adult: 50
-    child: 0
-
 suggested_donations:
     - 10
     - 25

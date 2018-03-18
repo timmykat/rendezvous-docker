@@ -14,9 +14,9 @@
     .row
       .col-md-offset-3.col-md-6
         / .alert.alert-danger{:role => 'alert'} Last day to register is June 10!
-        - if Time.now > AdminController::REG_WINDOW[:open] && Time.now <= AdminController::REG_WINDOW[:close]
-          = link_to 'Go to registration', registration_welcome_path, :class => 'btn btn-primary btn-lg'
-        - elsif Time.now > AdminController::REG_WINDOW[:close]
+        - if Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+          = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
+        - elsif Time.now > Rails.configuration.rendezvous[:registration_window][:close]
           .alert.alert-info{:role => 'alert'} 
             Although you may have heard about changes at The Springs, <em>pas de souci</em>, the Rendezvous is on! Registration will open on or near March 15. Make sure you've 
             %a{:href => 'http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f'} signed up 

@@ -46,7 +46,7 @@
             .row
               .col-md-6.col-xs-12
                 %p.amount.bg-success.form-group
-                  %label Registration fee: $
+                  %label Registration fee (USD):
                   = f.input_field :registration_fee, :disabled => true, :class => 'calculated'
             = f.input_field :year, :as => :hidden, :value => Time.new.year
             = f.input_field :status, :as => :hidden, :value => Rails.configuration.rendezvous[:registration_statuses][0]

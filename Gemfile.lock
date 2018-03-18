@@ -160,6 +160,9 @@ GEM
     rack (1.6.8)
     rack-test (0.6.3)
       rack (>= 1.0)
+    racksh (1.0.0)
+      rack (>= 1.0)
+      rack-test (>= 0.5)
     rails (4.2.9)
       actionmailer (= 4.2.9)
       actionpack (= 4.2.9)
@@ -280,6 +283,7 @@ DEPENDENCIES
   mysql2 (~> 0.3.18)
   pry-rails
   puma
+  racksh
   rails (= 4.2.9)
   recaptcha
   role_model
