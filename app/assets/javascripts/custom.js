@@ -62,7 +62,7 @@ function onScroll(event){
       }
       else{
         jQuery(".logo").css({"margin-top": "8px", "border-bottom": "0"});
-         jQuery(".navbar-default").css({"margin-top": "25px", "margin-bottom": "15px"});
+         jQuery(".navbar-default").css({"margin-top": "10px", "margin-bottom": "5px"});
         
       }
    });
