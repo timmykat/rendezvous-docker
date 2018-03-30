@@ -7,7 +7,7 @@ class Mailer < ApplicationMailer
     @email = email
     @message = message
     recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
-    mail(to: recipients, subject: "New Rendezvous query from #{@name}")
+    mail(to: recipients, from: @email, subject: "New Rendezvous query from #{@name}")
   end
   
   def autoresponse(name, email, message)
