@@ -44,6 +44,10 @@ class User < ActiveRecord::Base
     end
   end
   
+  def newbie?
+    self.rendezvous_registrations.length == 1 && self.rendezvous_registrations.first.created_at.year == Time.now.year
+  end
+  
   def postal_code_by_country
     if Rails.configuration.rendezvous[:provinces].include? (state_or_province)
       country_format = 'Canadian'
