@@ -167,7 +167,7 @@
                       %tr
                         %td
                           %em  Sunday dinner 
-                        %td.text-right= @data[:sunday_dinner]
+                        %td.text-right= @data[:sunday_dinner][:number]
                       %tr
                         %td
                           %em  Volunteers 
@@ -176,6 +176,14 @@
                         %td
                           %em  Vehicles 
                         %td.text-right= @vehicles.count
+                      %tr
+                        %td{ :colspan => 2 }
+                          %p
+                            %em  Newbies 
+                          %p
+                            - @data[:newbies].each do |newbie|
+                              = newbie.full_name
+                              %br
         #tabbed-6
           %h2 Site Users
           %table.table

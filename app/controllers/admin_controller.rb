@@ -60,6 +60,7 @@ class AdminController < ApplicationController
       :citroens       => [],
       :non_citroens   => [],
       :attendees      => [],
+      :newbies        => [],
       :adult          => 0,
       :child          => 0,
       :sunday_dinner  => {
@@ -79,8 +80,8 @@ class AdminController < ApplicationController
       }
     }
     @registrations.each do |registration|
-      @data[:registrants] << registration.user
-    
+      @data[:registrants] << registration.user      
+      @data[:newbies] << registration.user if registration.user.newbie?
       @data[:financials][:total]                += registration.total.to_f unless registration.total.blank?
       @data[:financials][:registration_fees]    += registration.registration_fee.to_f unless registration.registration_fee.blank?
       @data[:financials][:paid]                 += registration.paid_amount.to_f unless registration.paid_amount.blank?
