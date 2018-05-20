@@ -4,7 +4,7 @@ class PicturesController < ApplicationController
   # GET /pictures
   def index
     @title = 'Photo Gallery'
-    pictures = Picture.all
+    pictures = Picture.order(:year => :desc).all
     @pictures_by_year = {}
     n = 0
     pictures.each do |pic|
