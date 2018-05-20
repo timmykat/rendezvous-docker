@@ -6,8 +6,10 @@ class PicturesController < ApplicationController
     @title = 'Photo Gallery'
     pictures = Picture.all
     @pictures_by_year = {}
+    n = 0
     pictures.each do |pic|
-      unless File.exist?(File.join(Rails.root, pic.image.gallery.path)) && File.exist?(File.join(Rails.root, pic.image.display.path))
+      n += 1
+      unless File.exist?(pic.image.gallery.path) && File.exist?(pic.image.display.path)
         pic.image.recreate_versions!(:gallery, :display)
         pic.save!
       end
