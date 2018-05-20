@@ -138,10 +138,11 @@ class AdminController < ApplicationController
           csv_object['volunteers'] << [ a.name, registration.user.email ]
         end
         
-        # Volunteers
+        # Sunday dinner
         if a.sunday_dinner?
           csv_object['sunday_dinner'] << [ a.name, registration.user.email ]
         end
+
       end
     end
     
