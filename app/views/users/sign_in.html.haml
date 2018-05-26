@@ -26,8 +26,13 @@
             = f.submit "Log in", :class => "btn btn-info"
       
       .well.reset-password
-        %h3 Don't know your password? 
-        %p We'll send you a link to reset it:
+        %h3 Don't know your password?
+        %p There are two possibilities:
+        %ul
+          %li You've forgotten it.
+          %li You haven't registered on this site and so there's nothing to remember
+          
+        %p Enter your email below and we'll send you a link to reset your password. If you don't get an email, either it's in your spam bin or you haven't registered for the site and you should create an account.
         = form_for(:user, :as => 'user', :url => user_password_path, :html => { :method => :post, :class => "form" }) do |f|
           .form-group
             %label Email
