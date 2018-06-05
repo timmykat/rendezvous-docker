@@ -143,7 +143,7 @@ class RendezvousRegistrationsController < ApplicationController
       @app_data[:clientToken] =  Braintree::ClientToken.generate
       @app_data[:registration_fee] = @rendezvous_registration.registration_fee
       @credit_connection = true
-    rescue BraintreeError => e
+    rescue Braintree::BraintreeError => e
       @credit_connection = false
       flash_alert("We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check.")
       flash_alert e.inspect
