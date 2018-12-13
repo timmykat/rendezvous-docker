@@ -1,11 +1,11 @@
 # The following will most likely change from year to year
 dates:
-  start: 14
-  end: 17
-  year: 2018
+  start: 13
+  end: 16
+  year: 2019
 registration_window:
-  open: 2018-01-01
-  close: 2018-06-10T23:59
+  open: 2019-04-01
+  close: 2019-06-09T23:59
 fees:
   registration:
     adult: 60
@@ -191,7 +191,6 @@ production:
       enable_starttls_auto:  true
 
   inquiry_recipients:
-    - hellman.michaela@gmail.com
     - david.cossitt.levy@gmail.com
     - toaph@yahoo.com
     - tim@wordsareimages.com 
