@@ -3,6 +3,7 @@ lock '3.10.1'
 
 set :application, 'rendezvous'
 set :deploy_via, :copy
+set :rbenv_ruby, '2.4.5' 
 
 # set :repo_url, 'git@example.com:me/my_repo.git'
 
