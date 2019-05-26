@@ -4,6 +4,10 @@ ruby '2.4.5'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.9'
 
+# Security updates
+gem 'sprockets', '>= 3.7.2'
+gem "actionpack", ">= 4.2.5.2"
+
 # Load environment variables in development
 gem 'dotenv-rails', :groups => [:development, :test]
 
@@ -29,7 +33,7 @@ gem 'uglifier', '>= 1.3.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'devise'
+gem 'devise', '>= 4.6.0'
 gem 'bootstrap-sass', '~> 3.1.1'
 gem 'carrierwave'
 gem 'mini_magick'
