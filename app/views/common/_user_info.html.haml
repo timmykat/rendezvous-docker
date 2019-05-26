@@ -46,7 +46,7 @@
     .col-md-6.col-xs-12
       #country
         %label Country
-        = f.input_field :country, :collection => country_list, :as => :select, :selected => 'USA', :class => 'form-control'
+        = f.input_field :country, :collection => country_list, :as => :select, :class => 'form-control'
 
 - if defined?(connect) && connect
   .row
