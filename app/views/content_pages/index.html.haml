@@ -19,7 +19,7 @@
           = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
         - elsif Time.now > Rails.configuration.rendezvous[:registration_window][:close]
           .alert.alert-info{:role => 'alert'} 
-            Online registration is now closed, but the Rendezvous is ON!
+            See you next year!
     .row
       .col-md-offset-4.col-md-4.col-xs-12
         %p{:style => 'text-shadow: none;', :class => 'facebook bg-secondary'}
