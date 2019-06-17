@@ -1,11 +1,11 @@
 # The following will most likely change from year to year
 dates:
-  start: 13
-  end: 16
-  year: 2019
+  start: 18
+  end: 21
+  year: 2020
 registration_window:
-  open: 2019-03-30
-  close: 2019-06-08T23:59
+  open: 2020-04-01
+  close: 2019-06-10T23:59
 fees:
   registration:
     adult: 60
