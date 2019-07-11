@@ -148,7 +148,7 @@ class AdminController < ApplicationController
     
     @vehicles = @data[:citroens] + @data[:non_citroens]
     
-    @users = User.all
+    @users = User.order(:last_name => :asc).all
     
   end
   
