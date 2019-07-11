@@ -191,6 +191,7 @@
               %tr
                 %th.text-center Admin
                 %th Name
+                %th Address
                 %th Email
                 %th.text-center Mailing List
                 %th.text-center Citroenenvie
@@ -199,6 +200,7 @@
                   %tr{ :class => ((user.has_role? :admin) ? 'bg-info' : '' ) }
                     %td.text-center= check_box_tag "is_admin_user_#{user.id}", 1, (user.has_role? :admin), :class => "admin_check", :disabled => (user.id == current_user.id)
                     %td= link_to user.display_name, user_path(user)
+                    %td= address_of(user)
                     %td= user.email
                     %td.text-center= (user.receive_mailings? ? 'Subscribed' : '')
                     %td.text-center= (user.citroenvie? ? 'yes' : '')
