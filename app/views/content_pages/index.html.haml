@@ -17,9 +17,6 @@
         / .alert.alert-danger{:role => 'alert'} Last day to register is June 10!
         - if Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
           = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
-        - elsif Time.now > Rails.configuration.rendezvous[:registration_window][:close]
-          .alert.alert-info{:role => 'alert'} 
-            See you next year!
     .row
       .col-md-offset-4.col-md-4.col-xs-12
         %p{:style => 'text-shadow: none;', :class => 'facebook bg-secondary'}
