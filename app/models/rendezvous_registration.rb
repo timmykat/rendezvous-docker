@@ -10,8 +10,8 @@ class RendezvousRegistration < ActiveRecord::Base
   
   scope :current, -> { where(:year => Time.now.year) }
   
-  validate :validate_minimum_number_of_adults, :unless => "status == 'cancelled'"
-  validate :validate_payment, :unless => "status == 'cancelled'"
+  validate :validate_minimum_number_of_adults, unless: -> { status == 'cancelled' }
+  validate :validate_payment, unless: -> { status == 'cancelled' }
   validates :paid_method, :inclusion => { :in => Rails.configuration.rendezvous[:payment_methods] }, :allow_blank => true
   # validates :invoice_number, :uniqueness => true, :format => { :with => /\ARR20\d{2}-\d{3,4}\z/, :on => :new }, :allow_blank => true
   
