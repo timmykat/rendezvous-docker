@@ -1,5 +1,5 @@
 class  CustomDevise::PasswordsController < Devise::PasswordsController
-  skip_before_action :require_admin  
+  skip_before_action :require_admin, raise: false
 
   # POST /resource/password
   def create
