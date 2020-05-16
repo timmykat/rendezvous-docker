@@ -4,8 +4,8 @@ dates:
   end: 21
   year: 2020
 registration_window:
-  open: 2020-04-01
-  close: 2019-06-10T23:59
+  open: 2020-06-30
+  close: 2020-06-18
 fees:
   registration:
     adult: 60
@@ -13,7 +13,7 @@ fees:
 
 # The following should rarely change
 front_page_message:
-  pre_registration: Online registration will be available April 1.
+  pre_registration: Sadly, due to the coronavirus, this year's Rendezvous is cancelled.
   during_registration:
   closed_registration: Online registration is now closed, but the Rendezvous is ON!
   post_rendezvous: See you next year!

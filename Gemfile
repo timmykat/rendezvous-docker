@@ -1,18 +1,20 @@
 source 'https://rubygems.org'
-ruby '2.4.5'
+ruby '2.7.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.9'
+gem 'rails', '5.2.4'
+# gem 'rails', '4.2.9'
 
 # Security updates
 gem 'sprockets', '>= 3.7.2'
-gem "actionpack", ">= 4.2.5.2"
+gem "actionpack", "5.2.4"
+# gem "actionpack", ">= 4.2.5.2"
 
 # Load environment variables in development
 gem 'dotenv-rails', :groups => [:development, :test]
 
 # MySQL the database for Active Record
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -44,7 +46,7 @@ gem 'role_model'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'braintree'
-gem 'simple_form'
+gem 'simple_form', '5.0.2'
 gem "bower-rails", "~> 0.10.0"
 
 # Pdf creation
@@ -60,7 +62,7 @@ gem 'aws-sdk', '~> 2'
 group :development do
   gem 'byebug'
   gem 'pry-rails'
-  gem 'puma'
+  gem 'puma', ">= 3.12.4"
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
