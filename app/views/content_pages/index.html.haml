@@ -1,20 +1,21 @@
 - config = Rails.configuration.rendezvous
 / banner area starts here
-%section#home.banner.text-center
+%section#home.banner.text-center.special
   .container
     .row
       .col-md-12
-        %h3 &nbsp;
-        -# Saratoga Springs, New York
-        %h1 &nbsp;
-        -# June #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
-        %p &nbsp;
-        -#
-            The Northeast's fun and fabulous gathering of 
-            Citroen owners, enthusiasts and friends
-        %div{ :style => "height: 155px;" }
-        -# = image_tag "rendezvous-year-badge.png"
-        %br/
+        %h3 Saratoga Springs, New York
+        %h1 June #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
+        %p
+          Please stay tuned for possible alternatives later in the year via:
+          %br
+          %a{ :href => "http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f", :target => "_blank" } The Citroen Rendezvous newsletter
+          %br          
+          %a{ :href => "https://www.facebook.com/groups/1796592930566951/", :target => "_blank" } The Rendezvous Facebook page
+          %br          
+          %a{ :href => "https://citroenvie.com/", :target => "_blank" } CITROËNVIE!
+
+
     .row
       .col-md-offset-3.col-md-6
         / .alert.alert-danger{:role => 'alert'} Last day to register is June 10!
