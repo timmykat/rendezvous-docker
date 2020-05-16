@@ -4,11 +4,14 @@
   .container
     .row
       .col-md-12
-        %h3 Saratoga Springs, New York
-        %h1 June #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
-        %p 
-          The Northeast's fun and fabulous gathering of 
-          %br Citroen owners, enthusiasts and friends
+        %h3 &nbsp;
+        -# Saratoga Springs, New York
+        %h1 &nbsp;
+        -# June #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
+        %p &nbsp;
+        -#
+            The Northeast's fun and fabulous gathering of 
+            Citroen owners, enthusiasts and friends
         %div{ :style => "height: 155px;" }
         -# = image_tag "rendezvous-year-badge.png"
         %br/
@@ -26,6 +29,7 @@
 / end of banner section
 / about section
 %section#schedule.about.text-center
+  .service-overlay
   .container
     .row
       .col-md-8.col-md-offset-2.about-heading
