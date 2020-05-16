@@ -1,9 +1,9 @@
 # config valid only for current version of Capistrano
-lock '3.10.1'
+lock '3.12.1'
 
 set :application, 'rendezvous'
 set :deploy_via, :copy
-set :rbenv_ruby, '2.4.5' 
+set :rbenv_ruby, '2.7.0' 
 
 # set :repo_url, 'git@example.com:me/my_repo.git'
 
