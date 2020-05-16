@@ -1,5 +1,5 @@
 # Load DSL and set up stages
-lock '3.10.1'
+lock '3.12.1'
 
 require 'capistrano/setup'
 require 'capistrano/deploy'
