@@ -1,13 +1,14 @@
 Rails.application.routes.draw do
-  get '/register', to: 'rendezvous_registrations#new'
+  get '/register',             to: 'rendezvous_registrations#new'
   get '/registration-welcome', to: 'rendezvous_registrations#welcome'
-  
-  resources :pictures, except: :index
-  get '/gallery',      to: 'pictures#index'
-  get '/pictures_recreate_versions', to: 'pictures#recreate_versions' 
-  
-  devise_for :users, 
-    :controllers => { 
+
+  resources :pictures, except: [:index]
+  get '/gallery',                    to: 'pictures#index'
+  get '/t-shirt-gallery',            to: 'pictures#t_shirt_gallery'
+  get '/pictures_recreate_versions', to: 'pictures#recreate_versions'
+
+  devise_for :users,
+    :controllers => {
       :users => 'users',
       :passwords => 'custom_devise/passwords',
       :registrations => 'custom_devise/registrations'
@@ -15,7 +16,7 @@ Rails.application.routes.draw do
     :path => ''
   get '/users/synchronize_mailchimp', to: 'users#synchronize_with_mailchimp'
   resources :users
-  
+
   resources :rendezvous_registrations do
     member do
       get :review
@@ -25,8 +26,8 @@ Rails.application.routes.draw do
     end
   end
   resources :rendezvous_registrations, :except => [:index]
-  
-  
+
+
   # Admin routes
   get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   resources :admin, { :only => [:index] }
@@ -35,11 +36,11 @@ Rails.application.routes.draw do
     resources :transactions, { :only => [ :create ] }
     get 'rendezvous_registrations/:id/cancel', to: 'rendezvous_registrations#cancel', as: 'cancel_rendezvous_registration'
   end
-    
+
   # Omniauth authentication
   get '/auth/:provider/callback', to: 'sessions#create'
-  
-  
+
+
   root 'content_pages#index'
   get '/',                  to: 'content_pages#index'
   get '/faq',               to: 'content_pages#faq'
@@ -48,24 +49,24 @@ Rails.application.routes.draw do
   get '/legal_information', to: 'content_pages#legal_information'
   get '/schedule',          to: 'content_pages#schedule'
   get '/vendors',           to: 'content_pages#vendors'
-  
+
   # User management
   get '/user_sign_up', to: 'users#sign_up'
   get '/user_sign_in', to: 'users#sign_in'
-  
+
   # Picture upload
   get '/my-pictures', to: 'pictures#my_pictures'
   post '/pictures/upload(.:format)', to:'pictures#upload'
-  
+
   # Contact form
   post '/contact-us', to:'content_pages#contact_us'
-  
+
 
   # AJAX routes
   get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'
   get '/ajax/find_user_by_email', to: 'users#find_by_email'
   get '/ajax/toggle_admin',       to: 'users#toggle_admin'
-  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
