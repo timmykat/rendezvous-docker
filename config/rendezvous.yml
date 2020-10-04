@@ -1,11 +1,11 @@
 # The following will most likely change from year to year
 dates:
-  start: 18
-  end: 21
-  year: 2020
+  start: 17
+  end: 20
+  year: 2021
 registration_window:
-  open: 2020-06-30
-  close: 2020-06-18
+  open: 2021-04-01
+  close: 2021-06-17
 fees:
   registration:
     adult: 60
@@ -13,7 +13,7 @@ fees:
 
 # The following should rarely change
 front_page_message:
-  pre_registration: Sadly, due to the coronavirus, this year's Rendezvous is cancelled.
+  pre_registration: Stay tuned.
   during_registration:
   closed_registration: Online registration is now closed, but the Rendezvous is ON!
   post_rendezvous: See you next year!
@@ -26,7 +26,7 @@ suggested_donations:
     - 10
     - 25
     - 50
-    - 100  
+    - 100
 payment_methods:
   - credit card
   - check
@@ -59,15 +59,15 @@ vehicle_marques:
 vehicle_models:
   - C2
   - Traction Avant (11)
-  - Traction Avant (15) 
-  - 2CV (sedan) 
-  - 2CV (truckette) 
-  - Dyane 
-  - D (early) 
-  - D (late) 
-  - D (wagon) 
-  - D (Chapron) 
-  - SM 
+  - Traction Avant (15)
+  - 2CV (sedan)
+  - 2CV (truckette)
+  - Dyane
+  - D (early)
+  - D (late)
+  - D (wagon)
+  - D (Chapron)
+  - SM
   - CX (series 1)
   - CX (series 2)
   - CXA
@@ -88,7 +88,7 @@ judging_categories:
   - 'SM'
   - 'CX / CXA'
   - 'Ami / Dyane / Mehari / Visa'
-  - 'GS / GSA / XM / Xantia / C6 / H-Van' 
+  - 'GS / GSA / XM / Xantia / C6 / H-Van'
   - 'Other French'
   - 'Non-French'
 countries:
@@ -110,7 +110,7 @@ countries:
   SWE: Sweden
   CHE: Switzerland
   GBR: United Kingdom
-  
+
 provinces:
   - AB
   - BC
@@ -126,7 +126,7 @@ provinces:
   - YT
 
 print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
-mailchimp: 
+mailchimp:
   api_key: <%= ENV['RENDEZVOUS_MAILCHIMP_API_KEY'] %>
   list:
     name: Citroen Rendezvous
@@ -151,8 +151,8 @@ development:
       :enable_starttls_auto: true
 
   inquiry_recipients:
-    - tim@wordsareimages.com 
-     
+    - tim@wordsareimages.com
+
 staging:
   facebook:
     app_id: <%= ENV['RENDEZVOUS_FACEBOOK_APP_ID'] %>
@@ -163,7 +163,7 @@ staging:
   mailer:
     delivery_method: :smtp
     settings:
-      address:               email-smtp.us-east-1.amazonaws.com            
+      address:               email-smtp.us-east-1.amazonaws.com
       domain:                rendezvous.wordsareimages.com
       port:                  587
       user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
@@ -175,7 +175,7 @@ staging:
     - hellman.michaela@gmail.com
     - david.cossitt.levy@gmail.com
     - toaph@yahoo.com
-    - tim@wordsareimages.com 
+    - tim@wordsareimages.com
 
 production:
   facebook:
@@ -187,7 +187,7 @@ production:
   mailer:
     delivery_method: :smtp
     settings:
-      address:               email-smtp.us-east-1.amazonaws.com            
+      address:               email-smtp.us-east-1.amazonaws.com
       domain:                citroenrendezvous.org
       port:                  587
       user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
@@ -198,8 +198,8 @@ production:
   inquiry_recipients:
     - david.cossitt.levy@gmail.com
     - toaph@yahoo.com
-    - tim@wordsareimages.com 
-      
+    - tim@wordsareimages.com
+
 test:
   facebook:
     app_id: <%= ENV['FACEBOOK_APP_ID'] %>
