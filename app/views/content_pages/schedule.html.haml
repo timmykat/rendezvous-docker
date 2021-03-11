@@ -12,7 +12,7 @@
   .row
     .col-md-offset-1.col-md-10.col-xs-12
       .day.well.well-sm
-        %h2 Thursday, June #{config[:dates][:start]}th
+        %h2 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}th
         .event
           .title 
             6pm&ndash;9pm Dinner, 
@@ -23,7 +23,7 @@
               The official, unofficial start to the Rendezvous! Find your way to Mama Mia’s to meet up with old friends and make some new ones.  Whether you just got to town or have been there for a day or 2, dinner at Mama Mia’s will put you in the right frame of mind to the big weekend! Please call ahead to reserve a table!
             %p.hint Note: This is the only dinner <strong>not</strong> included as part of your registration.
       .day.well.well-sm
-        %h2 Friday, June #{config[:dates][:start] + 1}th
+        %h2 Friday, #{config[:dates][:month]} #{config[:dates][:start] + 1}th
         .event
           .title 
             2&ndash;4pm Ice cream social, location TBD
@@ -40,7 +40,7 @@
               Happily, the Springs Motel continues to serve as home base for R17. Thanks to the big-heartedness of Karl, our host, the official event kicks off with registration & a pizza party at the Springs. This also gives you your first chance see Citroëns en masse. Come get your welcome registration packet, grab some pizza (including gluten free) and a beverage and celebrate another year of friendship and fun.
             %p If you see Karl, please be sure to shake his hand asay THANKS for all the years of hosting us... and to MANY more!
       .day.well.well-sm
-        %h2 Saturday, June #{config[:dates][:start] + 2}th
+        %h2 Saturday, #{config[:dates][:month]} #{config[:dates][:start] + 2}th
         .event
           .title 9am&ndash;9pm Le GRAND jour! Lakeside Farms
           .details
@@ -84,7 +84,7 @@
             %p Provided by the friendly folks at Lakeside Farms. The People's Choice Awards and winners of the 50-50 raffle will be announced at <strong>8pm</strong>.
 
       .day.well.well-sm
-        %h2 Sunday, June #{config[:dates][:end]}th
+        %h2 Sunday, #{config[:dates][:month]} #{config[:dates][:end]}th
         %p
           %strong The Springs Motel
         .event
