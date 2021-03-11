@@ -4,7 +4,7 @@
   .container
     .row
       .col-md-6
-        %h1 June #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
+        %h1 September #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
         %h2 Saratoga Springs, New York
       .col-md-6
         %p
@@ -20,7 +20,7 @@
   .container.register
     .row
       .col-md-offset-3.col-md-6
-        / .alert.alert-danger{:role => 'alert'} Last day to register is June 10!
+        / .alert.alert-danger{:role => 'alert'} Last day to register is #{config[:dates][:month]} 10!
         - if Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
           = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
 <!--End mc_embed_signup-->
@@ -49,7 +49,7 @@
         .col-md-3.single-about.col-xs-12.col-sm-4
           .about-inside
             %i.fa.fa-road
-            %h3 Thursday, June #{config[:dates][:start]}
+            %h3 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}
             %ul.text-left
               %li
                 %strong 6-9pm
@@ -58,7 +58,7 @@
         .col-md-3.single-about.col-xs-12.col-sm-4
           .about-inside
             %i.fa.fa-automobile
-            %h3 Friday, June #{config[:dates][:start] + 1}
+            %h3 Friday, #{config[:dates][:month]} #{config[:dates][:start] + 1}
             %ul.text-left
               %li
                 %strong 2-4pm
@@ -69,7 +69,7 @@
         .col-md-3.single-about.col-xs-12.col-sm-4
           .about-inside
             %i.fa.fa-automobile
-            %h3 Saturday June #{config[:dates][:start] + 2}
+            %h3 Saturday #{config[:dates][:month]} #{config[:dates][:start] + 2}
             %ul.text-left
               %li
                 %strong 9am-4pm
@@ -92,7 +92,7 @@
         .col-md-3.single-about.col-xs-12.col-sm-4
           .about-inside
             %i.fa.fa-road
-            %h3 Sunday June #{config[:dates][:end]}
+            %h3 Sunday #{config[:dates][:month]} #{config[:dates][:end]}
             %ul.text-left
               %li
                 %strong 9:00-11:30am
@@ -126,7 +126,7 @@
           %i.fa.fa-hotel
           %h3 Accommodations
           %p
-            Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Just remember that June is high season, so book early; let the
+            Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Just remember that #{config[:dates][:month]} is high season, so book early; let the
             = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { :target => '_blank' }
             be your guide, or use your favorite travel website. Also see
             = succeed '.' do
