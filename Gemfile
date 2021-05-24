@@ -46,6 +46,7 @@ gem 'role_model'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'braintree'
+gem 'dkim'
 gem 'simple_form', '5.0.2'
 gem "bower-rails", "~> 0.10.0"
 
@@ -56,7 +57,7 @@ gem 'wicked_pdf'
 # gem 'omniauth'
 # gem 'omniauth-facebook'
 # gem 'omniauth-twitter'
-gem 'gibbon'               
+gem 'gibbon'
 gem 'aws-sdk', '~> 2'
 
 group :development do
@@ -75,4 +76,3 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'racksh'
 end
-
