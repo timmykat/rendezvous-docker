@@ -7,12 +7,12 @@ class RendezvousRegistrationsController < ApplicationController
   before_action :set_cache_buster
 
   skip_before_action :verify_authenticity_token, :only => [:show]
-  
+
   def check_cutoff
-    unless Time.now >= Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+    unless (current_user.has_role? :admin) || Time.now >= Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
       flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
       redirect_to :root
-    end      
+    end
   end
 
   def set_cache_buster
@@ -20,11 +20,11 @@ class RendezvousRegistrationsController < ApplicationController
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
   end
-  
+
   def new
-  
+
     @title = 'Registration - Start'
-      
+
     if user_signed_in? && !session[:admin_user]
       @rendezvous_registration = current_user.rendezvous_registrations.current.first
       if !@rendezvous_registration.blank?
@@ -33,10 +33,10 @@ class RendezvousRegistrationsController < ApplicationController
         return
       end
     end
-  
+
     @rendezvous_registration = RendezvousRegistration.new
     @rendezvous_registration.attendees.build
-    
+
     if user_signed_in? && !session[:admin_user]
       @rendezvous_registration.user = current_user
     else
@@ -45,13 +45,13 @@ class RendezvousRegistrationsController < ApplicationController
     @rendezvous_registration.user.vehicles.build
     render 'registration_form'
   end
-  
+
   def create
-  
+
     # Create or update the user
     if user_signed_in? && !session[:admin_user]
-      user = User.find(current_user.id)      
-      if !user.update(rendezvous_registration_user_params) 
+      user = User.find(current_user.id)
+      if !user.update(rendezvous_registration_user_params)
         flash_alert 'There was a problem saving the user.'
         flash_alert user.errors.full_messages.to_sentence
         redirect_to register_path and return
@@ -68,52 +68,52 @@ class RendezvousRegistrationsController < ApplicationController
           flash_alert_now user.errors.full_messages.to_sentence
           @rendezvous_registration = RendezvousRegistration.new
           @rendezvous_registration.attendees.build
-          render 'registration_form' and return  
+          render 'registration_form' and return
         end
       end
     end
-    
+
     # Done updating the user so remove those parameters
     params[:rendezvous_registration][:user_id] = user.id
     params[:rendezvous_registration][:user_attributes] = nil
-    
-    
+
+
     # Set total to registration fee. Donation happens in payment
     params[:rendezvous_registration][:total] = params[:rendezvous_registration][:registration_fee]
-    
+
     @rendezvous_registration = RendezvousRegistration.new(rendezvous_registration_params)
     @rendezvous_registration.invoice_number = RendezvousRegistration.invoice_number
-    
+
     if !@rendezvous_registration.save
       flash_alert_now('There was a problem creating your registration.')
       flash_alert_now @rendezvous_registration.errors.full_messages.to_sentence
       render 'registration_form' and return
     else
-      handle_mailchimp(@rendezvous_registration.user)     
+      handle_mailchimp(@rendezvous_registration.user)
       sign_in(@rendezvous_registration.user) unless (session[:user_admin] || user_signed_in?)
       redirect_to review_rendezvous_registration_path(@rendezvous_registration)
-    end    
+    end
   end
-  
+
   def edit
     @title = 'Edit Registration'
-      
+
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     render 'registration_form'
   end
 
   def update
-      
+
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     user = @rendezvous_registration.user
     mailchimp_init = user.receive_mailings
-    
+
     user.update(rendezvous_registration_user_params)
-    
+
     handle_mailchimp(user) unless user.receive_mailings == mailchimp_init
     params[:rendezvous_registration][:user_id] = user.id
     params[:rendezvous_registration][:user_attributes] = nil
-    
+
     # Set total to registration fee. Donation happens in payment
     params[:rendezvous_registration][:total] = params[:rendezvous_registration][:registration_fee]
 
@@ -126,14 +126,14 @@ class RendezvousRegistrationsController < ApplicationController
       redirect_to edit_rendezvous_registration_path(@rendezvous_registration)
     end
   end
-  
+
   def review
     @title = 'Review Registration Information'
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     @rendezvous_registration.status = 'in review'
     @rendezvous_registration.save!
   end
-  
+
   def payment
     @title = 'Registration - Payment'
     begin
@@ -151,16 +151,16 @@ class RendezvousRegistrationsController < ApplicationController
     end
   end
 
-  
+
   def complete
     @title = 'Complete Registration'
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
-    @rendezvous_registration.update(rendezvous_registration_params) 
+    @rendezvous_registration.update(rendezvous_registration_params)
 
     # If this is a credit card transaction, set the customer and billing attributes
     # (have to do it now, in case this is an existing user and the user attributes are removed laster
-    
-    if params[:rendezvous_registration][:paid_method] == 'credit card' && !params[:payment_method_nonce].blank? 
+
+    if params[:rendezvous_registration][:paid_method] == 'credit card' && !params[:payment_method_nonce].blank?
       braintree_transaction_params = {
         :order_id             => @rendezvous_registration.invoice_number,
         :amount               => @rendezvous_registration.total,
@@ -184,9 +184,9 @@ class RendezvousRegistrationsController < ApplicationController
           :submit_for_settlement => true
         },
       }
-      
+
       result = Braintree::Transaction.sale(braintree_transaction_params)
-      
+
       if result.success?
 
         # Create a new transaction
@@ -213,8 +213,8 @@ class RendezvousRegistrationsController < ApplicationController
         redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
         return
       end
-    end 
-    
+    end
+
     # Set the paid amounts
     params[:rendezvous_registration][:total] = params[:rendezvous_registration][:total].to_f
     if params[:rendezvous_registration][:paid_method] == 'credit card'
@@ -222,7 +222,7 @@ class RendezvousRegistrationsController < ApplicationController
     else
       params[:rendezvous_registration][:paid_amount] = 0.00
     end
-    
+
     # Update the registration
     if !@rendezvous_registration.update_attributes(rendezvous_registration_params)
       flash_alert 'There was a problem completing your registration.'
@@ -235,43 +235,43 @@ class RendezvousRegistrationsController < ApplicationController
 #      redirect_to rendezvous_registration_path(@rendezvous_registration)
     end
   end
-  
+
   def vehicles
     @title = 'Vehicle Information'
 
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     @user = @rendezvous_registration.user
   end
-    
+
   def index
     @title = 'All Registrations'
     @rendezvous_registrations = RendezvousRegistration.all
   end
-  
+
   def show
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
   end
-  
+
   def destroy
     @rendezvous_registration = RendezvousRegistration.find(params[:id])
     @rendezvous_registration.destroy
     flash_notice('Your registration has been deleted.')
     redirect_to user_path(current_user)
   end
-  
+
   def welcome
-    
+
   end
-  
+
   private
-    
+
     # Create pdf and send acknowledgement emails
     def send_registration_success_emails
       filename = "#{@rendezvous_registration.invoice_number}.pdf"
       registration_pdf = ::WickedPdf.new.pdf_from_string(
         render_to_string('rendezvous_registrations/show', :layout => 'layouts/registration_mailer', :encoding => 'UTF-8')
       )
-      save_dir =  Rails.root.join('public','registrations')   
+      save_dir =  Rails.root.join('public','registrations')
       save_path = Rails.root.join('public','registrations', filename)
       File.open(save_path, 'wb') do |file|
         file << registration_pdf
@@ -279,16 +279,16 @@ class RendezvousRegistrationsController < ApplicationController
       Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
       Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
     end
-    
-  
+
+
     # Only allows admins and owners to see registration
     def owner_or_admin
       unless (current_user.id == RendezvousRegistration.find(params[:id]).user_id) || (current_user.has_role? :admin)
         flash_alert 'Sorry, you must be an admin to see that.'
         redirect_to :root
       end
-    end 
-      
+    end
+
     def handle_mailchimp(user)
       action = user.receive_mailings? ? 'subscribe' : 'unsubscribe'
       response = user.mailchimp_action(action)
@@ -300,7 +300,7 @@ class RendezvousRegistrationsController < ApplicationController
       end
       response
     end
-  
+
     def rendezvous_registration_params
       params.require(:rendezvous_registration).permit(
         :number_of_adults,
@@ -308,7 +308,7 @@ class RendezvousRegistrationsController < ApplicationController
         :registration_fee,
         :donation,
         :total,
-        :year, 
+        :year,
         :paid_amount,
         :paid_method,
         :paid_date,
@@ -320,19 +320,19 @@ class RendezvousRegistrationsController < ApplicationController
         },
         {:user_attributes=>
           [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
-            {:vehicles_attributes => 
+            {:vehicles_attributes =>
               [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
             }
           ]
         }
       )
     end
-    
+
     def rendezvous_registration_user_params
       params[:user] = params[:rendezvous_registration][:user_attributes]
       params.require(:user).permit(
         [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
-          {:vehicles_attributes => 
+          {:vehicles_attributes =>
             [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
           }
         ]
