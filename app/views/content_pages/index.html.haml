@@ -20,12 +20,7 @@
   .container.register
     .row
       .col-md-offset-3.col-md-6
-        / .alert.alert-danger{:role => 'alert'} Last day to register is #{config[:dates][:month]} 10!
-        - if (current_user && (current_user.has_role? :admin)) || ((Time.now > Rails.configuration.rendezvous[:registration_window][:open]) && (Time.now <= Rails.configuration.rendezvous[:registration_window][:close]))
-          = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
 <!--End mc_embed_signup-->
-/ end of banner section
-/ about section
 %section#schedule.about.text-center
   .container
     .row
