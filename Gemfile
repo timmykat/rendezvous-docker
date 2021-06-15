@@ -5,6 +5,9 @@ ruby '2.7.0'
 gem 'rails', '5.2.4'
 # gem 'rails', '4.2.9'
 
+# Browserify
+gem 'browserify-rails'
+
 # Security updates
 gem 'sprockets', '>= 3.7.2'
 gem "actionpack", "5.2.4"
@@ -48,15 +51,11 @@ gem 'daemons'
 gem 'braintree'
 gem 'dkim'
 gem 'simple_form', '5.0.2'
-gem "bower-rails", "~> 0.10.0"
 
 # Pdf creation
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
 
-# gem 'omniauth'
-# gem 'omniauth-facebook'
-# gem 'omniauth-twitter'
 gem 'gibbon'
 gem 'aws-sdk', '~> 2'
 
@@ -67,6 +66,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+  gem 'capistrano-yarn'
 end
 
 group :development, :test do

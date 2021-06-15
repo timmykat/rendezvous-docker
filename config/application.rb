@@ -28,16 +28,13 @@ module Rendezvous
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
-    
-    # Add bower folders to asset paths
-    config.assets.paths << Rails.root.join('vendor', 'assets')
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
 #NOTVALID     config.active_record.raise_in_transactional_callbacks = true
-    
+
     # Use Delayed Job for queueing emails
     config.active_job.queue_adapter = :delayed_job
-    
+
     config.rendezvous = YAML::load(ERB.new(File.read("#{Rails.root}/config/rendezvous.yml")).result).deep_symbolize_keys
   end
 end

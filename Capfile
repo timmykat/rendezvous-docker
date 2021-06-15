@@ -7,6 +7,7 @@ require 'capistrano/deploy'
 # Include default deployment tasks
 require 'capistrano/rails'
 require 'capistrano/rbenv'
+require 'capistrano/yarn'
 
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git

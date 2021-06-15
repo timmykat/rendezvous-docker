@@ -1,3 +1,4 @@
+- config = Rails.configuration.rendezvous
 !!!
 %html{:lang => "en"}
   %head
@@ -85,8 +86,12 @@
                   %ul.nav.navbar-nav.navbar-right
                     %li
                       %a{:href => "/#home"} home
-                    %li
-                      %a{:href => "/t-shirt-gallery", :disable => false} t-shirt gallery
+
+                    - if Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+                      %li
+                        = link_to 'Register', registration_welcome_path
+                    - else
+                      %a{:href => "/t-shirt-gallery"} t-shirt gallery
                     %li
                       %a{:href => "/#info"} info
                     %li
@@ -107,3 +112,13 @@
     = yield
 
     = render :partial => 'common/footer'
+
+- if (current_user && (current_user.has_role? :admin)) || (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
+  %section.registration-modal
+    .container.register
+      %h2
+        Citroen Rendezvous 2021
+        %br
+        registration is open!
+      = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
+      %button.close-modal CLOSE

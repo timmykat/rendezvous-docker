@@ -1,5 +1,5 @@
 - config = Rails.configuration.rendezvous
-= render :partial => 'common/braintree_v3_javascript'
+// = render :partial => 'common/braintree_v3_javascript'
 .container
   .row
     = render :partial => 'common/registration_header', :locals => { :step => 'payment' }
@@ -41,7 +41,7 @@
                         %label{ :for => 'card-number' } Card Number
                         #card-number.form-control
                   .row
-                    .col-md-8            
+                    .col-md-8
                       .form-group
                         %label{ :for => 'expiration-date' } Expiration Date
                         #expiration-date.form-control
@@ -71,15 +71,15 @@
                           %td
                             &nbsp;
                             %i.fa.fa-check.hidden
-                  = f.input_field :status, :as => :hidden, :value => 'complete'  
+                  = f.input_field :status, :as => :hidden, :value => 'complete'
                 #mailing-address.hidden
                   %p
                     %em You will be able to print your receipt once you complete the registration; it will also be emailed to you in PDF format. Please send it with a check payable to Citroen Rendezvous LLC to:
                     %p= mailing_address()
-                  = f.input_field :status, :as => :hidden, :value => 'payment due'  
+                  = f.input_field :status, :as => :hidden, :value => 'payment due'
               .col-md-6.col-xs-12
                 .row
-                  .col-md-12              
+                  .col-md-12
                     %p We take the security of your financial information seriously and have taken steps to ensure that the encryption of your sensitive information is as secure as possible.
                     .ssl
                       = image_tag 'ssl-assurance.gif', :style => 'width: 100%;'
@@ -89,8 +89,10 @@
                       %img{ :src => "https://www.securitymetrics.com/static/apps/super/assets/img/Credit_Card_Safe_corporate.png", :alt => "SecurityMetrics Credit Card Safe"}
                   .col-md-6
                     :javascript
-                      TrustLogo("https://citroenrendezvous.org/comodo_secure_seal_76x26_transp.png", "CL1", "none");
-                    = link_to 'Essential SSL', "https://www.instantssl.com/", :id => "comodoTL"                      
+                      if (typeof TrustLogo === 'function') {
+                        TrustLogo("https://citroenrendezvous.org/comodo_secure_seal_76x26_transp.png", "CL1", "none");
+                      }
+                    = link_to 'Essential SSL', "https://www.instantssl.com/", :id => "comodoTL"
           %section
             - if !Rails.env = 'development'
               .row
@@ -102,3 +104,4 @@
                 .form-group
                   = f.button :submit, 'Complete Registration'.html_safe, :class => 'btn btn-primary'
 
+%script{ src: javascript_url("payments.js") }
