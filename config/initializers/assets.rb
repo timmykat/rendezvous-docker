@@ -3,9 +3,14 @@
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = '1.0'
 
+Rails.application.config.assets.paths << Rails.root.join('node_modules')
+
+# Add bower folders to asset paths
+Rails.application.config.assets.paths << Rails.root.join('vendor', 'assets')
+
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += %w( custom html5shiv.js respond.min.js smoothscroll.js)
+Rails.application.config.assets.precompile += %w( custom payments html5shiv respond.min smoothscroll)

@@ -5,11 +5,11 @@ dates:
   end: 12
   year: 2021
 registration_window:
-  open: 2021-07-01
+  open: 2021-06-19
   close: 2021-09-01
 fees:
   registration:
-    adult: 60
+    adult: 50
     child: 0
 
 # The following should rarely change

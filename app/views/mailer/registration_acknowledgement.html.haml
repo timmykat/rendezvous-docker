@@ -5,8 +5,8 @@
 - if @rendezvous_registration.paid_method == 'credit card'
   %p Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
 - else
-  %p An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied. 
-%p 
+  %p An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied.
+%p
   You may also view your registration information
   = succeed '.' do
     = link_to 'here', rendezvous_registration_url(@rendezvous_registration, :protocol => 'https')
@@ -23,7 +23,7 @@
   %tr
     %td #{a.name}
     %td #{a.adult_or_child.titlecase}
-    %td Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'} 
+    -# %td Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'}
     %td Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
 
 %p Vehicles:

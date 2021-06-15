@@ -5,7 +5,7 @@ You have successfully registered for the the 40th Citroen Rendezvous, which will
 - if @rendezvous_registration.paid_method == 'credit card'
   Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
 - else
-  An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied. 
+  An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied.
 
 You may also view your registration information at
 = rendezvous_registration_url(@rendezvous_registration, :protocol => 'https')
@@ -19,7 +19,7 @@ Due: #{number_to_currency(@rendezvous_registration.balance)}
 
 Attendees:
 - @rendezvous_registration.attendees.each do |a|
-  #{a.name}  #{a.adult_or_child}  Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'} Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
+  #{a.name}  #{a.adult_or_child}  Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
 
 Vehicles:
 - @rendezvous_registration.user.vehicles.each do |v|
@@ -33,4 +33,3 @@ Here's to a great milestone Rendezvous!
 Warmest regards,
 Your chauffeurs
 Michaela Hellman, David Cossitt Levy, Christoper (Toaph) Westfall, Tim Kinnel
-

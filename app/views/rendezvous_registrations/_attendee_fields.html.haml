@@ -7,13 +7,10 @@
     .col-md-12
       %label Adult or child?
       = f.input :adult_or_child, :label => '', :collection => [['Adult', 'adult'], ['Child', 'child']], :as => :radio_buttons, :item_label_class => 'radio-inline', :item_wrapper_tag => false
-      = f.input :sunday_dinner, :inline_label => 'Attending Sunday dinner'
+      // = f.input :sunday_dinner, :inline_label => 'Attending Sunday dinner'
       = f.input :volunteer, :inline_label => 'Would like to volunteer'
   .row
     .col-md-12
       .remove_association_action
         = link_to_remove_association '<i class="fa fa-minus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :class => 'btn btn-danger btn-sm'
         Remove this person
-
-
-

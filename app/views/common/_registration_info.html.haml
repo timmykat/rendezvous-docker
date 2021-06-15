@@ -1,6 +1,6 @@
 .well.well-sm.registrant
   %p
-    %b Registration number: 
+    %b Registration number:
     #{@rendezvous_registration.invoice_number}
     &nbsp;&nbsp;&nbsp
     = link_to 'Print <i class="fa fa-print"></i>'.html_safe, 'javascript:window.print();'
@@ -16,25 +16,25 @@
 
 .well.well-sm.payment
   %h3 Fees
-  .row 
+  .row
     .col-md-12
       %p
         %label Registration Status - #{@rendezvous_registration.status}
       %p
-        %label Registration fee: 
+        %label Registration fee:
         #{number_to_currency(@rendezvous_registration.registration_fee)} (US)
         - if @rendezvous_registration.status != Rails.configuration.rendezvous[:registration_statuses][0]
-          %br  
+          %br
           %label Donation:
           - if @rendezvous_registration.donation.blank?
             (no donation)
-          - else 
+          - else
             #{number_to_currency(@rendezvous_registration.donation)} (US)
           %br
           %br
-            %label Total: 
+            %label Total:
             #{number_to_currency(@rendezvous_registration.total)} (US)
-            
+
           %h4 Transactions
           %table.table
             %thead
@@ -49,8 +49,8 @@
                   %td= transaction.transaction_type
                   %td= transaction.transaction_method
                   %td= transaction.cc_transaction_id
-                  %td #{number_to_currency(transaction.amount)} (US) 
-        
+                  %td #{number_to_currency(transaction.amount)} (US)
+
           %strong
             %label Balance:
             #{number_to_currency(@rendezvous_registration.balance)} (US)
@@ -60,7 +60,7 @@
           Please print this invoice or the one you received via email and send with a check for the amount due to:
           %br= mailing_address
 
-- if current_user == @rendezvous_registration.user   
+- if current_user == @rendezvous_registration.user
   .well.well-sm.attendees
     %h3 Attendees
     %table.table
@@ -74,12 +74,12 @@
           %tr
             %td= a.name
             %td= a.adult_or_child
-            %td #{a.sunday_dinner? ? 'yes' : 'no'}
+            -# %td #{a.sunday_dinner? ? 'yes' : 'no'}
             %td #{a.volunteer? ? 'yes' : 'no'}
-    
+
   .well.well-sm.vehicles
     %h3 Vehicles
-    %p This is the vehicle information we have for you. 
+    %p This is the vehicle information we have for you.
     %p If you are bringing different vehicles, please update after you finish registering.
     - if @rendezvous_registration.user.vehicles.blank?
       %p You are not bringing any vehicles to the Rendezvous.

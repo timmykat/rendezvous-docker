@@ -11,13 +11,12 @@
 // about supported directives.
 //
 //= require jquery/dist/jquery
-//= require jquery-ui/jquery-ui
+//= require jquery-ui/ui/tabbable
+//= require jquery-ui.themes.smoothness/jquery-ui
 //= require jquery-ujs/src/rails
 //= require js-cookie/src/js.cookie.js
 //= require bootstrap
 //= require dropzone/dist/dropzone
-//= require braintree-web/client
-//= require braintree-web/hosted-fields
 //= require cocoon
 //= require magnific-popup/dist/jquery.magnific-popup.js
 //= require admin

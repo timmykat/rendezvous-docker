@@ -7,33 +7,31 @@
       = render :partial => 'common/registration_progress', :locals => { :step => 'welcome' }
       .well.well-sm
 
-        %p.bg-info 
-          Your chauffeurs have decided to make a small increase to the registration fee this year. 
-          We are doing this to ensure the long-term continuation of the Rendezvous. 
-          We think you still get a lot of bang for your francs. We hope you agree. Thanks for your understanding.
+        %p.bg-info
+          What a relief to be able to meet in person this year!
+          Since we have eliminated one of the meals, registration will be at a vintage amount!
           %br
           %br
           The registration fee is $#{config[:fees][:registration][:adult]} per adult (16+). Kids 15 and under are free! You may pay by credit card or by check.
 
-        %p.bg-info 
-          Your registration does not include accommodations. 
-          %br 
-            You can find accommodation information at the 
-            = succeed '.' do
-              = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', :target => '_blank'
+        %p.bg-info
+          Your registration does not include accommodations.
+          This year's Rendezvous hotel is the Holiday Inn. You can also find accommodations through the
+          = succeed '.' do
+            = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', :target => '_blank'
         %p Registration consists of the following steps:
         %ol
-          %li 
+          %li
             Sign in
             %ul
-              %li You have an account if you registered on line last year
+              %li You have an account if you have previously registered on line
               %li If you've forgotten your password, use the reset password form on the sign-in page
               %li You'll have an opportunity to sign up if you don't have an account
           %li Enter your registration information
           %li Review information and pay
           %li Tell us what vehicles you will be bringing to the Rendezvous
-          
-        %p 
+
+        %p
           If you have problems registering, please
           = succeed '.' do
             = link_to 'let us know', root_path(:anchor => 'contact')
@@ -44,4 +42,3 @@
         %p.printed-form
           If you prefer not to register on line, or are having problems registering, please print this registration form and send it in with your registration fee payment:
           = link_to '<i class="fa  fa-file-pdf-o"></i>'.html_safe, 'Rendezvous-registration-form.pdf', :target => '_blank'
-

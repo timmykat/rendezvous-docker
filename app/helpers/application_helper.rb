@@ -10,14 +10,14 @@ module ApplicationHelper
       display = "You are signed in as #{user.email}"
     end
   end
-  
+
   def my_registration_path(user)
     id = user.rendezvous_registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
     if (!id.blank?)
       "/rendezvous_registrations/#{id.to_s}"
     end
   end
-  
+
   def sign_in_method(user)
     if user.provider
       user.provider.titlecase
@@ -25,7 +25,7 @@ module ApplicationHelper
       user.email
     end
   end
-  
+
   def registration_row_class(registration)
     klass = 'text-center '
     case registration.status
@@ -43,15 +43,15 @@ module ApplicationHelper
 
   def address_of(user)
     address  = '<div class="text-left">'
-    address += user.address1 + "<br />\n" if !user.address1.blank? 
-    address += user.address2 + "<br />\n" if !user.address2.blank? 
-    address += user.city if !user.city.blank? 
-    address += ", " + user.state_or_province if !user.state_or_province.blank? 
-    address += " " + user.postal_code + "<br />\n" if !user.postal_code.blank? 
+    address += user.address1 + "<br />\n" if !user.address1.blank?
+    address += user.address2 + "<br />\n" if !user.address2.blank?
+    address += user.city if !user.city.blank?
+    address += ", " + user.state_or_province if !user.state_or_province.blank?
+    address += " " + user.postal_code + "<br />\n" if !user.postal_code.blank?
     address += user.country_name + "</div>\n"
     return address.html_safe if address
   end
-  
+
   def vehicles_list(vehicles)
     if vehicles
       output = "<ul class='list-unstyled'>\n"
@@ -62,11 +62,11 @@ module ApplicationHelper
       output.html_safe
     end
   end
-  
+
   def mailing_address(delimiter = "<br />\n")
     Rails.configuration.rendezvous[:official_contact][:mailing_address_array].join(delimiter).html_safe
   end
-  
+
   def official_contact
     output = '<p><em>Mailing address: </em><br />'
     output +=  mailing_address
@@ -74,15 +74,15 @@ module ApplicationHelper
     output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
     output.html_safe
   end
-  
+
   def marques
     Rails.configuration.rendezvous[:vehicle_marques].map{ |m| [m, m] }
   end
-  
+
   def models
     Rails.configuration.rendezvous[:vehicle_models].map{ |m| [m, m] }
   end
-  
+
   def selected_marque(vehicle)
     if marques.include? vehicle.marque
       vehicle.marque
@@ -92,13 +92,13 @@ module ApplicationHelper
       'Other'
     end
   end
-  
+
   def other_marque(vehicle)
     if !marques.include? vehicle.marque
       vehicle.marque
     end
   end
-  
+
   def selected_model(vehicle)
     if models.include? vehicle.model
       vehicle.model
@@ -106,7 +106,7 @@ module ApplicationHelper
       nil
     end
   end
-  
+
   def other_model(vehicle)
     if !models.include? vehicle.model
       vehicle.model
@@ -114,11 +114,11 @@ module ApplicationHelper
       nil
     end
   end
-    
+
   def month_list
     [
       ['[01]  January', '01'],
-      ['[02]  February', '02'], 
+      ['[02]  February', '02'],
       ['[03]  March', '03'],
       ['[04]  April', '04'],
       ['[05]  May', '05'],
@@ -131,15 +131,15 @@ module ApplicationHelper
       ['[12]  December', '12']
     ]
   end
-  
+
   def year_list
     [*2016..2022]
   end
-  
+
   def country_list
     Rails.configuration.rendezvous[:countries].map{|code, name| [name, code] }
   end
-  
+
   def state_province_list
     [
       ['Northeastern US', [
@@ -201,7 +201,7 @@ module ApplicationHelper
         ['Washington', 'WA'],
         ['West Virginia', 'WV'],
         ['Wisconsin', 'WI'],
-        ['Wyoming'], ['WY']
+        ['Wyoming', 'WY']
       ]],
       ['Other Canada', [
         ['Alberta', 'AB'],
