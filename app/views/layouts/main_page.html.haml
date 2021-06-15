@@ -87,11 +87,12 @@
                     %li
                       %a{:href => "/#home"} home
 
-                    - if Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+                    - if can_register?
                       %li
                         = link_to 'Register', registration_welcome_path
                     - else
-                      %a{:href => "/t-shirt-gallery"} t-shirt gallery
+                      %li
+                        %a{:href => "/t-shirt-gallery"} t-shirt gallery
                     %li
                       %a{:href => "/#info"} info
                     %li
@@ -113,7 +114,7 @@
 
     = render :partial => 'common/footer'
 
-- if (current_user && (current_user.has_role? :admin)) || (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
+- if can_register?
   %section.registration-modal
     .container.register
       %h2
