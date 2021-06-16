@@ -147,7 +147,7 @@ class RendezvousRegistrationsController < ApplicationController
       @credit_connection = false
       flash_alert("We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check.")
       flash_alert e.inspect
-      #redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
+      # redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
     end
   end
 
