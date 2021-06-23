@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     end
   end
   resources :rendezvous_registrations, :except => [:index]
+  get 'payment_token', to: 'rendezvous_registrations#get_payment_token'
 
 
   # Admin routes
