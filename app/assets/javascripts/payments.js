@@ -7,9 +7,11 @@ function buildBraintree() {
   let form = document.querySelector('#rendezvous_registration_form');
   let submit = document.querySelector('input[type="submit"]');
 
-  console.log("Client token", appData.clientToken);
+  let clientToken = 'production_38sh5xx8_p6w5d79q9nj5qkq4';
 
-  braintreeClient.create({ authorization: appData.clientToken }, function(clientErr, clientInstance) {
+  console.log("Client token", clientToken);
+
+  braintreeClient.create({ authorization: clientToken }, function(clientErr, clientInstance) {
 
     if (clientErr) {
       console.error(clientEerr);
