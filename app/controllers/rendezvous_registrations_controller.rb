@@ -15,6 +15,11 @@ class RendezvousRegistrationsController < ApplicationController
     end
   end
 
+  def get_payment_token
+    puts "PAYMENT TOKEN " +  ENV['BRAINTREE_PAYMENT_TOKEN']
+    render plain:  ENV['BRAINTREE_PAYMENT_TOKEN'], content_type: 'text/plain'
+  end
+
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
@@ -140,7 +145,7 @@ class RendezvousRegistrationsController < ApplicationController
       @title = 'Registration - Payment'
       @rendezvous_registration = RendezvousRegistration.find(params[:id])
       @rendezvous_registration.status = 'payment due'
-      @app_data[:clientToken] =  Braintree::ClientToken.generate
+      # @app_data[:clientToken] =  Braintree::ClientToken.generate
       @app_data[:registration_fee] = @rendezvous_registration.registration_fee
       @credit_connection = true
     rescue Braintree::BraintreeError => e

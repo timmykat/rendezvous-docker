@@ -3,13 +3,9 @@ const  hostedFields = require('braintree-web/hosted-fields');
 
 let myHostedFields;
 
-function buildBraintree() {
+function buildBraintree(clientToken) {
   let form = document.querySelector('#rendezvous_registration_form');
   let submit = document.querySelector('input[type="submit"]');
-
-  let clientToken = 'production_38sh5xx8_p6w5d79q9nj5qkq4';
-
-  console.log("Client token", clientToken);
 
   braintreeClient.create({ authorization: clientToken }, function(clientErr, clientInstance) {
 
@@ -108,23 +104,24 @@ function buildBraintree() {
 
 
 $(function() {
+  $.get('/payment_token.plain', function(clientToken) {
+    console.log("Client token", clientToken);
+    buildBraintree(clientToken);
 
-  buildBraintree();
-
-  $('#rendezvous_registration_paid_method_credit_card').on('click', function() {
-    buildBraintree();
-  });
-  $('#rendezvous_registration_paid_method_check').on('click', function() {
-    myHostedFields.teardown( function(teardownErr) {
-      if (teardownErr) {
-        console.error('Could not tear down HostedFields.');
-      } else {
-        console.log('HostedFields has been torn down.');
-        myHostedFields = null;
-      }
+    $('#rendezvous_registration_paid_method_credit_card').on('click', function() {
+      buildBraintree(clientToken);
+    });
+    $('#rendezvous_registration_paid_method_check').on('click', function() {
+      myHostedFields.teardown( function(teardownErr) {
+        if (teardownErr) {
+          console.error('Could not tear down HostedFields.');
+        } else {
+          console.log('HostedFields has been torn down.');
+          myHostedFields = null;
+        }
+      });
     });
   });
-
 });
 
 
