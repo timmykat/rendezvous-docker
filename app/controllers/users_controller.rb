@@ -55,7 +55,7 @@ class UsersController < ApplicationController
 
   def toggle_admin
     user = User.find(params[:user_id])
-    if params[:admin]
+    if params[:admin] == 'admin'
       user.roles << :admin
     else
       user.roles.delete :admin
@@ -68,13 +68,10 @@ class UsersController < ApplicationController
     puts params
     user = User.find(params[:user_id])
     if params[:tester] == 'tester'
-      puts "Adding tester role"
       user.roles << :tester
     else
-      puts "Removing tester role"
       user.roles.delete :tester
     end
-    puts (user.has_role? :tester) ? 'Yes' : 'No'
     user.save!
     render :json => true
   end
