@@ -1,38 +1,38 @@
 class User < ActiveRecord::Base
 
   include RoleModel
-  
+
   before_save :set_country
-  
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 #          :omniauthable, :omniauth_providers => [:facebook, :twitter]
-         
+
   has_many :pictures, :dependent => :destroy
   has_many :vehicles, :dependent => :destroy
   has_many :rendezvous_registrations
   has_many :authorizations
-  
+
   validates :first_name, :presence => true
   validates :last_name, :presence => true
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
   validates :address1, :presence => true, :on => :update
   validates :city, :presence => true, :on => :update
 #   validates :password, :length => { :in => 6..20 }
-  
+
   # US or Canadian postal code
   validate :postal_code_by_country, :on => :update
-  
+
   # Password policy
   validate :password_complexity
-  
+
   accepts_nested_attributes_for :pictures, allow_destroy: true
   accepts_nested_attributes_for :vehicles, allow_destroy: true, :reject_if => lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
-  
-  roles :admin, :organizer, :registrant
-    
+
+  roles :admin, :organizer, :registrant, :tester
+
   def password_complexity
     if password.present?
       lower = password.match(/[a-z]/)
@@ -43,11 +43,11 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   def newbie?
     self.rendezvous_registrations.length == 1 && self.rendezvous_registrations.first.created_at.year == Time.now.year
   end
-  
+
   def postal_code_by_country
     if Rails.configuration.rendezvous[:provinces].include? (state_or_province)
       country_format = 'Canadian'
@@ -58,13 +58,13 @@ class User < ActiveRecord::Base
     else
       valid = true
     end
-    
+
     errors.add :postal_code, "does not appear to be consistent with #{country_format} format" unless valid
   end
-  
+
   def set_country
     if Rails.configuration.rendezvous[:provinces].include? (state_or_province)
-      country = 'CA' 
+      country = 'CA'
     elsif !state_or_province.blank?
       country = 'US'
     else
@@ -80,20 +80,20 @@ class User < ActiveRecord::Base
       user.password = Devise.friendly_token[0,20]
     end
   end
-    
+
   def full_name
     "#{first_name} #{last_name}"
   end
   alias_method :display_name, :full_name
-  
+
   def last_name_first
     "#{last_name}, #{first_name}"
   end
-  
+
   def attending
     !self.rendezvous_registrations.where(:year => Time.now.year).blank?
   end
-  
+
   def country_name
     if Rails.configuration.rendezvous[:countries].map{ |code, name| code.to_s }.include? country
       Rails.configuration.rendezvous[:countries][country.to_sym]
@@ -101,26 +101,26 @@ class User < ActiveRecord::Base
       ''
     end
   end
-  
+
   def self.mailchimp_init_request
-    gibbon = Gibbon::Request.new(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key]) 
+    gibbon = Gibbon::Request.new(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key])
     gibbon.timeout = 10
     gibbon
   end
-  
+
   def self.synchronize_with_mailchimp_data
     gibbon = User.mailchimp_init_request
     list_id = Rails.configuration.rendezvous[:mailchimp][:list][:list_id]
-    
+
     # Get list data from Mailchimp
     begin
       subscriber_list = gibbon.lists(list_id).members.retrieve( :params => { :fields => 'members.email_address,members.status', :count => "1000" } )
 
-      subscriber_emails = subscriber_list['members'].reduce([]) { |subscriber_emails, s| 
-        subscriber_emails << s['email_address'] if s['status'] == 'subscribed' 
+      subscriber_emails = subscriber_list['members'].reduce([]) { |subscriber_emails, s|
+        subscriber_emails << s['email_address'] if s['status'] == 'subscribed'
         subscriber_emails
       }
-    
+
       user_list = {}
       User.all.each do |u|
         init = u.receive_mailings
@@ -140,15 +140,15 @@ class User < ActiveRecord::Base
     end
     response
   end
-  
+
   def mailchimp_action(action)
-  
+
     gibbon = User.mailchimp_init_request
     list_id = Rails.configuration.rendezvous[:mailchimp][:list][:list_id]
-    
+
     require 'digest'
     hashed_email = Digest::MD5.hexdigest email.downcase
-    
+
     case action
       when 'get_status'
         begin
@@ -162,7 +162,7 @@ class User < ActiveRecord::Base
             response = {
               :status => :not_found,
               :message => "That user is not in the list."
-            }            
+            }
           else
             response = {
               :status => :error,
@@ -170,7 +170,7 @@ class User < ActiveRecord::Base
             }
           end
         end
-        
+
       when 'subscribe'
         begin
           # MMERGE3 ==> Thinking about coming to the Rendezvous 2017 'Yes', 'No', 'Maybe'
@@ -188,7 +188,7 @@ class User < ActiveRecord::Base
             :message => "MailChimp Error: #{e.detail}"
           }
         end
-        
+
       when 'unsubscribe'
         # First have to check to see if the member exists
         begin
@@ -199,10 +199,10 @@ class User < ActiveRecord::Base
               :status => :ok,
               :member_status => 'unsubscribed',
             }
-            return response           
+            return response
           end
         end
-          
+
         begin
           gibbon.lists(list_id).members(hashed_email).update( :body => { :status => 'unsubscribed' } )
           receive_mailings = false
@@ -217,7 +217,7 @@ class User < ActiveRecord::Base
             :message => "MailChimp Error: #{e.detail}"
           }
         end
-    end 
+    end
     response
   end
 end

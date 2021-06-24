@@ -5,19 +5,19 @@ class UsersController < ApplicationController
 
   def sign_up
   end
-  
+
   def sign_in
   end
-  
+
   def show
     @user = User.find(params[:id])
   end
-  
+
   def edit
     @user = User.find(params[:id])
     @rendezvous_registration = @user.rendezvous_registrations.current.last
   end
-  
+
   def update
     @user = User.find(params[:id])
     if !@user.update(user_params)
@@ -36,23 +36,23 @@ class UsersController < ApplicationController
       redirect_to user_path(@user)
     end
   end
-  
+
   def join_mailing_list
     gibbon = Gibbon::Request.new   # Automatically uses   MAILCHIMP_API_KEY environment variable
     gibbon.timeout = 10
-    
+
     gibbon.lists(Rails.configuration.mailchimp.list_id).members.create(body: {email_address: params[:email], status: "subscribed"})
   end
-  
+
   def find_by_email
     if User.find_by_email(params[:email])
       status = { :exists => true }
     else
       status = { :exists => false }
     end
-    render :json => status  
+    render :json => status
   end
-  
+
   def toggle_admin
     user = User.find(params[:user_id])
     if params[:admin]
@@ -60,9 +60,25 @@ class UsersController < ApplicationController
     else
       user.roles.delete :admin
     end
+    user.save!
     render :json => true
   end
-  
+
+  def toggle_tester
+    puts params
+    user = User.find(params[:user_id])
+    if params[:tester] == 'tester'
+      puts "Adding tester role"
+      user.roles << :tester
+    else
+      puts "Removing tester role"
+      user.roles.delete :tester
+    end
+    puts (user.has_role? :tester) ? 'Yes' : 'No'
+    user.save!
+    render :json => true
+  end
+
   def synchronize_with_mailchimp
     response = User.synchronize_with_mailchimp_data
     subscriber_count = response[:user_list].reject { |k,v| v != 'subscribed' }.count
@@ -78,7 +94,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(
         [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
-          {:vehicles_attributes => 
+          {:vehicles_attributes =>
             [:id, :year, :marque, :model, :other_info, :_destroy]
           }
         ]

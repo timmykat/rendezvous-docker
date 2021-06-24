@@ -67,6 +67,7 @@ Rails.application.routes.draw do
   get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'
   get '/ajax/find_user_by_email', to: 'users#find_by_email'
   get '/ajax/toggle_admin',       to: 'users#toggle_admin'
+  get '/ajax/toggle_tester',       to: 'users#toggle_tester'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
