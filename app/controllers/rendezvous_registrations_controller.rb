@@ -189,7 +189,14 @@ class RendezvousRegistrationsController < ApplicationController
         },
       }
 
-      result = Braintree::Transaction.sale(braintree_transaction_params)
+      gateway = Braintree::Gateway.new(
+        :environment => Braintree::Configuration.environment,
+        :merchant_id => Braintree::Configuration.merchant_id,
+        :public_key => Braintree::Configuration.public_key,
+        :private_key => Braintree::Configuration.private_key,
+      )
+
+      result = gateway.transaction.sale(braintree_transaction_params)
 
       if result.success?
 
