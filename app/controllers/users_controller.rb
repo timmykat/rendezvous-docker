@@ -76,6 +76,16 @@ class UsersController < ApplicationController
     render :json => true
   end
 
+  def delete_users
+    user_ids = params[:users].split(',')
+    users = User.find(user_ids)
+    puts users
+    users.each do |u|
+      u.destroy
+    end
+    render :js => "window.location = '/admin#tabbed-6'"
+  end
+
   def synchronize_with_mailchimp
     response = User.synchronize_with_mailchimp_data
     subscriber_count = response[:user_list].reject { |k,v| v != 'subscribed' }.count

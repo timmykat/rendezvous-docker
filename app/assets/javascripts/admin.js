@@ -1,6 +1,8 @@
 $(function() {
   $('#tabbed').tabs();
 
+  $('#user-table').tablesorter();
+
   $('.admin_check').change(function(e) {
     let checked = false;
     let $user = $(this).parent().parent();
@@ -38,6 +40,17 @@ $(function() {
       } else {
         $user.removeClass('bg-info');
       }
+    });
+  });
+
+  $('button.delete_users').on('click', function() {
+    let $checkedUsers = $('.delete_user:checked');
+    let forDeletion = $.map($checkedUsers, function($check, index) {
+      return $check.defaultValue;
+    }).join(',');
+
+    $.get('/ajax/delete_users', {"users": forDeletion}, function() {
+      console.log('Success');
     });
   });
 });

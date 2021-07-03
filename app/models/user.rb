@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :pictures, allow_destroy: true
   accepts_nested_attributes_for :vehicles, allow_destroy: true, :reject_if => lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
 
-  roles :admin, :organizer, :registrant, :tester
+  roles :admin, :organizer, :registrant, :tester, :superuser
 
   def password_complexity
     if password.present?
