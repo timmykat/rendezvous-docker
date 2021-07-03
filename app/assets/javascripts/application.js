@@ -25,4 +25,5 @@
 //= require rendezvous_registrations
 //= require user
 //= require vehicles
+//= require tablesorter/dist/js/jquery.tablesorter.min.js
 //= require transactions
