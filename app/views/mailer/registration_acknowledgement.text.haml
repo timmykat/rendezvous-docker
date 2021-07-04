@@ -1,6 +1,7 @@
+- config = Rails.configuration.rendezvous
 Dear #{@rendezvous_registration.user.full_name},
 
-You have successfully registered for the the 40th Citroen Rendezvous, which will take place #{config[:dates][:month]} 16-19 in Saratoga Springs, New York. We hope you're as excited as we are!
+You have successfully registered for the the #{config[:dates][:year]} Citroen Rendezvous, which will take place #{config[:dates][:month]} #{config[:dates][:start]}-#{config[:dates][:end]} in Saratoga Springs, New York. We hope you're as excited as we are!
 
 - if @rendezvous_registration.paid_method == 'credit card'
   Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
@@ -28,8 +29,8 @@ Vehicles:
 
 If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
 
-Here's to a great milestone Rendezvous!
+Here's to a great Rendezvous!
 
 Warmest regards,
 Your chauffeurs
-Michaela Hellman, David Cossitt Levy, Christoper (Toaph) Westfall, Tim Kinnel
+David Cossitt Levy, Christoper (Toaph) Westfall, Tim Kinnel
