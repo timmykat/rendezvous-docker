@@ -191,6 +191,7 @@ production:
     sendmail_settings:
       perform_deliveries: true
       raise_delivery_errors: false
+      domain: 'citroenrendezvous.org'
       default_options:
         from: 'no-reply@citroenrendezvous.org'
 
