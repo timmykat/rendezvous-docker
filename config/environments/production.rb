@@ -66,6 +66,7 @@ Rails.application.configure do
   mailconf = Rails.configuration.rendezvous[:production][:mailer]
   config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
   config.action_mailer.smtp_settings = mailconf[:settings].clone
+  config.action_mailer.default_url_options = { :protocol => 'https', :host => 'citroenrendezvous.org' }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
