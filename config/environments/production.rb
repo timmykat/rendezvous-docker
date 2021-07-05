@@ -65,10 +65,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   mailconf = Rails.configuration.rendezvous[:production][:mailer]
   config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
-  config.action_mailer.default_options = { :from => 'no-reply@citroenrendezvous.org' }
-  config.action_mailer.sendmail_settings = mailconf[:sendmail_settings].clone
-  #config.action_mailer.smtp_settings = mailconf[:settings].clone
-  config.action_mailer.default_url_options = { :protocol => 'http', :host => mailconf[:sendmail_settings][:domain] }
+  config.action_mailer.smtp_settings = mailconf[:settings].clone
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
