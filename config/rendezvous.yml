@@ -187,13 +187,14 @@ production:
     consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
 
   mailer:
-    delivery_method: :sendmail
-    sendmail_settings:
-      perform_deliveries: true
-      raise_delivery_errors: false
-      domain: 'citroenrendezvous.org'
-      default_options:
-        from: 'no-reply@citroenrendezvous.org'
+    delivery_method: :smtp
+    settings:
+      address:               smtp.gmail.co
+      port:                  587
+      user_name:             <%= ENV['GMAIL_USER'] %>
+      password:              <%= ENV['GMAIL_PASS'] %>
+      authentication:        :plain
+      enable_starttls_auto:  true
 
   # mailer:
   #   delivery_method: :smtp
