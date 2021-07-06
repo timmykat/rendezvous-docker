@@ -4,6 +4,7 @@ dates:
   start: 9
   end: 12
   year: 2021
+  refund: September 1, 2021
 registration_window:
   open: 2021-07-04
   close: 2021-09-01
@@ -51,6 +52,7 @@ official_contact:
     - "United States"
   chief_officer: David Cossitt Levy
   email: david.cossitt.levy@gmail.com
+  facebook: https://www.facebook.com/groups/1796592930566951/
 vehicle_marques:
   - Citroen
   - Panhard

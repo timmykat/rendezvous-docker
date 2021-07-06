@@ -1,3 +1,4 @@
+- config = Rails.configuration.rendezvous
 .content
   .row
     .col-md-offset-2.col-md-8.col-xs-12
@@ -5,28 +6,27 @@
       %h2#about About
       %p This website, citroenrendezvous.org , is owned and operated by Citroen Rendezvous LLC:
       = official_contact()
- 
+
       %h2#event_pricing Event Pricing
       %p The cost for attending the event is $50 per adult, free for children under the age of 15.
-     
+
       %h2#refund_policy Refund Policy
-      %p In case of cancellation, Citroen Rendezvous LLC will refund up to the full registration fee for the event until one (1) week before the event; the last day to request a refund is #{config[:dates][:month]} 8, 2017.
+      %p In case of cancellation, Citroen Rendezvous LLC will refund up to the full registration fee for the event until one (1) week before the event; the last day to request a refund is #{config[:dates][:refund]}.
       %p Donations are non-refundable.
       %p If payment was made by credit card, cancellations will be refunded by crediting your card.
-      
+
       %h2#privacy_policy Privacy Policy
       %p We are committed to protecting the privacy of website visitors.
       %ul
-        %li We collect and store your name, email address, and geographic address. 
+        %li We collect and store your name, email address, and geographic address.
         %li We do not save or store your credit card information.
         %li All information, including usernames, passwords, personal data, and credit card information are transmitted using SSL encryption.
         %li We will not knowingly provide your personal information to any third parties for the purposes of commerce.
-        %li Our website uses session cookies as a convenience to you. 
+        %li Our website uses session cookies as a convenience to you.
         %li The sharing service we use may insert tracking cookies. We have no control over this.
         %li You have the option to refuse to accept cookies
-        %li 
-          You may also use a service called 
-          = link_to 'Ghostery', 'https://www.ghostery.com/our-solutions/ghostery-browser-extention/' 
+        %li
+          You may also use a service called
+          = link_to 'Ghostery', 'https://www.ghostery.com/our-solutions/ghostery-browser-extention/'
           to control tracking cookies.
-        %li In the future, we may provide a way for you to post photographs to the site. Your uploading of those photographs will constitute consent for us to display them. The copyright for any photographs will remain yours.
-        
+        %li Uploading photos to the website grants consent for us to display them. The copyright for any photographs will remain yours.
