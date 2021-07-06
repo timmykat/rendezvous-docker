@@ -68,10 +68,12 @@ module ApplicationHelper
   end
 
   def official_contact
+    config = Rails.configuration.rendezvous
     output = '<p><em>Mailing address: </em><br />'
     output +=  mailing_address
     output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
     output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
+    output += '<p><em>Facebook:</em> <a href="' + config[:official_contact][:facebook] + '"><i class="fa fa-facebook-square"></i></a></p>' + "\n"
     output.html_safe
   end
 
