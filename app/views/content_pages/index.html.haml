@@ -21,6 +21,22 @@
     .row
       .col-md-offset-3.col-md-6
 <!--End mc_embed_signup-->
+
+-# %section#schedule.about.text-center
+-#   .container
+-#     .row
+-#       .col-md-8.col-md-offset-2.about-heading
+-#         %h2.main-heading
+-#           #{config[:dates][:year]} Schedule
+-#         = image_tag "chevrons.png"
+-#         %p.text-left
+-#           This year's Rendezvous is not only at a different time, we have a new home base! The Holiday Inn Saratoga Springs is centrally located, just steps from Congress Park and downtown, and offers a large parking lot, on-site dining, and indoor and outdoor heated pools.
+-#           %br
+-#           %br
+-#           We have secured a block of 40 rooms at a reduced rate of $169/night and expect they will go fast so make sure to book early. If all the blocked rooms are booked, the hotel will honor the rate, pending availability. The room block expires August 13th so don't delay!
+-#           = link_to 'Book here', "https://www.ihg.com/holidayinn/hotels/us/en/saratoga-springs/sgany/hoteldetail"
+-#           or call +1-518-584-4550. The group code for the reduced rate is in the email announcement, or available from your chauffeurs.
+
 %section#schedule.about.text-center
   .container
     .row
@@ -29,71 +45,58 @@
           #{config[:dates][:year]} Schedule
         = image_tag "chevrons.png"
         %p.text-left
-          This year's Rendezvous is not only at a different time, we have a new home base! The Holiday Inn Saratoga Springs is centrally located, just steps from Congress Park and downtown, and offers a large parking lot, on-site dining, and indoor and outdoor heated pools.
-          %br
-          %br
-          We have secured a block of 40 rooms at a reduced rate of $169/night and expect they will go fast so make sure to book early. If all the blocked rooms are booked, the hotel will honor the rate, pending availability. The room block expires August 13th so don't delay!
-          = link_to 'Book here', "https://www.ihg.com/holidayinn/hotels/us/en/saratoga-springs/sgany/hoteldetail"
-          or call +1-518-584-4550. The group code for the reduced rate is in the email announcement, or available from your chauffeurs.
+          Just a reminder that we  have a new home base! The Holiday Inn Saratoga Springs is centrally located, just steps from Congress Park and downtown, and offers a large parking lot, on-site dining, and indoor and outdoor heated pools.
 
-  %section#schedule.about.text-center
-    .service-overlay
-    .container
-      .row
-        .col-md-8.col-md-offset-2.about-heading
-          %h2.main-heading
-            #{config[:dates][:year]} Schedule
-          = image_tag "chevrons.png"
-          %p.text-center
-            = link_to 'Detailed schedule', schedule_path
-        -# .col-md-3.single-about.col-xs-12.col-sm-4
-        -#   .about-inside
-        -#     %i.fa.fa-road
-        -#     %h3 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}
-        -#     %ul.text-left
-        -#       %li
-        -#         %strong 6-9pm
-        -#         Dinner, Mama Mia's Pizza & Cafe, 185 Ballston Ave, SS.
-        -#         %em NOTE: Not included in your registration; please make your own dinner reservation by calling 518-583-7783
-        .col-md-3.single-about.col-xs-12.col-sm-4
-          .about-inside
-            %i.fa.fa-automobile
-            %h3 Friday, #{config[:dates][:month]} #{config[:dates][:start]}
-            %ul.text-left
-              %li
-                %strong 2-4pm
-                Ice cream social, Kaleidoscope Caafe, 588 Lake Ave. (Rte 29)
-              %li
-                %strong 6-9pm
-                Rendezvous #{Time.now.year} registration and welcome with casual food and cash bar, Holiday Inn, 232 Broadway
-        .col-md-3.single-about.col-xs-12.col-sm-4
-          .about-inside
-            %i.fa.fa-automobile
-            %h3 Saturday #{config[:dates][:month]} #{config[:dates][:start]}
-            %ul.text-left
-              %li
-                %strong 9am-4pm
-                Showfield is open, Lakeside Farms (Ballston Lake)
-              %li
-                %strong 4-6pm
-                Silent auction. Winners announced at after dinner.
-              %li
-                %strong 4-5:30pm
-                Downtime: RELAX!
-              %li
-                %strong 6-8pm
-                Banquet dinner
-              %li
-                %strong 8pm
-                People's Choice awards!
-        .col-md-3.single-about.col-xs-12.col-sm-4
-          .about-inside
-            %i.fa.fa-road
-            %h3 Sunday #{config[:dates][:month]} #{config[:dates][:end]}
-            %ul.text-left
-              %li
-                %strong 9:30-11:30am
-                Au Revior petit déjeuner, Congress Park, Saratoga Springs
+        %p.text-center
+          = link_to 'Detailed schedule', schedule_path
+      -# .col-md-3.single-about.col-xs-12.col-sm-4
+      -#   .about-inside
+      -#     %i.fa.fa-road
+      -#     %h3 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}
+      -#     %ul.text-left
+      -#       %li
+      -#         %strong 6-9pm
+      -#         Dinner, Mama Mia's Pizza & Cafe, 185 Ballston Ave, SS.
+      -#         %em NOTE: Not included in your registration; please make your own dinner reservation by calling 518-583-7783
+      .col-md-3.single-about.col-xs-12.col-sm-4
+        .about-inside
+          %i.fa.fa-automobile
+          %h3 Friday, #{config[:dates][:month]} #{config[:dates][:start]}
+          %ul.text-left
+            %li
+              %strong 2-4pm
+              Ice cream social, Kaleidoscope Caafe, 588 Lake Ave. (Rte 29)
+            %li
+              %strong 6-9pm
+              Rendezvous #{Time.now.year} registration and welcome with casual food and cash bar, Holiday Inn, 232 Broadway
+      .col-md-3.single-about.col-xs-12.col-sm-4
+        .about-inside
+          %i.fa.fa-automobile
+          %h3 Saturday #{config[:dates][:month]} #{config[:dates][:start] + 1}
+          %ul.text-left
+            %li
+              %strong 9am-4pm
+              Showfield is open, Lakeside Farms (Ballston Lake)
+            %li
+              %strong 4-6pm
+              Silent auction. Winners announced at after dinner.
+            %li
+              %strong 4-5:30pm
+              Downtime: RELAX!
+            %li
+              %strong 6-8pm
+              Banquet dinner
+            %li
+              %strong 8pm
+              People's Choice awards!
+      .col-md-3.single-about.col-xs-12.col-sm-4
+        .about-inside
+          %i.fa.fa-road
+          %h3 Sunday #{config[:dates][:month]} #{config[:dates][:end]}
+          %ul.text-left
+            %li
+              %strong 9:30-11:30am
+              Au Revior petit déjeuner, Congress Park, Saratoga Springs
 
 / end of about section
 / service section
