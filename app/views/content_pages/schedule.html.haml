@@ -2,80 +2,73 @@
 .container
   .row
     .col-md-offset-1.col-md-10.col-xs-12.heading
-      %h1.pull-left 
+      %h1.pull-left
         = Time.now.year
         Rendezvous Schedule
       .pull-right= image_tag('rendezvous-logo.png')
   .row
-    .col-md-offset-1.col-md-10.col-xs-12  
-      %p (tentative schedule, based on last year)  
+    .col-md-offset-1.col-md-10.col-xs-12
+      %p (tentative schedule, based on last year)
   .row
     .col-md-offset-1.col-md-10.col-xs-12
+      -# .day.well.well-sm
+      -#   %h2 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}th
+      -#   .event
+      -#     .title
+      -#       6pm&ndash;9pm Dinner,
+      -#       =link_to "Mama Mia's Pizza & Cafe", 'http://mamamiassaratoga.com', :target => '_blank'
+      -#     .details
+      -#       %p 185 Ballston Ave., Saratoga Springs, 518-583-7783
+      -#       %p
+      -#         The official, unofficial start to the Rendezvous! Find your way to Mama Mia’s to meet up with old friends and make some new ones.  Whether you just got to town or have been there for a day or 2, dinner at Mama Mia’s will put you in the right frame of mind to the big weekend! Please call ahead to reserve a table!
+      -#       %p.hint Note: This is the only dinner <strong>not</strong> included as part of your registration.
       .day.well.well-sm
-        %h2 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}th
+        %h2 Friday, #{config[:dates][:month]} #{config[:dates][:start]}th
         .event
-          .title 
-            6pm&ndash;9pm Dinner, 
-            =link_to "Mama Mia's Pizza & Cafe", 'http://mamamiassaratoga.com', :target => '_blank'
-          .details
-            %p 185 Ballston Ave., Saratoga Springs, 518-583-7783
-            %p
-              The official, unofficial start to the Rendezvous! Find your way to Mama Mia’s to meet up with old friends and make some new ones.  Whether you just got to town or have been there for a day or 2, dinner at Mama Mia’s will put you in the right frame of mind to the big weekend! Please call ahead to reserve a table!
-            %p.hint Note: This is the only dinner <strong>not</strong> included as part of your registration.
-      .day.well.well-sm
-        %h2 Friday, #{config[:dates][:month]} #{config[:dates][:start] + 1}th
-        .event
-          .title 
+          .title
             2&ndash;4pm Ice cream social, location TBD
           .details
-            %p 558 Lake Ave. (Rte 29), Saratoga Springs
-            %p Join us for a cool refresher at Ollie's, formerly Furlong's Family Fun. The name has changed but the venue will look familiar!
+            %p Kaleidoscope Cafe, 588 Lake Ave. (Rte 29), Saratoga Springs
+            %p Join us for a cool refresher at Kaleidoscope Cafe.
         .event
-          .title 
-            6&ndash;8pm Poolside reception & pizza party at the 
-            = link_to 'Springs Motel', 'http://www.springsmotel.com/', :target => '_blank'
+          .title
+            6&ndash;8pm Poolside reception & pizza party at the Holiday Inn
           .details
-            %p 189 Broadway, Saratoga Springs
+            %p 232 Broadway, Saratoga Springs
             %p
-              Happily, the Springs Motel continues to serve as home base for R17. Thanks to the big-heartedness of Karl, our host, the official event kicks off with registration & a pizza party at the Springs. This also gives you your first chance see Citroëns en masse. Come get your welcome registration packet, grab some pizza (including gluten free) and a beverage and celebrate another year of friendship and fun.
-            %p If you see Karl, please be sure to shake his hand asay THANKS for all the years of hosting us... and to MANY more!
+              Our new venue for R21. The official event kicks off with registration, casual food and cash bar at the Holiday Inn.
       .day.well.well-sm
-        %h2 Saturday, #{config[:dates][:month]} #{config[:dates][:start] + 2}th
+        %h2 Saturday, #{config[:dates][:month]} #{config[:dates][:start] + 1}th
         .event
           .title 9am&ndash;9pm Le GRAND jour! Lakeside Farms
           .details
             %p 336 Schauber Rd., Ballston Lake
-            %p 
+            %p
               %em SHOW CARS will be directed to park on the show field by model; all others will be asked to park in the lot. Please follow instructions from our volunteer parkers.
-            %p 
+            %p
               After parking and getting your windshield placard secured, stroll the rows & see your favorites. Be sure to carry your People Choice Ballot and vote for your favorites. Stop by the big tent to see out what the vendors have for sale & pick up this year's T-shirt at the registration table. And don't forget the complimentary continental breakfast!
         %h3 Show day details
-        .event 
+        .event
           .title 9am&ndash;4pm Show field open
           .details
             %p
               %em PLEASE no early birds; the vendors and volunteers need time to set up.
-            %p 
+            %p
               %strong Hunger pangs?
               %br
-              Visit the 
+              Visit the
               = succeed ', ' do
-                = link_to 'Lakeside Country Market & Restaurant', 'http://www.lakesidefarmscidermill.com/', :target => '_blank' 
+                = link_to 'Lakeside Country Market & Restaurant', 'http://www.lakesidefarmscidermill.com/', :target => '_blank'
               right on site. Soups, salads, & sandwiches, burgers & hot dogs are all available at the restaurant, while the market has lots of light snacks.
         .event
-          .title 11am until after dinner: Silent auction
+          .title 4-6pm: Silent auction
           .details
             %p Win stuff <em>and</em> help the Rendezvous!
             %p
-              %em 
-                Winners announced after dinner. 
+              %em
+                Winners announced after dinner.
         .event
-          .title Presentations/Tech Talks
-          .details
-            %p TBD
-         
-        .event
-          .title 4&ndash;5:30pm Downtime 
+          .title 4&ndash;5:30pm Downtime
           .details
             %p  Relax, catch a nap, explore
         .event
@@ -86,20 +79,8 @@
       .day.well.well-sm
         %h2 Sunday, #{config[:dates][:month]} #{config[:dates][:end]}th
         %p
-          %strong The Springs Motel
+          %strong Congress Park
         .event
-          .title 9:00&ndash;11:30am Continental breakfast at the Springs
+          .title 9:30&ndash;11:30am An au revoir petit déjeuner
         .details
-          %p Breakfast and coffee and People's Choice award winners viewing
-        .event
-          .title 
-            11:30am&ndash;12:30 or 1:00pm Driving tour
-          .details
-            %p
-              TBD
-        .event
-          .title After the tour: Downtime - take a break!
-        .event
-          .title 5&ndash;8pm Dinner at the Canfield Casino (sorry, no alcohol)
-        .details
-          %p Last chance to hang out with your fellow Citroënistes ... until #{Time.now.year + 1}!
+          %p Breakfast and coffee
