@@ -46,40 +46,37 @@
           = image_tag "chevrons.png"
           %p.text-center
             = link_to 'Detailed schedule', schedule_path
-        .col-md-3.single-about.col-xs-12.col-sm-4
-          .about-inside
-            %i.fa.fa-road
-            %h3 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}
-            %ul.text-left
-              %li
-                %strong 6-9pm
-                Dinner, Mama Mia's Pizza & Cafe, 185 Ballston Ave, SS.
-                %em NOTE: Not included in your registration; please make your own dinner reservation by calling 518-583-7783
+        -# .col-md-3.single-about.col-xs-12.col-sm-4
+        -#   .about-inside
+        -#     %i.fa.fa-road
+        -#     %h3 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}
+        -#     %ul.text-left
+        -#       %li
+        -#         %strong 6-9pm
+        -#         Dinner, Mama Mia's Pizza & Cafe, 185 Ballston Ave, SS.
+        -#         %em NOTE: Not included in your registration; please make your own dinner reservation by calling 518-583-7783
         .col-md-3.single-about.col-xs-12.col-sm-4
           .about-inside
             %i.fa.fa-automobile
-            %h3 Friday, #{config[:dates][:month]} #{config[:dates][:start] + 1}
+            %h3 Friday, #{config[:dates][:month]} #{config[:dates][:start]}
             %ul.text-left
               %li
                 %strong 2-4pm
-                Ice cream social, 588 Lake Ave. (Rte 29)
+                Ice cream social, Kaleidoscope Caafe, 588 Lake Ave. (Rte 29)
               %li
-                %strong 6-8pm
-                Rendezvous #{Time.now.year} poolside welcome reception and pizza party, Springs Motel
+                %strong 6-9pm
+                Rendezvous #{Time.now.year} registration and welcome with casual food and cash bar, Holiday Inn, 232 Broadway
         .col-md-3.single-about.col-xs-12.col-sm-4
           .about-inside
             %i.fa.fa-automobile
-            %h3 Saturday #{config[:dates][:month]} #{config[:dates][:start] + 2}
+            %h3 Saturday #{config[:dates][:month]} #{config[:dates][:start]}
             %ul.text-left
               %li
                 %strong 9am-4pm
                 Showfield is open, Lakeside Farms (Ballston Lake)
               %li
-                %strong 11am until the end of dinner
+                %strong 4-6pm
                 Silent auction. Winners announced at after dinner.
-              %li
-                %strong Late morning/early afternoon
-                Presentations/tech talks TBD
               %li
                 %strong 4-5:30pm
                 Downtime: RELAX!
@@ -88,25 +85,16 @@
                 Banquet dinner
               %li
                 %strong 8pm
-                Raffle winner and People's Choice awards!
+                People's Choice awards!
         .col-md-3.single-about.col-xs-12.col-sm-4
           .about-inside
             %i.fa.fa-road
             %h3 Sunday #{config[:dates][:month]} #{config[:dates][:end]}
             %ul.text-left
               %li
-                %strong 9:00-11:30am
-                The Springs: continental breakfast and viewing of People's Choice award winners
-              %li
-                %strong 11:30am-2 or 3pm
-                = link_to 'Driving tour', faq_path(:anchor => 'rally')
-                Vehicle hopping encouraged!
-              %li
-                %strong 2 or 3-5pm
-                Downtime
-              %li
-                %strong 5-8pm
-                Canfield Casino: farewell dinner (sorry, no alcohol)
+                %strong 9:30-11:30am
+                Au Revior petit déjeuner, Congress Park, Saratoga Springs
+
 / end of about section
 / service section
 %section#info.service.text-left
