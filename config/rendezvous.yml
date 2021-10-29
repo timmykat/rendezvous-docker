@@ -1,10 +1,10 @@
 # The following will most likely change from year to year
 dates:
-  month: September
-  start: 10
-  end: 12
-  year: 2021
-  refund: September 1, 2021
+  month: June
+  start: 17
+  end: 19
+  year: 2022
+  refund: 'June 10, 2022'
 registration_window:
   open: 2021-07-04
   close: 2021-09-01
