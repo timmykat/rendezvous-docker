@@ -4,11 +4,11 @@
   .container
     .row
       .col-md-6
-        %h1 September #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
+        %h1 #{config[:dates][:month]} #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
         %h2 Saratoga Springs, New York
       .col-md-6
         %p
-          Stay tuned for 2021 info:
+          Stay tuned for 2022 info:
           %br
           %a{ :href => "http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f", :target => "_blank" } The Citroen Rendezvous newsletter
           %br
@@ -198,20 +198,16 @@
             %br/
           If you have any questions that haven't been answered here, please let us know!
 / end of contact section
-%section.contact-form
-  .container
-    .row
-      .form
-        .sbtn.col-md-12.text-center
-          = form_tag "/contact-us" do
-            = text_field_tag 'name', nil, :class => 'name form-input', :placeholder => "NAME"
-            = email_field_tag 'email', nil, :class => 'email form-input', :placeholder => "EMAIL"
-            = text_field_tag 'message', nil, :class => 'message form-input', :placeholder => "MESSAGE"
-            - if Rails.env != 'development'
-              .captcha
-                = recaptcha_tags
-            = submit_tag 'SEND', :class => 'submit-btn', :disabled => true
-    .row
-      .col-md-offset-4.col-md-4.col-xs-12.text-center
-        .well.well-sm
-          = link_to 'Sign up for Rendezvous updates', 'http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f', :target => '_blank'
+-# %section.contact-form{ style: "height: 100px;"}
+-#   .container
+    -# .row
+    -#   .form
+    -#     .sbtn.col-md-12.text-center
+    -#       = form_tag "/contact-us" do
+    -#         = text_field_tag 'name', nil, :class => 'name form-input', :placeholder => "NAME"
+    -#         = email_field_tag 'email', nil, :class => 'email form-input', :placeholder => "EMAIL"
+    -#         = text_field_tag 'message', nil, :class => 'message form-input', :placeholder => "MESSAGE"
+    -#         - if Rails.env != 'development'
+    -#           .captcha
+    -#             = recaptcha_tags
+    -#         = submit_tag 'SEND', :class => 'submit-btn', :disabled => true
