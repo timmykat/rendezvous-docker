@@ -335,6 +335,7 @@ DEPENDENCIES
   puma (>= 3.12.4)
   racksh
   rails (= 5.2.4)
+  rake
   recaptcha
   role_model
   rspec-rails
