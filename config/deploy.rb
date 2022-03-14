@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.12.1'
+lock '3.17.0'
 
 set :application, 'rendezvous'
 set :deploy_via, :copy
