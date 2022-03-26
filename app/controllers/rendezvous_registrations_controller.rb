@@ -278,16 +278,16 @@ class RendezvousRegistrationsController < ApplicationController
 
     # Create pdf and send acknowledgement emails
     def send_registration_success_emails
-      filename = "#{@rendezvous_registration.invoice_number}.pdf"
-      registration_pdf = ::WickedPdf.new.pdf_from_string(
-        render_to_string('rendezvous_registrations/show', :layout => 'layouts/registration_mailer', :encoding => 'UTF-8')
-      )
-      save_dir =  Rails.root.join('public','registrations')
-      save_path = Rails.root.join('public','registrations', filename)
-      File.open(save_path, 'wb') do |file|
-        file << registration_pdf
-      end
-      Mailer.registration_acknowledgement(@rendezvous_registration).deliver_later
+      # filename = "#{@rendezvous_registration.invoice_number}.pdf"
+      # registration_pdf = ::WickedPdf.new.pdf_from_string(
+      #   render_to_string('rendezvous_registrations/show', :layout => 'layouts/registration_mailer', :encoding => 'UTF-8')
+      # )
+      # save_dir =  Rails.root.join('public','registrations')
+      # save_path = Rails.root.join('public','registrations', filename)
+      # File.open(save_path, 'wb') do |file|
+      #   file << registration_pdf
+      # end
+      Mailer.registration_confirmation(@rendezvous_registration).deliver_later
       Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
     end
 
