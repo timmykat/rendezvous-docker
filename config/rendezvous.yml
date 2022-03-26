@@ -6,8 +6,8 @@ dates:
   year: 2022
   refund: 'June 10, 2022'
 registration_window:
-  open: 2021-07-04
-  close: 2021-09-01
+  open: 2022-04-01
+  close: 2022-06-10
 fees:
   registration:
     adult: 50
@@ -16,7 +16,7 @@ fees:
 # The following should rarely change
 front_page_message:
   pre_registration: Stay tuned.
-  during_registration:
+  during_registration: Registration is open.
   closed_registration: Online registration is now closed, but the Rendezvous is ON!
   post_rendezvous: See you next year!
 info_pages:
@@ -175,7 +175,6 @@ staging:
       enable_starttls_auto:  true
 
   inquiry_recipients:
-    - hellman.michaela@gmail.com
     - david.cossitt.levy@gmail.com
     - toaph@yahoo.com
     - tim@wordsareimages.com
@@ -198,17 +197,6 @@ production:
       password:              <%= ENV['GMAIL_PASS'] %>
       authentication:        :plain
       enable_starttls_auto:  true
-
-  # mailer:
-  #   delivery_method: :smtp
-  #   settings:
-  #     address:               email-smtp.us-east-1.amazonaws.com
-  #     domain:                citroenrendezvous.org
-  #     port:                  587
-  #     user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
-  #     password:              <%= ENV['RENDEZVOUS_SES_PASSWORD'] %>
-  #     authentication:        :login
-  #     enable_starttls_auto:  true
 
   inquiry_recipients:
     - david.cossitt.levy@gmail.com
