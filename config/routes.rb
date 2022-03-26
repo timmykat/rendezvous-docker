@@ -62,6 +62,8 @@ Rails.application.routes.draw do
   # Contact form
   post '/contact-us', to:'content_pages#contact_us'
 
+  # Send email
+  get '/send_email', to: 'rendezvous_registrations#send_email'
 
   # AJAX routes
   get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'

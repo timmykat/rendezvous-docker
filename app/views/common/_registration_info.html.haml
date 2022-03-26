@@ -2,8 +2,6 @@
   %p
     %b Registration number:
     #{@rendezvous_registration.invoice_number}
-    &nbsp;&nbsp;&nbsp
-    = link_to 'Print <i class="fa fa-print"></i>'.html_safe, 'javascript:window.print();'
   %h3= @rendezvous_registration.user.full_name
   %p= @rendezvous_registration.user.email
   %p
@@ -98,3 +96,10 @@
             %td= v.year
             %td= v.other_info
             %td= v.judging_category
+   
+.well.well-sm.email
+  %h3 Email to Registrant
+  %form{ :action => '/send_email' }
+    %input{ :type => 'hidden', :name => 'authenticity_token', :value => form_authenticity_token }
+    %input{ :type => 'hidden', :name => 'registration_id', :value => @rendezvous_registration.id }
+    %input{ :type => 'submit', :name => 'submit', :value => 'SEND EMAIL', :class => 'btn btn-primary' }
