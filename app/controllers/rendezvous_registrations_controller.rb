@@ -214,7 +214,7 @@ class RendezvousRegistrationsController < ApplicationController
         @rendezvous_registration.paid_date = Time.new
         @rendezvous_registration.status = 'complete'
         @rendezvous_registration.save!
-        send_registration_success_emails
+        send_confirmation_emails
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         redirect_to vehicles_rendezvous_registration_path(@rendezvous_registration)
         return
@@ -240,7 +240,7 @@ class RendezvousRegistrationsController < ApplicationController
       flash_alert @rendezvous_registration.errors.full_messages.to_sentence
       redirect_to payment_rendezvous_registration_path(@rendezvous_registration)
     else
-      send_registration_success_emails
+      send_confirmation_emails
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
       redirect_to vehicles_rendezvous_registration_path(@rendezvous_registration)
 #      redirect_to rendezvous_registration_path(@rendezvous_registration)
@@ -274,10 +274,22 @@ class RendezvousRegistrationsController < ApplicationController
 
   end
 
+  def send_email
+    registration_id = params[:registration_id]
+    registration = RendezvousRegistration.find(registration_id)
+    if registration
+      Mailer.registration_confirmation(registration).deliver
+      flash_notice('Email sent')
+    else
+      flash_notice('No registration found')
+    end
+    redirect_to :root
+  end
+
   private
 
     # Create pdf and send acknowledgement emails
-    def send_registration_success_emails
+    def send_confirmation_emails
       # filename = "#{@rendezvous_registration.invoice_number}.pdf"
       # registration_pdf = ::WickedPdf.new.pdf_from_string(
       #   render_to_string('rendezvous_registrations/show', :layout => 'layouts/registration_mailer', :encoding => 'UTF-8')
@@ -288,7 +300,7 @@ class RendezvousRegistrationsController < ApplicationController
       #   file << registration_pdf
       # end
       Mailer.registration_confirmation(@rendezvous_registration).deliver_later
-      Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
+      # Mailer.registration_notification(@rendezvous_registration).deliver_later unless Rails.env.development?
     end
 
 

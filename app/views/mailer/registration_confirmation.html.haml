@@ -6,8 +6,10 @@
 - if @rendezvous_registration.paid_method == 'credit card'
   %p Thank you for paying your registration fee by credit card.
 - else
-  %p Our records indicated you have not paid by credit card. Please be prepared to pay on arrival, or send a check for your registration fee to:
-  = official_contact()
+  %p 
+    Please send a check for your registration fee to the address below, including your invoice number (@rendezvous_registration.invoice_number).
+    %br (Alternatively, you may pay on arrival at the Rendezvous.) 
+  %p= mailing_address()
 %p
   You may also view your registration information
   = succeed '.' do

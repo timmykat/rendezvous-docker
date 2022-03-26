@@ -18,6 +18,7 @@ class Mailer < ApplicationMailer
   end
   
   def registration_confirmation(rendezvous_registration)
+    puts 'Sending email'
     @rendezvous_registration = rendezvous_registration
 #     registration_pdf = ::WickedPdf.new.pdf_from_url(rendezvous_registration_url(@rr, :protocol => (Rails.env.development? ? 'http' : 'https'), :print_token => Rails.configuration.rendezvous[:print_token]), :print_media_type => true, :ignore_load_errors => true)
 #     filename = "#{@rendezvous_registration.invoice_number}.pdf"
