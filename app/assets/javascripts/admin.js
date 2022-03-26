@@ -53,6 +53,7 @@ $(function() {
         console.log(forDeletion);
         $.get('/ajax/delete_users', { "users": forDeletion }, function() {
             console.log('Success');
+            window.location('/admin#tabbed-6');
         });
     });
 });
