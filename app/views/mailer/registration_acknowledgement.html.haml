@@ -4,9 +4,10 @@
 %p You have successfully registered for the the #{config[:dates][:year]} Citroen Rendezvous, which will take place #{config[:dates][:month]} #{config[:dates][:start]}-#{config[:dates][:end]} in Saratoga Springs, New York. We hope you're as excited as we are!
 
 - if @rendezvous_registration.paid_method == 'credit card'
-  %p Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
+  %p Thank you for paying your registration fee by credit card.
 - else
-  %p An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied.
+  %p Our records indicated you have not paid by credit card. Please be prepared to pay on arrival, or send a check for your registration fee to:
+  = official_contact()
 %p
   You may also view your registration information
   = succeed '.' do
@@ -31,7 +32,9 @@
 - @rendezvous_registration.user.vehicles.each do |vehicle|
   %br #{vehicle.full_spec}
 
-%p If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
+%p 
+  If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. 
+  The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
 %p Here's to a great Rendezvous!
 
 %p Warmest regards,
