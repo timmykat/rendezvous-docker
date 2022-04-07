@@ -81,7 +81,7 @@
     - if @rendezvous_registration.status == 'complete' || @rendezvous_registration.status == 'payment due'
       %p 
         If you need to modify your vehicle info for this year,
-        = link_to "update here", vehicles_rendezvous_registration
+        = link_to "update here", vehicles_rendezvous_registration_path(@rendezvous_registration)
     - else
       %p If you are bringing different vehicles, please update after you finish registering.
     - if @rendezvous_registration.user.vehicles.blank?
