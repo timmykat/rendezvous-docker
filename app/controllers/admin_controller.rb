@@ -46,7 +46,9 @@ class AdminController < ApplicationController
 
     csv_object['vehicles'] << [
       'Number',
-      'Registrant',
+      'Registrant Last Name',
+      'Registrant First Name',
+      'Registrant Full Name',
       'Year',
       'Marque',
       'Model',
@@ -100,6 +102,8 @@ class AdminController < ApplicationController
         nvehicle += 1
         csv_object['vehicles'] << [
           "#{registration.invoice_number}-#{nvehicle.to_s}",
+          registration.user.last_name,
+          registration.user.first_name
           registration.user.full_name,
           v.year,
           v.marque,
