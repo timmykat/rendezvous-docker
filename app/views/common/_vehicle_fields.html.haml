@@ -14,7 +14,7 @@
               = select_tag :select_marque, options_for_select(marques), :selected => selected_marque(f.object), :class => 'form-control'
           .col-md-4.col-xs-12
             .form-group
-              = text_field_tag :other_marque, nil, :label => 'Other marque', :class => 'form-control', :placeholder => 'Specify non-French marque'
+              = text_field_tag :other_marque, nil, :label => 'Other marque', :class => 'form-control', :placeholder => 'Specify non-Citroen marque'
         = f.input :marque, :as => :hidden, :value => f.object.marque
   .row
     .col-md-12
