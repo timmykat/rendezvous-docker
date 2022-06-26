@@ -4,7 +4,7 @@
       = image_tag pic.image.thumb.url
     %td.year
       .form-group
-        - options = options_for_select((1976..2020).to_a.reverse, pic.year)
+        - options = options_for_select((1976..Time.now.year).to_a.reverse, pic.year)
         = f.select :year, options, {}, { :class => 'form-control', :selected => pic.year }
     /
       %td.caption
