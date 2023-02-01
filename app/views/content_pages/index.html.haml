@@ -4,7 +4,7 @@
   .container
     .row
       .col-md-6
-        %h1 #{config[:dates][:month]} #{config[:dates][:start]}&ndash;#{config[:dates][:end]}, #{config[:dates][:year]}
+        %h1 #{event_dates}
         %h2 Saratoga Springs, New York
       .col-md-6
         %p
@@ -41,43 +41,37 @@
   .container
     .row
       .col-12
-        %p 
+        %p
           Citroëns in Kyiv, Ukraine &vert;
           %em Oleksandr Lutsenko &copy;lutsenko/123RF.COM
     .row
       .col-md-8.col-md-offset-2.about-heading
         %h2.main-heading
-          #{config[:dates][:year]} Schedule
+          #{event_year} Schedule
         = image_tag "chevrons.png"
         %p.text-left
           Just a reminder that we  have a new home base! The Holiday Inn Saratoga Springs is centrally located, just steps from Congress Park and downtown, and offers a large parking lot, on-site dining, and indoor and outdoor heated pools.
 
         %p.text-center
           = link_to 'Detailed schedule', schedule_path
-      -# .col-md-3.single-about.col-xs-12.col-sm-4
-      -#   .about-inside
-      -#     %i.fa.fa-road
-      -#     %h3 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}
-      -#     %ul.text-left
-      -#       %li
-      -#         %strong 6-9pm
-      -#         Dinner, Mama Mia's Pizza & Cafe, 185 Ballston Ave, SS.
-      -#         %em NOTE: Not included in your registration; please make your own dinner reservation by calling 518-583-7783
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
-          %i.fa.fa-automobile
-          %h3 Friday, #{config[:dates][:month]} #{config[:dates][:start]}
+          %i.fa.fa-road
+          %h3 #{relative_date(0)}
           %ul.text-left
             %li
-              %strong 2-4pm
-              Ice cream social, Kaleidoscope Caafe, 588 Lake Ave. (Rte 29)
-            %li
-              %strong 6-9pm
-              Rendezvous #{Time.now.year} registration and welcome with casual food and cash bar, Holiday Inn, 232 Broadway
+              #{tbd_message}
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-automobile
-          %h3 Saturday #{config[:dates][:month]} #{config[:dates][:start] + 1}
+          %h3 #{relative_date(1)}
+          %ul.text-left
+            %li
+              #{tbd_message}
+      .col-md-3.single-about.col-xs-12.col-sm-4
+        .about-inside
+          %i.fa.fa-automobile
+          %h3 #{relative_date(2)}
           %ul.text-left
             %li
               %strong 9am-4pm
@@ -97,11 +91,10 @@
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa.fa-road
-          %h3 Sunday #{config[:dates][:month]} #{config[:dates][:end]}
+          %h3 #{relative_date(3)}
           %ul.text-left
             %li
-              %strong 9:30-11:30am
-              Au Revior petit déjeuner, Congress Park, Saratoga Springs
+              #{tbd_message}
 
 / end of about section
 / service section
@@ -205,7 +198,7 @@
 / end of contact section
 -# %section.contact-form{ style: "height: 100px;"}
 -#   .container
-    -# .row
+  -# .row
     -#   .form
     -#     .sbtn.col-md-12.text-center
     -#       = form_tag "/contact-us" do
