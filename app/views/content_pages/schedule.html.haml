@@ -3,12 +3,12 @@
   .row
     .col-md-offset-1.col-md-10.col-xs-12.heading
       %h1.pull-left
-        = Time.now.year
+        #{event_year}
         Rendezvous Schedule
       .pull-right= image_tag('rendezvous-logo.png')
   .row
     .col-md-offset-1.col-md-10.col-xs-12
-      %p (tentative schedule, based on last year)
+      %p #{tbd_message}
   .row
     .col-md-offset-1.col-md-10.col-xs-12
       -# .day.well.well-sm
@@ -23,22 +23,16 @@
       -#         The official, unofficial start to the Rendezvous! Find your way to Mama Mia’s to meet up with old friends and make some new ones.  Whether you just got to town or have been there for a day or 2, dinner at Mama Mia’s will put you in the right frame of mind to the big weekend! Please call ahead to reserve a table!
       -#       %p.hint Note: This is the only dinner <strong>not</strong> included as part of your registration.
       .day.well.well-sm
-        %h2 Friday, #{config[:dates][:month]} #{config[:dates][:start]}th
+        %h2 #{relative_date(1)}
+        %p
+          %strong #{tbd_message}
         .event
           .title
-            2&ndash;4pm Ice cream social, location TBD
           .details
-            %p Kaleidoscope Cafe, 588 Lake Ave. (Rte 29), Saratoga Springs
-            %p Join us for a cool refresher at Kaleidoscope Cafe.
-        .event
-          .title
-            6&ndash;8pm Poolside reception & pizza party at the Holiday Inn
-          .details
-            %p 232 Broadway, Saratoga Springs
-            %p
-              Our new venue for R21. The official event kicks off with registration, casual food and cash bar at the Holiday Inn.
       .day.well.well-sm
-        %h2 Saturday, #{config[:dates][:month]} #{config[:dates][:start] + 1}th
+        %h2 #{relative_date(2)}
+        %p 
+          %strong (Subject to change)
         .event
           .title 9am&ndash;9pm Le GRAND jour! Lakeside Farms
           .details
@@ -77,10 +71,8 @@
             %p Provided by the friendly folks at Lakeside Farms. The People's Choice Awards and winners of the 50-50 raffle will be announced at <strong>8pm</strong>.
 
       .day.well.well-sm
-        %h2 Sunday, #{config[:dates][:month]} #{config[:dates][:end]}th
+        %h2 #{relative_date(3)}
         %p
-          %strong Congress Park
+          %strong #{tbd_message}
         .event
-          .title 9:30&ndash;11:30am An au revoir petit déjeuner
         .details
-          %p Breakfast and coffee

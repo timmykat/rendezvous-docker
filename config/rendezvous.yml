@@ -1,13 +1,11 @@
 # The following will most likely change from year to year
 dates:
-  month: June
-  start: 17
-  end: 19
-  year: 2022
-  refund: 'June 10, 2022'
+  day_one: June 29, 2023
+  duration: 4
+  refund_date: 'June 20, 2023'
 registration_window:
-  open: 2022-04-01
-  close: 2022-06-12
+  open: 2023-04-15
+  close: 2023-06-22
 fees:
   registration:
     adult: 50
