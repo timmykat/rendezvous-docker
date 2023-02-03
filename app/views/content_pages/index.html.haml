@@ -8,7 +8,7 @@
         %h2 Saratoga Springs, New York
       .col-md-6
         %p
-          Stay tuned for #{config[:dates][:year]} info:
+          Stay tuned for #{event_year} info:
           %br
           %a{ :href => "http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f", :target => "_blank" } The Citroen Rendezvous newsletter
           %br
@@ -42,15 +42,28 @@
     .row
       .col-12
         %p
-          Citroëns in Kyiv, Ukraine &vert;
-          %em Oleksandr Lutsenko &copy;lutsenko/123RF.COM
+          Benugo "Espresso Van" 1972 Citroën HY in Granary Square &vert;
+          %em 
+            Mic from Reading - Berkshire, United Kingdom via
+            %a{:href => "https://creativecommons.org/licenses/by/2.0", :target => "_blank" } 
+              Wikimedia Commons
     .row
       .col-md-8.col-md-offset-2.about-heading
         %h2.main-heading
           #{event_year} Schedule
         = image_tag "chevrons.png"
         %p.text-left
-          We have some changes again this year, including dates (thank you Dead & Company!) and venue. Stay tuned for more info!
+          We have some changes again this year, including dates (thank you Dead & Company!) and venue. 
+          %br
+          %br
+          This year's event hotel is the Courtyard Marriott, 11 Excelsior Ave, Saratoga Springs.
+          You can book out our special event rate of $189/night at this 
+          %a{:href => "https://citroenrendezvous.us12.list-manage.com/track/click?u=198c738ff80668ca4d472c590&id=eceda0d825&e=882a1f74e7", :target => "_blank"}
+            link
+          by May 30.
+          %br
+          %br
+          Stay tuned for more info!
 
         %p.text-center
           = link_to 'Detailed schedule', schedule_path
