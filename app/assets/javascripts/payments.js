@@ -4,7 +4,7 @@ const  hostedFields = require('braintree-web/hosted-fields');
 let myHostedFields;
 
 function buildBraintree(clientToken) {
-  let form = document.querySelector('#rendezvous_registration_form');
+  let form = document.querySelector('#registration_form');
   let submit = document.querySelector('input[type="submit"]');
 
   braintreeClient.create({ authorization: clientToken }, function(clientErr, clientInstance) {
@@ -17,7 +17,7 @@ function buildBraintree(clientToken) {
     let hostedFieldOptions = {
       client: clientInstance,
 
-      id: 'rendezvous_registration_form',
+      id: 'registration_form',
       fields: {
         number: {
           selector: '#card-number'
@@ -108,10 +108,10 @@ $(function() {
     console.log("Client token", clientToken);
     buildBraintree(clientToken);
 
-    $('#rendezvous_registration_paid_method_credit_card').on('click', function() {
+    $('#registration_paid_method_credit_card').on('click', function() {
       buildBraintree(clientToken);
     });
-    $('#rendezvous_registration_paid_method_check').on('click', function() {
+    $('#registration_paid_method_check').on('click', function() {
       myHostedFields.teardown( function(teardownErr) {
         if (teardownErr) {
           console.error('Could not tear down HostedFields.');

@@ -7,10 +7,10 @@
         regStatus += ' <i class="fa fa-thumbs-up complete"></i>'
       } else if (regStatus === 'payment due') {
         regStatus += ' <i class="fa fa-thumbs-up payment-due"></i>'
-        regStatus += ' <a href="/rendezvous_registrations/' + regId + '/payment">Go to payment</a>'
+        regStatus += ' <a href="/registrations/' + regId + '/payment">Go to payment</a>'
       } else  if (regStatus === 'in review') {
         regStatus += ' <i class="fa fa-check-circle"></i>';
-        regStatus += ' <a href="/rendezvous_registrations/' + regId + '/review">Go to review</a>';
+        regStatus += ' <a href="/registrations/' + regId + '/review">Go to review</a>';
       }
       $('.registration-status .status').html('Registration status: ' + regStatus );
       $('.registration-status').slideDown();

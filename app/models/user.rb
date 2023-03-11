@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   has_many :pictures, :dependent => :destroy
   has_many :vehicles, :dependent => :destroy
-  has_many :rendezvous_registrations
+  has_many :registrations
   has_many :authorizations
 
   validates :first_name, :presence => true
@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   end
 
   def newbie?
-    self.rendezvous_registrations.length == 1 && self.rendezvous_registrations.first.created_at.year == Time.now.year
+    self.registrations.length == 1 && self.registrations.first.created_at.year == Time.now.year
   end
 
   def postal_code_by_country
@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
   end
 
   def attending
-    !self.rendezvous_registrations.where(:year => Time.now.year).blank?
+    !self.registrations.where(:year => Time.now.year).blank?
   end
 
   def country_name

@@ -55,7 +55,7 @@ class AdminController < ApplicationController
       'Info'
     ]
 
-    @registrations = RendezvousRegistration.where("year = ?", Time.now.year)
+    @registrations = Registration.where("year = ?", Time.now.year)
 
     @data = {
       :registrants    => [],

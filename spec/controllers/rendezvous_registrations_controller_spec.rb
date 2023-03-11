@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RendezvousRegistrationsController, type: :controller do
+RSpec.describe RegistrationsController, type: :controller do
 
   before(:each) do
     DatabaseCleaner.start
@@ -9,26 +9,26 @@ RSpec.describe RendezvousRegistrationsController, type: :controller do
   context "the user is paying by credit card" do
     context "the transaction succeeds" do
       before(:each) do
-        @rendezvous_registration = build(:rendezvous_registration)
+        @registration = build(:registration)
         Braintree::Transaction.stub(:sale).and_return(double('result', :success? => true))
       end
       
       it "sets the paid amount" do
-        expect(@rendezvous_registration.paid_amount).to be_equal(100.0)
+        expect(@registration.paid_amount).to be_equal(100.0)
       end
       
       it "sets the paid method" do
-        expect(@rendezvous_registration.paid_method).to be_equal('credit card')
+        expect(@registration.paid_method).to be_equal('credit card')
       end
       
       it "redirects to the show page" do
-        expect(@rendezvous_registration).to redirect_to(assigns(:rendezvous_registration))
+        expect(@registration).to redirect_to(assigns(:registration))
       end
     end
     
     context "the transaction fails" do
       before(:each) do
-        @rendezvous_registration = build(:rendezvous_registration)
+        @registration = build(:registration)
         Braintree::Transaction.stub(:sale).and_return(double('result', {:success? => false, :transaction => true, :errors => 'There was an error' }))
       end
     
@@ -42,31 +42,31 @@ RSpec.describe RendezvousRegistrationsController, type: :controller do
   
   context "the user is paying by check" do
     it "sets the paid amount to 0" do
-      @rendezvous_registration = build(:rendezvous_registration, :paid_method => 'check')
-      expect(@rendezvous_registration.paid_amount).to be_equal(0.0)
+      @registration = build(:registration, :paid_method => 'check')
+      expect(@registration.paid_amount).to be_equal(0.0)
     end
   end
 
   it "creates an invoice number" do
-    @rendezvous_registration = build(:rendezvous_registration)
+    @registration = build(:registration)
     year = Time.now.year
-    RendezvousRegistration.stub(:invoice_number).and_return("CR#{year}-999")
-    expect(@rendezvous_registration.invoice_number).to be_equal("CR#{year}-999")
+    Registration.stub(:invoice_number).and_return("CR#{year}-999")
+    expect(@registration.invoice_number).to be_equal("CR#{year}-999")
   end
 
   context "user not logged in" do
     context "user doesn't exist" do
       it "creates a user" do
-        @rendezvous_registration = create(:rendezvous_registration)
-        expect(@rendezvous_registration.user.class).to be_equal('User')
+        @registration = create(:registration)
+        expect(@registration.user.class).to be_equal('User')
       end
     end
 
     context "user does exist" do
       it "finds and updates the user" do
         @user = create(:user)
-        @rendezvous_registration = create(:rendezvous_registration)
-        expect(@rendezvous_registration.user).to be_equal(@user)
+        @registration = create(:registration)
+        expect(@registration.user).to be_equal(@user)
       end
     end
   end
@@ -74,7 +74,7 @@ RSpec.describe RendezvousRegistrationsController, type: :controller do
   context "user logged in" do    
     it "updates the user" do
       @user = create(:user)
-      @rendezvous_registration = create(:rendezvous_registration, :user_attributes => { :first_name => "Jacques" })
+      @registration = create(:registration, :user_attributes => { :first_name => "Jacques" })
       expect(@user.first_name).to be_equal("Jacques")
     end
   end

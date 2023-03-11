@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_11_062205) do
+ActiveRecord::Schema.define(version: 2023_03_11_064101) do
 
   create_table "attendees", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name"
     t.string "attendee_age", default: "adult"
     t.boolean "volunteer"
     t.boolean "sunday_dinner"
-    t.integer "rendezvous_registration_id"
+    t.integer "registration_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["attendee_age"], name: "index_attendees_on_attendee_age"
@@ -87,7 +87,7 @@ ActiveRecord::Schema.define(version: 2023_03_11_062205) do
     t.string "transaction_type"
     t.string "cc_transaction_id"
     t.decimal "amount", precision: 6, scale: 2, default: "0.0"
-    t.integer "rendezvous_registration_id"
+    t.integer "registration_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["cc_transaction_id"], name: "index_transactions_on_cc_transaction_id"

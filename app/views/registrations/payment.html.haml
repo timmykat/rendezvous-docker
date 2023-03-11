@@ -5,7 +5,7 @@
     = render :partial => 'common/registration_header', :locals => { :step => 'payment' }
   .row
     .col-md-offset-2.col-md-8.col-xs-12
-      = simple_form_for @rendezvous_registration, :url => complete_rendezvous_registration_path(@rendezvous_registration), :html => { :id => 'rendezvous_registration_form' } do |f|
+      = simple_form_for @registration, :url => complete_registration_path(@registration), :html => { :id => 'registration_form' } do |f|
         %section
           %h3 Help Out
           .row
@@ -23,7 +23,7 @@
                 .col-md-6.col-xs-12
                   %p.amount.bg-success.form-group
                     %label Total (USD):
-                    = f.input_field :total, :value => ("%.2f" % @rendezvous_registration.total) , :disabled => true, :class => 'calculated'
+                    = f.input_field :total, :value => ("%.2f" % @registration.total) , :disabled => true, :class => 'calculated'
             %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
           %section
             %h2 Payment Information

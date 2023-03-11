@@ -1,7 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :rendezvous_registration do
+  factory :registration do
     registrant
     attendee
     number_of_adults 2

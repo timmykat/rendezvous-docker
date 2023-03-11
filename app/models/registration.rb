@@ -1,4 +1,4 @@
-class RendezvousRegistration < ActiveRecord::Base
+class Registration < ActiveRecord::Base
   
   belongs_to :user
   has_many :attendees, :dependent => :destroy
@@ -43,7 +43,7 @@ class RendezvousRegistration < ActiveRecord::Base
   
   def self.invoice_number
     prefix = "CR#{Rails.configuration.rendezvous[:dates][:year]}"
-    previous_code = RendezvousRegistration.pluck(:invoice_number).last
+    previous_code = Registration.pluck(:invoice_number).last
     if previous_code.blank?
       next_number = 101
     else

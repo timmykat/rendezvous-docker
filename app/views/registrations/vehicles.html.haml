@@ -10,9 +10,9 @@
       %p 
         It's helps us plan if we know what show vehicles you will be bringing. If the information below is correct, you may go directly to 
         = succeed '.' do
-          = link_to 'your registration information', rendezvous_registration_path(@rendezvous_registration)
+          = link_to 'your registration information', registration_path(@registration)
         Otherwise, please enter the correct information below.
-      = simple_form_for @user, :id => 'rendezvous_registration_vehicles' do |u|      
+      = simple_form_for @user, :id => 'registration_vehicles' do |u|      
         = render :partial => 'common/user_info', :locals => { :f => u, :user_fields => true,:vehicles => true }
         %br
         = u.button :submit, 'Save Vehicle(s)', :class => 'btn btn-primary', :id => 'save-vehicle'

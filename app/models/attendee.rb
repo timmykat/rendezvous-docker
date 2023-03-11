@@ -1,5 +1,5 @@
 class Attendee < ActiveRecord::Base
-  belongs_to :rendezvous_registration
+  belongs_to :registration
   
   validates :name, :presence => true
   validates :attendee_age, :inclusion => { :in => ['adult', 'senior', 'child'] } 

@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @rendezvous_registration = @user.rendezvous_registrations.current.last
+    @registration = @user.registrations.current.last
   end
 
   def update

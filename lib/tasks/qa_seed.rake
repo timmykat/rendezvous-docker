@@ -7,7 +7,7 @@ namespace :qa do
     
     # Clear the database
     User.destroy_all
-    RendezvousRegistration.destroy_all
+    Registration.destroy_all
     
     # Vehicle marque array
     vehicle_counts  = [0, 0, 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,3]
@@ -94,9 +94,9 @@ namespace :qa do
       end
       registration_params[:number_of_adults]    = num_adults
       registration_params[:number_of_children]  = num_children
-      registration_params[:invoice_number]  = RendezvousRegistration.invoice_number
+      registration_params[:invoice_number]  = Registration.invoice_number
       
-      r = RendezvousRegistration.new(registration_params)
+      r = Registration.new(registration_params)
       if !r.save
         puts registration_params[:invoice_number]
         puts r.errors.messages

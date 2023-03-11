@@ -152,7 +152,7 @@ a.btn-twitter, a:visited.btn-twitter {
   display: inline-block;
   cursor: pointer;
 }
-.c_rendezvous_registrations .last-step-vehicles .user_fields {
+.c_registrations .last-step-vehicles .user_fields {
   display: none;
 }
 .registration-status {
@@ -867,6 +867,9 @@ color:#EFEFEF;
 /* Registration */
 .amount {
   font-size: 1.2em;
+	padding: 10px 20px;
+	background-color: white;
+	border-radius: 5px;
 }
 input.calculated {
   border: none;

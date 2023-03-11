@@ -12,9 +12,9 @@ module ApplicationHelper
   end
 
   def my_registration_path(user)
-    id = user.rendezvous_registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
+    id = user.registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
     if (!id.blank?)
-      "/rendezvous_registrations/#{id.to_s}"
+      "/registrations/#{id.to_s}"
     end
   end
 

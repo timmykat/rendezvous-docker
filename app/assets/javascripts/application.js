@@ -22,7 +22,7 @@
 //= require admin
 //= require main_pages
 //= require pictures
-//= require rendezvous_registrations
+//= require registrations
 //= require user
 //= require vehicles
 //= require tablesorter/dist/js/jquery.tablesorter.min.js
