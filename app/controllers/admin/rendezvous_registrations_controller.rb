@@ -36,6 +36,7 @@ class Admin::RendezvousRegistrationsController < AdminController
     # Delete all attendees
     @rendezvous_registration.attendees.destroy_all
     @rendezvous_registration.number_of_adults = 0
+    @rendezvous_registration.number_of_seniors = 0
     @rendezvous_registration.number_of_children = 0
     
     # Set registration fee to 0.0
@@ -66,12 +67,13 @@ class Admin::RendezvousRegistrationsController < AdminController
       params.require(:rendezvous_registration).permit(
         :id,
         :number_of_adults,
+        :number_of_seniors
         :number_of_children,
         :registration_fee,
         :total,
         :status,
         { :attendees_attributes =>
-          [:id, :name, :adult_or_child, :volunteer, :sunday_dinner, :_destroy]
+          [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
         }
       )
     end

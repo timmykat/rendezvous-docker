@@ -327,6 +327,7 @@ class RendezvousRegistrationsController < ApplicationController
     def rendezvous_registration_params
       params.require(:rendezvous_registration).permit(
         :number_of_adults,
+        :number_of_seniors,
         :number_of_children,
         :registration_fee,
         :donation,
@@ -339,7 +340,7 @@ class RendezvousRegistrationsController < ApplicationController
         :invoice_number,
         :user_id,
         { :attendees_attributes =>
-          [:id, :name, :adult_or_child, :volunteer, :sunday_dinner, :_destroy]
+          [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
         },
         {:user_attributes=>
           [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,

@@ -15,13 +15,16 @@ $(function() {
   var setRegistrationFee = function() {
     if (typeof appData != 'undefined') {
       var total = $('input#rendezvous_registration_number_of_adults').val() * appData.fees.registration.adult
+         + $('input#rendezvous_registration_number_of_adults').val() * appData.fees.registration.senior
          + $('input#rendezvous_registration_number_of_children').val() * appData.fees.registration.child;
       $('input#rendezvous_registration_registration_fee').val((total).currency());
     }
   };
   var getAttendeeTotals = function() {
     var adults = $('#attendees input[value="adult"]:visible:checked').length;
-    $('input#rendezvous_registration_number_of_adults').val(adults);  
+    $('input#rendezvous_registration_number_of_adults').val(adults);
+    var seniors = $('#attendees input[value="senior"]:visible:checked').length;
+    $('input#rendezvous_registration_number_of_seniors').val(seniors);  
     var children = $('#attendees input[value="child"]:visible:checked').length;
     $('input#rendezvous_registration_number_of_children').val(children);  
     setRegistrationFee();  
@@ -33,7 +36,7 @@ $(function() {
   $('#attendees .rendezvous_registration_attendees_name input:first').attr('placeholder', 'Your name *');
   
   // Initialize - set the first attendee info and get totals
-  $('#attendees input[value="adult"]:first').attr('checked', 'checked');
+  // $('#attendees input[value="adult"]:first').attr('checked', 'checked');
   getAttendeeTotals(); 
   
   if ($('input#rendezvous_registration_user_attributes_last_name').length > 0) {
@@ -43,7 +46,7 @@ $(function() {
   }
   
 
-  // Get adult and kid totals
+  // Get adult, senior, and kid totals
   $('#attendees').on('click', 'input[type=radio]', function(e) { 
     getAttendeeTotals(); 
   });
@@ -89,7 +92,7 @@ $(function() {
   });
   
   
-  // Enable the email, amount and adult- and child-count fields upon form submission
+  // Enable the email, amount and adult-, senior-, and child-count fields upon form submission
   $('form').bind('submit', function() {
     $('input.calculated, input[type=email]').prop('disabled', false);
   });

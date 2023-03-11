@@ -20,8 +20,8 @@ class RendezvousRegistration < ActiveRecord::Base
   serialize :events, JSON
   
   def validate_minimum_number_of_adults
-    if number_of_adults < 1
-      errors[:base] << "You must register at least one adult."
+    if number_of_adults + number_of_seniors < 1
+      errors[:base] << "You must register at least one adult or senior."
     end
   end
   

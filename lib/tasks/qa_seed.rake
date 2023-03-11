@@ -64,7 +64,7 @@ namespace :qa do
       num_adults.times.each do |a|
         attendee = {
           :name => "Lee Adult-Attendee-#{i}",
-          :adult_or_child => 'adult',
+          :attendee_age => 'adult',
           :sunday_dinner => sunday_dinner,
           :volunteer => volunteer
         }
@@ -73,7 +73,7 @@ namespace :qa do
       num_children.times.each do |a|
         attendee = {
           :name => "Lee Child-Attendee-#{i}",
-          :adult_or_child => 'child',
+          :attendee_age => 'child',
           :sunday_dinner => sunday_dinner,
           :volunteer => volunteer
         }

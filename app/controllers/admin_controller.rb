@@ -32,7 +32,7 @@ class AdminController < ApplicationController
       'Registration number',
       'Registratant',
       'Attendee name',
-      'Adult or child',
+      'Adult, senior (80+) or child',
       'Volunteer?',
       # 'Sunday dinner?',
       'Donation?',
@@ -64,6 +64,7 @@ class AdminController < ApplicationController
       :attendees      => [],
       :newbies        => [],
       :adult          => 0,
+      :senior         => 0,
       :child          => 0,
       # :sunday_dinner  => {
       #   :number => 0,
@@ -114,7 +115,7 @@ class AdminController < ApplicationController
 
       registration.attendees.each do |a|
         @data[:attendees] << a.name
-        @data[a.adult_or_child.to_sym]  += 1
+        @data[a.attendee_age.to_sym]  += 1
         # if a.sunday_dinner?
         #   @data[:sunday_dinner][:number]            += 1
         #   @data[:sunday_dinner][:list] << { :name => a.name, :email =>  registration.user.email }
@@ -130,7 +131,7 @@ class AdminController < ApplicationController
           registration.invoice_number,
           registration.user.last_name_first,
           a.name,
-          a.adult_or_child.titlecase,
+          a.attendee_age.titlecase,
           (a.volunteer? ? 'Yes' : 'No'),
           # (a.sunday_dinner? ? 'Yes' : 'No'),
           (!registration.donation.blank? && (registration.donation.to_f > 0.0)) ? 'Yes' : 'No',
