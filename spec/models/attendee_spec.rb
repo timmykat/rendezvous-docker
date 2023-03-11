@@ -11,7 +11,7 @@ RSpec.describe Attendee, type: :model do
   end
   
   it "must be an adult or a child" do
-    expect(build(:attendee, :adult_or_child => nil)).to be_invalid
+    expect(build(:attendee, :attendee_age => nil)).to be_invalid
   end
   
   DatabaseCleaner.clean_with :truncation
@@ -25,7 +25,7 @@ RSpec.describe Attendee, type: :model do
       @sunday_diners = create_list(:attendee, 3, :sunday_dinner => true) 
       @volunteers = create_list(:attendee, 4, :volunteer => true) 
       @neither = create_list(:attendee, 7) 
-      @kids = create_list(:attendee, 2, :adult_or_child => 'child') 
+      @kids = create_list(:attendee, 2, :attendee_age => 'child') 
     end
     
     it "returns the number of sunday diners" do

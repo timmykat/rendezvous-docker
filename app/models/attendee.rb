@@ -2,7 +2,7 @@ class Attendee < ActiveRecord::Base
   belongs_to :rendezvous_registration
   
   validates :name, :presence => true
-  validates :adult_or_child, :inclusion => { :in => ['adult', 'child'] } 
+  validates :attendee_age, :inclusion => { :in => ['adult', 'senior', 'child'] } 
   
   def self.sunday_dinner_count
     Attendee.where(:sunday_dinner => true).count
@@ -13,10 +13,14 @@ class Attendee < ActiveRecord::Base
   end
   
   def self.adult_count
-    Attendee.where(:adult_or_child => 'adult').count
+    Attendee.where(:attendee_age => 'adult').count
+  end
+
+  def self.senior_count
+    Attendee.where(:attendee_age => 'senior').count
   end
   
   def self.child_count
-    Attendee.where(:adult_or_child => 'child').count
+    Attendee.where(:attendee_age => 'child').count
   end
 end

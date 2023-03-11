@@ -64,14 +64,14 @@
     %table.table
       %thead
         %th Name
-        %th Adult or Child
+        %th Adult, Senior, or Child
         -# %th Sunday Dinner
         %th Volunteer
       %tbody
         -@rendezvous_registration.attendees.each do |a|
           %tr
             %td= a.name
-            %td= a.adult_or_child
+            %td= a.attendee_age
             -# %td #{a.sunday_dinner? ? 'yes' : 'no'}
             %td #{a.volunteer? ? 'yes' : 'no'}
 

@@ -21,7 +21,7 @@
           %section
             %h2 Registration Information
             %h3 Attendees
-            %p.hint (Adults are 16 and up, children are 15 and under)
+            %p.hint (Adults are 16+, seniors are 80+, and children are 15 and under)
             .row
               .col-md-12
                 #attendees
@@ -37,6 +37,11 @@
                 .form-group
                   %label Total adults:
                   = f.input_field :number_of_adults, :disabled => true, :class => 'calculated fee-calculation'
+            .row
+              .col-md-4
+                .form-group
+                  %label Total seniors:
+                  = f.input_field :number_of_seniors, :disabled => true, :class => 'calculated fee-calculation'
             .row
               .col-md-4
                 .form-group

@@ -18,6 +18,7 @@
                 %th.text-center Status
                 %th Name
                 %th.text-center Adults
+                %th.text-center Seniors
                 %th.text-center Children
                 %th.text-center Vehicles
                 %th.text-center Registration Fee
@@ -38,6 +39,7 @@
                   %td.text-center= registration.status
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
                   %td.text-center= registration.number_of_adults
+                  %td.text-center= registration.number_of_seniors
                   %td.text-center= registration.number_of_children
                   %td.text-center= vehicles_list(registration.user.vehicles)
                   %td.text-center= number_to_currency(registration.registration_fee)
@@ -143,6 +145,8 @@
                           %em  Attendees
                         %td.text-right
                           Adults: #{@data[:adult]}
+                          %br
+                            Seniors:   #{@data[:senior]}
                           %br
                             Kids:   #{@data[:child]}
                       %tr

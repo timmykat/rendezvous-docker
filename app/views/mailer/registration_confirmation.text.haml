@@ -20,7 +20,7 @@ Due: #{number_to_currency(@rendezvous_registration.balance)}
 
 Attendees:
 - @rendezvous_registration.attendees.each do |a|
-  #{a.name}  #{a.adult_or_child}  Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
+  #{a.name}  #{a.attendee_age}  Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
 
 Vehicles:
 - @rendezvous_registration.user.vehicles.each do |v|

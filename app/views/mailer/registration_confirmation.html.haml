@@ -26,7 +26,7 @@
 - @rendezvous_registration.attendees.each do |a|
   %tr
     %td #{a.name}
-    %td #{a.adult_or_child.titlecase}
+    %td #{a.attendee_age.titlecase}
     -# %td Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'}
     %td Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
 
