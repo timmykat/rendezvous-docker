@@ -1,4 +1,4 @@
-module RendezvousRegistrationsHelper
+module RegistrationsHelper
 
   STEP_ARRAY = [ 'welcome', 'sign', 'register', 'review', 'payment', 'vehicles' ]
   

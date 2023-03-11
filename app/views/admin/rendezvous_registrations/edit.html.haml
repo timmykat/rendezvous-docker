@@ -11,15 +11,15 @@
     .col-md-6.col-xs-12
       %section
         %h2 Modify Attendees
-        = simple_form_for @rendezvous_registration, :url => admin_rendezvous_registration_path(@rendezvous_registration), :method => :put, :id => 'rendezvous_registration_form' do |f|
+        = simple_form_for @registration, :url => admin_registration_path(@registration), :method => :put, :id => 'registration_form' do |f|
           %h3 Attendees
           .row
             .col-md-12
               #attendees
                 = f.simple_fields_for :attendees do |a|
-                  = render :partial => '/rendezvous_registrations/attendee_fields', :locals => { :f => a }
+                  = render :partial => '/registrations/attendee_fields', :locals => { :f => a }
                 .links
-                  = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, :class => 'btn btn-primary btn-sm', :partial => '/rendezvous_registrations/attendee_fields'
+                  = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, :class => 'btn btn-primary btn-sm', :partial => '/registrations/attendee_fields'
                   Add a person
               %br
               %br
@@ -63,7 +63,7 @@
               = f.input :cc_transaction_id, :label => 'Credit card transaction ID', :disabled => true
           .row
             .col-md-12
-              = hidden_field_tag :rendezvous_registration_id, @rendezvous_registration.id
+              = hidden_field_tag :registration_id, @registration.id
               = f.button :submit, 'Update Registration', :class => 'btn btn-primary'
   
 

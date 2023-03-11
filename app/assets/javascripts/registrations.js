@@ -14,34 +14,35 @@ var n = this,
 $(function() {
   var setRegistrationFee = function() {
     if (typeof appData != 'undefined') {
-      var total = $('input#rendezvous_registration_number_of_adults').val() * appData.fees.registration.adult
-         + $('input#rendezvous_registration_number_of_adults').val() * appData.fees.registration.senior
-         + $('input#rendezvous_registration_number_of_children').val() * appData.fees.registration.child;
-      $('input#rendezvous_registration_registration_fee').val((total).currency());
+      var total = $('input#registration_number_of_adults').val() * appData.fees.registration.adult
+         + $('input#registration_number_of_adults').val() * appData.fees.registration.senior
+         + $('input#registration_number_of_children').val() * appData.fees.registration.child;
+      $('input#registration_registration_fee').val((total).currency());
     }
   };
   var getAttendeeTotals = function() {
     var adults = $('#attendees input[value="adult"]:visible:checked').length;
-    $('input#rendezvous_registration_number_of_adults').val(adults);
+    $('input#registration_number_of_adults').val(adults);
     var seniors = $('#attendees input[value="senior"]:visible:checked').length;
-    $('input#rendezvous_registration_number_of_seniors').val(seniors);  
+    $('input#registration_number_of_seniors').val(seniors);  
     var children = $('#attendees input[value="child"]:visible:checked').length;
-    $('input#rendezvous_registration_number_of_children').val(children);  
+    $('input#registration_number_of_children').val(children);  
     setRegistrationFee();  
   }
       
-  // Remove the remove button from the first attendee and lock the child selection
+  // Remove the remove button from the first attendee and lock and hide the child selection
   $('#attendees .remove_association_action:first').remove();
   $('#attendees input[value="child"]:first').attr('disabled', true);
-  $('#attendees .rendezvous_registration_attendees_name input:first').attr('placeholder', 'Your name *');
+  $('#attendees input[value="child"]:first').parent().hide();
+  $('#attendees .registration_attendees_name input:first').attr('placeholder', 'Your name *');
   
   // Initialize - set the first attendee info and get totals
   // $('#attendees input[value="adult"]:first').attr('checked', 'checked');
   getAttendeeTotals(); 
   
-  if ($('input#rendezvous_registration_user_attributes_last_name').length > 0) {
-    var firstName = $('input#rendezvous_registration_user_attributes_first_name').val();
-    var lastName = $('input#rendezvous_registration_user_attributes_last_name').val();
+  if ($('input#registration_user_attributes_last_name').length > 0) {
+    var firstName = $('input#registration_user_attributes_first_name').val();
+    var lastName = $('input#registration_user_attributes_last_name').val();
     $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
   }
   
@@ -63,9 +64,9 @@ $(function() {
   // Get final total on payment page
   var setTotal = function() {
     if (typeof appData != 'undefined') {
-      var donation = $('input[name="rendezvous_registration[donation]"]:checked').val();
+      var donation = $('input[name="registration[donation]"]:checked').val();
       if (donation == 'other') {
-        donation = $('input[name="rendezvous_registration[donation]"][type=number]').val();
+        donation = $('input[name="registration[donation]"][type=number]').val();
       }
       if ($.isNumeric(donation)) {
         donation = parseFloat(donation);
@@ -73,7 +74,7 @@ $(function() {
         donation = 0.
       }
       var total = parseFloat(appData.registration_fee) + donation;
-      $('input#rendezvous_registration_total').val((total).currency());
+      $('input#registration_total').val((total).currency());
     }
   };
   
@@ -85,9 +86,9 @@ $(function() {
   // Toggle access to donation other amount field
   $('input[type=radio].total-calculation').on('click', function(e) {
     if ($(this).val() == 'other') {
-      $('input#rendezvous_registration_donation').attr('disabled', false);
+      $('input#registration_donation').attr('disabled', false);
     } else {
-      $('input#rendezvous_registration_donation').attr('disabled', true).val('');
+      $('input#registration_donation').attr('disabled', true).val('');
     }
   });
   

@@ -30,12 +30,12 @@
               - @registrations.each do |registration|
                 %tr{:class => registration_row_class(registration)}
                   %td
-                    = link_to 'View', admin_rendezvous_registration_path(registration.id), :class => 'btn btn-sm btn-default', :style => 'margin-bottom: 5px;'
+                    = link_to 'View', admin_registration_path(registration.id), :class => 'btn btn-sm btn-default', :style => 'margin-bottom: 5px;'
                     %br
-                    = link_to 'Edit', edit_admin_rendezvous_registration_path(registration.id), :class => 'btn btn-sm btn-warning'
+                    = link_to 'Edit', edit_admin_registration_path(registration.id), :class => 'btn btn-sm btn-warning'
                     %br
                     %br
-                    = link_to 'Cancel', admin_cancel_rendezvous_registration_path(registration.id), :class => 'btn btn-sm btn-danger'
+                    = link_to 'Cancel', admin_cancel_registration_path(registration.id), :class => 'btn btn-sm btn-danger'
                   %td.text-center= registration.status
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
                   %td.text-center= registration.number_of_adults

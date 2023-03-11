@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get '/register',             to: 'rendezvous_registrations#new'
-  get '/registration-welcome', to: 'rendezvous_registrations#welcome'
+  get '/register',             to: 'registrations#new'
+  get '/registration-welcome', to: 'registrations#welcome'
 
   resources :pictures, except: [:index]
   get '/gallery',                    to: 'pictures#index'
@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get '/users/synchronize_mailchimp', to: 'users#synchronize_with_mailchimp'
   resources :users
 
-  resources :rendezvous_registrations do
+  resources :registrations do
     member do
       get :review
       get :payment
@@ -25,17 +25,17 @@ Rails.application.routes.draw do
       get :vehicles
     end
   end
-  resources :rendezvous_registrations, :except => [:index]
-  get 'payment_token', to: 'rendezvous_registrations#get_payment_token'
+  resources :registrations, :except => [:index]
+  get 'payment_token', to: 'registrations#get_payment_token'
 
 
   # Admin routes
   get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   resources :admin, { :only => [:index] }
   namespace :admin do
-    resources  :rendezvous_registrations, { :only => [ :show, :edit, :update ] }
+    resources  :registrations, { :only => [ :show, :edit, :update ] }
     resources :transactions, { :only => [ :create ] }
-    get 'rendezvous_registrations/:id/cancel', to: 'rendezvous_registrations#cancel', as: 'cancel_rendezvous_registration'
+    get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
   end
 
   # Omniauth authentication
@@ -63,7 +63,7 @@ Rails.application.routes.draw do
   post '/contact-us', to:'content_pages#contact_us'
 
   # Send email
-  get '/send_email', to: 'rendezvous_registrations#send_email'
+  get '/send_email', to: 'registrations#send_email'
 
   # AJAX routes
   get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'

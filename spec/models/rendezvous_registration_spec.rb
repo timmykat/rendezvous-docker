@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RendezvousRegistration, type: :model do
+RSpec.describe Registration, type: :model do
   it "requires a first name"
   it "requires a last name"
   it "requires one address line"

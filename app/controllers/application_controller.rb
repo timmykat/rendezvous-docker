@@ -42,14 +42,14 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     session[:admin_user] = false
-    @rendezvous_registration = current_user.rendezvous_registrations.current.first
+    @registration = current_user.registrations.current.first
     if current_user.has_role? :admin
       session[:admin_user] = true
       admin_index_path
-    elsif @rendezvous_registration.blank? || @rendezvous_registration.status != 'complete'
+    elsif @registration.blank? || @registration.status != 'complete'
       register_path
     else
-      rendezvous_registration_path(@rendezvous_registration)
+      registration_path(@registration)
     end
   end
 

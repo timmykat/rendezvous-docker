@@ -1,6 +1,6 @@
 class Admin::TransactionsController < AdminController
   def create
-    rendezvous_registration = RendezvousRegistration.find(params[:rendezvous_registration_id])
+    registration = Registration.find(params[:registration_id])
     transaction = Transaction.new(transaction_params)
 
     # Set transaction amount for refund to be negative
@@ -8,27 +8,27 @@ class Admin::TransactionsController < AdminController
       transaction.amount = -transaction.amount
     end
     
-    rendezvous_registration.paid_amount ||= 0.0
+    registration.paid_amount ||= 0.0
     
-    if (transaction.amount + rendezvous_registration.paid_amount) < 0.0
+    if (transaction.amount + registration.paid_amount) < 0.0
       flash_alert_now "You probably don't want to refund more than the person has paid..."
-      render 'admin/rendezvous_registrations/edit'
+      render 'admin/registrations/edit'
       return
     end
     
-    rendezvous_registration.transactions << transaction
-    rendezvous_registration.paid_amount += transaction.amount
-    if (rendezvous_registration.total - rendezvous_registration.paid_amount).abs < 0.10
-      rendezvous_registration.status = 'complete'
+    registration.transactions << transaction
+    registration.paid_amount += transaction.amount
+    if (registration.total - registration.paid_amount).abs < 0.10
+      registration.status = 'complete'
     end
     
-    if !rendezvous_registration.save
+    if !registration.save
       flash_alert 'There was a problem creating the transaction.'
     else
       flash_notice 'The transaction was successfully created.'
     end
         
-    redirect_to edit_admin_rendezvous_registration_path(rendezvous_registration)
+    redirect_to edit_admin_registration_path(registration)
         
   end
   

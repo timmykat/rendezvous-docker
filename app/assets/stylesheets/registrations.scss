@@ -1,18 +1,52 @@
-// Place all the styles related to the RendezvousRegistrations controller here.
+// Place all the styles related to the Registrations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.attendee {
+  .attendee-type {
+    font-weight: bold;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+
+    &.registrant {
+      color: black;
+      background-color: #eee;
+      border: solid 2px #c00;
+      display: none;
+    }
+
+    &.guest {
+      color: #444;
+      background-color: #dedede;
+      border: solid 1px #666;
+    }
+  }
+
+  &:first-child {
+    .registrant {
+      display: block;
+    }
+    .guest {
+      display: none;
+    }
+  }
+}
+
 .existing_account {
   font-weight: bold;
   font-size: 1.1em;
   display: none;
 }
-#new_rendezvous_registration input.email {
+#new_registration input.email {
   width: 100%;
 }
-#new_rendezvous_registration fieldset {
+#new_registration fieldset {
   margin-top: 30px;
 }
-#new_rendezvous_registration .rendezvous_registration_user_country {
+#new_registration .registration_user_country {
   font-size: 1.2em;
   font-weight: bold;
 }
