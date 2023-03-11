@@ -13,6 +13,13 @@ database.yml
 # Ignore bundler config.
 /.bundle
 
+# Ignore local mysql config
+/mysql_config
+
+# Ignore lock files
+Gemfile.lock
+yarn.lock
+
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep

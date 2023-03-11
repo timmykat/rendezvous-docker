@@ -1,0 +1,124 @@
+version: '3.3'
+
+volumes:
+  db_data:
+
+services:
+  rails_app:
+    build:
+      context: .
+      dockerfile: ./config/docker/Dockerfile
+    
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+
+    environment:
+      RENDEZVOUS_FACEBOOK_APP_ID: ${RENDEZVOUS_FACEBOOK_APP_ID}
+      RENDEZVOUS_FACEBOOK_APP_SECRET: ${RENDEZVOUS_FACEBOOK_APP_SECRET}
+      RENDEZVOUS_TWITTER_CONSUMER_KEY: ${RENDEZVOUS_TWITTER_CONSUMER_KEY}
+      RENDEZVOUS_TWITTER_CONSUMER_SECRET: ${RENDEZVOUS_TWITTER_CONSUMER_SECRET}
+      RENDEZVOUS_RECAPTCHA_PUBLIC_KEY: ${RENDEZVOUS_RECAPTCHA_PUBLIC_KEY}
+      RENDEZVOUS_RECAPTCHA_PRIVATE_KEY: ${RENDEZVOUS_RECAPTCHA_PRIVATE_KEY}
+      MAILCHIMP_API_KEY: ${MAILCHIMP_API_KEY}
+      RENDEZVOUS_SES_USER: ${RENDEZVOUS_SES_USER}
+      RENDEZVOUS_SES_PASSWORD: ${RENDEZVOUS_SES_PASSWORD}
+      RENDEZVOUS_AWS_ACCESS_KEY_ID: ${RENDEZVOUS_AWS_ACCESS_KEY_ID}
+      RENDEZVOUS_AWS_SECRET_ACCESS_KEY: ${RENDEZVOUS_AWS_SECRET_ACCESS_KEY}
+      BRAINTREE_MERCHANT_ID: ${BRAINTREE_MERCHANT_ID}
+      BRAINTREE_PUBLIC_KEY: ${BRAINTREE_PUBLIC_KEY}
+      BRAINTREE_PRIVATE_KEY: ${BRAINTREE_PRIVATE_KEY}
+      BRAINTREE_PAYMENT_TOKEN: ${BRAINTREE_PAYMENT_TOKEN}
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_PASS: ${GMAIL_PASS}
+      CAPTCH_V3_PUBLIC: ${CAPTCH_V3_PUBLIC}
+      CAPTCH_V3_PRIVATE: ${CAPTCH_V3_PRIVATE}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+
+    ports:
+      - 3000:3000
+
+    links:
+      - mysql
+
+    networks:
+      - rendezvous
+
+    depends_on: 
+      - mysql
+
+    volumes:
+      - "./rendezvous_app:/app"
+      - "/tmp:/var/run/mysqld"
+
+  delayed_job:
+    build:
+      context: .
+      dockerfile: ./config/docker/Dockerfile
+    
+    command: /app/bin/delayed_job start; while true; do sleep 1; done
+
+    environment:
+      RENDEZVOUS_FACEBOOK_APP_ID: ${RENDEZVOUS_FACEBOOK_APP_ID}
+      RENDEZVOUS_FACEBOOK_APP_SECRET: ${RENDEZVOUS_FACEBOOK_APP_SECRET}
+      RENDEZVOUS_TWITTER_CONSUMER_KEY: ${RENDEZVOUS_TWITTER_CONSUMER_KEY}
+      RENDEZVOUS_TWITTER_CONSUMER_SECRET: ${RENDEZVOUS_TWITTER_CONSUMER_SECRET}
+      RENDEZVOUS_RECAPTCHA_PUBLIC_KEY: ${RENDEZVOUS_RECAPTCHA_PUBLIC_KEY}
+      RENDEZVOUS_RECAPTCHA_PRIVATE_KEY: ${RENDEZVOUS_RECAPTCHA_PRIVATE_KEY}
+      MAILCHIMP_API_KEY: ${MAILCHIMP_API_KEY}
+      RENDEZVOUS_SES_USER: ${RENDEZVOUS_SES_USER}
+      RENDEZVOUS_SES_PASSWORD: ${RENDEZVOUS_SES_PASSWORD}
+      RENDEZVOUS_AWS_ACCESS_KEY_ID: ${RENDEZVOUS_AWS_ACCESS_KEY_ID}
+      RENDEZVOUS_AWS_SECRET_ACCESS_KEY: ${RENDEZVOUS_AWS_SECRET_ACCESS_KEY}
+      BRAINTREE_MERCHANT_ID: ${BRAINTREE_MERCHANT_ID}
+      BRAINTREE_PUBLIC_KEY: ${BRAINTREE_PUBLIC_KEY}
+      BRAINTREE_PRIVATE_KEY: ${BRAINTREE_PRIVATE_KEY}
+      BRAINTREE_PAYMENT_TOKEN: ${BRAINTREE_PAYMENT_TOKEN}
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_PASS: ${GMAIL_PASS}
+      CAPTCH_V3_PUBLIC: ${CAPTCH_V3_PUBLIC}
+      CAPTCH_V3_PRIVATE: ${CAPTCH_V3_PRIVATE}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+
+    networks:
+      - rendezvous
+
+    depends_on:
+      - rails_app
+      - mysql
+
+    volumes:
+      - "./rendezvous_app:/app" 
+
+  mysql:
+    image: mysql/mysql-server:8.0.28
+    platform: linux/amd64
+    restart: always
+
+    ports:
+      - "3306:3306"
+    
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+
+    networks:
+      - rendezvous
+
+    volumes:
+      - "./config/mysql/mysqlcnf:/etc/mysql/conf.d"
+      - "./.ephemeral/db_init/rendezvous.sql:/docker-entrypoint-initdb.d/rendezvous.sql"
+      - "./.ephemeral/db_data:/var/lib/mysql" 
+
+networks:
+  rendezvous:
+
