@@ -4,37 +4,42 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-#Ignore .env file
-/.env
+# Ignore local dev site
+.ephemeral
+.sass-cache
 
-#Ignore database file
-database.yml
+# Ignore .env files
+rendezvous_app/.env
+rendezvous_app/.envrc
+
+# Ignore database file
+rendezvous_app/database.yml
 
 # Ignore bundler config.
-/.bundle
+rendezvous_app/.bundle
 
 # Ignore local mysql config
-/mysql_config
+rendezvous_app/mysql_config
 
 # Ignore lock files
-Gemfile.lock
-yarn.lock
+rendezvous_app/Gemfile.lock
+rendezvous_app/yarn.lock
 
 # Ignore all logfiles and tempfiles.
-/log/*
+rendezvous_app/log/*
 !/log/.keep
-/tmp
+rendezvous_app/tmp
 
 # Ignore user files
-/public/*.csv
-/public/uploads/*
-/public/registrations/*
-/public/assets/*
+rendezvous_app/public/*.csv
+rendezvous_app/public/uploads/*
+rendezvous_app/public/registrations/*
+rendezvous_apprendezvous_app/public/assets/*
 
-.sass-cache
-/public/packs
-/public/packs-test
-/node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
+rendezvous_app.sass-cache
+rendezvous_app/public/packs
+rendezvous_app/public/packs-test
+rendezvous_app/node_modules
+rendezvous_app/yarn-error.log
+rendezvous_appyarn-debug.log*
+rendezvous_app/.yarn-integrity

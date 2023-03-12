@@ -118,9 +118,9 @@
   %section.registration-modal
     .container.register
       %h2
-        Citroen Rendezvous #{config[:dates][:year]}
+        Citroen Rendezvous registration
         %br
-        registration is open!
+        is open for #{Time.now.year}!
       %p On-line registration closes #{relative_date(-7)}
       = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
       %button.close-modal CLOSE

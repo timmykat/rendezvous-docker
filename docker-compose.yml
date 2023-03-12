@@ -5,6 +5,7 @@ volumes:
 
 services:
   rails_app:
+    image: rails_image
     build:
       context: .
       dockerfile: ./config/docker/Dockerfile
@@ -54,12 +55,8 @@ services:
       - "/tmp:/var/run/mysqld"
 
   delayed_job:
-    build:
-      context: .
-      dockerfile: ./config/docker/Dockerfile
-    
+    image: rails_image
     command: /app/bin/delayed_job start; while true; do sleep 1; done
-
     environment:
       RENDEZVOUS_FACEBOOK_APP_ID: ${RENDEZVOUS_FACEBOOK_APP_ID}
       RENDEZVOUS_FACEBOOK_APP_SECRET: ${RENDEZVOUS_FACEBOOK_APP_SECRET}
