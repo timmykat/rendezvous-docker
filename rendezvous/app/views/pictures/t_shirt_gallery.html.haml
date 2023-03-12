@@ -1,0 +1,17 @@
+.container
+  .row
+    .col-md-12
+      %h1 Rendezvous T-Shirt Gallery
+      %p Thanks to Linda Abrams! Click on a photo to enlarge/enter slideshow.
+      #gallery
+        - @pictures.each do |picture|
+          = render :partial => 'gallery_image', :locals => { :pic => picture }
+
+%script{ :src => "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.7.1/lazyload.min.js" }
+
+:javascript
+  (function() {
+    new LazyLoad({
+      elements_selector: ".lazy"
+    });
+  }());

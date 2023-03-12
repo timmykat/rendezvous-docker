@@ -1,0 +1,37 @@
+.spacer
+.container
+  .row
+    .col-md-12
+      %h1 Rendezvous Registrations
+      %table.table.table-striped
+        %thead
+          %tr
+            %th Name
+            %th.text-center Adults
+            %th.text-center Children
+            %th.text-center Vehicles
+            %th.text-center Fee
+            %th.text-center Donation
+            %th.text-center Total
+            %th.text-center Paid
+            %th.text-center Due
+            %th.text-center Admin
+        %tbody
+          - @registrations.each do |registration|
+            %tr
+              %td
+                = link_to registration.user.last_name_first, registration_path(registration.id)
+              %td.text-center= registration.number_of_adults
+              %td.text-center= registration.number_of_seniors
+              %td.text-center= registration.number_of_children
+              %td.text-center= vehicles_list(registration.user.vehicles)
+              %td.text-center= number_to_currency(registration.registration_fee)
+              %td.text-center= number_to_currency(registration.donation)
+              %td.text-center= number_to_currency(registration.total)
+              %td.text-center= number_to_currency(registration.paid_amount)
+              - due = registration.balance
+              - if due > 0.0
+                %td.text-center.alert-danger= number_to_currency(due)
+              - else
+                %td.text-center.alert-success= number_to_currency(due)
+              %td= link_to "delete", registration_path(registration.id), :method => :delete

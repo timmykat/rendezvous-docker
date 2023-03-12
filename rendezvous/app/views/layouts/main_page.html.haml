@@ -1,0 +1,126 @@
+- config = Rails.configuration.rendezvous
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "UTF-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "A website for the northeast Citroen enthusiasts gathering", :name => "description"}/
+    %meta{:content => "Citroen Rendezvous, LLC", :name => "author"}/
+
+    - # Social metatags
+    %meta{ :property => "fb:app_id", :content => '146487272381428' }
+    %meta{ :property => "og:type", :content => 'website' }
+    %meta{ :property => "og:site_name", :content => 'Citroen Rendezvous' }
+    %meta{ :property => "og:url", :content => 'https://citroenrendezvous.org' }
+    %meta{ :property => "og:title", :content => 'Citroen Rendezvous' }
+    %meta{ :property => "og:description", :content => "The Northeast&#039;s largest gathering of Citroens and their fans, friends, and family." }
+    %meta{ :property => "og:image", :content => 'https://citroenrendezvous.org/citroen-rendezvous-2022.jpg' }
+    %meta{ :property => "og:image:type", :content => 'image/jpeg' }
+    %meta{ :property => "og:image:width", :content => '1200' }
+    %meta{ :property => "og:image:height", :content => '699' }
+    %meta{ :name => "twitter:card", :content => 'summary' }
+    %meta{ :name => "twitter:title", :content => 'Citroen Rendezvous' }
+    %meta{ :name => "twitter:url", :content => 'https://citroenrendezvous.org' }
+    %meta{ :name => "twitter:description", :content => "The Northeast&#039;s largest gathering of Citroens and their fans, friends, and family." }
+    %meta{ :name => "twitter:img:src", :content => 'https://citroenrendezvous.org/rendezvous-share-2021.jpg' }
+    %meta{ :name => "twitter:img:width", :content => '1200' }
+    %meta{ :name => "twitter:img:height", :content => '699' }
+
+    %title Citroen Rendezvous | The Northeast's largest gathering of Citroën owners, families, and fans
+    = stylesheet_link_tag "//cdn-images.mailchimp.com/embedcode/slim-081711.css"
+    = stylesheet_link_tag 'application', :media  => 'all'
+
+    %script{ :src => 'https://use.fontawesome.com/5257bcd371.js' }
+    = javascript_include_tag 'application'
+    = javascript_include_tag 'smoothscroll'
+    = javascript_include_tag 'custom'
+
+    = csrf_meta_tags
+    = yield :header_tags
+
+    /
+      [if lt IE 9]
+      = javascript_include_tag "html5shiv"
+      = javascript_include_tag "respond"
+
+    - # Google Analytics script
+    :javascript
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-4773340-9', 'auto');
+      ga('send', 'pageview');
+
+    = javascript_include_tag "//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js", "data-dojo-config" => 'usePlainJson: true, isDebug: false'
+    :javascript
+      require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us12.list-manage.com","uuid":"198c738ff80668ca4d472c590","lid":"9e696fe93f"}) });
+
+    = render :partial => 'common/status_bar'
+
+  %body{ :class => "main #{(user_signed_in? ? 'logged-in' : 'guest')}" }
+    - if user_signed_in?
+      = render :partial => 'common/manage'
+    = render :partial => 'layouts/flash'
+
+    %header.top-header
+      .container
+        .row.header-row
+          .col-md-12
+            %nav.navbar.navbar-default
+              %a{:href => "/"}
+                = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo', :style => 'height: 75px;margin-top: 0px; border-bottom: 0px none; margin-bottom: 10px;'
+
+              .container-fluid
+                / Brand and toggle get grouped for better mobile display
+                .navbar-header
+                  %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+                    %span.sr-only Toggle navigation
+                    %span.icon-bar
+                    %span.icon-bar
+                    %span.icon-bar
+                / Collect the nav links, forms, and other content for toggling
+                #bs-example-navbar-collapse-1.collapse.navbar-collapse
+                  %ul.nav.navbar-nav.navbar-right
+                    %li
+                      %a{:href => "/#home"} home
+
+                    - if can_register?
+                      %li
+                        = link_to 'Register', registration_welcome_path
+                    - else
+                      %li
+                        %a{:href => "/t-shirt-gallery"} t-shirt gallery
+                    %li
+                      %a{:href => "/#info"} info
+                    %li
+                      %a{:href => "/#photos"} photos
+                    -# %li
+                    -#   %a{:href => "/#contact"} contact us
+                    - unless current_user
+                      %li
+                        %a{:href => "/user_sign_in"} sign in
+                / /.navbar-collapse
+              / /.container-fluid
+      .registration-status
+        .container
+          .row
+            .col-md-12.status
+              Status here
+
+    = yield
+
+    = render :partial => 'common/footer'
+
+- if can_register?
+  %section.registration-modal
+    .container.register
+      %h2
+        Citroen Rendezvous registration
+        %br
+        is open for #{Time.now.year}!
+      %p On-line registration closes #{relative_date(-7)}
+      = link_to 'REGISTER', registration_welcome_path, :class => 'btn btn-primary btn-lg'
+      %button.close-modal CLOSE

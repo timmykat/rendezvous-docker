@@ -1,0 +1,65 @@
+.container#vendors
+  .row
+    .col-md-offset-2.col-md-8.col-xs-12
+      %h1 FAQ
+      .well.well-sm#discounts
+        .question
+          %p We spend a lot of money in town - does anyone give discounts?
+        .answer
+          %p YES! Mention the Citroen Rendezvous at these places:
+          %ul
+            %li 15% off at Ravenous Creperie, 21 Phila St.
+            %li 20% off food and beverage at NaNola, 2638 Rte 9, Malta, NY 12020
+            %li 10% off rosé at Crush and Cask Wine and Spirits, 170 S. Broadway
+      .well.well-sm#help
+        .question
+          %p How can I help?
+        .answer
+          %p So glad you asked!
+          %ul
+            %li You can donate stuff to the silent auction. Details about how to do this will be forthcoming.
+            %li
+              You can make a food pantry donation in honor of Gelseigh Cannon. Non-perishable food items collected will go to the
+              = succeed '.' do
+                = link_to 'Franklin Community Center', 'http://www.franklincommunitycenter.org/', :target => '_blank'
+            %li You can sign up to volunteer when you register (or get in touch later).
+            %li You can make a donation to the Rendezvous when you register. Or any time, really.
+      .well.well-sm#accommodations
+        .question
+          %p Do you have any recommended accommodations?
+        .answer
+          %p
+            The
+            = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', { :target => '_blank' }
+            and various travel websites are excellent sources of information. That said, the following are close to the center of action at the Holiday Inn (232 Broadway):
+          %ul
+            %li
+              = succeed ',' do
+                = link_to 'Carriage House Inn', 'httpd://CarriageHouseInnSaratoga.com', :target => '_blank'
+              198 Broadway, 518-584-4220
+            %li
+              = succeed ',' do
+                = link_to 'Holiday Inn', 'http://SaratogaHI.com', :target => '_blank'
+              232 Braodway, 518-584-4550
+            %li
+              = succeed ',' do
+                = link_to 'Turf & Spa', 'http://SaratogaTurfAndSpa.com', :target => '_blank'
+              176 Broadway, 800-972-1229
+            %li
+              = succeed ',' do
+                = link_to 'St. Francis Motel', 'http://StFrancisStCharlesMotels.com', :target => '_blank'
+              188 Broadway, 518-584-2050
+            %li
+              = succeed ',' do
+                = link_to 'St. Charles Motel', 'http://StFrancisStCharlesMotels.com', :target => '_blank'
+              195 Broadway, 518-584-2050
+      .well.well-sm#rally
+        .question
+          %p How does the Sunday driving tour work? Do I need to drive a Citroen?
+        .answer
+          %p Art Harvey, a Saratoga Springs local, will be leading the driving tour.
+          %ul
+            %li You can drive anything you want - no judgment.
+            %li Starting point is the Saratoga Auto Museum at 11:30am on Sunday.
+            %li The drive will be at a leisurely pace on secondary roads.
+            %li Participants may drive any part of the route.
