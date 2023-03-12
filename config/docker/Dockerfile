@@ -1,4 +1,4 @@
-FROM ruby:3.1.3 as main
+FROM ruby:3.1.2 as main
 
 RUN apt-get update
 

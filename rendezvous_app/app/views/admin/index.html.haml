@@ -10,7 +10,7 @@
           %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-5'
           %li= link_to '<i class="fa fa-female"></i><i class="fa fa-male"></i> Site Users'.html_safe, '#tabbed-6'
         #tabbed-1
-          %h2 Registrations
+          %h2= "Registrations for #{Time.now.year}"
           %table.table.striped
             %thead
               %tr
