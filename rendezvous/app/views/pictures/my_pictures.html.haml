@@ -1,0 +1,31 @@
+.logged-in-spacer
+.container
+  %h2 My Photos
+  .row
+    .col-md-12
+      .well
+        %p
+          We're pleased to have users to upload photos from the Rendezvous for our photo gallery.
+        %p
+          We have limited server space, so please choose your images carefully and avoid duplication. Max upload size is 2 MB, which is smaller than the default size of most DSLRs, so please resize if necessary.
+        %p 
+          Drag your photos, singly or as a group, to the area below to upload.
+  .row.upload-area
+    .col-md-12
+      %form{ :action => '/pictures/upload', :class => 'dropzone', :id => 'dropzone-upload' }
+        = hidden_field_tag :authenticity_token, form_authenticity_token
+  .row
+    .col-md-12
+      %table.pictures
+        %thead
+          %tr
+            %th{ :style => 'width: 15%' } Thumbnail
+            %th{ :style => 'width: 15%' } Rendezvous Year
+            /
+              %th Caption/title
+            %th Credit
+            %th
+        %tbody
+          - @pictures.each do |pic|
+            = render :partial => 'common/picture_form', :locals => { :pic => pic }
+  

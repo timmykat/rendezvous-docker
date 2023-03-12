@@ -1,0 +1,33 @@
+@function str-replace($string, $search, $replace: "") {
+    $index: str-index($string, $search);
+    @if $index {
+        @return str-slice($string, 1, $index - 1)+$replace+str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    }
+    @return $string;
+}
+
+@mixin font-face($name, $file, $weight: normal, $style: normal) {
+    @font-face {
+        font-family: quote($name);
+        font-style: $style;
+        font-weight: $weight;
+        src: url(font-path($file + '.eot') + "?iefix") format('embedded-opentype'), url(font-path($file + '.woff')) format('woff'), url(font-path($file + '.ttf')) format('truetype'),
+    }
+}
+
+@include font-face('Open Sans',
+open_sans/OpenSans-Regular-webfont,
+normal,
+normal);
+@include font-face('Open Sans',
+open_sans/OpenSans-Italic-webfont,
+normal,
+italic);
+@include font-face('Open Sans',
+open_sans/OpenSans-Bold-webfont,
+bold,
+normal);
+@include font-face('Open Sans',
+open_sans/OpenSans-SemiboldItalic-webfont,
+bold,
+italic);

@@ -1,0 +1,36 @@
+- config = Rails.configuration.rendezvous
+Dear #{@registration.user.full_name},
+
+You have successfully registered for the the #{config[:dates][:year]} Citroen Rendezvous, which will take place #{config[:dates][:month]} #{config[:dates][:start]}-#{config[:dates][:end]} in Saratoga Springs, New York. We hope you're as excited as we are!
+
+- if @registration.paid_method == 'credit card'
+  Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
+- else
+  An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied.
+
+You may also view your registration information at
+= registration_url(@registration, :protocol => 'https')
+
+Your Rendezvous details:
+
+Registration fee: #{number_to_currency(@registration.registration_fee)}
+Donation: #{number_to_currency(@registration.donation)}
+Total: #{number_to_currency(@registration.total)}
+Due: #{number_to_currency(@registration.balance)}
+
+Attendees:
+- @registration.attendees.each do |a|
+  #{a.name}  #{a.attendee_age}  Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
+
+Vehicles:
+- @registration.user.vehicles.each do |v|
+  #{v.year} #{v.marque} #{v.model}
+
+
+If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
+
+Here's to a great Rendezvous!
+
+Warmest regards,
+Your chauffeurs
+David Cossitt Levy, Christoper (Toaph) Westfall, Tim Kinnel

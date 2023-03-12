@@ -1,7 +1,0 @@
-.gallery-image
-  %a{ :href => pic.image.display.url }
-    %picture
-      %source{ :srcset => pic.image.gallery.url, :media => '(min-width: 700px)' }
-      %source{ :srcset => pic.image.thumb.url, :media => '(min-width: 480px)' }
-      %img{ :src => pic.image.thumb.url, :class => "lazy" }
-  .credit= picture_credit(pic) 

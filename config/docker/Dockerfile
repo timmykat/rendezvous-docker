@@ -6,7 +6,7 @@ RUN apt install -yq nodejs npm
 
 RUN npm install yarn --global
 
-COPY ./../../rendezvous_app /app
+COPY ./../../rendevous /app
 
 WORKDIR /app
 

@@ -51,7 +51,7 @@ services:
       - mysql
 
     volumes:
-      - "./rendezvous_app:/app"
+      - "./rendevous:/app"
       - "/tmp:/var/run/mysqld"
 
   delayed_job:
@@ -91,7 +91,7 @@ services:
       - mysql
 
     volumes:
-      - "./rendezvous_app:/app" 
+      - "./rendevous:/app" 
 
   mysql:
     image: mysql/mysql-server:8.0.28
