@@ -1,8 +1,4 @@
 version: '3.3'
-
-volumes:
-  db_data:
-
 services:
   rails_app:
     image: rails_image
@@ -51,7 +47,7 @@ services:
       - mysql
 
     volumes:
-      - "./rendevous:/app"
+      - "./rendezvous:/app"
       - "/tmp:/var/run/mysqld"
 
   delayed_job:
@@ -91,16 +87,14 @@ services:
       - mysql
 
     volumes:
-      - "./rendevous:/app" 
+      - "./rendezvous:/app" 
 
   mysql:
-    image: mysql/mysql-server:8.0.28
+    image: mysql:8.0.32
     platform: linux/amd64
-    restart: always
 
     ports:
       - "3306:3306"
-    
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
@@ -112,10 +106,9 @@ services:
       - rendezvous
 
     volumes:
-      - "./config/mysql/mysqlcnf:/etc/mysql/conf.d"
-      - "./.ephemeral/db_init/rendezvous.sql:/docker-entrypoint-initdb.d/rendezvous.sql"
-      - "./.ephemeral/db_data:/var/lib/mysql" 
+      - "./.ephemeral/mysqld/db_init/rendezvous.sql:/docker-entrypoint-initdb.d/rendezvous.sql"
+      - "./.ephemeral/mysqld/db_data:/var/lib/mysql" 
 
 networks:
   rendezvous:
-
+    driver: bridge

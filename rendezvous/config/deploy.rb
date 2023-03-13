@@ -5,10 +5,14 @@ set :application, 'rendezvous'
 set :deploy_via, :copy
 set :rbenv_ruby, '3.1.2'
 
-# set :repo_url, 'git@example.com:me/my_repo.git'
+# Use github repository
+set :repo_url, 'git@github.com:timmykat/rendezvous.git'
 
 # Default branch is :master
-set :branch, :main
+ask :branch, 'git rev-parse --abbrev-ref HEAD'
+
+# Set app directory for dockerized version
+set :repo_tree, 'rendezvous'
 
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, '/var/www/my_app_name'

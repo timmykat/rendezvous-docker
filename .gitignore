@@ -9,37 +9,37 @@
 .sass-cache
 
 # Ignore .env files
-rendevous/.env
-rendevous/.envrc
+rendezvous/.env
+rendezvous/.envrc
 
 # Ignore database file
-rendevous/database.yml
+rendezvous/database.yml
 
 # Ignore bundler config.
-rendevous/.bundle
+rendezvous/.bundle
 
 # Ignore local mysql config
-rendevous/mysql_config
+rendezvous/mysql_config
 
 # Ignore lock files
-rendevous/Gemfile.lock
-rendevous/yarn.lock
+rendezvous/Gemfile.lock
+rendezvous/yarn.lock
 
 # Ignore all logfiles and tempfiles.
-rendevous/log/*
+rendezvous/log/*
 !/log/.keep
-rendevous/tmp
+rendezvous/tmp
 
 # Ignore user files
-rendevous/public/*.csv
-rendevous/public/uploads/*
-rendevous/public/registrations/*
-rendevous/public/assets/*
+rendezvous/public/*.csv
+rendezvous/public/uploads/*
+rendezvous/public/registrations/*
+rendezvous/public/assets/*
 
-rendevous.sass-cache
-rendevous/public/packs
-rendevous/public/packs-test
-rendevous/node_modules
-rendevous/yarn-error.log
-rendevousyarn-debug.log*
-rendevous/.yarn-integrity
+rendezvous.sass-cache
+rendezvous/public/packs
+rendezvous/public/packs-test
+rendezvous/node_modules
+rendezvous/yarn-error.log
+rendezvousyarn-debug.log*
+rendezvous/.yarn-integrity
