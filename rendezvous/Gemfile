@@ -61,10 +61,12 @@ gem 'wicked_pdf'
 gem 'gibbon'
 gem 'aws-sdk', '~> 3'
 
+# Application server
+gem 'puma'
+
 group :development do
   gem 'byebug'
   gem 'pry-rails'
-  gem 'puma'
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'

@@ -8,9 +8,9 @@
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
 server 'ec2-34-206-35-204.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{app db web}
-set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
 set :rails_env, 'production'
 
+# set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
 
 # role-based syntax
 # ==================
