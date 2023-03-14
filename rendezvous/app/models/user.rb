@@ -73,13 +73,13 @@ class User < ActiveRecord::Base
   end
 
   # Handle omniauth signin
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.provider = auth.provider
-      user.email    = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-    end
-  end
+  # def self.from_omniauth(auth)
+  #   where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
+  #     user.provider = auth.provider
+  #     user.email    = auth.info.email
+  #     user.password = Devise.friendly_token[0,20]
+  #   end
+  # end
 
   def full_name
     "#{first_name} #{last_name}"
