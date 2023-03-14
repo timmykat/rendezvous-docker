@@ -58,8 +58,7 @@ gem 'simple_form', '~>5'
 gem 'wkhtmltopdf-binary'
 gem 'wicked_pdf'
 
-gem 'gibbon'
-gem 'aws-sdk', '~> 3'
+gem 'gibbon' # Mailchimp API
 
 # Application server
 gem 'puma'
