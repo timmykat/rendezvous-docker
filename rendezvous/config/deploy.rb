@@ -6,7 +6,7 @@ set :deploy_via, :copy
 set :rbenv_ruby, '3.1.2'
 
 # Use github repository
-set :repo_url, 'git@github.com:timmykat/rendezvous.git'
+# set :repo_url, 'git@github.com:timmykat/rendezvous.git'
 
 # Default branch is :master
 ask :branch, 'git rev-parse --abbrev-ref HEAD'
