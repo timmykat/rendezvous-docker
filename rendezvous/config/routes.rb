@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   end
 
   # Omniauth authentication
-  get '/auth/:provider/callback', to: 'sessions#create'
+  # get '/auth/:provider/callback', to: 'sessions#create'
 
 
   root 'content_pages#index'

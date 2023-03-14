@@ -9,7 +9,11 @@ port        ENV['PORT']     || 3000
 rails_env = ENV['RAILS_ENV'] || "production"
 environment rails_env
 
-app_dir = File.expand_path("../..", __FILE__)
+if rails_env == "production"
+  app_dir = "/var/www/rendezvous"
+else
+  app_dir = File.expand_path("../..", __FILE__)
+end
 
 if rails_env == "production"
   workers 1

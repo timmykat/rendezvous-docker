@@ -1,0 +1,136 @@
+
+#user  nobody;
+worker_processes  2;
+
+pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+  passenger_root /home/ec2-user/.rbenv/versions/2.7.0/lib/ruby/gems/2.7.0/gems/passenger-6.0.4;
+  passenger_ruby /home/ec2-user/.rbenv/versions/2.7.0/bin/ruby;
+
+  include       mime.types;
+  default_type  application/octet-stream;
+
+  #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+  #                  '$status $body_bytes_sent "$http_referer" '
+  #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+  #access_log  logs/access.log  main;
+
+  sendfile        on;
+  #tcp_nopush     on;
+
+  #keepalive_timeout  0;
+  keepalive_timeout  65;
+
+  gzip  on;
+
+  merge_slashes on;
+
+  # Set file upload limits
+  client_max_body_size 2M;
+
+  # Rendezvous HTTP
+  server {
+    listen       80;
+    server_name  citroenrendezvous.org, citroenrendezvous.com, citroenrendezvous.net, *.citroenrendezvous.org, *.citroenrendezvous.com, *.citroenrendezvous.net, citroen-rendezvous.org;
+
+    # Set canonical domain name and https
+    rewrite ^(.*)$ https://citroenrendezvous.org/$1 permanent;
+
+    #charset koi8-r;
+
+    #access_log  logs/host.access.log  main;
+
+    root   /var/www/rendezvous/current/public;
+
+    error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+      root   html;
+    }
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    location ~ /\.ht {
+      deny  all;
+    }
+    passenger_enabled on;
+    passenger_app_env production;
+  }
+
+  # Rendezvous HTTPS
+  #
+  server {
+    listen       443 ssl http2;
+    server_name  citroenrendezvous.org, citroenrendezvous.com, citroenrendezvous.net, *.citroenrendezvous.org, *.citroenrendezvous.com, *.citroenrendezvous.net, citroen-rendezvous.org;
+
+    # Set canonical domain name and https
+    if ( $host != 'citroenrendezvous.org' ) {
+      rewrite ^/(.*)$ https://citroenrendezvous.org/$1 permanent;
+    }
+
+    # Get rid of double slashes
+    merge_slashes off;
+    rewrite ^(.*?)//+(.*?)$ $1/$2 permanent;
+
+    # access_log  logs/host.access.log  main;
+
+    root /var/www/rendezvous/current/public;
+
+    ssl_certificate      /etc/ssl/certs/2021/rendezvous-bundle.crt;
+    ssl_certificate_key  /etc/ssl/certs/2021/citroenrendezvous_org.key;
+
+    ssl_dhparam /etc/ssl/dhparams.pem;
+
+    ssl_session_cache    shared:SSL:1m;
+    ssl_session_timeout  5m;
+
+    # ssl_ciphers  HIGH:!aNULL:!MD5;
+    # Update from SSL analysis
+    ssl_ciphers 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:!DSS';
+
+
+    ssl_prefer_server_ciphers  on;
+
+    ssl_protocols TLSv1.3 TLSv1.2 TLSv1.1;
+
+    passenger_enabled on;
+    passenger_app_env production;
+
+    ## OCSP STapling
+    #  (see https://support.comodo.com/index.php?/Default/Knowledgebase/Article/View/1091/37/certificate-installation--nginx)
+
+    resolver 127.0.0.1;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/ssl/certs/2017/ssl-bundle.crt;
+
+  }
+  server {
+        listen       80;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+    }
+
+}
