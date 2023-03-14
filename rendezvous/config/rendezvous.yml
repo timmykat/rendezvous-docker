@@ -4,7 +4,7 @@ dates:
   duration: 4
   refund_date: 'June 22, 2023'
 registration_window:
-  open: 2023-03-01
+  open: 2023-04-01
   close: 2023-06-22
 fees:
   registration:

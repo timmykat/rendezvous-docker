@@ -26,12 +26,10 @@ services:
       BRAINTREE_PAYMENT_TOKEN: ${BRAINTREE_PAYMENT_TOKEN}
       GMAIL_USER: ${GMAIL_USER}
       GMAIL_PASS: ${GMAIL_PASS}
-      CAPTCH_V3_PUBLIC: ${CAPTCH_V3_PUBLIC}
-      CAPTCH_V3_PRIVATE: ${CAPTCH_V3_PRIVATE}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_HOST: mysql
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
 
     ports:
@@ -52,7 +50,7 @@ services:
 
   delayed_job:
     image: rails_image
-    command: /app/bin/delayed_job start; while true; do sleep 1; done
+    command: /app/bin/delayed_job_docker.sh
     environment:
       RENDEZVOUS_FACEBOOK_APP_ID: ${RENDEZVOUS_FACEBOOK_APP_ID}
       RENDEZVOUS_FACEBOOK_APP_SECRET: ${RENDEZVOUS_FACEBOOK_APP_SECRET}
@@ -71,16 +69,17 @@ services:
       BRAINTREE_PAYMENT_TOKEN: ${BRAINTREE_PAYMENT_TOKEN}
       GMAIL_USER: ${GMAIL_USER}
       GMAIL_PASS: ${GMAIL_PASS}
-      CAPTCH_V3_PUBLIC: ${CAPTCH_V3_PUBLIC}
-      CAPTCH_V3_PRIVATE: ${CAPTCH_V3_PRIVATE}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_HOST: mysql
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
 
     networks:
       - rendezvous
+
+    links:
+      - mysql
 
     depends_on:
       - rails_app
@@ -106,7 +105,7 @@ services:
       - rendezvous
 
     volumes:
-      - "./.ephemeral/mysqld/db_init/rendezvous.sql:/docker-entrypoint-initdb.d/rendezvous.sql"
+      - "./.ephemeral/mysqld/db_init/rendezvous_init.sql:/docker-entrypoint-initdb.d/rendezvous_init.sql"
       - "./.ephemeral/mysqld/db_data:/var/lib/mysql" 
 
 networks:
