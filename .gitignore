@@ -21,9 +21,6 @@ rendezvous/.bundle
 # Ignore local mysql config
 rendezvous/mysql_config
 
-# Ignore lock files
-rendezvous/Gemfile.lock
-rendezvous/yarn.lock
 
 # Ignore all logfiles and tempfiles.
 rendezvous/log/*
