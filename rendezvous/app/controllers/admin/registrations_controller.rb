@@ -67,7 +67,7 @@ class Admin::RegistrationsController < AdminController
       params.require(:registration).permit(
         :id,
         :number_of_adults,
-        :number_of_seniors
+        :number_of_seniors,
         :number_of_children,
         :registration_fee,
         :total,
