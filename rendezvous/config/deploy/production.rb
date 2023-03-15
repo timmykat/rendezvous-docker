@@ -11,6 +11,8 @@ server 'ec2-34-206-35-204.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{
 set :rails_env, 'production'
 set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous-docker.git'
 
+set :puma_enable_socket_service, true
+
 # set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
 
 # role-based syntax
