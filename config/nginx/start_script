@@ -1,0 +1,81 @@
+#!/bin/bash
+
+#
+# puma - this script starts and stops the puma daemon
+#
+# chkconfig: - 20 80
+# description:  Puma is an application server for Rails
+# processname: puma
+# config:      /var/www/rendezvous/shared/config/puma.rb
+# pidfile:     /var/www/rendezvous/shared/pids/puma.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+prog="puma"
+
+RAILS_DIR=/var/www/rendezvous
+RAILS_PIDS=$RAILS_DIR/shared/pids
+RUBY_DIR=/home/ec2-user/.rbenv/.rbenv/versions/3.1.2/bin
+
+PUMA_CONF=$RAILS_/config/puma.rb
+PUMA_LOCK=$RAILS_PIDS/puma.lock
+PUMA_PID=$RAILS_PIDS/puma.pid
+
+exec
+
+start() {
+  echo -n $"Starting $prog: "
+  $RUBY_DIR/puma -C $PUMA_CONF
+  RETVAL=$?
+  echo
+  [ $RETVAL -eq 0 ] && touch $PUMA_LOCK
+  return $RETVAL
+}
+
+stop() {
+  echo -n $"Stopping $prog: "
+  $RUBY_DIR/pumactl -F $PUMA_CONF stop
+  RETVAL=$?
+  echo
+  return $RETVAL
+}
+
+restart() {
+  echo -n $"Restarting puma: "
+  $RUBY_DIR/pumactl -F $PUMA_CONF stop
+  $RUBY_DIR/pumactl -F $PUMA_CONF phased-restart
+  retval=$?
+  echo
+  return $retval
+}
+
+status -p $PUMA_PID >/dev/null 
+running=$?
+
+# See how we were called.
+case "$1" in
+    start)
+  [ $running -eq 0 ] && exit 0
+  start
+  RETVAL=$?
+  ;;
+    stop)
+  [ $running -eq 0 ] || exit 0
+  stop
+  RETVAL=$?
+  ;;
+    restart)
+  restart
+  RETVAL=$?
+  ;;
+    status)
+  echo -n puma; status -p $PUMA_PID -l puma
+  RETVAL=$?
+  ;;
+    *)
+  echo $"Usage: $0 {start|stop|restart|status}"
+  RETVAL=2
+esac
+
+exit $RETVAL

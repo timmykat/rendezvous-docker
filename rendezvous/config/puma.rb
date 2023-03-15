@@ -16,7 +16,7 @@ else
 end
 
 if rails_env == "production"
-  workers 1
+  workers 0
 
   shared_dir = "#{app_dir}/shared"
 
