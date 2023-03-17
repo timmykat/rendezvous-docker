@@ -1,6 +1,7 @@
 GIT
-  remote: https://github.com/seuros/capistrano-puma.git
-  revision: 2cc11846540489edda10d83e026c9bea04e6fab1
+  remote: https://github.com/timmykat/capistrano-puma.git
+  revision: 974b4d00d35b11debd7cc4e88d59d5270d68b1c4
+  branch: amazon-linux-support
   specs:
     capistrano3-puma (6.0.0.beta.1)
       capistrano (~> 3.7)
@@ -203,7 +204,7 @@ GEM
       net-ssh (>= 2.6.5, < 8.0.0)
     net-smtp (0.3.3)
       net-protocol
-    net-ssh (7.0.1)
+    net-ssh (7.1.0)
     nio4r (2.5.8)
     nokogiri (1.14.2-aarch64-linux)
       racc (~> 1.4)

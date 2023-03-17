@@ -18,10 +18,10 @@ end
 if rails_env == "production"
   workers 0
 
-  shared_dir = "#{app_dir}/shared"
+  shared_path = "#{app_dir}/shared"
 
   # Set up socket location
-  bind "unix://#{shared_dir}/sockets/puma.sock"
+  bind "unix://#{shared_path}/sockets/puma.sock"
 
   # Logging
   stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
