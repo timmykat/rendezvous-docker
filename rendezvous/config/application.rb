@@ -15,6 +15,11 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Load dotenv only in development or test environment
+if ['production'].include? ENV['RAILS_ENV']
+  Dotenv::Railtie.load
+end
+
 module Rendezvous
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
