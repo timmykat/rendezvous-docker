@@ -11,19 +11,16 @@ environment rails_env
 
 if rails_env == "production"
   app_dir = "/var/www/rendezvous"
-  db_config_path = "#{app_dir}/shared/config/database.yml"
-else
-  app_dir = File.expand_path("../..", __FILE__)
-  db_config_path = "#{app_dir}/config/database.yml"
-end
+  shared_dir = "#{app_dir}/shared"
+  db_config_file = "#{shared_dir}/config/database.yml"
+  puma_socket_path = "#{shared_dir}/sockets/puma.sock"
+  puma_state_path = "#{shared_dir}/pids/puma.state"
+  log_directory = "#{shared_dir}/log"
 
-if rails_env == "production"
-  workers 0
-
-  shared_path = "#{app_dir}/shared"
+  workers 1
 
   # Set up socket location
-  bind "unix://#{shared_path}/sockets/puma.sock"
+  bind "unix://#{puma_socket_path}"
 
   # Logging
   stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
@@ -32,13 +29,24 @@ if rails_env == "production"
   pidfile "#{shared_dir}/pids/puma.pid"
   state_path "#{shared_dir}/pids/puma.state"
   activate_control_app
+
+else
+  app_dir = File.expand_path("../..", __FILE__)
+  db_config_file = "#{app_dir}/config/database.yml"
 end
+
+puts "App dir: " + app_dir
+
+puts "DB config path: " + db_config_path
+
 
 preload_app!
 
 on_worker_boot do
   require "active_record"
 
+  puts "Booting worker"
+
   ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
-  ActiveRecord::Base.establish_connection(YAML.load_file(db_config_path)[rails_env])
+  ActiveRecord::Base.establish_connection(YAML.load_file(db_config_file)[rails_env])
 end
