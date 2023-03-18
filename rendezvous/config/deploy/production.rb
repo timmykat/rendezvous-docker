@@ -11,19 +11,6 @@ server 'ec2-34-206-35-204.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{
 set :rails_env, 'production'
 set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous-docker.git'
 
-set :puma_enable_socket_service, true
-
-# nginx settings
-domain = 'citroenrendezvous.org'
-set :nginx_domain_name, domain
-set :nginx_config_name, domain.gsub(".", "_")
-set :nginx_puma_socket, '/var/www/rendezvous/shared/sockets/puma.sock'
-set :nginx_socket_flags, 'fail_timeout=0'
-set :nginx_server_name, 'citroenrendezvous.org, citroenrendezvous.com, citroenrendezvous.net, *.citroenrendezvous.org, *.citroenrendezvous.com, *.citroenrendezvous.net, citroen-rendezvous.org'
-set :nginx_use_ssls, true
-set :nginx_use_http2, true
-:nginx_downstream_uses_ssl
-
 # set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
 
 # role-based syntax
