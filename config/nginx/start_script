@@ -14,11 +14,11 @@
 
 prog="puma"
 
-RAILS_DIR=/var/www/rendezvous
-RAILS_PIDS=$RAILS_DIR/shared/pids
-RUBY_DIR=/home/ec2-user/.rbenv/.rbenv/versions/3.1.2/bin
+RAILS_SHARED_DIR=/var/www/rendezvous/shared
+RAILS_PIDS=$RAILS_SHARED_DIR/pids
+RUBY_BIN=/home/ec2-user/.rbenv/versions/3.1.2/bin
 
-PUMA_CONF=$RAILS_/config/puma.rb
+PUMA_CONF=$RAILS_SHARED_DIR/config/puma.rb
 PUMA_LOCK=$RAILS_PIDS/puma.lock
 PUMA_PID=$RAILS_PIDS/puma.pid
 
@@ -26,7 +26,11 @@ exec
 
 start() {
   echo -n $"Starting $prog: "
-  $RUBY_DIR/puma -C $PUMA_CONF
+  # Check for config file
+  if [ ! -f $PUMA_CONF ]; then
+    echo $"Puma confing file does not exist: $PUMA_CONF" && exit 0
+  fi
+  $RUBY_BIN/puma -C $PUMA_CONF
   RETVAL=$?
   echo
   [ $RETVAL -eq 0 ] && touch $PUMA_LOCK
@@ -35,7 +39,7 @@ start() {
 
 stop() {
   echo -n $"Stopping $prog: "
-  $RUBY_DIR/pumactl -F $PUMA_CONF stop
+  $RUBY_BIN/pumactl -F $PUMA_CONF stop
   RETVAL=$?
   echo
   return $RETVAL
@@ -43,8 +47,8 @@ stop() {
 
 restart() {
   echo -n $"Restarting puma: "
-  $RUBY_DIR/pumactl -F $PUMA_CONF stop
-  $RUBY_DIR/pumactl -F $PUMA_CONF phased-restart
+  $RUBY_BIN/pumactl -F $PUMA_CONF stop
+  $RUBY_BIN/pumactl -F $PUMA_CONF phased-restart
   retval=$?
   echo
   return $retval

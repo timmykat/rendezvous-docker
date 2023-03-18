@@ -1,12 +1,13 @@
 GIT
   remote: https://github.com/timmykat/capistrano-puma.git
-  revision: 974b4d00d35b11debd7cc4e88d59d5270d68b1c4
+  revision: f1a893d1aea739ef3b975a3a39b30dc0726e1dd4
   branch: amazon-linux-support
   specs:
     capistrano3-puma (6.0.0.beta.1)
       capistrano (~> 3.7)
       capistrano-bundler
       puma (>= 5.1, < 7.0)
+      sshkit-sudo
 
 GEM
   remote: https://rubygems.org/
@@ -311,6 +312,8 @@ GEM
     sshkit (1.21.4)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    sshkit-sudo (0.1.0)
+      sshkit (~> 1.8)
     ssrf_filter (1.1.1)
     temple (0.10.0)
     thor (1.2.1)
