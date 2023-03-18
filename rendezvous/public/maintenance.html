@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Site Maintenance | Citroen Rendezvous</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      :root {
+        --notice-width: 300px;
+        --notice-padding: 30px;
+      }
+      .background {
+        position: absolute;
+        left: 0; top: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('./maintenance.webp');
+        background-size: cover;
+        filter: url('./maintenance.jpg');
+        filter: blur(10px);
+      }
+      .notice {
+        position: absolute;
+        left: calc(50% - (var(--notice-width) + var(--notice-padding))/2); 
+        top: 30%;
+        width: var(--notice-width);
+        padding: 20px var(--notice-padding);
+        color: white;
+        background-color: #E1393E;
+        border-radius: 10px;
+        margin: 0 auto;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        z-index: 100;
+      }
+      h1 {
+        font-size: 20px;
+      }
+      p {
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background"></div>
+    <div class="notice">
+      <h1>En Panne!</h1>
+      <p>Sorry, we're doing some site maintenance right now.</p>
+      <p>But you know how that feels....</p>
+    </div>
+  </body>
+</html>
