@@ -1,5 +1,13 @@
 version: '3.3'
 services:
+  nginx:
+    image: nginx
+
+    volumes:
+      - ./confing/nginx/develop/nginx.conf:/etc/nginx.conf
+
+    ports:
+      - 80:80
   rails_app:
     image: rails_image
     build:
@@ -49,6 +57,8 @@ services:
       - "/tmp:/var/run/mysqld"
 
   delayed_job:
+    profiles: ["with_delayed_job"]
+    
     image: rails_image
     command: /app/bin/delayed_job_docker.sh
     environment:

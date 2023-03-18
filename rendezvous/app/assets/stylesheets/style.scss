@@ -9,13 +9,18 @@
 *
 *
 *****/
+:root {
+	--citroen-red: #E1393E;
+	--dark-medium-blue: #1E6994;
+	--dark-red: #94171B;
+}
 
 /* Rendezvous customizations */
 // Original primary: $primary-color
 // Original button color: #cfc91d
-$primary-color: #E1393E; /* Citroen red */
-$secondary-color: #1E6994; /* dark medium blue */
-$hover-color:  #94171B;     /*  darker red */
+$primary-color: var(--citroen-red); /* Citroen red */
+$secondary-color: var(--dark-medium-blue); /* dark medium blue */
+$hover-color: var(--dark-red);     /*  darker red */
 /*
   #1B77AE;  light medium blue
   #E6E351:  acid green

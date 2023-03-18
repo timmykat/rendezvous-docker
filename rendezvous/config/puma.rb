@@ -11,8 +11,10 @@ environment rails_env
 
 if rails_env == "production"
   app_dir = "/var/www/rendezvous"
+  db_config_path = "#{app_dir}/shared/config/database.yml"
 else
   app_dir = File.expand_path("../..", __FILE__)
+  db_config_path = "#{app_dir}/config/database.yml"
 end
 
 if rails_env == "production"
@@ -38,5 +40,5 @@ on_worker_boot do
   require "active_record"
 
   ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
-  ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
+  ActiveRecord::Base.establish_connection(YAML.load_file(db_config_path)[rails_env])
 end
