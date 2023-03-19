@@ -71,6 +71,7 @@ group :development do
   gem 'capistrano-rbenv'
   gem 'capistrano-yarn'
   gem 'capistrano3-puma', github: "timmykat/capistrano-puma", branch: "amazon-linux-support"
+  gem 'letter_opener'
 end
 
 group :development, :test do
