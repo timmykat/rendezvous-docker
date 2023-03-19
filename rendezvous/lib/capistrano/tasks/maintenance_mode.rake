@@ -17,4 +17,19 @@ namespace :maintenance do
       end
     end
   end
+
+  desc 'Maintenance status'
+  task :off do
+    on roles(:all) do
+      within release_path do
+        status = capture(execute :ls, 'public/maintenance.html')
+        if (status == 0)
+          state = "ON"
+        else
+          state= "OFF"
+        end
+        puts "Maintenance mode is #{state}"
+      end
+    end
+  end
 end
