@@ -12,12 +12,10 @@ require 'capistrano/yarn'
 require 'capistrano/puma'
 require 'capistrano/puma/nginx'
 require 'capistrano/puma/upstart'
-require_relative 'lib/capistrano/rendezvous'
 
 install_plugin Capistrano::Puma  # Default puma tasks
 install_plugin Capistrano::Puma::Nginx
 install_plugin Capistrano::Puma::Upstart
-install_plugin Capistrano::Rendezvous
 
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git

@@ -28,7 +28,7 @@ rendezvous/log/*
 rendezvous/tmp
 
 # Ignore user files
-rendezvous/public/*.csv
+rendezvous/public/csv/*.csv
 rendezvous/public/uploads/*
 rendezvous/public/registrations/*
 rendezvous/public/assets/*
