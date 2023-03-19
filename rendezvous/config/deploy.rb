@@ -31,7 +31,7 @@ set :repo_tree, 'rendezvous'
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push(
-  '.env', 'dkim.pem', 'config/database.yml', 'config/secrets.yml', 'config/puma.rb', 'public/matenance.html'
+  '.env', 'dkim.pem', 'config/database.yml', 'config/secrets.yml', 'config/puma.rb'
 )
 
 # Default value for linked_dirs is []
