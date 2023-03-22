@@ -72,7 +72,7 @@ class Admin::RegistrationsController < AdminController
         :registration_fee,
         :total,
         :status,
-        { :attendees_attributes =>
+        { attendees_attributes:
           [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
         }
       )

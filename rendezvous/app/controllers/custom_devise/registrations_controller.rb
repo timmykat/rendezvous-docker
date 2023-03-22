@@ -1,4 +1,5 @@
-class CustomDevise::RegistrationsController < Devise::RegistrationsController  
+class CustomDevise::RegistrationsController < Devise::RegistrationsController 
+
   def create
     build_resource(sign_up_params)
 
@@ -18,7 +19,7 @@ class CustomDevise::RegistrationsController < Devise::RegistrationsController
     else
       clean_up_passwords resource
       set_minimum_password_length
-      render :template => 'users/sign_in'
+      render template: 'users/sign_in'
     end
   end
 

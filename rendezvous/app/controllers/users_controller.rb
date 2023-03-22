@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
-  before_action :authenticate_user!, :only => [:edit, :update]
-  before_action :require_admin, :only => [:toggle_admin, :synchronize_with_mailchimp]
+  before_action :authenticate_user!, only: [:welcome, :edit, :update]
+  before_action :require_admin, only: [:toggle_admin, :synchronize_with_mailchimp]
 
   def sign_up
   end
@@ -9,8 +9,12 @@ class UsersController < ApplicationController
   def sign_in
   end
 
-  def show
+  def welcome
     @user = User.find(params[:id])
+  end
+
+  def show
+    @user = User.find(current_user.id)
   end
 
   def edit
@@ -23,7 +27,7 @@ class UsersController < ApplicationController
     if !@user.update(user_params)
       flash_alert_now 'We had a problem saving your updated information'
       flash_alert_now  @user.errors.full_messages.to_sentence
-      render :action => :edit
+      render action: :edit
     else
       action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'
       response = @user.mailchimp_action(action)
@@ -46,11 +50,11 @@ class UsersController < ApplicationController
 
   def find_by_email
     if User.find_by_email(params[:email])
-      status = { :exists => true }
+      status = { exists: true }
     else
-      status = { :exists => false }
+      status = { exists: false }
     end
-    render :json => status
+    render json: status
   end
 
   def toggle_admin
@@ -61,7 +65,7 @@ class UsersController < ApplicationController
       user.roles.delete :admin
     end
     user.save!
-    render :json => true
+    render json: true
   end
 
   def toggle_tester
@@ -73,7 +77,7 @@ class UsersController < ApplicationController
       user.roles.delete :tester
     end
     user.save!
-    render :json => true
+    render json: true
   end
 
   def delete_users
@@ -83,7 +87,7 @@ class UsersController < ApplicationController
     users.each do |u|
       u.destroy
     end
-    render :js => "window.location = '/admin#tabbed-6'"
+    render js: "window.location = '/admin#tabbed-6'"
   end
 
   def synchronize_with_mailchimp
@@ -101,7 +105,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(
         [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
-          {:vehicles_attributes =>
+          {vehicles_attributes:
             [:id, :year, :marque, :model, :other_info, :_destroy]
           }
         ]

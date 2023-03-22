@@ -58,28 +58,28 @@ class AdminController < ApplicationController
     @registrations = Registration.where("year = ?", Time.now.year)
 
     @data = {
-      :registrants    => [],
-      :citroens       => [],
-      :non_citroens   => [],
-      :attendees      => [],
-      :newbies        => [],
-      :adult          => 0,
-      :senior         => 0,
-      :child          => 0,
-      # :sunday_dinner  => {
-      #   :number => 0,
-      #   :list => [],
+      registrants: [],
+      citroens: [],
+      non_citroens: [],
+      attendees: [],
+      newbies: [],
+      adult: 0,
+      senior: 0,
+      child: 0,
+      # sunday_dinner: {
+      #   number: 0,
+      #   list: [],
       # },
-      :volunteers      => {
-        :number => 0,
-        :list => [],
+      volunteers: {
+        number: 0,
+        list: [],
       },
-      :financials     => {
-        :registration_fees  => 0.0,
-        :donations          => 0.0,
-        :total              => 0.0,
-        :paid               => 0.0,
-        :due                => 0.0
+      financials: {
+        registration_fees: 0.0,
+        donations: 0.0,
+        total: 0.0,
+        paid: 0.0,
+        due: 0.0
       }
     }
     @registrations.each do |registration|
@@ -118,11 +118,11 @@ class AdminController < ApplicationController
         @data[a.attendee_age.to_sym]  += 1
         # if a.sunday_dinner?
         #   @data[:sunday_dinner][:number]            += 1
-        #   @data[:sunday_dinner][:list] << { :name => a.name, :email =>  registration.user.email }
+        #   @data[:sunday_dinner][:list] << { name: a.name, email:  registration.user.email }
         # end
         if a.volunteer?
           @data[:volunteers][:number]               += 1
-          @data[:volunteers][:list] << { :name => a.name, :email =>  registration.user.email }
+          @data[:volunteers][:list] << { name: a.name, email:  registration.user.email }
         end
 
         #Write to CSV
@@ -153,7 +153,7 @@ class AdminController < ApplicationController
 
     @vehicles = @data[:citroens] + @data[:non_citroens]
 
-    @users = User.order(:last_name => :asc).all
+    @users = User.order(last_name: :asc).all
 
   end
 

@@ -25,7 +25,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   # Process files as they are uploaded:
-  process :resize_to_limit => [1024, 1024]
+  process resize_to_limit: [1024, 1024]
   
   #
   # def scale(width, height)
@@ -34,27 +34,27 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   # Create different versions of your uploaded files:
   version :gallery do
-    process :resize_to_fill => [350,350]
+    process resize_to_fill: [350,350]
   end
   
   version :display do
-    process :resize_to_limit => [1024, 800]
+    process resize_to_limit: [1024, 800]
   end
   
   version :portfolio do
-    process :resize_to_fill => [321,238]
+    process resize_to_fill: [321,238]
   end
   
   version :mobile do
-    process :resize_to_limit => [320, 640]
+    process resize_to_limit: [320, 640]
   end
   
   version :tablet do
-    process :resize_to_limit => [728, 728]
+    process resize_to_limit: [728, 728]
   end
   
   version :thumb do
-    process :resize_to_fill => [100,100]
+    process resize_to_fill: [100,100]
   end
 
   # Add a white list of extensions which are allowed to be uploaded.

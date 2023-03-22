@@ -8,7 +8,7 @@ gem 'rails', '7.0.4'
 # gem 'rails', '4.2.9'
 
 # Browserify
-gem 'browserify-rails'
+# gem 'browserify-rails'
 
 # Security updates
 gem 'sprockets-rails', '~> 3'
@@ -63,6 +63,8 @@ gem 'gibbon' # Mailchimp API
 # Application server
 gem 'puma'
 
+gem 'letter_opener'
+
 group :development do
   gem 'byebug'
   gem 'pry-rails'
@@ -71,7 +73,6 @@ group :development do
   gem 'capistrano-rbenv'
   gem 'capistrano-yarn'
   gem 'capistrano3-puma', github: "timmykat/capistrano-puma", branch: "amazon-linux-support"
-  gem 'letter_opener'
 end
 
 group :development, :test do

@@ -5,7 +5,7 @@ class ContentPagesController < ApplicationController
   def index
     @pictures = Picture.front_page_set
     @cache_buster = "?cb=#{Time.now.to_i}"
-    render :layout => 'main_page'
+    render layout: 'main_page'
   end
   
   def faq

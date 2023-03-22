@@ -98,7 +98,11 @@
               .row
                 .col-md-12
                   .captcha
-                    = recaptcha_tags
+                    - if @show_checkbox_recaptcha
+                      = recaptcha_tags
+                    - else
+                      = recaptcha_v3(action: 'register')
+                    - end
             .row
               .col-md-12
                 .form-group
