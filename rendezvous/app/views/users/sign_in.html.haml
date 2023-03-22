@@ -4,26 +4,46 @@
   .row
     .col-md-offset-3.col-md-6
       %hr
-      .well.sign-in
-        %h2 Sign In
+      .well.instructions
+        %h1 Sign In 
         %p If you registered on line last year, you have an account. 
-        %p If you forgot your password, enter your email below.
+        %p You can sign in with your username and password, or we can send you a login link.
         %p 
           If you don't have an account,
-          %a{ :href => '/user_sign_up' } sign up here.
+          %a{ href: '/user_sign_up' } sign up here.
+      .well.get-sign-in-link 
+        %h2 Sign in with a link
+        %p Enter your email below and we'll send you a link to log in to the site.
+        = form_with(url: email_link_path, method: :post) do |f|
+          .form-group
+            = f.label :email
+            = f.email_field :email, autofocus: true, placeholder: "you@example.com", required: true, class: 'form-control'
+          -# .form-group
+          -#   - if @show_checkbox_recaptcha
+          -#     = recaptcha_tags
+          -#   - else
+          -#     = recaptcha_v3(action: 'login')
+          = f.submit "Send" , class: "btn btn-info"
+      .well.sign-in
+        %h2 Sign with your username and password
+        %p If you forgot your password, enter your email below.
         = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
           .form-group
             = f.label :email
             %br/
-            = f.email_field :email, autofocus: true, :class => 'form-control', :placeholder => 'E-mail'
+            = f.email_field :email, class: 'form-control', placeholder: 'E-mail'
           .form-group
             = f.label :password
             %br/
-            = f.password_field :password, autocomplete: "off", :class => 'form-control', :placeholder => 'Password'
+            = f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password'
           .form-group
-            = recaptcha_tags
+            - if @show_checkbox_recaptcha
+              = recaptcha_tags
+            - else
+              = recaptcha_v3(action: 'login')
+
           .actions
-            = f.submit "Log in", :class => "btn btn-info"
+            = f.submit "Log in", class: "btn btn-info"
       
       .well.reset-password
         %h3 Don't know your password?
@@ -33,10 +53,10 @@
           %li You haven't registered on this site and so there's nothing to remember
           
         %p Enter your email below and we'll send you a link to reset your password. If you don't get an email, either it's in your spam bin or you haven't registered for the site and you should create an account.
-        = form_for(:user, :as => 'user', :url => user_password_path, :html => { :method => :post, :class => "form" }) do |f|
+        = form_for(:user, as: 'user', url: user_password_path, html: { method: :post, class: "form" }) do |f|
           .form-group
             %label Email
-            = f.text_field :email, :required => false, :class => "form-control"
+            = f.text_field :email, required: false, class: "form-control"
           .form-group
-            = f.submit "Reset my password", :class => "btn btn-large btn-primary"
+            = f.submit "Reset my password", class: "btn btn-large btn-primary"
  

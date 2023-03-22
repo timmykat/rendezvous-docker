@@ -19,11 +19,11 @@ class ApplicationController < ActionController::Base
   def get_app_data
     @app_data =
       {
-        :fees => Rails.configuration.rendezvous[:fees],
-        :marques => Rails.configuration.rendezvous[:vehicle_marques],
-        :models => Rails.configuration.rendezvous[:vehicle_models],
-        :provinces => Rails.configuration.rendezvous[:provinces],
-        :countries => Rails.configuration.rendezvous[:countries]
+        fees: Rails.configuration.rendezvous[:fees],
+        marques: Rails.configuration.rendezvous[:vehicle_marques],
+        models: Rails.configuration.rendezvous[:vehicle_models],
+        provinces: Rails.configuration.rendezvous[:provinces],
+        countries: Rails.configuration.rendezvous[:countries]
       }
   end
 
@@ -37,20 +37,11 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_up_path_for(resource)
-    register_path
+    users_welcome_path(@user)
   end
 
   def after_sign_in_path_for(resource)
-    session[:admin_user] = false
-    @registration = current_user.registrations.current.first
-    if current_user.has_role? :admin
-      session[:admin_user] = true
-      admin_index_path
-    elsif @registration.blank? || @registration.status != 'complete'
-      register_path
-    else
-      registration_path(@registration)
-    end
+    users_welcome_path(@user)
   end
 
   def after_sign_out_path_for(resource_or_scope)

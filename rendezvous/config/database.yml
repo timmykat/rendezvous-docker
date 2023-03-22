@@ -6,11 +6,14 @@ default: &default
   pool: 5
   timeout: 5000
   encoding: utf8
-
-development:
-  <<: *default
   database: <%= ENV.fetch("MYSQL_DATABASE") %>
   username: <%= ENV.fetch("MYSQL_USER") %>
   password: <%= ENV.fetch("MYSQL_PASSWORD") %>
   host: mysql
   port: 3306
+
+development:
+  <<: *default
+
+production:
+  <<: *default

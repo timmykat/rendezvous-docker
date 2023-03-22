@@ -90,10 +90,6 @@ GEM
     braintree (4.10.0)
       builder (>= 3.2.4)
       rexml (>= 3.1.9)
-    browserify-rails (4.4.0)
-      addressable (>= 2.4.0)
-      railties (>= 4.0.0)
-      sprockets (>= 3.6.0)
     builder (3.2.4)
     byebug (11.1.3)
     capistrano (3.17.2)
@@ -347,7 +343,6 @@ DEPENDENCIES
   bcrypt (~> 3.1)
   bootstrap-sass (~> 3.1)
   braintree
-  browserify-rails
   byebug
   capistrano
   capistrano-rails

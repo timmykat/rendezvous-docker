@@ -1,12 +1,12 @@
 class RegistrationsController < ApplicationController
 
-  before_action :check_cutoff, :only => [:new, :create, :complete, :edit]
-  before_action :require_admin, :only => [:index]
-  before_action :authenticate_user!, :except => [:new, :welcome]
-  before_action :owner_or_admin, :only => [:show]
+  before_action :check_cutoff, only: [:new, :create, :complete, :edit]
+  before_action :require_admin, only: [:index]
+  before_action :authenticate_user!, except: [:new, :welcome]
+  before_action :owner_or_admin, only: [:show]
   before_action :set_cache_buster
 
-  skip_before_action :verify_authenticity_token, :only => [:show]
+  skip_before_action :verify_authenticity_token, only: [:show]
 
   def check_cutoff
     unless (current_user.has_any_role? :admin, :tester) || Time.now >= Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
@@ -166,34 +166,34 @@ class RegistrationsController < ApplicationController
 
     if params[:registration][:paid_method] == 'credit card' && !params[:payment_method_nonce].blank?
       braintree_transaction_params = {
-        :order_id             => @registration.invoice_number,
-        :amount               => @registration.total,
-        :payment_method_nonce => params[:payment_method_nonce],
-        :customer             => {
-          :first_name               => @registration.user.first_name,
-          :last_name                => @registration.user.last_name,
-          :email                    => @registration.user.email,
+        order_id: @registration.invoice_number,
+        amount: @registration.total,
+        payment_method_nonce: params[:payment_method_nonce],
+        customer: {
+          first_name: @registration.user.first_name,
+          last_name: @registration.user.last_name,
+          email: @registration.user.email,
         },
-        :billing               => {
-          :first_name               => @registration.user.first_name,
-          :last_name                => @registration.user.last_name,
-          :street_address           => @registration.user.address1,
-          :extended_address         => @registration.user.address2,
-          :locality                 => @registration.user.city,
-          :region                   => @registration.user.state_or_province,
-          :postal_code              => @registration.user.postal_code,
-          :country_code_alpha3      => @registration.user.country
+        billing: {
+          first_name: @registration.user.first_name,
+          last_name: @registration.user.last_name,
+          street_address: @registration.user.address1,
+          extended_address: @registration.user.address2,
+          locality: @registration.user.city,
+          region: @registration.user.state_or_province,
+          postal_code: @registration.user.postal_code,
+          country_code_alpha3: @registration.user.country
         },
-        :options => {
-          :submit_for_settlement => true
+        options: {
+          submit_for_settlement: true
         },
       }
 
       gateway = Braintree::Gateway.new(
-        :environment => Braintree::Configuration.environment,
-        :merchant_id => Braintree::Configuration.merchant_id,
-        :public_key => Braintree::Configuration.public_key,
-        :private_key => Braintree::Configuration.private_key,
+        environment: Braintree::Configuration.environment,
+        merchant_id: Braintree::Configuration.merchant_id,
+        public_key: Braintree::Configuration.public_key,
+        private_key: Braintree::Configuration.private_key,
       )
 
       result = gateway.transaction.sale(braintree_transaction_params)
@@ -202,10 +202,10 @@ class RegistrationsController < ApplicationController
 
         # Create a new transaction
         @registration.transactions << Transaction.new(
-          :transaction_method => 'credit card',
-          :transaction_type => 'payment',
-          :cc_transaction_id => result.transaction.id,
-          :amount => @registration.total
+          transaction_method: 'credit card',
+          transaction_type: 'payment',
+          cc_transaction_id: result.transaction.id,
+          amount: @registration.total
         )
 
         @registration.paid_amount = @registration.total
@@ -292,7 +292,7 @@ class RegistrationsController < ApplicationController
     def send_confirmation_emails
       # filename = "#{@registration.invoice_number}.pdf"
       # registration_pdf = ::WickedPdf.new.pdf_from_string(
-      #   render_to_string('registrations/show', :layout => 'layouts/registration_mailer', :encoding => 'UTF-8')
+      #   render_to_string('registrations/show', layout: 'layouts/registration_mailer', encoding: 'UTF-8')
       # )
       # save_dir =  Rails.root.join('public','registrations')
       # save_path = Rails.root.join('public','registrations', filename)
@@ -339,12 +339,12 @@ class RegistrationsController < ApplicationController
         :status,
         :invoice_number,
         :user_id,
-        { :attendees_attributes =>
+        { attendees_attributes:
           [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
         },
         {:user_attributes=>
           [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
-            {:vehicles_attributes =>
+            {vehicles_attributes:
               [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
             }
           ]
@@ -356,7 +356,7 @@ class RegistrationsController < ApplicationController
       params[:user] = params[:registration][:user_attributes]
       params.require(:user).permit(
         [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
-          {:vehicles_attributes =>
+          {vehicles_attributes:
             [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
           }
         ]

@@ -6,7 +6,7 @@ class PicturesController < ApplicationController
   # GET /pictures
   def index
     @title = 'Photo Gallery'
-    pictures = Picture.where.not(:year => 9999).order(:year => :desc).all
+    pictures = Picture.where.not(year: 9999).order(year: :desc).all
     @pictures_by_year = {}
     pictures.each do |pic|
       unless File.exist?(pic.image.gallery.path) && File.exist?(pic.image.display.path)
@@ -22,7 +22,7 @@ class PicturesController < ApplicationController
   # GET /t-shirt-gallery
   def t_shirt_gallery
     @title = 'T-Shirt Gallery'
-    @pictures = Picture.where(:year => 9999).all
+    @pictures = Picture.where(year: 9999).all
     if @pictures.empty?
       @pictures = initialize_tshirt_gallery_images
     end
@@ -74,8 +74,8 @@ class PicturesController < ApplicationController
     picture = Picture.new(picture_params)
     if picture.save
       respond_to do |format|
-        format.html { render :partial => 'common/picture_form', :locals => { :pic => picture } }
-        format.json { render :json => picture }
+        format.html { render partial: 'common/picture_form', locals: { pic: picture } }
+        format.json { render json: picture }
       end
     end
   end
@@ -89,11 +89,11 @@ class PicturesController < ApplicationController
 
       # Copy file to work area
       params[:picture] = {
-        :user_id  => user.id,
-        :credit   => "#{user.first_name} #{user.last_name}",
-        :caption  => "ANOTHER t-shirt",
-        :year    => 9999,
-        :image =>  Pathname.new(path.basename)
+        user_id: user.id,
+        credit: "#{user.first_name} #{user.last_name}",
+        caption: "ANOTHER t-shirt",
+        year: 9999,
+        image:  Pathname.new(path.basename)
       }
 
       new_picture = Picture.new(picture_params)
@@ -106,7 +106,7 @@ class PicturesController < ApplicationController
         puts "Error saving "
       end
     end
-    Picture.where(:year => 9999).all
+    Picture.where(year: 9999).all
   end
 
 
@@ -114,7 +114,7 @@ class PicturesController < ApplicationController
   def update
     if @picture.update(picture_params)
       respond_to do |format|
-        format.json { render :json => { :status => :ok } }
+        format.json { render json: { status: :ok } }
       end
      end
   end
@@ -135,7 +135,7 @@ class PicturesController < ApplicationController
     @picture.destroy
 
     respond_to do |format|
-      format.json { render :json => { status: 'ok' } }
+      format.json { render json: { status: 'ok' } }
     end
   end
 

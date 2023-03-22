@@ -29,7 +29,7 @@ RSpec.describe RegistrationsController, type: :controller do
     context "the transaction fails" do
       before(:each) do
         @registration = build(:registration)
-        Braintree::Transaction.stub(:sale).and_return(double('result', {:success? => false, :transaction => true, :errors => 'There was an error' }))
+        Braintree::Transaction.stub(:sale).and_return(double('result', {:success? => false, transaction: true, errors: 'There was an error' }))
       end
     
       it "sets a flash error"
@@ -42,7 +42,7 @@ RSpec.describe RegistrationsController, type: :controller do
   
   context "the user is paying by check" do
     it "sets the paid amount to 0" do
-      @registration = build(:registration, :paid_method => 'check')
+      @registration = build(:registration, paid_method: 'check')
       expect(@registration.paid_amount).to be_equal(0.0)
     end
   end
@@ -74,7 +74,7 @@ RSpec.describe RegistrationsController, type: :controller do
   context "user logged in" do    
     it "updates the user" do
       @user = create(:user)
-      @registration = create(:registration, :user_attributes => { :first_name => "Jacques" })
+      @registration = create(:registration, user_attributes: { first_name: "Jacques" })
       expect(@user.first_name).to be_equal("Jacques")
     end
   end

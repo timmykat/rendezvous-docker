@@ -1,0 +1,8 @@
+%p Hello,  #{@user.full_name}.
+
+%p Recently someone, hopefully you, requested a link to enter your Citroen Rendezvous registration account.
+
+%p if it was you, just click the link below to log in: 
+
+%p
+  = link_to "Sign in to my Citroen Rendezvous account", email_link_validate_url(token: @token)

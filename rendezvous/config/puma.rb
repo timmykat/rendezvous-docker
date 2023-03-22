@@ -9,40 +9,45 @@ port        ENV['PORT']     || 3000
 rails_env = ENV['RAILS_ENV'] || "production"
 environment rails_env
 
-if rails_env == "production"
-  app_dir = "/var/www/rendezvous"
+app_dir = "/var/www/rendezvous"
+
+if !Dir.exist? "/proc/docker"
   shared_dir = "#{app_dir}/shared"
   db_config_file = "#{shared_dir}/config/database.yml"
-  puma_socket_path = "#{shared_dir}/sockets/puma.sock"
-  puma_state_path = "#{shared_dir}/pids/puma.state"
-  log_directory = "#{shared_dir}/log"
+  puma_socket_file = "#{shared_dir}/sockets/puma.sock"
+  puma_state_file = "#{shared_dir}/pids/puma.state"
+  pidfile "#{shared_dir}/pids/puma.pid"
+  log_dir = "#{shared_dir}/log"
 
   workers 1
 
-  # Set up socket location
-  bind "unix://#{puma_socket_path}"
-
-  # Logging
-  stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
-
-  # Set primary PID and state locations
-  pidfile "#{shared_dir}/pids/puma.pid"
-  state_path "#{shared_dir}/pids/puma.state"
-  activate_control_app
-
 else
-  app_dir = File.expand_path("../..", __FILE__)
   db_config_file = "#{app_dir}/config/database.yml"
+  puma_socket_file = "#{app_dir}/tmp/sockets/puma.sock"
+  puma_state_file = "#{app_dir}/tmp/pids/puma.state"
+  pidfile "#{app_dir}/tmp/pids/puma.pid"
+  log_dir = "#{app_dir}/log"
+
+  puts "*** Puma socket: #{puma_socket_file}"
 end
 
-puts "App dir: " + app_dir
+# Bind puma socket
+bind "unix:/#{puma_socket_file}"
 
-puts "DB config path: " + db_config_path
+state_path puma_state_file
 
+# Logging
+stdout_redirect "#{log_dir}/puma.stdout.log", "#{log_dir}/puma.stderr.log", true
+
+# Set primary PID and state locations
+
+activate_control_app
 
 preload_app!
 
 on_worker_boot do
+  puts "** Setting socket permissions **"
+  puts `chmod ago+rw #{puma_socket_file}`
   require "active_record"
 
   puts "Booting worker"

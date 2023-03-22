@@ -47,7 +47,7 @@ RSpec.describe MainPagesController, type: :controller do
   describe "GET #show" do
     it "assigns the requested main_page as @main_page" do
       main_page = MainPage.create! valid_attributes
-      get :show, {:id => main_page.to_param}, valid_session
+      get :show, {id: main_page.to_param}, valid_session
       expect(assigns(:main_page)).to eq(main_page)
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe MainPagesController, type: :controller do
   describe "GET #edit" do
     it "assigns the requested main_page as @main_page" do
       main_page = MainPage.create! valid_attributes
-      get :edit, {:id => main_page.to_param}, valid_session
+      get :edit, {id: main_page.to_param}, valid_session
       expect(assigns(:main_page)).to eq(main_page)
     end
   end
@@ -71,30 +71,30 @@ RSpec.describe MainPagesController, type: :controller do
     context "with valid params" do
       it "creates a new MainPage" do
         expect {
-          post :create, {:main_page => valid_attributes}, valid_session
+          post :create, {main_page: valid_attributes}, valid_session
         }.to change(MainPage, :count).by(1)
       end
 
       it "assigns a newly created main_page as @main_page" do
-        post :create, {:main_page => valid_attributes}, valid_session
+        post :create, {main_page: valid_attributes}, valid_session
         expect(assigns(:main_page)).to be_a(MainPage)
         expect(assigns(:main_page)).to be_persisted
       end
 
       it "redirects to the created main_page" do
-        post :create, {:main_page => valid_attributes}, valid_session
+        post :create, {main_page: valid_attributes}, valid_session
         expect(response).to redirect_to(MainPage.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved main_page as @main_page" do
-        post :create, {:main_page => invalid_attributes}, valid_session
+        post :create, {main_page: invalid_attributes}, valid_session
         expect(assigns(:main_page)).to be_a_new(MainPage)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:main_page => invalid_attributes}, valid_session
+        post :create, {main_page: invalid_attributes}, valid_session
         expect(response).to render_template("new")
       end
     end
@@ -108,20 +108,20 @@ RSpec.describe MainPagesController, type: :controller do
 
       it "updates the requested main_page" do
         main_page = MainPage.create! valid_attributes
-        put :update, {:id => main_page.to_param, :main_page => new_attributes}, valid_session
+        put :update, {id: main_page.to_param, main_page: new_attributes}, valid_session
         main_page.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested main_page as @main_page" do
         main_page = MainPage.create! valid_attributes
-        put :update, {:id => main_page.to_param, :main_page => valid_attributes}, valid_session
+        put :update, {id: main_page.to_param, main_page: valid_attributes}, valid_session
         expect(assigns(:main_page)).to eq(main_page)
       end
 
       it "redirects to the main_page" do
         main_page = MainPage.create! valid_attributes
-        put :update, {:id => main_page.to_param, :main_page => valid_attributes}, valid_session
+        put :update, {id: main_page.to_param, main_page: valid_attributes}, valid_session
         expect(response).to redirect_to(main_page)
       end
     end
@@ -129,13 +129,13 @@ RSpec.describe MainPagesController, type: :controller do
     context "with invalid params" do
       it "assigns the main_page as @main_page" do
         main_page = MainPage.create! valid_attributes
-        put :update, {:id => main_page.to_param, :main_page => invalid_attributes}, valid_session
+        put :update, {id: main_page.to_param, main_page: invalid_attributes}, valid_session
         expect(assigns(:main_page)).to eq(main_page)
       end
 
       it "re-renders the 'edit' template" do
         main_page = MainPage.create! valid_attributes
-        put :update, {:id => main_page.to_param, :main_page => invalid_attributes}, valid_session
+        put :update, {id: main_page.to_param, main_page: invalid_attributes}, valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,13 +145,13 @@ RSpec.describe MainPagesController, type: :controller do
     it "destroys the requested main_page" do
       main_page = MainPage.create! valid_attributes
       expect {
-        delete :destroy, {:id => main_page.to_param}, valid_session
+        delete :destroy, {id: main_page.to_param}, valid_session
       }.to change(MainPage, :count).by(-1)
     end
 
     it "redirects to the main_pages list" do
       main_page = MainPage.create! valid_attributes
-      delete :destroy, {:id => main_page.to_param}, valid_session
+      delete :destroy, {id: main_page.to_param}, valid_session
       expect(response).to redirect_to(main_pages_url)
     end
   end
