@@ -69,21 +69,21 @@
           = link_to 'Detailed schedule', schedule_path
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
-          %i.fa.fa-road
+          %i.fa-solid.fa-road
           %h3 #{relative_date(0)}
           %ul.text-left
             %li
               #{tbd_message}
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
-          %i.fa.fa-automobile
+          %i.fa-solid.fa-car
           %h3 #{relative_date(1)}
           %ul.text-left
             %li
               #{tbd_message}
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
-          %i.fa.fa-automobile
+          %i.fa-solid.fa-car
           %h3 #{relative_date(2)}
           %ul.text-left
             %li
@@ -103,7 +103,7 @@
               People's Choice awards!
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
-          %i.fa.fa-road
+          %i.fa-solid.fa-road
           %h3 #{relative_date(3)}
           %ul.text-left
             %li
@@ -125,7 +125,7 @@
             = link_to 'faq', faq_path
       .col-md-12.services
         .col-md-3.single-service.col-xs-12
-          %i.fa.fa-hotel
+          %i.fa-solid.fa-hotel
           %h3 Accommodations
           %p
             Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Just remember that #{config[:dates][:month]} is high season, so book early; let the
@@ -134,21 +134,21 @@
             = succeed '.' do
               = link_to 'this FAQ', faq_path(:anchor => 'accommodations')
         .col-md-3.single-service.col-xs-12
-          %i.fa.fa-shopping-cart
+          %i.fa-solid.fa-shopping-cart
           %h3 Supporting Vendors
           %p
             We couldn't put on the Rendezvous (nor could we keep our cars going) without our
             = link_to 'friendly and knowledgeable supporting vendors', '/vendors'
       .col-md-12.services.bottom-services
         .col-md-3.single-service.col-xs-12
-          %i.fa.fa-calendar
+          %i.fa-solid.fa-calendar
           %h3 History
           %p
             Lance Hellmann, one of the original organizers of the Rendezvous has kindly written a
             = link_to 'charming little history', '/history'
             of the event, edited for this site by David Cossitt-Levy. Enjoy!
         .col-md-3.single-service.col-xs-12
-          %i.fa.fa-empire
+          %i.fa-solid.fa-empire
           %h3 Organization
           %p
             The Rendezvous is run by volunteers, with a small group of
@@ -184,7 +184,7 @@
               %h4= pic.caption
               %p= pic.credit
           %a{:href => pic.image.url}
-            %i.fa.fa-search
+            %i.fa-solid.fa-search
     - else
       - (1..8).each do |n|
         .col-md-3.single-portfolio.col-sm-6
@@ -194,7 +194,7 @@
               %h4 Photo #{n}
               %p Placeholder photo
           %a{:href => "portfolio#{n}.jpg"}
-            %i.fa.fa-search
+            %i.fa-solid.fa-search
 / end of portfolio section
 %section#contact.contact.text-center
   .container

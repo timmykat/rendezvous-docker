@@ -142,40 +142,9 @@ development:
     consumer_key: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_KEY'] %>
     consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
   mailer:
-    delivery_method: :smtp
-    settings:
-      :address:             smtp.gmail.com
-      :domain:              localhost
-      :port:                587
-      :user_name:           <%= ENV['GMAIL_USER'] %>
-      :password:            <%= ENV['GMAIL_PASS'] %>
-      :authentication:      :plain
-      :enable_starttls_auto: true
+    delivery_method: :letter_opener
 
   inquiry_recipients:
-    - tim@wordsareimages.com
-
-staging:
-  facebook:
-    app_id: <%= ENV['RENDEZVOUS_FACEBOOK_APP_ID'] %>
-    app_secret: <%= ENV['RENDEZVOUS_FACEBOOK_APP_SECRET'] %>
-  twitter:
-    consumer_key: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_KEY'] %>
-    consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
-  mailer:
-    delivery_method: :smtp
-    settings:
-      address:               email-smtp.us-east-1.amazonaws.com
-      domain:                rendezvous.wordsareimages.com
-      port:                  587
-      user_name:             <%= ENV['RENDEZVOUS_SES_USER'] %>
-      password:              <%= ENV['RENDEZVOUS_SES_PASSWORD'] %>
-      authentication:        :login
-      enable_starttls_auto:  true
-
-  inquiry_recipients:
-    - david.cossitt.levy@gmail.com
-    - toaph@yahoo.com
     - tim@wordsareimages.com
 
 production:
@@ -187,15 +156,16 @@ production:
     consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
 
   mailer:
+    use_letter_opener: false    # Overrides production delivery method
     delivery_method: :smtp
-    settings:
-      address:               smtp.gmail.com
+    smtp_settings:
+      address:               email-smtp.us-east-1.amazonaws.com
       domain:                citroenrendezvous.org
-      port:                  587
-      user_name:             <%= ENV['GMAIL_USER'] %>
-      password:              <%= ENV['GMAIL_PASS'] %>
+      user_name:             <%= ENV['RENDEZVOUS_SMTP_USER'] %>
+      password:              <%= ENV['RENDEZVOUS_SMTP_PASSWORD'] %>
       authentication:        :plain
-      enable_starttls_auto:  true
+      tls:                   true
+      port:                  465
 
   inquiry_recipients:
     - david.cossitt.levy@gmail.com

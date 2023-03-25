@@ -1,6 +1,6 @@
-class Mailer < ApplicationMailer
+class RendezvousMailer < ApplicationMailer
 
-  helper ApplicationHelper
+  helper :application
 
   def send_to_us(name, email, message)
     @name = name

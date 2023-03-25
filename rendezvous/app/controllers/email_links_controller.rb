@@ -13,10 +13,10 @@ class EmailLinksController < ApplicationController
 
 
     if @email_link
-      flash[:notice] = "Email sent! Please, check your inbox."
+      flash_notice "Email sent! Please, check your inbox."
       redirect_to welcome_path
     else
-      flash[:alert] = "I'm sorry, we couldn't find you in our system."
+      flash_alert = "I'm sorry, we couldn't find you in our system."
       redirect_to user_sign_in_path 
     end
   end
@@ -25,7 +25,7 @@ class EmailLinksController < ApplicationController
     email_link = EmailLink.where(token: params[:token]).where("expires_at > ?", DateTime.now).first
 
     unless email_link
-      flash[:alert] = "Invalid or expired token!"
+      flash_alert = "Invalid or expired token!"
       redirect_to new_email_link_path
     end
 

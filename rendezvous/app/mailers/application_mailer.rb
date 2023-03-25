@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "citroen.rendezvous.mail@gmail.com"
-  layout 'mailer'
+  default from: ENV['RENDEZVOUS_SES_SENDING_ADDRESS']
+  layout 'rendezvous_mailer'
 end

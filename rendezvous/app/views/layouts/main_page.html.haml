@@ -58,7 +58,7 @@
     :javascript
       require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us12.list-manage.com","uuid":"198c738ff80668ca4d472c590","lid":"9e696fe93f"}) });
 
-    = render :partial => 'common/status_bar'
+    = render :partial => 'common/status_bar_script'
 
   %body{ :class => "main #{(user_signed_in? ? 'logged-in' : 'guest')}" }
     - if user_signed_in?

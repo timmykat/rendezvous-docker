@@ -65,13 +65,24 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   mailconf = Rails.configuration.rendezvous[:production][:mailer]
 
-  if Dir.exists? "/proc/docker"
+  if mailconf[:use_letter_opener]
     config.action_mailer.delivery_method = :letter_opener
     config.action_mailer.default_url_options = { protocol: 'http', host: 'localhost', port:8080 }
   else
     config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
-    config.action_mailer.default_url_options = { protocol: 'https', host: 'citroenrendezvous.org' }
-    config.action_mailer.smtp_settings = mailconf[:settings].clone
+    if Dir.exists? '/proc/docker'
+      config.action_mailer.default_url_options = { 
+        protocol: 'http', 
+        host: 'localhost',
+        port: 8080
+      }
+    else
+      config.action_mailer.default_url_options = { 
+        protocol: 'https', 
+        host: 'citroenrendezvous.org'
+      }
+    end
+    config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
   end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -83,6 +94,7 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+  config.log_level = :warn
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

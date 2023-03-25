@@ -5,10 +5,10 @@ class User < ActiveRecord::Base
   before_save :set_country
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-#          :omniauthable, omniauth_providers: [:facebook, :twitter]
+         :recoverable, :rememberable, :validatable, 
+         :confirmable, :reconfirmable
 
   has_many :pictures, dependent: :destroy
   has_many :vehicles, dependent: :destroy

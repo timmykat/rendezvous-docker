@@ -20,11 +20,11 @@
       %ul.list-inline
         %li
           = "Welcome, #{current_user.full_name}&nbsp;&nbsp;&nbsp;&nbsp;".html_safe
-          %i.fa.fa-circle  
+          %i.fa-solid.fa-circle  
         %li.dropdown
           %span{ :id => 'userDropdown', 'data-toggle' => 'dropdown', 'aria-haspopup' => 'true', 'aria-expanded' => 'true' }
             Menu
-            %i.fa.fa-bars
+            %i.fa-solid.fa-bars
           %ul{ :class => 'dropdown-menu dropdown-menu-right', 'aria-labelledby' => 'userDropdown' }
             %li=link_to 'My profile<br />and vehicle(s)'.html_safe, user_path(current_user), :class => 'btn btn-default'
             - if (reg_path = my_registration_path(current_user))

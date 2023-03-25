@@ -11,7 +11,7 @@ environment rails_env
 
 app_dir = "/var/www/rendezvous"
 
-if !Dir.exist? "/proc/docker"
+if !Dir.exists? "/proc/docker"
   shared_dir = "#{app_dir}/shared"
   db_config_file = "#{shared_dir}/config/database.yml"
   puma_socket_file = "#{shared_dir}/sockets/puma.sock"
