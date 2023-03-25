@@ -46,6 +46,7 @@ services:
       - BRAINTREE_PAYMENT_TOKEN
       - GMAIL_USER
       - GMAIL_PASS
+      - RAILS_SECRET_KEY_BASE
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
@@ -93,6 +94,7 @@ services:
       - BRAINTREE_PAYMENT_TOKEN
       - GMAIL_USER
       - GMAIL_PASS
+      - RAILS_SECRET_KEY_BASE
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
