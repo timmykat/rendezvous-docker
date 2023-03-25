@@ -1,44 +1,39 @@
 !!!
-%html{:lang => "en"}
+%html{ lang: 'en' }
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %meta{:charset => "UTF-8"}/
-    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %meta{:content => "A website for the northeast Citroen enthusiasts gathering", :name => "description"}/
-    %meta{:content => "Citroen Rendezvous, LLC", :name => "author"}/
+    %meta{ content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type' } /
+    %meta{ charset: 'UTF-8'}/
+    %meta{ content: 'width=device-width, initial-scale=1.0', name: 'viewport' }/
+    %meta{ content: 'A website for the northeast Citroen enthusiasts gathering', name: 'description' }/
+    %meta{ content: 'Citroen Rendezvous, LLC', name: 'author' }/
 
     %title #{@title} | #{Time.now.year} Citroën Rendezvous
-
     = stylesheet_link_tag 'application', :media  => 'all'
-    
-    %script{ :src => 'https://use.fontawesome.com/5257bcd371.js' }
-    = javascript_include_tag 'application'
     
     = csrf_meta_tags
     = yield :header_tags
-    
-    /
-      [if lt IE 9]
-      = javascript_include_tag "html5shiv"
-      = javascript_include_tag "respond"
+
+    = javascript_include_tag 'application'
+    %script{ src: 'https://kit.fontawesome.com/757686987b.js', crossorigin: 'anonymous' }
+
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
-      
+
     - if @registration
       :javascript
-        Cookies.set('registration_status', "#{@registration.status}", {expires: 180 });
+        Cookies.set( 'registration_status', "#{@registration.status}", {expires: 180 });
         Cookies.set('registration_id', "#{@registration.id}", {expires: 180 });
-    
-    = render :partial => 'common/status_bar'
-      
-        
-  %body{ :class => "c_#{controller_name()} simple" }
+
+      = render partial: 'common/status_bar_script'
+
+  %body{ class: "c_#{controller_name} simple" }
+  
     .body_wrapper
-      = render :partial => 'common/manage'
-      = render :partial => 'layouts/flash'
+      = render partial: 'common/manage'
+      = render partial: 'layouts/flash'
       .back-bar
-        %a{:href => '/'}
-          %i.fa.fa-arrow-left
+        %a{ href: '/' }
+          %i.fa-solid.fa-arrow-left
           Back to main page
       .registration-status
         .container
@@ -48,5 +43,5 @@
       .content
         = yield
       .push
-      = render :partial => 'common/footer'  
+      = render partial: 'common/footer'
 

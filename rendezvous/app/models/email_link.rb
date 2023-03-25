@@ -2,6 +2,8 @@ class EmailLink < ActiveRecord::Base
   belongs_to :user
   after_create :send_mail
 
+  TOKEN_LENGTH = 29
+
   def self.generate(email)
     user = User.find_by(email: email)
     
@@ -12,7 +14,7 @@ class EmailLink < ActiveRecord::Base
   end
 
   def self.generate_token
-    Devise.friendly_token.first(16)
+    Devise.friendly_token.first(TOKEN_LENGTH)
   end
 
   private

@@ -107,7 +107,7 @@ $field-success: #e2f7d3;
   background-color: $field-success;
 }
 
-i.fa.fa-check.pass {
+i.fa-solid.fa-check.pass {
   color: $success;
   visibility: hidden;
   &.success {
@@ -226,25 +226,36 @@ a .site-name {
 
 /* flash */
 .flash-wrapper {
-  width: 80%;
+	top: 85px;
   z-index: 2000;
   top: 100px;
   width: 100%;
-}
-.flash {
-  min-width: 320px;
-  background: #eec;
-  border-radius: 2px;
-	box-shadow: rgba(0,0,0,0.75) 5px 5px;
-  font-weight: bold;
-  position: relative;
-}
-i.fa-close {
-  color: $primary-color;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
+	position: fixed;
+	color: white;
+
+	.flash {
+		width: 75%;
+		min-width: 320px;
+		margin: 0 auto;
+		padding: 30px 60px;
+		background: rgb(48, 54, 251);
+		border-radius: 2px;
+		font-weight: bold;
+		position: relative;
+		box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+
+		i {
+			color: white;
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			cursor: pointer;
+		}
+	}
+
+	.alert {
+		background-color: darkred;
+	}
 }
 
 table tr:hover {
@@ -363,24 +374,7 @@ ul.nav{
   border-color: #fff;
   margin-top: 4px;
 }
-.flash-wrapper {
-  position: fixed;
-  top: 85px;
-  width: 100%;
-  z-index: 500;
-}
-.flash {
-  padding: 15px;
-  text-align: center;
-  font-weight: bold;
-  margin: 0 auto;
-  width: 33%;
-  min-width: 300px;
-  background: white;
-  border: solid 2px #666;
-  border-radius: 7px;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
-}
+
 /* spacer to allow for header */
 .spacer {
   height: 155px;
@@ -748,8 +742,7 @@ h2.main-heading {
 	padding: 5px 20px;
 }
 /*contact area*/
-.contact{}
-.contact h2{
+.contact h2 {
 	font-size: 46px;
 	color: $primary-color;
 	margin-top: 100px;
