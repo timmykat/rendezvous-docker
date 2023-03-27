@@ -10,11 +10,11 @@
         %p
           Stay tuned for #{event_year} info:
           %br
-          %a{ :href => "http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f", :target => "_blank" } The Citroen Rendezvous newsletter
+          %a{ href: "http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f", target: "_blank" } The Citroen Rendezvous newsletter
           %br
-          %a{ :href => "https://www.facebook.com/groups/1796592930566951/", :target => "_blank" } The Rendezvous Facebook page
+          %a{ href: "https://www.facebook.com/groups/1796592930566951/", target: "_blank" } The Rendezvous Facebook page
           %br
-          %a{ :href => "https://citroenvie.com/", :target => "_blank" } CITROËNVIE!
+          %a{ href: "https://citroenvie.com/", target: "_blank" } CITROËNVIE!
 
 %section.banner
   .container.register
@@ -45,7 +45,7 @@
           Benugo "Espresso Van" 1972 Citroën HY in Granary Square &vert;
           %em 
             Mic from Reading - Berkshire, United Kingdom via
-            %a{:href => "https://creativecommons.org/licenses/by/2.0", :target => "_blank" } 
+            %a{href: "https://creativecommons.org/licenses/by/2.0", target: "_blank" } 
               Wikimedia Commons
     .row
       .col-md-8.col-md-offset-2.about-heading
@@ -56,11 +56,11 @@
           We have some changes again this year, including dates (thank you Dead & Company!) and venue. 
           %br
           %br
-          This year's event hotel is the Courtyard Marriott, 11 Excelsior Ave, Saratoga Springs.
-          You can book out our special event rate of $189/night at this 
-          %a{:href => "https://citroenrendezvous.us12.list-manage.com/track/click?u=198c738ff80668ca4d472c590&id=eceda0d825&e=882a1f74e7", :target => "_blank"}
+          This year's event hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}
+          You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
+          %a{href: config[:hotel][:event_rate_link], target: "_blank"}
             link
-          by May 30.
+          by #{config[:hotel][:event_rate_Last_day]}.
           %br
           %br
           Stay tuned for more info!
@@ -88,7 +88,7 @@
           %ul.text-left
             %li
               %strong 9am-4pm
-              Showfield is open, Lakeside Farms (Ballston Lake)
+              Showfield is open, #{config[:venue][:name]}, #config{#{config[:venue][:address]}
             %li
               %strong 4-6pm
               Silent auction. Winners announced at after dinner.
@@ -129,10 +129,10 @@
           %h3 Accommodations
           %p
             Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Just remember that #{config[:dates][:month]} is high season, so book early; let the
-            = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { :target => '_blank' }
+            = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { target: '_blank' }
             be your guide, or use your favorite travel website. Also see
             = succeed '.' do
-              = link_to 'this FAQ', faq_path(:anchor => 'accommodations')
+              = link_to 'this FAQ', faq_path(anchor: 'accommodations')
         .col-md-3.single-service.col-xs-12
           %i.fa-solid.fa-shopping-cart
           %h3 Supporting Vendors
@@ -173,27 +173,27 @@
         %br
         %br
           %b Check out our new photo gallery!
-          =link_to 'Go', gallery_path, :class => 'btn btn-info'
+          =link_to 'Go', gallery_path, class: 'btn btn-info'
       %p Members, you can contribute photos by signing in and going to the upload page.
     - if @pictures.count == 8
       - @pictures.each do |pic|
         .col-md-3.single-portfolio.col-sm-6
           %figure.portfolio-item
-            = image_tag pic.image.portfolio.url + @cache_buster, :class => 'img-responsive'
+            = image_tag pic.image.portfolio.url + @cache_buster, class: 'img-responsive'
             %figcaption.portfolio-details
               %h4= pic.caption
               %p= pic.credit
-          %a{:href => pic.image.url}
+          %a{href: pic.image.url}
             %i.fa-solid.fa-search
     - else
       - (1..8).each do |n|
         .col-md-3.single-portfolio.col-sm-6
           %figure.portfolio-item
-            = image_tag "portfolio#{n}.jpg", :class => 'img-responsive'
+            = image_tag "portfolio#{n}.jpg", class: 'img-responsive'
             %figcaption.portfolio-details
               %h4 Photo #{n}
               %p Placeholder photo
-          %a{:href => "portfolio#{n}.jpg"}
+          %a{href: "portfolio#{n}.jpg"}
             %i.fa-solid.fa-search
 / end of portfolio section
 %section#contact.contact.text-center
@@ -205,7 +205,7 @@
         %p
           -#
             Please register using the
-            %a{ :href => '/registration', :title => 'Go to registration form' } online registration form.
+            %a{ href: new_event_registration_path, title: 'Go to registration form' } online registration form.
             %br/
           If you have any questions that haven't been answered here, please let us know!
 / end of contact section
@@ -215,10 +215,10 @@
     -#   .form
     -#     .sbtn.col-md-12.text-center
     -#       = form_tag "/contact-us" do
-    -#         = text_field_tag 'name', nil, :class => 'name form-input', :placeholder => "NAME"
-    -#         = email_field_tag 'email', nil, :class => 'email form-input', :placeholder => "EMAIL"
-    -#         = text_field_tag 'message', nil, :class => 'message form-input', :placeholder => "MESSAGE"
+    -#         = text_field_tag 'name', nil, class: 'name form-input', placeholder: "NAME"
+    -#         = email_field_tag 'email', nil, class: 'email form-input', placeholder: "EMAIL"
+    -#         = text_field_tag 'message', nil, class: 'message form-input', placeholder: "MESSAGE"
     -#         - if Rails.env != 'development'
     -#           .captcha
     -#             = recaptcha_tags
-    -#         = submit_tag 'SEND', :class => 'submit-btn', :disabled => true
+    -#         = submit_tag 'SEND', class: 'submit-btn', disabled: true

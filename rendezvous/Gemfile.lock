@@ -153,8 +153,6 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.15.5)
-    font-awesome-sass (6.3.0)
-      sassc (~> 2.0)
     gibbon (3.4.4)
       faraday (>= 1.0)
       multi_json (>= 1.11.0)
@@ -358,7 +356,6 @@ DEPENDENCIES
   dkim
   dotenv-rails
   factory_bot
-  font-awesome-sass
   gibbon
   haml-rails
   letter_opener

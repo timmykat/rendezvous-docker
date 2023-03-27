@@ -226,36 +226,38 @@ a .site-name {
 
 /* flash */
 .flash-wrapper {
-	top: 85px;
+	top: 10px;
   z-index: 2000;
-  top: 100px;
   width: 100%;
 	position: fixed;
-	color: white;
 
 	.flash {
-		width: 75%;
-		min-width: 320px;
-		margin: 0 auto;
-		padding: 30px 60px;
-		background: rgb(48, 54, 251);
-		border-radius: 2px;
+		color: white;
+		background: #7799BB; // Standard for role=notice
+		font-weight: bold;
+		width: 66%;
+		min-width: 375px;
+		margin: 10px auto;
+		padding: 30px 5%;
+		border-radius: 7px;
+		border: solid 2px #ccc;
 		font-weight: bold;
 		position: relative;
 		box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 
 		i {
-			color: white;
 			position: absolute;
 			top: 10px;
 			right: 10px;
 			cursor: pointer;
 		}
+		
+		&[role='alert'] {
+			background-color: var(--dark-red);
+		}
 	}
 
-	.alert {
-		background-color: darkred;
-	}
+
 }
 
 table tr:hover {

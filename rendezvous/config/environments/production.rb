@@ -85,6 +85,10 @@ Rails.application.configure do
     config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
   end
 
+  config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
+
+  config.url_prefix += ":#{config.action_mailer.default_url_options[:port]}" if config.action_mailer.default_url_options[:port]
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
@@ -94,7 +98,6 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-  config.log_level = :warn
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false

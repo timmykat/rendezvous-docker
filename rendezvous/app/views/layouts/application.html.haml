@@ -1,3 +1,4 @@
+- config = Rails.configuration.rendezvous
 !!!
 %html{ lang: 'en' }
   %head
@@ -32,7 +33,7 @@
       = render partial: 'common/manage'
       = render partial: 'layouts/flash'
       .back-bar
-        %a{ href: '/' }
+        %a{ href: root_path }
           %i.fa-solid.fa-arrow-left
           Back to main page
       .registration-status

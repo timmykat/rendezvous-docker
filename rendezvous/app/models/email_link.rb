@@ -19,7 +19,7 @@ class EmailLink < ActiveRecord::Base
 
   private
   def send_mail
-    EmailLinkMailer.sign_in_mail(self).deliver_now
+    RendezvousMailer.sign_in_mail(self).deliver_now
   end
 end
 

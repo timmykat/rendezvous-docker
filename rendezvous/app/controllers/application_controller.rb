@@ -37,17 +37,18 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_up_path_for(resource)
-    users_welcome_path(@user)
+    user_welcome_path(resource)
   end
 
   def after_sign_in_path_for(resource)
-    users_welcome_path(@user)
+    user_welcome_path(resource)
   end
 
   def after_sign_out_path_for(resource_or_scope)
     root_path
   end
 
+  # Create convenience methods for flash: flash_notice, flash_alert (anything will work)
   def method_missing(method_sym, *arguments, &block)
     if method_sym.to_s =~ /^flash_([a-z]+)(_(now))?$/
       type = $1.to_sym

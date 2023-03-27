@@ -46,8 +46,8 @@ class ContentPagesController < ApplicationController
     @email = params[:email]
     @message = params[:message]
 
-    Mailer.send_to_us(@name, @email, @message).deliver_later
-    Mailer.autoresponse(@name, @email, @message).deliver_later
+    RendezvousMailer.send_to_us(@name, @email, @message).deliver_later
+    RendezvousMailer.autoresponse(@name, @email, @message).deliver_later
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
   end

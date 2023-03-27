@@ -1,0 +1,7 @@
+- sign_in_link_url = "#{Rails.configuration.url_prefix}/users/#{@user.id}/sign_in_link?confirmation_token=#{@raw_login_token}"
+%p Welcome back!
+
+%p If you requested this login link, click the link below to log in. Otherwise, just delete this email. 
+
+%p
+  = link_to "Sign in to my Citroen Rendezvous account", sign_in_link_url

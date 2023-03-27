@@ -6,7 +6,7 @@
       %p Please add the vehicles you are bringing to the Rendezvous.
       #vehicles
         = f.simple_fields_for @vehicles do |v|
-          = render 'vehicle_fields', :f => v
+          = render 'vehicle_fields', f:  v
         .links
-          = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, :class => "btn btn-primary btn-sm"
+          = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, class:  "btn btn-primary btn-sm"
           Add a vehicle

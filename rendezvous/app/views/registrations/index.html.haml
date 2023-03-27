@@ -34,4 +34,4 @@
                 %td.text-center.alert-danger= number_to_currency(due)
               - else
                 %td.text-center.alert-success= number_to_currency(due)
-              %td= link_to "delete", registration_path(registration.id), :method => :delete
+              %td= link_to "delete", registration_path(registration.id), method:  :delete

@@ -32,4 +32,4 @@
           %ul
             - @user.vehicles.each do |v|
               %li= v.full_spec
-      =link_to 'Edit Profile', edit_user_path(@user), :class => 'btn btn-warning'      
+      =link_to 'Edit Profile', edit_user_path(@user), class:  'btn btn-warning'      

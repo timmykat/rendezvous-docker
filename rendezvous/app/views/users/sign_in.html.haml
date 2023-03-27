@@ -10,11 +10,11 @@
         %p You can sign in with your username and password, or we can send you a login link.
         %p 
           If you don't have an account,
-          %a{ href: '/user_sign_up' } sign up here.
+          %a{ href: new_user_registration } sign up here.
       .well.get-sign-in-link 
         %h2 Sign in with a link
         %p Enter your email below and we'll send you a link to log in to the site.
-        = form_with(url: email_link_path, method: :post) do |f|
+        = form_with(url: request_login_link_path, method: :post) do |f|
           .form-group
             = f.label :email
             = f.email_field :email, autofocus: true, placeholder: "you@example.com", required: true, class: 'form-control'

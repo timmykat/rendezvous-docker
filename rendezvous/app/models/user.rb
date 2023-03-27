@@ -1,3 +1,6 @@
+require 'devise/models/linkable'
+require 'devise/models/token_authenticatable'
+
 class User < ActiveRecord::Base
 
   include RoleModel
@@ -8,7 +11,11 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, 
-         :confirmable, :reconfirmable
+         :confirmable
+
+  
+  include Devise::Models::Linkable
+  include Devise::Models::TokenAuthenticatable
 
   has_many :pictures, dependent: :destroy
   has_many :vehicles, dependent: :destroy

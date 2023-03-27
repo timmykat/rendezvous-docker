@@ -1,4 +1,4 @@
-class  CustomDevise::PasswordsController < Devise::PasswordsController
+class  Users::PasswordsController < Devise::PasswordsController
   skip_before_action :require_admin, raise: false
 
   # POST /resource/password

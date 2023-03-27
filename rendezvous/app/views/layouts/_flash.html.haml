@@ -1,11 +1,11 @@
 - unless flash.keys.blank?
   .flash-wrapper
-    - flash.keys.each do |type| 
-      %i.fa-solid.fa-square-xmark
-      - if type == 'alert'
-        .flash.bg-danger{ :role => 'alert' }
-      - else 
-        .flash.bg-primary{ :role => 'notice' }
+    - flash.keys.each do |type|
+      - flash[type].each do |m|
+        .flash{ role: type.to_s }
+          %i.fa-solid.fa-square-xmark.close
+          .message
+            #{m} 
 
-        - flash[type].each do |m|
-          #{m}<br/>
+
+

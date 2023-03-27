@@ -16,7 +16,7 @@
       -#   .event
       -#     .title
       -#       6pm&ndash;9pm Dinner,
-      -#       =link_to "Mama Mia's Pizza & Cafe", 'http://mamamiassaratoga.com', :target => '_blank'
+      -#       =link_to "Mama Mia's Pizza & Cafe", 'http://mamamiassaratoga.com', target:  '_blank'
       -#     .details
       -#       %p 185 Ballston Ave., Saratoga Springs, 518-583-7783
       -#       %p
@@ -52,7 +52,7 @@
               %br
               Visit the
               = succeed ', ' do
-                = link_to 'Lakeside Country Market & Restaurant', 'http://www.lakesidefarmscidermill.com/', :target => '_blank'
+                = link_to config[:venue][:name], config[:venue][:website], target:  '_blank'
               right on site. Soups, salads, & sandwiches, burgers & hot dogs are all available at the restaurant, while the market has lots of light snacks.
         .event
           .title 4-6pm: Silent auction

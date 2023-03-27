@@ -16,8 +16,8 @@ class RegistrationsController < ApplicationController
   end
 
   def get_payment_token
-    puts "PAYMENT TOKEN " +  ENV['BRAINTREE_PAYMENT_TOKEN']
-    render plain:  ENV['BRAINTREE_PAYMENT_TOKEN'], content_type: 'text/plain'
+    puts "PAYMENT TOKEN " +  ENV['BRAINTREE_TOKENIZATION_KEY']
+    render plain:  ENV['BRAINTREE_TOKENIZATION_KEY'], content_type: 'text/plain'
   end
 
   def set_cache_buster
@@ -278,7 +278,7 @@ class RegistrationsController < ApplicationController
     registration_id = params[:registration_id]
     registration = Registration.find(registration_id)
     if registration
-      Mailer.registration_confirmation(registration).deliver
+      RendezvousMailer.registration_confirmation(registration).deliver
       flash_notice('Email sent')
     else
       flash_notice('No registration found')
@@ -299,8 +299,8 @@ class RegistrationsController < ApplicationController
       # File.open(save_path, 'wb') do |file|
       #   file << registration_pdf
       # end
-      Mailer.registration_confirmation(@registration).deliver_later
-      # Mailer.registration_notification(@registration).deliver_later unless Rails.env.development?
+      RendezvousMailer.registration_confirmation(@registration).deliver_later
+      # RendezvousMailer.registration_notification(@registration).deliver_later unless Rails.env.development?
     end
 
 

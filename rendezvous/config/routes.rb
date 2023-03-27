@@ -2,40 +2,51 @@ Rails.application.routes.draw do
 
   root 'content_pages#index'
 
-  get '/welcome', to: 'users#welcome'
-
   # -- Users
   devise_for :users,
     controllers: {
       users: 'users',
-      passwords: 'custom_devise/passwords',
-      registrations: 'custom_devise/registrations'
+      sessions: 'users/sessions',
+      passwords: 'users/passwords',
+      registrations: 'users/registrations'
     },
     path: ''
-  get '/users/synchronize_mailchimp', to: 'users#synchronize_with_mailchimp'
-  resources :users
+  
+  resources :users 
 
-  get '/user_sign_up', to: 'users#sign_up'
-  get '/user_sign_in', to: 'users#sign_in'  
+  post :request_login_link, to: 'users#request_login_link'
+  
+  resources :users do
+    get :welcome
+    get :synchronize_mailchimp
+  end
 
-  get '/email_links/new', as: :new_email_link
-  post '/email_links/create', as: :email_link
-  get '/email_links/validate', as: :email_link_validate
+  devise_scope :user do
+      get '/users/:id/sign_in_link', to: 'users/sessions#create_with_link'
+  end
+
+  # get '/users/sessions/sign_in_with_link/:id', to: 'users/sessions#create_with_link'
+  # post '/new_login_link', to: 'users#new_login_link'
+  # get '/welcome/:id', to: 'users#welcome'
+
+  # get '/users/synchronize_mailchimp', to: 'users#synchronize_with_mailchimp'
+
 
   # -- Registrations
-  get '/register',             to: 'registrations#new'
-  get '/registration-welcome', to: 'registrations#welcome'
-
-  resources :registrations do
-    member do
-      get :review
-      get :payment
-      patch :complete
-      get :vehicles
+  # get '/event_registration',             to: 'registrations#new'
+  namespace :event do
+    resources :registrations  do 
+      member do
+        get :review
+        get :payment
+        patch :complete
+        get :vehicles
+      end
     end
+    resources :registrations, except: [:index]
+    get 'payment_token', to: 'registrations#get_payment_token'
+    get '/welcome', to: 'registrations#welcome'
   end
-  resources :registrations, except: [:index]
-  get 'payment_token', to: 'registrations#get_payment_token'
 
 
   # Admin routes

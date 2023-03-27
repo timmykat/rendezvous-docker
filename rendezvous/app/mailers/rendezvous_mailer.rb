@@ -2,6 +2,13 @@ class RendezvousMailer < ApplicationMailer
 
   helper :application
 
+  def sign_in_mail(email_link)
+    @token = email_link.token
+    @user = email_link.user
+
+    mail to: @user.email, subject: "Your citroenrendezvous.org login link 🚀"
+  end
+
   def send_to_us(name, email, message)
     @name = name
     @email = email
@@ -31,4 +38,10 @@ class RendezvousMailer < ApplicationMailer
     recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
     mail(to: recipients, subject: "New Rendezvous registration from #{@registration.user.display_name}")
   end  
+
+  def send_registration_open_notice(user)
+      @name = user.first_name
+      @email = user.email
+      mail(to: @email, subject: "Rendezvous registration is open for #{Time.now.year}!")
+  end
 end

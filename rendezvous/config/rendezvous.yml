@@ -11,6 +11,17 @@ fees:
     adult: 55
     senior: 0
     child: 0
+hotel:
+  name: Courtyard Marriott
+  address: 11 Excelsior Ave, Saratoga Springs
+  website: https://www.marriott.com/en-us/hotels/albss-courtyard-saratoga-springs/overview/
+  event_rate: $189/night
+  event_rate_link: https://citroenrendezvous.us12.list-manage.com/track/click?u=198c738ff80668ca4d472c590&id=eceda0d825&e=882a1f74e7
+  event_rate_last_day: May 30
+venue:
+  name: Lakeside Farms
+  address: 336 Schauber Road, Ballston Lake
+  website: https://www.lakesidefarmscidermill.com/
 
 # The following should rarely change
 front_page_message:
