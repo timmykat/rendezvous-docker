@@ -18,11 +18,11 @@ Rails.application.routes.draw do
   
   resources :users do
     get :welcome
-    get :synchronize_mailchimp
   end
 
   devise_scope :user do
-      get '/users/:id/sign_in_link', to: 'users/sessions#create_with_link'
+    get :synchronize_with_mailchimp, to: 'users#synchronize_with_mailchimp'
+    get :sign_in_with_link, to: 'users/sessions#create_with_link'
   end
 
   # get '/users/sessions/sign_in_with_link/:id', to: 'users/sessions#create_with_link'

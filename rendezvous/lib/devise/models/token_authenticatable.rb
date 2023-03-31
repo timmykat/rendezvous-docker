@@ -6,31 +6,38 @@ module Devise
 
       extend extend ActiveSupport::Concern
 
-      attr_reader :raw_confirmation_token
-      attr_accessor :confirmed_at
+      attr_reader :raw_login_token
 
       def initialize(*args, &block)
-        @raw_confirmation_token = nil
+        @raw_login_token = nil
         super
       end
 
       def self.required_fields(klass)
-        [:confirmation_token, :confirmed_at]
+        required_methods = [:login_token, :login_token_sent_at]
+        required_methods
       end
 
-      def valid_confirmation_token?(confirmation_token)
-        Devise::Encryptor.compare(self.class, confirmation_token, raw_confirmation_token)
+      def send_login_link
+        generate_login_token!
+        send_devise_notification(:email_login_link, @raw_login_token)
       end
 
       def after_token_authentication
-        self.update_attribute(:confirmed_at, Time.now.utc)
+        Rails.logger.debug "Expiring the token"
+        self.update_attribute(:login_token_sent_at, nil)
       end
 
-      protected
-        def authentication_hash
-          { email: self.email, confirmation_token: self.confirmation_token }
+      protected 
+        def generate_login_token          
+          self.login_token = @raw_login_token = Devise.friendly_token
+          self.login_token_sent_at = Time.now.utc
         end
-      
+
+        def generate_login_token!
+          generate_login_token && save(validate: false)
+          @raw_login_token
+        end
     end
   end
 end

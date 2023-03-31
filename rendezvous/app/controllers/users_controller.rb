@@ -12,14 +12,13 @@ class UsersController < ApplicationController
   def request_login_link
     @user = User.find_by_email(params[:email])
 
-    if @user 
+    if @user
       flash_notice 'Please check your inbox for your login link'
       @user.send_login_link
-      redirect_to root_path
-    else 
-      flash_alert 'Sorry, you don\'t have an account registered to that email.'
-      redirect_to new_user_session_path
+    else
+      flash_notice 'You don\'t have an account with that email'
     end
+    redirect_to root_path
   end
 
   def welcome

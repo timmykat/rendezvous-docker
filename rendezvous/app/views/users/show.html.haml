@@ -19,7 +19,7 @@
           %em Interested in Citroenvie: #{@user.citroenvie? ? 'Yes' : 'No'}
         - if @user.registrations.last
           %p
-            = link_to 'View my registration', registration_path(@user.registrations.last)
+            = link_to 'View my registration', event_registration_path(@user.registrations.last)
       - unless @user.vehicles.blank?
         .well.well-sm
           %h2 Vehicles

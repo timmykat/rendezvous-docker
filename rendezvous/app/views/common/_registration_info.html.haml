@@ -81,7 +81,7 @@
     - if @registration.status == 'complete' || @registration.status == 'payment due'
       %p 
         If you need to modify your vehicle info for this year,
-        = link_to "update here", vehicles_registration_path(@registration)
+        = link_to "update here", vehicles_event_registration_path(@registration)
     - else
       %p If you are bringing different vehicles, please update after you finish registering.
     - if @registration.user.vehicles.blank?

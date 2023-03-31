@@ -1,11 +1,13 @@
 - unless flash.keys.blank?
   .flash-wrapper
     - flash.keys.each do |type|
+      - flash[type] = [ flash[type] ] if !flash[type].kind_of? Array
       - flash[type].each do |m|
         .flash{ role: type.to_s }
           %i.fa-solid.fa-square-xmark.close
           .message
-            #{m} 
+            #{m}
+
 
 
 

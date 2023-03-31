@@ -5,7 +5,7 @@
     = render partial:  'common/registration_header', locals:  { step:  'payment' }
   .row
     .col-md-offset-2.col-md-8.col-xs-12
-      = simple_form_for @registration, url:  complete_registration_path(@registration), html:  { id:  'registration_form' } do |f|
+      = simple_form_for @registration, url:  complete_event_registration_path(@registration), html:  { id:  'registration_form' } do |f|
         %section
           %h3 Help Out
           .row

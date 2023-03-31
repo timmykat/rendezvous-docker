@@ -10,11 +10,8 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, 
-         :confirmable
+         :recoverable, :rememberable, :validatable
 
-  
-  include Devise::Models::Linkable
   include Devise::Models::TokenAuthenticatable
 
   has_many :pictures, dependent: :destroy
@@ -107,6 +104,10 @@ class User < ActiveRecord::Base
     else
       ''
     end
+  end
+
+  def self.find_by_token(token)
+    User.where(login_token: token).first
   end
 
   def self.mailchimp_init_request

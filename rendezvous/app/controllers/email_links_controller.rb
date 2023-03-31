@@ -1,10 +1,7 @@
 require 'logger'
 
-require 'logger'
-
 class EmailLinksController < ApplicationController
   def new
-
   end
 
   def create

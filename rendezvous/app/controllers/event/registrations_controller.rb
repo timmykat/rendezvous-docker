@@ -1,4 +1,5 @@
-class RegistrationsController < ApplicationController
+
+class Event::RegistrationsController < ApplicationController
 
   before_action :check_cutoff, only: [:new, :create, :complete, :edit]
   before_action :require_admin, only: [:index]
@@ -59,7 +60,7 @@ class RegistrationsController < ApplicationController
       if !user.update(registration_user_params)
         flash_alert 'There was a problem saving the user.'
         flash_alert user.errors.full_messages.to_sentence
-        redirect_to register_path and return
+        redirect_to event_welcome_path and return
       end
     else
       user = User.find_by_email(params[:registration][:user_attributes][:email])
@@ -96,7 +97,7 @@ class RegistrationsController < ApplicationController
     else
       handle_mailchimp(@registration.user)
       sign_in(@registration.user) unless (session[:user_admin] || user_signed_in?)
-      redirect_to review_registration_path(@registration)
+      redirect_to review_event_registration_path(@registration)
     end
   end
 
@@ -124,11 +125,11 @@ class RegistrationsController < ApplicationController
 
     if @registration.update(registration_params)
       flash_notice 'The registration was updated.'
-      redirect_to review_registration_path(@registration)
+      redirect_to review_event_registration_path(@registration)
     else
       flash_alert 'There was a problem updating the registration.'
       flash_alert @registration.errors.full_messages.to_sentence
-      redirect_to edit_registration_path(@registration)
+      redirect_to edit_event_registration_path(@registration)
     end
   end
 
@@ -151,7 +152,7 @@ class RegistrationsController < ApplicationController
       @credit_connection = false
       flash_alert("We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check.")
       flash_alert e.inspect
-      # redirect_to payment_registration_path(@registration)
+      # redirect_to payment_event_registration_path(@registration)
     end
   end
 
@@ -216,12 +217,12 @@ class RegistrationsController < ApplicationController
         @registration.save!
         send_confirmation_emails
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to vehicles_registration_path(@registration)
+        redirect_to vehicles_event_registration_path(@registration)
         return
       elsif result.errors
         flash_alert 'There was a problem with your credit card payment.'
         flash_alert result.message
-        redirect_to payment_registration_path(@registration)
+        redirect_to payment_event_registration_path(@registration)
         return
       end
     end
@@ -235,15 +236,15 @@ class RegistrationsController < ApplicationController
     end
 
     # Update the registration
-    if !@registration.update_attributes(registration_params)
+    if !@registration.update(registration_params)
       flash_alert 'There was a problem completing your registration.'
       flash_alert @registration.errors.full_messages.to_sentence
-      redirect_to payment_registration_path(@registration)
+      redirect_to payment_event_registration_path(@registration)
     else
       send_confirmation_emails
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-      redirect_to vehicles_registration_path(@registration)
-#      redirect_to registration_path(@registration)
+      redirect_to vehicles_event_registration_path(@registration)
+#      redirect_to event_registration_path(@registration)
     end
   end
 
@@ -363,3 +364,4 @@ class RegistrationsController < ApplicationController
       )
     end
 end
+
