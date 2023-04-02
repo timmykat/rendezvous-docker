@@ -16,12 +16,12 @@ class User < ActiveRecord::Base
 
   has_many :pictures, dependent: :destroy
   has_many :vehicles, dependent: :destroy
-  has_many :registrations
+  has_many :registrations, class_name: 'Event::Registration'
   has_many :authorizations
 
   validates :first_name, presence: true
   validates :last_name, presence: true
-  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, presence: true
   validates :address1, presence: true, on: :update
   validates :city, presence: true, on: :update
 #   validates :password, length: { in: 6..20 }

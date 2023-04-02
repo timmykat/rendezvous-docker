@@ -2,11 +2,10 @@ class RendezvousMailer < ApplicationMailer
 
   helper :application
 
-  def sign_in_mail(email_link)
-    @token = email_link.token
-    @user = email_link.user
-
-    mail to: @user.email, subject: "Your citroenrendezvous.org login link 🚀"
+  def no_email_found(email)
+    Rails.logger.debug "No email found mailer: " + email
+    @email = email
+    mail to: @email, subject: 'Incorrect email for sign-in to the Citroen Rendezvous site'
   end
 
   def send_to_us(name, email, message)
@@ -25,7 +24,7 @@ class RendezvousMailer < ApplicationMailer
   end
   
   def registration_confirmation(registration)
-    puts 'Sending email'
+    Rails.logger.info "Sending registration confirmation email"
     @registration = registration
 #     registration_pdf = ::WickedPdf.new.pdf_from_url(registration_url(@rr, protocol: (Rails.env.development? ? 'http' : 'https'), print_token: Rails.configuration.rendezvous[:print_token]), print_media_type: true, ignore_load_errors: true)
 #     filename = "#{@registration.invoice_number}.pdf"

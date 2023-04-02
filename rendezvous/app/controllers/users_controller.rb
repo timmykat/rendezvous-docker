@@ -3,24 +3,6 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, only: [:welcome, :edit, :update]
   before_action :require_admin, only: [:toggle_admin, :synchronize_with_mailchimp]
 
-  def sign_up
-  end
-
-  def sign_in
-  end
-
-  def request_login_link
-    @user = User.find_by_email(params[:email])
-
-    if @user
-      flash_notice 'Please check your inbox for your login link'
-      @user.send_login_link
-    else
-      flash_notice 'You don\'t have an account with that email'
-    end
-    redirect_to root_path
-  end
-
   def welcome
     @user = User.find(params[:id])
   end
@@ -81,7 +63,6 @@ class UsersController < ApplicationController
   end
 
   def toggle_tester
-    puts params
     user = User.find(params[:user_id])
     if params[:tester] == 'tester'
       user.roles << :tester
@@ -95,8 +76,8 @@ class UsersController < ApplicationController
   def delete_users
     user_ids = params[:users].split(',')
     users = User.find(user_ids)
-    puts users
     users.each do |u|
+      Rails.logger.info "Deleting user #{u.email}"
       u.destroy
     end
     render js: "window.location = '/admin#tabbed-6'"

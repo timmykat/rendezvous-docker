@@ -55,7 +55,7 @@ class AdminController < ApplicationController
       'Info'
     ]
 
-    @registrations = Registration.where("year = ?", Time.now.year)
+    @registrations = Event::Registration.where("year = ?", Time.now.year)
 
     @data = {
       registrants: [],

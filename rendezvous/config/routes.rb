@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
 
-  root 'content_pages#index'
+  root 'main_pages#index'
 
   # -- Users
+  
+
   devise_for :users,
     controllers: {
       users: 'users',
@@ -10,27 +12,20 @@ Rails.application.routes.draw do
       passwords: 'users/passwords',
       registrations: 'users/registrations'
     },
-    path: ''
-  
-  resources :users 
-
-  post :request_login_link, to: 'users#request_login_link'
-  
-  resources :users do
-    get :welcome
-  end
+    path: '',
+    path_names: {
+      sessions: '',
+      registration: 'site'
+    }
 
   devise_scope :user do
+    post :request_login_link, to: 'users/sessions#request_login_link'
     get :synchronize_with_mailchimp, to: 'users#synchronize_with_mailchimp'
     get :sign_in_with_link, to: 'users/sessions#create_with_link'
+    # post :sign_up, to: 'users/registrations#create'
   end
 
-  # get '/users/sessions/sign_in_with_link/:id', to: 'users/sessions#create_with_link'
-  # post '/new_login_link', to: 'users#new_login_link'
-  # get '/welcome/:id', to: 'users#welcome'
-
-  # get '/users/synchronize_mailchimp', to: 'users#synchronize_with_mailchimp'
-
+  resources :users
 
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
@@ -59,13 +54,12 @@ Rails.application.routes.draw do
   end
 
   # -- Content
-  get '/',                  to: 'content_pages#index'
-  get '/faq',               to: 'content_pages#faq'
-  get '/gallery',           to: 'content_pages#gallery'
-  get '/history',           to: 'content_pages#history'
-  get '/legal_information', to: 'content_pages#legal_information'
-  get '/schedule',          to: 'content_pages#schedule'
-  get '/vendors',           to: 'content_pages#vendors'
+  get '/',                  to: 'main_pages#index'
+  get '/faq',               to: 'main_pages#faq'
+  get '/history',           to: 'main_pages#history'
+  get '/legal_information', to: 'main_pages#legal_information'
+  get '/schedule',          to: 'main_pages#schedule'
+  get '/vendors',           to: 'main_pages#vendors'
 
   resources :pictures, except: [:index]
   get '/gallery',                    to: 'pictures#index'

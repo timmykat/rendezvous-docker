@@ -8,7 +8,6 @@ module Devise
       attr_accessor :login_token
       
       def valid?
-        Rails.logger.debug params[:login_token].present? ? 'Valid' : 'Not valid'
         params[:login_token].present?
       end
 

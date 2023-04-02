@@ -743,6 +743,14 @@ h2.main-heading {
 	color: #fff;
 	padding: 5px 20px;
 }
+
+form {
+	label.required {
+		&::after {
+			content: '*'
+		}
+	} 
+}
 /*contact area*/
 .contact h2 {
 	font-size: 46px;

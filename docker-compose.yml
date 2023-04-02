@@ -27,7 +27,7 @@ services:
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     environment:
-      - RAILS_ENV=production
+      - RAILS_ENV
       - RACK_ENV
       - RENDEZVOUS_FACEBOOK_APP_ID
       - RENDEZVOUS_FACEBOOK_APP_SECRET
@@ -67,7 +67,7 @@ services:
 
     volumes:
       - ./rendezvous:/var/www/rendezvous
-      - "/tmp:/var/run/mysqld"
+      - /tmp/mysqld:/var/run/mysqld
 
   delayed_job:
     profiles: ["with_delayed_job"]
@@ -75,8 +75,8 @@ services:
     image: rails_image
     command: /var/www/rendezvous/bin/delayed_job_docker.sh
     environment:
-      - RAILS_ENV=production
-      - RACK_ENV=production
+      - RAILS_ENV
+      - RACK_ENV
       - RENDEZVOUS_FACEBOOK_APP_ID
       - RENDEZVOUS_FACEBOOK_APP_SECRET
       - RENDEZVOUS_TWITTER_CONSUMER_KEY
@@ -113,14 +113,14 @@ services:
 
     volumes:
       - ./rendezvous:/var/www/rendezvous
-      - "/tmp:/var/run/mysqld"
+      - "/tmp/mysqld:/var/run/mysqld"
 
   mysql:
     image: mysql:8.0.32
     platform: linux/amd64
 
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
       - MYSQL_DATABASE
       - MYSQL_USER
@@ -132,8 +132,9 @@ services:
       - rendezvous
 
     volumes:
-      - "./.ephemeral/mysqld/db_init/rendezvous_init.sql:/docker-entrypoint-initdb.d/rendezvous_init.sql"
-      - "./.ephemeral/mysqld/db_data:/var/lib/mysql" 
+      - ./.ephemeral/mysqld/db_init/rendezvous_init.sql:/docker-entrypoint-initdb.d/rendezvous_init.sql"
+      - ./.ephemeral/mysqld/db_data:/var/lib/mysql
+      - /tmp/mysqld:/var/run/mysqld
 networks:
   rendezvous:
     driver: bridge

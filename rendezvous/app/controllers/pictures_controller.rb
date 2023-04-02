@@ -103,7 +103,7 @@ class PicturesController < ApplicationController
       end
 
       if !new_picture.save
-        puts "Error saving "
+        Rails.logger.error "Error saving new picture"
       end
     end
     Picture.where(year: 9999).all

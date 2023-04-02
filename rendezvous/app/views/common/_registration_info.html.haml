@@ -58,7 +58,7 @@
           Please print this invoice or the one you received via email and send with a check for the amount due to:
           %br= mailing_address
 
-- if current_user == @registration.user
+- if @current_user == @registration.user
   .well.well-sm.attendees
     %h3 Attendees
     %table.table
@@ -102,7 +102,7 @@
             %td= v.other_info
             %td= v.judging_category
 
-- if current_user.has_role? :admin   
+- if @current_user.has_role? :admin   
   .well.well-sm.email
     %h3 Send registration info to registrant
     %form{ action:  '/send_email' }

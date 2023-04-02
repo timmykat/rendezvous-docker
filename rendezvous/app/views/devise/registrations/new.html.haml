@@ -1,44 +1,29 @@
-- resource = :user
-- resource_name = 'user'
 .container
   .row
     .col-md-offset-3.col-md-6
       %hr
       .well.sign-up
-        %h2 Sign Up 
+        %h2 Sign Up
+        %p This site uses email login links, so you will not need a password.
         %p 
-          If you already have an account,
+          If you already have an account, please
           %a{ href: new_user_session_path } sign in here.
-        = form_for(resource, as: resource_name, url: event_registration_path(resource_name)) do |f|
+        = form_for(resource, url: user_registration_path, method: :post) do |f|
           .form-group
-            = f.label :email
+            = f.label :email, nil, class: 'required'
             %br/
-            = f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'E-mail', required: true
-          %p{ class: 'help-block' } 
-            Your password must be at least 6 characters and must include one each:
-            %br
-            Lower case:
-            %i.fa-solid.fa-check.pass.lower 
-            Upper case:
-            %i.fa-solid.fa-check.pass.upper 
-            Number:
-            %i.fa-solid.fa-check.pass.digit 
+            = f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'E-mail', value: @email, required: true
+          
           .form-group
-            = f.label :password
-            - if @minimum_password_length
-              %em
-                (#{@minimum_password_length} characters minimum)
-            %br/
-            = f.password_field :password, autocomplete: "off", class: 'form-control primary', placeholder: 'Set password', required: true
-          .form-group
-            = f.label :password_confirmation
-            %br/
-            = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control confirm', placeholder: 'Confirm password', required: true
-          .form-group
-            = f.label "Name"
+            = f.label "Name", nil, class: 'required'
             %br/
             = f.text_field :first_name, class: 'form-control inline-form-element', placeholder: 'First', required: true
             = f.text_field :last_name, class: 'form-control inline-form-element', placeholder: 'Last', required: true
+          
+          .form-group
+            = f.hidden_field :password, class: 'form-control primary', value: @password, required: true
+            = f.hidden_field :password_confirmation, class: 'form-control confirm', value: @password, hidden: true, required: true         
+          
           .form-group
             - if @show_checkbox_recaptcha
               = recaptcha_tags

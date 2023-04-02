@@ -361,3 +361,13 @@ Processing by ContentPagesController#index as HTML
 Completed 200 OK in 871ms (Views: 836.8ms | ActiveRecord: 18.1ms | Allocations: 69889)
 
 
+DEPRECATION WARNING: Using legacy connection handling is deprecated. Please set
+`legacy_connection_handling` to `false` in your application.
+
+The new connection handling does not support `connection_handlers`
+getter and setter.
+
+Read more about how to migrate at: https://guides.rubyonrails.org/active_record_multiple_databases.html#migrate-to-the-new-connection-handling
+ (called from <top (required)> at /var/www/rendezvous/config/environment.rb:5)
+*** Devise initializer ***
+[:rememberable, :token_authenticatable]

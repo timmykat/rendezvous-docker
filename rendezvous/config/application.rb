@@ -38,6 +38,7 @@ module Rendezvous
     #NOTVALID     config.active_record.raise_in_transactional_callbacks = true
 
     # Is this a docker environment (as opposed to EC2)
+    ActiveRecord.legacy_connection_handling = false
 
     # Use Delayed Job for queueing emails
     config.active_job.queue_adapter = :delayed_job

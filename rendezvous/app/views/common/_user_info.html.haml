@@ -5,7 +5,7 @@
         .form-group
           = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', disabled:  !session[:admin_user]
           - if user_signed_in? && !session[:admin_user]
-            = f.input :id, as:  :hidden, input_html:  { value:  current_user.id }
+            = f.input :id, as:  :hidden, input_html:  { value:  @current_user.id }
        
     .row
       .col-md-12

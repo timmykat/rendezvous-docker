@@ -1,12 +1,12 @@
 class Admin::RegistrationsController < AdminController
 
   def show
-    @registration = Registration.includes(:user, :transactions, :attendees).find(params[:id])
+    @registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
     render 'admin/registrations/show'
   end
 
   def edit
-    @registration = Registration.includes(:user, :transactions, :attendees).find(params[:id])
+    @registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
     @registration.transactions.build
     @transaction = Transaction.new
     
@@ -14,7 +14,7 @@ class Admin::RegistrationsController < AdminController
   end
   
   def update
-    @registration = Registration.find(params[:id])
+    @registration = Event::Registration.find(params[:id])
     
     if @registration.update(registration_update_params)
     
@@ -31,7 +31,7 @@ class Admin::RegistrationsController < AdminController
   end
   
   def cancel
-    @registration = Registration.find(params[:id])
+    @registration = Event::Registration.find(params[:id])
     
     # Delete all attendees
     @registration.attendees.destroy_all

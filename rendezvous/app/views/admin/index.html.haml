@@ -167,7 +167,7 @@
                               %br
         #tabbed-6
           %h2 Site Users
-          - if current_user.has_role? :superuser
+          - if @current_user.has_role? :superuser
             %button{class: 'btn btn-danger delete_users'} DELETE checked users
           %table#user-table.table
             %thead
@@ -182,15 +182,14 @@
                 %th.text-center DELETE?
               %tbody
                 - @users.each do |user|
-                  - puts user.id.to_s + ' ' + ((user.has_role? :tester) ? 'Yes' : 'No')
                   %tr{ class:  ((user.has_role? :admin) ? 'bg-info' : '' ) }
-                    %td.text-center= check_box_tag "is_admin_user_#{user.id}", 'admin', (user.has_role? :admin), class:  "admin_check", disabled:  (user.id == current_user.id)
-                    %td.text-center= check_box_tag "is_tester_user_#{user.id}", 'tester', (user.has_role? :tester), class:  "tester_check", disabled:  (user.id == current_user.id)
+                    %td.text-center= check_box_tag "is_admin_user_#{user.id}", 'admin', (user.has_role? :admin), class:  "admin_check", disabled:  (user.id == @current_user.id)
+                    %td.text-center= check_box_tag "is_tester_user_#{user.id}", 'tester', (user.has_role? :tester), class:  "tester_check", disabled:  (user.id == @current_user.id)
                     %td= link_to user.display_name, user_path(user)
                     %td= address_of(user)
                     %td= user.email
                     %td.text-center= (user.receive_mailings? ? 'Subscribed' : '')
                     %td.text-center= (user.citroenvie? ? 'yes' : '')
                     %td.text-center= check_box_tag "delete_user_#{user.id}", user.id, nil, class:  'delete_user', disabled:  (user.has_role? :admin)
-          - if current_user.has_role? :superuser
+          - if @current_user.has_role? :superuser
             %button{class: 'btn btn-danger delete_users'} DELETE checked users

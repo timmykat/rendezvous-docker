@@ -36,10 +36,11 @@ Devise.setup do |config|
   Rails.logger.debug '*** Devise initializer ***'
   config.warden do |manager|
     while strategy = manager.default_strategies(scope: :user).pop
+      Rails.logger.debug "*** Default strategy: #{strategy}"
     end
+    manager.default_strategies(scope: :user).unshift :database_authenticatable
     manager.default_strategies(scope: :user).unshift :token_authenticatable
     manager.default_strategies(scope: :user).unshift :rememberable
-    Rails.logger.debug manager.default_strategies(scope: :user)
   end
 
   # Configure parameters from the request object used for authentication. Each entry
