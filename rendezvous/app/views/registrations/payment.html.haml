@@ -1,0 +1,107 @@
+- config = Rails.configuration.rendezvous
+// = render :partial => 'common/braintree_v3_javascript'
+.container
+  .row
+    = render :partial => 'common/registration_header', :locals => { :step => 'payment' }
+  .row
+    .col-md-offset-2.col-md-8.col-xs-12
+      = simple_form_for @registration, :url => complete_registration_path(@registration), :html => { :id => 'registration_form' } do |f|
+        %section
+          %h3 Help Out
+          .row
+            .col-md-12
+              %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated!
+              .form-group
+                %label Donation
+                = f.input :donation, :label => false, :collection => donation_list(config[:suggested_donations]), :as => :radio_buttons, :input_html => { :class => 'total-calculation' }, :item_label_class => 'radio-inline', :item_wrapper_tag => false
+              .row
+                .col-md-2
+                  .form-group
+                    = f.input :donation, :label => false, :input_html => { :placeholder => 'Other amount', :class => 'total-calculation'}, :disabled => true
+
+              .row
+                .col-md-6.col-xs-12
+                  %p.amount.bg-success.form-group
+                    %label Total (USD):
+                    = f.input_field :total, :value => ("%.2f" % @registration.total) , :disabled => true, :class => 'calculated'
+            %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
+          %section
+            %h2 Payment Information
+            .row
+              .col-md-6.col-xs-12
+                .form-group
+                  = f.input :paid_method, :label => 'Payment method', :collection => payment_options, :as => :radio_buttons, :checked => 'credit card', :input_html => { :class => 'payment' }
+                #payment-form
+                  .row
+                    .col-md-12
+                      .logos
+                        = image_tag 'credit_card_logos_13'
+                      = hidden_field_tag :payment_method_nonce, ''
+                      .form-group
+                        %label{ :for => 'card-number' } Card Number
+                        #card-number.form-control
+                  .row
+                    .col-md-8
+                      .form-group
+                        %label{ :for => 'expiration-date' } Expiration Date
+                        #expiration-date.form-control
+                    .col-md-4
+                      .form-group
+                        %label{ :for => 'cvv' } CVV
+                        #cvv.form-control
+                  .row
+                    .col-md-12
+                      %table.table.submit-status
+                        %tr.credit-card.text-danger
+                          %td
+                            Credit card valid?
+                          %td
+                            &nbsp;
+                            %i.fa.fa-check.hidden
+                          %td{ :id => 'logo', :rowspan => '3' }
+                        %tr.expiration.text-danger
+                          %td
+                            Expiration date valid?
+                          %td
+                            &nbsp;
+                            %i.fa.fa-check.hidden
+                        %tr.cvv.text-danger
+                          %td
+                            CVV valid?
+                          %td
+                            &nbsp;
+                            %i.fa.fa-check.hidden
+                  = f.input_field :status, :as => :hidden, :value => 'complete'
+                #mailing-address.hidden
+                  %p
+                    %em You may either pay on arrival, or send check payable to Citroen Rendezvous LLC to:
+                    %p= mailing_address()
+                  = f.input_field :status, :as => :hidden, :value => 'payment due'
+              .col-md-6.col-xs-12
+                .row
+                  .col-md-12
+                    %p We take the security of your financial information seriously and have taken steps to ensure that the encryption of your sensitive information is as secure as possible.
+                    .ssl
+                      = image_tag 'ssl-assurance.gif', :style => 'width: 100%;'
+                .row
+                  .col-md-6
+                    %a{ :href => "//www.securitymetrics.com/site_certificate?id=1561486&tk=4752303369d59e6ee11209926d45a11d", :target => "_blank"}
+                      %img{ :src => "https://www.securitymetrics.com/static/apps/super/assets/img/Credit_Card_Safe_corporate.png", :alt => "SecurityMetrics Credit Card Safe"}
+                  .col-md-6
+                    :javascript
+                      if (typeof TrustLogo === 'function') {
+                        TrustLogo("https://citroenrendezvous.org/comodo_secure_seal_76x26_transp.png", "CL1", "none");
+                      }
+                    = link_to 'Essential SSL', "https://www.instantssl.com/", :id => "comodoTL"
+          %section
+            - if !Rails.env = 'development'
+              .row
+                .col-md-12
+                  .captcha
+                    = recaptcha_tags
+            .row
+              .col-md-12
+                .form-group
+                  = f.button :submit, 'Complete Registration'.html_safe, :class => 'btn btn-primary'
+
+%script{ src: javascript_url("payments.js") }

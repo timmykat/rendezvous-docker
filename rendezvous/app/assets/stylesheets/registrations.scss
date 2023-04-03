@@ -1,0 +1,145 @@
+// Place all the styles related to the Registrations controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.attendee {
+  .attendee-type {
+    font-weight: bold;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+
+    &.registrant {
+      color: black;
+      background-color: #eee;
+      border: solid 2px #c00;
+      display: none;
+    }
+
+    &.guest {
+      color: #444;
+      background-color: #dedede;
+      border: solid 1px #666;
+    }
+  }
+
+  &:first-child {
+    .registrant {
+      display: block;
+    }
+    .guest {
+      display: none;
+    }
+  }
+}
+
+.existing_account {
+  font-weight: bold;
+  font-size: 1.1em;
+  display: none;
+}
+#new_registration input.email {
+  width: 100%;
+}
+#new_registration fieldset {
+  margin-top: 30px;
+}
+#new_registration .registration_user_country {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+label.radio-inline {
+  display: inline-block;
+  margin-right: 20px;
+}
+.printed-form .fa-file-pdf-o {
+  font-size: 1.5em;
+  padding-left: 10px;
+}
+#registration-form {
+  position: relative;
+  .cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.80);
+    z-index: 250;
+  }
+}
+#country {
+  font-size: 18px;
+}
+td#logo {
+  padding: 0 10px;
+  background-image: image-url('credit_card_logos_13.gif');
+  background-position: 400px 0;
+  background-repeat: no-repeat;
+  width: 55px;
+  &.visa {
+    background-position: 0 0;
+  }
+  &.master-card {
+    background-position: -60px 0;
+  }
+  &.discover {
+    background-position: -120px 0;
+  }
+}
+.registration-progress {
+  text-align: center;
+  .fa {
+    color: #666;
+  }
+  .step {
+    background-color: $primary-color;
+    color: white;
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 3px;
+    margin: 20px 0;
+    font-size: 0.9em;
+    &.to_do {
+      background-color: #444;
+    }
+    &.complete {
+      background-color: lightgray;
+    }
+  }
+}
+
+body {
+  .simple {
+    h1 {
+      height: 90px;
+      background: image-url("rendezvous-logo.png") no-repeat right center;
+    }
+    .content .invoice {
+      margin: 40px;
+      border-left: solid 1px #999;
+      border-right: solid 1px #999;
+      p {
+        font-size: 1.2em;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+@media screen {
+  .back-bar {
+    background-color: $primary-color;
+    padding: 10px;
+    font-sized: 1.2em;
+    a, a:hover, a:visited {
+      color: white;
+      text-decoration: none;
+    }
+  }
+}
+@media print {
+  .back-bar {
+    display: none;
+  }
+}
+      
