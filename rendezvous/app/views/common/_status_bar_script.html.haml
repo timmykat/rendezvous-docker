@@ -1,0 +1,18 @@
+:javascript
+  $(function() {
+    var regId = Cookies.get('registration_id');
+    var regStatus = Cookies.get('registration_status');
+    if (regStatus) {
+      if (regStatus === 'complete') {
+        regStatus += ' <i class="fa fa-thumbs-up complete"></i>'
+      } else if (regStatus === 'payment due') {
+        regStatus += ' <i class="fa fa-thumbs-up payment-due"></i>'
+        regStatus += ' <a href="/event/registrations/' + regId + '/payment">Go to payment</a>'
+      } else  if (regStatus === 'in review') {
+        regStatus += ' <i class="fa fa-check-circle"></i>';
+        regStatus += ' <a href="/event/registrations/' + regId + '/review">Go to review</a>';
+      }
+      $('.registration-status .status').html('Registration status: ' + regStatus );
+      $('.registration-status').slideDown();
+    }
+  });

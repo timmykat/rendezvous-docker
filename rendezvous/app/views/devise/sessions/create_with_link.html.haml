@@ -1,0 +1,8 @@
+%h1 Bienvenue!
+
+%p Welcome to the Citroen Rendezvous site, #{@user.first_name}, you've successfully logged in.
+ 
+%p Click the link below to start the registration %process: 
+ 
+%ul
+  %li= link_to 'Start registerting', event_welcome_path, class:  'btn btn-sm btn-info'

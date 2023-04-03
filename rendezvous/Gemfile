@@ -8,7 +8,7 @@ gem 'rails', '7.0.4'
 # gem 'rails', '4.2.9'
 
 # Browserify
-gem 'browserify-rails'
+# gem 'browserify-rails'
 
 # Security updates
 gem 'sprockets-rails', '~> 3'
@@ -45,8 +45,7 @@ gem 'bootstrap-sass', '~> 3.1'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'cocoon'
-gem 'recaptcha', require: 'recaptcha/rails'
-gem 'font-awesome-sass'
+gem 'recaptcha', require: 'recaptcha/rails' 
 gem 'role_model'
 gem 'delayed_job_active_record'
 gem 'daemons'
@@ -63,6 +62,8 @@ gem 'gibbon' # Mailchimp API
 # Application server
 gem 'puma'
 
+gem 'letter_opener'
+
 group :development do
   gem 'byebug'
   gem 'pry-rails'
@@ -75,7 +76,7 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'factory_bot'
+  gem 'factory_bot_rails'
   gem 'database_cleaner'
   gem 'racksh'
 end

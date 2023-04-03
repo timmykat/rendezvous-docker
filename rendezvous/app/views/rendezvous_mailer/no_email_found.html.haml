@@ -1,0 +1,9 @@
+%p It looks like you tried to log in to the Citroen Rendezvous website with an email that isn't registered, #{@email}.
+
+%p 
+  If you're not registered for the site and would like to be, please
+  = link_to 'sign up', new_user_registration_url(email: @email)
+
+%p 
+  Best regards,
+  %br The Citroen Chauffers.

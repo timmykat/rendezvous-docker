@@ -47,7 +47,7 @@ RSpec.describe PicturesController, type: :controller do
   describe "GET #show" do
     it "assigns the requested picture as @picture" do
       picture = Picture.create! valid_attributes
-      get :show, {:id => picture.to_param}, valid_session
+      get :show, {id: picture.to_param}, valid_session
       expect(assigns(:picture)).to eq(picture)
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe PicturesController, type: :controller do
   describe "GET #edit" do
     it "assigns the requested picture as @picture" do
       picture = Picture.create! valid_attributes
-      get :edit, {:id => picture.to_param}, valid_session
+      get :edit, {id: picture.to_param}, valid_session
       expect(assigns(:picture)).to eq(picture)
     end
   end
@@ -71,30 +71,30 @@ RSpec.describe PicturesController, type: :controller do
     context "with valid params" do
       it "creates a new Picture" do
         expect {
-          post :create, {:picture => valid_attributes}, valid_session
+          post :create, {picture: valid_attributes}, valid_session
         }.to change(Picture, :count).by(1)
       end
 
       it "assigns a newly created picture as @picture" do
-        post :create, {:picture => valid_attributes}, valid_session
+        post :create, {picture: valid_attributes}, valid_session
         expect(assigns(:picture)).to be_a(Picture)
         expect(assigns(:picture)).to be_persisted
       end
 
       it "redirects to the created picture" do
-        post :create, {:picture => valid_attributes}, valid_session
+        post :create, {picture: valid_attributes}, valid_session
         expect(response).to redirect_to(Picture.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved picture as @picture" do
-        post :create, {:picture => invalid_attributes}, valid_session
+        post :create, {picture: invalid_attributes}, valid_session
         expect(assigns(:picture)).to be_a_new(Picture)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:picture => invalid_attributes}, valid_session
+        post :create, {picture: invalid_attributes}, valid_session
         expect(response).to render_template("new")
       end
     end
@@ -108,20 +108,20 @@ RSpec.describe PicturesController, type: :controller do
 
       it "updates the requested picture" do
         picture = Picture.create! valid_attributes
-        put :update, {:id => picture.to_param, :picture => new_attributes}, valid_session
+        put :update, {id: picture.to_param, picture: new_attributes}, valid_session
         picture.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested picture as @picture" do
         picture = Picture.create! valid_attributes
-        put :update, {:id => picture.to_param, :picture => valid_attributes}, valid_session
+        put :update, {id: picture.to_param, picture: valid_attributes}, valid_session
         expect(assigns(:picture)).to eq(picture)
       end
 
       it "redirects to the picture" do
         picture = Picture.create! valid_attributes
-        put :update, {:id => picture.to_param, :picture => valid_attributes}, valid_session
+        put :update, {id: picture.to_param, picture: valid_attributes}, valid_session
         expect(response).to redirect_to(picture)
       end
     end
@@ -129,13 +129,13 @@ RSpec.describe PicturesController, type: :controller do
     context "with invalid params" do
       it "assigns the picture as @picture" do
         picture = Picture.create! valid_attributes
-        put :update, {:id => picture.to_param, :picture => invalid_attributes}, valid_session
+        put :update, {id: picture.to_param, picture: invalid_attributes}, valid_session
         expect(assigns(:picture)).to eq(picture)
       end
 
       it "re-renders the 'edit' template" do
         picture = Picture.create! valid_attributes
-        put :update, {:id => picture.to_param, :picture => invalid_attributes}, valid_session
+        put :update, {id: picture.to_param, picture: invalid_attributes}, valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,13 +145,13 @@ RSpec.describe PicturesController, type: :controller do
     it "destroys the requested picture" do
       picture = Picture.create! valid_attributes
       expect {
-        delete :destroy, {:id => picture.to_param}, valid_session
+        delete :destroy, {id: picture.to_param}, valid_session
       }.to change(Picture, :count).by(-1)
     end
 
     it "redirects to the pictures list" do
       picture = Picture.create! valid_attributes
-      delete :destroy, {:id => picture.to_param}, valid_session
+      delete :destroy, {id: picture.to_param}, valid_session
       expect(response).to redirect_to(pictures_url)
     end
   end

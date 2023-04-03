@@ -5,9 +5,9 @@
       %p Thanks to Linda Abrams! Click on a photo to enlarge/enter slideshow.
       #gallery
         - @pictures.each do |picture|
-          = render :partial => 'gallery_image', :locals => { :pic => picture }
+          = render partial:  'gallery_image', locals:  { pic:  picture }
 
-%script{ :src => "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.7.1/lazyload.min.js" }
+%script{ src:  "https://cdnjs.cloudflare.com/ajax/libs/vanilla-lazyload/8.7.1/lazyload.min.js" }
 
 :javascript
   (function() {

@@ -1,3 +1,6 @@
+require 'devise/models/linkable'
+require 'devise/models/token_authenticatable'
+
 class User < ActiveRecord::Base
 
   include RoleModel
@@ -5,31 +8,32 @@ class User < ActiveRecord::Base
   before_save :set_country
 
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-#          :omniauthable, :omniauth_providers => [:facebook, :twitter]
 
-  has_many :pictures, :dependent => :destroy
-  has_many :vehicles, :dependent => :destroy
-  has_many :registrations
+  include Devise::Models::TokenAuthenticatable
+
+  has_many :pictures, dependent: :destroy
+  has_many :vehicles, dependent: :destroy
+  has_many :registrations, class_name: 'Event::Registration'
   has_many :authorizations
 
-  validates :first_name, :presence => true
-  validates :last_name, :presence => true
-  validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
-  validates :address1, :presence => true, :on => :update
-  validates :city, :presence => true, :on => :update
-#   validates :password, :length => { :in => 6..20 }
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, presence: true
+  validates :address1, presence: true, on: :update
+  validates :city, presence: true, on: :update
+#   validates :password, length: { in: 6..20 }
 
   # US or Canadian postal code
-  validate :postal_code_by_country, :on => :update
+  validate :postal_code_by_country, on: :update
 
   # Password policy
   validate :password_complexity
 
   accepts_nested_attributes_for :pictures, allow_destroy: true
-  accepts_nested_attributes_for :vehicles, allow_destroy: true, :reject_if => lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
+  accepts_nested_attributes_for :vehicles, allow_destroy: true, reject_if: lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
 
   roles :admin, :organizer, :registrant, :tester, :superuser
 
@@ -91,7 +95,7 @@ class User < ActiveRecord::Base
   end
 
   def attending
-    !self.registrations.where(:year => Time.now.year).blank?
+    !self.registrations.where(year: Time.now.year).blank?
   end
 
   def country_name
@@ -102,8 +106,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.find_by_token(token)
+    User.where(login_token: token).first
+  end
+
   def self.mailchimp_init_request
-    gibbon = Gibbon::Request.new(:api_key => Rails.configuration.rendezvous[:mailchimp][:api_key])
+    gibbon = Gibbon::Request.new(api_key: Rails.configuration.rendezvous[:mailchimp][:api_key])
     gibbon.timeout = 10
     gibbon
   end
@@ -114,7 +122,7 @@ class User < ActiveRecord::Base
 
     # Get list data from Mailchimp
     begin
-      subscriber_list = gibbon.lists(list_id).members.retrieve( :params => { :fields => 'members.email_address,members.status', :count => "1000" } )
+      subscriber_list = gibbon.lists(list_id).members.retrieve( params: { fields: 'members.email_address,members.status', count: "1000" } )
 
       subscriber_emails = subscriber_list['members'].reduce([]) { |subscriber_emails, s|
         subscriber_emails << s['email_address'] if s['status'] == 'subscribed'
@@ -125,17 +133,17 @@ class User < ActiveRecord::Base
       User.all.each do |u|
         init = u.receive_mailings
         u.receive_mailings = subscriber_emails.include?(u.email)
-        u.save(:validate => false) unless (u.receive_mailings == init)
+        u.save(validate: false) unless (u.receive_mailings == init)
         user_list[u.email] = u.receive_mailings? ? 'subscribed' : 'not subscribed'
       end
       response = {
-        :status => :ok,
-        :user_list => user_list
+        status: :ok,
+        user_list: user_list
       }
     rescue Gibbon::MailChimpError => e
       response = {
-        :status => :error,
-        :message => "MailChimp Error: #{e.details}"
+        status: :error,
+        message: "MailChimp Error: #{e.details}"
       }
     end
     response
@@ -154,19 +162,19 @@ class User < ActiveRecord::Base
         begin
           member = gibbon.lists(list_id).members(hashed_email).retrieve
           response = {
-            :status => :ok,
-            :member_status => member['status'],
+            status: :ok,
+            member_status: member['status'],
           }
         rescue Gibbon::MailChimpError => e
           if e.body['status'] == 404
             response = {
-              :status => :not_found,
-              :message => "That user is not in the list."
+              status: :not_found,
+              message: "That user is not in the list."
             }
           else
             response = {
-              :status => :error,
-              :message => "MailChimp Error: #{e.detail}"
+              status: :error,
+              message: "MailChimp Error: #{e.detail}"
             }
           end
         end
@@ -175,17 +183,17 @@ class User < ActiveRecord::Base
         begin
           # MMERGE3 ==> Thinking about coming to the Rendezvous 2017 'Yes', 'No', 'Maybe'
           hashed_email = Digest::MD5.hexdigest email.downcase
-          gibbon.lists(list_id).members(hashed_email).upsert( :body => { :email_address => email, :status => 'subscribed', :merge_fields => { :FNAME => first_name, :LNAME => last_name, :MMERGE3 => 'Yes' }} )
+          gibbon.lists(list_id).members(hashed_email).upsert( body: { email_address: email, status: 'subscribed', merge_fields: { FNAME: first_name, LNAME: last_name, MMERGE3: 'Yes' }} )
           receive_mailings = true
-          self.save(:validate => false)
+          self.save(validate: false)
            response = {
-            :status => :ok,
-            :member_status => 'subscribed',
+            status: :ok,
+            member_status: 'subscribed',
           }
         rescue Gibbon::MailChimpError => e
           response = {
-            :status => :error,
-            :message => "MailChimp Error: #{e.detail}"
+            status: :error,
+            message: "MailChimp Error: #{e.detail}"
           }
         end
 
@@ -196,25 +204,25 @@ class User < ActiveRecord::Base
         rescue Gibbon::MailChimpError => e
           if e.body['status'] == 404
             response = {
-              :status => :ok,
-              :member_status => 'unsubscribed',
+              status: :ok,
+              member_status: 'unsubscribed',
             }
             return response
           end
         end
 
         begin
-          gibbon.lists(list_id).members(hashed_email).update( :body => { :status => 'unsubscribed' } )
+          gibbon.lists(list_id).members(hashed_email).update( body: { status: 'unsubscribed' } )
           receive_mailings = false
           self.save!
            response = {
-            :status => :ok,
-            :member_status => 'unsubscribed',
+            status: :ok,
+            member_status: 'unsubscribed',
           }
         rescue Gibbon::MailChimpError => e
           response = {
-            :status => :error,
-            :message => "MailChimp Error: #{e.detail}"
+            status: :error,
+            message: "MailChimp Error: #{e.detail}"
           }
         end
     end

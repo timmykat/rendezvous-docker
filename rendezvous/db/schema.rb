@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_11_064101) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_31_011833) do
   create_table "attendees", id: :integer, charset: "latin1", force: :cascade do |t|
     t.string "name"
     t.string "attendee_age", default: "adult"
@@ -37,6 +37,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_11_064101) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "email_links", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "token"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_email_links_on_token"
   end
 
   create_table "main_pages", id: :integer, charset: "latin1", force: :cascade do |t|
@@ -116,11 +124,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_11_064101) do
     t.string "country"
     t.integer "roles_mask"
     t.boolean "citroenvie"
+    t.string "login_token"
+    t.datetime "login_token_sent_at"
     t.index ["citroenvie"], name: "index_users_on_citroenvie"
     t.index ["country"], name: "index_users_on_country"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"
+    t.index ["login_token"], name: "index_users_on_login_token", unique: true
     t.index ["provider"], name: "index_users_on_provider"
     t.index ["receive_mailings"], name: "index_users_on_receive_mailings"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

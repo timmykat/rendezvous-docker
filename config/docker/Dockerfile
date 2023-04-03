@@ -1,18 +1,25 @@
 FROM ruby:3.1.2 as main
 
-RUN apt-get update
-
-RUN apt install -yq nodejs npm
+RUN apt-get update -qq 
+RUN apt-get -y -qq install nodejs npm
 
 RUN npm install yarn --global
 
-COPY ./../../rendezvous /app
+ENV RAILS_ROOT /var/www/rendezvous
+RUN mkdir -p $RAILS_ROOT 
 
-WORKDIR /app
+WORKDIR $RAILS_ROOT
 
+# Add gem setup
 RUN gem install bundler
 
+COPY Gemfile Gemfile
+COPY Gemfile.lock Gemfile.lock
+
 RUN bundle install
+
+# Add project files and precompile assets
+COPY . .
 
 RUN yarn install
 

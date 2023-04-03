@@ -1,10 +1,10 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
+# Read about factories at https://github.com/thoughtbot/factory_bot
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :vehicle do
     registrant
-    marque "Citroen"
-    model "D (early)"
-    year 1963
+    marque { 'Citroen'  }
+    model { 'D (early)'  }
+    year { 1963 }
   end
 end

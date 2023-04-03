@@ -1,0 +1,28 @@
+- config = Rails.configuration.rendezvous
+%p Dear #{@user.first_name},
+
+%p It's what you've been waiting for! Registration is now open for the #{Time.now.year} Citroen Rendezvous.
+
+%p 
+  %em
+    Key info:
+
+%ul
+  %li Dates:  #{event_dates} 
+  %li Saturday event venue: #{config[:venue][:name]}, #{config[:venue][:address]}
+  %li Event hotel: #{config[:hotel][:name]}, #{config[:hotel][:address]}
+  %li
+    Hotel registration link: get the
+    %a{href: config[:hotel][:event_rate_link]} reduced event rate 
+    by: #{config[:hotel][:registration_last_day]}
+
+%p 
+  More details are available on the 
+  %a{href: 'https://citroenrendezvous.org'}
+    Rendezvous website.
+    
+%p If you're able to come, we look forward to seeing %you! 
+
+%p Warmest regards,
+  %br Your chauffeurs
+  David Cossitt Levy, Christoper (Toaph) Westfall, Tim Kinnel

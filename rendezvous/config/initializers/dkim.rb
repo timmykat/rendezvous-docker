@@ -1,4 +1,4 @@
-if Rails.env.production?
+if false # Rails.env.production?
   Dkim::domain      = 'citroenrendezvous.org'
   Dkim::selector    = 'dkim'
   pem_file = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'dkim.pem'))
