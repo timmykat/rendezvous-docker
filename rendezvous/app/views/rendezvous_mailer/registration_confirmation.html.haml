@@ -1,0 +1,44 @@
+- config = Rails.configuration.rendezvous
+%p Dear #{@registration.user.full_name},
+
+%p You have successfully registered for the the #{config[:dates][:year]} Citroen Rendezvous, which will take place #{config[:dates][:month]} #{config[:dates][:start]}-#{config[:dates][:end]} in Saratoga Springs, New York. We hope you're as excited as we are!
+
+- if @registration.paid_method == 'credit card'
+  %p Thank you for paying your registration fee by credit card.
+- else
+  %p 
+    Please send a check for your registration fee to the address below, including your invoice number (@registration.invoice_number).
+    %br (Alternatively, you may pay on arrival at the Rendezvous.) 
+  %p= mailing_address()
+%p
+  You may also view your registration information
+  = succeed '.' do
+    = link_to 'here', registration_url(@registration, protocol:  'https')
+%p Your Rendezvous details:
+%ul
+  %li Registration fee: #{number_to_currency(@registration.registration_fee)}
+  %li Donation: #{number_to_currency(@registration.donation)}
+  %li Total: #{number_to_currency(@registration.total)}
+  %li Due: #{number_to_currency(@registration.balance)}
+
+%p Attendees:
+%table
+- @registration.attendees.each do |a|
+  %tr
+    %td #{a.name}
+    %td #{a.attendee_age.titlecase}
+    -# %td Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'}
+    %td Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
+
+%p Vehicles:
+- @registration.user.vehicles.each do |vehicle|
+  %br #{vehicle.full_spec}
+
+%p 
+  If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. 
+  The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
+%p Here's to a great Rendezvous!
+
+%p Warmest regards,
+  %br Your chauffeurs
+  David Cossitt Levy, Christoper (Toaph) Westfall, Tim Kinnel

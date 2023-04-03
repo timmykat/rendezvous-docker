@@ -13,7 +13,7 @@ _term() {
   trap - SIGINT
   trap - INT
   # end delayed jobs 
-  bundle exec "./bin/delayed_job ${DELAYED_JOB_ARGS} stop"
+  bundle exec "./bin/delayed_job stop"
 
   exit
 }
@@ -24,7 +24,7 @@ trap _term TERM
 trap _term INT
 trap _term SIGINT
 
-echo "Starting delayed jobs ... with ARGs \"${DELAYED_JOB_ARGS}\""
+echo "Starting delayed jobs ... "
 
 # restart delayed jobs on script execution
 bundle exec "./bin/delayed_job ${DELAYED_JOB_ARGS} restart"

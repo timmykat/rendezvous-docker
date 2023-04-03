@@ -1,0 +1,47 @@
+- config = Rails.configuration.rendezvous
+.container
+  .row
+    .col-md-offset-2.col-md-8.col-xs-12
+      %h1  #{event_year} Citroen Rendezvous Registration
+      %h2 #{event_dates}, Saratoga Springs, New York
+      = render partial:  'common/registration_progress', locals:  { step:  'welcome' }
+      .well.well-sm
+
+        %p.bg-info
+          What a relief to be able to meet in person this year!
+          Since we have eliminated one of the meals, registration will be at a vintage amount!
+          %br
+          %br
+          The registration fee is $#{config[:fees][:registration][:adult]} per adult (16+). Seniors 80+ and kids 15 and under are free! You may pay by credit card or by check.
+
+        %p.bg-info
+          Your registration does not include accommodations.
+          This year's Rendezvous hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}. You can book out our special rate of $189/night at this 
+          %a{href:  "https://citroenrendezvous.us12.list-manage.com/track/click?u=198c738ff80668ca4d472c590&id=eceda0d825&e=882a1f74e7"}
+            link
+          by May 30. You can also find accommodations through the
+          = succeed '.' do
+            = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', target:  '_blank'
+        %p Registration consists of the following steps:
+        %ol
+          %li
+            Sign in
+            %ul
+              %li You have an account if you have previously registered on line
+              %li If you've forgotten your password, use the reset password form on the sign-in page
+              %li You'll have an opportunity to sign up if you don't have an account
+          %li Enter your registration information
+          %li Review information and pay
+          %li Tell us what vehicles you will be bringing to the Rendezvous
+
+        %p
+          If you have problems registering, please
+          = succeed '.' do
+            = link_to 'let us know', root_path(anchor:  'contact')
+        %p.text-center
+          %a.btn.btn-primary{ href:  user_signed_in? ? new_event_registration_path : new_user_session_path } Let's get started
+        %hr{ style:  'margin: 10px; border-top: 2px solid #999' }
+        %h3.text-center.text-info OR
+        %p.printed-form
+          If you prefer not to register on line, or are having problems registering, please print this registration form and send it in with your registration fee payment:
+          = link_to '<i class="fa  fa-file-pdf-o"></i>'.html_safe, 'Rendezvous-registration-form.pdf', target:  '_blank'

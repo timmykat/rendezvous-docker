@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe "pictures/new", type: :view do
   before(:each) do
     assign(:picture, Picture.new(
-      :user => "",
-      :image => "MyString",
-      :caption => "MyString",
-      :credit => "MyString",
-      :year => 1
+      user: "",
+      image: "MyString",
+      caption: "MyString",
+      credit: "MyString",
+      year: 1
     ))
   end
 

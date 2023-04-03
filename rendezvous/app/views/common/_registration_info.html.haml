@@ -81,7 +81,7 @@
     - if @registration.status == 'complete' || @registration.status == 'payment due'
       %p 
         If you need to modify your vehicle info for this year,
-        = link_to "update here", vehicles_registration_path(@registration)
+        = link_to "update here", vehicles_event_registration_path(@registration)
     - else
       %p If you are bringing different vehicles, please update after you finish registering.
     - if @registration.user.vehicles.blank?
@@ -105,7 +105,7 @@
 - if current_user.has_role? :admin   
   .well.well-sm.email
     %h3 Send registration info to registrant
-    %form{ :action => '/send_email' }
-      %input{ :type => 'hidden', :name => 'authenticity_token', :value => form_authenticity_token }
-      %input{ :type => 'hidden', :name => 'registration_id', :value => @registration.id }
-      %input{ :type => 'submit', :name => 'submit', :value => 'SEND EMAIL', :class => 'btn btn-primary' }
+    %form{ action:  '/send_email' }
+      %input{ type:  'hidden', name:  'authenticity_token', value:  form_authenticity_token }
+      %input{ type:  'hidden', name:  'registration_id', value:  @registration.id }
+      %input{ type:  'submit', name:  'submit', value:  'SEND EMAIL', class:  'btn btn-primary' }

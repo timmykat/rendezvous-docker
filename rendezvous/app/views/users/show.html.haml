@@ -19,7 +19,7 @@
           %em Interested in Citroenvie: #{@user.citroenvie? ? 'Yes' : 'No'}
         - if @user.registrations.last
           %p
-            = link_to 'View my registration', registration_path(@user.registrations.last)
+            = link_to 'View my registration', event_registration_path(@user.registrations.last)
       - unless @user.vehicles.blank?
         .well.well-sm
           %h2 Vehicles
@@ -32,4 +32,4 @@
           %ul
             - @user.vehicles.each do |v|
               %li= v.full_spec
-      =link_to 'Edit Profile', edit_user_path(@user), :class => 'btn btn-warning'      
+      =link_to 'Edit Profile', edit_user_path(@user), class:  'btn btn-warning'      

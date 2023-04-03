@@ -1,13 +1,13 @@
 - unless flash.keys.blank?
   .flash-wrapper
-    - flash.keys.each do |type| 
-      .flash
-        %i.fa.fa-close
-        - if type == 'alert'
-          .text-danger{ :role => 'alert' }
-            - flash[type].each do |m|
-              #{m}<br/>
-        - else 
-          .text-primary{ :role => 'notice' }
-            - flash[type].each do |m|
-              #{m}<br/>
+    - flash.keys.each do |type|
+      - flash[type] = [ flash[type] ] if !flash[type].kind_of? Array
+      - flash[type].each do |m|
+        .flash{ role: type.to_s }
+          %i.fa-solid.fa-square-xmark.close
+          .message
+            #{m}
+
+
+
+

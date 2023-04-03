@@ -4,7 +4,7 @@ class AddTransactionTable < ActiveRecord::Migration
       t.string  :transaction_method
       t.string  :transaction_type
       t.string  :cc_transaction_id
-      t.decimal :amount, :precision => 6, :scale => 2, :default => 0.00
+      t.decimal :amount, precision: 6, scale: 2, default: 0.00
       
       t.belongs_to :rendezvous_registration
       
@@ -19,11 +19,11 @@ class AddTransactionTable < ActiveRecord::Migration
     RendezvousRegistration.all.each do |reg|
       if reg.paid_method == 'credit card' && reg.status == 'complete'
         transaction = Transaction.new(
-          :transaction_method         => 'credit card',
-          :transaction_type           => 'payment',
-          :cc_transaction_id          => reg.cc_transaction_id,
-          :amount                     => reg.paid_amount,
-          :rendezvous_registration_id => reg.id
+          transaction_method: 'credit card',
+          transaction_type: 'payment',
+          cc_transaction_id: reg.cc_transaction_id,
+          amount: reg.paid_amount,
+          rendezvous_registration_id: reg.id
         )
         if !transaction.save!
           puts transaction.errors.full_messages.to_sentence

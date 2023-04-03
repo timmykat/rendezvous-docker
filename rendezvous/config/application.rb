@@ -35,7 +35,10 @@ module Rendezvous
     # config.i18n.default_locale = :de
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
-#NOTVALID     config.active_record.raise_in_transactional_callbacks = true
+    #NOTVALID     config.active_record.raise_in_transactional_callbacks = true
+
+    # Is this a docker environment (as opposed to EC2)
+    ActiveRecord.legacy_connection_handling = false
 
     # Use Delayed Job for queueing emails
     config.active_job.queue_adapter = :delayed_job

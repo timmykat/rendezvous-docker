@@ -25,10 +25,9 @@ module MainPagesHelper
 
   def event_dates
     output = START_DATE.strftime(SHORT_FORMAT) + "&ndash;" +  END_DATE.strftime(SHORT_FORMAT) + ", " + START_DATE.year.to_s
-    logger.debug("OUTPUT: " + output)
+
     mo = output.match(/^[a-zA-Z]+/)
-    logger.debug("*** match ***")
-    logger.debug(mo)
+ 
     nth = 2
     i = 0
     output = output.gsub(/#{mo} /) do |month|

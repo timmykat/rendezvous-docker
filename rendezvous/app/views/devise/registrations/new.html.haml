@@ -1,21 +1,33 @@
-%h2 Sign up
-= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  = devise_error_messages!
-  .field
-    = f.label :email
-    %br/
-    = f.email_field :email, autofocus: true
-  .field
-    = f.label :password
-    - if @minimum_password_length
-      %em
-        (#{@minimum_password_length} characters minimum)
-    %br/
-    = f.password_field :password, autocomplete: "off"
-  .field
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
-  .actions
-    = f.submit "Sign up"
-= render "devise/shared/links"
+.container
+  .row
+    .col-md-offset-3.col-md-6
+      %hr
+      .well.sign-up
+        %h2 Sign Up
+        %p This site uses email login links, so you will not need a password.
+        %p 
+          If you already have an account, please
+          %a{ href: new_user_session_path } sign in here.
+        = form_for(resource, url: user_registration_path, method: :post) do |f|
+          .form-group
+            = f.label :email, nil, class: 'required'
+            %br/
+            = f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'E-mail', value: @email, required: true
+          
+          .form-group
+            = f.label "Name", nil, class: 'required'
+            %br/
+            = f.text_field :first_name, class: 'form-control inline-form-element', placeholder: 'First', required: true
+            = f.text_field :last_name, class: 'form-control inline-form-element', placeholder: 'Last', required: true
+          
+          .form-group
+            = f.hidden_field :password, class: 'form-control primary', value: @password, required: true
+            = f.hidden_field :password_confirmation, class: 'form-control confirm', value: @password, hidden: true, required: true         
+          
+          .form-group
+            - if @show_checkbox_recaptcha
+              = recaptcha_tags
+            - else
+              = recaptcha_v3(action: 'register')
+          .actions
+            = f.submit "Sign up", class: "btn btn-info"
