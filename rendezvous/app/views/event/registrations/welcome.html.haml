@@ -39,7 +39,7 @@
           = succeed '.' do
             = link_to 'let us know', root_path(anchor:  'contact')
         %p.text-center
-          %a.btn.btn-primary{ href:  user_signed_in? ? event_welcome_path : new_user_session_path } Let's get started
+          %a.btn.btn-primary{ href:  user_signed_in? ? new_event_registration_path : new_user_session_path } Let's get started
         %hr{ style:  'margin: 10px; border-top: 2px solid #999' }
         %h3.text-center.text-info OR
         %p.printed-form

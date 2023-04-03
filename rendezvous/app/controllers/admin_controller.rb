@@ -4,6 +4,8 @@ class AdminController < ApplicationController
   before_action :require_admin
 
   def index
+    @year = params[:year] || Time.now.year
+
     @title = 'Admin'
 
     # Create CSV data files
@@ -55,7 +57,7 @@ class AdminController < ApplicationController
       'Info'
     ]
 
-    @registrations = Event::Registration.where("year = ?", Time.now.year)
+    @registrations = Event::Registration.where("year = ?", @year)
 
     @data = {
       registrants: [],

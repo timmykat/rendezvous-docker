@@ -99,7 +99,7 @@
                       %a{href:  root_path(anchor: 'photos') } photos
                     -# %li
                     -#   %a{href:  root_path(anchor: 'contact') } contact us
-                    - unless @current_user
+                    - unless current_user
                       %li
                         %a{href:  new_user_session_path } sign in
                 / /.navbar-collapse
