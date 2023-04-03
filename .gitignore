@@ -4,30 +4,39 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-#Ignore .env file
-/.env
+# Ignore local dev site
+.ephemeral
+.sass-cache
 
-#Ignore database file
-database.yml
+# Ignore .env files
+rendezvous/.env
+rendezvous/.envrc
+
+# Ignore database file
+rendezvous/database.yml
 
 # Ignore bundler config.
-/.bundle
+rendezvous/.bundle
+
+# Ignore local mysql config
+rendezvous/mysql_config
+
 
 # Ignore all logfiles and tempfiles.
-/log/*
+rendezvous/log/*
 !/log/.keep
-/tmp
+rendezvous/tmp
 
 # Ignore user files
-/public/*.csv
-/public/uploads/*
-/public/registrations/*
-/public/assets/*
+rendezvous/public/csv/*.csv
+rendezvous/public/uploads/*
+rendezvous/public/registrations/*
+rendezvous/public/assets/*
 
-.sass-cache
-/public/packs
-/public/packs-test
-/node_modules
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
+rendezvous.sass-cache
+rendezvous/public/packs
+rendezvous/public/packs-test
+rendezvous/node_modules
+rendezvous/yarn-error.log
+rendezvousyarn-debug.log*
+rendezvous/.yarn-integrity

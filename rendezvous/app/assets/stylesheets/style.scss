@@ -1,0 +1,1013 @@
+/*****
+*
+*
+* Author Name : Mostafizur Rahman
+* Author URI : http://mostafiz.me
+* Description : This is a responsive HTML5 and Bootstrap portolio template developed my Mostafizur Rahman
+* Template URI : http://mostafiz.me/demo/folio/
+* Version : 1.1
+*
+*
+*****/
+:root {
+	--citroen-red: #E1393E;
+	--dark-medium-blue: #1E6994;
+	--dark-red: #94171B;
+}
+
+/* Rendezvous customizations */
+// Original primary: $primary-color
+// Original button color: #cfc91d
+$primary-color: var(--citroen-red); /* Citroen red */
+$secondary-color: var(--dark-medium-blue); /* dark medium blue */
+$hover-color: var(--dark-red);     /*  darker red */
+/*
+  #1B77AE;  light medium blue
+  #E6E351:  acid green
+*/
+
+/* sticky footer */
+html, body {
+  height: 100%;
+}
+
+body, p, ul, ol, a, td, li, .btn {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+body{
+	margin: 0;
+	padding: 0;
+}
+
+h1 {
+  margin-top: 60px;
+}
+
+/* Turn off spinners on number fields */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  margin: 0;
+}
+
+.body_wrapper {
+  height: auto !important;
+  margin: 0 auto -90px;
+  min-height: 100%;
+}
+.footer, .push {
+  height: 90px;
+}
+
+$success: #3c763d;
+
+$facebook-blue: #4C66A4;
+$twitter-blue: #55ACEF;
+
+$field-success: #e2f7d3;
+
+.fa.fa-facebook-square {
+  font-size: 18px;
+  color: $facebook-blue;
+}
+#social {
+  position: absolute;
+  top: 10px;
+  left: -5px;
+  width: 55px;
+  background-color: rgba(0,0,0,0.50);
+  padding: 10px 5px 5px 10px;
+  border-radius: 7px;
+  z-index: 200;
+}
+
+.alert {
+  text-shadow: none;
+  font-weight: bold;
+}
+
+.alert-cancelled {
+  background-color: #ccc;
+}
+
+.bg-rendezvous {
+  background-color: $primary-color;
+  color: white;
+}
+
+/* Set background for field inputs with success  */
+.has-success .form-control {
+  background-color: $field-success;
+}
+
+i.fa.fa-check.pass {
+  color: $success;
+  visibility: hidden;
+  &.success {
+    visibility: visible;
+  }
+}
+
+a, a:visited {
+  color: $primary-color;
+  text-decoration: underline;
+}
+.navbar a, .navbar a:visited {
+  text-decoration: none;
+}
+a:hover {
+  color: #ccc;
+  text-decoration: none;
+  background-color: transparent;
+}
+a.btn, a:visited.btn {
+  text-decoration: none;
+  color: white;
+}
+
+a.btn-facebook, a:visited.btn.facebook {
+  background-color: $facebook-blue;
+  color: white;
+}
+a.btn-twitter, a:visited.btn-twitter {
+  background-color: $twitter-blue;
+  color: white;
+}
+.btn-default {
+  background-color: #666;
+}
+
+.dropdown-menu > li > a.btn-default:hover {
+  color: #666;
+}
+.btn-mainpage {
+  background-color: $primary-color;
+}
+.dropdown-menu > li > a.btn-mainpage:hover {
+  color: #666;
+}
+.dropdown #userDropdown {
+  display: inline-block;
+  cursor: pointer;
+}
+.c_registrations .last-step-vehicles .user_fields {
+  display: none;
+}
+.registration-status {
+  padding:5px 0;
+  display: none;
+}
+.registration-status {
+  a, a:visited {
+    color: #ccc
+  }
+  a:hover {
+    color: $primary-color
+  }
+  .fa-check-circle, .payment-due {
+    color: orange;
+  }
+  .complete {
+    color: #6f6;
+  }
+}
+body.main {
+  .registration-status {
+    background-color: white;
+    color: #333;
+  }
+}
+body.simple {
+  .registration-status {
+    background-color: #666;
+    color: white;
+    padding:15px 0 5px;
+  }
+}
+
+
+p {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+li {
+  margin-bottom: 1rem;
+}
+ul.dropdown-menu > li {
+  margin-bottom: 1px;
+}
+blockquote {
+  font-size: 1em;
+  border: none;
+}
+
+.simple section {
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(200, 220, 250, 0.3);
+}
+
+.site-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+a .site-name {
+  color: white;
+}
+
+/* flash */
+.flash-wrapper {
+  width: 60%;
+  z-index: 2000;
+  top: 100px;
+  width: 100%;
+}
+.flash {
+  width: 60%;
+  min-width: 320px;
+  background: white;
+  border-radius: 7px;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+}
+i.fa-close {
+  color: $primary-color;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+table tr:hover {
+  background-color: #eee;
+}
+
+/* Mailchimp sign-up */
+#mc_embed_signup{
+  clear: left;
+  font: Helvetica,Arial,sans-serif;
+  text-align: center;
+  form {
+    text-align: center;
+  }
+  input.email {
+    display: inline;
+    margin: 0 5px 10px 0;
+  }
+}
+
+/*header area*/
+.manage {
+  background-color: #333;
+  position: fixed;
+  z-index: 500;
+  width: 100%;
+  color: #ddd;
+  padding: 10px 30px;
+  height: 55px;
+  ul {
+    margin-bottom: 0;
+  }
+  .dropdown-menu {
+    padding: 0;
+  }
+}
+.dropdown-menu > li > a, .dropdown-menu > li  > a:visited {
+  color: white;
+}
+.top-header {
+	background: $primary-color;
+	position: fixed;
+	width: 100%;
+	z-index: 333;
+	top: 0;
+	border-bottom: solid 2px #7cdc7c;
+}
+
+.top-header .container {
+	margin: 0 30px;
+}
+
+.logged-in .top-header {
+  top: 40px;
+}
+.manage {
+  background-color: #454545;
+  text-align: right;
+  p {
+    margin: 0;
+  }
+  a, a:visited {
+    color: white;
+  }
+}
+.header-row {
+	margin: 0;
+	padding: 0;
+}
+.top-header img.logo{
+	float: left;
+	margin-top: 8px;
+	margin-bottom: 30px;
+	transition:all 0.7s ease 0s;
+	-webkit-transition:all 0.7s ease 0s;
+	-moz-transition:all 0.7s ease 0s;
+	-o-transition:all 0.7s ease 0s;
+	-ms-transition:all 0.7s ease 0s;
+}
+.navbar-default {
+  background-color: transparent;
+  border-color: transparent;
+  margin-bottom: 0;
+  margin-top: 23px;
+  transition:all 0.7s ease 0s;
+	-webkit-transition:all 0.7s ease 0s;
+	-moz-transition:all 0.7s ease 0s;
+	-o-transition:all 0.7s ease 0s;
+	-ms-transition:all 0.7s ease 0s;
+}
+.navbar-toggle span{
+	color: #fff;
+}
+ul.nav{
+	margin: 0;
+	padding: 0;
+}
+.navbar-default .navbar-nav>li>a {
+ 	font-size: 16px;
+	color: #fff;
+	text-transform: uppercase;
+	font-weight: 800;
+	transition: all .7s ease 0s;
+	-webkit-transition: all .7s ease 0s;
+	-moz-transition: all .7s ease 0s;
+	-o-transition: all .7s ease 0s;
+	-ms-transition: all .7s ease 0s;
+	padding: 12px 20px;
+	border-radius: 5px;
+}
+.navbar-default .navbar-nav>li>a:hover{
+	color: red;
+	background-color: #fff;
+}
+.navbar-default .navbar-toggle {
+  border-color: #fff;
+  margin-top: 4px;
+}
+.flash-wrapper {
+  position: fixed;
+  top: 85px;
+  width: 100%;
+  z-index: 500;
+}
+.flash {
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+  margin: 0 auto;
+  width: 33%;
+  min-width: 300px;
+  background: white;
+  border: solid 2px #666;
+  border-radius: 7px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+}
+/* spacer to allow for header */
+.spacer {
+  height: 155px;
+}
+.text-citroen {
+  color: $primary-color;
+}
+
+/*banner area*/
+.banner {
+	background-image: image-url('banner.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: left center;
+	text-shadow: 1px 1px 2px rgba(0,0,0, 0.75);
+	min-height: 800px;
+}
+.header {
+	background-color: #071559;
+}
+.header .container {
+	margin: 0;
+	padding: 10px 30px;
+}
+
+.header .row {
+  margin-top: 120px;
+}
+
+.header h1 {
+	font-size: 3em;
+	color: #fff;
+	font-weight: 700;
+	margin-top: 20px;
+}
+
+.header h2 {
+	font-size: 2em;
+	color: #fff;
+	font-weight: 500;
+	margin: 0;
+}
+.header p, .header p a {
+	color: white;
+	line-height: 1.6;
+}
+
+.banner .container.register p {
+	font-size: 1.1em;
+	color: #fff;
+}
+.banner img{
+	margin: 50px;
+}
+
+.banner button{
+	width: 190px;
+	height: 50px;
+	font-size: 16px;
+	color: #ddd;
+	background: $secondary-color;
+	border-radius: 2px;
+	border: 0px;
+	font-weight: 800;
+	/*
+	margin-bottom: 205px;
+	*/
+	margin-bottom: 45px;
+	transition: all .5s ease 0s;
+	-webkit-transition: all .5s ease 0s;
+	-moz-transition: all .5s ease 0s;
+	-o-transition: all .5s ease 0s;
+	-ms-transition: all .5s ease 0s;
+
+}
+.banner button:hover {
+	background: $hover-color;
+	color: #fff;
+}
+.banner button.not-yet, .banner button:hover.not-yet {
+  background: #666;
+  color: #999;
+}
+.banner .well {
+  color: $secondary-color;
+  text-shadow: none;
+  font-size: 16px;
+  text-align: center;
+}
+.banner .well p.facebook {
+  color: #999;
+}
+
+/* Registration modal */
+.registration-modal {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	background-position: cover;
+	background-image: image-url('modal-background.jpg');
+	z-index: 1000;
+
+	.register {
+		text-align: center;
+		width: 50%;
+		min-width: 350px;
+		margin: calc(0.20 * 100vh) auto;
+		background-color: white;
+		text-align: center;
+		padding: 30px 50px;
+		border-radius: 5px;
+
+		h2 {
+			margin-top: 0;
+			margin-bottom: 2rem;
+			line-height: 1.5;
+		}
+
+		a.btn.btn-primary {
+			display: block;
+			margin: 0 auto 60px;
+			min-width: 200px;
+			font-size: 2rem;
+			color: white;
+			background: $primary-color;
+			border-radius: 5px;
+			border: 0px;
+			font-weight: 800;
+
+		}
+		a.btn.btn-primary:hover {
+			background: $hover-color;
+			color: #fff;
+		}
+
+		button.close-modal {
+			font-size: 1.5rem;
+			color: #444;
+			text-align: center;
+			padding: 10px auto;
+			width: 8rem;
+			border-radius: 2px;
+			border: solid 1px #444;
+		}
+	}
+}
+
+/* info/main page */
+h2.main-heading {
+  text-transform: uppercase;
+}
+
+/*about section*/
+.about{
+	background: #fff;
+	position: relative;
+}
+.about h2{
+	font-size: 46px;
+	color: $primary-color;
+	font-weight: 800;
+	text-transform: uppercase;
+	margin-top: 90px;
+	margin-bottom: 30px;
+}
+.about-heading img{
+	margin-bottom: 30px;
+}
+.about-heading p{
+	font-size: 16px;
+	color: #7e8287;
+	margin-bottom: 80px;
+
+}
+.about-heading p span{
+	font-size: 23px;
+}
+.single-about{
+	margin-bottom: 90px;
+}
+.single-about + .single-about{
+	border-left: 1px solid #d9dbdb;
+}
+.about-inside{
+	padding: 30px;
+}
+/*
+.single-about:hover{
+	background: red;
+	color: #fff;
+}
+*/
+.about-inside h3{
+	font-size: 16px;
+	color: #7e8287;
+	font-weight: 800;
+}
+.about-inside p{
+	color: #7e8287;
+}
+.about-inside i.fa{
+	color: $primary-color;
+	font-size: 30px;
+}
+/*
+.single-about:hover .about-inside i.fa{
+	color: #fff;
+}
+.single-about:hover .about-inside p{
+	color: #fff;
+}
+.single-about:hover .about-inside h3{
+	color: #fff;
+}
+*/
+/*service area*/
+.service{
+	margin: 0;
+	padding: 0;
+	background: image-url('colorful-2cv.jpg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	position: relative;
+}
+.service-overlay{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(255, 255, 255, 0.80);
+	z-index: 1000;
+}
+.service h2{
+	font-size: 46px;
+	color: $primary-color;
+	text-transform: uppercase;
+	font-weight: 800;
+	margin-top: 75px;
+	margin-bottom: 40px;
+}
+.service p{
+	font-size: 16px;
+	color: #7e8287;
+	margin-top: 35px;
+}
+.services{
+	margin-left: 0;
+	padding-left: 0;
+}
+.bottom-services{
+	margin-bottom: 80px;
+}
+.single-service{
+	margin-left: 0;
+	padding-left: 20px;
+	margin-top: 50px;
+	background: #F5F5F1;
+}
+/* Remove hover styling
+.single-service:hover{
+	background: red;
+	cursor: pointer;
+}
+*/
+.single-service i.fa{
+	color: $secondary-color;
+	font-size: 30px;
+	padding-top: 15px;
+}
+.single-service h3{
+	font-size: 16px;
+	color: #7e8287;
+}
+.single-service p{
+	color: #7e8287;
+	margin-top: 5px;
+}
+/* Remove hover styling
+.single-service:hover.single-service i.fa{
+	color: #fff;
+}
+.single-service:hover.single-service h3{
+	color: #fff;
+}
+.single-service:hover.single-service p{
+	color: #fff;
+}
+*.
+/*portfolio area*/
+.portfolio h2{
+	font-size: 46px;
+	color: $primary-color;
+	margin-top: 100px;
+	font-weight: 800;
+	margin-bottom: 35px;
+}
+.portfolio-row{
+	margin: 0;
+	padding: 0;
+}
+.portfolio-heading img{
+	margin-bottom: 30px;
+}
+.portfolio-heading p{
+	font-size: 16px;
+	color: #7e8287;
+	margin-bottom: 80px;
+}
+.single-portfolio{
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+.single-portfolio i.fa {
+  position: absolute;
+  z-index: 222;
+  right: 0px;
+  bottom: 0px;
+  font-size: 25px;
+  background: rgba(0, 0, 0, 0.39);
+  padding: 10px;
+  color: #fff;
+  display: none;
+}
+.single-portfolio:hover.single-portfolio i.fa{
+	display: block;
+}
+.portfolio-item{
+	position: relative;
+	z-index: 10;
+}
+.portfolio-details{
+	position: absolute;
+	z-index: 99;
+	top: 25px;
+  	left: 32px;
+	width: 80%;
+	height: 80%;
+	background: rgba($secondary-color, 0.77);
+	display: none;
+}
+.single-portfolio:hover .portfolio-details{
+	display: block;
+}
+.portfolio-item img{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+.portfolio-details h4{
+	font-size: 16px;
+	color: #fff;
+	font-weight: 800;
+	margin-top: 55px;
+}
+.portfolio-details p{
+	font-size: 16px;
+	color: #fff;
+	padding: 5px 20px;
+}
+/*contact area*/
+.contact{}
+.contact h2{
+	font-size: 46px;
+	color: $primary-color;
+	margin-top: 100px;
+	font-weight: 800;
+	margin-bottom: 35px;
+}
+.contact p{
+	font-size: 16px;
+	color: #7e8287;
+	margin-top: 30px;
+	margin-bottom: 70px;
+}
+.contact-form{
+	margin: 0;
+	padding: 0;
+	background: #0b0b0b;
+	overflow: hidden;
+}
+.contact-form input{
+	text-align: center;
+	margin-bottom: 50px;
+	border-bottom: 2px solid #898989;
+	border-left: 0;
+	border-top: 0;
+	border-right: 0;
+	background: transparent;
+	color: #fff;
+}
+.contact-form input:focus{
+	outline: none;
+}
+input.name{
+	margin-top: 55px;
+	width: 640px;
+}
+input.email{
+	width: 640px;
+}
+input.message{
+	width: 920px;
+}
+.contact-form input.submit-btn{
+	width: 200px;
+	height: 50px;
+	border:0;
+	background: $secondary-color;
+	color: #ddd;
+	font-weight: 800;
+	margin:auto;
+	margin: 0 50px;
+	margin-bottom: 70px;
+	transition: all 0.5s ease 0s;
+	-webkit-transition: all 0.5s ease 0s;
+	-moz-transition: all 0.5s ease 0s;
+	-o-transition: all 0.5s ease 0s;
+	-ms-transition: all 0.5s ease 0s;
+}
+.contact-form input.submit-btn:hover{
+	background: $hover-color;
+	color: #fff;
+}
+.contact-form input.submit-btn[disabled=disabled], .contact-form input.submit-btn[disabled=disabled]:hover {
+  background: #666;
+  color: #999;
+}
+
+.form-input::-webkit-input-placeholder {
+color:#EFEFEF;
+}
+.form-input:-moz-placeholder { /* Firefox 18- */
+   color:#EFEFEF;
+}
+
+.form-input::-moz-placeholder {  /* Firefox 19+ */
+   color:#EFEFEF;
+}
+
+.form-input:-ms-input-placeholder {
+   color:#EFEFEF;
+}
+.inline-form-element {
+  width: auto;
+  display: inline-block;
+}
+/* Recaptcha */
+.g-recaptcha {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+/* Vendors */
+#vendors .name {
+  font-weight: bold;
+}
+
+/*footer area*/
+
+.footer{
+	background: #000;
+}
+.footer p{
+	color: #7e8287;
+	font-size: 12px;
+	padding:25px;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #FFF;
+}
+.nivo-lightbox-image img{
+	width: 600px;
+	height: 400px;
+}
+
+/* Secondary pages */
+.account {
+  text-align: center;
+}
+
+/* Registration */
+.amount {
+  font-size: 1.2em;
+	padding: 10px 20px;
+	background-color: white;
+	border-radius: 5px;
+}
+input.calculated {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+}
+
+.day {
+  .title {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1.1em;
+    margin-top: 20px;
+  }
+}
+
+/*** Admin ***/
+.data_files {
+  padding: 10px;
+  margin: 10px 0;
+  background-color: $primary-color;
+  border-radius: 2px;
+  span {
+    display: inline-block;
+    padding-right: 5em;
+    a, a:visited {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
+
+/******************************
+simple layout
+*******************************/
+.simple .heading {
+  margin-top: 40px;
+}
+.simple h3 {
+  margin-top: 30px;
+}
+.simple .table {
+  margin-bottom: 10px;
+}
+.simple .invoice .fa-print {
+  font-size: 1.5em;
+}
+
+/******************************
+responsive area
+********************************/
+/* lg */
+@media (min-width: 1200px) {
+
+}
+
+/* md */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+
+}
+
+/* sm */
+@media (min-width: 768px) and (max-width: 991px) {
+	.single-service{
+		margin-bottom: 30px;
+	}
+	.navbar-default .navbar-nav>li>a{
+		padding: 12px 10px;
+	}
+	input.message {
+	  width: 718px;
+	}
+}
+
+/* xs */
+@media (min-width: 480px) and (max-width: 767px) {
+	input.name {
+	  margin-top: 55px;
+	  width: 420px;
+	}
+	input.email{
+		width: 420px;
+	}
+	input.message{
+		width: 420px;
+	}
+	.banner h1 {
+	  font-size: 60px;
+	  letter-spacing: 3px;
+	}
+	.about-inside{
+		padding: 10px;
+	}
+}
+
+/* XS Portrait */
+@media (max-width: 479px) {
+	.logo{
+		margin-top: 10px;
+	}
+	input.name{
+		margin-top: 55px;
+		width: 275px;
+	}
+	input.email{
+		width: 275px;
+	}
+	input.message{
+		width: 275px;
+	}
+	.contact-form input.submit-btn{
+		width: 200px;
+		height: 50px;
+		border:0;
+	}
+	.banner h1 {
+		  font-size: 38px;
+		  letter-spacing: 0px;
+	}
+	.navbar-header{
+		margin-top: 5px !important;
+	}
+	.about-inside{
+		padding: 0px;
+	}
+}
+@media print {
+  .manage, .flash-wrapper, .back-bar, .push, .footer, #modal, .fa-print {
+    display: none;
+  }
+  .simple .heading {
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,18 @@
+.container
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12.heading
+      %h1.pull-left R#{Time.new.year} Registration
+      .pull-right= image_tag('rendezvous-logo.png')
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12.heading
+      %h2 Admin Review
+      %p
+        = link_to 'Edit', edit_admin_registration_path(@registration), :class => 'btn btn-sm btn-warning'                   
+      = render :partial => 'common/registration_info'
+      
+      - if @refund
+        %p 
+          %b Refund due: #{number_to_currency(@refund)}
+    
+  
+  
