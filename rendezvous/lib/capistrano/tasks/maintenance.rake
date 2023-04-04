@@ -1,14 +1,13 @@
 
 namespace :maintenance do
 
-  SHARED = "/var/www/rendezvous/shared/public/files/maintenance.html"
-  CURRENT = "/var/www/rendezvous/current/public/files/maintenance.html"
+  MAINTENANCE_SIGNAL = '/var/www/rendezvous/shared/public/files/show_maintenance.txt'
 
   desc 'Maintenance mode on'
   task :on do
     on roles(:all) do
       within release_path do
-        execute :ln, '-s', SHARED, CURRENT 
+        execute :touch, MAINTENANCE_SIGNAL
       end
     end
   end
@@ -17,7 +16,7 @@ namespace :maintenance do
   task :off do
     on roles(:all) do
       within release_path do
-        execute :rm, CURRENT
+        execute :rm, MAINTENANCE_SIGNAL
       end
     end
   end
@@ -26,7 +25,7 @@ namespace :maintenance do
   task :status do
     on roles(:all) do
       within release_path do
-        status = capture %([ -f #{CURRENT}]), raise_on_non_zero_exit: false
+        status = capture %([ -f #{MAINTENANCE_SIGNAL}]), raise_on_non_zero_exit: false
         if (status)
           state = "ON"
         else
