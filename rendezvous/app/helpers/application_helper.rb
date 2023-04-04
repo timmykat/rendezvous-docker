@@ -11,6 +11,13 @@ module ApplicationHelper
     end
   end
 
+  def static_file(file_path)
+    "/files/#{file_path}"
+
+  def static_file_url(file_path)
+    "#{request.protocol}://#{request.domain}:#{request.port}#{static_file(file_path)}"
+  end
+
   def my_registration_path(user)
     id = user.registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
     if (!id.blank?)

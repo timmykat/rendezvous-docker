@@ -22,7 +22,7 @@ class AdminController < ApplicationController
       file_name = "#{data_type}_data.csv"
       @files[data_type] = {
         'name'        => file_name,
-        'path'        => File.join(Rails.root, 'public', 'csv', file_name),
+        'path'        => File.join(Rails.root, 'public', static_file("csv/#{file_name}")),
         'descriptor'  => descriptor
       }
       csv_file[data_type] = File.new(@files[data_type]['path'], 'wb')

@@ -90,7 +90,7 @@
                   .col-md-6
                     :javascript
                       if (typeof TrustLogo === 'function') {
-                        TrustLogo("https://citroenrendezvous.org/comodo_secure_seal_76x26_transp.png", "CL1", "none");
+                        TrustLogo(static_file_url("comodo_secure_seal_76x26_transp.png"), "CL1", "none");
                       }
                     = link_to 'Essential SSL', "https://www.instantssl.com/", id:  "comodoTL"
           %section
