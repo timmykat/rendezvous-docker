@@ -9,7 +9,8 @@ set :rbenv_ruby, '3.1.2'
 # set :repo_url, 'git@github.com:timmykat/rendezvous.git'
 
 # Default branch is :master
-ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+set :branch, 'main'
 
 # Set app directory for dockerized version
 set :repo_tree, 'rendezvous'
