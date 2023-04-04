@@ -9,9 +9,10 @@ port        ENV['PORT']     || 3000
 rails_env = ENV['RAILS_ENV'] || "production"
 environment rails_env
 
-app_dir = "/var/www/rendezvous"
+
 
 if !Dir.exists? "/proc/docker"
+  app_dir = "/var/www/rendezvous/current"
   shared_dir = "#{app_dir}/shared"
   db_config_file = "#{shared_dir}/config/database.yml"
   puma_socket_file = "#{shared_dir}/sockets/puma.sock"
@@ -22,6 +23,7 @@ if !Dir.exists? "/proc/docker"
   workers 1
 
 else
+  app_dir = "/var/www/rendezvous"
   db_config_file = "#{app_dir}/config/database.yml"
   puma_socket_file = "#{app_dir}/tmp/sockets/puma.sock"
   puma_state_file = "#{app_dir}/tmp/pids/puma.state"
