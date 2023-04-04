@@ -1,8 +1,8 @@
 
 namespace :maintenance do
 
-  SHARED = "/var/www/rendezvous/shared/public/maintenance.html"
-  CURRENT = "/var/www/rendezvous/current/public/maintenance.html"
+  SHARED = "/var/www/rendezvous/shared/public/files/maintenance.html"
+  CURRENT = "/var/www/rendezvous/current/public/files/maintenance.html"
 
   desc 'Maintenance mode on'
   task :on do

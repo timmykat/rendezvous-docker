@@ -88,7 +88,7 @@
           - if File.exist? file['path']
             %p
               Data file:
-              =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, "/csv/#{file['name']}"
+              =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{file['name'])}"
           %table.table
             %thead
               %tr
