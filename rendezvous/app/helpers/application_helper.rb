@@ -13,6 +13,7 @@ module ApplicationHelper
 
   def static_file(file_path)
     "/files/#{file_path}"
+  end
 
   def static_file_url(file_path)
     "#{request.protocol}://#{request.domain}:#{request.port}#{static_file(file_path)}"
