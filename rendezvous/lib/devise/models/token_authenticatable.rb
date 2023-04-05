@@ -23,6 +23,10 @@ module Devise
         send_devise_notification(:email_login_link, @raw_login_token)
       end
 
+      def send_devise_notification(notification, *args)
+        rendezvous_devise_mailer.delay.send(notification, self, *args)
+      end
+
       def after_token_authentication
         Rails.logger.debug "Expiring the token"
         self.update_attribute(:login_token_sent_at, nil)

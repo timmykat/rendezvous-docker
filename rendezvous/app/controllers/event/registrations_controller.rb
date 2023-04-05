@@ -277,7 +277,7 @@ module Event
       registration_id = params[:registration_id]
       registration = Registration.find(registration_id)
       if registration
-        RendezvousMailer.registration_confirmation(registration).deliver
+        RendezvousMailer.registration_confirmation(registration).deliver_later
         flash_notice('Email sent')
       else
         flash_notice('No registration found')
