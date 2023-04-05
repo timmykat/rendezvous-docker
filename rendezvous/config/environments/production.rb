@@ -83,8 +83,8 @@ Rails.application.configure do
       }
     end
     config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
-    logger.debug '*** Action mailer SMTP settings'
-    logger.debug config.action_mailer.smtp_settings
+    Rails.logger.debug '*** Action mailer SMTP settings'
+    Rails.logger.debug config.action_mailer.smtp_settings
   end
 
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
