@@ -1,7 +1,3 @@
-require 'logger'
-
-Rails.logger = Logger.new(STDOUT)
-
 Rails.application.configure do
 
   # Settings specified here will take precedence over those in config/application.rb.
@@ -88,8 +84,6 @@ Rails.application.configure do
       }
     end
     config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
-    Rails.logger.debug '*** Action mailer SMTP settings'
-    Rails.logger.debug config.action_mailer.smtp_settings
   end
 
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
