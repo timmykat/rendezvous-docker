@@ -48,7 +48,6 @@ module Event
         @registration.build_user
       end
       @registration.user.vehicles.build
-      render 'registration_form'
     end
 
     def create
