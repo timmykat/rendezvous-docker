@@ -1,6 +1,4 @@
 module MainPagesHelper
-  require "logger"
-  logger = Logger.new(STDOUT)
 
   config = Rails.configuration.rendezvous
   
@@ -32,7 +30,6 @@ module MainPagesHelper
     i = 0
     output = output.gsub(/#{mo} /) do |month|
       i += 1
-      logger.debug("Instance " + i.to_s)
       if i == nth
         ""
       else
