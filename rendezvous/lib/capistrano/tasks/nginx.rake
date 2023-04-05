@@ -12,7 +12,6 @@ namespace :nginx do
       local_file = Pathname.new("#{RAILS_ROOT}/../#{LOCAL_CONF_DIRECTORY}/#{CONF_FILE}").cleanpath
       upload(local_file, $HOME)
       execute :sudo, :cp, "#{$HOME}/nginx.conf", nginx_path
-      end
     end
   end
 end
@@ -23,7 +22,6 @@ namespace :nginx do
     on roles(:all) do
       execute :sudo, :cp, "#{NGINX_PATH}/#{CONF_FILE}", "#{$HOME}/#{CONF_FILE}.prod"
       download("#{$HOME}/#{CONF_FILE}.prod", LOCAL_CONF_DIRECTORY)
-      end
     end
   end
 end
