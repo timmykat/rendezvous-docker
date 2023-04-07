@@ -11,6 +11,23 @@ module ApplicationHelper
     end
   end
 
+  def user_is_admin?
+    current_user && (current_user != @user)
+  end
+
+  def can_register?
+    (current_user && (current_user.has_any_role? :admin, :tester)) || (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
+    true
+  end
+
+  def static_file(file_path)
+    "/files/#{file_path}"
+  end
+
+  def static_file_url(file_path)
+    "#{request.protocol}://#{request.domain}:#{request.port}#{static_file(file_path)}"
+  end
+
   def my_registration_path(user)
     id = user.registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
     if (!id.blank?)
@@ -23,21 +40,6 @@ module ApplicationHelper
       user.provider.titlecase
     else
       user.email
-    end
-  end
-
-  def registration_row_class(registration)
-    klass = 'text-center '
-    case registration.status
-      when 'complete'
-        klass += 'alert-success'
-      when 'initiated'
-        klass += 'alert-warning'
-      when 'payment due'
-      when 'in review'
-        klass += 'alert-danger'
-      when 'cancelled'
-        klass += 'alert-cancelled'
     end
   end
 

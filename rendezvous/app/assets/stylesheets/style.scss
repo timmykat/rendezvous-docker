@@ -9,18 +9,58 @@
 *
 *
 *****/
+
+// $theme-colors: (
+// 	"primary": var(--dark-medium-blue),
+//   "info": var(--dark-blue)
+// );
+
 :root {
 	--citroen-red: #E1393E;
 	--dark-medium-blue: #1E6994;
 	--dark-red: #94171B;
+	--dark-blue: #071658;
 }
 
 /* Rendezvous customizations */
-// Original primary: $primary-color
+// Original primary: $brand-color
 // Original button color: #cfc91d
-$primary-color: var(--citroen-red); /* Citroen red */
+$brand-color: var(--citroen-red); /* Citroen red */
 $secondary-color: var(--dark-medium-blue); /* dark medium blue */
 $hover-color: var(--dark-red);     /*  darker red */
+$info-color: var(--dark-blue);
+
+.btn-info {
+	background-color: $info-color;
+	min-width: 100px;
+}
+
+.btn {
+	border-radius: 20px;
+	font-size: 0.8rem;
+	font-weight: bold;
+}
+
+.status-icon {
+	padding-top: 20px;
+	font-size: 20px;
+	.complete {
+		color: green;
+	}
+	.initiated {
+		color: slateblue;
+	}
+	.in-review {
+		color: gold;
+	}
+	.payment-due {
+		color: orange;
+	}
+	.cancelled {
+		color: darkred;
+	}
+}
+
 /*
   #1B77AE;  light medium blue
   #E6E351:  acid green
@@ -98,7 +138,7 @@ $field-success: #e2f7d3;
 }
 
 .bg-rendezvous {
-  background-color: $primary-color;
+  background-color: $brand-color;
   color: white;
 }
 
@@ -116,7 +156,7 @@ i.fa-solid.fa-check.pass {
 }
 
 a, a:visited {
-  color: $primary-color;
+  color: $brand-color;
   text-decoration: underline;
 }
 .navbar a, .navbar a:visited {
@@ -148,7 +188,7 @@ a.btn-twitter, a:visited.btn-twitter {
   color: #666;
 }
 .btn-mainpage {
-  background-color: $primary-color;
+  background-color: $brand-color;
 }
 .dropdown-menu > li > a.btn-mainpage:hover {
   color: #666;
@@ -169,7 +209,7 @@ a.btn-twitter, a:visited.btn-twitter {
     color: #ccc
   }
   a:hover {
-    color: $primary-color
+    color: $brand-color
   }
   .fa-check-circle, .payment-due {
     color: orange;
@@ -190,6 +230,10 @@ body.simple {
     color: white;
     padding:15px 0 5px;
   }
+}
+
+.c_registrations .content {
+	background: #d6e6e6;
 }
 
 
@@ -245,11 +289,15 @@ a .site-name {
 		position: relative;
 		box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 
-		i {
+		.close-flash {
+			cursor: pointer;
+			color: white;
 			position: absolute;
 			top: 10px;
 			right: 10px;
-			cursor: pointer;
+			i {
+				width: 14px; height: 14px;
+			}
 		}
 		
 		&[role='alert'] {
@@ -258,6 +306,14 @@ a .site-name {
 	}
 
 
+}
+
+.profile-info {
+	display: flex;
+
+	.user-info, .vehicle-info {
+		width: 50%
+	}
 }
 
 table tr:hover {
@@ -298,7 +354,7 @@ table tr:hover {
   color: white;
 }
 .top-header {
-	background: $primary-color;
+	background: $brand-color;
 	position: fixed;
 	width: 100%;
 	z-index: 333;
@@ -382,7 +438,7 @@ ul.nav{
   height: 155px;
 }
 .text-citroen {
-  color: $primary-color;
+  color: $brand-color;
 }
 
 /*banner area*/
@@ -478,14 +534,17 @@ ul.nav{
 	width: 100%;
 	height: 100%;
 	background-color: gray;
+	opacity: 0.5;
 	background-position: cover;
-	background-image: image-url('modal-background.jpg');
 	z-index: 1000;
+	position: relative;
 
 	.register {
+		position: absolute;
 		text-align: center;
-		width: 50%;
-		min-width: 350px;
+		left: calc(50% - 125px);
+		top: 200px;
+		width: 350px;
 		margin: calc(0.20 * 100vh) auto;
 		background-color: white;
 		text-align: center;
@@ -504,7 +563,7 @@ ul.nav{
 			min-width: 200px;
 			font-size: 2rem;
 			color: white;
-			background: $primary-color;
+			background: $brand-color;
 			border-radius: 5px;
 			border: 0px;
 			font-weight: 800;
@@ -539,7 +598,7 @@ h2.main-heading {
 }
 .about h2{
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	font-weight: 800;
 	text-transform: uppercase;
 	margin-top: 90px;
@@ -581,7 +640,7 @@ h2.main-heading {
 	color: #7e8287;
 }
 .about-inside i.fa{
-	color: $primary-color;
+	color: $brand-color;
 	font-size: 30px;
 }
 /*
@@ -616,7 +675,7 @@ h2.main-heading {
 }
 .service h2{
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	text-transform: uppercase;
 	font-weight: 800;
 	margin-top: 75px;
@@ -673,7 +732,7 @@ h2.main-heading {
 /*portfolio area*/
 .portfolio h2{
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	margin-top: 100px;
 	font-weight: 800;
 	margin-bottom: 35px;
@@ -754,7 +813,7 @@ form {
 /*contact area*/
 .contact h2 {
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	margin-top: 100px;
 	font-weight: 800;
 	margin-bottom: 35px;
@@ -897,7 +956,7 @@ input.calculated {
 .data_files {
   padding: 10px;
   margin: 10px 0;
-  background-color: $primary-color;
+  background-color: $brand-color;
   border-radius: 2px;
   span {
     display: inline-block;

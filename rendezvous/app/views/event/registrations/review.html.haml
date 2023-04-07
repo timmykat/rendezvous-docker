@@ -10,5 +10,5 @@
   .row
     .col-md-12.text-center          
       .form-group
-        = link_to '<i class="fa fa-arrow-left"></i> Go back '.html_safe, edit_event_registration_path(@registration), class:  'btn btn-primary'
-        = link_to 'Go to payment <i class="fa fa-arrow-right"></i>'.html_safe, payment_event_registration_path(@registration), class:  'btn btn-primary correct_form'
+        = link_to '<i class="fa fa-arrow-left"></i> Go back '.html_safe, edit_event_registration_path(@event_registration), class:  'btn btn-primary'
+        = link_to 'Go to payment <i class="fa fa-arrow-right"></i>'.html_safe, payment_event_registration_path(@event_registration), class:  'btn btn-primary correct_form'

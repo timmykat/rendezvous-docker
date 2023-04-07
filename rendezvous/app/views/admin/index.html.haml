@@ -24,7 +24,7 @@
           %table.table.striped
             %thead
               %tr
-                %th
+                %th.text-center Actions
                 %th.text-center Status
                 %th Name
                 %th.text-center Adults
@@ -36,16 +36,18 @@
                 %th.text-center Paid
                 %th.text-center Due
             %tbody
-              - @registrations.each do |registration|
-                %tr{class:  registration_row_class(registration)}
+              - @event_registrations.each do |registration|
+                %tr{class:  'text-center' }
                   %td.text-left
-                    = link_to 'View', admin_registration_path(registration.id), class:  'btn btn-sm btn-default', style:  'margin-bottom: 5px;'
-                    %br
-                    = link_to 'Edit', edit_admin_registration_path(registration.id), class:  'btn btn-sm btn-warning'
-                    %br
-                    %br
-                    = link_to 'Cancel', admin_cancel_registration_path(registration.id), class:  'btn btn-sm btn-danger'
-                  %td.text-center= registration.status
+                    .row 
+                      .col-sm-12
+                        = link_to 'View', event_registration_path(registration.id), class:  'btn btn-sm btn-info btn-block'
+                        = link_to 'Edit', edit_event_registration_path(registration.id), class:  'btn btn-sm btn-warning btn-block'
+                        = link_to 'Cancel', admin_cancel_registration_path(registration.id), class:  'btn btn-sm btn-danger btn-block'
+                  %td.text-center
+                    = registration.status
+                    .status-icon
+                      %i{ class: get_status_icon(registration.status) } 
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
                   %td.text-center= registration.number_of_adults
                   %td.text-center= registration.number_of_seniors
@@ -88,7 +90,7 @@
           - if File.exist? file['path']
             %p
               Data file:
-              =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, "/csv/#{file['name']}"
+              =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{file['name']}")
           %table.table
             %thead
               %tr

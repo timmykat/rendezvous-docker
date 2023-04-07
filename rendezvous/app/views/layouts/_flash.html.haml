@@ -4,7 +4,9 @@
       - flash[type] = [ flash[type] ] if !flash[type].kind_of? Array
       - flash[type].each do |m|
         .flash{ role: type.to_s }
-          %i.fa-solid.fa-square-xmark.close
+          .close-flash
+            Close 
+            %i.fa.fa-close
           .message
             #{m}
 

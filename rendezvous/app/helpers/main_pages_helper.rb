@@ -1,6 +1,4 @@
 module MainPagesHelper
-  require "logger"
-  logger = Logger.new(STDOUT)
 
   config = Rails.configuration.rendezvous
   
@@ -32,7 +30,6 @@ module MainPagesHelper
     i = 0
     output = output.gsub(/#{mo} /) do |month|
       i += 1
-      logger.debug("Instance " + i.to_s)
       if i == nth
         ""
       else
@@ -48,11 +45,6 @@ module MainPagesHelper
 
   def tbd_message
     return "Stay tuned"
-  end
-
-  def can_register?
-    (current_user && (current_user.has_any_role? :admin, :tester)) || (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
-    false
   end
 
   def formatted_date(the_date)

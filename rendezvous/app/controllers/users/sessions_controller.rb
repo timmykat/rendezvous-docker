@@ -13,7 +13,7 @@ class Users::SessionsController < Devise::SessionsController
       @user.send_login_link
     else
       Rails.logger.debug "This email is not valid " + params[:email]
-      RendezvousMailer.no_email_found(params[:email]).deliver_now
+      RendezvousMailer.no_email_found(params[:email]).deliver
     end
 
     redirect_to root_path
