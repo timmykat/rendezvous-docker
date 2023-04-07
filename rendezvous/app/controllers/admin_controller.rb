@@ -1,11 +1,15 @@
 require 'csv'
 
 class AdminController < ApplicationController
-  before_action :require_admin
+  before_action :require_admin, :get_data
+
+  def get_data
+    @year = params[:year] || Time.now.year
+    @event_registrations = Event::Registration.alpha.where("year = ?", @year)
+    @users = User.order(last_name: :asc).all
+  end
 
   def index
-    @year = params[:year] || Time.now.year
-
     @title = 'Admin'
 
     # Create CSV data files
@@ -22,7 +26,7 @@ class AdminController < ApplicationController
       file_name = "#{data_type}_data.csv"
       @files[data_type] = {
         'name'        => file_name,
-        'path'        => File.join(Rails.root, 'public', static_file("csv/#{file_name}")),
+        'path'        => File.join(Rails.root, 'public', helpers.static_file("csv/#{file_name}")),
         'descriptor'  => descriptor
       }
       csv_file[data_type] = File.new(@files[data_type]['path'], 'wb')
@@ -57,8 +61,6 @@ class AdminController < ApplicationController
       'Info'
     ]
 
-    @registrations = Event::Registration.where("year = ?", @year)
-
     @data = {
       registrants: [],
       citroens: [],
@@ -84,7 +86,7 @@ class AdminController < ApplicationController
         due: 0.0
       }
     }
-    @registrations.each do |registration|
+    @event_registrations.each do |registration|
       @data[:registrants] << registration.user
       @data[:newbies] << registration.user if registration.user.newbie?
       @data[:financials][:total]                += registration.total.to_f unless registration.total.blank?
@@ -154,9 +156,6 @@ class AdminController < ApplicationController
     end
 
     @vehicles = @data[:citroens] + @data[:non_citroens]
-
-    @users = User.order(last_name: :asc).all
-
   end
 
   def toggle_user_session
