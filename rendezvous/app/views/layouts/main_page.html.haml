@@ -74,6 +74,7 @@
                 = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo', :style => 'height: 75px;margin-top: 0px; border-bottom: 0px none; margin-bottom: 10px;'
 
               .container-fluid
+
                 / Brand and toggle get grouped for better mobile display
                 .navbar-header
                   %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
@@ -81,29 +82,29 @@
                     %span.icon-bar
                     %span.icon-bar
                     %span.icon-bar
+
                 / Collect the nav links, forms, and other content for toggling
                 #bs-example-navbar-collapse-1.collapse.navbar-collapse
                   %ul.nav.navbar-nav.navbar-right
                     %li
-                      %a{:href => "/#home"} home
+                      %a{href: root_path( anchor: 'home' )} home
 
                     - if can_register?
                       %li
                         = link_to 'Register', new_event_registration_path
                     - else
                       %li
-                        %a{:href => "/t-shirt-gallery"} t-shirt gallery
+                        %a{href: t_shirt_gallery_path } t-shirt gallery
                     %li
-                      %a{:href => "/#info"} info
+                      %a{href: root_path( anchor: 'info' )} info
                     %li
-                      %a{:href => "/#photos"} photos
+                      %a{href: root_path( anchor: 'photos' )} photos
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
                     - unless current_user
                       %li
-                        %a{:href => "/user_sign_in"} sign in
-                / /.navbar-collapse
-              / /.container-fluid
+                        %a{href: new_user_session_path } sign in
+
       .registration-status
         .container
           .row
@@ -118,11 +119,11 @@
   #modal
   .modal-wrapper
   %section.registration-modal
-      .container.register
-        %h2
-          Citroen Rendezvous registration
-          %br
-          is open for #{Time.now.year}!
-        %p On-line registration closes #{relative_date(-7)}
-        = link_to 'REGISTER', new_event_registration_path, :class => 'btn btn-primary btn-lg'
-        %button.close-modal CLOSE
+    .container.register
+      %h2
+        Citroen Rendezvous registration
+        %br
+        is open for #{Time.now.year}!
+      %p On-line registration closes #{relative_date(-7)}
+      = link_to 'REGISTER', new_event_registration_path, :class => 'btn btn-primary btn-lg'
+      %button.close-modal CLOSE

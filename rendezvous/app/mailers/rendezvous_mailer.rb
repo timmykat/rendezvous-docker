@@ -25,17 +25,17 @@ class RendezvousMailer < ApplicationMailer
   
   def registration_confirmation(registration)
     Rails.logger.info "Sending registration confirmation email"
-    @registration = registration
+    @event_registration = registration
 #     registration_pdf = ::WickedPdf.new.pdf_from_url(registration_url(@rr, protocol: (Rails.env.development? ? 'http' : 'https'), print_token: Rails.configuration.rendezvous[:print_token]), print_media_type: true, ignore_load_errors: true)
-#     filename = "#{@registration.invoice_number}.pdf"
+#     filename = "#{@event_registration.invoice_number}.pdf"
 #     attachments[filename] =File.read(Rails.root.join('public','registrations', filename))
-    mail(to: @registration.user.email, subject: "Thanks for registering for the #{Time.now.year} Rendezvous!")
+    mail(to: @event_registration.user.email, subject: "Thanks for registering for the #{Time.now.year} Rendezvous!")
   end
   
   def registration_notification(registration)
-    @registration = registration
+    @event_registration = registration
     recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
-    mail(to: recipients, subject: "New Rendezvous registration from #{@registration.user.display_name}")
+    mail(to: recipients, subject: "New Rendezvous registration from #{@event_registration.user.display_name}")
   end  
 
   def send_registration_open_notice(user)

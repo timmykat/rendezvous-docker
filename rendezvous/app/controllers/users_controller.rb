@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @registration = @user.registrations.current.last
+    @event_registration = @user.registrations.current.last
   end
 
   def update

@@ -11,19 +11,19 @@
 // about supported directives.
 //
 //= require jquery/dist/jquery
+//= require jquery-ui/dist/jquery-ui
 //= require jquery-ui/ui/tabbable
-//= require jquery-ui.themes.smoothness/jquery-ui
 //= require jquery-ujs/src/rails
-//= require js-cookie/src/js.cookie.js
-//= require bootstrap
+//= require js-cookie/src/js.cookie
+//= require bootstrap/dist/js/bootstrap
 //= require dropzone/dist/dropzone
 //= require cocoon
-//= require magnific-popup/dist/jquery.magnific-popup.js
+//= require magnific-popup/dist/jquery.magnific-popup
 //= require admin
 //= require main_pages
 //= require pictures
 //= require registrations
 //= require user
 //= require vehicles
-//= require tablesorter/dist/js/jquery.tablesorter.min.js
+//= require tablesorter/dist/js/jquery.tablesorter
 //= require transactions

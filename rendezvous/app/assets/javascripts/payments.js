@@ -4,7 +4,7 @@ const  hostedFields = require('braintree-web/hosted-fields');
 let myHostedFields;
 
 function buildBraintree(clientToken) {
-  let form = document.querySelector('#registration_form');
+  let form = document.querySelector('#event_registration_form');
   let submit = document.querySelector('input[type="submit"]');
 
   braintreeClient.create({ authorization: clientToken }, function(clientErr, clientInstance) {
@@ -17,7 +17,7 @@ function buildBraintree(clientToken) {
     let hostedFieldOptions = {
       client: clientInstance,
 
-      id: 'registration_form',
+      id: 'event_registration_form',
       fields: {
         number: {
           selector: '#card-number'
@@ -50,8 +50,8 @@ function buildBraintree(clientToken) {
 
       // Set up events
       hostedFieldsInstance.on('cardTypeChange', function(e) {
-        if (e.cards.length === 1) {
-          $('td#logo').addClass(e.cards[0].type);
+        if (e.wells.length === 1) {
+          $('td#logo').addClass(e.wells[0].type);
         } else {
           $('td#logo').attr('class', '');
         }
@@ -108,10 +108,10 @@ $(function() {
     console.log("Client token", clientToken);
     buildBraintree(clientToken);
 
-    $('#registration_paid_method_credit_card').on('click', function() {
+    $('#event_registration_paid_method_credit_card').on('click', function() {
       buildBraintree(clientToken);
     });
-    $('#registration_paid_method_check').on('click', function() {
+    $('#event_registration_paid_method_check').on('click', function() {
       myHostedFields.teardown( function(teardownErr) {
         if (teardownErr) {
           console.error('Could not tear down HostedFields.');
