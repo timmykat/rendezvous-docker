@@ -14,19 +14,20 @@ var n = this,
 $(function() {
   var setRegistrationFee = function() {
     if (typeof appData != 'undefined') {
-      var total = $('input#registration_number_of_adults').val() * appData.fees.registration.adult
-         + $('input#registration_number_of_adults').val() * appData.fees.registration.senior
-         + $('input#registration_number_of_children').val() * appData.fees.registration.child;
-      $('input#registration_registration_fee').val((total).currency());
+      var total = $('input#event_registration_number_of_adults').val() * appData.fees.adult
+         + $('input#event_registration_number_of_adults').val() * appData.fees.senior
+         + $('input#event_registration_number_of_children').val() * appData.fees.child;
+      $('input#event_registration_registration_fee').val((total).currency());
+      console.log('Registration fee:' + total)
     }
   };
   var getAttendeeTotals = function() {
     var adults = $('#attendees input[value="adult"]:visible:checked').length;
-    $('input#registration_number_of_adults').val(adults);
+    $('input#event_registration_number_of_adults').val(adults);
     var seniors = $('#attendees input[value="senior"]:visible:checked').length;
-    $('input#registration_number_of_seniors').val(seniors);  
+    $('input#event_registration_number_of_seniors').val(seniors);  
     var children = $('#attendees input[value="child"]:visible:checked').length;
-    $('input#registration_number_of_children').val(children);  
+    $('input#event_registration_number_of_children').val(children);  
     setRegistrationFee();  
   }
       
@@ -34,15 +35,15 @@ $(function() {
   $('#attendees .remove_association_action:first').remove();
   $('#attendees input[value="child"]:first').attr('disabled', true);
   $('#attendees input[value="child"]:first').parent().hide();
-  $('#attendees .registration_attendees_name input:first').attr('placeholder', 'Your name *');
+  $('#attendees .event_registration_attendees_name input:first').attr('placeholder', 'Your name *');
   
   // Initialize - set the first attendee info and get totals
   // $('#attendees input[value="adult"]:first').attr('checked', 'checked');
   getAttendeeTotals(); 
   
-  if ($('input#registration_user_attributes_last_name').length > 0) {
-    var firstName = $('input#registration_user_attributes_first_name').val();
-    var lastName = $('input#registration_user_attributes_last_name').val();
+  if ($('input#event_registration_user_attributes_last_name').length > 0) {
+    var firstName = $('input#event_registration_user_attributes_first_name').val();
+    var lastName = $('input#event_registration_user_attributes_last_name').val();
     $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
   }
   
@@ -73,8 +74,9 @@ $(function() {
       } else {
         donation = 0.
       }
-      var total = parseFloat(appData.registration_fee) + donation;
-      $('input#registration_total').val((total).currency());
+      var total = parseFloat(appData.event_registration_fee) + donation;
+      $('input#event_registration_total').val((total).currency());
+      console.log('Final payment total is: ' + total)
     }
   };
   
@@ -86,9 +88,9 @@ $(function() {
   // Toggle access to donation other amount field
   $('input[type=radio].total-calculation').on('click', function(e) {
     if ($(this).val() == 'other') {
-      $('input#registration_donation').attr('disabled', false);
+      $('input#event_registration_donation').attr('disabled', false);
     } else {
-      $('input#registration_donation').attr('disabled', true).val('');
+      $('input#event_registration_donation').attr('disabled', true).val('');
     }
   });
   

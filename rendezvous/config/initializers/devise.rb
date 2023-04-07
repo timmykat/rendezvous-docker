@@ -33,10 +33,9 @@ Devise.setup do |config|
   # or not authentication should be aborted when the value is not present.
   config.authentication_keys = [:email]
 
-  Rails.logger.debug '*** Devise initializer ***'
   config.warden do |manager|
     while strategy = manager.default_strategies(scope: :user).pop
-      Rails.logger.debug "*** Default strategy: #{strategy}"
+
     end
     manager.default_strategies(scope: :user).unshift :database_authenticatable
     manager.default_strategies(scope: :user).unshift :token_authenticatable

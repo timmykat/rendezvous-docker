@@ -11,6 +11,7 @@ module Event
     accepts_nested_attributes_for :transactions, allow_destroy: true
     
     scope :current, -> { where(year: Time.now.year) }
+    scope :alpha, -> { joins(:user).order( :last_name )}
     
     validate :validate_minimum_number_of_adults, unless: -> { status == 'cancelled' }
     validate :validate_payment, unless: -> { status == 'cancelled' }

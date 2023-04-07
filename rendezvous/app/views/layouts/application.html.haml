@@ -20,10 +20,10 @@
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-    - if @registration
+    - if @event_registration
       :javascript
-        Cookies.set( 'registration_status', "#{@registration.status}", {expires: 180 });
-        Cookies.set('registration_id', "#{@registration.id}", {expires: 180 });
+        Cookies.set( 'registration_status', "#{@event_registration.status}", {expires: 180 });
+        Cookies.set('registration_id', "#{@event_registration.id}", {expires: 180 });
 
       = render partial: 'common/status_bar_script'
 

@@ -9,7 +9,8 @@ set :rbenv_ruby, '3.1.2'
 # set :repo_url, 'git@github.com:timmykat/rendezvous.git'
 
 # Default branch is :master
-ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+set :branch, 'main'
 
 # Set app directory for dockerized version
 set :repo_tree, 'rendezvous'
@@ -31,13 +32,12 @@ set :repo_tree, 'rendezvous'
 
 # Default value for :linked_files is []
 set :linked_files, fetch(:linked_files, []).push(
-  '.envrc', 'dkim.pem', 'config/database.yml', 'config/secrets.yml', 'config/puma.rb'
+  '.env', 'dkim.pem', 'config/database.yml', 'config/secrets.yml', 'config/puma.rb'
 )
 
 # Default value for linked_dirs is []
 set :linked_dirs, fetch(:linked_dirs, []).push(
-  'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 
-  'public/uploads', 'public/registrations', 'public/maintenance', 'public/csv'
+  'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/files', 'public/uploads'
 )
 
 # Default value for default_env is {}

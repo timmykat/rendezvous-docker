@@ -11,6 +11,7 @@
 # Ignore .env files
 rendezvous/.env
 rendezvous/.envrc
+config/production_env_vars
 
 # Ignore database file
 rendezvous/database.yml
@@ -28,9 +29,9 @@ rendezvous/log/*
 rendezvous/tmp
 
 # Ignore user files
-rendezvous/public/csv/*.csv
+rendezvous/public/files/csv/*.csv
 rendezvous/public/uploads/*
-rendezvous/public/registrations/*
+rendezvous/public/files/registrations/*
 rendezvous/public/assets/*
 
 rendezvous.sass-cache

@@ -93,7 +93,7 @@ td#logo {
     color: #666;
   }
   .step {
-    background-color: $primary-color;
+    background-color: $brand-color;
     color: white;
     display: inline-block;
     padding: 5px 20px;
@@ -104,7 +104,7 @@ td#logo {
       background-color: #444;
     }
     &.complete {
-      background-color: lightgray;
+      background-color: #999;
     }
   }
 }
@@ -128,7 +128,7 @@ body {
 }
 @media screen {
   .back-bar {
-    background-color: $primary-color;
+    background-color: $brand-color;
     padding: 10px;
     font-sized: 1.2em;
     a, a:hover, a:visited {
