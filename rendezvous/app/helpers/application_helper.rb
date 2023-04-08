@@ -1,4 +1,5 @@
 module ApplicationHelper
+
   def logged_in_user(user)
     if user.first_name
       display = "Welcome #{user.first_name}"

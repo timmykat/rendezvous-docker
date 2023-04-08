@@ -1,4 +1,7 @@
 require 'terser'
+require 'docker/docker_helper'
+
+include Rendezvous::Docker
 
 Rails.application.configure do
 
@@ -25,18 +28,23 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.serve_static_files = !docker_env?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = Terser.new
   config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = true
+  # if docker_env?
+  #   config.assets.debug = true
+  # else
+    config.assets.compile = true
+    config.assets.digest = true
+  # end
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
-  config.assets.digest = true
+
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -73,7 +81,7 @@ Rails.application.configure do
     config.action_mailer.default_url_options = { protocol: 'http', host: 'localhost', port:8080 }
   else
     config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
-    if Dir.exists? '/proc/docker'
+    if docker_env?
       config.action_mailer.default_url_options = { 
         protocol: 'http', 
         host: 'localhost',
