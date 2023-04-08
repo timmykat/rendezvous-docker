@@ -1,6 +1,6 @@
 require 'letter_opener'
 
-if Dir.exists? "/proc/docker"
+if docker_env?
   LetterOpener.configure do |config|
     # To overrider the location for message storage.
     # Default value is `tmp/letter_opener`

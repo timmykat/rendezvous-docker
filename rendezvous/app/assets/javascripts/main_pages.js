@@ -33,6 +33,6 @@ $(function() {
   // Let the user dismiss the flash
   $('.flash-wrapper').delay(5000).fadeOut(400);
   $('body').on('click', '.flash .close-flash', function(e) {
-    $(e.target).parent().fadeOut(200);
+    $(e.target).closest('.flash').fadeOut(200);
   });
 });
