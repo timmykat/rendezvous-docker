@@ -1,0 +1,13 @@
+- status_paths = [ 'new', 'review', 'payment']
+- status = current_registration ? current_registration.status : 'new'
+- status_page = status.split(' ').last
+.status-info 
+  %p 
+    Your registration status:
+    %strong 
+      - if status == 'new'
+        =link_to 'Not Started - create one', new_event_registration_path
+      - else
+        = link_to status.titleize, send("#{status_page}_event_registration_path", current_registration) #{current_registration.status.titleize}
+
+

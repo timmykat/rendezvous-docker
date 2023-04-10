@@ -12,20 +12,16 @@
     = stylesheet_link_tag 'application', :media  => 'all'
     
     = csrf_meta_tags
-    = yield :header_tags
+
+    = yield :head
 
     = javascript_include_tag 'application'
-    %script{ src: 'https://kit.fontawesome.com/757686987b.js', crossorigin: 'anonymous' }
+
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
 
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
-
-    - if @event_registration
-      :javascript
-        Cookies.set( 'registration_status', "#{@event_registration.status}", {expires: 180 });
-        Cookies.set('registration_id', "#{@event_registration.id}", {expires: 180 });
-
-      = render partial: 'common/status_bar_script'
 
   %body{ class: "c_#{controller_name} simple" }
   
@@ -36,11 +32,12 @@
         %a{ href: root_path }
           %i.fa-solid.fa-arrow-left
           Back to main page
-      .registration-status
-        .container
-          .row
-            .col-md-12.status
-              Status here
+      - if (current_registration)
+        .registration-status
+          .container
+            .row
+              .col-md-12.status
+                = render partial: 'common/registration_status'
       .content
         = yield
       .push

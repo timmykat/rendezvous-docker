@@ -1,5 +1,5 @@
 - config = Rails.configuration.rendezvous
-// = render partial:  'common/braintree_v3_javascript'
+
 .container
   .row
     = render partial:  'common/registration_header', locals:  { step:  'payment' }
@@ -23,7 +23,7 @@
                 .col-md-6.col-xs-12
                   %p.amount.bg-success.form-group
                     %label Total (USD):
-                    = f.input_field :total, value:  ("%.2f" % @event_registration.total) , disabled:  true, class:  'calculated'
+                    = f.input_field :total, value:  ("%.2f" % @event_registration.total), readonly: true, class:  'calculated'
             %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
           %section
             %h2 Payment Information
@@ -108,4 +108,3 @@
                 .form-group
                   = f.button :submit, 'Complete registration'.html_safe, class:  'btn btn-primary'
 
-%script{ src: javascript_url("payments.js") }
