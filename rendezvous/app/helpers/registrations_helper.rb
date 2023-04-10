@@ -42,15 +42,6 @@ module RegistrationsHelper
     reg.blank? ? '(none)' : reg
   end
 
-  def current_registration
-    r = current_user.registrations.sort.last
-    if r && r.year == Time.now.year
-      r.id
-    else 
-      false
-    end
-  end
-
   def existing_event_registration_path
     edit_event_registration_path(current_registration)
   end

@@ -43,6 +43,10 @@ module Event
     def paid?
       !(balance > 0.0)
     end
+
+    def complete?
+      status == 'complete'
+    end
     
     def self.invoice_number
       prefix = "CR#{Rails.configuration.rendezvous[:dates][:year]}"

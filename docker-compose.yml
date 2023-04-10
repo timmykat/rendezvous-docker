@@ -4,11 +4,13 @@ services:
     image: nginx
 
     volumes:
+      - ./config/nginx/local/certs:/etc/ssl/certs
       - ./config/nginx/docker/nginx.conf:/etc/nginx/nginx.conf
       - ./rendezvous:/var/www/rendezvous
 
     ports:
       - 8080:8080
+      - 443:443
 
     depends_on:
       - rails_app

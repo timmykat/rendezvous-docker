@@ -1,15 +1,15 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
-Number.prototype.currency = function(c, d, t){
-var n = this, 
-    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-    d = d == undefined ? "." : d, 
-    t = t == undefined ? "," : t, 
-    s = n < 0 ? "-" : "", 
-    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-    j = (j = i.length) > 3 ? j % 3 : 0;
-   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-};
+// Number.prototype.currency = function(c, d, t){
+// var n = this, 
+//     c = isNaN(c = Math.abs(c)) ? 2 : c, 
+//     d = d == undefined ? "." : d, 
+//     t = t == undefined ? "," : t, 
+//     s = n < 0 ? "-" : "", 
+//     i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+//     j = (j = i.length) > 3 ? j % 3 : 0;
+//    return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+// };
 
 $(function() {
   var setRegistrationFee = function() {
@@ -17,7 +17,7 @@ $(function() {
       var total = $('input#event_registration_number_of_adults').val() * appData.fees.adult
          + $('input#event_registration_number_of_adults').val() * appData.fees.senior
          + $('input#event_registration_number_of_children').val() * appData.fees.child;
-      $('input#event_registration_registration_fee').val((total).currency());
+      $('input#event_registration_registration_fee').val((total).toFixed(2));
       console.log('Registration fee:' + total)
     }
   };
@@ -65,17 +65,21 @@ $(function() {
   // Get final total on payment page
   var setTotal = function() {
     if (typeof appData != 'undefined') {
-      var donation = $('input[name="registration[donation]"]:checked').val();
+      var donation = $('input[name="event_registration[donation]"]:checked').val();
       if (donation == 'other') {
-        donation = $('input[name="registration[donation]"][type=number]').val();
+        donation = $('input[name="event_registration[donation]"][type=number]').val();
       }
+
       if ($.isNumeric(donation)) {
         donation = parseFloat(donation);
       } else {
         donation = 0.
       }
+      console.log('Donation value: ', donation)
       var total = parseFloat(appData.event_registration_fee) + donation;
-      $('input#event_registration_total').val((total).currency());
+      console.log('Total: ', total)
+      console.log($('input#event_registration_total'))
+      $('input#event_registration_total').val(total.toFixed(2));
       console.log('Final payment total is: ' + total)
     }
   };
@@ -104,5 +108,14 @@ $(function() {
   $('input.payment').on('click', function() {
     $('#payment-form').toggleClass('hidden');
     $('#mailing-address').toggleClass('hidden');
-  });   
+  });  
+  
+  // Transactions
+  $('#transaction_transaction_method').on('change', function(e) {
+    if (e.target.value == 'credit card') {
+      $('#transaction_cc_transaction_id').attr('disabled', false);
+    } else {
+       $('#transaction_cc_transaction_id').attr('disabled', true);
+    }
+  });
 });

@@ -201,12 +201,12 @@ a.btn-twitter, a:visited.btn-twitter {
   display: none;
 }
 .registration-status {
-  padding:5px 0;
-  display: none;
+  background-color: black;
+	color: #ccc;
 }
 .registration-status {
   a, a:visited {
-    color: #ccc
+    color: gold;
   }
   a:hover {
     color: $brand-color

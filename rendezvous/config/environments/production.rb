@@ -28,19 +28,17 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = !docker_env?
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = Terser.new
   config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
-  # if docker_env?
-  #   config.assets.debug = true
-  # else
-    config.assets.compile = true
-    config.assets.digest = true
-  # end
+  config.assets.debug = false
+  config.assets.compile = true
+  config.assets.digest = true
+
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
@@ -78,14 +76,15 @@ Rails.application.configure do
 
   if mailconf[:use_letter_opener]
     config.action_mailer.delivery_method = :letter_opener
-    config.action_mailer.default_url_options = { protocol: 'http', host: 'localhost', port:8080 }
+    # config.action_mailer.default_url_options = { protocol: 'http', host: 'localhost', port:8080 }
+    config.action_mailer.default_url_options = { protocol: 'https', host: 'rendezvous.local.wgbhdigital.org', port:443 }
   else
     config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
     if docker_env?
       config.action_mailer.default_url_options = { 
-        protocol: 'http', 
-        host: 'localhost',
-        port: 8080
+        protocol: 'https', 
+        host: 'rendezvous.local.wgbhdigital.org',
+        port: 443
       }
     else
       config.action_mailer.default_url_options = { 

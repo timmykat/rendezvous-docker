@@ -29,11 +29,8 @@ module ApplicationHelper
     "#{request.protocol}://#{request.domain}:#{request.port}#{static_file(file_path)}"
   end
 
-  def my_registration_path(user)
-    id = user.registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
-    if (!id.blank?)
-      "/registrations/#{id.to_s}"
-    end
+  def current_registration
+    current_user.registrations.where("year='#{Time.now.year.to_s}'").first
   end
 
   def sign_in_method(user)

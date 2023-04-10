@@ -144,7 +144,7 @@ module Event
         @title = 'Registration - Payment'
         @event_registration = Registration.find(params[:id])
         @event_registration.status = 'payment due'
-        @app_data[:registration_fee] = @event_registration.registration_fee
+        @app_data[:event_registration_fee] = @event_registration.registration_fee
         @credit_connection = true
       rescue Braintree::BraintreeError => e
         @credit_connection = false
