@@ -19,7 +19,7 @@
 	--citroen-red: #E1393E;
 	--dark-medium-blue: #1E6994;
 	--dark-red: #94171B;
-	--dark-blue: #071658;
+	--dark-blue: #071559;
 }
 
 /* Rendezvous customizations */
@@ -359,7 +359,7 @@ table tr:hover {
 	width: 100%;
 	z-index: 333;
 	top: 0;
-	border-bottom: solid 2px #7cdc7c;
+	border-bottom: solid 2px #ccc;
 }
 
 .top-header .container {
@@ -451,7 +451,9 @@ ul.nav{
 	min-height: 800px;
 }
 .header {
-	background-color: #071559;
+	background-color: white;
+	color: var(--dark-blue);
+	border-bottom: solid 2px  var(--dark-blue);
 }
 .header .container {
 	margin: 0;
@@ -464,19 +466,16 @@ ul.nav{
 
 .header h1 {
 	font-size: 3em;
-	color: #fff;
 	font-weight: 700;
 	margin-top: 20px;
 }
 
 .header h2 {
 	font-size: 2em;
-	color: #fff;
 	font-weight: 500;
 	margin: 0;
 }
 .header p, .header p a {
-	color: white;
 	line-height: 1.6;
 }
 
@@ -526,65 +525,19 @@ ul.nav{
   color: #999;
 }
 
-/* Registration modal */
-.registration-modal {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: gray;
-	opacity: 0.5;
-	background-position: cover;
-	z-index: 1000;
-	position: relative;
-
-	.register {
-		position: absolute;
-		text-align: center;
-		left: calc(50% - 125px);
-		top: 200px;
-		width: 350px;
-		margin: calc(0.20 * 100vh) auto;
-		background-color: white;
-		text-align: center;
-		padding: 30px 50px;
-		border-radius: 5px;
-
-		h2 {
-			margin-top: 0;
-			margin-bottom: 2rem;
-			line-height: 1.5;
-		}
-
-		a.btn.btn-primary {
-			display: block;
-			margin: 0 auto 60px;
-			min-width: 200px;
-			font-size: 2rem;
-			color: white;
-			background: $brand-color;
-			border-radius: 5px;
-			border: 0px;
-			font-weight: 800;
-
-		}
-		a.btn.btn-primary:hover {
-			background: $hover-color;
-			color: #fff;
-		}
-
-		button.close-modal {
-			font-size: 1.5rem;
-			color: #444;
-			text-align: center;
-			padding: 10px auto;
-			width: 8rem;
-			border-radius: 2px;
-			border: solid 1px #444;
-		}
-	}
+/* Registration open */
+h2.registration_open {
+	text-align: center;
+	font-style: italic;
+	margin: 0;
+	padding: 30px 0;
+	font-weight: bold;
+	background: var(--dark-blue);
+	color: white;
+	// border-top: 2px solid var(--citroen-red);
+	border-bottom: 2px solid var(--citroen-red);
 }
+
 
 /* info/main page */
 h2.main-heading {
