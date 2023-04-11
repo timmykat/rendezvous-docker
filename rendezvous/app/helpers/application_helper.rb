@@ -16,9 +16,16 @@ module ApplicationHelper
     current_user && (current_user != @user)
   end
 
+  def in_registration_window?
+    Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+  end
+
+  def is_tester?
+    current_user && (current_user.has_any_role? :admin, :tester)
+  end
+
   def can_register?
-    (current_user && (current_user.has_any_role? :admin, :tester)) || (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
-    true
+    is_tester? || in_registration_window?
   end
 
   def static_file(file_path)
@@ -30,7 +37,7 @@ module ApplicationHelper
   end
 
   def current_registration
-    current_user.registrations.where("year='#{Time.now.year.to_s}'").first
+    current_user  && current_user.registrations.where("year='#{Time.now.year.to_s}'").first
   end
 
   def sign_in_method(user)

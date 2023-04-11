@@ -16,6 +16,11 @@
           %br
           %a{ href: "https://citroenvie.com/", target: "_blank" } CITROËNVIE!
 
+- if can_register?
+  %section.registration_open   
+    %h2.registration_open 
+      Registration is open for #{Time.now.year}!
+
 %section.banner
   .container.register
     .row

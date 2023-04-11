@@ -93,29 +93,10 @@
                       %a{href: root_path( anchor: 'photos' )} photos
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
-                    - unless current_user
+                    - unless current_user || !in_registration_window?
                       %li
                         %a{href: new_user_session_path } sign in
-
-      .registration-status
-        .container
-          .row
-            .col-md-12.status
-              Status here
-
     = yield
 
     = render :partial => 'common/footer'
 
-- if can_register?
-  #modal
-  .modal-wrapper
-  %section.registration-modal
-    .container.register
-      %h2
-        Citroen Rendezvous registration
-        %br
-        is open for #{Time.now.year}!
-      %p On-line registration closes #{relative_date(-7)}
-      = link_to 'REGISTER', new_event_registration_path, :class => 'btn btn-primary btn-lg'
-      %button.close-modal CLOSE
