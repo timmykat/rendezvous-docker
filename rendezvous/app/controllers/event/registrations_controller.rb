@@ -199,6 +199,8 @@ module Event
 
         if result.success?
 
+          logger.info "Braintree transaction success for #{@event_registration.user.email}"
+
           # Create a new transaction
           @event_registration.transactions << Transaction.new(
             transaction_method: 'credit card',
@@ -218,6 +220,8 @@ module Event
           redirect_to vehicles_event_registration_path(@event_registration)
           return
         elsif result.errors
+          logger.debug "Braintree transaction error for #{@event_registration.user.email}"
+          logger.debug result.message
           flash_alert 'There was a problem with your credit card payment.'
           flash_alert result.message
           redirect_to payment_event_registration_path(@event_registration)

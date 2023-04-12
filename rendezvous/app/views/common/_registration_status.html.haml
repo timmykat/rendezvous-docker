@@ -1,13 +1,11 @@
-- status_paths = [ 'new', 'review', 'payment']
-- status = current_registration ? current_registration.status : 'new'
-- status_page = status.split(' ').last
 .status-info 
   %p 
-    Your registration status:
+    Your next step:
     %strong 
-      - if status == 'new'
-        =link_to 'Not Started - create one', new_event_registration_path
-      - else
-        = link_to status.titleize, send("#{status_page}_event_registration_path", current_registration) #{current_registration.status.titleize}
-
-
+      - if !current_registration
+        =link_to 'start your registration', new_event_registration_path
+      - elsif  ['in review', 'payment due'].include? current_registration.status
+        = link_to 'pay your fee', payment_event_registration_path(current_registration)
+      - elsif current_registration.status == 'complete'
+        = link_to 'update your vehicle(s)', vehicles_event_registration_path(current_registration)
+        or just kick back - you're done! 

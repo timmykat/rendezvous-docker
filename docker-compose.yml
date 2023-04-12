@@ -72,8 +72,6 @@ services:
       - /tmp/mysqld:/var/run/mysqld
 
   delayed_job:
-    profiles: ["with_delayed_job"]
-    
     image: rails_image
     command: /var/www/rendezvous/bin/delayed_job_docker.sh
     environment:
