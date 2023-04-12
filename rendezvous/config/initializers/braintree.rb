@@ -8,7 +8,7 @@ unless ENV["BRAINTREE_TOKENIZATION_KEY"] &&
   ENV['BRAINTREE_PUBLIC_KEY'] &&
   ENV['BRAINTREE_PRIVATE_KEY']
 
-  raise "Cannot find necessary environmental variables. See https://github.com/braintree/braintree_rails_example#setup-instructions for instructions";
+  raise "Cannot find necessary environment variables. See https://github.com/braintree/braintree_rails_example#setup-instructions for instructions";
 end
 
 if Rails.env.production? && !docker_env?
