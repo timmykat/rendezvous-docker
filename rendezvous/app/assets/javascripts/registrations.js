@@ -118,4 +118,9 @@ $(function() {
        $('#transaction_cc_transaction_id').attr('disabled', true);
     }
   });
+
+  // Spinner
+  $('.go-to-payment').click(function(e) {
+    $('.review-loader').show();
+  })
 });

@@ -20,7 +20,8 @@ function buildBraintree(clientToken) {
       id: 'event_registration_form',
       fields: {
         number: {
-          selector: '#card-number'
+          selector: '#card-number',
+          placeholder: '1111 1111 1111 1111'
         },
         cvv: {
           selector: '#cvv',
@@ -50,8 +51,8 @@ function buildBraintree(clientToken) {
 
       // Set up events
       hostedFieldsInstance.on('cardTypeChange', function(e) {
-        if (e.wells.length === 1) {
-          $('td#logo').addClass(e.wells[0].type);
+        if (e.cards.length === 1) {
+          $('td#logo').addClass(e.cards[0].type);
         } else {
           $('td#logo').attr('class', '');
         }
@@ -104,7 +105,7 @@ function buildBraintree(clientToken) {
 
 
 $(function() {
-  $.get('/payment_token.plain', function(clientToken) {
+  $.get('/event/payment_token.plain', function(clientToken) {
     console.log("Client token", clientToken);
     buildBraintree(clientToken);
 
