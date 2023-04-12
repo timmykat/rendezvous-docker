@@ -20,7 +20,7 @@
             %th.text-center Due
             %th.text-center Admin
         %tbody
-          - @registrations.each do |registration|
+          - @event_registrations.each do |registration|
             %tr
               %td
                 = link_to registration.user.last_name_first, event_registration_path(registration.id)

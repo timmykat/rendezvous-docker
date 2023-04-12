@@ -10,5 +10,6 @@
   .row
     .col-md-12.text-center          
       .form-group
-        = link_to '<i class="fa fa-arrow-left"></i> Go back '.html_safe, edit_event_registration_path(@registration), class:  'btn btn-primary'
-        = link_to 'Go to payment <i class="fa fa-arrow-right"></i>'.html_safe, payment_event_registration_path(@registration), class:  'btn btn-primary correct_form'
+        = link_to '<i class="fa fa-arrow-left"></i> Go back '.html_safe, edit_event_registration_path(@event_registration), class:  'btn btn-primary'
+        = link_to 'Go to payment <i class="fa fa-arrow-right"></i>'.html_safe, payment_event_registration_path(@event_registration), class:  'btn btn-primary go-to-payment'
+        %img{ src: asset_path('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}

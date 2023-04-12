@@ -1,6 +1,7 @@
-require 'logger'
+require 'terser'
+require 'docker/docker_helper'
 
-Rails.logger = Logger.new(STDOUT)
+include Rendezvous::Docker
 
 Rails.application.configure do
 
@@ -27,18 +28,21 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = Uglifier.new(harmony: true)
-  # config.assets.css_compressor = :sass
+  config.assets.js_compressor = Terser.new
+  config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.debug = false
   config.assets.compile = true
+  config.assets.digest = true
+
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
-  config.assets.digest = true
+
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -72,14 +76,15 @@ Rails.application.configure do
 
   if mailconf[:use_letter_opener]
     config.action_mailer.delivery_method = :letter_opener
-    config.action_mailer.default_url_options = { protocol: 'http', host: 'localhost', port:8080 }
+    # config.action_mailer.default_url_options = { protocol: 'http', host: 'localhost', port:8080 }
+    config.action_mailer.default_url_options = { protocol: 'https', host: 'rendezvous.local.wgbhdigital.org', port:443 }
   else
     config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
-    if Dir.exists? '/proc/docker'
+    if docker_env?
       config.action_mailer.default_url_options = { 
-        protocol: 'http', 
-        host: 'localhost',
-        port: 8080
+        protocol: 'https', 
+        host: 'rendezvous.local.wgbhdigital.org',
+        port: 443
       }
     else
       config.action_mailer.default_url_options = { 
@@ -88,8 +93,6 @@ Rails.application.configure do
       }
     end
     config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
-    Rails.logger.debug '*** Action mailer SMTP settings'
-    Rails.logger.debug config.action_mailer.smtp_settings
   end
 
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"

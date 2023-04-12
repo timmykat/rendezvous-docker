@@ -13,7 +13,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @registration = @user.registrations.current.last
+    @event_registration = @user.registrations.current.last
   end
 
   def update
@@ -23,14 +23,14 @@ class UsersController < ApplicationController
       flash_alert_now  @user.errors.full_messages.to_sentence
       render action: :edit
     else
-      action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'
-      response = @user.mailchimp_action(action)
-      if response[:status] == :ok
-        flash_notice('Your user information and mailing list status were updated.')
-      else
-        flash_alert('Your user information was updated, but there was a problem updating your mailing list status.')
-        flash_alert(response[:message])
-      end
+      # action = @user.receive_mailings? ? 'subscribe' : 'unsubscribe'
+      # response = @user.mailchimp_action(action)
+      # if response[:status] == :ok
+      #   flash_notice('Your user information and mailing list status were updated.')
+      # else
+      #   flash_alert('Your user information was updated, but there was a problem updating your mailing list status.')
+      #   flash_alert(response[:message])
+      # end
       redirect_to user_path(@user)
     end
   end

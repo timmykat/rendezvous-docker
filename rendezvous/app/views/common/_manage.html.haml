@@ -10,10 +10,10 @@
             %ul{ class:  'dropdown-menu', 'aria-labelledby' => 'adminDropdown' }
               %li= link_to 'Admin Dashboard', admin_index_path, class:  'btn btn-sm btn-info'
               - if session[:admin_user]
-                %li= link_to 'Create Registration', event_welcome_path, class:  'btn btn-sm btn-info'
+                %li= link_to 'Create registration', new_event_registration_path, class:  'btn btn-sm btn-info'
               %li= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'btn btn-sm btn-info'
               %li= link_to 'Synchronize with Mailchimp', synchronize_with_mailchimp_path, class:  'btn btn-sm btn-info'
-              - if Rails.env != 'production' && (defined? current_registration) && !current_registration.blank?
+              - if current_registration && !current_registration.complete?
                 %li= link_to 'Delete my registration', event_registration_path(current_registration), method:  :delete, class:  'btn btn-sm btn-danger', confirmation:  'Are you sure?'
             
     .pull-right
@@ -27,8 +27,8 @@
             %i.fa-solid.fa-bars
           %ul{ class:  'dropdown-menu dropdown-menu-right', 'aria-labelledby' => 'userDropdown' }
             %li=link_to 'My profile<br />and vehicle(s)'.html_safe, user_path(current_user), class:  'btn btn-default'
-            - if (reg_path = my_registration_path(current_user))
-              %li= link_to 'My registration', reg_path, class:  'btn btn-default'
+            - if current_registration
+              %li= link_to 'My registration', event_registration_path(current_registration), class:  'btn btn-default'
             %li= link_to 'My photos', my_pictures_path, class:  'btn btn-default'
             %li= link_to 'Sign out', destroy_user_session_path, method:  :delete, class:  'btn btn-default'
             %li= link_to 'Photo Gallery',gallery_path, class:  'btn btn-info'

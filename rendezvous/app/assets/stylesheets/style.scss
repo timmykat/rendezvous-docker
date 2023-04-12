@@ -9,18 +9,58 @@
 *
 *
 *****/
+
+// $theme-colors: (
+// 	"primary": var(--dark-medium-blue),
+//   "info": var(--dark-blue)
+// );
+
 :root {
 	--citroen-red: #E1393E;
 	--dark-medium-blue: #1E6994;
 	--dark-red: #94171B;
+	--dark-blue: #071559;
 }
 
 /* Rendezvous customizations */
-// Original primary: $primary-color
+// Original primary: $brand-color
 // Original button color: #cfc91d
-$primary-color: var(--citroen-red); /* Citroen red */
+$brand-color: var(--citroen-red); /* Citroen red */
 $secondary-color: var(--dark-medium-blue); /* dark medium blue */
 $hover-color: var(--dark-red);     /*  darker red */
+$info-color: var(--dark-blue);
+
+.btn-info {
+	background-color: $info-color;
+	min-width: 100px;
+}
+
+.btn {
+	border-radius: 20px;
+	font-size: 0.8rem;
+	font-weight: bold;
+}
+
+.status-icon {
+	padding-top: 20px;
+	font-size: 20px;
+	.complete {
+		color: green;
+	}
+	.initiated {
+		color: slateblue;
+	}
+	.in-review {
+		color: gold;
+	}
+	.payment-due {
+		color: orange;
+	}
+	.cancelled {
+		color: darkred;
+	}
+}
+
 /*
   #1B77AE;  light medium blue
   #E6E351:  acid green
@@ -98,7 +138,7 @@ $field-success: #e2f7d3;
 }
 
 .bg-rendezvous {
-  background-color: $primary-color;
+  background-color: $brand-color;
   color: white;
 }
 
@@ -116,7 +156,7 @@ i.fa-solid.fa-check.pass {
 }
 
 a, a:visited {
-  color: $primary-color;
+  color: $brand-color;
   text-decoration: underline;
 }
 .navbar a, .navbar a:visited {
@@ -148,7 +188,7 @@ a.btn-twitter, a:visited.btn-twitter {
   color: #666;
 }
 .btn-mainpage {
-  background-color: $primary-color;
+  background-color: $brand-color;
 }
 .dropdown-menu > li > a.btn-mainpage:hover {
   color: #666;
@@ -157,19 +197,19 @@ a.btn-twitter, a:visited.btn-twitter {
   display: inline-block;
   cursor: pointer;
 }
-.c_registrations .last-step-vehicles .user_fields {
+.c_event_registrations .last-step-vehicles .user_fields {
   display: none;
 }
 .registration-status {
-  padding:5px 0;
-  display: none;
+  background-color: black;
+	color: #ccc;
 }
 .registration-status {
   a, a:visited {
-    color: #ccc
+    color: gold;
   }
   a:hover {
-    color: $primary-color
+    color: $brand-color
   }
   .fa-check-circle, .payment-due {
     color: orange;
@@ -190,6 +230,10 @@ body.simple {
     color: white;
     padding:15px 0 5px;
   }
+}
+
+.c_event_registrations .body-wrapper {
+	background: #d6e6e6;
 }
 
 
@@ -245,11 +289,15 @@ a .site-name {
 		position: relative;
 		box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 
-		i {
+		.close-flash {
+			cursor: pointer;
+			color: white;
 			position: absolute;
 			top: 10px;
 			right: 10px;
-			cursor: pointer;
+			i {
+				width: 14px; height: 14px;
+			}
 		}
 		
 		&[role='alert'] {
@@ -258,6 +306,14 @@ a .site-name {
 	}
 
 
+}
+
+.profile-info {
+	display: flex;
+
+	.user-info, .vehicle-info {
+		width: 50%
+	}
 }
 
 table tr:hover {
@@ -298,12 +354,12 @@ table tr:hover {
   color: white;
 }
 .top-header {
-	background: $primary-color;
+	background: $brand-color;
 	position: fixed;
 	width: 100%;
 	z-index: 333;
 	top: 0;
-	border-bottom: solid 2px #7cdc7c;
+	border-bottom: solid 2px #ccc;
 }
 
 .top-header .container {
@@ -382,7 +438,7 @@ ul.nav{
   height: 155px;
 }
 .text-citroen {
-  color: $primary-color;
+  color: $brand-color;
 }
 
 /*banner area*/
@@ -395,7 +451,9 @@ ul.nav{
 	min-height: 800px;
 }
 .header {
-	background-color: #071559;
+	background-color: white;
+	color: var(--dark-blue);
+	border-bottom: solid 2px  var(--dark-blue);
 }
 .header .container {
 	margin: 0;
@@ -408,19 +466,16 @@ ul.nav{
 
 .header h1 {
 	font-size: 3em;
-	color: #fff;
 	font-weight: 700;
 	margin-top: 20px;
 }
 
 .header h2 {
 	font-size: 2em;
-	color: #fff;
 	font-weight: 500;
 	margin: 0;
 }
 .header p, .header p a {
-	color: white;
 	line-height: 1.6;
 }
 
@@ -470,62 +525,19 @@ ul.nav{
   color: #999;
 }
 
-/* Registration modal */
-.registration-modal {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background-color: gray;
-	background-position: cover;
-	background-image: image-url('modal-background.jpg');
-	z-index: 1000;
-
-	.register {
-		text-align: center;
-		width: 50%;
-		min-width: 350px;
-		margin: calc(0.20 * 100vh) auto;
-		background-color: white;
-		text-align: center;
-		padding: 30px 50px;
-		border-radius: 5px;
-
-		h2 {
-			margin-top: 0;
-			margin-bottom: 2rem;
-			line-height: 1.5;
-		}
-
-		a.btn.btn-primary {
-			display: block;
-			margin: 0 auto 60px;
-			min-width: 200px;
-			font-size: 2rem;
-			color: white;
-			background: $primary-color;
-			border-radius: 5px;
-			border: 0px;
-			font-weight: 800;
-
-		}
-		a.btn.btn-primary:hover {
-			background: $hover-color;
-			color: #fff;
-		}
-
-		button.close-modal {
-			font-size: 1.5rem;
-			color: #444;
-			text-align: center;
-			padding: 10px auto;
-			width: 8rem;
-			border-radius: 2px;
-			border: solid 1px #444;
-		}
-	}
+/* Registration open */
+h2.registration_open {
+	text-align: center;
+	font-style: italic;
+	margin: 0;
+	padding: 30px 0;
+	font-weight: bold;
+	background: var(--dark-blue);
+	color: white;
+	// border-top: 2px solid var(--citroen-red);
+	border-bottom: 2px solid var(--citroen-red);
 }
+
 
 /* info/main page */
 h2.main-heading {
@@ -539,7 +551,7 @@ h2.main-heading {
 }
 .about h2{
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	font-weight: 800;
 	text-transform: uppercase;
 	margin-top: 90px;
@@ -581,7 +593,7 @@ h2.main-heading {
 	color: #7e8287;
 }
 .about-inside i.fa{
-	color: $primary-color;
+	color: $brand-color;
 	font-size: 30px;
 }
 /*
@@ -616,7 +628,7 @@ h2.main-heading {
 }
 .service h2{
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	text-transform: uppercase;
 	font-weight: 800;
 	margin-top: 75px;
@@ -673,7 +685,7 @@ h2.main-heading {
 /*portfolio area*/
 .portfolio h2{
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	margin-top: 100px;
 	font-weight: 800;
 	margin-bottom: 35px;
@@ -754,7 +766,7 @@ form {
 /*contact area*/
 .contact h2 {
 	font-size: 46px;
-	color: $primary-color;
+	color: $brand-color;
 	margin-top: 100px;
 	font-weight: 800;
 	margin-bottom: 35px;
@@ -850,8 +862,11 @@ color:#EFEFEF;
 
 /*footer area*/
 
-.footer{
+.footer {
 	background: #000;
+	position: fixed;
+	width: 100vw;
+	bottom: 0;
 }
 .footer p{
 	color: #7e8287;
@@ -897,7 +912,7 @@ input.calculated {
 .data_files {
   padding: 10px;
   margin: 10px 0;
-  background-color: $primary-color;
+  background-color: $brand-color;
   border-radius: 2px;
   span {
     display: inline-block;

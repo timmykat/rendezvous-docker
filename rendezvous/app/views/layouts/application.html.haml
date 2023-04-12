@@ -2,32 +2,28 @@
 !!!
 %html{ lang: 'en' }
   %head
-    %meta{ content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type' } /
-    %meta{ charset: 'UTF-8'}/
-    %meta{ content: 'width=device-width, initial-scale=1.0', name: 'viewport' }/
-    %meta{ content: 'A website for the northeast Citroen enthusiasts gathering', name: 'description' }/
-    %meta{ content: 'Citroen Rendezvous, LLC', name: 'author' }/
+    %meta{ content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type' }
+    %meta{ charset: 'UTF-8'}
+    %meta{ content: 'width=device-width, initial-scale=1.0', name: 'viewport' }
+    %meta{ content: 'A website for the northeast Citroen enthusiasts gathering', name: 'description' }
+    %meta{ content: 'Citroen Rendezvous, LLC', name: 'author' }
 
     %title #{@title} | #{Time.now.year} Citroën Rendezvous
     = stylesheet_link_tag 'application', :media  => 'all'
     
     = csrf_meta_tags
-    = yield :header_tags
+
+    = yield :head
 
     = javascript_include_tag 'application'
-    %script{ src: 'https://kit.fontawesome.com/757686987b.js', crossorigin: 'anonymous' }
+
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
 
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-    - if @registration
-      :javascript
-        Cookies.set( 'registration_status', "#{@registration.status}", {expires: 180 });
-        Cookies.set('registration_id', "#{@registration.id}", {expires: 180 });
-
-      = render partial: 'common/status_bar_script'
-
-  %body{ class: "c_#{controller_name} simple" }
+  %body{ class: "c_#{controller_path.gsub('/', '_')} simple" }
   
     .body_wrapper
       = render partial: 'common/manage'
@@ -36,11 +32,12 @@
         %a{ href: root_path }
           %i.fa-solid.fa-arrow-left
           Back to main page
-      .registration-status
-        .container
-          .row
-            .col-md-12.status
-              Status here
+      - if (current_registration)
+        .registration-status
+          .container
+            .row
+              .col-md-12.status
+                = render partial: 'common/registration_status'
       .content
         = yield
       .push

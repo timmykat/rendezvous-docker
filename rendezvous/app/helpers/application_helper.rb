@@ -1,4 +1,5 @@
 module ApplicationHelper
+
   def logged_in_user(user)
     if user.first_name
       display = "Welcome #{user.first_name}"
@@ -11,6 +12,22 @@ module ApplicationHelper
     end
   end
 
+  def user_is_admin?
+    current_user && (current_user != @user)
+  end
+
+  def in_registration_window?
+    Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+  end
+
+  def is_tester?
+    current_user && (current_user.has_any_role? :admin, :tester)
+  end
+
+  def can_register?
+    is_tester? || in_registration_window?
+  end
+
   def static_file(file_path)
     "/files/#{file_path}"
   end
@@ -19,11 +36,8 @@ module ApplicationHelper
     "#{request.protocol}://#{request.domain}:#{request.port}#{static_file(file_path)}"
   end
 
-  def my_registration_path(user)
-    id = user.registrations.where("year='#{Time.now.year.to_s}'").pluck(:id).first
-    if (!id.blank?)
-      "/registrations/#{id.to_s}"
-    end
+  def current_registration
+    current_user  && current_user.registrations.where("year='#{Time.now.year.to_s}'").first
   end
 
   def sign_in_method(user)
@@ -31,21 +45,6 @@ module ApplicationHelper
       user.provider.titlecase
     else
       user.email
-    end
-  end
-
-  def registration_row_class(registration)
-    klass = 'text-center '
-    case registration.status
-      when 'complete'
-        klass += 'alert-success'
-      when 'initiated'
-        klass += 'alert-warning'
-      when 'payment due'
-      when 'in review'
-        klass += 'alert-danger'
-      when 'cancelled'
-        klass += 'alert-cancelled'
     end
   end
 

@@ -10,20 +10,28 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery/dist/jquery
-//= require jquery-ui/ui/tabbable
-//= require jquery-ui.themes.smoothness/jquery-ui
-//= require jquery-ujs/src/rails
-//= require js-cookie/src/js.cookie.js
-//= require bootstrap
-//= require dropzone/dist/dropzone
-//= require cocoon
-//= require magnific-popup/dist/jquery.magnific-popup.js
+
+//= require jquery
+//= require rails-ujs
+//= require html5shiv/dist/html5shiv.min
+//= require respond/main.js
+//= require bootstrap/dist/js/bootstrap
+//= require jquery-ui
+//= require js-cookie/dist/js.cookie.min
+//= require tablesorter/dist/js/jquery.tablesorter
+//= require dropzone/dist/dropzone-min
+//= require magnific-popup/dist/jquery.magnific-popup.min
+//= require lazyload/lazyload.min
+//= require braintree-web/client
+//= require braintree-web/hosted-fields
+//= require @nathanvda/cocoon/cocoon
 //= require admin
+//= require payments
 //= require main_pages
+//= require custom
 //= require pictures
 //= require registrations
 //= require user
 //= require vehicles
-//= require tablesorter/dist/js/jquery.tablesorter.min.js
-//= require transactions
+
+
