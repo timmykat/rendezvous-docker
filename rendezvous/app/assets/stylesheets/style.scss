@@ -197,7 +197,7 @@ a.btn-twitter, a:visited.btn-twitter {
   display: inline-block;
   cursor: pointer;
 }
-.c_registrations .last-step-vehicles .user_fields {
+.c_event_registrations .last-step-vehicles .user_fields {
   display: none;
 }
 .registration-status {
@@ -232,7 +232,7 @@ body.simple {
   }
 }
 
-.c_registrations .content {
+.c_event_registrations .body-wrapper {
 	background: #d6e6e6;
 }
 
@@ -862,8 +862,11 @@ color:#EFEFEF;
 
 /*footer area*/
 
-.footer{
+.footer {
 	background: #000;
+	position: fixed;
+	width: 100vw;
+	bottom: 0;
 }
 .footer p{
 	color: #7e8287;

@@ -2,11 +2,11 @@
 !!!
 %html{ lang: 'en' }
   %head
-    %meta{ content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type' } /
-    %meta{ charset: 'UTF-8'}/
-    %meta{ content: 'width=device-width, initial-scale=1.0', name: 'viewport' }/
-    %meta{ content: 'A website for the northeast Citroen enthusiasts gathering', name: 'description' }/
-    %meta{ content: 'Citroen Rendezvous, LLC', name: 'author' }/
+    %meta{ content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type' }
+    %meta{ charset: 'UTF-8'}
+    %meta{ content: 'width=device-width, initial-scale=1.0', name: 'viewport' }
+    %meta{ content: 'A website for the northeast Citroen enthusiasts gathering', name: 'description' }
+    %meta{ content: 'Citroen Rendezvous, LLC', name: 'author' }
 
     %title #{@title} | #{Time.now.year} Citroën Rendezvous
     = stylesheet_link_tag 'application', :media  => 'all'
@@ -23,7 +23,7 @@
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-  %body{ class: "c_#{controller_name} simple" }
+  %body{ class: "c_#{controller_path.gsub('/', '_')} simple" }
   
     .body_wrapper
       = render partial: 'common/manage'
