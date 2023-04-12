@@ -31,8 +31,8 @@ $(function() {
 
   // Fade out the flash wrapper when it appears
   // Let the user dismiss the flash
-  // $('.flash-wrapper').delay(5000).fadeOut();
-  $('body').on('click', 'i.close', function() {
-    $('.flash-wrapper').hide();
+  $('.flash-wrapper').delay(5000).fadeOut(400);
+  $('body').on('click', '.flash .close-flash', function(e) {
+    $(e.target).closest('.flash').fadeOut(200);
   });
 });

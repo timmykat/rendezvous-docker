@@ -11,7 +11,7 @@
     .col-md-6.col-xs-12
       %section
         %h2 Modify Attendees
-        = simple_form_for @registration, url:  admin_registration_path(@registration), method:  :put, id:  'registration_form' do |f|
+        = simple_form_for @event_registration, url:  admin_registration_path(@event_registration), method:  :put, id:  'registration_form' do |f|
           %h3 Attendees
           .row
             .col-md-12
@@ -63,8 +63,8 @@
               = f.input :cc_transaction_id, label:  'Credit card transaction ID', disabled:  true
           .row
             .col-md-12
-              = hidden_field_tag :registration_id, @registration.id
-              = f.button :submit, 'Update Registration', class:  'btn btn-primary'
+              = hidden_field_tag :registration_id, @event_registration.id
+              = f.button :submit, 'Update registration', class:  'btn btn-primary'
   
 
               

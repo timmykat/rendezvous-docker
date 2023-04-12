@@ -11,7 +11,7 @@ environment rails_env
 
 
 
-if !Dir.exists? "/proc/docker"
+unless docker_env?
   app_dir = "/var/www/rendezvous/current"
   shared_dir = "#{app_dir}/shared"
   db_config_file = "#{shared_dir}/config/database.yml"
@@ -43,7 +43,7 @@ stdout_redirect "#{log_dir}/puma.stdout.log", "#{log_dir}/puma.stderr.log", true
 
 # Set primary PID and state locations
 
-activate_control_app
+# activate_control_app
 
 preload_app!
 

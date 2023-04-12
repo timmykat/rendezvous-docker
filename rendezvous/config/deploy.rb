@@ -9,8 +9,8 @@ set :rbenv_ruby, '3.1.2'
 # set :repo_url, 'git@github.com:timmykat/rendezvous.git'
 
 # Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
-set :branch, 'main'
+ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+# set :branch, 'main'
 
 # Set app directory for dockerized version
 set :repo_tree, 'rendezvous'
@@ -60,10 +60,8 @@ namespace :deploy do
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+      invoke 'puma:stop'
+      invoke 'puma:start'
     end
   end
 

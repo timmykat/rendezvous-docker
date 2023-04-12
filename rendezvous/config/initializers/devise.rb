@@ -12,7 +12,6 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  Rails.logger.debug "*** Setting devise sender to #{ENV['RENDEZVOUS_SES_SENDING_ADDRESS']}"
   config.mailer_sender = ENV['RENDEZVOUS_SES_SENDING_ADDRESS']
 
   # Configure the class responsible to send e-mails.
@@ -36,7 +35,7 @@ Devise.setup do |config|
 
   config.warden do |manager|
     while strategy = manager.default_strategies(scope: :user).pop
-      Rails.logger.debug "*** Default strategy: #{strategy}"
+
     end
     manager.default_strategies(scope: :user).unshift :database_authenticatable
     manager.default_strategies(scope: :user).unshift :token_authenticatable
