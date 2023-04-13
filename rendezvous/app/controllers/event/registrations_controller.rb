@@ -279,7 +279,7 @@ module Event
     def send_email
       event_registration = Registration.find(params[:id])
       if event_registration
-        RendezvousMailer.delay.registration_confirmation(event_registration)
+        RendezvousMailer.registration_confirmation(event_registration).perform
         flash_notice('Email sent')
       else
         flash_notice('No registration found')
@@ -300,7 +300,7 @@ module Event
         # File.open(save_path, 'wb') do |file|
         #   file << registration_pdf
         # end
-        RendezvousMailer.delay.registration_confirmation(@event_registration)
+        RendezvousMailer.registration_confirmation(@event_registration).perform
         # RendezvousMailer.delay.registration_notification(@event_registration) unless Rails.env.development?
       end
 
