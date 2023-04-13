@@ -6,7 +6,7 @@ class Admin::RegistrationsController < AdminController
 
   def send_confirmation_email
     event_registration = Event::Registration.find(params[:id])
-    RendezvousMailer.registration_confirmation(event_registration).deliver_later
+    RendezvousMailer.delay.registration_confirmation(event_registration)
     redirect_to admin_index_path
   end
 
