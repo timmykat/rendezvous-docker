@@ -106,7 +106,5 @@
 - if current_user.has_role? :admin   
   .well.well-sm.email
     %h3 Send registration info to registrant
-    %form{ action:  '/send_email' }
-      %input{ type:  'hidden', name:  'authenticity_token', value:  form_authenticity_token }
-      %input{ type:  'hidden', name:  'registration_id', value:  @event_registration.id }
-      %input{ type:  'submit', name:  'submit', value:  'SEND EMAIL', class:  'btn btn-primary' }
+    = link_to "Send Confirmation Email", "/admin/registrations/#{@event_registration.id}/send_confirmation_email", class: 'btn btn-sm btn-info'
+
