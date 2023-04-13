@@ -1,7 +1,7 @@
 - config = Rails.configuration.rendezvous
 %p Dear #{@event_registration.user.full_name},
 
-%p You have successfully registered for the the #{Time.now.year} Citroen Rendezvous, which will take place #{START_DATE}--#{END_DATE} in Saratoga Springs, New York. We hope you're as excited as we are!
+%p You have successfully registered for the the #{Time.now.year} Citroen Rendezvous, which takes place the weekend of #{config[:dates][:day_one]} in Saratoga Springs, New York. We hope you're as excited as we are!
 
 - if @event_registration.paid_method == 'credit card'
   %p Thank you for paying your registration fee by credit card.
