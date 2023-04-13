@@ -215,7 +215,7 @@ module Event
           @event_registration.paid_date = Time.new
           @event_registration.status = 'complete'
           @event_registration.save!
-          send_confirmation_emails
+          send_email
           flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
           redirect_to vehicles_event_registration_path(@event_registration)
           return
@@ -243,7 +243,7 @@ module Event
         flash_alert @event_registration.errors.full_messages.to_sentence
         redirect_to payment_event_registration_path(@event_registration)
       else
-        send_confirmation_emails
+        send_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         redirect_to vehicles_event_registration_path(@event_registration)
       end
@@ -277,32 +277,37 @@ module Event
     end
 
     def send_email
-      event_registration = Registration.find(params[:id])
+      event_registration = @event_registration || Registration.find(params[:id])
       if event_registration
-        RendezvousMailer.registration_confirmation(event_registration).deliver_now
+        RendezvousMailer.delay.registration_confirmation(event_registration)
         flash_notice('Email sent')
       else
         flash_notice('No registration found')
       end
-      redirect_to :root
+      unless @event_registration
+        if current_user.admin?
+          redirect_to admin_indez_path
+        else
+          redirect_to :root
+      end
     end
 
     private
 
-      # Create pdf and send acknowledgement emails
-      def send_confirmation_emails
-        # filename = "#{@event_registration.invoice_number}.pdf"
-        # registration_pdf = ::WickedPdf.new.pdf_from_string(
-        #   render_to_string('registrations/show', layout: 'layouts/registration_mailer', encoding: 'UTF-8')
-        # )
-        # save_dir =  Rails.root.join('public','registrations')
-        # save_path = Rails.root.join('public','registrations', filename)
-        # File.open(save_path, 'wb') do |file|
-        #   file << registration_pdf
-        # end
-        RendezvousMailer.registration_confirmation(@event_registration).deliver_now
-        # RendezvousMailer.delay.registration_notification(@event_registration) unless Rails.env.development?
-      end
+      # # Create pdf and send acknowledgement emails
+      # def send_confirmation_emails
+      #   # filename = "#{@event_registration.invoice_number}.pdf"
+      #   # registration_pdf = ::WickedPdf.new.pdf_from_string(
+      #   #   render_to_string('registrations/show', layout: 'layouts/registration_mailer', encoding: 'UTF-8')
+      #   # )
+      #   # save_dir =  Rails.root.join('public','registrations')
+      #   # save_path = Rails.root.join('public','registrations', filename)
+      #   # File.open(save_path, 'wb') do |file|
+      #   #   file << registration_pdf
+      #   # end
+      #   RendezvousMailer.delay.registration_confirmation(@event_registration)
+      #   # RendezvousMailer.delay.registration_notification(@event_registration) unless Rails.env.development?
+      # end
 
 
       # Only allows admins and owners to see registration
