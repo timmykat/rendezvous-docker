@@ -285,7 +285,7 @@ module Event
       end
       unless @event_registration
         if current_user.admin?
-          redirect_to admin_indez_path
+          redirect_to admin_index_path
         else
           redirect_to :root
         end
