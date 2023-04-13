@@ -4,12 +4,6 @@ class Admin::RegistrationsController < AdminController
     @event_registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
   end
 
-  def send_confirmation_email
-    event_registration = Event::Registration.find(params[:id])
-    RendezvousMailer.delay.registration_confirmation(event_registration)
-    redirect_to admin_index_path
-  end
-
   def edit
     @event_registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
     @event_registration.transactions.build

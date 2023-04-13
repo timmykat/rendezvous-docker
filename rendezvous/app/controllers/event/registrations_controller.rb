@@ -277,7 +277,7 @@ module Event
     end
 
     def send_email
-      event_registration = Registration.find(params[:event_registration_id])
+      event_registration = Registration.find(params[:id])
       if event_registration
         RendezvousMailer.delay.registration_confirmation(event_registration)
         flash_notice('Email sent')
