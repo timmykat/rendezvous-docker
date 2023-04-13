@@ -46,8 +46,8 @@ class MainPagesController < ApplicationController
     @email = params[:email]
     @message = params[:message]
 
-    RendezvousMailer.send_to_us(@name, @email, @message).deliver_later
-    RendezvousMailer.autoresponse(@name, @email, @message).deliver_later
+    RendezvousMailer.delay.send_to_us(@name, @email, @message)
+    RendezvousMailer.delay.autoresponse(@name, @email, @message)
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
   end
