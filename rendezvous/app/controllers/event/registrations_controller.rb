@@ -51,7 +51,6 @@ module Event
     end
 
     def create
-
       # Create or update the user
       if user_signed_in? && !session[:admin_user]
         user = User.find(current_user.id)
@@ -289,6 +288,7 @@ module Event
           redirect_to admin_indez_path
         else
           redirect_to :root
+        end
       end
     end
 
