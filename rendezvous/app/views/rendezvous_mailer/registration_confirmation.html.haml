@@ -13,7 +13,7 @@
 %p
   You may also view your registration information
   = succeed '.' do
-    = link_to 'here', registration_url(@event_registration, protocol:  'https')
+    = link_to 'here', event_registration_url(@event_registration, protocol:  'https')
 %p Your Rendezvous details:
 %ul
   %li Registration fee: #{number_to_currency(@event_registration.registration_fee)}
