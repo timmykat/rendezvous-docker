@@ -39,7 +39,7 @@ module Event
         end
       end
 
-      @event_registration = Event::Registration.new
+      @event_registration = Registration.new
       @event_registration.attendees.build
 
       if user_signed_in? && !session[:admin_user]
