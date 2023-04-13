@@ -4,6 +4,12 @@ class Admin::RegistrationsController < AdminController
     @event_registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
   end
 
+  def send_confirmation_email
+    event_registration = Event::Registration.find(params[:id])
+    RendezvousMailer.registration_confirmation(event_registration).deliver_later
+    redirect_to admin_index_path
+  end
+
   def edit
     @event_registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
     @event_registration.transactions.build
@@ -59,7 +65,6 @@ class Admin::RegistrationsController < AdminController
   
   
   private
-  
     def registration_update_params
       params.require(:registration).permit(
         :id,
