@@ -28,7 +28,6 @@
     %meta{ :name => "twitter:img:height", :content => '699' }
 
     %title Citroen Rendezvous | The Northeast's largest gathering of Citroën owners, families, and fans
-    = stylesheet_link_tag "//cdn-images.mailchimp.com/embedcode/slim-081711.css"
     = stylesheet_link_tag 'application', :media  => 'all'
 
     = csrf_meta_tags
@@ -47,10 +46,6 @@
 
       ga('create', 'UA-4773340-9', 'auto');
       ga('send', 'pageview');
-
-    = javascript_include_tag "//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js", "data-dojo-config" => 'usePlainJson: true, isDebug: false'
-    :javascript
-      require(["mojo/signup-forms/Loader"], function(L) { L.start({"baseUrl":"mc.us12.list-manage.com","uuid":"198c738ff80668ca4d472c590","lid":"9e696fe93f"}) });
 
   %body{ :class => "main #{(user_signed_in? ? 'logged-in' : 'guest')}" }
     - if user_signed_in?
@@ -98,5 +93,5 @@
                         %a{href: new_user_session_path } sign in
     = yield
 
-    = render :partial => 'common/footer'
+    = render partial: 'common/footer'
 

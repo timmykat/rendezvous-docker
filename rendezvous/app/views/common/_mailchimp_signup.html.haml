@@ -1,0 +1,72 @@
+/ Begin Mailchimp Signup Form
+%link{href:  "//cdn-images.mailchimp.com/embedcode/classic-071822.css", rel:  "stylesheet", type:  "text/css"}/
+:css
+  :root {
+    --form-bg-color: #666;
+  }
+  .mailing-list-signup {
+    background-color: var(--form-bg-color);
+  }
+
+  #mc_embed_signup {
+    clear: left;
+    font: Helvetica,Arial,sans-serif;
+    background-color: var(--form-bg-color);
+    color: white;
+    font-size: 14px;
+  }
+  #mc_embed_signup h2, #mc_embed_signup label {
+    font-weight: normal;
+    font-style: italic;
+    white-space: nowrap;
+  }
+  #mc_embed_signup .helper_text {
+    background-color: var(--form-bg-color);
+    color: white;    
+  }
+
+  #mc_embed_signup .form-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 20px;
+  }
+  #mc_embed_signup input.email {
+    padding: 10px;
+    border: solid 1px var(--dark-red);
+    max-width: 25rem;
+    margin: 0;
+  }
+  #mc_embed_signup .button {
+    max-width: 250px;
+    margin-bottom: 0;
+  }
+
+#mc_embed_signup
+  %form#mc-embedded-subscribe-form.validate{action:  "https://citroenrendezvous.us12.list-manage.com/subscribe/post?u=198c738ff80668ca4d472c590&id=9e696fe93f&f_id=00374ee0f0", method:  "post", name:  "mc-embedded-subscribe-form", novalidate:  "", target:  "_blank"}
+    #mc_embed_signup_scroll
+      .form-group
+        %h2 Tenez-vous informé!
+        .mc-field
+          %input#mce-EMAIL.email{name:  "EMAIL", required:  "", type:  "email", value:  "", placeholder: 'Email'}
+          %span#mce-EMAIL-HELPERTEXT.helper_text
+        %input#mc-embedded-subscribe.button{name:  "subscribe", type:  "submit", value:  "Subscribe"}
+      -# .name
+      -#   .mc-field-group
+      -#     %label{for:  "mce-FNAME"} First Name
+      -#     %input#mce-FNAME{name:  "FNAME", type:  "text", value:  ""}
+      -#     %span#mce-FNAME-HELPERTEXT.helper_text
+      -#   .mc-field-group
+      -#     %label{for:  "mce-LNAME"} Last Name
+      -#     %input#mce-LNAME{name:  "LNAME", type:  "text", value:  ""}
+      -#     %span#mce-LNAME-HELPERTEXT.helper_text
+      #mce-responses.clear.foot
+        #mce-error-response.response{style:  "display:none"}
+        #mce-success-response.response{style:  "display:none"}
+      / real people should not fill this in and expect good things - do not remove this or risk form bot signups
+      %div{"aria-hidden" => "true", style:  "position: absolute; left: -5000px;"}
+        %input{name:  "b_198c738ff80668ca4d472c590_9e696fe93f", tabindex:  "-1", type:  "text", value:  ""}
+
+:javascript
+  (function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[4]='MMERGE4';ftypes[4]='text';fnames[6]='MMERGE6';ftypes[6]='text';fnames[5]='MMERGE5';ftypes[5]='text';fnames[8]='MMERGE8';ftypes[8]='phone';fnames[13]='MMERGE13';ftypes[13]='address';fnames[3]='MMERGE3';ftypes[3]='radio';}(jQuery));var $mcj = jQuery.noConflict(true);
+/ End mc_embed_signup

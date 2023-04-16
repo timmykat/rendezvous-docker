@@ -20,7 +20,6 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     post :request_login_link, to: 'users/sessions#request_login_link'
-    get :synchronize_with_mailchimp, to: 'users#synchronize_with_mailchimp'
     get :sign_in_with_link, to: 'users/sessions#create_with_link'
     # post :sign_up, to: 'users/registrations#create'
   end
