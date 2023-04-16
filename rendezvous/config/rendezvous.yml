@@ -4,7 +4,7 @@ dates:
   duration: 4
   refund_date: 'June 22, 2023'
 registration_window:
-  open: 2023-04-30
+  open: 2023-04-15
   close: 2023-06-22
 fees:
   adult: 55
