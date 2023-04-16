@@ -320,20 +320,6 @@ table tr:hover {
   background-color: #eee;
 }
 
-/* Mailchimp sign-up */
-#mc_embed_signup{
-  clear: left;
-  font: Helvetica,Arial,sans-serif;
-  text-align: center;
-  form {
-    text-align: center;
-  }
-  input.email {
-    display: inline;
-    margin: 0 5px 10px 0;
-  }
-}
-
 /*header area*/
 .manage {
   background-color: #333;
@@ -777,78 +763,86 @@ form {
 	margin-top: 30px;
 	margin-bottom: 70px;
 }
-.contact-form{
+
+.contact-form {
 	margin: 0;
 	padding: 0;
 	background: #0b0b0b;
 	overflow: hidden;
-}
-.contact-form input{
-	text-align: center;
-	margin-bottom: 50px;
-	border-bottom: 2px solid #898989;
-	border-left: 0;
-	border-top: 0;
-	border-right: 0;
-	background: transparent;
-	color: #fff;
-}
-.contact-form input:focus{
-	outline: none;
-}
-input.name{
-	margin-top: 55px;
-	width: 640px;
-}
-input.email{
-	width: 640px;
-}
-input.message{
-	width: 920px;
-}
-.contact-form input.submit-btn{
-	width: 200px;
-	height: 50px;
-	border:0;
-	background: $secondary-color;
-	color: #ddd;
-	font-weight: 800;
-	margin:auto;
-	margin: 0 50px;
-	margin-bottom: 70px;
-	transition: all 0.5s ease 0s;
-	-webkit-transition: all 0.5s ease 0s;
-	-moz-transition: all 0.5s ease 0s;
-	-o-transition: all 0.5s ease 0s;
-	-ms-transition: all 0.5s ease 0s;
-}
-.contact-form input.submit-btn:hover{
-	background: $hover-color;
-	color: #fff;
-}
-.contact-form input.submit-btn[disabled=disabled], .contact-form input.submit-btn[disabled=disabled]:hover {
-  background: #666;
-  color: #999;
+
+
+
+	input{
+		text-align: center;
+		margin-bottom: 50px;
+		border-bottom: 2px solid #898989;
+		border-left: 0;
+		border-top: 0;
+		border-right: 0;
+		background: transparent;
+		color: #fff;
+	}
+	input:focus{
+		outline: none;
+	}
+	input.name{
+		margin-top: 55px;
+		width: 640px;
+	}
+	input.email{
+		width: 640px;
+	}
+	input.message{
+		width: 920px;
+	}
+
+	input.submit-btn{
+		width: 200px;
+		height: 50px;
+		border:0;
+		background: $secondary-color;
+		color: #ddd;
+		font-weight: 800;
+		margin:auto;
+		margin: 0 50px;
+		margin-bottom: 70px;
+		transition: all 0.5s ease 0s;
+		-webkit-transition: all 0.5s ease 0s;
+		-moz-transition: all 0.5s ease 0s;
+		-o-transition: all 0.5s ease 0s;
+		-ms-transition: all 0.5s ease 0s;
+	}
+
+	input.submit-btn:hover{
+		background: $hover-color;
+		color: #fff;
+	}
+
+	input.submit-btn[disabled=disabled], .contact-form input.submit-btn[disabled=disabled]:hover {
+		background: #666;
+		color: #999;
+	}
+
+	.form-input::-webkit-input-placeholder {
+	color:#EFEFEF;
+	}
+	.form-input:-moz-placeholder { /* Firefox 18- */
+		color:#EFEFEF;
+	}
+
+	.form-input::-moz-placeholder {  /* Firefox 19+ */
+		color:#EFEFEF;
+	}
+
+	.form-input:-ms-input-placeholder {
+		color:#EFEFEF;
+	}
+	.inline-form-element {
+		width: auto;
+		display: inline-block;
+	}
 }
 
-.form-input::-webkit-input-placeholder {
-color:#EFEFEF;
-}
-.form-input:-moz-placeholder { /* Firefox 18- */
-   color:#EFEFEF;
-}
-
-.form-input::-moz-placeholder {  /* Firefox 19+ */
-   color:#EFEFEF;
-}
-
-.form-input:-ms-input-placeholder {
-   color:#EFEFEF;
-}
-.inline-form-element {
-  width: auto;
-  display: inline-block;
-}
 /* Recaptcha */
 .g-recaptcha {
   display: inline-block;

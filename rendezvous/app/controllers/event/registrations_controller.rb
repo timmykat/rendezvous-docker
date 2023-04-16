@@ -92,7 +92,6 @@ module Event
         flash_alert_now @event_registration.errors.full_messages.to_sentence
         render 'registration_form' and return
       else
-        handle_mailchimp(@event_registration.user)
         sign_in(@event_registration.user) unless (session[:user_admin] || user_signed_in?)
         redirect_to review_event_registration_path(@event_registration)
       end
@@ -109,11 +108,9 @@ module Event
 
       @event_registration = Registration.find(params[:id])
       user = @event_registration.user
-      mailchimp_init = user.receive_mailings
 
       user.update(event_registration_user_params)
 
-      handle_mailchimp(user) unless user.receive_mailings == mailchimp_init
       params[:event_registration][:user_id] = user.id
       params[:event_registration][:user_attributes] = nil
 
@@ -318,18 +315,6 @@ module Event
         end
       end
 
-      def handle_mailchimp(user)
-        action = user.receive_mailings? ? 'subscribe' : 'unsubscribe'
-        response = user.mailchimp_action(action)
-        if response[:status] == :ok
-          flash_notice 'Your user information and mailing list status were updated.'
-        else
-          flash_alert 'Your user information was updated, but there was a problem updating your mailing list status.'
-          flash_alert response[:message]
-        end
-        response
-      end
-
       def event_registration_params
         params.require(:event_registration).permit(
           :number_of_adults,
@@ -349,7 +334,7 @@ module Event
             [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
           },
           {:user_attributes=>
-            [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
+            [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
               {vehicles_attributes:
                 [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
               }
@@ -361,7 +346,7 @@ module Event
       def event_registration_user_params
         params[:user] = params[:event_registration][:user_attributes]
         params.require(:user).permit(
-          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :receive_mailings, :citroenvie,
+          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
             {vehicles_attributes:
               [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
             }
