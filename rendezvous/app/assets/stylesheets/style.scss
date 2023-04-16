@@ -397,6 +397,11 @@ ul.nav{
 	margin: 0;
 	padding: 0;
 }
+
+.navbar-default .navbar-nav>li {
+	margin-left: 5px;
+}
+
 .navbar-default .navbar-nav>li>a {
  	font-size: 16px;
 	color: #fff;
@@ -408,12 +413,18 @@ ul.nav{
 	-o-transition: all .7s ease 0s;
 	-ms-transition: all .7s ease 0s;
 	padding: 12px 20px;
-	border-radius: 5px;
+	border-radius: 50px;
+
+	&:hover {
+		color: red;
+		background-color: #fff;
+	}
+
+	&.registration-link {
+		border: solid 1px white;
+	}
 }
-.navbar-default .navbar-nav>li>a:hover{
-	color: red;
-	background-color: #fff;
-}
+
 .navbar-default .navbar-toggle {
   border-color: #fff;
   margin-top: 4px;

@@ -11,7 +11,7 @@
 // about supported directives.
 //
 
-//= require jquery
+//= require jquery/dist/jquery
 //= require rails-ujs
 //= require html5shiv/dist/html5shiv.min
 //= require respond/main.js

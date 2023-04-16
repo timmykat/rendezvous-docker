@@ -25,7 +25,7 @@
                     %label Total (USD):
                     = f.input_field :total, value:  ("%.2f" % @event_registration.total), readonly: true, class:  'calculated'
             %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
-          %section
+          %section#payment-section
             %h2 Payment Information
             .row
               .col-md-6.col-xs-12
