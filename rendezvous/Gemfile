@@ -6,9 +6,6 @@ gem 'rake'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '7.0.4'
 
-# Browserify
-# gem 'browserify-rails'
-
 # Security updates
 gem 'sprockets-rails', '~> 3'
 gem "actionpack", "7.0.4"
@@ -19,6 +16,7 @@ gem 'dotenv-rails'
 # MySQL the database for Active Record
 gem 'mysql2'
 
+# Browserify
 gem 'browserify-rails'
 
 # Use SCSS for stylesheets
