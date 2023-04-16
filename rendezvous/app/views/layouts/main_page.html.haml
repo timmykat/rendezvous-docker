@@ -78,7 +78,7 @@
 
                     - if can_register?
                       %li
-                        = link_to 'Register', new_event_registration_path
+                        = link_to 'Register', new_event_registration_path, class: 'registration-link'
                     - else
                       %li
                         %a{href: t_shirt_gallery_path } t-shirt gallery

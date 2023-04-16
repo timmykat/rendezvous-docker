@@ -3,7 +3,7 @@ module Event
 
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
     before_action :require_admin, only: [:index]
-    before_action :authenticate_user!, except: [:welcome]
+    before_action :authenticate_user!, except: [:welcome, :get_payment_token]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
 

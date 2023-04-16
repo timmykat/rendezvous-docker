@@ -11,8 +11,10 @@
     .row
       = render partial:  'common/registration_header', locals:  { step:  'register' }
       .col-md-offset-2.col-md-8.col-xs-12
-        .well 
-          The registration fee is $#{fee} for adults and free for seniors (80+) driving a Citroen and children
+        .well
+          %h2 Let's Get You Registered!
+          %p
+            We've already filled in information from your previous registration, and we assume you're coming! Let us know who you're bringing, if anyone. Then we'll give you a chance to review, followed by payment. 
         #registration-form
           - if !user_signed_in?
             .cover
@@ -40,7 +42,7 @@
                       = render partial:  'attendee_fields', locals:  { f:  a }
                     .links
                       = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary btn-sm'
-                      Add a person
+                      Add a guest
                   %br
                   %br
               .row

@@ -59,7 +59,6 @@ function buildBraintree(clientToken) {
       });
 
       hostedFieldsInstance.on('validityChange', function(e) {
-        console.log(e);
         field = e.fields[e.emittedBy];
         let fieldClass;
         if (e.emittedBy === 'expirationDate') {
@@ -69,10 +68,6 @@ function buildBraintree(clientToken) {
         } else if (e.emittedBy == 'number') {
           fieldClass = '.credit-card';
         }
-
-        console.log(field);
-        console.log(fieldClass);
-        console.log(field.isValid);
 
         if (field.isValid) {
           $('.submit-status ' + fieldClass + ' i').removeClass('hidden');
@@ -86,7 +81,6 @@ function buildBraintree(clientToken) {
       submit.removeAttribute('disabled');
 
       form.addEventListener('submit', function(event) {
-        console.log(myHostedFields);
         if (myHostedFields) {
           event.preventDefault();
           hostedFieldsInstance.tokenize(function(tokenizeErr, payload) {
@@ -104,26 +98,28 @@ function buildBraintree(clientToken) {
 };
 
 
-$(function() {
-  $.get('/event/payment_token.plain', function(clientToken) {
-    console.log("Client token", clientToken);
-    buildBraintree(clientToken);
+(function($) {
+  jQuery(document).ready(function() {
+    if ($('#payment-section')) {
+      $.get('/event/payment_token.plain', function(clientToken) {
+        buildBraintree(clientToken);
 
-    $('#event_registration_paid_method_credit_card').on('click', function() {
-      buildBraintree(clientToken);
-    });
-    $('#event_registration_paid_method_check').on('click', function() {
-      myHostedFields.teardown( function(teardownErr) {
-        if (teardownErr) {
-          console.error('Could not tear down HostedFields.');
-        } else {
-          console.log('HostedFields has been torn down.');
-          myHostedFields = null;
-        }
+        $('#event_registration_paid_method_credit_card').on('click', function() {
+          buildBraintree(clientToken);
+        });
+        $('#event_registration_paid_method_check').on('click', function() {
+          myHostedFields.teardown( function(teardownErr) {
+            if (teardownErr) {
+              console.error('Could not tear down HostedFields.');
+            } else {
+              myHostedFields = null;
+            }
+          });
+        });
       });
-    });
+    }
   });
-});
+}) (jQuery);
 
 
 //<![CDATA[

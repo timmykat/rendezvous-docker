@@ -25,9 +25,15 @@ class Users::SessionsController < Devise::SessionsController
     Rails.logger.debug resource_name
     sign_in(resource_name, resource)
     yield resource if block_given?
-    Rails.logger.debug 'Redirecting to new event registration page'
-    redirect_to new_event_registration_path
-    # respond_with resource, { location: after_sign_in_path_for(resource) }
+    if !resource
+      flash_alert 'We\re sorry, we were unable to authenticate that email address, or your token is expired.'
+      redirect_to new_session_path(resource_name)
+    elsif resource.admin?
+      redirect_to admin_index_path
+    else
+      Rails.logger.debug 'Redirecting to new event registration page'
+      redirect_to new_event_registration_path
+    end
   end
 
 
