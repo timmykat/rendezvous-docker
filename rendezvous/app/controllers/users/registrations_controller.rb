@@ -18,10 +18,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if resource.persisted?
       if resource.active_for_authentication?
         Rails.logger.debug "--- active for auth"
-        flash_notice "Congratulations, you've successfully signed up!"
-        sign_up(resource_name, resource)
-        redirect_to new_event_registration_path
-        # respond_with resource, location: after_sign_up_path_for(resource)
+        flash_notice "Congratulations, you've successfully signed up! Check your email inbox for a link to log in."
+        resource.send_login_link
+        redirect_to root_path
       else
         flash_notice :"signed_up_but_#{resource.inactive_message}"
         expire_data_after_sign_in!
