@@ -8,6 +8,7 @@ class RendezvousDeviseMailer < Devise::Mailer
 
   def email_login_link(resource, login_token, opts = {})
     @login_token = login_token
+    opts[:subject] = 'citroenrendezvous.org login link'
     devise_mail(resource, :email_login_link, opts)
   end
 end

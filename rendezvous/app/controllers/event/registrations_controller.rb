@@ -101,7 +101,6 @@ module Event
       @title = 'Edit Registration'
 
       @event_registration = Registration.find(params[:id])
-      render 'registration_form'
     end
 
     def update

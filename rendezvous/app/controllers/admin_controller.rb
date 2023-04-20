@@ -160,6 +160,6 @@ class AdminController < ApplicationController
 
   def toggle_user_session
     session[:admin_user] = !session[:admin_user]
-    redirect_to :back
+    redirect_back(fallback_location: root_path)
   end
 end
