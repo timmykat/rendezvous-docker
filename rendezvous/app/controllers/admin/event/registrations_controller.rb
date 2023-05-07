@@ -1,4 +1,4 @@
-class Admin::RegistrationsController < AdminController
+class Admin::Event::RegistrationsController < AdminController
 
   def show
     @event_registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])

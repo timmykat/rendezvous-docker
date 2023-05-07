@@ -48,7 +48,9 @@ Rails.application.routes.draw do
   get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   resources :admin, { only: [:index] }
   namespace :admin do
-    resources  :registrations, { only: [ :show, :edit, :update ] }
+    namespace :event do
+      resources  :registrations, { only: [ :show, :edit, :update ] }
+    end
     resources :transactions, { only: [ :create ] }
     get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'

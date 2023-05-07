@@ -1,6 +1,6 @@
 class Admin::TransactionsController < AdminController
   def create
-    event_registration = Registration.find(params[:registration_id])
+    event_registration = Event::Registration.find(params[:registration_id])
     transaction = Transaction.new(transaction_params)
 
     # Set transaction amount for refund to be negative
@@ -10,7 +10,7 @@ class Admin::TransactionsController < AdminController
     
     event_registration.paid_amount ||= 0.0
     
-    if (transaction.amount + registration.paid_amount) < 0.0
+    if (transaction.amount + event_registration.paid_amount) < 0.0
       flash_alert_now "You probably don't want to refund more than the person has paid..."
       render 'admin/registrations/edit'
       return
@@ -28,7 +28,7 @@ class Admin::TransactionsController < AdminController
       flash_notice 'The transaction was successfully created.'
     end
         
-    redirect_to edit_admin_registration_path(event_registration)
+    redirect_to edit_admin_event_registration_path(event_registration)
         
   end
   
