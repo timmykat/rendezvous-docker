@@ -107,8 +107,8 @@ class AdminController < ApplicationController
       csv_object['labels'] << [
         "#{registration.user.last_name}, #{registration.user.first_name}",
         registration.attendees.count,
-        registration.paid? ? 'PAID' : "$#{registration.registration_fee}",
-        (registration.donation && (registration.donation > 0.0)) ? "Donation: $#{registration.donation}" : '',
+        registration.paid? ? 'PAID' : "$#{registration.registration_fee.to_i}",
+        (registration.donation && (registration.donation > 0.0)) ? "Donation: $#{registration.donation.to_i}" : '',
         "Volunteers: #{get_volunteers(registration)}"
       ]
       nvehicle = 0
