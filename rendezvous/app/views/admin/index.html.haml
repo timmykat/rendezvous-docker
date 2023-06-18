@@ -2,6 +2,7 @@
   .row
     .col-md-12
       %h1 Administrative Info
+
       #tabbed
         %ul
           %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
@@ -21,6 +22,13 @@
                   = f.submit 'Go', class:  'btn btn-primary'
           
           %h2= "Registrations for #{@year}"
+          %p
+            %em Registration labels:
+          - file = @files['labels']
+          - if File.exist? file['path']
+            %p
+              Data file:
+              =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{file['name']}")
           %table.table.striped
             %thead
               %tr
