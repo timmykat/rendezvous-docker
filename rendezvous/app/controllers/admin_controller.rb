@@ -17,7 +17,8 @@ class AdminController < ApplicationController
     csv_file = {}
     csv_object = {}
     data_types = {
-      'registration'  => 'Attendee Data',
+      'labels' => 'Packet Label Data',
+      'registrations'  => 'Attendee Data',
       'volunteers'    => 'Volunteer List',
       # 'sunday_dinner' => 'Sunday Dinner List',
       'vehicles'      => 'Vehicle Manifest'
@@ -34,7 +35,15 @@ class AdminController < ApplicationController
     end
 
    # CSV file headers
-    csv_object['registration'] << [
+   csv_object['labels'] <<[
+    'Registratant Name',
+    'Guests',
+    'Fee Status',
+    'Donation',
+    'Volunteers',
+    'Vehicles'
+   ]
+    csv_object['registrations'] << [
       'Registration number',
       'Registratant',
       'Attendee name',
@@ -95,7 +104,13 @@ class AdminController < ApplicationController
       @data[:financials][:due]                  += registration.balance.to_f unless registration.balance.blank?
       @data[:financials][:donations]            += registration.donation.to_f unless registration.donation.blank?
 
-
+      csv_object['labels'] << [
+        "#{registration.user.last_name}, #{registration.user.first_name}",
+        registration.attendees.count,
+        registration.paid? ? 'PAID' : "$#{registration.registration_fee}",
+        (registration.donation && registration.donation) > 0.0 ? "Donation: $#{registration.donation}" : '',
+        "Volunteers: #{get_volunteers(registration)}"
+      ]
       nvehicle = 0
       registration.user.vehicles.each do |v|
          if v.marque == 'Citroen'
@@ -131,7 +146,7 @@ class AdminController < ApplicationController
 
         #Write to CSV
         # Registered attendees
-        csv_object['registration'] << [
+        csv_object['registrations'] << [
           registration.invoice_number,
           registration.user.last_name_first,
           a.name,
@@ -161,5 +176,13 @@ class AdminController < ApplicationController
   def toggle_user_session
     session[:admin_user] = !session[:admin_user]
     redirect_back(fallback_location: root_path)
+  end
+
+  def get_volunteers(registration)
+    volunteers = 0
+    registration.attendees.each do |a|
+      volunteers += 1 if a.volunteer?
+    end
+    return volunteers
   end
 end
