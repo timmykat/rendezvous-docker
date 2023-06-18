@@ -108,7 +108,7 @@ class AdminController < ApplicationController
         "#{registration.user.last_name}, #{registration.user.first_name}",
         registration.attendees.count,
         registration.paid? ? 'PAID' : "$#{registration.registration_fee}",
-        (registration.donation && registration.donation) > 0.0 ? "Donation: $#{registration.donation}" : '',
+        (registration.donation && (registration.donation > 0.0)) ? "Donation: $#{registration.donation}" : '',
         "Volunteers: #{get_volunteers(registration)}"
       ]
       nvehicle = 0
