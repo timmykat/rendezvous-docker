@@ -45,4 +45,5 @@ module RegistrationsHelper
   def existing_event_registration_path
     edit_event_registration_path(current_registration)
   end
+
 end
