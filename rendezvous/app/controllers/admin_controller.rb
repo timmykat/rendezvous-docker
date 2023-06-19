@@ -179,7 +179,7 @@ class AdminController < ApplicationController
       label['name'] = "#{r.user.last_name}, #{r.user.first_name}"
       label['people'] = r.attendees.count
       label['fee'] = r.paid? ? 'PAID' : "Due: $#{r.registration_fee.to_i}"
-      label['donation'] = (r.donation && (r.donation > 0.0)) ? r.donation.to_i : ''
+      label['donation'] = (r.donation && (r.donation > 0.0)) ? r.donation.to_i : 0
       label['volunteers'] = get_volunteers(r)
 
       @labels << label
