@@ -1,0 +1,15 @@
+.container
+
+  - @labels.each do |label, index|
+    .label 
+      .name #{label['name']}
+      .people People: #{label['people']}
+      .fee Fee: #{label['fee']}
+      - if !label['donation'].empty?
+        .donation Donation amount: #{label['donation']}
+      - if label['volunteers'] > 0
+        .volunteers Number of volunteers: #{volunteers}
+
+      = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo'
+
+
