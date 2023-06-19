@@ -8,7 +8,7 @@
       - if label['donation'] > 0
         .donation Donation amount: $#{label['donation']}
       - if label['volunteers'] > 0
-        .volunteers Number of volunteers: #{volunteers}
+        .volunteers Number of volunteers: #{label['volunteers']}
 
       = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo'
 
