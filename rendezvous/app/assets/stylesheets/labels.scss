@@ -1,0 +1,37 @@
+
+body.labels {
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.8;
+  
+  .container {
+    display: flex;
+
+    .label {
+      color: black;
+      box-sizing: border-box;
+      width: calc(4*96px);
+      height: calc(3.33*96px);
+
+      margin: 0 0.75rem;
+      border: solid 1px #ccc;
+      border-radius: 2rem;
+
+      padding: 1rem 2rem;
+      position: relative;
+
+      .name {
+        font-weight: bold;
+        font-size: 1.2em;
+      }
+
+      .logo {
+        position: absolute;
+        right: 1rem;
+        bottom: 1rem;
+        height: 4rem;
+      }
+    }
+  }
+
+}

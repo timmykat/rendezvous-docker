@@ -40,8 +40,7 @@ class AdminController < ApplicationController
     'Guests',
     'Fee Status',
     'Donation',
-    'Volunteers',
-    'Vehicles'
+    'Volunteers'
    ]
     csv_object['registrations'] << [
       'Registration number',
@@ -171,6 +170,21 @@ class AdminController < ApplicationController
     end
 
     @vehicles = @data[:citroens] + @data[:non_citroens]
+  end
+
+  def make_labels
+    @labels = []
+    Event::Registration.alpha.where("year = ?", @year).each do |r|
+      label = {}
+      label['name'] = "#{r.user.last_name}, #{r.user.first_name}"
+      label['people'] = r.attendees.count
+      label['fee'] = r.paid? ? 'PAID' : "Due: $#{r.registration_fee.to_i}"
+      label['donation'] = (r.donation && (r.donation > 0.0)) ? r.donation.to_i : ''
+      label['volunteers'] = get_volunteers(r)
+
+      @labels << label
+    end
+    render layout: 'no_header', template: 'admin/labels'
   end
 
   def toggle_user_session

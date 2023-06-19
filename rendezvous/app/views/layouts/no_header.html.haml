@@ -1,0 +1,15 @@
+- config = Rails.configuration.rendezvous
+!!!
+%html{ lang: 'en' }
+  %head
+    %meta{ content: 'text/html; charset=UTF-8', 'http-equiv': 'Content-Type' }
+    %meta{ charset: 'UTF-8'}
+    %meta{ content: 'width=device-width, initial-scale=1.0', name: 'viewport' }
+
+    %title Admin Labels | Rendezvous Registration
+    = stylesheet_link_tag 'labels', :media  => 'all'
+
+  %body{ class: "labels" }
+    = yield
+
+
