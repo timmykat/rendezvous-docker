@@ -52,10 +52,10 @@ Rails.application.routes.draw do
   namespace :admin do
     namespace :event do
       resources  :registrations, { only: [ :show, :edit, :update ] }
+      get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
+      get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
     end
     resources :transactions, { only: [ :create ] }
-    get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
-    get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
   end
 
   # -- Content

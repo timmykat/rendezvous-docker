@@ -50,7 +50,11 @@ class Admin::Event::RegistrationsController < AdminController
     @event_registration.registration_fee = 0.0
     
     # Set status
-    @event_registration.status = 'cancelled'
+    if @regend > 0.0
+      @event_registration.status = 'cancelled - needs refund'
+    else
+      @event_registration.status = 'cancelled - settled'
+    end
     
     @event_registration.save!
     flash_notice "This registration was cancelled. Amount to be refunded: $#{@refund}"
@@ -60,7 +64,7 @@ class Admin::Event::RegistrationsController < AdminController
   
   private
     def registration_update_params
-      params.require(:registration).permit(
+      params.require(:event_registration).permit(
         :id,
         :number_of_adults,
         :number_of_seniors,
