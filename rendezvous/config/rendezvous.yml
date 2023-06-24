@@ -49,7 +49,8 @@ registration_statuses:
   - complete
   - updated
   - updating
-  - cancelled
+  - "cancelled - settled"
+  - "cancelled - needs refund"
 transaction_types:
   - payment
   - refund
