@@ -50,7 +50,7 @@ class Admin::Event::RegistrationsController < AdminController
     @event_registration.registration_fee = 0.0
     
     # Set status
-    if @regend > 0.0
+    if @refund > 0.0
       @event_registration.status = 'cancelled - needs refund'
     else
       @event_registration.status = 'cancelled - settled'
