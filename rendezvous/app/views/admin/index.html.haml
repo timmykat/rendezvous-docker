@@ -47,7 +47,7 @@
                       .col-sm-12
                         = link_to 'View', event_registration_path(registration.id), class:  'btn btn-sm btn-info btn-block'
                         = link_to 'Edit', edit_admin_event_registration_path(registration.id), class:  'btn btn-sm btn-warning btn-block'
-                        = link_to 'Cancel', admin_cancel_registration_path(registration.id), class:  'btn btn-sm btn-danger btn-block'
+                        = link_to 'Cancel', admin_event_cancel_registration_path(registration.id), class:  'btn btn-sm btn-danger btn-block'
                   %td.text-center
                     = registration.status
                     .status-icon

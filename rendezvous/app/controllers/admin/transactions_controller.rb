@@ -19,7 +19,11 @@ class Admin::TransactionsController < AdminController
     event_registration.transactions << transaction
     event_registration.paid_amount += transaction.amount
     if (event_registration.total - event_registration.paid_amount).abs < 0.10
-      event_registration.status = 'complete'
+      if transaction.transaction_type == 'refund'
+        event_registration.status = 'cancelled - settled'
+      else
+        event_registration.status = 'complete'
+      end
     end
     
     if !event_registration.save
