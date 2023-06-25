@@ -13,11 +13,17 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
+    if current_user.has_role? :admin
+      @user.id = params[:id].to_i
+    end
     @event_registration = @user.registrations.current.last
   end
 
   def update
     @user = User.find(params[:id])
+    if current_user.has_role? :admin
+      @user.id = params[:id].to_i
+    end
     if !@user.update(user_params)
       flash_alert_now 'We had a problem saving your updated information'
       flash_alert_now  @user.errors.full_messages.to_sentence
