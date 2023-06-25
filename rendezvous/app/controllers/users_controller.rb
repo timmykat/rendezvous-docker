@@ -13,17 +13,11 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    if current_user.has_role? :admin
-      @user.id = params[:id].to_i
-    end
     @event_registration = @user.registrations.current.last
   end
 
   def update
     @user = User.find(params[:id])
-    if current_user.has_role? :admin
-      @user.id = params[:id].to_i
-    end
     if !@user.update(user_params)
       flash_alert_now 'We had a problem saving your updated information'
       flash_alert_now  @user.errors.full_messages.to_sentence
@@ -77,7 +71,7 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(
-        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
+        [:email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
           {vehicles_attributes:
             [:id, :year, :marque, :model, :other_info, :_destroy]
           }
