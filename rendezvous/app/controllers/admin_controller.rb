@@ -66,6 +66,7 @@ class AdminController < ApplicationController
       'Year',
       'Marque',
       'Model',
+      'Judging Category',
       'Info'
     ]
 
@@ -127,6 +128,7 @@ class AdminController < ApplicationController
           v.year,
           v.marque,
           v.model,
+          v.judging_category,
           v.other_info
         ]
       end
