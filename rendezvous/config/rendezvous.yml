@@ -57,11 +57,11 @@ transaction_types:
 official_contact:
   mailing_address_array:
     - "Citroen Rendezvous, LLC"
-    - "245 Harvester Road"
-    - "Orange, CT 06477-2929"
+    - "28 11th Street"
+    - "Providence, RI 02906"
     - "United States"
-  chief_officer: David Cossitt Levy
-  email: david.cossitt.levy@gmail.com
+  chief_officer: Timothy S Kinnel
+  email: rendezvousLLC@kinnel.warpmail.net
   facebook: https://www.facebook.com/groups/1796592930566951/
 vehicle_marques:
   - Citroen
