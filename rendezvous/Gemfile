@@ -57,7 +57,7 @@ gem 'wicked_pdf'
 gem 'gibbon' # Mailchimp API
 
 # Application server
-gem 'puma'
+gem 'puma', '6.4.0'
 
 gem 'letter_opener'
 

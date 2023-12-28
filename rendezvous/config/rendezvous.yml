@@ -1,21 +1,21 @@
 # The following will most likely change from year to year
 dates:
-  day_one: June 29, 2023
-  duration: 4
-  refund_date: 'June 22, 2023'
+  day_one: June 14, 2024
+  duration: 3
+  refund_date: 'June 7, 2024'
 registration_window:
-  open: 2023-04-15
-  close: 2023-06-27
+  open: 2024-04-01
+  close: 2024-06-11, 2024
 fees:
-  adult: 55
+  adult: 60
   senior: 0
   child: 0
 hotel:
   name: Courtyard Marriott
   address: 11 Excelsior Ave, Saratoga Springs
   website: https://www.marriott.com/en-us/hotels/albss-courtyard-saratoga-springs/overview/
-  event_rate: $189/night
-  event_rate_link: https://citroenrendezvous.us12.list-manage.com/track/click?u=198c738ff80668ca4d472c590&id=eceda0d825&e=882a1f74e7
+  event_rate: TBD
+  event_rate_link: 
   event_rate_last_day: May 30
 venue:
   name: Lakeside Farms
