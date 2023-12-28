@@ -60,17 +60,18 @@
           #{event_year} Schedule
         = image_tag "chevrons.png"
         %p.text-left
-          We have some changes again this year, including dates (thank you Dead & Company!) and venue. 
+          Finally, the Rendezvous will be on the traditional Father's Day weekend again! 
           %br
           %br
           This year's event hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}
-          You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
-          %a{href: config[:hotel][:event_rate_link], target: "_blank"}
+          Detatils to come.
+          -# You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
+          -# 
             link
           by #{config[:hotel][:event_rate_Last_day]}.
           %br
           %br
-          Stay tuned for more info!
+          Schedule info below will be updated as we get closer to the event. Stay tuned for more info!
 
         %p.text-center
           = link_to 'Detailed schedule', schedule_path
@@ -80,12 +81,12 @@
           %i.fa-solid.fa-car
           %h3 #{relative_date(1)}
           %ul.text-left
-            %li
-              %strong 2pm
-              Ice cream social, Kaleidescope Cafe
-            %li
-              %strong 6pm
-              Welcome reception, Excelsior Springs Center
+            -# %li
+            -#   %strong 2pm
+            -#   Ice cream social, Kaleidescope Cafe
+            -# %li
+            -#   %strong 6pm
+            -#   Welcome reception, Excelsior Springs Center
       .col-md-3.single-about.col-xs-12.col-sm-4
         .about-inside
           %i.fa-solid.fa-car
