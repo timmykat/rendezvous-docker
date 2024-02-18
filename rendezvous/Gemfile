@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.1.2'
+ruby '3.2.2'
 
 gem 'rake'
 
@@ -14,7 +14,7 @@ gem "actionpack", "7.0.4"
 gem 'dotenv-rails'
 
 # MySQL the database for Active Record
-gem 'mysql2'
+gem 'mysql2', '0.5.6'
 
 # Browserify
 gem 'browserify-rails'
