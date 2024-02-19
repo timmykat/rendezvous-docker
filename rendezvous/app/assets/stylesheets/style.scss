@@ -81,6 +81,14 @@ body{
 	padding: 0;
 }
 
+main {
+	margin-bottom: 90px;
+
+	section:last-of-type {
+		padding-bottom: 100px;
+	}
+}
+
 h1 {
   margin-top: 60px;
 }
@@ -341,11 +349,29 @@ table tr:hover {
 }
 .top-header {
 	background: $brand-color;
-	position: fixed;
 	width: 100%;
 	z-index: 333;
 	top: 0;
 	border-bottom: solid 2px #ccc;
+	position: fixed;
+	
+	&.small {
+		transition:all 0.5s ease 0s;
+		-webkit-transition:all 0.5s ease 0s;
+		-moz-transition:all 0.5s ease 0s;
+		-o-transition:all 0.5s ease 0s;
+		-ms-transition:all 0.5s ease 0s;
+
+		height: 65px;
+
+		.navbar-default {
+			margin-top: 8px;
+		}
+
+		img.logo {
+			height: 36px;
+		}
+	}
 }
 
 .top-header .container {
@@ -369,15 +395,10 @@ table tr:hover {
 	margin: 0;
 	padding: 0;
 }
-.top-header img.logo{
+.top-header img.logo {
 	float: left;
 	margin-top: 8px;
-	margin-bottom: 30px;
-	transition:all 0.7s ease 0s;
-	-webkit-transition:all 0.7s ease 0s;
-	-moz-transition:all 0.7s ease 0s;
-	-o-transition:all 0.7s ease 0s;
-	-ms-transition:all 0.7s ease 0s;
+	margin-bottom: 20px;
 }
 .navbar-default {
   background-color: transparent;
@@ -443,9 +464,9 @@ ul.nav{
 	background-image: image-url('banner.jpg');
 	background-repeat: no-repeat;
 	background-size: cover;
-	background-position: left center;
+	background-position: center top;
 	text-shadow: 1px 1px 2px rgba(0,0,0, 0.75);
-	min-height: 800px;
+	min-height: 680px;
 }
 .header {
 	background-color: white;
@@ -783,7 +804,7 @@ form {
 
 
 
-	input{
+	input {
 		text-align: center;
 		margin-bottom: 50px;
 		border-bottom: 2px solid #898989;
@@ -791,7 +812,8 @@ form {
 		border-top: 0;
 		border-right: 0;
 		background: transparent;
-		color: #fff;
+		// color: #fff;
+		color: #222;
 	}
 	input:focus{
 		outline: none;
@@ -802,6 +824,7 @@ form {
 	}
 	input.email{
 		width: 640px;
+		color: #222;
 	}
 	input.message{
 		width: 920px;
@@ -872,6 +895,7 @@ form {
 	position: fixed;
 	width: 100vw;
 	bottom: 0;
+	z-index: 100;
 }
 .footer p{
 	color: #7e8287;

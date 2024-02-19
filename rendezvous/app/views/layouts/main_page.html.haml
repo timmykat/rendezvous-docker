@@ -58,7 +58,7 @@
           .col-md-12
             %nav.navbar.navbar-default
               %a{:href => "/"}
-                = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo', :style => 'height: 75px;margin-top: 0px; border-bottom: 0px none; margin-bottom: 10px;'
+                = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo'
 
               .container-fluid
 
@@ -79,13 +79,14 @@
                     - if can_register?
                       %li
                         = link_to 'Register', new_event_registration_path, class: 'registration-link'
-                    - else
-                      %li
-                        %a{href: t_shirt_gallery_path } t-shirt gallery
                     %li
                       %a{href: root_path( anchor: 'info' )} info
                     %li
+                      %a{href: root_path( anchor: 'sign-up' )} subscribe
+                    %li
                       %a{href: root_path( anchor: 'photos' )} photos
+                    %li
+                      %a{href: t_shirt_gallery_path } t-shirt gallery
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
                     - unless current_user || !in_registration_window?

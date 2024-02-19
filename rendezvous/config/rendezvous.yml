@@ -22,6 +22,12 @@ venue:
   address: 336 Schauber Road, Ballston Lake
   website: https://www.lakesidefarmscidermill.com/
 
+chauffeurs:
+ - Bill Blaufuss
+ - Michaela Hellman
+ - Tim Kinnel
+ - Christoper (Toaph) Westfall
+
 # The following should rarely change
 front_page_message:
   pre_registration: Stay tuned.
@@ -179,9 +185,10 @@ production:
       port:                  465
 
   inquiry_recipients:
-    - david.cossitt.levy@gmail.com
-    - toaph@yahoo.com
+    - wbbw67@gmail.com
+    - hellman.michaela@gmail.com
     - tim@wordsareimages.com
+    - toaph@yahoo.com
 
 test:
   facebook:
