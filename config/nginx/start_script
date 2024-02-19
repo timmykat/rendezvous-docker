@@ -16,7 +16,7 @@ prog="puma"
 
 RAILS_SHARED_DIR=/var/www/rendezvous/shared
 RAILS_PIDS=$RAILS_SHARED_DIR/pids
-RUBY_BIN=/home/ec2-user/.rbenv/versions/3.2.2/bin
+RUBY_BIN=/home/ec2-user/.rbenv/versions/3.1.2/bin
 
 PUMA_CONF=$RAILS_SHARED_DIR/config/puma.rb
 PUMA_LOCK=$RAILS_PIDS/puma.lock
