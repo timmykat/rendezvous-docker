@@ -1,4 +1,4 @@
-FROM ruby:3.2.2 as main
+FROM ruby:3.1.2 as main
 
 RUN apt-get update -qq 
 RUN apt-get -y -qq install nodejs npm
