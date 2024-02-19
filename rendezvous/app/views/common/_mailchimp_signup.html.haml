@@ -6,6 +6,7 @@
   }
   .mailing-list-signup {
     background-color: var(--form-bg-color);
+    padding: 30px 0;
   }
 
   #mc_embed_signup {
@@ -32,6 +33,7 @@
     column-gap: 20px;
   }
   #mc_embed_signup input.email {
+    color: #222;
     padding: 10px;
     border: solid 1px var(--dark-red);
     max-width: 25rem;
@@ -46,7 +48,7 @@
   %form#mc-embedded-subscribe-form.validate{action:  "https://citroenrendezvous.us12.list-manage.com/subscribe/post?u=198c738ff80668ca4d472c590&id=9e696fe93f&f_id=00374ee0f0", method:  "post", name:  "mc-embedded-subscribe-form", novalidate:  "", target:  "_blank"}
     #mc_embed_signup_scroll
       .form-group
-        %h2 Tenez-vous informé!
+        %h2 Sign up for our mailing list
         .mc-field
           %input#mce-EMAIL.email{name:  "EMAIL", required:  "", type:  "email", value:  "", placeholder: 'Email'}
           %span#mce-EMAIL-HELPERTEXT.helper_text

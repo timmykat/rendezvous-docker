@@ -1,235 +1,235 @@
 - config = Rails.configuration.rendezvous
-/ banner area starts here
-%section#home.header
-  .container
-    .row
-      .col-md-6
-        %h1 #{event_dates}
-        %h2 Saratoga Springs, New York
-      .col-md-6
-        %p
-          Stay tuned for #{event_year} info:
-          %br
-          %a{ href: "http://citroenrendezvous.us12.list-manage2.com/subscribe?u=198c738ff80668ca4d472c590&id=9e696fe93f", target: "_blank" } The Citroen Rendezvous newsletter
-          %br
-          %a{ href: "https://www.facebook.com/groups/1796592930566951/", target: "_blank" } The Rendezvous Facebook page
-          %br
-          %a{ href: "https://citroenvie.com/", target: "_blank" } CITROËNVIE!
-
-- if can_register?
-  %section.registration_open   
-    %h2.registration_open 
-      Registration is open for #{Time.now.year}!
--# - else
--#   %section.registration_closed   
--#     %h2.registration_close
--#       Online registration is now closed. Please register at the event.
-%section.banner
-  .container.register
-    .row
-      .col-md-offset-3.col-md-6
-
--# %section#schedule.about.text-center
--#   .container
--#     .row
--#       .col-md-8.col-md-offset-2.about-heading
--#         %h2.main-heading
--#           #{config[:dates][:year]} Schedule
--#         = image_tag "chevrons.png"
--#         %p.text-left
--#           This year's Rendezvous is not only at a different time, we have a new home base! The Holiday Inn Saratoga Springs is centrally located, just steps from Congress Park and downtown, and offers a large parking lot, on-site dining, and indoor and outdoor heated pools.
--#           %br
--#           %br
--#           We have secured a block of 40 rooms at a reduced rate of $169/night and expect they will go fast so make sure to book early. If all the blocked rooms are booked, the hotel will honor the rate, pending availability. The room block expires August 13th so don't delay!
--#           = link_to 'Book here', "https://www.ihg.com/holidayinn/hotels/us/en/saratoga-springs/sgany/hoteldetail"
--#           or call +1-518-584-4550. The group code for the reduced rate is in the email announcement, or available from your chauffeurs.
-
-%section#schedule.about.text-center
-  .container
-    .row
-      .col-12
-        %p
-          Benugo "Espresso Van" 1972 Citroën HY in Granary Square &vert;
-          %em 
-            Mic from Reading - Berkshire, United Kingdom via
-            %a{href: "https://creativecommons.org/licenses/by/2.0", target: "_blank" } 
-              Wikimedia Commons
-    .row
-      .col-md-8.col-md-offset-2.about-heading
-        %h2.main-heading
-          #{event_year} Schedule
-        = image_tag "chevrons.png"
-        %p.text-left
-          Finally, the Rendezvous will be on the traditional Father's Day weekend again! 
-          %br
-          %br
-          This year's event hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}
-          Detatils to come.
-          -# You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
-          -# 
-            link
-          by #{config[:hotel][:event_rate_Last_day]}.
-          %br
-          %br
-          Schedule info below will be updated as we get closer to the event. Stay tuned for more info!
-
-        %p.text-center
-          = link_to 'Detailed schedule', schedule_path
-
-      .col-md-3.single-about.col-xs-12.col-sm-4
-        .about-inside
-          %i.fa-solid.fa-car
-          %h3 #{relative_date(0)}
-          %ul.text-left
-            %li Details TBD
-            -#   %strong 2pm
-            -#   Ice cream social, Kaleidescope Cafe
-            -# %li
-            -#   %strong 6pm
-            -#   Welcome reception, Excelsior Springs Center
-      .col-md-3.single-about.col-xs-12.col-sm-4
-        .about-inside
-          %i.fa-solid.fa-car
-          %h3 #{relative_date(1)}
-          %ul.text-left
-            %li
-              %strong 9am-4pm
-              Showfield is open, #{config[:venue][:name]}, #config{#{config[:venue][:address]}
-            %li
-              %strong 4-6pm
-              Silent auction. Winners announced at after dinner.
-            %li
-              %strong 4-5:30pm
-              Downtime: RELAX!
-            %li
-              %strong 6-8pm
-              Banquet dinner
-            %li
-              %strong 8pm
-              People's Choice awards!
-      .col-md-3.single-about.col-xs-12.col-sm-4
-        .about-inside
-          %i.fa-solid.fa-road
-          %h3 #{relative_date(2)}
-          %ul.text-left
-            %li Details TBD
-
-/ end of about section
-%section.mailing-list-signup
-  .container 
-    .row 
-      .col-md-12
-        = render partial: 'common/mailchimp_signup' 
-/ service section
-%section#info.service.text-left
-  .container
-    .row
-      .col-md-5.col-sm-5.col-xs-5
-        %h2.main-heading Info
-        = image_tag "chevrons.png"
-        %p
-          The Citroen Rendezvous is the largest gathering of Citroens in North America, taking place annually on Father's Day weekend in Saratoga Springs, NY.  It is the people who make the event special. Friends, family, and other enthusiasts are warmly welcomed, as are other French, European, and just plain quirky cars.
-        %p
-          In addition to the information below, please checkout out our
-          = succeed '.' do
-            = link_to 'faq', faq_path
-      .col-md-12.services
-        .col-md-3.single-service.col-xs-12
-          %i.fa-solid.fa-hotel
-          %h3 Accommodations
+%main
+  / banner area starts here
+  %section#home.header
+    .container
+      .row
+        .col-md-6
+          %h1 #{event_dates}
+          %h2 Saratoga Springs, New York
+        .col-md-6
           %p
-            Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Just remember that #{config[:dates][:month]} is high season, so book early; let the
-            = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { target: '_blank' }
-            be your guide, or use your favorite travel website. Also see
+            Stay tuned for #{event_year} info:
+            %br
+            %a{href: root_path( anchor: 'sign-up' )} The Citroen Rendezvous newsletter
+            %br
+            %a{ href: "https://www.facebook.com/groups/1796592930566951/", target: "_blank" } The Rendezvous Facebook page
+            %br
+            %a{ href: "https://citroenvie.com/", target: "_blank" } CITROËNVIE!
+
+  - if can_register?
+    %section.registration_open   
+      %h2.registration_open 
+        Registration is open for #{Time.now.year}!
+  -# - else
+  -#   %section.registration_closed   
+  -#     %h2.registration_close
+  -#       Online registration is now closed. Please register at the event.
+  %section.banner
+    .container.register
+      .row
+        .col-md-offset-3.col-md-6
+
+  -# %section#schedule.about.text-center
+  -#   .container
+  -#     .row
+  -#       .col-md-8.col-md-offset-2.about-heading
+  -#         %h2.main-heading
+  -#           #{config[:dates][:year]} Schedule
+  -#         = image_tag "chevrons.png"
+  -#         %p.text-left
+  -#           This year's Rendezvous is not only at a different time, we have a new home base! The Holiday Inn Saratoga Springs is centrally located, just steps from Congress Park and downtown, and offers a large parking lot, on-site dining, and indoor and outdoor heated pools.
+  -#           %br
+  -#           %br
+  -#           We have secured a block of 40 rooms at a reduced rate of $169/night and expect they will go fast so make sure to book early. If all the blocked rooms are booked, the hotel will honor the rate, pending availability. The room block expires August 13th so don't delay!
+  -#           = link_to 'Book here', "https://www.ihg.com/holidayinn/hotels/us/en/saratoga-springs/sgany/hoteldetail"
+  -#           or call +1-518-584-4550. The group code for the reduced rate is in the email announcement, or available from your chauffeurs.
+
+  %section#schedule.about.text-center
+    .container
+      .row
+        .col-12
+          %p
+            Traction Avant separation of drive and passenger and passenger elements | Image courtesy of Citroënvie
+      .row
+        .col-md-8.col-md-offset-2.about-heading
+          %h2.main-heading
+            #{event_year} Schedule
+          = image_tag "chevrons.png"
+          %p.text-left
+            Finally, the Rendezvous will be on the traditional Father's Day weekend again! 
+            %br
+            %br
+            This year's event hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}
+            Please see more information 
+            %a{ href: "/#info" } below.
+            -# You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
+            -# 
+              link
+            by #{config[:hotel][:event_rate_Last_day]}.
+            %br
+            %br
+            Schedule info below will be updated as we get closer to the event. Stay tuned for more info!
+
+          %p.text-center
+            = link_to 'Detailed schedule', schedule_path
+
+        .col-md-3.single-about.col-xs-12.col-sm-4
+          .about-inside
+            %i.fa-solid.fa-car
+            %h3 #{relative_date(0)}
+            %ul.text-left
+              %li Details TBD
+              -#   %strong 2pm
+              -#   Ice cream social, Kaleidescope Cafe
+              -# %li
+              -#   %strong 6pm
+              -#   Welcome reception, Excelsior Springs Center
+        .col-md-3.single-about.col-xs-12.col-sm-4
+          .about-inside
+            %i.fa-solid.fa-car
+            %h3 #{relative_date(1)}
+            %ul.text-left
+              %li
+                %strong 9am-4pm
+                Showfield is open, #{config[:venue][:name]}, #config{#{config[:venue][:address]}
+              %li
+                %strong 4-6pm
+                Silent auction. Winners announced at after dinner.
+              %li
+                %strong 4-5:30pm
+                Downtime: RELAX!
+              %li
+                %strong 6-8pm
+                Banquet dinner
+              %li
+                %strong 8pm
+                People's Choice awards!
+        .col-md-3.single-about.col-xs-12.col-sm-4
+          .about-inside
+            %i.fa-solid.fa-road
+            %h3 #{relative_date(2)}
+            %ul.text-left
+              %li Details TBD
+
+  / service section
+  %section#info.service.text-left
+    .container
+      .row
+        .col-md-5.col-sm-5.col-xs-5
+          %h2.main-heading Info
+          = image_tag "chevrons.png"
+          %p
+            The Citroen Rendezvous is the largest gathering of Citroens in North America, taking place annually on Father's Day weekend in Saratoga Springs, NY.  It is the people who make the event special. Friends, family, and other enthusiasts are warmly welcomed, as are other French, European, and just plain quirky cars.
+          %p
+            In addition to the information below, please checkout out our
             = succeed '.' do
-              = link_to 'this FAQ', faq_path(anchor: 'accommodations')
-        .col-md-3.single-service.col-xs-12
-          %i.fa-solid.fa-shopping-cart
-          %h3 Supporting Vendors
-          %p
-            We couldn't put on the Rendezvous (nor could we keep our cars going) without our
-            = link_to 'friendly and knowledgeable supporting vendors', '/vendors'
-      .col-md-12.services.bottom-services
-        .col-md-3.single-service.col-xs-12
-          %i.fa-solid.fa-calendar
-          %h3 History
-          %p
-            Lance Hellmann, one of the original organizers of the Rendezvous has kindly written a
-            = link_to 'charming little history', '/history'
-            of the event, edited for this site by David Cossitt-Levy. Enjoy!
-        .col-md-3.single-service.col-xs-12
-          %i.fa-solid.fa-empire
-          %h3 Organization
-          %p
-            The Rendezvous is run by volunteers, with a small group of
-            %em chauffeurs
-            at the wheel organizing things and making sure all the details are in place to host a fun-filled event. If you are
-            interested in volunteering during the event,
-            by all means get in touch with us using the
-            = link_to 'contact form at the bottom of this page.',  '/#sec5'
-          %p
-            Your
-            %em chauffeurs:
-            = les_chauffeurs 
-            
-/ about section ends
-/ portfolio section
-%section#photos.portfolio.text-center
-  .row.portfolio-row
-    .portfolio-heading
-      %h2.main-heading Photos
-      = image_tag "chevrons.png"
-      %p
-        The best things about the Rendezvous are the cars and the people!
-        %br
-        %br
-          %b Check out our new photo gallery!
-          =link_to 'Go', gallery_path, class: 'btn btn-info'
-      %p Members, you can contribute photos by signing in and going to the upload page.
-    - if @pictures.count == 8
-      - @pictures.each do |pic|
-        .col-md-3.single-portfolio.col-sm-6
-          %figure.portfolio-item
-            = image_tag pic.image.portfolio.url + @cache_buster, class: 'img-responsive'
-            %figcaption.portfolio-details
-              %h4= pic.caption
-              %p= pic.credit
-          %a{href: pic.image.url}
-            %i.fa-solid.fa-search
-    - else
-      - (1..8).each do |n|
-        .col-md-3.single-portfolio.col-sm-6
-          %figure.portfolio-item
-            = image_tag "portfolio#{n}.jpg", class: 'img-responsive'
-            %figcaption.portfolio-details
-              %h4 Photo #{n}
-              %p Placeholder photo
-          %a{href: "portfolio#{n}.jpg"}
-            %i.fa-solid.fa-search
-/ end of portfolio section
-%section#contact.contact.text-center
-  .container
-    .row
-      %article.contact-heading
-        %h2.main-heading Contact us
+              = link_to 'faq', faq_path
+        .col-md-12.services
+          .col-md-3.single-service.col-xs-12
+            %i.fa-solid.fa-hotel
+            %h3 Accommodations
+            %p
+              This year's event hotel is the same as last year, the Courtyard Marriott in Saratoga Springs. However, our allotment of rooms is nearly booked, so you may need to turn to other alternatives. For hotel details, please see our
+              %a{ href: "https://mailchi.mp/f63e421308b7/rendezvous-2024-is-on-save-the-date?e=7da8d21dbd", target: "_blank" } email announcement.
+            %p
+              Saratoga Springs is well known as a vacation destination and has a wealth of places to stay. Just remember that #{config[:dates][:month]} is high season, so book early; let the
+              = link_to 'convention and tourism bureau', 'http://discoversaratoga.org/saratoga/lodging', { target: '_blank' }
+              be your guide, or use your favorite travel website. Also see
+              = succeed '.' do
+                = link_to 'this FAQ', faq_path(anchor: 'accommodations')
+          .col-md-3.single-service.col-xs-12
+            %i.fa-solid.fa-shopping-cart
+            %h3 Supporting Vendors
+            %p
+              We couldn't put on the Rendezvous (nor could we keep our cars going) without our
+              = link_to 'friendly and knowledgeable supporting vendors', '/vendors'
+        .col-md-12.services.bottom-services
+          .col-md-3.single-service.col-xs-12
+            %i.fa-solid.fa-calendar
+            %h3 History
+            %p
+              Lance Hellmann, one of the original organizers of the Rendezvous has kindly written a
+              = link_to 'charming little history', '/history'
+              of the event, edited for this site by David Cossitt-Levy. Enjoy!
+          .col-md-3.single-service.col-xs-12
+            %i.fa-solid.fa-empire
+            %h3 Organization
+            %p
+              The Rendezvous is run by volunteers, with a small group of
+              %em chauffeurs
+              at the wheel organizing things and making sure all the details are in place to host a fun-filled event. If you are
+              interested in volunteering during the event,
+              by all means get in touch with us using the
+              = link_to 'contact form at the bottom of this page.',  '/#sec5'
+            %p
+              Your
+              %em chauffeurs:
+              = les_chauffeurs 
+              
+  / about section ends
+  %section.mailing-list-signup#sign-up
+    .container 
+      .row 
+        .col-md-12
+          = render partial: 'common/mailchimp_signup' 
+        
+  / portfolio section
+  %section#photos.portfolio.text-center
+    .row.portfolio-row
+      .portfolio-heading
+        %h2.main-heading Photos
         = image_tag "chevrons.png"
         %p
-          -#
-            Please register using the
-            %a{ href: new_event_registration_path, title: 'Go to registration form' } online registration form.
-            %br/
-          If you have any questions that haven't been answered here, please let us know!
-/ end of contact section
--# %section.contact-form{ style: "height: 100px;"}
--#   .container
-  -# .row
-    -#   .form
-    -#     .sbtn.col-md-12.text-center
-    -#       = form_tag "/contact-us" do
-    -#         = text_field_tag 'name', nil, class: 'name form-input', placeholder: "NAME"
-    -#         = email_field_tag 'email', nil, class: 'email form-input', placeholder: "EMAIL"
-    -#         = text_field_tag 'message', nil, class: 'message form-input', placeholder: "MESSAGE"
-    -#         - if Rails.env != 'development'
-    -#           .captcha
-    -#             = recaptcha_tags
-    -#         = submit_tag 'SEND', class: 'submit-btn', disabled: true
+          The best things about the Rendezvous are the cars and the people!
+          %br
+          %br
+            %b Check out our new photo gallery!
+            =link_to 'Go', gallery_path, class: 'btn btn-info'
+      - if @pictures.count == 8
+        - @pictures.each do |pic|
+          .col-md-3.single-portfolio.col-sm-6
+            %figure.portfolio-item
+              = image_tag pic.image.portfolio.url + @cache_buster, class: 'img-responsive'
+              %figcaption.portfolio-details
+                %h4= pic.caption
+                %p= pic.credit
+            %a{href: pic.image.url}
+              %i.fa-solid.fa-search
+      - else
+        - (1..8).each do |n|
+          .col-md-3.single-portfolio.col-sm-6
+            %figure.portfolio-item
+              = image_tag "portfolio#{n}.jpg", class: 'img-responsive'
+              %figcaption.portfolio-details
+                %h4 Photo #{n}
+                %p Placeholder photo
+            %a{href: "portfolio#{n}.jpg"}
+              %i.fa-solid.fa-search
+  / end of portfolio section
+  -# %section#contact.contact.text-center
+  -#   .container
+  -#     .row
+  -#       %article.contact-heading
+  -#         %h2.main-heading Contact us
+  -#         = image_tag "chevrons.png"
+  -#         %p
+  -#           -#
+  -#             Please register using the
+  -#             %a{ href: new_event_registration_path, title: 'Go to registration form' } online registration form.
+  -#             %br/
+  -#           If you have any questions that haven't been answered here, please let us know!
+  / end of contact section
+  -# %section.contact-form{ style: "height: 100px;"}
+  -#   .container
+    -# .row
+      -#   .form
+      -#     .sbtn.col-md-12.text-center
+      -#       = form_tag "/contact-us" do
+      -#         = text_field_tag 'name', nil, class: 'name form-input', placeholder: "NAME"
+      -#         = email_field_tag 'email', nil, class: 'email form-input', placeholder: "EMAIL"
+      -#         = text_field_tag 'message', nil, class: 'message form-input', placeholder: "MESSAGE"
+      -#         - if Rails.env != 'development'
+      -#           .captcha
+      -#             = recaptcha_tags
+      -#         = submit_tag 'SEND', class: 'submit-btn', disabled: true
