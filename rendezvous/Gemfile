@@ -14,7 +14,7 @@ gem "actionpack", "7.0.4"
 gem 'dotenv-rails'
 
 # MySQL the database for Active Record
-gem 'mysql2'
+gem 'mysql2', '0.5.6'
 
 # Browserify
 gem 'browserify-rails'
@@ -67,6 +67,7 @@ group :development do
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
+  gem 'capistrano-bundler'
   gem 'capistrano-yarn'
 end
 

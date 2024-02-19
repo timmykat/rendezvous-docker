@@ -59,6 +59,10 @@ module ApplicationHelper
     return address.html_safe if address
   end
 
+  def les_chauffeurs(separator = ", ")
+    return Rails.configuration.rendezvous[:chauffeurs].join(separator)
+  end
+
   def vehicles_list(vehicles)
     if vehicles
       output = "<ul class='list-unstyled'>\n"
