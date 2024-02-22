@@ -10,11 +10,10 @@
 server 'ec2-34-206-35-204.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{app db web}
 set :rails_env, 'production'
 set :repo_url, 'git@github.com:timmykat/rendezvous-docker.git'
-set :rbenv_ruby, '3.2.2'
 
-# set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous-docker.git'
-
-# set :repo_url, 'ssh://ec2-34-206-35-204.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
+# Set the location of Ruby
+set :rvm_type, :system
+set :rvm_ruby_version, "/usr/bin/ruby" # Path to your Ruby executable
 
 # role-based syntax
 # ==================
