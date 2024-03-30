@@ -46,7 +46,7 @@ set :repo_url, 'git@github.com:timmykat/rendezvous-docker.git'
 # Global options
 # --------------
 set :ssh_options, {
-  keys: %w(~/.ssh/rendezvous-ed25519.pem),
+  keys: %w(~/.ssh/id_ed25519_home),
   forward_agent: false,
   auth_methods: %w(publickey)
 }
