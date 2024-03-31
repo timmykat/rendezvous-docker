@@ -8,7 +8,6 @@ on roles(:web) do
 end
 
 set :application, 'rendezvous'
-set :deploy_via, :copy
 
 # Use github repository
 # set :repo_url, 'git@github.com:timmykat/rendezvous.git'
