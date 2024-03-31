@@ -55,5 +55,7 @@ on_worker_boot do
   puts "Booting worker"
 
   ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
-  ActiveRecord::Base.establish_connection(YAML.load_file(db_config_file)[rails_env])
+  puts "---> Rails environment: #{rails_env}"
+  db_config = YAML.load_file(db_config_file)[rails_env]
+  ActiveRecord::Base.establish_connection(db_config)
 end
