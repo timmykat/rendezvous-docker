@@ -17,7 +17,7 @@ Bundler.require(*Rails.groups)
 
 # Load dotenv only in development or test environment
 if ['production'].include? ENV['RAILS_ENV']
-  Dotenv::Railtie.load
+  Dotenv::Rails.load
 end
 
 module Rendezvous

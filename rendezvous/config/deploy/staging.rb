@@ -7,9 +7,10 @@
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
-server 'ec2-44-202-137-156.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{app db web}
+server 'ec2-44-202-143-62.compute-1.amazonaws.com', user: 'ec2-user', roles: %w{app db web}
 set :rails_env, 'production'
 set :repo_url, 'git@github.com:timmykat/rendezvous-docker.git'
+set :bundle_flags, '--deployment'
 
 # set :repo_url, 'ssh://ec2-54-165-108-181.compute-1.amazonaws.com/home/ec2-user/git-repos/rendezvous.git'
 
@@ -46,7 +47,7 @@ set :repo_url, 'git@github.com:timmykat/rendezvous-docker.git'
 # Global options
 # --------------
 set :ssh_options, {
-  keys: %w(~/.ssh/id_ed25519_home),
+  keys: %w(~/.ssh/rendezvous-ed25519.pem),
   forward_agent: false,
   auth_methods: %w(publickey)
 }
