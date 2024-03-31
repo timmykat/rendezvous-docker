@@ -1,7 +1,3 @@
-require "#{Rails.root}/app/helpers/application_helper"
-include ApplicationHelper
-
-
 namespace :db do
     desc "Verify database credentials"
     task :verify  => :environment do
