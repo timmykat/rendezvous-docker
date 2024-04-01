@@ -1,0 +1,15 @@
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/rendezvous/current
+ExecStart=/usr/bin/bundle exec puma -C /var/www/rendezvous/current/config/puma.rb
+User=ec2-user
+Group=ec2-user
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
