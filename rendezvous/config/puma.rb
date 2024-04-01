@@ -15,9 +15,9 @@ unless docker_env?
   app_dir = "/var/www/rendezvous/current"
   shared_dir = "#{app_dir}/shared"
   db_config_file = "#{shared_dir}/config/database.yml"
-  puma_socket_file = "#{shared_dir}/sockets/puma.sock"
-  puma_state_file = "#{shared_dir}/pids/puma.state"
-  pidfile "#{shared_dir}/pids/puma.pid"
+  puma_socket_file = "#{shared_dir}/tmp/sockets/puma.sock"
+  puma_state_file = "#{shared_dir}/tmp/pids/puma.state"
+  pidfile "#{shared_dir}/tmp/pids/puma.pid"
   log_dir = "#{shared_dir}/log"
 
   workers 1
