@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=/var/www/rendezvous/current
-ExecStart=/usr/bin/bundle exec puma -C /var/www/rendezvous/shared/config/puma.rb
+ExecStart=/usr/bin/bundle exec /var/www/rendezvous/current/shared/bundle/ruby/3.2.0/bin/puma -C /var/www/rendezvous/shared/config/puma.rb
 User=ec2-user
 Group=ec2-user
 Restart=always
