@@ -15,9 +15,9 @@ unless docker_env?
   app_dir = "/var/www/rendezvous/current"
   shared_dir = "#{app_dir}/shared"
   db_config_file = "#{shared_dir}/config/database.yml"
-  puma_socket_file = "#{shared_dir}/sockets/puma.sock"
-  puma_state_file = "#{shared_dir}/pids/puma.state"
-  pidfile "#{shared_dir}/pids/puma.pid"
+  puma_socket_file = "#{shared_dir}/tmp/sockets/puma.sock"
+  puma_state_file = "#{shared_dir}/tmp/pids/puma.state"
+  pidfile "#{shared_dir}/tmp/pids/puma.pid"
   log_dir = "#{shared_dir}/log"
 
   workers 1
@@ -47,13 +47,16 @@ stdout_redirect "#{log_dir}/puma.stdout.log", "#{log_dir}/puma.stderr.log", true
 
 preload_app!
 
-on_worker_boot do
-  puts "** Setting socket permissions **"
-  puts `chmod ago+rw #{puma_socket_file}`
-  require "active_record"
+# The following is only necessary for more than 1 work (workers <> 0 above)
+# on_worker_boot do
+#   puts "** Setting socket permissions **"
+#   puts `chmod ago+rw #{puma_socket_file}`
+#   require "active_record"
 
-  puts "Booting worker"
+#   puts "Booting worker"
 
-  ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
-  ActiveRecord::Base.establish_connection(YAML.load_file(db_config_file)[rails_env])
-end
+#   ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
+#   puts "---> Rails environment: #{rails_env}"
+#   db_config = YAML.load_file(db_config_file)[rails_env]
+#   ActiveRecord::Base.establish_connection(db_config)
+# end
