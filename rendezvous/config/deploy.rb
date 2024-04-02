@@ -1,12 +1,17 @@
 # config valid only for current version of Capistrano
-lock '3.17.2'
+lock '3.18.1'
+
+# Test for shell, presence of yarn
+on roles(:web) do
+  execute :echo, '$SHELL'
+  execute :which, 'yarn'
+end
 
 set :application, 'rendezvous'
-set :deploy_via, :copy
-set :rbenv_ruby, '3.1.2'
 
 # Use github repository
 # set :repo_url, 'git@github.com:timmykat/rendezvous.git'
+set :repo_url, 'git@github.com:timmykat/rendezvous-docker.git'
 
 # Default branch is :master
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp

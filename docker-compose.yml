@@ -29,6 +29,7 @@ services:
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     environment:
+      - RAILS_DEVELOPMENT_HOSTS
       - RAILS_ENV
       - RACK_ENV
       - RENDEZVOUS_FACEBOOK_APP_ID
@@ -69,12 +70,14 @@ services:
 
     volumes:
       - ./rendezvous:/var/www/rendezvous
-      - /tmp/mysqld:/var/run/mysqld
+      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   delayed_job:
+    profiles: [full]
     image: rails_image
     command: /var/www/rendezvous/bin/delayed_job_docker.sh
     environment:
+      - RAILS_DEVELOPMENT_HOSTS
       - RAILS_ENV
       - RACK_ENV
       - RENDEZVOUS_FACEBOOK_APP_ID
@@ -113,7 +116,7 @@ services:
 
     volumes:
       - ./rendezvous:/var/www/rendezvous
-      - "/tmp/mysqld:/var/run/mysqld"
+      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   mysql:
     image: mysql:8.0.32
