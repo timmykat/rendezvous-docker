@@ -9,8 +9,6 @@
 .sass-cache
 
 # Ignore .env files
-rendezvous/.env
-rendezvous/.envrc
 config/production_env_vars
 
 # Ignore database file

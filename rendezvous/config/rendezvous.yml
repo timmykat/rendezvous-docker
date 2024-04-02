@@ -4,17 +4,17 @@ dates:
   duration: 3
   refund_date: 'June 7, 2024'
 registration_window:
-  open: 2024-04-01
+  open: 2024-04-15
   close: 2024-06-11, 2024
 fees:
-  adult: 60
+  adult: 75
   senior: 0
   child: 0
 hotel:
   name: Courtyard Marriott
   address: 11 Excelsior Ave, Saratoga Springs
   website: https://www.marriott.com/en-us/hotels/albss-courtyard-saratoga-springs/overview/
-  event_rate: TBD
+  event_rate: (FULL)
   event_rate_link: 
   event_rate_last_day: May 30
 venue:
