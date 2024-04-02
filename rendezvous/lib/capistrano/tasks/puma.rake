@@ -5,7 +5,7 @@ namespace :puma do
     on roles(:all) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :sudo, :service, :puma, :stop
+          execute :sudo, :systemctl, :stop, :puma
         end
       end
     end
@@ -16,7 +16,7 @@ namespace :puma do
     on roles(:all) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :sudo, :service, :puma, :start
+          execute :sudo, :systemctl, :start, :puma
         end
       end
     end
@@ -27,7 +27,7 @@ namespace :puma do
     on roles(:all) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :sudo, :service, :puma, :restart
+          execute :sudo, :systemctl, :restart, :puma
         end
       end
     end

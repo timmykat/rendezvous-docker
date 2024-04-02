@@ -47,15 +47,16 @@ stdout_redirect "#{log_dir}/puma.stdout.log", "#{log_dir}/puma.stderr.log", true
 
 preload_app!
 
-on_worker_boot do
-  puts "** Setting socket permissions **"
-  puts `chmod ago+rw #{puma_socket_file}`
-  require "active_record"
+# The following is only necessary for more than 1 work (workers <> 0 above)
+# on_worker_boot do
+#   puts "** Setting socket permissions **"
+#   puts `chmod ago+rw #{puma_socket_file}`
+#   require "active_record"
 
-  puts "Booting worker"
+#   puts "Booting worker"
 
-  ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
-  puts "---> Rails environment: #{rails_env}"
-  db_config = YAML.load_file(db_config_file)[rails_env]
-  ActiveRecord::Base.establish_connection(db_config)
-end
+#   ActiveRecord::Base.connection.disconnect! rescue ActiveRecord::ConnectionNotEstablished
+#   puts "---> Rails environment: #{rails_env}"
+#   db_config = YAML.load_file(db_config_file)[rails_env]
+#   ActiveRecord::Base.establish_connection(db_config)
+# end
