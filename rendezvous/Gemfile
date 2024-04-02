@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.1.2'
+ruby '3.2.2'
 
 gem 'rake'
 
@@ -64,11 +64,12 @@ gem 'letter_opener'
 group :development do
   gem 'byebug'
   gem 'pry-rails'
-  gem 'capistrano'
+  gem 'capistrano', '3.18.1'
   gem 'capistrano-rails'
-  gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano-yarn'
+  gem 'ed25519', '>= 1.2', '< 2.0'
+  gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 end
 
 group :development, :test do

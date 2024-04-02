@@ -1,0 +1,89 @@
+#!/bin/bash
+
+#
+# puma - this script starts and stops the puma daemon
+#
+# chkconfig: - 20 80
+# description:  Puma is an application server for Rails
+# processname: puma
+# config:      /var/www/rendezvous/shared/config/puma.rb
+# pidfile:     /var/www/rendezvous/shared/pids/puma.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+prog="puma"
+
+RBENV_SHIMS=/home/ec2-user/.rbenv/shims
+
+RAILS_DIR=/var/www/rendezvous
+APP_DIR=$RAILS_DIR/current
+RAILS_SHARED_DIR=$RAILS_DIR/shared
+RAILS_PIDS=$RAILS_SHARED_DIR/pids
+
+PUMA_CONF=$RAILS_SHARED_DIR/config/puma.rb
+PUMA_LOCK=$RAILS_PIDS/puma.lock
+PUMA_PID=$RAILS_PIDS/puma.pid
+
+start() {
+  echo -n $"Starting $prog as $USER: "
+   # Check for config file
+  if [ ! -f $PUMA_CONF ]; then
+    echo $"Puma confing file does not exist: $PUMA_CONF" && exit 0
+  fi
+  cd $APP_DIR
+  $RBENV_SHIMS/bundle exec puma -C $PUMA_CONF &
+  echo
+  touch $PUMA_LOCK
+  return $RETVAL
+}
+
+stop() {
+  echo -n $"Stopping $prog: "
+  cd $APP_DIR
+  $RBENV_SHIMS/bundle exec pumactl -F $PUMA_CONF stop
+  RETVAL=$?
+  echo
+  return $RETVAL
+}
+
+restart() {
+  echo -n $"Restarting puma: "
+  cd $APP_DIR
+  $RBENV_SHIMS/bundle exec pumactl -F $PUMA_CONF stop
+  $RBENV_SHIMS/bundle exec pumactl -F $PUMA_CONF phased-restart
+  retval=$?
+  echo
+  return $retval
+}
+
+status -p $PUMA_PID >/dev/null
+running=$?
+
+# See how we were called.
+case "$1" in
+    start)
+  [ $running -eq 0 ] && exit 0
+  start
+  RETVAL=$?
+  ;;
+    stop)
+  [ $running -eq 0 ] || exit 0
+  stop
+  RETVAL=$?
+  ;;
+    restart)
+  restart
+  RETVAL=$?
+  ;;
+    status)
+  echo -n puma; status -p $PUMA_PID -l puma
+  RETVAL=$?
+  ;;
+    *)
+  echo $"Usage: $0 {start|stop|restart|status}"
+  RETVAL=2
+esac
+
+exit $RETVAL
+
