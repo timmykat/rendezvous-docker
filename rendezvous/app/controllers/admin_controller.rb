@@ -30,8 +30,10 @@ class AdminController < ApplicationController
         'path'        => File.join(Rails.root, 'public', helpers.static_file("csv/#{file_name}")),
         'descriptor'  => descriptor
       }
-      csv_file[data_type] = File.new(@files[data_type]['path'], 'wb')
-      csv_object[data_type] = ::CSV.new(csv_file[data_type])
+      if system("mkdir -p #{File.dirname(@files[data_type]['path'])}")
+        csv_file[data_type] = File.new(@files[data_type]['path'], 'wb')
+        csv_object[data_type] = ::CSV.new(csv_file[data_type])
+      end
     end
 
    # CSV file headers

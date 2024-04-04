@@ -89,7 +89,7 @@
                       %a{href: t_shirt_gallery_path } t-shirt gallery
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
-                    - unless current_user || !in_registration_window?
+                    - unless current_user
                       %li
                         %a{href: new_user_session_path } sign in
     = yield
