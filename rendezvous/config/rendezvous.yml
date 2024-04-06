@@ -4,8 +4,8 @@ dates:
   duration: 3
   refund_date: 'June 7, 2024'
 registration_window:
-  open: 2024-04-15
-  close: 2024-06-11, 2024
+  open: 2024-04-05
+  close: 2024-06-11
 fees:
   adult: 75
   child: 0
