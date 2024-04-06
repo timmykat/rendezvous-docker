@@ -3,7 +3,7 @@
   / banner area starts here
   %section#home.header
     .container
-      .row
+      .row.header-info
         .col-md-6
           %h1 #{event_dates}
           %h2 Saratoga Springs, New York
@@ -11,13 +11,13 @@
           %p
             Stay tuned for #{event_year} info:
             %br
-            %a{href: root_path( anchor: 'sign-up' )} The Citroen Rendezvous newsletter
+            %a{href: root_path( anchor: 'sign-up' )} Sign up for the Citroen Rendezvous newsletter
             %br
-            %a{ href: "https://www.facebook.com/groups/1796592930566951/", target: "_blank" } The Rendezvous Facebook page
+            %a{ href: "https://www.facebook.com/groups/1796592930566951/", target: "_blank" } Connect on Facebook
             %br
-            %a{ href: "https://citroenvie.com/", target: "_blank" } CITROËNVIE!
+            %a{ href: "https://citroenvie.com/", target: "_blank" } Check out CITROËNVIE!
 
-  - if can_register?
+  - if in_registration_window?
     %section.registration_open   
       %h2.registration_open 
         Registration is open for #{Time.now.year}!

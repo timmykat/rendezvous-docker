@@ -1,44 +1,26 @@
-- config = Rails.configuration.rendezvous
-%p Dear #{@event_registration.user.full_name},
+!!!
+%html{lang:  "en"}
+  %body
+    %div{ style:  "width: 600px;" }
+      %p Dear #{@event_registration.user.first_name},
+      %p Here is your registration info: 
+      %ul
+        %li Number of people: #{@event_registration.attendees.size}
+        %li Total registration amount: #{number_to_currency(@event_registration.total)} (US)
+        - if (@event_registration.donation? && !@event_registration.cancelled?)
+          %li Donation (thank you!): #{number_to_currency(@event_registration.donation)} (US)
+        %li Registration status: #{@event_registration.status}
 
-%p You have successfully registered for the the #{Time.now.year} Citroen Rendezvous, which takes place the weekend of #{config[:dates][:day_one]} in Saratoga Springs, New York. We hope you're as excited as we are!
+      - if @event_registration.outstanding_balance?
+        %p You have an outstanding balance of #{number_to_currency(@event_registration.balance)} (US)
+        %p Please send a check for that amount to:
+        %p #{mailing_address}
+      - elsif @event_registration.owed_a_refund?
+        %p You are owed a refund of #{number_to_currency(-@event_registration.balance)}
+        %p We will get in touch with you to discuss how you'd like to be refunded.
+      
+      - unless @event_registration.cancelled?
+        %p We look forward to seeing you at the Rendezvous!
 
-- if @event_registration.paid_method == 'credit card'
-  %p Thank you for paying your registration fee by credit card.
-- else
-  %p 
-    Please send a check for your registration fee to the address below, including your invoice number (@event_registration.invoice_number).
-    %br (Alternatively, you may pay on arrival at the Rendezvous.) 
-  %p= mailing_address()
-%p
-  You may also view your registration information
-  = succeed '.' do
-    = link_to 'here', event_registration_url(@event_registration, protocol:  'https')
-%p Your Rendezvous details:
-%ul
-  %li Registration fee: #{number_to_currency(@event_registration.registration_fee)}
-  %li Donation: #{number_to_currency(@event_registration.donation)}
-  %li Total: #{number_to_currency(@event_registration.total)}
-  %li Due: #{number_to_currency(@event_registration.balance)}
-
-%p Attendees:
-%table
-- @event_registration.attendees.each do |a|
-  %tr
-    %td #{a.name}
-    %td #{a.attendee_age.titlecase}
-    -# %td Sunday dinner? #{a.sunday_dinner? ? 'Yes' : 'No'}
-    %td Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
-
-%p Vehicles:
-- @event_registration.user.vehicles.each do |vehicle|
-  %br #{vehicle.full_spec}
-
-%p 
-  If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. 
-  The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
-%p Here's to a great Rendezvous!
-
-%p Warmest regards,
-  %br Your chauffeurs
-  = {les_chauffeurs}
+    %div{ style:  "width: 600px; margin-top: 20px;border-top: solid 2px #ccc; padding-top: 20px;" }
+      

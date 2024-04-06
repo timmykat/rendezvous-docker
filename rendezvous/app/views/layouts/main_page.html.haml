@@ -76,20 +76,18 @@
                     %li
                       %a{href: root_path( anchor: 'home' )} home
 
-                    - if can_register?
+                    - if registration_live?
                       %li
                         = link_to 'Register', new_event_registration_path, class: 'registration-link'
                     %li
                       %a{href: root_path( anchor: 'info' )} info
-                    %li
-                      %a{href: root_path( anchor: 'sign-up' )} subscribe
                     %li
                       %a{href: root_path( anchor: 'photos' )} photos
                     %li
                       %a{href: t_shirt_gallery_path } t-shirt gallery
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
-                    - unless current_user || !in_registration_window?
+                    - if registration_live? && !current_user
                       %li
                         %a{href: new_user_session_path } sign in
     = yield

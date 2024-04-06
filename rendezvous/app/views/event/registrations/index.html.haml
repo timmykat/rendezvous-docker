@@ -17,7 +17,7 @@
             %th.text-center Donation
             %th.text-center Total
             %th.text-center Paid
-            %th.text-center Due
+            %th.text-center Balance
             %th.text-center Admin
         %tbody
           - @event_registrations.each do |registration|
@@ -25,16 +25,17 @@
               %td
                 = link_to registration.user.last_name_first, event_registration_path(registration.id)
               %td.text-center= registration.number_of_adults
-              %td.text-center= registration.number_of_seniors
               %td.text-center= registration.number_of_children
               %td.text-center= vehicles_list(registration.user.vehicles)
               %td.text-center= number_to_currency(registration.registration_fee)
               %td.text-center= number_to_currency(registration.donation)
               %td.text-center= number_to_currency(registration.total)
               %td.text-center= number_to_currency(registration.paid_amount)
-              - due = registration.balance
-              - if due > 0.0
-                %td.text-center.alert-danger= number_to_currency(due)
-              - else
-                %td.text-center.alert-success= number_to_currency(due)
+              - if registration.outstanding_balance?
+                %td.text-center.has-balance= number_to_currency(registration.balance)
+              - elsif registration.owed_a_refund?
+                %td.text-center.owed (#{number_to_currency(-registration.balance)})
+              - else 
+                %td.text-center #{number_to_currency(-registration.balance)}
+              
               %td= link_to "delete", event_registration_path(registration.id), method:  :delete

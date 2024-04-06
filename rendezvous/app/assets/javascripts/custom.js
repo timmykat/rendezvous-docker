@@ -1,6 +1,7 @@
 window.onload = (e) => {
     window.addEventListener('scroll', e => {
         let header = document.querySelector('header.top-header')
+        if (!header) return
         let stickyPoint = 115;
         let position = window.scrollY
 
@@ -20,7 +21,7 @@ window.onload = (e) => {
     }
 
     let scrollLinks = document.querySelectorAll('header.top-header a[href*="#"]');
-    scrollLinks.forEach(link => {
+    scrollLinks?.forEach(link => {
         link.addEventListener('click', e => {
             e.preventDefault();
             let targetId = e.target.getAttribute('href').replace('/#', '');

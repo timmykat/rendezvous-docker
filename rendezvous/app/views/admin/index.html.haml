@@ -32,13 +32,12 @@
                 %th.text-center Status
                 %th Name
                 %th.text-center Adults
-                %th.text-center Seniors
                 %th.text-center Children
                 %th.text-center Fee
                 %th.text-center Donation
                 %th.text-center Total
                 %th.text-center Paid
-                %th.text-center Due
+                %th.text-center Balance
             %tbody
               - @event_registrations.each do |registration|
                 %tr{class:  'text-center' }
@@ -54,13 +53,17 @@
                       %i{ class: get_status_icon(registration.status) } 
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
                   %td.text-center= registration.number_of_adults
-                  %td.text-center= registration.number_of_seniors
                   %td.text-center= registration.number_of_children
                   %td.text-right= number_to_currency(registration.registration_fee)
                   %td.text-right= number_to_currency(registration.donation)
                   %td.text-right= number_to_currency(registration.total)
                   %td.text-right= number_to_currency(registration.paid_amount)
-                  %td= number_to_currency(registration.balance)
+                  - if registration.outstanding_balance?
+                    %td.text-center.has-balance #{number_to_currency(registration.balance)}
+                  - elsif registration.owed_a_refund?
+                    %td.text-center.owed (#{number_to_currency(-registration.balance)})
+                  - else 
+                    %td.text-center #{number_to_currency(-registration.balance)}
         #tabbed-2
           %h2 Vehicles
           .well.well-sm
@@ -159,8 +162,6 @@
                           %em  Attendees
                         %td.text-right
                           Adults: #{@data[:adult]}
-                          %br
-                            Seniors:   #{@data[:senior]}
                           %br
                             Kids:   #{@data[:child]}
                       %tr
