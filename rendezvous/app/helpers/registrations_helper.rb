@@ -28,9 +28,15 @@ module RegistrationsHelper
     end
   end
     
-  def donation_list(raw_values)
+  def donation_list(raw_values, registration_fees)
+    cc_fee = '%.2f' % braintree_fee(registration_fees)
     list = raw_values.map{ |v| ["$#{v.to_s}", v]  }
+    list.unshift ["Credit card fee ($#{ cc_fee})", cc_fee.to_f]
     list << ['Other', 'other']
+  end
+
+  def braintree_fee(amount)
+    0.49 + 0.0259 * amount
   end
   
   def payment_options

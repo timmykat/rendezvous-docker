@@ -10,10 +10,10 @@
           %h3 Help Out
           .row
             .col-md-12
-              %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated!
+              %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
               .form-group
                 %label Donation
-                = f.input :donation, label:  false, collection:  donation_list(config[:suggested_donations]), as:  :radio_buttons, input_html:  { class:  'total-calculation' }, item_label_class:  'radio-inline', item_wrapper_tag:  false
+                = f.input :donation, label:  false, collection:  donation_list(config[:suggested_donations], @event_registration.total.to_f), as:  :radio_buttons, input_html:  { class:  'total-calculation' }, item_label_class:  'radio-inline', item_wrapper_tag:  false
               .row
                 .col-md-3
                   .form-group
