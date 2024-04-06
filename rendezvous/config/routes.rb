@@ -35,7 +35,7 @@ Rails.application.routes.draw do
         get :payment
         patch :complete
         get :vehicles
-        get :send_email
+        get :send_email_confirmation
       end
     end
     resources :registrations, except: [:index]

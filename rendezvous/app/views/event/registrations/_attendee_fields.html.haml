@@ -12,8 +12,7 @@
   .row
     .col-md-12
       %label
-      = f.input :attendee_age, label:  '', collection:  [['Adult, 16+', 'adult'], ['Senior, 80+ (free)', 'senior'], ['Child, 15- (free)', 'child']], as:  :radio_buttons, item_label_class:  'radio-inline', item_wrapper_tag:  false
-      // = f.input :sunday_dinner, inline_label:  'Attending Sunday dinner'
+      = f.input :attendee_age, label:  '', collection:  [['Adult, 16+', 'adult'], ['Child, 15- (free)', 'child']], as:  :radio_buttons, item_label_class:  'radio-inline', item_wrapper_tag:  false
       = f.input :volunteer, inline_label:  'Would like to volunteer'
   .row
     .col-md-12

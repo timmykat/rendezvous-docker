@@ -31,6 +31,7 @@ module Devise
       protected 
         def generate_login_token          
           self.login_token = @raw_login_token = Devise.friendly_token
+          Rails.logger.debug "Token set: " + @raw_login_token
           self.login_token_sent_at = Time.now.utc
         end
 

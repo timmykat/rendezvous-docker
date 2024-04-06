@@ -10,7 +10,7 @@ module Event
     skip_before_action :verify_authenticity_token, only: [:show]
 
     def check_cutoff
-      unless helpers.can_register?
+      unless helpers.registration_live?
         flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
         redirect_to :root
       end
@@ -210,7 +210,7 @@ module Event
           @event_registration.paid_date = Time.new
           @event_registration.status = 'complete'
           @event_registration.save!
-          send_email
+          send_confirmation_email
           flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
           redirect_to vehicles_event_registration_path(@event_registration)
           return
@@ -238,7 +238,7 @@ module Event
         flash_alert @event_registration.errors.full_messages.to_sentence
         redirect_to payment_event_registration_path(@event_registration)
       else
-        send_email
+        send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         redirect_to vehicles_event_registration_path(@event_registration)
       end
@@ -271,11 +271,14 @@ module Event
 
     end
 
-    def send_email
+    def send_confirmation_email
+      Rails.logger.debug "*** Sending registration email to " + @event_registration.user.email
+      Rails.logger.debug "*** Registration ID: " + params[:id]
       event_registration = @event_registration || Registration.find(params[:id])
       if event_registration
-        RendezvousMailer.delay.registration_confirmation(event_registration)
-        flash_notice('Email sent')
+        Rails.logger.debug "*** Registration exists"
+        RendezvousMailer.registration_confirmation(event_registration).deliver_later
+        Rails.logger.debug "*** Email sent (supposedly)"
       else
         flash_notice('No registration found')
       end
@@ -290,22 +293,6 @@ module Event
 
     private
 
-      # # Create pdf and send acknowledgement emails
-      # def send_confirmation_emails
-      #   # filename = "#{@event_registration.invoice_number}.pdf"
-      #   # registration_pdf = ::WickedPdf.new.pdf_from_string(
-      #   #   render_to_string('registrations/show', layout: 'layouts/registration_mailer', encoding: 'UTF-8')
-      #   # )
-      #   # save_dir =  Rails.root.join('public','registrations')
-      #   # save_path = Rails.root.join('public','registrations', filename)
-      #   # File.open(save_path, 'wb') do |file|
-      #   #   file << registration_pdf
-      #   # end
-      #   RendezvousMailer.delay.registration_confirmation(@event_registration)
-      #   # RendezvousMailer.delay.registration_notification(@event_registration) unless Rails.env.development?
-      # end
-
-
       # Only allows admins and owners to see registration
       def owner_or_admin
         unless (current_user.id == Registration.find(params[:id]).user_id) || (current_user.has_role? :admin)
@@ -317,7 +304,6 @@ module Event
       def event_registration_params
         params.require(:event_registration).permit(
           :number_of_adults,
-          :number_of_seniors,
           :number_of_children,
           :registration_fee,
           :donation,

@@ -1,5 +1,10 @@
 class MainPagesController < ApplicationController
   before_action :set_main_page, only: [:show, :edit, :update, :destroy]
+  before_action :check_test_param, only: [:index] 
+
+  def check_test_param
+    session[:test_session] = params[:test] && params[:test].downcase == 'opron'
+  end
 
   # GET /
   def index
@@ -46,8 +51,8 @@ class MainPagesController < ApplicationController
     @email = params[:email]
     @message = params[:message]
 
-    RendezvousMailer.delay.send_to_us(@name, @email, @message)
-    RendezvousMailer.delay.autoresponse(@name, @email, @message)
+    RendezvousMailer.send_to_us(@name, @email, @message).deliver_later
+    RendezvousMailer.autoresponse(@name, @email, @message).deliver_later
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
   end

@@ -14,7 +14,7 @@
         %p 
           %b Refund due: #{number_to_currency(@refund)}
 
-      = link_to "Send Confirmation Email", "/admin/registrations/#{@event_registration.id}/send_confirmation_email", class: 'btn btn-sm btn-info'
+      = link_to "Send Confirmation Email", admin_event_path(@event_registration), class: 'btn btn-sm btn-info'
     
   
   
