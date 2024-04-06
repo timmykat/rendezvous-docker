@@ -100,7 +100,7 @@ function buildBraintree(clientToken) {
 
 (function($) {
   jQuery(document).ready(function() {
-    if ($('#payment-section')) {
+    if (document.getElementById('payment-section')) {
       $.get('/event/payment_token.plain', function(clientToken) {
         buildBraintree(clientToken);
 

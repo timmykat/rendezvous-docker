@@ -23,8 +23,8 @@ module Event
     serialize :events, JSON
     
     def validate_minimum_number_of_adults
-      if number_of_adults + number_of_seniors < 1
-        errors[:base] << "You must register at least one adult or senior."
+      if number_of_adults < 1
+        errors[:base] << "You must register at least one adult."
       end
     end
     
@@ -39,13 +39,25 @@ module Event
     def balance
       total.to_f - paid_amount.to_f
     end
+
+    def donated?
+      donation > 0.0
+    end
     
-    def paid?
-      !(balance > 0.0)
+    def outstanding_balance?
+      balance > 0.0
+    end
+
+    def owed_a_refund?
+      balance < 0.0
     end
 
     def complete?
       status == 'complete'
+    end
+
+    def cancelled?
+      status =~ /cancelled/
     end
     
     def self.invoice_number

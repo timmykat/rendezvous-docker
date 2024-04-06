@@ -36,9 +36,7 @@ This will start containers:
 - `rendezvous-docker-rails_app-1`
 - `rendezvous-docker-nginx-1`
 - `rendezvous-docker-mysql-1`
-Another container,`rendezvous-docker-delayed_job-1` which handles email sends, will start if you add --profile=full:
-```
-$ docker compose up --profile=full
+~Another container,`rendezvous-docker-delayed_job-1` which handles email sends, will start if you add --profile=full~
 
 The development site runs in the `production` environment so you will want to precompile assets:
 `docker exec -it rendezvous-docker-rails_app-1 bundle exec rake assets:precompile

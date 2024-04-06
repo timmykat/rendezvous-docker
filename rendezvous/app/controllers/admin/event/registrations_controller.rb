@@ -33,7 +33,6 @@ class Admin::Event::RegistrationsController < AdminController
     # Delete all attendees
     @event_registration.attendees.destroy_all
     @event_registration.number_of_adults = 0
-    @event_registration.number_of_seniors = 0
     @event_registration.number_of_children = 0
     
     # Set registration fee to 0.0
@@ -61,13 +60,28 @@ class Admin::Event::RegistrationsController < AdminController
     redirect_to event_registration_path(@event_registration)
   end
   
+  def send_confirmation_email
+    if current_user.admin?
+      Rails.logger.debug "*** Registration ID: " + params[:id]
+      event_registration = Event::Registration.find(params[:id])
+      if event_registration
+        Rails.logger.debug "*** Sending registration email to " + event_registration.user.email
+        RendezvousMailer.registration_confirmation(event_registration).deliver_later
+        Rails.logger.debug "*** Email sent"
+      else
+        flash_notice('No registration found')
+      end
+      redirect_to admin_index_path
+    else
+      redirect_to :root
+    end
+  end
   
   private
     def registration_update_params
       params.require(:event_registration).permit(
         :id,
         :number_of_adults,
-        :number_of_seniors,
         :number_of_children,
         :registration_fee,
         :total,

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :get_app_data
   before_action :flash_array
+  before_action :check_admin_param
 
 
   # Need this for other gems that might set flash
@@ -14,6 +15,10 @@ class ApplicationController < ActionController::Base
         flash[type] = [ flash[type] ] if flash[type].is_a? String
       end
     end
+  end
+
+  def check_admin_param
+    session[:test_session] = params[:test] && params[:test].downcase == 'opron'
   end
 
   def get_app_data
