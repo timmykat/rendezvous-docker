@@ -39,10 +39,6 @@ module Event
     def balance
       total.to_f - paid_amount.to_f
     end
-
-    def donated?
-      donation > 0.0
-    end
     
     def outstanding_balance?
       balance > 0.0
