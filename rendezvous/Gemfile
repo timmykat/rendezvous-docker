@@ -44,15 +44,10 @@ gem 'mini_magick'
 gem 'cocoon'
 gem 'recaptcha', require: 'recaptcha/rails' 
 gem 'role_model'
-gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'braintree'
 gem 'dkim'
 gem 'simple_form', '~>5'
-
-# Pdf creation
-gem 'wkhtmltopdf-binary'
-gem 'wicked_pdf'
 
 gem 'gibbon' # Mailchimp API
 
@@ -63,7 +58,7 @@ gem 'letter_opener'
 
 group :development do
   gem 'byebug'
-  gem 'pry-rails'
+  gem 'pry'
   gem 'capistrano', '3.18.1'
   gem 'capistrano-rails'
   gem 'capistrano-bundler'

@@ -48,7 +48,7 @@ class AdminController < ApplicationController
       'Registration number',
       'Registratant',
       'Attendee name',
-      'Adult, senior (80+) or child',
+      'Adult or child',
       'Volunteer?',
       # 'Sunday dinner?',
       'Donation?',
@@ -79,12 +79,7 @@ class AdminController < ApplicationController
       attendees: [],
       newbies: [],
       adult: 0,
-      senior: 0,
       child: 0,
-      # sunday_dinner: {
-      #   number: 0,
-      #   list: [],
-      # },
       volunteers: {
         number: 0,
         list: [],
@@ -109,7 +104,7 @@ class AdminController < ApplicationController
       csv_object['labels'] << [
         "#{registration.user.last_name}, #{registration.user.first_name}",
         registration.attendees.count,
-        registration.paid? ? 'PAID' : "$#{registration.registration_fee.to_i}",
+        registration.outstanding_balance? ? 'PAID' : "$#{registration.registration_fee.to_i}",
         (registration.donation && (registration.donation > 0.0)) ? "Donation: $#{registration.donation.to_i}" : '',
         "Volunteers: #{get_volunteers(registration)}"
       ]
@@ -182,7 +177,7 @@ class AdminController < ApplicationController
       label = {}
       label['name'] = "#{r.user.last_name}, #{r.user.first_name}"
       label['people'] = r.attendees.count
-      label['fee'] = r.paid? ? 'PAID' : "Due: $#{r.registration_fee.to_i}"
+      label['fee'] = r.outstanding_balance? ? 'PAID' : "Due: $#{r.registration_fee.to_i}"
       label['donation'] = (r.donation && (r.donation > 0.0)) ? r.donation.to_i : 0
       label['volunteers'] = get_volunteers(r)
 

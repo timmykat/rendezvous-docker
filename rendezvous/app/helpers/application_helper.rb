@@ -24,8 +24,8 @@ module ApplicationHelper
     current_user && (current_user.has_any_role? :admin, :tester)
   end
 
-  def can_register?
-    is_tester? || in_registration_window?
+  def registration_live?
+    in_registration_window? || session[:test_session]
   end
 
   def static_file(file_path)
@@ -77,6 +77,7 @@ module ApplicationHelper
   def mailing_address(delimiter = "<br />\n")
     Rails.configuration.rendezvous[:official_contact][:mailing_address_array].join(delimiter).html_safe
   end
+
 
   def official_contact
     config = Rails.configuration.rendezvous
@@ -146,7 +147,7 @@ module ApplicationHelper
   end
 
   def year_list
-    [*2016..2022]
+    [*2016..2024]
   end
 
   def country_list
@@ -157,13 +158,18 @@ module ApplicationHelper
     [
       ['Northeastern US', [
         ['Connecticut', 'CT'],
+        ['Delaware', 'DE'],
+        ['District of Columbia', 'DC'],
         ['Maine', 'ME'],
+        ['Maryland', 'MD'],
         ['Massachusetts', 'MA'],
         ['New Hampshire', 'NH'],
         ['New Jersey', 'NJ'],
         ['New York', 'NY'],
         ['Pennsylvania', 'PA'],
+        ['Rhode Island', 'RI'],
         ['Vermont', 'VT'],
+        ['Virginia', 'VA'],
       ]],
       ['Southeastern Canada', [
         ['Ontario', 'ON'],
@@ -177,8 +183,6 @@ module ApplicationHelper
         ['Arkansas', 'AR'],
         ['California', 'CA'],
         ['Colorado', 'CO'],
-        ['Delaware', 'DE'],
-        ['District of Columbia', 'DC'],
         ['Florida', 'FL'],
         ['Georgia', 'GA'],
         ['Hawaii', 'HI'],
@@ -189,7 +193,6 @@ module ApplicationHelper
         ['Kansas', 'KS'],
         ['Kentucky', 'KY'],
         ['Louisiana', 'LA'],
-        ['Maryland', 'MD'],
         ['Michigan', 'MI'],
         ['Minnesota', 'MN'],
         ['Mississippi', 'MS'],
@@ -203,13 +206,11 @@ module ApplicationHelper
         ['Ohio', 'OH'],
         ['Oklahoma', 'OK'],
         ['Oregon', 'OR'],
-        ['Rhode Island', 'RI'],
         ['South Carolina', 'SC'],
         ['South Dakota', 'SD'],
         ['Tennessee', 'TN'],
         ['Texas', 'TX'],
         ['Utah', 'UT'],
-        ['Virginia', 'VA'],
         ['Virgin Islands', 'VI'],
         ['Washington', 'WA'],
         ['West Virginia', 'WV'],

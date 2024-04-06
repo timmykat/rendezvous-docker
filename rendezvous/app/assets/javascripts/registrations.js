@@ -16,16 +16,13 @@
     var setRegistrationFee = function() {
       if (typeof appData != 'undefined') {
         var total = $('input#event_registration_number_of_adults').val() * appData.fees.adult
-          + $('input#event_registration_number_of_adults').val() * appData.fees.senior
           + $('input#event_registration_number_of_children').val() * appData.fees.child;
         $('input#event_registration_registration_fee').val((total).toFixed(2));
       }
     };
     var getAttendeeTotals = function() {
       var adults = $('#attendees input[value="adult"]:visible:checked').length;
-      $('input#event_registration_number_of_adults').val(adults);
-      var seniors = $('#attendees input[value="senior"]:visible:checked').length;
-      $('input#event_registration_number_of_seniors').val(seniors);  
+      $('input#event_registration_number_of_adults').val(adults); 
       var children = $('#attendees input[value="child"]:visible:checked').length;
       $('input#event_registration_number_of_children').val(children);  
       setRegistrationFee();  
@@ -48,7 +45,7 @@
     }
     
 
-    // Get adult, senior, and kid totals
+    // Get adult and kid totals
     $('#attendees').on('click', 'input[type=radio]', function(e) { 
       getAttendeeTotals(); 
     });
@@ -95,7 +92,7 @@
     });
     
     
-    // Enable the email, amount and adult-, senior-, and child-count fields upon form submission
+    // Enable the email, amount and adult- and child-count fields upon form submission
     $('form').bind('submit', function() {
       $('input.calculated, input[type=email]').prop('disabled', false);
     });

@@ -1,35 +1,21 @@
-- config = Rails.configuration.rendezvous
-Dear #{@event_registration.user.full_name},
 
-You have successfully registered for the the #{Time.now.year} Citroen Rendezvous, which takes place the weekend of #{config[:dates][:day_one]} in Saratoga Springs, New York. We hope you're as excited as we are!
-- if @event_registration.paid_method == 'credit card'
-  Thank you for paying your registration fee by credit card. A printable receipt is attached to this email.
-- else
-  An invoice is attached to this email. Please send it and a check for your registration fee to the address supplied.
+Dear #{@event_registration.user.first_name}
 
-You may also view your registration information at
-= event_registration_url(@event_registration, protocol:  'https')
+Here is your registration info: 
 
-Your Rendezvous details:
+\-- Number of people: #{@event_registration.attendees.size}
+\-- Total registration amount: #{number_to_currency(@event_registration.total)} (US)
+- if (@event_registration.donated? && !@event_registration.cancelled?)
+    \-- Donation (thank you!): #{number_to_currency(@event_registration.donation)} (US)
+\-- Registration status: #{@event_registration.status}
 
-Registration fee: #{number_to_currency(@event_registration.registration_fee)}
-Donation: #{number_to_currency(@event_registration.donation)}
-Total: #{number_to_currency(@event_registration.total)}
-Due: #{number_to_currency(@event_registration.balance)}
+- if !@event_registration.outstanding_balance?
+    You have an outstanding balance of #{number_to_currency(@event_registration.balance)} (US)
+    Please send a check for that amount to:
+    #{mailing_address "\n"}
+- elsif @event_registration.owed_a_refund?
+    You are owed a refund of #{number_to_currency(-@event_registration.balance)}
+    We will get in touch with you to discuss how you'd like to be refunded.     
 
-Attendees:
-- @event_registration.attendees.each do |a|
-  #{a.name}  #{a.attendee_age}  Volunteer? #{a.volunteer? ? 'Yes' : 'No'}
-
-Vehicles:
-- @event_registration.user.vehicles.each do |v|
-  #{v.year} #{v.marque} #{v.model}
-
-
-If you haven't made arrangements for accommodations yet, please consider doing so soon to give you the best access to Rendezvous events. The Saratoga Spring Convention and Tourism Bureau is a great resource (http://discoversaratoga.org/saratoga/lodging).
-
-Here's to a great Rendezvous!
-
-Warmest regards,
-Your chauffeurs
-= les_chauffeurs
+- unless @event_registration.cancelled?   
+    We look forward to seeing you at the Rendezvous!
