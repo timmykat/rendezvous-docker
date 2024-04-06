@@ -7,7 +7,7 @@
       %ul
         %li Number of people: #{@event_registration.attendees.size}
         %li Total registration amount: #{number_to_currency(@event_registration.total)} (US)
-        - if (@event_registration.donated? && !@event_registration.cancelled?)
+        - if (@event_registration.donation? && !@event_registration.cancelled?)
           %li Donation (thank you!): #{number_to_currency(@event_registration.donation)} (US)
         %li Registration status: #{@event_registration.status}
 

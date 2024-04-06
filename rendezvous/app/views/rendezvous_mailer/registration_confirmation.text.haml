@@ -5,7 +5,7 @@ Here is your registration info:
 
 \-- Number of people: #{@event_registration.attendees.size}
 \-- Total registration amount: #{number_to_currency(@event_registration.total)} (US)
-- if (@event_registration.donated? && !@event_registration.cancelled?)
+- if (@event_registration.donation? && !@event_registration.cancelled?)
     \-- Donation (thank you!): #{number_to_currency(@event_registration.donation)} (US)
 \-- Registration status: #{@event_registration.status}
 
