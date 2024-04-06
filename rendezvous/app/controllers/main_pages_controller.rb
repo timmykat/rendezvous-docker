@@ -1,5 +1,10 @@
 class MainPagesController < ApplicationController
   before_action :set_main_page, only: [:show, :edit, :update, :destroy]
+  before_action :check_test_param, only: [:index] 
+
+  def check_test_param
+    session[:test_session] = params[:test] && params[:test].downcase == 'opron'
+  end
 
   # GET /
   def index
