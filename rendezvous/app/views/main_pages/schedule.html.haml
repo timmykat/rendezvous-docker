@@ -11,19 +11,8 @@
   -#     %p #{tbd_message}
   .row
     .col-md-offset-1.col-md-10.col-xs-12
-      -# .day.well.well-sm
-      -#   %h2 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}th
-      -#   .event
-      -#     .title
-      -#       6pm&ndash;9pm Dinner,
-      -#       =link_to "Mama Mia's Pizza & Cafe", 'http://mamamiassaratoga.com', target:  '_blank'
-      -#     .details
-      -#       %p 185 Ballston Ave., Saratoga Springs, 518-583-7783
-      -#       %p
-      -#         The official, unofficial start to the Rendezvous! Find your way to Mama Mia’s to meet up with old friends and make some new ones.  Whether you just got to town or have been there for a day or 2, dinner at Mama Mia’s will put you in the right frame of mind to the big weekend! Please call ahead to reserve a table!
-      -#       %p.hint Note: This is the only dinner <strong>not</strong> included as part of your registration.
       .day.well.well-sm
-        %h2 #{relative_date(1)}
+        %h2 #{relative_date(0)}
         .event
           .title 2&ndash;4pm - Ice cream social and registration packet pick-up, Kaleidescope Cafe
           .details
@@ -34,11 +23,11 @@
           .details
             %p 11 Excelsior Avenue, Saratoga Springs
         .event 
-          .title Enjoy dinner at one of the many places Saratoga Springs has to %offer 
+          .title Enjoy dinner at one of the many places Saratoga Springs has to offer 
           .details 
             %p https://www.discoversaratoga.org/eat-and-drink/
       .day.well.well-sm
-        %h2 #{relative_date(2)}
+        %h2 #{relative_date(1)}
         %p 
           %strong Le grand jour!
         .event
@@ -79,7 +68,7 @@
             %p Provided by the friendly folks at Lakeside Farms. The People's Choice Awards and winners of the 50-50 raffle will be announced at <strong>8pm</strong>.
 
       .day.well.well-sm
-        %h2 #{relative_date(3)}
+        %h2 #{relative_date(2)}
         .event
           .title 9:30am - Breakfast, High Rock Park
           .details
