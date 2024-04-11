@@ -6,77 +6,81 @@
         #{event_year}
         Rendezvous Schedule
       .pull-right= image_tag('rendezvous-logo.png')
-  .row
-    .col-md-offset-1.col-md-10.col-xs-12
-      %p #{tbd_message}
   -# .row
   -#   .col-md-offset-1.col-md-10.col-xs-12
-  -#     -# .day.well.well-sm
-  -#     -#   %h2 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}th
-  -#     -#   .event
-  -#     -#     .title
-  -#     -#       6pm&ndash;9pm Dinner,
-  -#     -#       =link_to "Mama Mia's Pizza & Cafe", 'http://mamamiassaratoga.com', target:  '_blank'
-  -#     -#     .details
-  -#     -#       %p 185 Ballston Ave., Saratoga Springs, 518-583-7783
-  -#     -#       %p
-  -#     -#         The official, unofficial start to the Rendezvous! Find your way to Mama Mia’s to meet up with old friends and make some new ones.  Whether you just got to town or have been there for a day or 2, dinner at Mama Mia’s will put you in the right frame of mind to the big weekend! Please call ahead to reserve a table!
-  -#     -#       %p.hint Note: This is the only dinner <strong>not</strong> included as part of your registration.
-  -#     .day.well.well-sm
-  -#       %h2 #{relative_date(1)}
-  -#       .event
-  -#         .title 2pm - Ice cream social, Kaleidescope Cafe
-  -#         .details
-  -#           %p 558 Lake Avenue, Saratoga Springs
+  -#     %p #{tbd_message}
+  .row
+    .col-md-offset-1.col-md-10.col-xs-12
+      -# .day.well.well-sm
+      -#   %h2 Thursday, #{config[:dates][:month]} #{config[:dates][:start]}th
+      -#   .event
+      -#     .title
+      -#       6pm&ndash;9pm Dinner,
+      -#       =link_to "Mama Mia's Pizza & Cafe", 'http://mamamiassaratoga.com', target:  '_blank'
+      -#     .details
+      -#       %p 185 Ballston Ave., Saratoga Springs, 518-583-7783
+      -#       %p
+      -#         The official, unofficial start to the Rendezvous! Find your way to Mama Mia’s to meet up with old friends and make some new ones.  Whether you just got to town or have been there for a day or 2, dinner at Mama Mia’s will put you in the right frame of mind to the big weekend! Please call ahead to reserve a table!
+      -#       %p.hint Note: This is the only dinner <strong>not</strong> included as part of your registration.
+      .day.well.well-sm
+        %h2 #{relative_date(1)}
+        .event
+          .title 2&ndash;4pm - Ice cream social and registration packet pick-up, Kaleidescope Cafe
+          .details
+            %p 558 Lake Avenue, Saratoga Springs
 
-  -#       .event
-  -#         .title 6pm - Welcome reception, Excelsior Springs Center
-  -#         .details
-  -#           %p 47 Excelsior Avenue, Saratoga Springs
-  -#     .day.well.well-sm
-  -#       %h2 #{relative_date(2)}
-  -#       %p 
-  -#         %strong Le grand jour!
-  -#       .event
-  -#         .title 9am&ndash;9pm Auto show and BBQ dinner, Lakeside Farms
-  -#         .details
-  -#           %p 336 Schauber Rd., Ballston Lake
-  -#           %p
-  -#             %em SHOW CARS will be directed to park on the show field by model; all others will be asked to park in the lot. Please follow instructions from our volunteer parkers.
-  -#           %p
-  -#             After parking and getting your windshield placard secured, stroll the rows & see your favorites. Be sure to carry your People Choice Ballot and vote for your favorites. Stop by the big tent to see out what the vendors have for sale & pick up this year's T-shirt at the registration table. And don't forget the complimentary continental breakfast!
-  -#       %h3 Show day details
-  -#       .event
-  -#         .title 9am&ndash;4pm Show field open
-  -#         .details
-  -#           %p
-  -#             %em PLEASE no early birds; the vendors and volunteers need time to set up.
-  -#           %p
-  -#             %strong Hunger pangs?
-  -#             %br
-  -#             Visit the
-  -#             = succeed ', ' do
-  -#               = link_to config[:venue][:name], config[:venue][:website], target:  '_blank'
-  -#             right on site. Soups, salads, & sandwiches, burgers & hot dogs are all available at the restaurant, while the market has lots of light snacks.
-  -#       .event
-  -#         .title 4-6pm: Silent auction
-  -#         .details
-  -#           %p Win stuff <em>and</em> help the Rendezvous!
-  -#           %p
-  -#             %em
-  -#               Winners announced after dinner.
-  -#       .event
-  -#         .title 4&ndash;5:30pm Downtime
-  -#         .details
-  -#           %p  Relax, catch a nap, explore
-  -#       .event
-  -#         .title 6&ndash;8pm Banquet dinner
-  -#         .details
-  -#           %p Provided by the friendly folks at Lakeside Farms. The People's Choice Awards and winners of the 50-50 raffle will be announced at <strong>8pm</strong>.
+        .event
+          .title 5&ndash;7pm - Registration packet pick-up at the Marriott
+          .details
+            %p 11 Excelsior Avenue, Saratoga Springs
+        .event 
+          .title Enjoy dinner at one of the many places Saratoga Springs has to %offer 
+          .details 
+            %p https://www.discoversaratoga.org/eat-and-drink/
+      .day.well.well-sm
+        %h2 #{relative_date(2)}
+        %p 
+          %strong Le grand jour!
+        .event
+          .title 9am&ndash;9pm Auto show and BBQ dinner, Lakeside Farms
+          .details
+            %p 336 Schauber Rd., Ballston Lake
+            %p
+              %em SHOW CARS will be directed to park on the show field by model; all others will be asked to park in the lot. Please follow instructions from our volunteer parkers.
+            %p
+              After parking and getting your windshield placard secured, stroll the rows & see your favorites. Be sure to carry your People Choice Ballot and vote for your favorites. Stop by the big tent to see out what the vendors have for sale & pick up this year's T-shirt at the registration table. And don't forget the complimentary continental breakfast!
+        %h3 Show day details
+        .event
+          .title 9am&ndash;4pm Show field open
+          .details
+            %p
+              %em PLEASE no early birds; the vendors and volunteers need time to set up.
+            %p
+              %strong Hunger pangs?
+              %br
+              Visit the
+              = succeed ', ' do
+                = link_to config[:venue][:name], config[:venue][:website], target:  '_blank'
+              right on site. Soups, salads, & sandwiches, burgers & hot dogs are all available at the restaurant, while the market has lots of light snacks.
+        .event
+          .title 4-6pm: Silent auction
+          .details
+            %p Win stuff <em>and</em> help the Rendezvous!
+            %p
+              %em
+                Winners announced after dinner.
+        .event
+          .title 4&ndash;5:30pm Downtime
+          .details
+            %p  Relax, catch a nap, explore
+        .event
+          .title 6&ndash;8pm Banquet dinner
+          .details
+            %p Provided by the friendly folks at Lakeside Farms. The People's Choice Awards and winners of the 50-50 raffle will be announced at <strong>8pm</strong>.
 
-  -#     .day.well.well-sm
-  -#       %h2 #{relative_date(3)}
-  -#       .event
-  -#         .title 9:30am - Breakfast, High Rock Park
-  -#         .details
-  -#           %p  112 High Rock Avenue, Saratoga Springs
+      .day.well.well-sm
+        %h2 #{relative_date(3)}
+        .event
+          .title 9:30am - Breakfast, High Rock Park
+          .details
+            %p  112 High Rock Avenue, Saratoga Springs
