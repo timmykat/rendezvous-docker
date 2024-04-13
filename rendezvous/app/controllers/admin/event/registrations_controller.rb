@@ -1,5 +1,28 @@
 class Admin::Event::RegistrationsController < AdminController
 
+  
+  def new_with_user
+    user = User.find(params[:id])
+    if (user.blank?)
+      @title = 'No user found'
+      return
+    end
+
+    # Check for existing reservation
+    @event_registration = user.registrations.current.first
+    if !@event_registration.blank?
+      @title = 'Edit registration for ' + user.full_name
+      flash_notice(user.full_name + ' has already created a registration')
+    else
+      @title = 'Create a registration for ' + user.full_name
+      @event_registration = Event::Registration.new
+      @event_registration.attendees.build
+      @event_registration.user = user
+      @event_registration.user.vehicles.build
+    end
+    render :template => 'edit' 
+  end
+
   def show
     @event_registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
   end
