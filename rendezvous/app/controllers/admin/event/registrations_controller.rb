@@ -11,16 +11,16 @@ class Admin::Event::RegistrationsController < AdminController
     # Check for existing reservation
     @event_registration = user.registrations.current.first
     if !@event_registration.blank?
-      @title = 'Edit registration for ' + user.full_name
+      @title = 'Editing registration for ' + user.full_name
       flash_notice(user.full_name + ' has already created a registration')
     else
-      @title = 'Create a registration for ' + user.full_name
+      @title = 'Creating a registration for ' + user.full_name
       @event_registration = Event::Registration.new
       @event_registration.attendees.build
       @event_registration.user = user
       @event_registration.user.vehicles.build
     end
-    render :template => 'edit' 
+    redirect_to new_admin_event_registration_path(@event_registration)
   end
 
   def show
