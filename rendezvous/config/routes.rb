@@ -51,8 +51,8 @@ Rails.application.routes.draw do
   resources :admin, { only: [:index] }
   namespace :admin do
     namespace :event do
-      resources  :registrations, { only: [ :new, :show, :edit, :update ] }
-      get 'registrations/new/user/:id', to: 'registrations#new_with_user'
+      resources  :registrations, { only: [ :show, :edit, :update ] }
+      get 'registrations/new/user/:id', to: 'registrations#new'
       get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
       get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
     end

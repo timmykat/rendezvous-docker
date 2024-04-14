@@ -1,7 +1,6 @@
 class Admin::Event::RegistrationsController < AdminController
 
-  
-  def new_with_user
+  def new
     user = User.find(params[:id])
     if (user.blank?)
       @title = 'No user found'
@@ -14,13 +13,12 @@ class Admin::Event::RegistrationsController < AdminController
       @title = 'Editing registration for ' + user.full_name
       flash_notice(user.full_name + ' has already created a registration')
     else
-      @title = 'Creating a registration for ' + user.full_name
+      @title = 'ADMIN: creating a registration for ' + user.full_name
       @event_registration = Event::Registration.new
       @event_registration.attendees.build
       @event_registration.user = user
       @event_registration.user.vehicles.build
     end
-    redirect_to new_admin_event_registration_path(@event_registration)
   end
 
   def show
@@ -112,6 +110,44 @@ class Admin::Event::RegistrationsController < AdminController
         { attendees_attributes:
           [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
         }
+      )
+    end
+
+    def event_registration_params
+      params.require(:event_registration).permit(
+        :number_of_adults,
+        :number_of_children,
+        :registration_fee,
+        :donation,
+        :total,
+        :year,
+        :paid_amount,
+        :paid_method,
+        :paid_date,
+        :status,
+        :invoice_number,
+        :user_id,
+        { attendees_attributes:
+          [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
+        },
+        {:user_attributes=>
+          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
+            {vehicles_attributes:
+              [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
+            }
+          ]
+        }
+      )
+    end
+
+    def event_registration_user_params
+      params[:user] = params[:event_registration][:user_attributes]
+      params.require(:user).permit(
+        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
+          {vehicles_attributes:
+            [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
+          }
+        ]
       )
     end
   
