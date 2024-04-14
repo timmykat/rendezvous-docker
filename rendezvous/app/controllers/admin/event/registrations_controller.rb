@@ -26,7 +26,19 @@ class Admin::Event::RegistrationsController < AdminController
   end
 
   def create
-    if @event_registration.save
+    @event_registration = Event::Registration.find(params[id])
+    data = params[:event_registration]
+    fee = data[:registration_fee]
+    @event_registration.total = fee + data[:donation]
+    payment = data[:transactions].first
+    @event_registration.paid_amount = payment.amount
+    @event_registration.paid_method = payment.transaction_method
+    if @event_registration.paid_amount == @event_registration.total
+      @event_registration.paid_date = Time.now
+    end
+    @event_registration.invoice_number = Registration.invoice_number
+
+    if @event_registration.update(event_registration_params)
       flash_notice = 'Registration was successfully create'
     else
       flash_notice = 'There was a problem creating the registration'

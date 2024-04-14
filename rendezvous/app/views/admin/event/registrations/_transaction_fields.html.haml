@@ -8,8 +8,4 @@
     = f.input :amount, hint:  'Enter a positive amount. The transaction type will determine the sign.'
 .row
   .col-md-4.col-xs-12
-    = f.input :cc_transaction_id, label:  'Credit card transaction ID', disabled:  true
-.row
-  .col-md-12
-    = hidden_field_tag :registration_id, @event_registration.id
-    = f.button :submit, 'Update registration', class:  'btn btn-primary'
+    = f.input :cc_transaction_id, label:  'Credit card transaction ID'
