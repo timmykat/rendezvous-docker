@@ -1,66 +1,65 @@
-- config = Rails.configuration.rendezvous
-.container.invoice
+- fee = Rails.configuration.rendezvous[:fees][:adult]
+.container
   .row
-    .col-md-12.heading
-      %h1.pull-left R#{Time.new.year} Registration
-      .pull-right= image_tag('rendezvous-logo.png')
-  .row
-    .col-md-6.col-xs-12
-      = render partial:  'common/registration_info' 
+    = render partial:  'common/registration_header', locals:  { step:  'register' }
+    .col-md-offset-2.col-md-8.col-xs-12
+      #registration-form
+        %h3= @title
+        = simple_form_for @event_registration, id:  'registration_form' do |f|
+          - if @create_by_admin
+            = hidden_field_tag :creator, value:  'omniscia'
+          %section
+            %h2 Personal Information
+            %p * = required
+            - if session[:admin_user]
+              %p.bg-warning You are creating a registration for another user.
+            - else
+              %p.bg-info You are signed in with your user account.
+            = f.simple_fields_for :user do |u|
+              = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
 
-    .col-md-6.col-xs-12
-      %section
-        %h2= @title
-        = simple_form_for @event_registration, url:  admin_event_registration_path(@event_registration), method:  :put, id:  'registration_form' do |f|
-          %h3 Attendees
+          %section
+            %h2 Registration Information
+            %h3 Attendees
+            %p.hint (Adults are 16+ and children are 15 and under)
+            .row
+              .col-md-12
+                #attendees
+                  = f.simple_fields_for :attendees do |a|
+                    = render partial:  'attendee_fields', locals:  { f:  a }
+                  .links
+                    = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary btn-sm'
+                    Add a guest
+                %br
+                %br
+            .row
+              .col-md-4
+                .form-group
+                  %label Total adults:
+                  = f.input_field :number_of_adults, disabled:  true, class:  'calculated fee-calculation'
+            .row
+              .col-md-4
+                .form-group
+                  %label Total kids:
+                  = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
+
+            .row
+              .col-md-12
+                %p.amount.form-group
+                  %label 
+                    Registration fee (USD):
+                    = f.input_field :registration_fee, disabled:  true, class:  'calculated'
+            = f.input_field :year, as:  :hidden, value:  Time.new.year
+            = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+
+            .form-group
+              - if @show_checkbox_recaptcha
+                = recaptcha_tags
+              - else
+                = recaptcha_v3(action: 'login')
           .row
             .col-md-12
-              #attendees
-                = f.simple_fields_for :attendees do |a|
-                  = render partial:  'event/registrations/attendee_fields', locals:  { f:  a }
-                .links
-                  = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary btn-sm', partial:  'event/registrations/attendee_fields'
-                  Add a guest
-              %br
-              %br
-          .row
-            .col-md-4
               .form-group
-                %label Total adults:
-                = f.input_field :number_of_adults, disabled:  true, class:  'calculated fee-calculation'        
-          .row
-            .col-md-4
-              .form-group
-                %label Total kids:
-                = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
-
-          .row
-            .col-md-12
-              %p.amount.bg-success.form-group
-                %label Registration fee: $
-                = f.input_field :registration_fee, disabled:  true, class:  'calculated'
-          = f.button :submit, 'Update registration', class:  'btn btn-primary'
+                = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  'btn btn-primary'
           
-      %section
-        %h2 Payment or Refund
-        %p For credit card transactions, please process the payment or refund in the Braintree account. Note the transaction code and enter here.
-        = simple_form_for @transaction, url:  admin_transactions_path do |f|
-          .row
-            .col-md-6.col-xs-12
-              = f.input :transaction_type, collection:  [['Payment', 'payment'], ['Refund', 'refund']], selected:  'payment'
-            .col-md-6.col-xs-12
-              = f.input :transaction_method, collection:  config[:payment_methods].map { |m| [m.titlecase, m] }, prompt:  '-- Select payment method'
-          .row
-            .col-md-4.col-xs-12
-              = f.input :amount, hint:  'Enter a positive amount. The transaction type will determine the sign.'
-          .row
-            .col-md-4.col-xs-12
-              = f.input :cc_transaction_id, label:  'Credit card transaction ID', disabled:  true
-          .row
-            .col-md-12
-              = hidden_field_tag :registration_id, @event_registration.id
-              = f.button :submit, 'Update registration', class:  'btn btn-primary'
-  
 
-              
-    
