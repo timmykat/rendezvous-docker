@@ -1,6 +1,7 @@
 class Admin::Event::RegistrationsController < AdminController
 
-  def new
+  def new    
+    session[:admin_user] = true
     user = User.find(params[:id])
     if (user.blank?)
       @title = 'No user found'
@@ -14,11 +15,23 @@ class Admin::Event::RegistrationsController < AdminController
       flash_notice(user.full_name + ' has already created a registration')
     else
       @title = 'ADMIN: creating a registration for ' + user.full_name
+      @transactions = []
+      @transactions << Transaction.new
       @event_registration = Event::Registration.new
+      @event_registration.transactions = @transactions
       @event_registration.attendees.build
       @event_registration.user = user
-      @event_registration.user.vehicles.build
+      @event_registration.transactions.build
     end
+  end
+
+  def create
+    if @event_registration.save
+      flash_notice = 'Registration was successfully create'
+    else
+      flash_notice = 'There was a problem creating the registration'
+    end
+    redirect_to admin_index_path, notice: flash_notice
   end
 
   def show
@@ -46,6 +59,13 @@ class Admin::Event::RegistrationsController < AdminController
       flash_alert @event_registration.errors.full_messages.to_sentence
     end
     redirect_to event_registration_path(@event_registration)
+  end
+
+  def delete
+    @event_registration = Event::Registration.find(params[:id])
+    @event_registration.destroy
+    flash_notice 'The registration has been deleted'
+    redirect_to admin_index_path
   end
   
   def cancel
