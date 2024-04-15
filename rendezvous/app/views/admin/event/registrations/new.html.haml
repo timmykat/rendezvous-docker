@@ -6,7 +6,7 @@
     .col-md-offset-2.col-md-8.col-xs-12
       #registration-form
         %h3= @title
-        = simple_form_for @event_registration, id: 'registration_form' do |f|
+        = simple_form_for @event_registration, url: admin_event_registrations_path, method: :post, id: 'registration_form' do |f|
           - if @create_by_admin
             = hidden_field_tag :creator, value:  'omniscia'
           %section
