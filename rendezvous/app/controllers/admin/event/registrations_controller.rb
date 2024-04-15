@@ -17,23 +17,12 @@ class Admin::Event::RegistrationsController < AdminController
       @title = 'ADMIN: creating a registration for ' + user.full_name
       @event_registration = Event::Registration.new
       @event_registration.user = user
-      attendee = Attendee.new
-      attendee.name = user.full_name
-      attendee.attendee_age = 'adult'
-      @event_registration.attendees << attendee
       @event_registration.attendees.build
-      @event_registration.number_of_adults = 1
-      @event_registration.save(validate: false)
-      @transactions = []
-      @transactions << Transaction.new
-      @event_registration = Event::Registration.new
-      @event_registration.transactions = @transactions
       @event_registration.transactions.build
     end
   end
 
   def create
-    @event_registration = Event::Registration.find(params[:id])
     data = params[:event_registration]
     fee = data[:registration_fee]
     params[:event_registration][:total] = fee + data[:donation]
@@ -43,15 +32,22 @@ class Admin::Event::RegistrationsController < AdminController
     
     if params[:event_registration][:paid_amount] == params[:event_registration][:total]
       params[:event_registration][:paid_date] = Time.now
+      params[:event_registration][:status] = 'complete'
+    else
+      params[:event_registration][:status] = 'payment due'
     end
+
     params[:event_registration][:invoice_number] = Registration.invoice_number
 
-    if @event_registration.update(event_registration_params)
+    @event_registration = Event::Registration.new(event_registration_params)
+
+    if @event_registration.save
       flash_notice = 'Registration was successfully create'
+      redirect_to admin_event_registration_path(@event_registration), notice: flash_notice
     else
       flash_notice = 'There was a problem creating the registration'
+      redirect_to admin_index_path, notice: flash_notice
     end
-    redirect_to admin_event_registration_path(@event_registration), notice: flash_notice
   end
 
   def show
