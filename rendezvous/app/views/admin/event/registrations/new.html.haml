@@ -60,11 +60,11 @@
           %section
             %h2 Payment
             %p For credit card transactions, please process the payment or refund in the Braintree account. Note the transaction code and enter here.
-            = f.simple_fields_for @transactions do |t|
+            = f.simple_fields_for :transactions do |t|
               = render partial:  'transaction_fields', locals:  { f:  t, payment_methods: config[:payment_methods] }
 
             %p
-              %label Registration %Status
+              %label Registration Status
               = f.input :status, collection:  config[:registration_statuses].map { |m| [m.titlecase, m] }, selected: 'complete', prompt:  '-- Select status --'
 
           .row

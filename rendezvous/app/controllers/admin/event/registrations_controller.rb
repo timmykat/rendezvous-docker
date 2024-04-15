@@ -23,31 +23,66 @@ class Admin::Event::RegistrationsController < AdminController
   end
 
   def create
-    data = params[:event_registration]
-    fee = data[:registration_fee]
-    params[:event_registration][:total] = fee + data[:donation]
-    payment = data[:transactions].first
-    params[:event_registration][:paid_amount] = payment[:amount]
-    params[:event_registration][:paid_method] = payment[:transaction_method]
-    
-    if params[:event_registration][:paid_amount] == params[:event_registration][:total]
-      params[:event_registration][:paid_date] = Time.now
-      params[:event_registration][:status] = 'complete'
-    else
-      params[:event_registration][:status] = 'payment due'
+    user_id = params[:event_registration][:user_attributes][:id]
+    user = User.find(user_id)
+    params[:event_registration][:user_attributes] = nil
+
+    @event_registration = Event::Registration.new
+    @event_registration.user = user
+    transaction = Transaction.new
+    transaction.update(transaction_params)
+    @event_registration.transactions << transaction
+
+    begin
+      if !@event_registration.save
+        Rails.logger.debug "*** The registration wasn't saved"
+        Rails.logger.debug @event_registration.errors.full_messages
+      end
+    rescue Exception => e
+      Rails.logger.debug "*** First save problem with user"
+      Rails.logger.debug e.inspect
+      Rails.logger.debug @event_registration,inspect 
     end
 
-    params[:event_registration][:invoice_number] = Registration.invoice_number
+    begin
+      if !@event_registration.update(create_event_registration_params)
+        Rails.logger.debug "*** The registration wasn't updated"
+        Rails.logger.debug @event_registration.errors.full_messages
+      end
+    rescue Exception => e
+      Rails.logger.debug "*** Update problemwith real event params"
+      Rails.logger.debug e.inspect
+      Rails.logger.debug @event_registration,inspect 
+    end
 
-    @event_registration = Event::Registration.new(event_registration_params)
-
-    if @event_registration.save
-      flash_notice = 'Registration was successfully create'
-      redirect_to admin_event_registration_path(@event_registration), notice: flash_notice
+    @event_registration.total = @event_registration.registration_fee + @event_registration.donation
+    
+    @event_registration.paid_amount = 0.0
+    if !@event_registration.transactions.blank?
+      transaction = @event_registration.transactions.first
+      @event_registration.paid_amount =  transaction.amount
+      @event_registration.paid_method = transaction.transaction_method
+    end
+    
+    if @event_registration.paid_amount == @event_registration.total
+      @event_registration.paid_date = Time.now
+      @event_registration.status = 'complete'
     else
+      @event_registration.status = 'payment due'
+    end
+    @event_registration.invoice_number = Event::Registration.invoice_number
+
+    begin
+      @event_registration.save
+    rescue Exception => e
+      Rails.logger.debug e.inspect
       flash_notice = 'There was a problem creating the registration'
       redirect_to admin_index_path, notice: flash_notice
+      return
     end
+
+    flash_notice = 'Registration was successfully created'
+    redirect_to admin_event_registration_path(@event_registration.id), notice: flash_notice
   end
 
   def show
@@ -149,8 +184,18 @@ class Admin::Event::RegistrationsController < AdminController
       )
     end
 
-    def event_registration_params
+    def transaction_params
+      params[:transaction] = params[:event_registration][:transactions_attributes]['0']
+      Rails.logger.debug "*** Inside transaction_params"
+      Rails.logger.debug params[:transaction].inspect
+      params[:transaction].permit( 
+        [:transaction_method, :transaction_type, :amount, :cc_transaction_id]
+      )
+    end
+
+    def create_event_registration_params
       params.require(:event_registration).permit(
+        :id,
         :number_of_adults,
         :number_of_children,
         :registration_fee,
@@ -162,19 +207,16 @@ class Admin::Event::RegistrationsController < AdminController
         :paid_date,
         :status,
         :invoice_number,
-        :user_id,
         { attendees_attributes:
           [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
         },
-        { transactions_attributes:
-          [:transaction_method, :transaction_type, :amount, :cc_transaction_id]
+        :transaction_id,
+        { transaction_attributes:
+          [:id, :transaction_method, :transaction_type, :amount, :cc_transaction_id, :_destroy]
         },
-        {:user_attributes=>
-          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
-            {vehicles_attributes:
-              [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
-            }
-          ]
+        :user_id,
+        { user_attributes:
+          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie]
         }
       )
     end
