@@ -7,8 +7,6 @@
       #registration-form
         %h3= @title
         = simple_form_for @event_registration, url: admin_event_registrations_path, method: :post, id: 'registration_form' do |f|
-          - if @create_by_admin
-            = hidden_field_tag :creator, value:  'omniscia'
           %section
             %h2 Personal Information
             %p * = required
