@@ -17,8 +17,6 @@
           - if !user_signed_in?
             .cover
           = simple_form_for @event_registration, id:  'registration_form' do |f|
-            - if @create_by_admin
-              = hidden_field_tag :creator, value:  'omniscia'
             %section
               %h2 Personal Information
               %p * = required
