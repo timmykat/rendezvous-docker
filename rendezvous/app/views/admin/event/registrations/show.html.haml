@@ -7,14 +7,14 @@
     .col-md-offset-1.col-md-10.col-xs-12.heading
       %h2 Admin Review
       %p
-        = link_to 'Edit', edit_admin_registration_path(@event_registration), class:  'btn btn-sm btn-warning'                   
+        = link_to 'Edit', edit_admin_event_registration_path(@event_registration), class:  'btn btn-sm btn-warning'                   
       = render partial:  'common/registration_info'
       
       - if @refund
         %p 
           %b Refund due: #{number_to_currency(@refund)}
 
-      = link_to "Send Confirmation Email", admin_event_path(@event_registration), class: 'btn btn-sm btn-info'
+      = link_to "Send Confirmation Email", "/admin/event/registrations/#{@event_registration.id}/send_confirmation_email", class: 'btn btn-sm btn-info'
     
   
   

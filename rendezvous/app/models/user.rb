@@ -94,8 +94,12 @@ class User < ActiveRecord::Base
     "#{last_name}, #{first_name}"
   end
 
+  def current_registration
+    self.registrations.where(year: Time.now.year).first
+  end
+
   def attending
-    !self.registrations.where(year: Time.now.year).blank?
+    !current_registration.blank?
   end
 
   def country_name
