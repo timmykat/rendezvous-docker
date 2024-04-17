@@ -4,11 +4,11 @@ ruby '3.2.2'
 gem 'rake'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.0.4'
+gem 'rails', '7.1.3.2'
 
 # Security updates
 gem 'sprockets-rails', '~> 3'
-gem "actionpack", "7.0.4"
+gem "actionpack", "7.1.3.2"
 
 # Load environment variables in development
 gem 'dotenv-rails'
@@ -52,7 +52,7 @@ gem 'simple_form', '~>5'
 gem 'gibbon' # Mailchimp API
 
 # Application server
-gem 'puma', '6.4.0'
+gem 'puma', '6.4.2'
 
 gem 'letter_opener'
 
