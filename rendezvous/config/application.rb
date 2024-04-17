@@ -38,7 +38,6 @@ module Rendezvous
     #NOTVALID     config.active_record.raise_in_transactional_callbacks = true
 
     # Is this a docker environment (as opposed to EC2)
-    ActiveRecord.legacy_connection_handling = false
 
     config.active_record.yaml_column_permitted_classes = [Date, Symbol]
 

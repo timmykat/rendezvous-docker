@@ -29,7 +29,7 @@ class Admin::TransactionsController < AdminController
     if !event_registration.save
       flash_alert 'There was a problem creating the transaction.'
     else
-      flash_notice 'The transaction was successfully created.'
+      flash_notice 'The transaction was successfully created'
     end
         
     redirect_to edit_admin_event_registration_path(event_registration)

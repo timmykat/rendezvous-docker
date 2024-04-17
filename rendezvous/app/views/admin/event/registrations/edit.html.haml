@@ -17,9 +17,9 @@
             .col-md-12
               #attendees
                 = f.simple_fields_for :attendees do |a|
-                  = render partial:  'event/registrations/attendee_fields', locals:  { f:  a }
+                  = render partial:  'attendee_fields', locals:  { f:  a }
                 .links
-                  = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary btn-sm', partial:  'event/registrations/attendee_fields'
+                  = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary btn-sm', partial:  'attendee_fields'
                   Add a guest
               %br
               %br
