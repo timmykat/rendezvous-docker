@@ -19,6 +19,7 @@
 //= require jquery-ui
 //= require js-cookie/dist/js.cookie.min
 //= require tablesorter/dist/js/jquery.tablesorter
+//= require tablesorter/dist/js/jquery.tablesorter.widgets
 //= require dropzone/dist/dropzone-min
 //= require magnific-popup/dist/jquery.magnific-popup.min
 //= require lazyload/lazyload.min

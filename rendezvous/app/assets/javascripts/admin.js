@@ -2,7 +2,16 @@
     jQuery(document).ready(function() {
         $('#tabbed').tabs();
 
-        $('#user-table').tablesorter();
+        $('#user-table').tablesorter({
+            widthFixed: true,
+            widgets: ["zebra", "filter"],
+            ignoreCase: true,
+            headers: {
+                '.address': {
+                    sorter: false
+                }
+            }
+        });
 
         $('.admin_check').on('change', function(e) {
             let checked = false;

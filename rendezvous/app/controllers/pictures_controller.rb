@@ -53,7 +53,7 @@ class PicturesController < ApplicationController
     @picture = Picture.new(picture_params)
 
     if @picture.save
-      redirect_to @picture, notice: 'Picture was successfully created.'
+      redirect_to @picture, notice: 'Picture was successfully created'
     else
       render :new
     end
