@@ -8,6 +8,9 @@ class RendezvousDeviseMailer < Devise::Mailer
 
   def email_login_link(resource, login_token, opts = {})
     Rails.logger.debug("Resource: " + resource.email)
+    if (resource.is_testing?)
+      resource.email = "kinnel@warpmail.net"
+    end
     @login_token = login_token
     opts[:subject] = 'Login link for CitroenRendezvous.org'
     devise_mail(resource, :email_login_link, opts)

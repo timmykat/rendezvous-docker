@@ -68,6 +68,15 @@ class UsersController < ApplicationController
     render js: "window.location = '/admin#tabbed-6'"
   end
 
+  def toggle_user_testing
+    user = User.find(params[:user_id])
+    if user
+      user.is_testing = !user.is_testing
+      user.save(validate: false)
+      render json: { user: user.id, status: user.is_testing? }
+    end 
+  end
+
   private
     def user_params
       params.require(:user).permit(

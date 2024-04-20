@@ -79,10 +79,11 @@ Rails.application.routes.draw do
 
 
   # -- AJAX routes
-  get '/ajax/picture/delete/:id', to: 'pictures#ajax_delete'
-  get '/ajax/find_user_by_email', to: 'users#find_by_email'
-  get '/ajax/toggle_admin',       to: 'users#toggle_admin'
-  get '/ajax/toggle_tester',      to: 'users#toggle_tester'
-  get '/ajax/delete_users',       to: 'users#delete_users'
+  get '/ajax/picture/delete/:id',   to: 'pictures#ajax_delete'
+  get '/ajax/find_user_by_email',   to: 'users#find_by_email'
+  get '/ajax/toggle_admin',         to: 'users#toggle_admin'
+  get '/ajax/toggle_tester',        to: 'users#toggle_tester'
+  get '/ajax/delete_users',         to: 'users#delete_users'
+  get '/ajax/toggle_user_testing',  to: 'users#toggle_user_testing'
 
 end
