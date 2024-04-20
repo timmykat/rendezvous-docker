@@ -7,6 +7,7 @@
 # Ignore local dev site
 .ephemeral
 .sass-cache
+.data
 
 # Ignore .env files
 config/production_env_vars
