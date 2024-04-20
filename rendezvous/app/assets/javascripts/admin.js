@@ -33,6 +33,16 @@
             });
         });
 
+        $('[type=checkbox].user_test').on('change', function(e) {
+  
+            let $checkbox = $(this)
+            let user_id = $checkbox.attr('name')
+            $.get('/ajax/toggle_user_testing', { user_id: user_id}, (data) => {
+                console.log(data)
+                $checkbox.prop('checked', data.status)
+            })
+        })
+
         $('.tester_check').on('change', function(e) {
             let checked = false;
             let $user = $(this).parent().parent();
