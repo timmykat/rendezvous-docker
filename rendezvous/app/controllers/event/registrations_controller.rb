@@ -50,8 +50,14 @@ module Event
       @event_registration.user.vehicles.build
     end
 
+    # Create or update the user
     def create
-      # Create or update the user
+      unless verify_recaptcha?(params[:recaptcha_token], 'register_event')
+        Rails.logger.warn "Event registration: recaptcha failed for email #{params[:event_registration][:user_attributes][:email]}"
+        redirect_to root_path, notice: 'You have failed reCAPTCHA verification for event registration'
+        return
+      end
+
       if user_signed_in? && !session[:admin_user]
         user = User.find(current_user.id)
         if !user.update(event_registration_user_params)

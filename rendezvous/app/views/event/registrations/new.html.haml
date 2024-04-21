@@ -22,6 +22,10 @@
         #registration-form
           - if !user_signed_in?
             .cover
+
+          = content_for :recaptcha_js do
+            = include_recaptcha_js
+
           = simple_form_for @event_registration, id:  'registration_form' do |f|
             %section
               %h2 Personal Information
@@ -67,14 +71,10 @@
               = f.input_field :year, as:  :hidden, value:  Time.new.year
               = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
 
-              .form-group
-                - if @show_checkbox_recaptcha
-                  = recaptcha_tags
-                - else
-                  = recaptcha_v3(action: 'login')
-            .row
-              .col-md-12
-                .form-group
-                  = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  'btn btn-primary'
+              .row
+                .col-md-12
+                  .form-group
+                    = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  'btn btn-primary'
+                    = recaptcha_execute('register_event')
             
 
