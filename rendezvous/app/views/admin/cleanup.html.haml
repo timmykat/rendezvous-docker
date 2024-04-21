@@ -1,0 +1,35 @@
+.container
+  .row
+    .col-md-12
+      %h1 Cleanup
+      %h2 Suspicious User Records
+
+      %p Number of users: #{@users.size.to_s}
+
+      -# - if @users_to_delete
+      -#   .well
+      -#     %ul
+      -#       - @users_to_delete.each do |u|
+      -#         %li u.full_name
+
+      -# - form_with url: admin_delete_users_path, method: :post do |f|
+      %table.table.striped
+        %thead
+          %tr
+            %th Delete
+            %th Name
+            %th Email
+            %th Number of Vehicles
+            %th Number of Registrations
+        
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td
+                = check_box_tag "user_ids[]", user.id, false, id: "user_#{user.id}", class: "sketchy_user_delete"
+                = label_tag "user_#{user.id}", "&nbsp;&nbsp;Delete".html_safe, style: "font-weight: normal"
+              %td #{user.full_name}
+              %td #{user.email}
+              %td #{user.vehicles.size} vehicles
+              %td #{user.registrations.size} registrations
+      -# = f.submit 'Delete Checked Users', data: { confirm: "Are you sure?" }

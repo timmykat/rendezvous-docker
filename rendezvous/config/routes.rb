@@ -58,6 +58,8 @@ Rails.application.routes.draw do
       get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
     end
     resources :transactions, { only: [ :create ] }
+    get 'cleanup',        to: 'users#cleanup'
+    post 'delete_users',  to: 'users#delete_users'
   end
 
   # -- Content

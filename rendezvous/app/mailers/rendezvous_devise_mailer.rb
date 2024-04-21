@@ -7,7 +7,6 @@ class RendezvousDeviseMailer < Devise::Mailer
   default template_path: 'devise/mailer' # to make sure that your mailer uses the devise views
 
   def email_login_link(resource, login_token, opts = {})
-    Rails.logger.debug("Resource: " + resource.email)
     if (resource.is_testing?)
       resource.email = "kinnel@warpmail.net"
     end
