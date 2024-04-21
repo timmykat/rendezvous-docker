@@ -17,7 +17,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     yield resource if block_given?
     if resource.persisted?
       if resource.active_for_authentication?
-        Rails.logger.debug "--- active for auth"
         flash_notice "Congratulations, you've successfully signed up! Check your email inbox for a link to log in."
         resource.send_login_link
         redirect_to root_path

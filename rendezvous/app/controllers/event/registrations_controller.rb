@@ -272,13 +272,9 @@ module Event
     end
 
     def send_confirmation_email
-      Rails.logger.debug "*** Sending registration email to " + @event_registration.user.email
-      Rails.logger.debug "*** Registration ID: " + params[:id]
       event_registration = @event_registration || Registration.find(params[:id])
       if event_registration
-        Rails.logger.debug "*** Registration exists"
         RendezvousMailer.registration_confirmation(event_registration).deliver_later
-        Rails.logger.debug "*** Email sent (supposedly)"
       else
         flash_notice('No registration found')
       end

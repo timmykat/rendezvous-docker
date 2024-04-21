@@ -28,7 +28,6 @@ class Users::SessionsController < Devise::SessionsController
     elsif resource.admin?
       redirect_to admin_index_path
     else
-      Rails.logger.debug 'Redirecting to new event registration page'
       redirect_to new_event_registration_path
     end
   end

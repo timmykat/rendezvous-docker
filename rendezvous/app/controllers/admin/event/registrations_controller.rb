@@ -154,12 +154,9 @@ class Admin::Event::RegistrationsController < AdminController
   
   def send_confirmation_email
     if current_user.admin?
-      Rails.logger.debug "*** Registration ID: " + params[:id]
       event_registration = Event::Registration.find(params[:id])
       if event_registration
-        Rails.logger.debug "*** Sending registration email to " + event_registration.user.email
         RendezvousMailer.registration_confirmation(event_registration).deliver_later
-        Rails.logger.debug "*** Email sent"
       else
         flash_notice('No registration found')
       end
@@ -186,8 +183,6 @@ class Admin::Event::RegistrationsController < AdminController
 
     def transaction_params
       params[:transaction] = params[:event_registration][:transactions_attributes]['0']
-      Rails.logger.debug "*** Inside transaction_params"
-      Rails.logger.debug params[:transaction].inspect
       params[:transaction].permit( 
         [:transaction_method, :transaction_type, :amount, :cc_transaction_id]
       )
