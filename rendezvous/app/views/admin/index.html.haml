@@ -22,6 +22,7 @@
                   = f.submit 'Go', class:  'btn btn-primary'
           
           %h2= "Registrations for #{@year}"
+          %p Number of registrations: #{@event_registrations.size}
           %p
             %em Registration labels:
             = link_to 'Labels page', admin_labels_path 
@@ -183,6 +184,7 @@
                               %br
         #tabbed-6
           %h2 Site Users
+          %p Number of users: #{@users.size}
           -# - if current_user.has_role? :superuser
           -#   %button{class: 'btn btn-danger delete_users'} DELETE checked users
           %table#user-table.table.tablesorter.striped
