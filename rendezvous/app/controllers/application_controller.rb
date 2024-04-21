@@ -6,6 +6,9 @@ class ApplicationController < ActionController::Base
   before_action :get_app_data
   before_action :flash_array
 
+  CONFIG = Rails.configuration.rendezvous
+  RECAPTCHA_MINIMUM_SCORE = 0.5
+
   # Need this for other gems that might set flash
   def flash_array
     unless flash.keys.blank?
@@ -18,13 +21,27 @@ class ApplicationController < ActionController::Base
   def get_app_data
     @app_data =
       {
-        fees: Rails.configuration.rendezvous[:fees],
-        marques: Rails.configuration.rendezvous[:vehicle_marques],
-        models: Rails.configuration.rendezvous[:vehicle_models],
-        provinces: Rails.configuration.rendezvous[:provinces],
-        countries: Rails.configuration.rendezvous[:countries]
+        fees: CONFIG[:fees],
+        marques: CONFIG[:vehicle_marques],
+        models: CONFIG[:vehicle_models],
+        provinces: CONFIG[:provinces],
+        countries: CONFIG[:countries]
       }
   end
+
+  ## Recaptcha v3 -----------
+
+  def verify_recaptcha?(token, recaptcha_action)
+    Rails.logger.debug "Recaptcha action: #{recaptcha_action}"
+    secret_key = CONFIG[:captcha][:secret_key]
+    uri = URI.parse("https://www.google.com/recaptcha/api/siteverify?secret=#{secret_key}&response=#{token}")
+    response = Net::HTTP.get_response(uri)
+    json = JSON.parse(response.body)
+    Rails.logger.debug "Recaptcha response: #{json}"
+    json['success'] && json['score'] > RECAPTCHA_MINIMUM_SCORE && json['action'] == recaptcha_action
+  end
+
+  ## Recaptcha v3 -----------
 
   helper ApplicationHelper
 

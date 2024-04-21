@@ -94,15 +94,6 @@
                       }
                     = link_to 'Essential SSL', "https://www.instantssl.com/", id:  "comodoTL"
           %section
-            - if !Rails.env = 'development'
-              .row
-                .col-md-12
-                  .captcha
-                    - if @show_checkbox_recaptcha
-                      = recaptcha_tags
-                    - else
-                      = recaptcha_v3(action: 'register')
-
             .row
               .col-md-12
                 .form-group

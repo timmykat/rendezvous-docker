@@ -68,11 +68,5 @@
           .row
             .col-md-12
               .form-group
-                - if @show_checkbox_recaptcha
-                  = recaptcha_tags
-                - else
-                  = recaptcha_v3(action: 'login')
-              .form-group
                 = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  'btn btn-primary'
-          
 

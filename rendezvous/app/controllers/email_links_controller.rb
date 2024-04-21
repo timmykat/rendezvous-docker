@@ -6,6 +6,13 @@ class EmailLinksController < ApplicationController
 
   def create
 
+    user = User.find_by_email(params[:email])
+
+    if user.nil?
+      flash_alert = "I'm sorry, we couldn't find you in our system."
+      redirect_to new_user_session_path 
+    end
+
     @email_link = EmailLink.generate(params[:email])
 
 
