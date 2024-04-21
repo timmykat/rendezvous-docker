@@ -5,31 +5,42 @@
       %h2 Suspicious User Records
 
       %p Number of users: #{@users.size.to_s}
+      - if @users_to_delete
+        - n = @users_to_delete.size.to_s
+      - else
+        - n = '0'
 
-      -# - if @users_to_delete
-      -#   .well
-      -#     %ul
-      -#       - @users_to_delete.each do |u|
-      -#         %li u.full_name
+      %p Number of users to delete: #{n}
 
-      -# - form_with url: admin_delete_users_path, method: :post do |f|
-      %table.table.striped
-        %thead
-          %tr
-            %th Delete
-            %th Name
-            %th Email
-            %th Number of Vehicles
-            %th Number of Registrations
-        
-        %tbody
-          - @users.each do |user|
+      - if @users_to_delete
+        .well
+          %p Number of users to delete: #{@users_to_delete.size.to_s}
+          %ul
+            - @users_to_delete.each do |u|
+              %li u.full_name
+
+      = form_with url: admin_delete_users_path, method: :post do |f|
+        %p
+          = check_box_tag "select_all", "select_all", false, id: "select_all", class: "select_all"
+          = label_tag "select_all", "&nbsp;&nbsp;Select All&nbsp;&nbsp;&nbsp;&nbsp;".html_safe, style: "font-weight: normal"
+          = f.submit 'Delete Checked', data: { confirm: "Are you sure?" }, class: "btn btn-danger"
+        %table.table.striped
+          %thead
             %tr
-              %td
-                = check_box_tag "user_ids[]", user.id, false, id: "user_#{user.id}", class: "sketchy_user_delete"
-                = label_tag "user_#{user.id}", "&nbsp;&nbsp;Delete".html_safe, style: "font-weight: normal"
-              %td #{user.full_name}
-              %td #{user.email}
-              %td #{user.vehicles.size} vehicles
-              %td #{user.registrations.size} registrations
-      -# = f.submit 'Delete Checked Users', data: { confirm: "Are you sure?" }
+              %th Delete
+              %th Name
+              %th Email
+              %th Number of Vehicles
+              %th Number of Registrations
+          
+          %tbody
+            - @users.each do |user|
+              %tr
+                %td
+                  = check_box_tag "user_ids[]", user.id, false, id: "user_#{user.id}", class: "delete_user"
+                  = label_tag "user_#{user.id}", "&nbsp;&nbsp;Delete".html_safe, style: "font-weight: normal"
+                %td #{user.full_name}
+                %td #{user.email}
+                %td #{user.vehicles.size} vehicles
+                %td #{user.registrations.size} registrations
+        = f.submit 'Delete Checked', data: { confirm: "Are you sure?" }, class: "btn btn-danger"

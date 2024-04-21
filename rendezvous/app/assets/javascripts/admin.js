@@ -64,16 +64,21 @@
             });
         });
 
-        $('button.delete_users').on('click', function() {
-            let $checkedUsers = $('.delete_user:checked');
-            let forDeletion = $.map($checkedUsers, function($check, index) {
-                return $check.defaultValue;
-            }).join(',');
+        $('#select_all').on('change', function(e) {
+            console.log('Changed')
+            $('.delete_user').prop('checked', $(this).prop('checked'))
+        })
 
-            $.get('/ajax/delete_users', { "users": forDeletion }, function() {
-                console.log('Success');
-                window.location.assign('/admin');
-            });
-        });
+        // $('button#delete_users').on('click', function() {
+        //     let $checkedUsers = $('.delete_user:checked');
+        //     let forDeletion = $.map($checkedUsers, function($check, index) {
+        //         return $check.defaultValue;
+        //     }).join(',');
+
+        //     $.get('/ajax/delete_users', { "users": forDeletion }, function() {
+        //         console.log('Success');
+        //         window.location.assign('/admin');
+        //     });
+        // });
     });
 }) (jQuery);
