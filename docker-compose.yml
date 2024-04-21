@@ -138,6 +138,7 @@ services:
       - ./.ephemeral/mysqld/db_init/rendezvous_init.sql:/docker-entrypoint-initdb.d/rendezvous_init.sql"
       - ./.ephemeral/mysqld/db_data:/var/lib/mysql
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
+      - ./.data:/tmp/.data
 networks:
   rendezvous:
     driver: bridge
