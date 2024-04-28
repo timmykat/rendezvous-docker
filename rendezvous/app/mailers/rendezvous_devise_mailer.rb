@@ -11,7 +11,7 @@ class RendezvousDeviseMailer < Devise::Mailer
       resource.email = "kinnel@warpmail.net"
     end
     @login_token = login_token
-    opts[:subject] = 'Login link for CitroenRendezvous.org'
+    opts[:subject] = "CitroenRendezvous.org login link for #{resource.full_name}"
     devise_mail(resource, :email_login_link, opts)
   end
 end

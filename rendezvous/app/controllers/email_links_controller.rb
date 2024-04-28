@@ -14,7 +14,7 @@ class EmailLinksController < ApplicationController
     end
 
     @email_link = EmailLink.generate(params[:email])
-
+    @recipient_name = user.full_name
 
     if @email_link
       flash_notice "Email sent! Please, check your inbox."
