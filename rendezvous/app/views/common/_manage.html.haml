@@ -9,6 +9,7 @@
               %i.caret
             %ul{ class:  'dropdown-menu', 'aria-labelledby' => 'adminDropdown' }
               %li= link_to 'Admin Dashboard', admin_index_path, class:  'btn btn-sm btn-info'
+              %li= link_to 'Registration Graphs', admin_graphs_path, class:  'btn btn-sm btn-info'
               %li= link_to 'Cleanup Page', admin_cleanup_path, class:  'btn btn-sm btn-info'
               - if session[:admin_user]
                 %li= link_to 'Create registration', new_event_registration_path, class:  'btn btn-sm btn-info'

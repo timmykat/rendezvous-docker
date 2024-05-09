@@ -9,6 +9,44 @@ class AdminController < ApplicationController
     @users = User.order(last_name: :asc).all
   end
 
+  def registration_graphs
+    @title = 'Registration Income Graphs'
+    event_dates = {
+      "2016" => "2016-06-16",
+      "2017" => "2017-06-15",
+      "2018" => "2018-06-14",
+      "2019" => "2019-06-13",
+      "2021" => "2021-09-09",
+      "2022" => "2022-06-16",
+      "2023" => "2023-06-30",
+      "2024" => "2024-06-14",
+    }
+
+    rendezvous_years = Event::Registration.group(:year).pluck(:year).sort.reverse
+
+    reg_data = {}
+    rendezvous_years.each do |year|
+      event_date = DateTime.strptime(event_dates[year], "%Y-%m-%d")
+      reg_data[year.to_s] = []
+      registrations = Event::Registration.where(year: year).order(:updated_at).all
+      total = 0
+      date = nil
+      (0..90).to_a.reverse.each do |d|
+        registrations.each do |r|
+          date = r.updated_at.strftime("%F")
+          date_diff = (event_date.to_date - r.updated_at.to_date).to_i
+          if date_diff == d
+            total = total + r.paid_amount if r.status == 'complete'
+          end
+        end
+        reg_data[year.to_s] << { daysOut: d, total: total }
+      end
+      @reg_data = reg_data.to_json
+      @event_dates = event_dates.to_json
+      @xLabels = (90).step(by: -1, to: 0).to_a.to_json
+    end
+  end
+
   def index
     @title = 'Admin'
 

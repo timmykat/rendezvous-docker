@@ -10,6 +10,7 @@
     "braintree-web": "^3.92.1",
     "browserify": "^17.0.0",
     "browserify-sign": "4.2.2",
+    "chartsjs": "4.4.2",
     "dropzone": "^6.0.0-beta.2",
     "html5shiv": "^3.7.3",
     "jquery-ui": "^1.13.2",
