@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   # Admin routes
   get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   get '/admin/labels', to: 'admin#make_labels'
+  get '/admin/graphs', to: 'admin#registration_graphs'
   
   resources :admin, { only: [:index] }
   namespace :admin do
