@@ -1,6 +1,8 @@
 class Transaction < ActiveRecord::Base
 
   belongs_to :registration, class_name: 'Event::Registration'
+
+  attribute :amount, :decimal, default: 0.0
   
   validates :transaction_type, inclusion: { in: ['payment', 'refund'] }
   validates :transaction_method, inclusion: { in: Rails.configuration.rendezvous[:payment_methods] }
