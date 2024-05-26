@@ -12,6 +12,10 @@ module Event
     
     scope :current, -> { where(year: Time.now.year) }
     scope :alpha, -> { joins(:user).order( :last_name )}
+
+    attribute :donation, :decimal, default: 0.0
+    attribute :paid_amount, :decimal, default: 0.0
+    attribute :total, :decimal, default: 0.0
     
     validate :validate_minimum_number_of_adults, unless: -> { status.nil? || status.match(/^cancelled/) }
     validate :validate_payment, unless: -> { status.nil? || status.match(/^cancelled/) }
