@@ -120,7 +120,7 @@
                   - @files.each do |ftype, fdata|
                     - if File.exist? fdata['path']
                       %span
-                        =link_to "#{fdata['descriptor']} <i class='fa fa-file-excel-o'></i>".html_safe, "/#{fdata['name']}"
+                        =link_to "#{fdata['descriptor']} <i class='fa fa-file-excel-o'></i>".html_safe, "/files/csv/#{fdata['name']}"
             .row
               .col-md-6.col-xs-12
                 .well.well-sm
