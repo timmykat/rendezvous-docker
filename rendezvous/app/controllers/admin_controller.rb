@@ -99,15 +99,15 @@ class AdminController < ApplicationController
     # csv_object['sunday_dinner'] << [ 'Name', 'Email' ]
 
     csv_object['vehicles'] << [
-      'Number',
-      'Registrant Last Name',
-      'Registrant First Name',
-      'Registrant Full Name',
-      'Year',
-      'Marque',
-      'Model',
-      'Judging Category',
-      'Info'
+      'number',
+      'last_name',
+      'first_name',
+      'full_name',
+      'year',
+      'marque',
+      'model',
+      'category',
+      'info'
     ]
 
     @data = {
