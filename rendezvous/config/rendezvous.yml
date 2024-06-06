@@ -48,6 +48,7 @@ payment_methods:
   - credit card
   - check
   - cash
+  - no payment
 registration_statuses:
   - initiated
   - in review

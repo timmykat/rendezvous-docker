@@ -76,11 +76,11 @@ class AdminController < ApplicationController
 
    # CSV file headers
    csv_object['labels'] <<[
-    'Registratant Name',
-    'Guests',
-    'Fee Status',
-    'Donation',
-    'Volunteers'
+    'registrant',
+    'guests',
+    'fee_status',
+    'donation',
+    'volunteers'
    ]
     csv_object['registrations'] << [
       'Registration number',

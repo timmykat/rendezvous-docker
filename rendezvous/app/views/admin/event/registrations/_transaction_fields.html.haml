@@ -1,6 +1,6 @@
 .row
   .col-md-6.col-xs-12
-    = f.input :transaction_type, collection:  [['Payment', 'payment'], ['Refund', 'refund']], selected:  'payment'
+    = f.input :transaction_type, collection:  [['Payment', 'payment'], ['Refund', 'refund'], ['None', 'none']], selected:  'payment'
   .col-md-6.col-xs-12
     = f.input :transaction_method, collection:  payment_methods.map { |m| [m.titlecase, m] }, prompt:  '-- Select payment method'
 .row

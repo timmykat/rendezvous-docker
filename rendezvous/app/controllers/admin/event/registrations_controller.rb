@@ -31,7 +31,9 @@ class Admin::Event::RegistrationsController < AdminController
     @event_registration.user = user
     transaction = Transaction.new
     transaction.update(transaction_params)
-    @event_registration.transactions << transaction
+    unless transaction.transaction_type == 'none'
+      @event_registration.transactions << transaction
+    end
 
     begin
       if !@event_registration.save
