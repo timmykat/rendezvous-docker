@@ -76,8 +76,9 @@ class AdminController < ApplicationController
 
    # CSV file headers
    csv_object['labels'] <<[
-    'registrant',
+    'last_name',
     'guests',
+    'people',
     'fee_status',
     'donation',
     'volunteers'
@@ -140,8 +141,9 @@ class AdminController < ApplicationController
       @data[:financials][:donations]            += registration.donation.to_f unless registration.donation.blank?
 
       csv_object['labels'] << [
-        "#{registration.user.last_name}, #{registration.user.first_name}",
+        "#{registration.user.last_name}",
         registration.attendees.count,
+        registration.attendees.map{ |a| a.name }.join('<br>'),
         registration.outstanding_balance? ? registration.registration_fee : 'paid',
         (registration.donation && (registration.donation > 0.0)) ? registration.donation : '',
         get_volunteers(registration)
