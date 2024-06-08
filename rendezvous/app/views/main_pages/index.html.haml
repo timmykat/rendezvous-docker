@@ -21,9 +21,13 @@
     %section.registration_open   
       %h2.registration_open 
         Registration is open for #{Time.now.year}!
+  - elsif after_rendezvous?
+    %section.registration_closed   
+      %h2.registration_closed
+        Thanks for a great Rendezvous! See you next year!  
   - else
     %section.registration_closed   
-      %h2.registration_close
+      %h2.registration_closed
         Online registration is now closed. Please register at the event.
   %section.banner
     .container.register

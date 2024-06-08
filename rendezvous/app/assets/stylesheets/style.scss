@@ -565,6 +565,11 @@ h2.registration_open {
 	border-bottom: 2px solid var(--citroen-red);
 }
 
+h2.registration_closed {
+	text-align: center;
+	color: var(--dark-red)
+}
+
 
 /* info/main page */
 h2.main-heading {
