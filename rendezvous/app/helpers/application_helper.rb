@@ -43,6 +43,10 @@ module ApplicationHelper
     Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
   end
 
+  def after_rendezvous?
+    Time.now > Rails.configuration.rendezvous[:registration_window][:after_rendezvous]
+  end
+
   def is_tester?
     current_user && (current_user.has_any_role? :admin, :tester)
   end

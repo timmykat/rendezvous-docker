@@ -6,6 +6,7 @@ dates:
 registration_window:
   open: 2024-04-05
   close: 2024-06-07
+  after_rendezvous: 2024-06-16
 fees:
   adult: 75
   child: 0
