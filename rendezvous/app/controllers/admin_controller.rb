@@ -1,6 +1,9 @@
 require 'csv'
 
 class AdminController < ApplicationController
+
+  NO_USER_ID = 999999
+
   before_action :require_admin, :get_data
 
   def get_data
@@ -49,6 +52,7 @@ class AdminController < ApplicationController
 
   def index
     @title = 'Admin'
+    @no_user_id = NO_USER_ID
 
     # Create CSV data files
     @files = {}

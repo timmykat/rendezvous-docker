@@ -1,4 +1,23 @@
 .container
+  .row 
+    .col-md-offset-2.col-md-8
+      .well
+        %h1 Create a registration onsite
+        = form_with(model: User.new, url: admin_event_registrations_new_withemail_path, method: :get) do |f|
+          .form-group
+            = f.label :email
+            = f.email_field :email, autofocus: true, required: true, class: 'form-control'
+
+          .form-group
+            = f.label :first_name
+            = f.text_field :first_name, required: true, class: 'form-control'            
+
+          .form-group
+            = f.label :last_name
+            = f.text_field :last_name, required: true, class: 'form-control' 
+          
+          .actions
+            = f.submit "Create a registration" , class: "btn btn-info"
   .row
     .col-md-12
       %h1 Administrative Info

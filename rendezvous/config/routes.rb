@@ -54,6 +54,8 @@ Rails.application.routes.draw do
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }
       get 'registrations/new/user/:id', to: 'registrations#new'
+      get 'registrations/new/withemail', to: 'registrations#new_with_email'
+      post 'registrations/create/withemail', to: 'registrations#create_with_email'
       get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
       get 'registrations/:id/delete', to: 'registrations#delete', as: 'delete_registration'
       get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
