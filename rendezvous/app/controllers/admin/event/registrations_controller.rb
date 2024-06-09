@@ -11,15 +11,16 @@ class Admin::Event::RegistrationsController < AdminController
     # Check for existing reservation
     @event_registration = user.registrations.current.first
     if !@event_registration.blank?
-      @title = 'Editing registration for ' + user.full_name
+      @title = 'Editing the registration for ' + user.full_name
       flash_notice(user.full_name + ' has already created a registration')
     else
-      @title = 'ADMIN: creating a registration for ' + user.full_name
+      @title = 'Creating a registration for ' + user.full_name
       @event_registration = Event::Registration.new
+      @event_registration.onsite = true
       @event_registration.user = user
       @event_registration.attendees.build
       @event_registration.transactions.build
-    end
+    end  
   end
 
   def create
@@ -47,7 +48,7 @@ class Admin::Event::RegistrationsController < AdminController
     end
 
     begin
-      if !@event_registration.update(create_event_registration_params)
+      if !@event_registration.update(create_registration_params)
         Rails.logger.debug "*** The registration wasn't updated"
         Rails.logger.debug @event_registration.errors.full_messages
       end
@@ -87,6 +88,62 @@ class Admin::Event::RegistrationsController < AdminController
     redirect_to admin_event_registration_path(@event_registration.id), notice: flash_notice
   end
 
+  def new_with_email 
+    session[:admin_user] = true
+    user = User.find_by_email(params[:user][:email])
+
+    Rails.logger.info user.blank? ? "No user for #{params[:user][:email]}" : "Found user #{user.full_name}"
+
+    if user.blank?
+      user = User.new(new_user_params)
+      # Set a password for the user
+      password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
+      user.password = password
+      user.password_confirmation = password
+      Rails.logger.info "Saving user #{user.full_name}"
+      if !user.save
+        flash_alert_now 'There was a problem saving the user.'
+        flash_alert_now user.errors.full_messages.to_sentence        
+      else
+        Rails.logger.info "Successful"
+      end
+    else
+      flash_notice 'This user already exists'
+    end
+
+    @title = 'Creating a registration onsite for user ' + user.full_name
+    @event_registration = Event::Registration.new
+    @event_registration.onsite = true
+    @event_registration.user = user
+    @event_registration.attendees.build
+  end
+
+  def create_with_email
+    user_id = params[:event_registration][:user_attributes][:id]
+    user = User.find(user_id)
+    params[:event_registration][:user_attributes] = nil
+
+    @event_registration = Event::Registration.new
+    @event_registration.user = user
+
+    if !@event_registration.update(registration_update_params)
+      flash_alert_now @event_registration.errors.full_messages
+      redirect_to '/', alert: flash_alert
+      return
+    end
+
+    @event_registration.paid_amount = 0.0
+    @event_registration.invoice_number = Event::Registration.invoice_number
+
+    if !@event_registration.save
+      flash_alert_now @event_registration.errors.full_messages
+      redirect_to '/', alert: flash_alert
+    else
+      flash_notice = 'Registration was successfully created'
+      redirect_to payment_event_registration_path(@event_registration), notice: flash_notice
+    end
+  end
+  
   def show
     @event_registration = Event::Registration.includes(:user, :transactions, :attendees).find(params[:id])
   end
@@ -169,14 +226,25 @@ class Admin::Event::RegistrationsController < AdminController
   end
   
   private
+    def new_user_params
+      params.require(:user).permit(
+        :email,
+        :first_name,
+        :last_name
+      )
+    end
+
     def registration_update_params
       params.require(:event_registration).permit(
         :id,
+        :onsite,
         :number_of_adults,
         :number_of_children,
         :registration_fee,
+        :donation,
         :total,
         :status,
+        :year,
         { attendees_attributes:
           [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
         }
@@ -190,9 +258,10 @@ class Admin::Event::RegistrationsController < AdminController
       )
     end
 
-    def create_event_registration_params
+    def create_registration_params
       params.require(:event_registration).permit(
         :id,
+        :onsite,
         :number_of_adults,
         :number_of_children,
         :registration_fee,

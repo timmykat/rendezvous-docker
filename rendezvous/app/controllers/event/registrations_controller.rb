@@ -144,6 +144,7 @@ module Event
       begin
         @title = 'Registration - Payment'
         @event_registration = Registration.find(params[:id])
+        @event_registration.total = @event_registration.registration_fee + @event_registration.donation
         @event_registration.status = 'payment due'
         @app_data[:event_registration_fee] = @event_registration.registration_fee
         @credit_connection = true
