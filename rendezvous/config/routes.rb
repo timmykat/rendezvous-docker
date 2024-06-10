@@ -26,6 +26,8 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resources :purchases, except: [:edit]
+
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
   namespace :event do
