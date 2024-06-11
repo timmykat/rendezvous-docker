@@ -13,8 +13,6 @@
       - if @refund
         %p 
           %b Refund due: #{number_to_currency(@refund)}
-
-      = link_to "Send Confirmation Email", "/admin/event/registrations/#{@event_registration.id}/send_confirmation_email", class: 'btn btn-sm btn-info'
     
   
   
