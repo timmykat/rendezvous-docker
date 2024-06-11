@@ -45,9 +45,7 @@
           
           %h2= "Registrations for #{@year}"
           %p Number of registrations: #{@event_registrations.size}
-          %p
-            %em Registration labels:
-            = link_to 'Labels page', admin_labels_path 
+
           %table.table.striped
             %thead
               %tr
