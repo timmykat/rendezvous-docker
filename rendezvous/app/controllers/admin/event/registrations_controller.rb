@@ -132,87 +132,14 @@ class Admin::Event::RegistrationsController < AdminController
       return
     end
 
-    @event_registration.paid_amount = 0.0
-    @event_registration.invoice_number = Event::Registration.invoice_number
-
-    if params[:event_registration][:paid_method] == 'credit card' && !params[:payment_method_nonce].blank?
-      braintree_transaction_params = {
-        order_id: @event_registration.invoice_number,
-        amount: @event_registration.total,
-        payment_method_nonce: params[:payment_method_nonce],
-        customer: {
-          first_name: @event_registration.user.first_name,
-          last_name: @event_registration.user.last_name,
-          email: @event_registration.user.email,
-        },
-        billing: {
-          first_name: @event_registration.user.first_name,
-          last_name: @event_registration.user.last_name,
-          street_address: @event_registration.user.address1,
-          extended_address: @event_registration.user.address2,
-          locality: @event_registration.user.city,
-          region: @event_registration.user.state_or_province,
-          postal_code: @event_registration.user.postal_code,
-          country_code_alpha3: @event_registration.user.country
-        },
-        options: {
-          submit_for_settlement: true
-        },
-      }
-
-      gateway = Braintree::Gateway.new(
-        environment: Braintree::Configuration.environment,
-        merchant_id: Braintree::Configuration.merchant_id,
-        public_key: Braintree::Configuration.public_key,
-        private_key: Braintree::Configuration.private_key,
-      )
-
-      result = gateway.transaction.sale(braintree_transaction_params)
-
-      if result.success?
-
-        logger.info "Braintree transaction success for #{@event_registration.user.email}"
-
-        # Create a new transaction
-        @event_registration.transactions << Transaction.new(
-          transaction_method: 'credit card',
-          transaction_type: 'payment',
-          cc_transaction_id: result.transaction.id,
-          amount: @event_registration.total
-        )
-
-        @event_registration.paid_amount = @event_registration.total
-        @event_registration.paid_method = 'credit card'
-        @event_registration.cc_transaction_id = result.transaction.id
-        @event_registration.paid_date = Time.new
-        @event_registration.status = 'complete'
-        @event_registration.save!
-
-      elsif result.errors
-        Rails.logger.debug "Braintree transaction error for #{@event_registration.user.email}"
-        Rails.logger.debug result.message
-        flash_alert 'There was a problem with the credit card payment.'
-        flash_alert result.message
-        redirect_to admin_event_registration_path(@event_registration)
-        return
-      end
-    end
-
-    params[:event_registration][:total] = params[:event_registration][:total].to_f
-    if params[:event_registration][:paid_method] == 'credit card'
-      params[:event_registration][:paid_amount] = params[:event_registration][:total]
-    else
-      params[:event_registration][:paid_amount] = 0.00
-    end
-
     # Update the registration
     if !@event_registration.update(create_registration_params)
-      flash_alert 'There was a problem completing your registration.'
+      flash_alert 'There was a problem creating the registration.'
       flash_alert @event_registration.errors.full_messages.to_sentence
       redirect_to admin_event_registration_path(@event_registration)
     else
       flash_notice 'The registration was successfully created.'
-      redirect_to admin_index_path
+      redirect_to payment_event_registration_path(@event_registration)
     end
   end
   
@@ -228,25 +155,33 @@ class Admin::Event::RegistrationsController < AdminController
   
   def update
     @event_registration = Event::Registration.find(params[:id])
+    transaction = Transaction.create(transaction_params)
+    params[:event_registration][:transaction_attributes] = nil
     
     if @event_registration.update(registration_update_params)
     
       # Update values that depend on the registration fee
       donation = @event_registration.donation || 0.0
       @event_registration.total = @event_registration.registration_fee + donation
+      @event_registration.transactions << transaction
+      @event_registration.paid_amount =  transaction.amount
+      @event_registration.paid_method = transaction.transaction_method
       @event_registration.save!
       flash_notice 'The registration was updated.'
     else
       flash_alert 'There was a problem updating the registration.'
       flash_alert @event_registration.errors.full_messages.to_sentence
     end
-    redirect_to event_registration_path(@event_registration.id)
+    redirect_to admin_event_registration_path(@event_registration)
   end
 
   def delete
     @event_registration = Event::Registration.find(params[:id])
-    @event_registration.destroy
-    flash_notice 'The registration has been deleted'
+    if !@event_registration.destroy
+      flash_alert @event_registration.errors.full_messages
+    else 
+      flash_notice 'The registration has been deleted'
+    end
     redirect_to admin_index_path
   end
   
@@ -319,13 +254,15 @@ class Admin::Event::RegistrationsController < AdminController
         :year,
         { attendees_attributes:
           [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
-        }
+        },
+        { transaction_attributes:
+          [:id, :transaction_method, :transaction_type, :amount, :cc_transaction_id, :_destroy]
+        },
       )
     end
 
     def transaction_params
-      params[:transaction] = params[:event_registration][:transactions_attributes]['0']
-      params[:transaction].permit( 
+      params[:transactions].permit( 
         [:transaction_method, :transaction_type, :amount, :cc_transaction_id]
       )
     end

@@ -10,7 +10,7 @@ module Event
     skip_before_action :verify_authenticity_token, only: [:show]
 
     def check_cutoff
-      unless helpers.registration_live?
+      unless helpers.registration_live? || helpers.user_is_admin?
         flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
         redirect_to :root
       end
@@ -244,6 +244,9 @@ module Event
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
         redirect_to payment_event_registration_path(@event_registration)
+      elsif helpers.user_is_admin?
+        flash_notice "Registration for #{@event_registration.user.full_name} complete"
+        redirect_to admin_event_registration_path(@event_registration)
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
