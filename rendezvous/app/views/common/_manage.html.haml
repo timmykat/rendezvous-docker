@@ -16,7 +16,9 @@
               %li= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'btn btn-sm btn-info'
               - if current_registration && !current_registration.complete?
                 %li= link_to 'Delete my registration', event_registration_path(current_registration), method:  :delete, class:  'btn btn-sm btn-danger', confirmation:  'Are you sure?'
-            
+          %li= link_to 'Admin Dashboard', admin_index_path, class:  'btn btn-sm btn-info'
+          %li= link_to 'Create Purchase', new_purchase_path, class:  'btn btn-sm btn-info' 
+          %li= link_to 'View Purchases', purchases_path, class:  'btn btn-sm btn-info'          
     .pull-right
       %ul.list-inline
         %li
