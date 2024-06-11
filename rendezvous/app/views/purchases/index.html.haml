@@ -1,0 +1,27 @@
+.container
+  .row
+    .col-md-offset-2.col-md-8
+    %h1 Purchases in #{@year}
+
+    %p= link_to 'Create purchase', new_purchase_path 
+
+    - if !@purchases.blank? && (@purchases.size > 0) 
+      %table.table.striped
+        %thead
+          %tr
+            %td Name
+            %td Description
+            %td Amount
+            %td Category 
+            %td Date
+        %tbody
+          - @purchases.each do |p|
+            %tr
+              %td #{p.name_for_alpha}
+              %td= p.description
+              %td= number_to_currency(p.amount)
+              %td= p.category.titlecase 
+              %td= p.created_at.to_formatted_s(:long)
+
+    - else 
+      No purchases yet

@@ -1,0 +1,42 @@
+%style
+  dt { padding-left: 2em; margin-bottom: 2em }
+.container
+  .row
+    .col-md-offset-2.col-md-8
+      %h1 Viewing purchase
+      
+      %ul
+        %li= link_to 'Create purchase', new_purchase_path
+        %li= link_to 'See all purchases', purchases_path
+
+      %dl
+        %dd Date: 
+        %dt #{@purchase.created_at.to_formatted_s(:long)}
+
+        %dd Category:  
+        %dt #{@purchase.category.titlecase}
+
+        %dd Description: 
+        %dt #{@purchase.description}
+
+        %dd Amount
+        %dt #{number_to_currency(@purchase.amount)}
+
+      .payment_info   
+        .well
+          %h2 Credit card info
+          %dl
+            %dd Name: 
+            %dt #{@purchase.full_name}
+
+            %dd Email: 
+            %dt #{@purchase.email}
+
+            %dd Zip/Post code:
+            %dt #{@purchase.postal_code}
+
+            %dd Country: 
+            %dt #{@purchase.country}
+            
+            %dd Transaction ID: 
+            %dt #{@purchase.cc_transaction_id}
