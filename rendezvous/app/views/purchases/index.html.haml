@@ -3,8 +3,6 @@
     .col-md-offset-2.col-md-8
     %h1 Purchases in #{@year}
 
-    %p= link_to 'Create purchase', new_purchase_path 
-
     - if !@purchases.blank? && (@purchases.size > 0) 
       %table.table.striped
         %thead
