@@ -86,6 +86,29 @@ module ApplicationHelper
     return address.html_safe if address
   end
 
+  def address_of_plain(user)
+    address_arr = []
+    if !user.address1.blank?
+      address_arr << user.address1
+    end
+    if !user.address2.blank?
+      address_arr << user.address2.blank?
+    end
+    locale = user.city
+    if !user.state_or_province.blank?
+      locale += ", " + user.state_or_province
+    end
+    if !user.postal_code.blank?
+      locale += " " + user.postal_code
+    end 
+    address_arr << locale
+    if !user.country_name.blank?
+      address_arr << user.country_name
+    end
+
+    return address_arr.join("\n")
+  end
+
   def les_chauffeurs(separator = ", ")
     return Rails.configuration.rendezvous[:chauffeurs].join(separator)
   end

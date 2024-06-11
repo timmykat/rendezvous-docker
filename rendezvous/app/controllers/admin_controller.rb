@@ -60,7 +60,8 @@ class AdminController < ApplicationController
     csv_object = {}
     data_types = {
       'labels' => 'Packet Label Data',
-      'registrations'  => 'Attendee Data',
+      'registered_users' => 'Registered Users',
+      'attendees'  => 'Attendee Data',
       'volunteers'    => 'Volunteer List',
       # 'sunday_dinner' => 'Sunday Dinner List',
       'vehicles'      => 'Vehicle Manifest'
@@ -86,8 +87,16 @@ class AdminController < ApplicationController
     'fee_status',
     'donation',
     'volunteers'
-   ]
-    csv_object['registrations'] << [
+    ]
+
+    csv_object['registered_users'] << [
+      'full name',
+      'email',
+      'address',
+      'volunteers'
+    ]
+
+    csv_object['attendees'] << [
       'Registration number',
       'Registratant',
       'Attendee name',
@@ -152,6 +161,14 @@ class AdminController < ApplicationController
         (registration.donation && (registration.donation > 0.0)) ? registration.donation : '',
         get_volunteers(registration)
       ]
+
+      csv_object['registered_users'] << [
+        registration.user.full_name,
+        registration.user.email,
+        helpers.address_of_plain(registration.user),
+        get_volunteers(registration)       
+      ]
+
       nvehicle = 0
       registration.user.vehicles.each do |v|
          if v.marque == 'Citroen'
@@ -188,7 +205,7 @@ class AdminController < ApplicationController
 
         #Write to CSV
         # Registered attendees
-        csv_object['registrations'] << [
+        csv_object['attendees'] << [
           registration.invoice_number,
           registration.user.last_name_first,
           a.name,
