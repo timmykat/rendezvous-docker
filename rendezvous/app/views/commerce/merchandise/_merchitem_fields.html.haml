@@ -1,0 +1,22 @@
+- sizes = Rails.configuration.rendezvous[:merchandise][:sizes].each{ |s| [s, s] }
+
+.nested-fields.well.well-sm.merchitem
+  .row
+    .col-md-4
+      .form-group
+        = f.input :size, label: 'Size', collection: sizes, as: :select
+  .row
+    .col-md-4
+      .form-group
+        = f.input :inventory, label: 'Inventory'
+  
+    .row
+    .col-md-4
+      .form-group
+        = f.input :remaining, label: 'Remaining'
+
+  .row
+    .col-md-4
+      .remove_association_action
+        = link_to_remove_association '<i class="fa fa-minus" ></i>'.html_safe, f, class:  'btn btn-danger btn-sm'
+        Remove this item

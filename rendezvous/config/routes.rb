@@ -26,7 +26,10 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :purchases, except: [:edit]
+  namespace :commerce do
+    resources :purchases, except: [:edit]
+    resources :merchandise, except: [:show]
+  end
 
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'

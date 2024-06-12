@@ -84,7 +84,7 @@ namespace :qa do
       registration_params[:registration_fee] = num_adults * 50.0
       registration_params[:donation] = [0.0, 0.0, 0.0, 0.0, 25.0, 25.0, 50.0].sample 
       registration_params[:total] = registration_params[:registration_fee] + registration_params[:donation]
-      registration_params[:paid_method] = ['credit card', 'credit card', 'credit card', 'check'].sample
+      registration_params[:paid_method] = ['credit card', 'credit card', 'credit card', 'cash_or_check'].sample
       if registration_params[:paid_method] == 'credit card'
         registration_params[:paid_amount] = registration_params[:total]
         registration_params[:status] = 'complete'

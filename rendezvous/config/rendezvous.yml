@@ -71,6 +71,17 @@ official_contact:
   chief_officer: Timothy S Kinnel
   email: rendezvousLLC@kinnel.warpmail.net
   facebook: https://www.facebook.com/groups/1796592930566951/
+
+merchandise:
+  sizes:
+    - S
+    - M
+    - L
+    - XL
+    - XXL
+    - XXXL
+    - no size
+    
 vehicle_marques:
   - Citroen
   - Panhard
