@@ -101,6 +101,7 @@
     $('input.payment').on('click', function() {
       $('#payment-form').toggleClass('hidden');
       $('#mailing-address').toggleClass('hidden');
+      $('#payment-paid').toggleClass('hidden');
     });  
     
     // Transactions

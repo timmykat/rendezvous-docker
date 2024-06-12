@@ -40,7 +40,7 @@ module RegistrationsHelper
   end
   
   def payment_options
-    [['I wish to pay by credit card now', 'credit card'], [' I wish to pay by check', 'check']]
+    [[' Credit Card', 'credit card'], [' Cash or Check', 'cash_or_check']]
   end
 
   def attended_rendezvous_years(user)

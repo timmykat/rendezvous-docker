@@ -1,0 +1,31 @@
+.container
+  .row 
+    .col-md-offset-2.col-md-8
+      %h1 New merchandise
+      
+      = simple_form_for @merchandise do |f|
+        .form-group 
+          = f.label :sku, nil, class: 'required'
+          = f.text_field :sku
+
+        .form-group
+          = f.label :description, nil, class: 'required'
+          = f.text_field :description
+
+        .form-group 
+          = f.label :sale_price, nil, class: 'required'
+          = f.text_field :sale_price
+
+        .form-group 
+          = f.label :unit_cost
+          = f.text_field :unit_cost
+
+        #merch-items
+          = f.simple_fields_for :merchitems do |a|
+            = render partial:  'merchitem_fields', locals:  { f:  a, disabled: 'val' }
+          .links
+            = link_to_add_association '<i class="fa fa-plus" ></i>'.html_safe, f, :merchitems, class:  'btn btn-primary btn-sm'
+            Add item
+
+        .form-group
+          = f.button :submit, 'Create merch', class:  'btn btn-primary'

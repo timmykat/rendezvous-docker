@@ -1,0 +1,18 @@
+.container
+  .row 
+    .col-md-offset-2.col-md-8
+      %h1= @merchandise.description
+      
+      %p SKU:  #{@merchandise.sku}
+
+      %p Sale price: #{@merchandise.sale_price}
+
+      %p Unit cost: #{@merchandise.unit_cost}
+
+      %ul
+        - @merchandise.merchitems.each do |item|
+
+          %li 
+            Size: #{item.size}
+            Inventory: #{item.inventory}
+            Remaining: #{item.remaining}

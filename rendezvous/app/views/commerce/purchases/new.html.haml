@@ -1,0 +1,102 @@
+.container
+  .row
+    .col-md-offset-2.col-md-8
+      %h1 Create purchase
+      %p
+        %em $10 minimum for credit card purchases 
+
+      = simple_form_for @purchase, do |f|
+        .well
+          .form-group
+            = f.label :description, nil, class: 'required'
+            %br/
+            = f.text_area :description, autofocus: true, class: 'form-control', placeholder: 'Description', required: true
+
+          .form-group
+            = f.label :amount, nil, class: 'required'
+            %br/
+            = f.text_field :amount, class: 'form-control', required: true
+
+          .form-group
+            = f.label :category, nil, class: 'required'
+            %br/
+            = f.select :category, collection:  [['Merch', 'merch'], ['Registration', 'registration'],['Donation', 'donation'], ['Multiple', 'multiple']] , :selected => 'merch', class:  'form-control'
+
+        .well
+          #payment-section
+            .form-group
+              = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'cash_or_check', input_html:  { class:  'payment' }
+
+            #payment-paid
+              .form-group 
+                = f.label :cash_check_paid, nil
+                = f.text_field :cash_check_paid, class: 'form-control'
+
+            
+            #payment-form.hidden
+              %h2 Credit card payment info
+              .form-group
+                = f.label :email, nil, class: 'required'
+                %br/
+                = f.text_field :email, class: 'form-control', required: true
+
+              .form-group
+                = f.label :first_name, nil, class: 'required'
+                %br/
+                = f.text_field :first_name, class: 'form-control', required: true
+
+              .form-group
+                = f.label :last_name, nil, class: 'required'
+                %br/
+                = f.text_field :last_name, class: 'form-control', required: true
+
+              .form-group
+                = f.label 'ZIP/Post code', nil, class: 'required'
+                %br/
+                = f.text_field :postal_code, class: 'form-control', required: true
+
+              .form-group
+                = f.label :country, nil, class: 'required'
+                %br/
+                = f.select :country, [['USA', 'USA'], ['CAN', 'CAN']], :selected => 'USA', class: 'form-control', required: true
+
+              .logos
+                = image_tag 'credit_card_logos_13'
+              = hidden_field_tag :payment_method_nonce, ''
+
+              .form-group
+                %label{ for:  'card-number' } Card Number
+                #card-number.form-control
+
+              .form-group
+                %label{ for:  'expiration-date' } Expiration Date
+                #expiration-date.form-control
+
+              .form-group
+                %label{ for:  'cvv' } CVV
+                #cvv.form-control
+
+              %table.table.submit-status
+                %tr.credit-card.text-danger
+                  %td
+                    Credit card valid?
+                  %td
+                    &nbsp;
+                    %i.fa-solid.fa-check.hidden
+                  %td{ id:  'logo', rowspan:  '3' }
+                %tr.expiration.text-danger
+                  %td
+                    Expiration date valid?
+                  %td
+                    &nbsp;
+                    %i.fa-solid.fa-check.hidden
+                %tr.cvv.text-danger
+                  %td
+                    CVV valid?
+                  %td
+                    &nbsp;
+                    %i.fa-solid.fa-check.hidden
+
+            .form-group
+              = f.button :submit, 'Complete purchase', class:  'btn btn-primary'
+

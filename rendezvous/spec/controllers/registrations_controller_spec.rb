@@ -42,7 +42,7 @@ RSpec.describe Event::RegistrationsController, type: :controller do
   
   context "the user is paying by check" do
     it "sets the paid amount to 0" do
-      @event_registration = build(:registration, paid_method: 'check')
+      @event_registration = build(:registration, paid_method: 'cash_or_check')
       expect(@event_registration.paid_amount).to be_equal(0.0)
     end
   end
