@@ -6,18 +6,22 @@
       = simple_form_for @merchandise do |f|
         .form-group 
           = f.label :sku, nil, class: 'required'
+          %br/
           = f.text_field :sku
 
         .form-group
-          = f.label :description, nil, class: 'required'
-          = f.text_field :description
+          = f.label :untracked_merchandise, nil, class: 'required'
+          %br/
+          = f.text_field :untracked_merchandise
 
         .form-group 
           = f.label :sale_price, nil, class: 'required'
+          %br/
           = f.text_field :sale_price
 
         .form-group 
           = f.label :unit_cost
+          %br/
           = f.text_field :unit_cost
 
         #merch-items

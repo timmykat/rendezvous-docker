@@ -1,0 +1,16 @@
+.nested-fields.well.well-sm.cart_item
+  = hidden_field_tag :item_total
+  .row
+    .col-md-4
+      .form-group
+        = f.input :merchitem_id, label: 'Item', collection: @available_items, as: :select 
+  .row
+    .col-md-4
+      .form-group
+        = f.input :number, label: :number, collection: [1, 2, 3, 4, 5], as: :select, selected: 1
+
+  .row
+    .col-md-4
+      .remove_association_action
+        = link_to_remove_association '<i class="fa fa-minus" ></i>'.html_safe, f, class:  'btn btn-danger btn-sm'
+        Remove this item
