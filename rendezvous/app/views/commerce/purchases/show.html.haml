@@ -17,10 +17,16 @@
         %dt #{@purchase.category.titlecase}
 
         %dd Description: 
-        %dt #{@purchase.description}
+        %dt #{@purchase.untracked_merchandise}
 
         %dd Amount
         %dt #{number_to_currency(@purchase.amount)}
+
+      #cart
+        %ul
+         - @purchase.cart.cart_items.each do |item|
+          %li #{item.merchitem.number} #{item.merchitem.size} #{item.merchitem.merchandise.description}
+
 
       .payment_info   
         .well

@@ -17,7 +17,7 @@
               %th Sale Price
               %th Unit Cost
               %th Size
-              %th Inventory
+              %th Starting Inventory
               %th Remaining
           %tbody
             - @merchandise.each do |item|
@@ -29,5 +29,5 @@
                   %td= item.sale_price
                   %td= item.unit_cost
                   %td= s.size
-                  %td= s.inventory
+                  %td= s.starting_inventory
                   %td= s.remaining

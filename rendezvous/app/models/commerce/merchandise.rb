@@ -2,7 +2,7 @@ module Commerce
   class Merchandise < ActiveRecord::Base
     
     attribute :sku, presence: true
-    attribute :description, presence: true
+    attribute :untracked_merchandise, presence: true
     attribute :sale_price, presence: true
 
     has_many :merchitems, dependent: :destroy
@@ -11,7 +11,7 @@ module Commerce
     def total_inventory
       inventory = 0
       merchitems.each do |item|
-        inventory += item.inventory if !item.inventory.nil?
+        inventory += item.starting_inventory if !item.starting_inventory.nil?
       end
       return inventory
     end

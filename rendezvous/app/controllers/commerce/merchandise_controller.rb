@@ -1,5 +1,7 @@
 module Commerce
   class MerchandiseController < ApplicationController
+
+    before_action :require_admin
     
     def new
         @merchandise = Merchandise.new
@@ -13,7 +15,7 @@ module Commerce
 
         # remaining = inventory --- to start
         @merchandise.merchitems.each do |item|
-          item.remaining = item.inventory
+          item.remaining = item.starting_inventory
         end
 
         if !@merchandise.save
@@ -60,7 +62,7 @@ module Commerce
         params.require(:commerce_merchandise).permit(
           :id,
           :sku,
-          :description,
+          :untracked_merchandise,
           :sale_price,
           :unit_cost,
           { merchitems_attributes:

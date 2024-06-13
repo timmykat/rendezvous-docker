@@ -16,8 +16,8 @@
           - @purchases.each do |p|
             %tr
               %td #{p.name_for_alpha}
-              %td= p.description
-              %td= number_to_currency(p.amount)
+              %td= p.untracked_merchandise
+              %td= number_to_currency(p.total)
               %td= p.category.titlecase 
               %td= p.created_at.to_formatted_s(:long)
 

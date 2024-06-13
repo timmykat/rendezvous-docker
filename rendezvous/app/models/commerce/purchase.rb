@@ -5,6 +5,10 @@ module Commerce
         attribute :cc_transaction_amount, :decimal, default: 0.0
         attribute :cash_amount, :decimal, default: 0.0
 
+        has_many :cart_items
+
+        accepts_nested_attributes_for :cart_items, allow_destroy: true
+
         validates :first_name, presence: true
         validates :last_name, presence: true
         validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, presence: true
