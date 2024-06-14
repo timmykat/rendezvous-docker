@@ -13,6 +13,7 @@
           %thead
             %tr
               %th
+              %th SKU
               %th Description
               %th Sale Price
               %th Unit Cost
@@ -25,6 +26,7 @@
                 %tr
                   %td 
                     #{link_to 'edit', edit_commerce_merchandise_path(item)}
+                  %td= s.sku
                   %td= item.description
                   %td= item.sale_price
                   %td= item.unit_cost
