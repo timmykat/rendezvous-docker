@@ -53,7 +53,7 @@ module Commerce
     private
       def generate_skus(merchandise)
         merchandise.merchitems.each do |item|
-          item.sku = "#{merchandise.sku}-#{item.size.parameterize }"
+          item.sku = "#{merchandise.sku}-#{item.size.parameterize.upcase }"
         end
         return merchandise
       end
@@ -62,11 +62,11 @@ module Commerce
         params.require(:commerce_merchandise).permit(
           :id,
           :sku,
-          :untracked_merchandise,
+          :description,
           :sale_price,
           :unit_cost,
           { merchitems_attributes:
-            [:id, :sku, :size, :inventory, :remaining, :_destroy]
+            [:id, :sku, :size, :starting_inventory, :remaining, :_destroy]
           }
         )
       end
