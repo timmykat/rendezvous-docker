@@ -4,45 +4,55 @@
   .row
     .col-md-offset-2.col-md-8
       %h1 Viewing purchase
-      
-      %ul
-        %li= link_to 'Create purchase', new_commerce_purchase_path
-        %li= link_to 'See all purchases', commerce_purchases_path
 
       %dl
-        %dd Date: 
-        %dt #{@purchase.created_at.to_formatted_s(:long)}
+        %dd Email: 
+        %dt #{@purchase.email.blank? ? '(None)' : @purchase.email}
+
+        %dd Total: 
+        %dt #{number_to_currency(@purchase.total)}
 
         %dd Category:  
         %dt #{@purchase.category.titlecase}
 
-        %dd Description: 
-        %dt #{@purchase.untracked_merchandise}
+        - unless @purchase.untracked_merchandise
+          %dd Generic merch: 
+          %dt #{@purchase.untracked_merchandise}
 
-        %dd Amount
-        %dt #{number_to_currency(@purchase.amount)}
+          %dd Generic merch amount:
+          %dt #{number_to_currency(@purchase.amount)}
 
       #cart
         %ul
-         - @purchase.cart.cart_items.each do |item|
-          %li #{item.merchitem.number} #{item.merchitem.size} #{item.merchitem.merchandise.description}
+          - @purchase.cart_items.each do |item|
+            %li #{item.number} #{item.merchitem.size} #{item.merchitem.merchandise.description}
 
 
-      .payment_info   
+      .payment_info
+        %h2 Payment Information
         .well
-          %h2 Credit card info
           %dl
-            %dd Name: 
-            %dt #{@purchase.full_name}
+            %dd Method:
+            %dt #{@purchase.paid_method.gsub(/_/, ' ')}
+          
+          - if @purchase.paid_method == 'credit card'
+            %h3 Credit card info
+            %dl
+              %dd Name: 
+              %dt #{@purchase.full_name}
 
-            %dd Email: 
-            %dt #{@purchase.email}
+              %dd Email: 
+              %dt #{@purchase.email}
 
-            %dd Zip/Post code:
-            %dt #{@purchase.postal_code}
+              %dd Zip/Post code:
+              %dt #{@purchase.postal_code}
 
-            %dd Country: 
-            %dt #{@purchase.country}
-            
-            %dd Transaction ID: 
-            %dt #{@purchase.cc_transaction_id}
+              %dd Country: 
+              %dt #{@purchase.country}
+              
+              %dd Transaction ID: 
+              %dt #{@purchase.cc_transaction_id}
+
+      %ul
+        %li= link_to 'Create purchase', new_commerce_purchase_path
+        %li= link_to 'See all purchases', commerce_purchases_path

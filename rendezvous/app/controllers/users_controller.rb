@@ -28,12 +28,17 @@ class UsersController < ApplicationController
   end
 
   def find_by_email
-    if User.find_by_email(params[:email])
-      status = { exists: true }
-    else
-      status = { exists: false }
-    end
-    render json: status
+    user = User.find_by_email(params[:email])
+    render json: user, only: [
+      :first_name, 
+      :last_name, 
+      :address1, 
+      :address2,
+      :city, 
+      :state_or_province,
+      :postal_code,
+      :country 
+    ]
   end
 
   def toggle_admin

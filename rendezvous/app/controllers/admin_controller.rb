@@ -53,6 +53,12 @@ class AdminController < ApplicationController
   def index
     @title = 'Admin'
     @no_user_id = NO_USER_ID
+    
+    if !params[:onsite_reg].blank?
+      @onsite_reg = true
+      render :index
+      return
+    end
 
     # Create CSV data files
     @files = {}

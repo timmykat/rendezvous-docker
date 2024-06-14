@@ -32,6 +32,7 @@
 //= require custom
 //= require pictures
 //= require registrations
+//= require purchases
 //= require user
 //= require vehicles
 

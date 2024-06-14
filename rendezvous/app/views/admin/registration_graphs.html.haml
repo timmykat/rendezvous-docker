@@ -1,5 +1,6 @@
-%script{src: 'https://cdn.jsdelivr.net/npm/chart.js'}
-%script
+= javscript_include_tag 'https://cdn.jsdelivr.net/npm/chart.js'
+
+:javascript
   = "const dataset = #{@reg_data.html_safe}"
   = "const eventDates = #{@event_dates.html_safe}"
   = "const xLabels = #{@xLabels.html_safe}"
@@ -10,7 +11,7 @@
       %h1= @title
       #graphs
 
-%script
+:javascript
   :plain
     const charts = []
     const graphContainer = document.getElementById('graphs')

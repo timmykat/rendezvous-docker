@@ -1,3 +1,5 @@
+require 'json'
+
 module Commerce
   class PurchasesController < ApplicationController
 
@@ -6,8 +8,21 @@ module Commerce
     def new
         @purchase = Purchase.new
         @purchase.cart_items.build
-        @available_items = get_available_items
-        @cart_item = CartItem.new
+        if (params[:silent_auction])
+          @purchase.untracked_merchandise = "Silent auction purchase"
+          @purchase.category = 'silent auction'
+          @silent_auction = true
+        else
+          @purchase.category = 'merch'
+          @available_items = get_available_items
+        end
+        @item_prices = Hash.new
+        Merchandise.all.each do |m|
+          m.merchitems.each do |item|
+            @item_prices[item.id] = m.sale_price
+          end
+        end
+        @item_prices = @item_prices.to_json
     end
 
     def create
@@ -17,7 +32,7 @@ module Commerce
         if @purchase.paid_method == 'credit card'
             braintree_transaction_params = {
                 order_id: order_id,
-                amount: @purchase.amount,
+                amount: @purchase.total,
                 payment_method_nonce: params[:payment_method_nonce],
                 customer: {
                 first_name: @purchase.first_name,
@@ -47,22 +62,25 @@ module Commerce
 
             if result.success?
                 @purchase.cc_transaction_id = result.transaction.id
-                @purchase.cc_transaction_amount = @purchase.amount
+                @purchase.cc_transaction_amount = @purchase.total
             end
         else
-            if @purchase.cash_check_paid != @purchase.amount
+            if @purchase.cash_check_paid != @purchase.total
                 flash_alert "The paid amount and the charge do not match"
-                redirect_to edit_commerce_purchase_path(@purchase)
+                redirect_to new_commerce_purchase_path
                 return
             end
         end
 
+        Rails.logger.info 'INSPECTION BEFORE SAVE'
+        Rails.logger.info @purchase.inspect
+
         if !@purchase.save
-            flash_alert_now @purchase.errors.full_messages
-            redirect_to new_commerce_purchase_path, alert: flash_alert
+            flash_alert_now 'There was a problem saving the purchase'
+            Rails.logger.info @purchase.errors.full_messages
+            redirect_to new_commerce_purchase_path
         else
             update_inventory(@purchase)
-            flash_notice 'The purchase was successfully created'
             redirect_to commerce_purchase_path(@purchase)
         end
     end
@@ -92,26 +110,27 @@ module Commerce
         items.each do |item|
           sku = item.merchandise.sku
           price = "$#{item.merchandise.sale_price.to_i}"
-          options << ["#{price} | #{sku} (#{item.size}) - #{item.remaining} left", item.id ]
+          options << ["-- #{item.size} -- | #{price} | #{sku} - #{item.remaining} left", item.id ]
         end
         return options
       end
 
       def purchase_params
-        params.require(:purchase).permit(
+        params.require(:commerce_purchase).permit(
           :id,
           :untracked_merchandise,
           :category,
-          :amount,
+          :generic_amount,
           :total,
           :email,
           :first_name,
           :last_name,
           :postal_code,
           :country,
+          :paid_method,
           :cc_transaction_id,
           :cc_transaction_amount,
-          :cash_amount,
+          :cash_check_paid,
           { cart_items_attributes: 
               [:id, :merchitem_id, :number, :_destroy]
         })

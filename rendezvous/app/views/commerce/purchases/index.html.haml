@@ -1,25 +1,24 @@
 .container
   .row
     .col-md-offset-2.col-md-8
-    %h1 Purchases in #{@year}
+      %h1 Purchases in #{@year}
 
-    - if !@purchases.blank? && (@purchases.size > 0) 
-      %table.table.striped
-        %thead
-          %tr
-            %td Name
-            %td Description
-            %td Amount
-            %td Category 
-            %td Date
-        %tbody
-          - @purchases.each do |p|
+      - if !@purchases.blank? && (@purchases.size > 0) 
+        %table.table.striped
+          %thead
             %tr
-              %td #{p.name_for_alpha}
-              %td= p.untracked_merchandise
-              %td= number_to_currency(p.total)
-              %td= p.category.titlecase 
-              %td= p.created_at.to_formatted_s(:long)
+              %th Email
+              %th Category
+              %th Total
+              %th Link
 
-    - else 
-      No purchases yet
+          %tbody
+            - @purchases.each do |p|
+              %tr
+                %td #{p.email}
+                %td= p.category.titlecase 
+                %td= number_to_currency(p.total) 
+                %td= link_to 'View', commerce_purchase_path(p)
+
+      - else 
+        No purchases yet

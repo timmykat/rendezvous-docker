@@ -3,23 +3,23 @@ module Commerce
 
         attribute :amount, :decimal, default: 0.0
         attribute :cc_transaction_amount, :decimal, default: 0.0
-        attribute :cash_amount, :decimal, default: 0.0
+        attribute :cash_check_paid, :decimal, default: 0.0
 
-        has_many :cart_items
+        has_many :cart_items, class_name: 'Commerce::CartItem'
 
         accepts_nested_attributes_for :cart_items, allow_destroy: true
 
-        validates :first_name, presence: true
-        validates :last_name, presence: true
-        validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, presence: true
-        validates :postal_code, presence: true
+        validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, 
+            presence: true
 
-        validates :amount, comparison: { greater_than: 10.0 }
-        validates :category, inclusion: { in: ['registration', 'merch', 'donation', 'multiple'] }
+        validates :postal_code, 
+            presence: true, if: Proc.new { |p| p.paid_method == 'credit card' }
+
+        validates :category, inclusion: { in: ['merch', 'silent auction', 'donation'] }
         validates :country, inclusion: { in: ['USA', 'CAN'] }
 
         def balance
-            return amount - cc_transaction_amount - cash_amount
+            return total - cc_transaction_amount - cash_check_paid
         end
 
         def name_for_alpha
