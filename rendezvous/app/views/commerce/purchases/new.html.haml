@@ -1,4 +1,6 @@
 .container#purchase
+  :javascript
+    const itemPrices = #{@item_prices}
   .row
     .col-md-offset-2.col-md-8
       %h1 Create purchase
@@ -11,19 +13,20 @@
           %br/
           = f.text_field :email, class: 'form-control', required: true
 
-        .well
-          #cart-items
-            %h2 #{Time.now.year} Merch
-            .form-group
-              = label_tag 'New merch subtotal'
-              = text_field_tag :subtotal, nil, class: 'form-control', disabled: true, style: 'width: 20em'
+        - unless @silent_auction
+          .well
+            #cart_items
+              %h2 #{Time.now.year} Merch
+              .form-group
+                = label_tag 'New merch subtotal'
+                = text_field_tag :subtotal, nil, class: 'form-control', disabled: true, style: 'width: 20em'
 
-            = f.simple_fields_for @cart_item do |item|
-              = render partial:  'cart_item_fields', locals:  { f:  item }
+              = f.simple_fields_for :cart_items do |item|
+                = render partial:  'cart_item_fields', locals:  { f:  item }
 
-            .links
-              = link_to_add_association '<i class="fa fa-plus" ></i>'.html_safe, f, :cart_items, class:  'btn btn-primary btn-sm'
-              Add item
+              .links
+                = link_to_add_association '<i class="fa fa-plus" ></i>'.html_safe, f, :cart_items, class:  'btn btn-primary btn-sm'
+                Add item
 
         .well
           .form-group 
@@ -32,20 +35,20 @@
             = f.text_area :untracked_merchandise, class: 'form-control'
 
           .form-group
-            = f.label :amount
+            = f.label :generic_amount
             %br/
-            = f.text_field :amount, class: 'form-control', style: 'width: 20em'
+            = f.text_field :generic_amount, class: 'form-control', style: 'width: 20em'
 
           .form-group
             = f.label :category
             %br/
-            = f.select :category, collection:  [['Merch', 'merch'], ['Registration', 'registration'],['Donation', 'donation'], ['Multiple', 'multiple']] , :selected => 'merch', class:  'form-control'
+            = f.select :category, collection:  [['Merch', 'merch'], ['Silent Auction', 'silent auction'],['Donation', 'donation']], class:  'form-control'
 
         .well
           .form-group 
             = f.label :total
             %br/
-            = f.text_field :total, disabled: true, id: 'total', style: 'width: 20em'
+            = f.text_field :total, id: 'total', style: 'width: 20em; font-size: 1.5em'
 
 
         #payment-section

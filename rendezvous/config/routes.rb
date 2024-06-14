@@ -29,7 +29,6 @@ Rails.application.routes.draw do
   namespace :commerce do
     resources :purchases, except: [:edit]
     resources :merchandise, except: [:show]
-    resources :cart, only: [:new, :edit, :show]
   end
 
   # -- Registrations

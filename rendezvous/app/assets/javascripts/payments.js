@@ -4,14 +4,10 @@ const  hostedFields = require('braintree-web/hosted-fields')
 let myHostedFields
 
 function buildBraintree(clientToken, formId) {
-  console.log('*** Running buildBraintree')
   let form = document.querySelector('#' + formId)
-  console.log('Form: ', form)
   let submit = document.querySelector('input[type="submit"]')
-  console.log('Submit button: ', submit)
 
   braintreeClient.create({ authorization: clientToken }, function(clientErr, clientInstance) {
-    console.log('*** Running client create')
 
     if (clientErr) {
       console.error(clientEerr)
@@ -44,15 +40,10 @@ function buildBraintree(clientToken, formId) {
       }
     }
 
-    console.log('Hosted field options', hostedFieldOptions)
-
     hostedFields.create(
       hostedFieldOptions, 
       function(hostedFieldsErr, hostedFieldsInstance) {
-        console.log('*** Runnging hostedFields setup callback')
         myHostedFields = hostedFieldsInstance
-
-        console.log('myHostedFields: ', myHostedFields)
 
         if (hostedFieldsErr) {
           console.error(hostedFieldsErr)
@@ -90,10 +81,7 @@ function buildBraintree(clientToken, formId) {
 
         submit.removeAttribute('disabled')
 
-        console.log('Setting up submit event listener')
         form.addEventListener('submit', function(event) {
-          console.log('*** Hosted fields submit event')
-          console.log(myHostedFields ? 'There are hosted fields' : 'Hosted fields missing!')
           
           if (myHostedFields) {
             event.preventDefault()
@@ -102,7 +90,7 @@ function buildBraintree(clientToken, formId) {
                 console.error('There has been a tokenize error: ', tokenizeErr)
                 return
               }
-              console.log('Payload nonce: ', payload.nonce)
+
               document.querySelector('input[name="payment_method_nonce"]').value = payload.nonce
               form.submit()
             })
@@ -115,20 +103,33 @@ function buildBraintree(clientToken, formId) {
 
 (function($) {
   jQuery(document).ready(function() {
-    console.log('Setting up Braintree')
     if (document.getElementById('payment-section')) {
       let formId = document.querySelector('form').id
-      console.log('Form ID: ', formId)
+
       $.get('/event/payment_token.plain', function(clientToken) {
-        console.log('Getting token and building Braintree: ', clientToken)
+        console.log('Retrieved token, building braintree')
         buildBraintree(clientToken, formId)
 
+        $('#commerce_purchase_paid_method_credit_card').on('click', function() {
+          console.log('Building hosted fields')
+          buildBraintree(clientToken, formId)
+        })
+
+        $('#commerce_purchase_paid_method_cash_or_check').on('click', function() {
+          console.log('Tearing down hosted fields')
+          myHostedFields.teardown( function(teardownErr) {
+            if (teardownErr) {
+              console.error('Could not tear down HostedFields.')
+            } else {
+              myHostedFields = null
+            }
+          })
+        })
+
         $('#event_registration_paid_method_credit_card').on('click', function() {
-          console.log('Credit card chosen -- building Braintree')
           buildBraintree(clientToken, formId)
         })
         $('#event_registration_paid_method_check').on('click', function() {
-          console.log('Check chosen - tearing down hosted fields')
           myHostedFields.teardown( function(teardownErr) {
             if (teardownErr) {
               console.error('Could not tear down HostedFields.')
