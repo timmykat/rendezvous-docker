@@ -1,11 +1,12 @@
 (function($) {
   jQuery(document).ready(function() {
-    console.log('Setting up purchases')
+    const creditCardSurchage = 0.03  // 3% credit card surcharge
 
     // Set up sources and targets
     let $purchase = $('#purchase')
     let $cartSubTotal = $('#subtotal')
     let $grandTotal = $('#total')
+    let $totalLabel = $('[for=commerce_purchase_total]')
     let $cashTotalPaid = $('#commerce_purchase_cash_check_paid')
 
     let $emailField = $('#commerce_purchase_email')
@@ -42,9 +43,11 @@
     // Payment methods
     $creditCardMethod.on('click', function() {
       $cashTotalPaid.val(0.0)
+      getGrandTotal()
     })
 
     $cashMethod.on('click', function() {
+      setTimeout(getGrandTotal(), 500)
       $cashTotalPaid.val($grandTotal.val())
     })
 
@@ -84,7 +87,6 @@
 
     let updateCartTotal = function() {
       let $cartItems = $purchase.find('#cart_items .cart_item')
-      console.log('There are ' + $cartItems.length + ' items')
       let sum = 0.0
       $cartItems.each(function(i) {
         sum += parseFloat($(this).find('.item_total_field').val())
@@ -94,8 +96,6 @@
 
     let getGrandTotal = function() {
       let cartTotal = 0.0
-      console.log($cartSubTotal, $cartSubTotal.val())
-      console.log($genericAmount, $genericAmount.val())
       if ($cartSubTotal && $cartSubTotal.val()) { 
         cartTotal = parseFloat($cartSubTotal.val())
       }
@@ -104,7 +104,12 @@
       $grandTotal.val((cartTotal + genericAmount).toFixed(2))
 
       if ($cashMethod.is(':checked')) {
+        $totalLabel.text('Total')
         $cashTotalPaid.val($grandTotal.val())
+      } else if ($creditCardMethod.is(':checked')) {
+        let totalWithCardFee = ($grandTotal.val() * (1.0 + creditCardSurchage)).toFixed(2)
+        $totalLabel.text('Total (includes ' + (creditCardSurchage * 100) + '% credit card surcharge)')
+        $grandTotal.val(totalWithCardFee)
       }
     }
 
