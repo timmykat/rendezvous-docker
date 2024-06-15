@@ -129,7 +129,7 @@ function buildBraintree(clientToken, formId) {
         $('#event_registration_paid_method_credit_card').on('click', function() {
           buildBraintree(clientToken, formId)
         })
-        $('#event_registration_paid_method_check').on('click', function() {
+        $('#event_registration_paid_method_cash_or_check').on('click', function() {
           myHostedFields.teardown( function(teardownErr) {
             if (teardownErr) {
               console.error('Could not tear down HostedFields.')
