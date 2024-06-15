@@ -8,11 +8,6 @@
         %em $10 minimum for credit card purchases 
 
       = simple_form_for @purchase do |f|
-        .form-group
-          = f.label :email, nil, class: 'required'
-          %br/
-          = f.text_field :email, class: 'form-control', required: true
-
         - unless @silent_auction
           .well
             #cart_items
@@ -32,7 +27,7 @@
           .form-group 
             = f.label 'Older merchandise/other'
             %br/
-            = f.text_area :description, class: 'form-control'
+            = f.text_area :untracked_merchandise, class: 'form-control'
 
           .form-group
             = f.label :generic_amount
@@ -63,6 +58,11 @@
 
         .well  
           #payment-form
+            %h2 Email
+            .form-group
+              = f.label :email, nil, class: 'required'
+              %br/
+              = f.text_field :email, class: 'form-control', required: true 
             %h2 Credit card payment info
             .form-group
               = f.label :first_name

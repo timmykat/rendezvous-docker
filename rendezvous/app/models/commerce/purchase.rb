@@ -10,7 +10,7 @@ module Commerce
         accepts_nested_attributes_for :cart_items, allow_destroy: true
 
         validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, 
-            presence: true
+            presence: true, if: Proc.new { |p| p.paid_method == 'credit card' }
 
         validates :postal_code, 
             presence: true, if: Proc.new { |p| p.paid_method == 'credit card' }
