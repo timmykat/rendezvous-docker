@@ -26,7 +26,7 @@
         %ul
           - @purchase.cart_items.each do |item|
             - merchitem = Commerce::Merchitem.find(item.merchitem_id)
-            %li #{item.number} #{merchitem.size} #{item.m.merchandise.description}
+            %li #{item.number} #{merchitem.size} #{item.merchitem.merchandise.description}
 
 
       .payment_info
