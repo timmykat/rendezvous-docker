@@ -49,6 +49,7 @@ payment_methods:
   - credit card
   - check
   - cash
+  - cash_or_check
   - no payment
 registration_statuses:
   - initiated
