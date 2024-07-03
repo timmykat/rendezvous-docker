@@ -55,7 +55,7 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_HOST=mysql
-      - MYSQL_ALLOW_EMPTY_PASSWORD
+      - MYSQL_ROOT_PASSWORD
 
     ports:
       - 3000:3000
