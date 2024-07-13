@@ -1,7 +1,7 @@
 
 namespace :maintenance do
 
-  MAINTENANCE_SIGNAL = '/var/www/rendezvous/shared/public/files/show_maintenance.txt'
+  MAINTENANCE_SIGNAL = '/var/www/rendezvous-docker/rendezvous/public/files/show_maintenance.txt'
 
   desc 'Maintenance mode on'
   task :on do
