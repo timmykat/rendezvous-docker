@@ -79,7 +79,6 @@ Rails.application.configure do
     protocol: 'https', 
     host: 'rendezvousstage.wordsareimages.org'
   }
-  end
   config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
 
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
