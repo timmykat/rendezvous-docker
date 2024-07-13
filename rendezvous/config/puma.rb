@@ -12,7 +12,7 @@ environment rails_env
 
 
 unless docker_env?
-  app_dir = "/var/www/rendezvous/current"
+  app_dir = "/var/www/rendezvous-docker/rendezvous"
   shared_dir = "#{app_dir}/shared"
   db_config_file = "#{shared_dir}/config/database.yml"
   puma_socket_file = "#{shared_dir}/tmp/sockets/puma.sock"
