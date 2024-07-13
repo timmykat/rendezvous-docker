@@ -1,4 +1,10 @@
+require 'terser'
+require 'docker/docker_helper'
+
+include Rendezvous::Docker
+
 Rails.application.configure do
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -22,18 +28,21 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
+  config.assets.js_compressor = Terser.new
+  config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.debug = false
   config.assets.compile = true
+  config.assets.digest = true
+
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
-  config.assets.digest = true
+
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -42,7 +51,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  # config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -63,11 +72,20 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
-  mailconf = Rails.configuration.rendezvous[:staging][:mailer]
-  config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
-  config.action_mailer.default_options = { from: 'no-reply@rendezvous.wordsareimages.com' }
-  config.action_mailer.smtp_settings = mailconf[:settings].clone
-  config.action_mailer.default_url_options = { protocol: 'http', host: mailconf[:settings][:domain] }
+  mailconf = Rails.configuration.rendezvous[:production][:mailer]
+
+    config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
+    config.action_mailer.default_url_options = { 
+      protocol: 'https', 
+      host: 'rendezvousstage.wordsareimages.org'
+    }
+    end
+    config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
+  end
+
+  config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
+
+  config.url_prefix += ":#{config.action_mailer.default_url_options[:port]}" if config.action_mailer.default_url_options[:port]
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

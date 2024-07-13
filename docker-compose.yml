@@ -1,4 +1,3 @@
-version: '3.3'
 services:
   nginx:
     image: nginx
@@ -9,8 +8,9 @@ services:
       - ./rendezvous:/var/www/rendezvous
 
     ports:
-      - 8080:8080
+      - 80:80
       - 443:443
+#     -8080:8080 
 
     depends_on:
       - rails_app
