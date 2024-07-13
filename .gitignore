@@ -15,7 +15,7 @@
 config/production_env_vars
 
 # Ignore database file
-rendezvous/database.yml
+database.yml
 
 # Ignore bundler config.
 rendezvous/.bundle
