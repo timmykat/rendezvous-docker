@@ -25,7 +25,7 @@ environment rails_env
 # else
 app_dir = "/var/www/rendezvous"
 db_config_file = "#{app_dir}/config/database.yml"
-puma_socket_file = "#{app_dir}/tmp/sockets/puma.sock"
+# puma_socket_file = "#{app_dir}/tmp/sockets/puma.sock"
 puma_state_file = "#{app_dir}/tmp/pids/puma.state"
 pidfile "#{app_dir}/tmp/pids/puma.pid"
 log_dir = "#{app_dir}/log"
@@ -34,7 +34,7 @@ puts "*** Puma socket: #{puma_socket_file}"
 # end
 
 # Bind puma socket
-bind "unix:/#{puma_socket_file}"
+bind 'tcp://0.0.0.0:3000'
 
 state_path puma_state_file
 
