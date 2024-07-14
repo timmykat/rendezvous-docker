@@ -30,7 +30,7 @@ puma_state_file = "#{app_dir}/tmp/pids/puma.state"
 pidfile "#{app_dir}/tmp/pids/puma.pid"
 log_dir = "#{app_dir}/log"
 
-puts "*** Puma socket: #{puma_socket_file}"
+# puts "*** Puma socket: #{puma_socket_file}"
 # end
 
 # Bind puma socket
