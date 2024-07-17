@@ -6,7 +6,6 @@ services:
       - ./config/nginx/staging/certs:/etc/nginx/ssl/certs
       - ./config/nginx/staging/nginx.conf:/etc/nginx/nginx.conf
       - ./rendezvous/log:/var/log/nginx
-      - ./rendezvous:/var/www/rendezvous
 
     ports:
       - 80:80
@@ -32,9 +31,10 @@ services:
       - RAILS_DEVELOPMENT_HOSTS
       - RAILS_ENV
       - RACK_ENV
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
+      - RENDEZVOUS_FACEBOOK_APP_ID
+      - RENDEZVOUS_FACEBOOK_APP_SECRET
+      - RENDEZVOUS_TWITTER_CONSUMER_KEY
+      - RENDEZVOUS_TWITTER_CONSUMER_SECRET
       - RENDEZVOUS_RECAPTCHA_PUBLIC_KEY
       - RENDEZVOUS_RECAPTCHA_PRIVATE_KEY
       - MAILCHIMP_API_KEY
@@ -46,7 +46,14 @@ services:
       - SANDBOX_BRAINTREE_PUBLIC_KEY
       - SANDBOX_BRAINTREE_PRIVATE_KEY
       - SANDBOX_BRAINTREE_TOKENIZATION_KEY
+      - GMAIL_USER
+      - GMAIL_PASS
       - RAILS_SECRET_KEY_BASE
+      # - MYSQL_DATABASE
+      # - MYSQL_USER
+      # - MYSQL_PASSWORD
+      # - MYSQL_HOST=mysql
+      # - MYSQL_ROOT_PASSWORD
 
     ports:
       - 3000:3000
@@ -65,38 +72,29 @@ services:
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   db:
-    image: mysql:8.0.32
-    platform: linux/amd64
+    image: postgres:16.1-alpine
     restart: always
 
     ports:
-      - 3306:3306
+      - 5432:5432
 
     environment:
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - POSTGRES_PASSWORD
+      - POSTRES_USER
+      - POSTGRES_DB
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      # - MYSQL_DATABASE
+      # - MYSQL_USER
+      # - MYSQL_PASSWORD
+      # - MYSQL_HOST
+      # - MYSQL_ROOT_PASSWORD
 
     networks:
       - rendezvous
 
     volumes:
-      - ./init_data/mysql:/docker-entrypoint-initdb.d
-      - ./.ephemeral/mysqld/db_data:/var/lib/mysql
-      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
-    networks:
-      - rendezvous
-
-    depends_on:
-      - db
+      - ./.ephemeral/postgres/pgdata:/var/lib/postgresql/data/pgdata
+      - ./.ephemeral/postgres/initdb:/docker-entrypoint-initdb.d
 
 networks:
   rendezvous:
