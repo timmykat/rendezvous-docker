@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: staging
 
     steps:
       # Checkout the repository
@@ -29,6 +30,6 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           script: |
             cd /var/www/rendezvous-docker
-            git pull origin hostinger  # or your branch name
-            sudo docker-compose -f ./docker-compose.yml down
-            sudo docker-compose -f ./docker-compose.yml up -d
+            git pull origin hostinger
+            docker compose -f ./docker-compose.yml down
+            docker compose -f ./docker-compose.yml up -d
