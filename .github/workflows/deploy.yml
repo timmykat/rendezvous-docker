@@ -17,8 +17,8 @@ jobs:
       # Set up Docker Compose
       - name: Set Up Docker Compose
         run: |
-          sudo docker compose -f /var/www/rendezvous-docker/docker-compose.yml build
-          sudo docker compose -f /var/www/rendezvous-docker/docker-compose.yml up -d
+          sudo docker compose -f ./docker-compose.yml build
+          sudo docker compose -f ./docker-compose.yml up -d
 
       # Deploy via SSH
       - name: Deploy via SSH
