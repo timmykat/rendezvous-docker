@@ -17,7 +17,12 @@ module Event
     end
 
     def get_payment_token
-      render plain:  ENV['BRAINTREE_TOKENIZATION_KEY'], content_type: 'text/plain'
+      if Rails.env.production?
+        prefix = "PROD_"
+      else
+        prefix = "SANDBOX_"
+      end 
+      render plain:  ENV[prefix + 'BRAINTREE_TOKENIZATION_KEY'], content_type: 'text/plain'
     end
 
     def set_cache_buster

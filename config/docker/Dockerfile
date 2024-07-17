@@ -13,8 +13,7 @@ WORKDIR $RAILS_ROOT
 # Add gem setup
 RUN gem install bundler
 
-COPY Gemfile Gemfile
-COPY Gemfile.lock Gemfile.lock
+COPY Gemfile Gemfile.lock ./
 
 RUN bundle install
 
