@@ -1,0 +1,48 @@
+name: Deploy Rendezvous
+run-name: Bulding and deploying Rendezvous
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - hostinger  # adjust to your main branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}  
+
+      - name: Set Production Environment
+        if: github.ref == 'refs/heads/main'
+        run: echo "ENVIRONMENT=production" >> $GITHUB_ENV
+
+      - name: Set Staging Environment
+        if: github.ref != 'refs/heads/main' 
+        run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+
+      - name: Build and push docker images
+        run: |
+          docker compose -f $ENVIRONMENT-compose.yml build
+          docker compose -f $ENVIRONMENT-compose.yml push
+
+      # Deploy via SSH
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTINGER_IP }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          script: |
+            cd /var/www/rendezvous-docker
+            git pull origin hostinger
+            docker compose -f $ENVIRONMENT-compose.yml down
+            docker compose -f $ENVIRONMENT-compose.yml up -d
