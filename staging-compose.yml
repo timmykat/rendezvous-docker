@@ -21,8 +21,8 @@ services:
   rails_app:
     image: rails_image
     build:
-      context: ../../rendezvous
-      dockerfile: ./docker/Dockerfile
+      context: ./rendezvous
+      dockerfile: ../config/docker/Dockerfile
     
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
