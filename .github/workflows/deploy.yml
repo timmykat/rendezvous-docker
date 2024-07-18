@@ -1,4 +1,5 @@
 name: Deploy Rendezvous
+run-name: Bulding and deploying Rendezvous
 
 on:
   push:
