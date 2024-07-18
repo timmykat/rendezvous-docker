@@ -2,6 +2,7 @@ name: Deploy Rendezvous
 run-name: Bulding and deploying Rendezvous
 
 on:
+  - workflow_dispatch
   push:
     branches:
       - hostinger  # adjust to your main branch name
