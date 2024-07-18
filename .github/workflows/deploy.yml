@@ -14,9 +14,11 @@ jobs:
       - name: Check Out Repository
         uses: actions/checkout@v4
 
-      - name: Set Environment
+      - name: Set Production Environment
         if: github.ref == 'refs/heads/main'
         run: echo "ENVIRONMENT=production" >> $GIHUB_ENV
+
+      - name: Set Staging Environment
         if: github.ref != 'refs/heads/main' 
         run: echo "ENVIRONMENT=staging" >> $GIHUB_ENV
 
