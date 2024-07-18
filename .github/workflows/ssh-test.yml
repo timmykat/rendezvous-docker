@@ -12,4 +12,4 @@ jobs:
         host: ${{ secrets.HOSTINGER_IP }}
         username: ${{ secrets.HOSTINGER_USER }}
         key: ${{ secrets.HOSTINGER_SSH_KEY }}
-        script: whoami
+        script: pwd
