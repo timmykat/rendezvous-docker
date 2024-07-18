@@ -8,18 +8,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: staging
 
     steps:
       # Checkout the repository
       - name: Check Out Repository
         uses: actions/checkout@v4
 
+      - name: Set Environment
+        if: github.ref == 'refs/heads/main'
+        run: echo "ENVIRONMENT=production" >> $GIHUB_ENV
+        if: github.ref != 'refs/heads/main' 
+        run: echo "ENVIRONMENT=staging" >> $GIHUB_ENV
+
       # Set up Docker Compose
       - name: Set Up Docker Compose
         run: |
-          sudo docker compose -f ./docker-compose.yml build
-          sudo docker compose -f ./docker-compose.yml up -d
+          sudo docker compose -f ./config/docker/staging-compose.yml build
+          sudo docker compose -f ./config/docker/staging-compose.yml up -d
 
       # Deploy via SSH
       - name: Deploy via SSH
@@ -31,5 +36,5 @@ jobs:
           script: |
             cd /var/www/rendezvous-docker
             git pull origin hostinger
-            docker compose -f ./docker-compose.yml down
-            docker compose -f ./docker-compose.yml up -d
+            docker compose -f ./config/docker/$ENVIRONMENT-compose.yml down
+            docker compose -f ./config/docker/$ENVIRONMENT-compose.yml up -d
