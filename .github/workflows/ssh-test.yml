@@ -1,0 +1,15 @@
+name: Remote ssh command test
+on: [workflow_dispatch]
+jobs:
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action
+      with:
+        host: ${{ secrets.HOSTINGER_IP }}
+        username: ${{ secrets.HOSTINGER_USER }}
+        key: ${{ secrets.HOSTINGER_SSH_KEY }}
+        script: whoami
