@@ -16,11 +16,11 @@ jobs:
 
       - name: Set Production Environment
         if: github.ref == 'refs/heads/main'
-        run: echo "ENVIRONMENT=production" >> $GIHUB_ENV
+        run: echo "ENVIRONMENT=production" >> $GITHUB_ENV
 
       - name: Set Staging Environment
         if: github.ref != 'refs/heads/main' 
-        run: echo "ENVIRONMENT=staging" >> $GIHUB_ENV
+        run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
 
       # Set up Docker Compose
       - name: Set Up Docker Compose
