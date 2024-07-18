@@ -22,7 +22,7 @@ services:
     image: rails_image
     build:
       context: ../../rendezvous
-      dockerfile: ./Dockerfile
+      dockerfile: ./docker/Dockerfile
     
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
