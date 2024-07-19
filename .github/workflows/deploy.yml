@@ -38,5 +38,5 @@ jobs:
             cd /var/www/rendezvous-docker
             git pull origin hostinger
             docker compose build
-            docker compose -f $ENVIRONMENT-compose.yml down
-            docker compose -f $ENVIRONMENT-compose.yml up -d
+            docker compose -f staging-compose.yml down
+            docker compose -f staging-compose.yml up -d
