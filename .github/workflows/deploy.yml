@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Check Out Repository
         uses: actions/checkout@v4
 
@@ -29,13 +28,7 @@ jobs:
         if: github.ref != 'refs/heads/main' 
         run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
 
-      - name: Build and push docker images
-        run: |
-          docker compose -f $ENVIRONMENT-compose.yml build
-          docker compose -f $ENVIRONMENT-compose.yml push
-
-      # Deploy via SSH
-      - name: Deploy via SSH
+      - name: Build and deploy via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOSTINGER_IP }}
@@ -44,5 +37,6 @@ jobs:
           script: |
             cd /var/www/rendezvous-docker
             git pull origin hostinger
+            docker compose build
             docker compose -f $ENVIRONMENT-compose.yml down
             docker compose -f $ENVIRONMENT-compose.yml up -d
