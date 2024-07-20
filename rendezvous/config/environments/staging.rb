@@ -78,7 +78,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
   config.action_mailer.default_url_options = { 
     protocol: 'https', 
-    host: 'rendezvousstage.wordsareimages.org'
+    host: 'staging.wordsareimages.org'
   }
   config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
 
