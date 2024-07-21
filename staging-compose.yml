@@ -87,7 +87,6 @@ services:
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   adminer:
-    profiles: [dbdev]
     image: adminer
     restart: always
     ports:
