@@ -8,7 +8,7 @@ class MainPagesController < ApplicationController
 
   # GET /
   def index
-    @pictures = Picture.front_page_set
+    @pictures = []
     @cache_buster = "?cb=#{Time.now.to_i}"
     render layout: 'main_page'
   end
