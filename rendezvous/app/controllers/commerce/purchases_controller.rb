@@ -66,7 +66,8 @@ module Commerce
             end
         else
             if @purchase.cash_check_paid != @purchase.total
-                flash_alert "The paid amount and the charge do not match"
+                Rails.logger.info "Paid: #{@purchase.cash_check_paid.to_s} Total: #{@purchase.total}"
+                flash_alert_now "The paid amount and the charge do not match"
                 redirect_to new_commerce_purchase_path
                 return
             end

@@ -51,6 +51,7 @@
             %table.table.striped
               %thead
                 %tr
+                  %th Start
                   %th.text-center Actions
                   %th.text-center Status
                   %th Name
@@ -65,6 +66,7 @@
                 - @event_registrations.each do |registration|
                   %tr{class:  'text-center' }
                     %td.text-left
+                      #{registration.user.city}, #{registration.user.state_or_province}
                       .row 
                         .col-sm-12
                           = link_to 'View', event_registration_path(registration.id), class:  'link-primary'
