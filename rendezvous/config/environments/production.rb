@@ -1,7 +1,4 @@
 require 'terser'
-require 'docker/docker_helper'
-
-include Rendezvous::Docker
 
 Rails.application.configure do
 
@@ -39,10 +36,8 @@ Rails.application.configure do
   config.assets.compile = true
   config.assets.digest = true
 
-
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
   # yet still be able to expire them through the digest params.
-
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -72,28 +67,16 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
-  mailconf = Rails.configuration.rendezvous[:production][:mailer]
+  mailconf = Rails.configuration.rendezvous[:mailer]
 
-  if mailconf[:use_letter_opener]
-    config.action_mailer.delivery_method = :letter_opener
-    # config.action_mailer.default_url_options = { protocol: 'http', host: 'localhost', port:8080 }
-    config.action_mailer.default_url_options = { protocol: 'https', host: 'rendezvous.local.wgbhdigital.org', port:443 }
-  else
-    config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
-    if docker_env?
-      config.action_mailer.default_url_options = { 
-        protocol: 'https', 
-        host: 'rendezvous.local.wgbhdigital.org',
-        port: 443
-      }
-    else
-      config.action_mailer.default_url_options = { 
-        protocol: 'https', 
-        host: 'citroenrendezvous.org'
-      }
-    end
-    config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
-  end
+  config.action_mailer.delivery_method = Rails.configuration.rendezvous[:production][:delivery_method].to_sym
+  config.action_mailer.default_url_options = { 
+    protocol: 'https', 
+    host: 'citroenrendezvous.org'
+  }
+
+  config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
+
 
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
 

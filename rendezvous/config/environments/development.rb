@@ -1,16 +1,14 @@
-require 'docker/docker_helper'
-
-include Rendezvous::Docker
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.hosts = [
-    IPAddr.new("0.0.0.0/0"),        # All IPv4 addresses.
-    IPAddr.new("::/0"),             # All IPv6 addresses.
-    "localhost",                    # The localhost reserved domain.
-    ENV["RAILS_DEVELOPMENT_HOSTS"]  # Additional comma-separated hosts for development.
-  ]
+  config.hosts.clear
+  #  = [
+  #   IPAddr.new("0.0.0.0/0"),        # All IPv4 addresses.
+  #   IPAddr.new("::/0"),             # All IPv6 addresses.
+  #   "localhost",                    # The localhost reserved domain.
+  #   ENV["RAILS_DEVELOPMENT_HOSTS"]  # Additional comma-separated hosts for development.
+  # ]
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development

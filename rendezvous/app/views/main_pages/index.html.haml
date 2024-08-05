@@ -196,7 +196,7 @@
           %br
             %b Check out our new photo gallery!
             =link_to 'Go', gallery_path, class: 'btn btn-info'
-      - if @pictures.count == 8
+      - if !@pictures.blank? && @pictures.count == 8
         - @pictures.each do |pic|
           .col-md-3.single-portfolio.col-sm-6
             %figure.portfolio-item

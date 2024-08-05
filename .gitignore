@@ -10,10 +10,15 @@
 .data
 
 # Ignore .env files
+.env
+.envrc
 config/production_env_vars
 
+# Key files
+*.pem
+
 # Ignore database file
-rendezvous/database.yml
+database.yml
 
 # Ignore bundler config.
 rendezvous/.bundle

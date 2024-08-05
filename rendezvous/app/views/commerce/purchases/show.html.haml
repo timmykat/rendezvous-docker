@@ -15,7 +15,7 @@
         %dd Category:  
         %dt #{@purchase.category.titlecase}
 
-        - unless @purchase.untracked_merchandise
+        - if @purchase.untracked_merchandise
           %dd Generic merch: 
           %dt #{@purchase.untracked_merchandise}
 
@@ -25,7 +25,8 @@
       #cart
         %ul
           - @purchase.cart_items.each do |item|
-            %li #{item.number} #{item.merchitem.size} #{item.merchitem.merchandise.description}
+            - merchitem = Commerce::Merchitem.find(item.merchitem_id)
+            %li #{item.number} #{merchitem.size} #{item.merchitem.merchandise.description}
 
 
       .payment_info
