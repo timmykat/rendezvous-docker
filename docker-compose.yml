@@ -3,7 +3,8 @@ services:
     image: nginx
 
     volumes:
-      - ./config/nginx/development/certs:/etc/nginx/ssl/certs
+      - ./config/nginx/templates:/etc/nginx/templates/
+      - ./config/nginx/local/certs:/etc/nginx/ssl/certs
       - ./config/nginx/local/nginx.conf:/etc/nginx/nginx.conf
       - ./rendezvous/log:/var/log/nginx
       - ./rendezvous:/var/www/rendezvous
@@ -29,24 +30,32 @@ services:
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     environment:
-      - RAILS_DEVELOPMENT_HOSTS
+      - APP_DOMAIN
       - RAILS_ENV
       - RACK_ENV
+      - RAILS_DEVELOPMENT_HOSTS
+      - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
-      - RENDEZVOUS_RECAPTCHA_PUBLIC_KEY
-      - RENDEZVOUS_RECAPTCHA_PRIVATE_KEY
-      - MAILCHIMP_API_KEY
-      - RENDEZVOUS_SES_SENDING_ADDRESS
-      - RENDEZVOUS_SMTP_USER
-      - RENDEZVOUS_SMTP_PASSWORD
-      - DEVISE_SECRET_KEY
+
+      # Sandbox info
       - SANDBOX_BRAINTREE_MERCHANT_ID
       - SANDBOX_BRAINTREE_PUBLIC_KEY
       - SANDBOX_BRAINTREE_PRIVATE_KEY
       - SANDBOX_BRAINTREE_TOKENIZATION_KEY
-      - RAILS_SECRET_KEY_BASE
+
+      # Mailer info
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_USER
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRES
+      - BREVO_API_KEY
 
     ports:
       - 3000:3000
