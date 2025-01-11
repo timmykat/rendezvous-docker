@@ -1,7 +1,10 @@
 require 'json'
+require 'square'
 
 module Commerce
   class PurchasesController < ApplicationController
+
+
 
     before_action :require_admin
 
@@ -30,35 +33,7 @@ module Commerce
         order_id = Purchase.last.blank? ? 1000 : Purchase.last.id + 1
 
         if @purchase.paid_method == 'credit card'
-            braintree_transaction_params = {
-                order_id: order_id,
-                amount: @purchase.total,
-                payment_method_nonce: params[:payment_method_nonce],
-                customer: {
-                first_name: @purchase.first_name,
-                last_name: @purchase.last_name,
-                email: @purchase.email,
-                },
-                billing: {
-                first_name: @purchase.first_name,
-                last_name: @purchase.last_name,
-                postal_code: @purchase.postal_code,
-                country_code_alpha3: @purchase.country
-                },
-                options: {
-                submit_for_settlement: true
-                },
-            }
 
-            # Handle the Braintree transaction
-            gateway = Braintree::Gateway.new(
-                environment: Braintree::Configuration.environment,
-                merchant_id: Braintree::Configuration.merchant_id,
-                public_key: Braintree::Configuration.public_key,
-                private_key: Braintree::Configuration.private_key,
-            )
-
-            result = gateway.transaction.sale(braintree_transaction_params)
 
             if result.success?
                 @purchase.cc_transaction_id = result.transaction.id

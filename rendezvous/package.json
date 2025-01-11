@@ -7,7 +7,6 @@
   "dependencies": {
     "@nathanvda/cocoon": "^1.2.14",
     "bootstrap": "^3",
-    "braintree-web": "^3.92.1",
     "browserify": "^17.0.0",
     "browserify-sign": "4.2.2",
     "dropzone": "^6.0.0-beta.2",

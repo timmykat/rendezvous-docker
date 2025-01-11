@@ -99,8 +99,8 @@
     
     // Toggle CC vs mailing address
     $('input.payment').on('click', function() {
-      $('#payment-form').toggleClass('hidden');
-      $('#mailing-address').toggleClass('hidden');
+      $('#payment-online').toggleClass('hidden');
+      $('#payment-cash').toggleClass('hidden');
       $('#payment-paid').toggleClass('hidden');
     });  
     

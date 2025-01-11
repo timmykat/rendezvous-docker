@@ -42,11 +42,16 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
 
-      # Sandbox info
+      # Braintree sandbox info
       - SANDBOX_BRAINTREE_MERCHANT_ID
       - SANDBOX_BRAINTREE_PUBLIC_KEY
       - SANDBOX_BRAINTREE_PRIVATE_KEY
       - SANDBOX_BRAINTREE_TOKENIZATION_KEY
+
+      # Square sandbox info
+      - SANDBOX_SQUARE_APP_ID
+      - SANDBOX_SQUARE_LOCATION_ID
+      - SANDBOX_SQUARE_ACCESS_TOKEN
 
       # Mailer info
       - SMTP_PASSWORD

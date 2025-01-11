@@ -23,11 +23,8 @@
 //= require dropzone/dist/dropzone-min
 //= require magnific-popup/dist/jquery.magnific-popup.min
 //= require lazyload/lazyload.min
-//= require braintree-web/client
-//= require braintree-web/hosted-fields
 //= require @nathanvda/cocoon/cocoon
 //= require admin
-//= require payments
 //= require main_pages
 //= require custom
 //= require pictures
