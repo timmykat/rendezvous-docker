@@ -40,7 +40,9 @@ module ApplicationHelper
   end
 
   def in_registration_window?
-    Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+    Rails.configuration.rendezvous[:registration_window][:test] ||
+    (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && 
+    Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
   end
 
   def after_rendezvous?

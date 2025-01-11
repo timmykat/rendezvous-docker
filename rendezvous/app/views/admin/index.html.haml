@@ -172,8 +172,8 @@
                             %em  Total
                           %td.text-right= number_to_currency(@data[:financials][:total])
                     %p
-                      Braintree account:
-                      = link_to '<i class="fa fa-bank"></i>'.html_safe, "https://#{Rails.env.production? ? '' : 'sandbox.'}braintreegateway.com/login", target:  '_blank'
+                      Square account:
+                      = link_to '<i class="fa fa-bank"></i>'.html_safe, "https://app.squareup.com", target:  '_blank'
                 .col-md-6.col-xs-12
                   .well.well-sm
                     %h3 The Numbers

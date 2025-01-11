@@ -1,15 +1,25 @@
 # The following will most likely change from year to year
 dates:
-  day_one: June 14, 2024
+  day_one: June 13, 2025
   duration: 3
-  refund_date: 'June 7, 2024'
+  refund_date: 'June 6, 2025'
 registration_window:
-  open: 2024-04-05
-  close: 2024-06-07
-  after_rendezvous: 2024-06-16
+  open: 2025-04-01
+  close: 2025-06-06
+  after_rendezvous: 2025-06-16
+  test: true
 fees:
   adult: 75
   child: 0
+
+payment_credentials:
+  sandbox:
+    application_id: <%= ENV['SANDBOX_SQUARE_APP_ID'] %>
+    location_id: <%= ENV['SANDBOX_SQUARE_LOCATION_ID'] %>
+  production:
+    application_id: <%= ENV['PROD_SQUARE_APP_ID'] %>
+    location_id: <%= ENV['PROD_SQUARE_LOCATION_ID'] %>
+
 hotel:
   name: Courtyard Marriott
   address: 11 Excelsior Ave, Saratoga Springs
@@ -27,7 +37,6 @@ chauffeurs:
  - Jon Chomitz
  - Michaela Hellman
  - Tim Kinnel
- - Christoper (Toaph) Westfall
 
 # The following should rarely change
 front_page_message:
@@ -49,7 +58,7 @@ payment_methods:
   - credit card
   - check
   - cash
-  - cash_or_check
+  - cash or check
   - no payment
 registration_statuses:
   - initiated

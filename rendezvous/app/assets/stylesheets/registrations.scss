@@ -109,6 +109,21 @@ td#logo {
   }
 }
 
+.btn.btn-square-pay {
+  position: relative;
+  display: block;
+  width: 120px;
+  margin-top: 20px;
+  padding-right: 35px;
+
+  &::after {
+    content: image-url('square-icon.png');
+    position: absolute;
+    right: 30px;
+    margin-top: -4px;
+  }
+}
+
 body {
   .simple {
     h1 {

@@ -39,12 +39,13 @@ Rails.application.routes.draw do
         get :review
         get :payment
         patch :complete
+        get :complete_after_online_payment
+        get :send_to_square
         get :vehicles
         get :send_email_confirmation
       end
     end
     resources :registrations, except: [:index]
-    get 'payment_token', to: 'registrations#get_payment_token'
     get '/welcome', to: 'registrations#welcome'
   end
 
@@ -87,13 +88,12 @@ Rails.application.routes.draw do
   get '/my-pictures', to: 'pictures#my_pictures'
   post '/pictures/upload(.:format)', to:'pictures#upload'
 
-
   # -- AJAX routes
-  get '/ajax/picture/delete/:id',   to: 'pictures#ajax_delete'
-  get '/ajax/find_user_by_email',   to: 'users#find_by_email'
-  get '/ajax/toggle_admin',         to: 'users#toggle_admin'
-  get '/ajax/toggle_tester',        to: 'users#toggle_tester'
-  get '/ajax/delete_users',         to: 'users#delete_users'
-  get '/ajax/toggle_user_testing',  to: 'users#toggle_user_testing'
-
+  get '/ajax/picture/delete/:id',    to: 'pictures#ajax_delete'
+  get '/ajax/find_user_by_email',    to: 'users#find_by_email'
+  get '/ajax/toggle_admin',          to: 'users#toggle_admin'
+  get '/ajax/toggle_tester',         to: 'users#toggle_tester'
+  get '/ajax/delete_users',          to: 'users#delete_users'
+  get '/ajax/toggle_user_testing',   to: 'users#toggle_user_testing'
+  get '/ajax/update_paid_method',    to: 'event/registrations#update_paid_method'
 end

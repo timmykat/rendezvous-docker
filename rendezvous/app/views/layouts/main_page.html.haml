@@ -81,9 +81,9 @@
                       %a{href: t_shirt_gallery_path } t-shirt gallery
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
-                    - if registration_live? && !current_user
-                      %li
-                        %a{href: new_user_session_path } sign in
+                    -# - if registration_live? && !current_user
+                    %li
+                      %a{href: new_user_session_path } sign in
     = yield
 
     = render partial: 'common/footer'
