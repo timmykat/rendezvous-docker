@@ -9,6 +9,6 @@
         &nbsp;&nbsp;
         = link_to 'pay your fee', payment_event_registration_path(current_registration)
       - elsif current_registration.status == 'complete'
-        = link_to 'update your vehicle(s)', vehicles_event_registration_path(current_registration)
+        = link_to 'update your vehicle(s)', update_vehicles_event_registration_path(current_registration)
         &nbsp;&nbsp;
         = link_to 'view completed registration', event_registration_path(current_registration)

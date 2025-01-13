@@ -52,4 +52,13 @@ module RegistrationsHelper
     edit_event_registration_path(current_registration)
   end
 
+  def vehicle_at_rendezvous(registration, vehicle)
+    bringing = false
+    registration.vehicles.each do |v|
+      if v == vehicle
+        return true
+      end
+    end
+    return false
+  end
 end

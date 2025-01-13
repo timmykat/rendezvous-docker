@@ -78,30 +78,26 @@
 
   .well.well-sm.vehicles
     %h3 Vehicles
-    %p This is the vehicle information we have for you.
-    - if @event_registration.status == 'complete' || @event_registration.status == 'payment due'
-      %p 
-        If you need to modify your vehicle info for this year,
-        = link_to "update here", vehicles_event_registration_path(@event_registration)
-    - else
-      %p If you are bringing different vehicles, please update after you finish registering.
-    - if @event_registration.user.vehicles.blank?
-      %p You are not bringing any vehicles to the Rendezvous.
-    - else
-      %table.table
-        %thead
-          %th Marque
-          %th Model
-          %th Year
-          %th Other info
-          %th Judging category
-        %tbody
-          - @event_registration.user.vehicles.each do |v|
-            %td= v.marque
-            %td= v.model
-            %td= v.year
-            %td= v.other_info
-            %td= v.judging_category
+    %p 
+      If you need to update the vehicle(s) you're bringing to the rendezvous, please do so 
+      %a{href: update_vehicles_event_registration_path(@event_registration)} here. 
+
+    %table.table
+      %thead
+        %th Bringing to Rendezvous?
+        %th Marque
+        %th Model
+        %th Year
+        %th Other info
+        %th Judging category
+      %tbody
+        - @event_registration.user.vehicles.each do |v|
+          %td= v.at_event?(@event_registration) ? "Yes" : "No"
+          %td= v.marque
+          %td= v.model
+          %td= v.year
+          %td= v.other_info
+          %td= v.judging_category
 
 - if current_user.has_role? :admin   
   .well.well-sm.email
