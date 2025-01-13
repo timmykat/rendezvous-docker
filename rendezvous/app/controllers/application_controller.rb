@@ -94,4 +94,9 @@ class ApplicationController < ActionController::Base
       super
     end
   end
+
+  def format_for_logging(hash)
+    require 'pp'
+    PP.pp(hash, '')
+  end
 end

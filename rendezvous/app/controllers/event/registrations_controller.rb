@@ -185,7 +185,7 @@ module Event
       if @event_registration.save
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to vehicles_event_registration_path(@event_registration)
+        redirect_to update_vehicles_event_registration_path(@event_registration)
         return 
       else 
         flash_alert 'There was a problem completing your registration.'
@@ -213,16 +213,27 @@ module Event
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to vehicles_event_registration_path(@event_registration)
+        redirect_to update_vehicles_event_registration_path(@event_registration)
       end
     end
 
-    def vehicles
+    def update_vehicles
       @title = 'Vehicle Information'
 
       @event_registration = Registration.find(params[:id])
-      @user = @event_registration.user
+      @vehicles = @event_registration.user.vehicles
     end
+
+    def save_updated_vehicles
+      @event_registration = Registration.find(params[:id])
+      Rails.logger.info(format_for_logging(vehicle_update_params))
+      if (@event_registration.update(vehicle_update_params))
+        flash_notice "Vehicle(s) for this event saved."
+      else
+        flash_alert "There was a problem saving your vehicle for this event."
+      end
+      redirect_to event_registration_path(@event_registration)
+    end  
 
     def index
       @title = 'All Registrations'
@@ -299,6 +310,10 @@ module Event
 
       def payment_method_params
         params.permit(:id, :paid_method) 
+      end
+
+      def vehicle_update_params
+        params.require(:event_registration).permit(vehicle_ids: [])
       end
 
       def event_registration_user_params
