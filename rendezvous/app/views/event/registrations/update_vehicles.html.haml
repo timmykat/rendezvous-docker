@@ -8,10 +8,10 @@
         %strong Congratulations, you have completed your registration for the Rendezvous!
       %p 
         %em 
-          If you're bringing a Citroen or other French car, please update here if necessary. It's helps us plan if we know what show vehicles you will be bringing. If the information below is correct, you may go directly to 
-        = succeed '.' do
-          = link_to 'your registration information', event_registration_path(@event_registration)
-        Otherwise, please enter the correct information below.
+          If you're bringing any displayable vehicles (Citroen, other French marque, something eye-catching), please indicate here -- it helps us to plan. If you need to update your vehicle(s), click below. 
+        
+      %button.btn.btn-primary{"data-target" => "#vehicle-modal", "data-toggle" => "modal", type: "button"} Update My Vehicles
+      / = render partial: 'common/user_vehicles_modal'
 
   .row    
     .col-md-offset-2.col-md-8.col-xs-12
@@ -21,4 +21,8 @@
 
         %br
         = f.submit "Update Vehicle(s)", class: "btn btn-primary"
+
+
+= render partial: 'common/user_vehicles_modal'
+
 
