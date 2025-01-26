@@ -219,9 +219,9 @@ module Event
 
     def update_vehicles
       @title = 'Vehicle Information'
-
       @event_registration = Registration.find(params[:id])
-      @vehicles = @event_registration.user.vehicles
+      @user = @event_registration.user
+      @vehicles = @user.vehicles
     end
 
     def save_updated_vehicles

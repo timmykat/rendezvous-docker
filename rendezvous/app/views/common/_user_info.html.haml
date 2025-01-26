@@ -69,11 +69,7 @@
 - if defined?(vehicles) && vehicles
   .row
     .col-md-12
-      = field_set_tag 'Vehicles' do
-        %p 
-          These are the vehicles you are bringing to the show. If you don't know what you are bringing yet, you can add or edit at any time by selecting
-          %em My profile
-          from the menu and then editing your vehicles. 
+      = field_set_tag 'Vehicles', class: 'legend-sm' do
         #vehicles
           = f.simple_fields_for :vehicles do |v|
             = render 'common/vehicle_fields', f:  v
