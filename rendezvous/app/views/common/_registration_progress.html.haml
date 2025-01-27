@@ -1,24 +1,24 @@
 .registration-progress
-  %ul.list-inline
-    %li{ class:  "step #{ registration_progress_indicator(step, 'welcome') }"} 
+  %ul.list-group.list-group-horizontal{ style: "align-items: center;"}
+    %li{ class:  "list-group-item #{ registration_progress_indicator(step, 'welcome') }"} 
       Welcome
-    %li
+    %li.separator
       %i.fa-solid.fa-caret-right
-    %li{ class:  "step #{ registration_progress_indicator(step, 'sign') }"} 
+    %li{ class:  "list-group-item #{ registration_progress_indicator(step, 'sign') }"} 
       Sign in
-    %li
+    %li.separator
       %i.fa-solid.fa-caret-right
-    %li{ class:  "step #{ registration_progress_indicator(step, 'register') }"} 
+    %li{ class:  "list-group-item #{ registration_progress_indicator(step, 'register') }"} 
       Register
-    %li
+    %li.separator
       %i.fa-solid.fa-caret-right
-    %li{ class:  "step #{ registration_progress_indicator(step, 'review') }"} 
+    %li{ class:  "list-group-item #{ registration_progress_indicator(step, 'review') }"} 
       Review
-    %li
+    %li.separator
       %i.fa-solid.fa-caret-right
-    %li{ class:  "step #{ registration_progress_indicator(step, 'payment') }"} 
+    %li{ class:  "list-group-item #{ registration_progress_indicator(step, 'payment') }"} 
       Payment
-    %li
+    %li.separator
       %i.fa-solid.fa-caret-right
-    %li{ class:  "step #{ registration_progress_indicator(step, 'vehicles') }"} Vehicles
+    %li{ class:  "list-group-item #{ registration_progress_indicator(step, 'vehicles') }"} Vehicles
    

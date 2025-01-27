@@ -56,7 +56,7 @@
           %p
             Traction Avant separation of drive and passenger and passenger elements | Image courtesy of Citroënvie
       .row
-        .col-md-8.col-md-offset-2.about-heading
+        .col-md-8.col-md-offset-2.about-heading.mx-auto
           %h2.main-heading
             #{event_year} Schedule
           = image_tag "chevrons.png"
@@ -78,49 +78,58 @@
           %p.text-center
             = link_to 'Detailed schedule', schedule_path
 
-        .col-md-3.single-about.col-xs-12.col-sm-4
-          .about-inside
-            %i.fa-solid.fa-car
-            %h3 #{relative_date(0)}
-            %ul.text-left
-              %li
-                %strong 2-4pm
-                Ice cream social, Kaleidescope Cafe
-              %li
-                %strong 5-7pm
-                NEW VENUE: Pizza, socializing, and packet pick-up, VFW Post 420
-                %br 190 Excelsior Ave., Saratoga Springs 
-              %li
-                Enjoy Saratoga Springs's dinner offerings 
-        .col-md-3.single-about.col-xs-12.col-sm-4
-          .about-inside
-            %i.fa-solid.fa-car
-            %h3 #{relative_date(1)}
-            %ul.text-left
-              %li
-                %strong 9am-4pm
-                Showfield is open, #{config[:venue][:name]}, #{config[:venue][:address]}
-              %li
-                %strong 11am-6pm
-                Silent auction. Winners announced after dinner.
-              %li
-                %strong 4-5:30pm
-                Downtime: RELAX!
-              %li
-                %strong 6-8pm
-                Banquet dinner
-              %li
-                %strong 8pm
-                People's Choice awards!
-        .col-md-3.single-about.col-xs-12.col-sm-4
-          .about-inside
-            %i.fa-solid.fa-road
-            %h3 #{relative_date(2)}
-            %ul.text-left
-              %li
-                %strong 9-11am
-                NEW VENUE: Farewell breakfast, American Legion Post 70
-                %br 34 West Ave., Saratoga Springs 
+        .col-xs-12.mx-auto
+          .card-group
+            .card
+              .card-body
+                .card-title
+                  %i.fa-solid.fa-car
+                  %h3 #{relative_date(0)}
+                .card-text
+                  %ul.text-left
+                    %li
+                      %strong 2-4pm
+                      Ice cream social, Kaleidescope Cafe
+                    %li
+                      %strong 5-7pm
+                      NEW VENUE: Pizza, socializing, and packet pick-up, VFW Post 420
+                      %br 190 Excelsior Ave., Saratoga Springs 
+                    %li
+                      Enjoy Saratoga Springs's dinner offerings 
+
+            .card
+              .card-body
+                .card-title
+                  %i.fa-solid.fa-car
+                  %h3 #{relative_date(1)}
+                .card-text
+                  %ul.text-left
+                    %li
+                      %strong 9am-4pm
+                      Showfield is open, #{config[:venue][:name]}, #{config[:venue][:address]}
+                    %li
+                      %strong 11am-6pm
+                      Silent auction. Winners announced after dinner.
+                    %li
+                      %strong 4-5:30pm
+                      Downtime: RELAX!
+                    %li
+                      %strong 6-8pm
+                      Banquet dinner
+                    %li
+                      %strong 8pm
+                      People's Choice awards!
+            .card
+              .card-body
+                .card-title
+                  %i.fa-solid.fa-road
+                  %h3 #{relative_date(2)}
+                .card-text
+                  %ul.text-left
+                    %li
+                      %strong 9-11am
+                      NEW VENUE: Farewell breakfast, American Legion Post 70
+                      %br 34 West Ave., Saratoga Springs 
 
   / service section
   %section#info.service.text-left
