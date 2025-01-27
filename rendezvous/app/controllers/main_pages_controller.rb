@@ -10,7 +10,6 @@ class MainPagesController < ApplicationController
   def index
     @pictures = []
     @cache_buster = "?cb=#{Time.now.to_i}"
-    render layout: 'main_page'
   end
   
   def faq

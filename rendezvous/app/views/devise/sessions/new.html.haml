@@ -1,42 +1,44 @@
 .container
   .row
-    .col-md-offset-3.col-md-6
-      %hr
-      .well.instructions
-        %h1 Sign In - Welcome!
-        %p If you registered on line in a previous year, you have an account. 
-        %p
-          %strong NEW!
-        %p Since people don't log in more than once a year, we've dispensed with passwords and are using login links. This is how it works: 
-        %ul
-          %li Submit your account email below.
-          %li We'll send a link to that email account with a login token good for 10 minutes
-          %li  
-            %em If you don't see the email in your inbox, please check your spam folder!
-          %li Click on the link and you'll be in like Flynn.
+    .col-md-offset-3.col-md-6.mx-auto
+      .card
+        .card-body
+          .card-title
+            %h1 Sign In - Welcome!
+          .card-text
+            %p If you registered on line in a previous year, you have an account. 
+            %p
+              %strong NEW!
+            %p Since people don't log in more than once a year, we've dispensed with passwords and are using login links. This is how it works: 
+            %ul
+              %li Submit your account email below.
+              %li We'll send a link to that email account with a login token good for 10 minutes
+              %li  
+                %em If you don't see the email in your inbox, please check your spam folder!
+              %li Click on the link and you'll be in like Flynn.
 
-        %p 
-          If you don't have an account, before you register, you need to create one. 
-          %a{ href: new_user_registration_path } Create a user.
+            %p 
+              If you don't have an account, before you register, you need to create one. 
+              %a{ href: new_user_registration_path } Create a user.
 
-        %p
-          NOTE: Some people are having problems logging in or registering. If you're not getting a login email, please check your spam folder. Otherwise, please use the 
-          %a{ href: "/Rendezvous-registration-2024.pdf" } alternative registration form
-          and send with payment to the indicated address.
+            %p
+              NOTE: Some people are having problems logging in or registering. If you're not getting a login email, please check your spam folder. Otherwise, please use the 
+              %a{ href: "/Rendezvous-registration-2024.pdf" } alternative registration form
+              and send with payment to the indicated address.
 
-        .get-sign-in-link 
-          %h3 Send me a link
-          %p Enter your email below to get your login link.
+            .get-sign-in-link 
+              %h3 Send me a link
+              %p Enter your email below to get your login link.
 
-          = content_for :recaptcha_js do
-            = include_recaptcha_js
+              = content_for :recaptcha_js do
+                = include_recaptcha_js
 
-          = form_with(url: request_login_link_path, method: :post) do |f|
-            .form-group
-              = f.label :email
-              = f.email_field :email, autofocus: true, placeholder: "you@example.com", required: true, class: 'form-control'
-            
-            .actions
-              = f.submit "Get Link" , class: "btn btn-info"
-              = recaptcha_execute('get_login_link')
+              = form_with(url: request_login_link_path, method: :post) do |f|
+                .form-group
+                  = f.label :email
+                  = f.email_field :email, autofocus: true, placeholder: "you@example.com", required: true, class: 'form-control'
+                
+                .actions
+                  = f.submit "Get Link" , class: "btn btn-info"
+                  = recaptcha_execute('get_login_link')
  
