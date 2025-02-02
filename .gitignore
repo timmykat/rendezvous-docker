@@ -14,9 +14,6 @@
 .envrc
 config/production_env_vars
 
-# Key files
-*.pem
-
 # Ignore database file
 database.yml
 
