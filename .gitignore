@@ -14,9 +14,6 @@
 .envrc
 config/production_env_vars
 
-# Ignore database file
-database.yml
-
 # Ignore bundler config.
 rendezvous/.bundle
 

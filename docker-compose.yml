@@ -101,6 +101,8 @@ services:
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   adminer:
+    profiles: 
+      - debug
     image: adminer
     restart: always
     ports:
