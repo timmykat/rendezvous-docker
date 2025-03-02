@@ -37,7 +37,7 @@
           #tabbed-1
             .row 
               .col-md-4
-                = form_with url: admin_index_path, method: :get do |f|
+                = form_with url: admin_dashboard_path, method: :get do |f|
                   - options = options_for_select( (Event::Registration.distinct.pluck(:year) + [Time.now.year.to_s]).uniq.sort.reverse, @year )
                   .form-group
                     = f.label :year
@@ -97,9 +97,13 @@
                 .card-title
                   %h2 Summary
                 .card-text
-                  %p Number of Citroens: #{@data[:citroens].count}
-                  %p Number of non-Citroens: #{@data[:non_citroens].count}
-                  %p Total: #{@vehicles.count}
+                  - if @data
+                    %p Number of Citroens: #{@data[:citroens].count}
+                    %p Number of non-Citroens: #{@data[:non_citroens].count}
+                  - if @vehicles
+                    %p Total: #{@vehicles.count}
+                  - else
+                    %p No vehicles yet
             %table.table
               %thead
                 %tr
@@ -110,37 +114,42 @@
                   %th Other Info
                   %th Registrant
               %tbody
-                - @vehicles.each do |vehicle|
-                  %tr
-                    %td= vehicle.judging_category
-                    %td= vehicle.model
-                    %td= vehicle.year
-                    %td= vehicle.marque
-                    %td
-                      %p= vehicle.other_info
-                    %td= vehicle.user.full_name
+                - unless @vehicles
+                  %p No vehicles yet.
+                - else
+                  - @vehicles.each do |vehicle|
+                    %tr
+                      %td= vehicle.judging_category
+                      %td= vehicle.model
+                      %td= vehicle.year
+                      %td= vehicle.marque
+                      %td
+                        %p= vehicle.other_info
+                      %td= vehicle.user.full_name
           #tabbed-3
             .card 
               .card-body 
                 .card-title
                   %h2 Volunteer List
                 .card-text
-                  %p Total volunteers: #{@data[:volunteers][:number]}
-                  - file = @files['volunteers']
-                  - if File.exist? file['path']
-                    %p
-                      Data file:
-                      =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{file['name']}")
+                  - if @data
+                    %p Total volunteers: #{@data[:volunteers][:number]}
+                    - file = @files['volunteers']
+                    - if File.exist? file['path']
+                      %p
+                        Data file:
+                        =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{file['name']}")
             %table.table
               %thead
                 %tr
                   %th Name
                   %th Email (of registered user)
                 %tbody
-                  - @data[:volunteers][:list].each do |volunteer|
-                    %tr
-                      %td= volunteer[:name]
-                      %td= volunteer[:email]
+                  - if @data
+                    - @data[:volunteers][:list].each do |volunteer|
+                      %tr
+                        %td= volunteer[:name]
+                        %td= volunteer[:email]
           #tabbed-5
             .card
               .card-body
@@ -151,10 +160,11 @@
                     .col-md-12
                       %h3 Data Files
                       .data_files
-                        - @files.each do |ftype, fdata|
-                          - if File.exist? fdata['path']
-                            %span
-                              =link_to "#{fdata['descriptor']} <i class='fa fa-file-excel-o'></i>".html_safe, "/files/csv/#{fdata['name']}"
+                        - if @files
+                          - @files.each do |ftype, fdata|
+                            - if File.exist? fdata['path']
+                              %span
+                                =link_to "#{fdata['descriptor']} <i class='fa fa-file-excel-o'></i>".html_safe, "/files/csv/#{fdata['name']}"
               .row
                 .col-md-6.col-xs-12
                   .card
@@ -162,28 +172,29 @@
                       .card-title
                         %h3 Financials
                       .card-text
-                        %table.table
-                          %tbody
-                            %tr
-                              %td
-                                %em  Registration fees
-                              %td.text-right= number_to_currency(@data[:financials][:registration_fees])
-                            %tr
-                              %td
-                                %em  Donations
-                              %td.text-right= number_to_currency(@data[:financials][:donations])
-                            %tr
-                              %td
-                                %em  Paid
-                              %td.text-right= number_to_currency(@data[:financials][:paid])
-                            %tr
-                              %td
-                                %em  Due
-                              %td.text-right= number_to_currency(@data[:financials][:due])
-                            %tr
-                              %td
-                                %em  Total
-                              %td.text-right= number_to_currency(@data[:financials][:total])
+                        - if @data
+                          %table.table
+                            %tbody
+                              %tr
+                                %td
+                                  %em  Registration fees
+                                %td.text-right= number_to_currency(@data[:financials][:registration_fees])
+                              %tr
+                                %td
+                                  %em  Donations
+                                %td.text-right= number_to_currency(@data[:financials][:donations])
+                              %tr
+                                %td
+                                  %em  Paid
+                                %td.text-right= number_to_currency(@data[:financials][:paid])
+                              %tr
+                                %td
+                                  %em  Due
+                                %td.text-right= number_to_currency(@data[:financials][:due])
+                              %tr
+                                %td
+                                  %em  Total
+                                %td.text-right= number_to_currency(@data[:financials][:total])
                         %p
                           Square account:
                           = link_to '<i class="fa fa-bank"></i>'.html_safe, "https://app.squareup.com", target:  '_blank'
@@ -194,35 +205,36 @@
                       .card-title
                         %h3 The Numbers
                       .card-text
-                        %table.table
-                          %tbody
-                            %tr
-                              %td
-                                %em  Registrations
-                              %td.text-right= @data[:registrants].count
-                            %tr
-                              %td
-                                %em  Attendees
-                              %td.text-right
-                                Adults: #{@data[:adult]}
-                                %br
-                                  Kids:   #{@data[:child]}
-                            %tr
-                              %td
-                                %em  Volunteers
-                              %td.text-right= @data[:volunteers][:number]
-                            %tr
-                              %td
-                                %em  Vehicles
-                              %td.text-right= @vehicles.count
-                            %tr
-                              %td{ colspan:  2 }
-                                %p
-                                  %em  Newbies
-                                %p
-                                  - @data[:newbies].each do |newbie|
-                                    = newbie.full_name
-                                    %br
+                        - if @data
+                          %table.table
+                            %tbody
+                              %tr
+                                %td
+                                  %em  Registrations
+                                %td.text-right= @data[:registrants].count
+                              %tr
+                                %td
+                                  %em  Attendees
+                                %td.text-right
+                                  Adults: #{@data[:adult]}
+                                  %br
+                                    Kids:   #{@data[:child]}
+                              %tr
+                                %td
+                                  %em  Volunteers
+                                %td.text-right= @data[:volunteers][:number]
+                              %tr
+                                %td
+                                  %em  Vehicles
+                                %td.text-right= @vehicles.count
+                              %tr
+                                %td{ colspan:  2 }
+                                  %p
+                                    %em  Newbies
+                                  %p
+                                    - @data[:newbies].each do |newbie|
+                                      = newbie.full_name
+                                      %br
           #tabbed-6
             %h2 Site Users
             %p Number of users: #{@users.size}

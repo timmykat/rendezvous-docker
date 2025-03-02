@@ -1,0 +1,18 @@
+.row.align-justify-center
+  .col-md-8
+    .form-group
+      = f.input :name, placeholder:  'Name'
+    .form-group
+      = f.input :event_hotel, as: :check_box
+    .form-group
+      = f.input :show_field_venue, as: :check_box
+    .form-group
+      = f.input :address, as: :text,
+    .form-group 
+      = f.input :phone
+    .form-group 
+      = f.input :email
+    .form-group
+      = f.input :details, as: :text,
+
+

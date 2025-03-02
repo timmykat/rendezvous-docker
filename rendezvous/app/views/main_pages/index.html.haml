@@ -28,22 +28,25 @@
   .container
     .row.justify-content-center.mt-3
       .col-lg-10
-        %h2.h3 #{event_year} Accommodations
-        .overview
-          %p This year's event hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}<span class="badge bg-rendezvous">New</span>
-          %p 
-            While rooms last, you can reserve on line at our group rate
-            = link_to 'here', config[:hotel][:event_registration_link]
+        .card 
+          .card-body 
+            .card-title
+              %h2.h3 #{event_year} Accommodations
+            .card-text
+              %p This year's event hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}<span class="badge bg-rendezvous">New</span>
+              %p 
+                While rooms last, you can reserve on line at our group rate
+                = link_to 'here', config[:hotel][:event_registration_link]
 
-            -# You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
-            -# 
-              link
-            by #{config[:hotel][:event_rate_Last_day]}.
-            %br
+                -# You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
+                -# 
+                  link
+                by #{config[:hotel][:event_rate_Last_day]}.
+                %br
             
     .row.justify-content-center
       .col-lg-10
-        %h2.h3 Schedule Overview
+        %h2.h3.no-card Schedule Overview
         .card-group
           .card
             .card-body
@@ -65,7 +68,10 @@
                       Pizza, socializing, and packet pick-up
                       %br VFW Post 420, 190 Excelsior Ave., Saratoga Springs 
                   %li.list-group-item
-                    Enjoy Saratoga Springs's dinner offerings 
+                    %p
+                      %strong Evening
+                    %p Enjoy Saratoga Springs's dinner offerings
+                    %p Socialize at the Hyatt roof-top bar  
 
           .card
             .card-body

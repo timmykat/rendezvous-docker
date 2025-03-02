@@ -50,7 +50,7 @@ class AdminController < ApplicationController
     end
   end
 
-  def index
+  def dashboard
     @title = 'Admin'
     @no_user_id = NO_USER_ID
     

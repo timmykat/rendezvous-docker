@@ -1,6 +1,6 @@
 
 module Event
-  class Registration < ActiveRecord::Base
+  class Registration < ApplicationRecord
     
     belongs_to :user
     has_many :attendees, dependent: :destroy

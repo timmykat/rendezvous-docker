@@ -31,9 +31,8 @@
     = stylesheet_link_tag 'application', :media  => 'all'
 
     %link{href: "https://fonts.googleapis.com", rel: "preconnect"}/
-    %link{crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}/
-    %link{href: "https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Limelight&display=swap", rel: "stylesheet"}/
-    
+    %link{crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
+
     = csrf_meta_tags
 
     = yield :recaptcha_js
@@ -46,7 +45,7 @@
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-  %body{ class: "c_#{controller_path.gsub('/', '_')} fira-sans-regular" }
+  %body{ class: "c_#{controller_path.gsub('/', '_')} outfit-regular" }
     = render partial: 'common/admin_manage'
     %header.bg-rendezvous
       .container

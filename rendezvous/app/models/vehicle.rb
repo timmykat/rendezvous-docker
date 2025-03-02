@@ -1,4 +1,4 @@
-class Vehicle < ActiveRecord::Base
+class Vehicle < ApplicationRecord
 
   belongs_to :user
   has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :vehicle_id

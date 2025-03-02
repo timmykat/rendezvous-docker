@@ -7,22 +7,53 @@
 	--tea-green: #C5EBC3;
 	--eggplant: #54414E;
 	--jet: #3A3335;
+
+	--cambridge-blue: #92B4A7;
+	--indigo-dye: #0B4F6C;
 }
 
 /* Rendezvous customizations */
 // Original primary: $brand-color
 // Original button color: #cfc91d
-$brand-color: var(--citroen-red); /* Citroen red */
-$secondary-color: var(--eggplant); /* dark medium blue */
-$hover-color: var(--dark-red);     /*  darker red */
+$brand-color: var(--citroen-red);
+$hover-color: var(--dark-red); 
 $info-color: var(--dark-blue);
 
+// Palette 1
+$body-background: var(--ash-gray);
+$card-background: var(--tea-green);
+$card-title-background: var(--eggplant);
+$secondary-color: var(--eggplant);
+
+// Palette 2
+$body-background: var(--cambridge-blue);
+$card-background: var(--tea-green);
+$card-title-background: var(--indigo-dye);
+$secondary-color: var(--indigo-dye);
+
+
 body {
-	background-color: var(--ash-gray);
+	background-color: $body-background;
+}
+
+// Font reset
+body, p, li, ol, td {
+	@include outfit-regular;
+	font-size: 18px;
+}
+
+footer {
+	padding: 30px 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
-	@include limelight-regular;
+	@include prompt-bold;
+
+	&.no-card {
+		background-color: $secondary-color;
+		color: white;
+		padding: 20px 40px 10px;
+	}
 }
 
 /* Bootstrap customizations */
@@ -34,20 +65,28 @@ h1, h2, h3, h4, h5, h6 {
 .navbar-brand {
 	font-size: 1.2em;
 	font-weight: bold;
+	margin: 40px 0;
 }
 
 .badge {
 	vertical-align: text-top;
+	margin: 0 5px;
 }
 
 .card {
 	margin: 10px 0;
-	background-color: var(--tea-green);
+	background-color: $card-background;
 
 	.card-title {
 		color: white;
-		background-color: var(--eggplant);
-		padding: 7px 10px;
+		background-color: $card-title-background;
+		padding: 15px 20px 7px;
+
+		h1, h2, h3, h4, h5, h6 {
+			padding: 0;
+			margin: 0;
+			line-height: 1;
+		}
 	}
 }
 
