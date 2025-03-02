@@ -1,0 +1,15 @@
+.container 
+  .row.align-justify-content
+    .col-md-8
+      %h1.h3 FAQs
+      %p
+        =link_to "Create new", new_admin_faq_path 
+
+      - unless @faqs
+        %p No FAQs yet.
+      - else
+        %ul
+          - @faqs.each do |faq|
+            %li
+              = link_to "Edit", edit_admin_faq_path(faq)
+              = faq.question

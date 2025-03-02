@@ -1,4 +1,4 @@
-class RegistrationsVehicles < ActiveRecord::Base
+class RegistrationsVehicles < ApplicationRecord
   belongs_to :registration, class_name: 'Event::Registration'
   belongs_to :vehicle
 

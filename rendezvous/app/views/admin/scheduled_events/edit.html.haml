@@ -1,0 +1,9 @@
+.container 
+  .row.align-just
+    .col-md-8
+      %h1.h3 Create scheduled event
+      = simple_form_for @scheduled_event do |f|
+        = render partial:  'admin_scheduled_event_fields'
+        %br
+        .form-group
+          = f.button :submit, input_html:  { value:  'Update Event' }, class:  'btn btn-primary'

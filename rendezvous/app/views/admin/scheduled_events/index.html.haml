@@ -1,0 +1,14 @@
+.container 
+  .row.align-justify-content
+    .col-md-8
+      %h1.h3 Scheduled Events
+      %p
+        =link_to "Create new", new_admin_scheduled_event_path
+      
+      - unless @scheduled_events
+        %p No scheduled events yet.
+      %ul
+        - @scheduled_events.each do |event|
+          %li
+            = link_to "Edit", edit_admin_scheduled_event_path(event)
+            = "#{event.time}: #{event.short_description}"

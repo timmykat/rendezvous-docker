@@ -1,0 +1,9 @@
+.container 
+  .row.align-just
+    .col-md-8
+      %h1.h3 Create FAQ
+      = simple_form_for @faq do |f|
+        = render partial:  'admin_faq_fields'
+        %br
+        .form-group
+          = f.button :submit, input_html:  { value:  'Update FAQ' }, class:  'btn btn-primary'

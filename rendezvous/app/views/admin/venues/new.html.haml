@@ -1,0 +1,22 @@
+.container 
+  .row.align-just
+    .col-md-8
+      %h1.h3 Create Venue
+      = simple_form_for @venue do |f|
+        .form-group
+          = f.input :name, placeholder:  'Name'
+        .form-group
+          = f.input :event_hotel, as: :boolean
+        .form-group
+          = f.input :show_field_venue, as: :boolean
+        .form-group
+          = f.input :address, as: :text
+        .form-group 
+          = f.input :phone
+        .form-group 
+          = f.input :email
+        .form-group
+          = f.input :details, as: :text
+        %br
+        .form-group
+          = f.button :submit, input_html:  { value:  'Create Venue' }, class:  'btn btn-primary'

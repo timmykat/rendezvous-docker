@@ -1,0 +1,15 @@
+.container 
+  .row.align-justify-content
+    .col-md-8
+      %h1.h3 Venues
+      %p
+        =link_to "Create new", new_admin_venue_path
+
+      - unless @venues
+        %p No FAQs yet.
+      - else
+        %ul
+          - @venues.each do |venue|
+            %li
+              = link_to "Edit", edit_admin_venue_path(venue)
+              = venue.question
