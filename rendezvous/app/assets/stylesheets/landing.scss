@@ -1,8 +1,10 @@
 // Place all the styles related to the main_pages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-main {
+section.banner {
   background-image: url('DS-50th-b+w.jpg');
-  background-size: contain;
+  background-size: cover;
+  background-position: 20% 50%;
   background-repeat: no-repeat;
+  min-height: 400px;
 }

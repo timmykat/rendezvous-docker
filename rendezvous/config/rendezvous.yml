@@ -21,12 +21,12 @@ payment_credentials:
     location_id: <%= ENV['PROD_SQUARE_LOCATION_ID'] %>
 
 hotel:
-  name: Courtyard Marriott
-  address: 11 Excelsior Ave, Saratoga Springs
+  name: Hyatt Place Saratoga Malta
+  address: 20 State Farm Place, Ballston Spa, NY, 12020
   website: https://www.marriott.com/en-us/hotels/albss-courtyard-saratoga-springs/overview/
-  event_rate: (FULL)
-  event_rate_link: 
-  event_rate_last_day: May 30
+  event_rate: $189/night
+  event_registration_link: https://www.hyatt.com/en-US/group-booking/ALBZS/G-CRDV
+  event_registration_last_day: May 30
 venue:
   name: Lakeside Farms
   address: 336 Schauber Road, Ballston Lake
@@ -34,6 +34,7 @@ venue:
 
 chauffeurs:
  - Bill Blaufuss
+ - Dave & Jamie Burnham
  - Jon Chomitz
  - Michaela Hellman
  - Tim Kinnel
