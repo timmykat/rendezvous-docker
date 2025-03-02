@@ -3,15 +3,27 @@
 	--dark-medium-blue: #1E6994;
 	--dark-red: #94171B;
 	--dark-blue: #071559;
+	--ash-gray: #B7C8B5;
+	--tea-green: #C5EBC3;
+	--eggplant: #54414E;
+	--jet: #3A3335;
 }
 
 /* Rendezvous customizations */
 // Original primary: $brand-color
 // Original button color: #cfc91d
 $brand-color: var(--citroen-red); /* Citroen red */
-$secondary-color: var(--dark-medium-blue); /* dark medium blue */
+$secondary-color: var(--eggplant); /* dark medium blue */
 $hover-color: var(--dark-red);     /*  darker red */
 $info-color: var(--dark-blue);
+
+body {
+	background-color: var(--ash-gray);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	@include limelight-regular;
+}
 
 /* Bootstrap customizations */
 .bg-rendezvous {
@@ -21,15 +33,21 @@ $info-color: var(--dark-blue);
 
 .navbar-brand {
 	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.badge {
+	vertical-align: text-top;
 }
 
 .card {
-	background-color: rgba(0, 0, 0, 0.05);
+	margin: 10px 0;
+	background-color: var(--tea-green);
 
 	.card-title {
 		color: white;
-		background-color: var(--dark-blue);
-		padding: 10px 0;
+		background-color: var(--eggplant);
+		padding: 7px 10px;
 	}
 }
 

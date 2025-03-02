@@ -50,25 +50,18 @@
     = render partial: 'common/admin_manage'
     %header.bg-rendezvous
       .container
-        .row.header-row
+        .row
           .col-md-12
             %nav.navbar.navbar-dark.bg-rendezvous.navbar-expand-lg
-              = link_to "Citroen Rendezvous<br />#{Time.now.year}", root_path, class: "navbar-brand"
               = image_tag "chevrons.png"
+              = link_to "Citroen Rendezvous<br />#{Time.now.year}".html_safe, root_path, class: "navbar-brand"
               %button.navbar-toggler{type: 'button', 'data-toggle' => 'collapse', 'data-target' => '#navbarContent' }
                 %span.navbar-toggler-icon
 
               .collapse.navbar-collapse#navbarContent
                 %ul.navbar-nav.mr-auto
-                  - if registration_live?
-                    %li.nav-item
-                      = link_to "Register for #{Time.now.year}", new_event_registration_path, class: 'nav-link'
                   %li.nav-item
                     = link_to 'Info', root_path, class: 'nav-link'
-                  %li.nav-item
-                    = link_to 'Photos', root_path(anchor: 'photos'), class: 'nav-link'
-                  %li.nav-item
-                    = link_to 'T-Shirt Gallery', t_shirt_gallery_path, class: 'nav-link'
                   - if !current_user
                     %li.nav-item
                       = link_to 'Sign In', new_user_session_path, class: 'nav-link'

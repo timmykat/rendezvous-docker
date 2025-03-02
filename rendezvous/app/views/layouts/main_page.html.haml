@@ -46,9 +46,9 @@
       = render :partial => 'common/manage'
     = render :partial => 'layouts/flash'
 
-    %header.top-header
+    %header
       .container
-        .row.header-row
+        .row
           .col-md-12
             %nav.navbar.navbar-default
               %a{:href => "/"}
@@ -75,10 +75,6 @@
                         = link_to 'Register', new_event_registration_path, class: 'registration-link'
                     %li
                       %a{href: root_path( anchor: 'info' )} info
-                    %li
-                      %a{href: root_path( anchor: 'photos' )} photos
-                    %li
-                      %a{href: t_shirt_gallery_path } t-shirt gallery
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
                     -# - if registration_live? && !current_user
