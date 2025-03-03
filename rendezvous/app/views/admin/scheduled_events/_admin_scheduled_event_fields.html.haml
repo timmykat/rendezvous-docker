@@ -1,15 +1,14 @@
-.row.align-justify-center
-  .col-md-8
-    .form-group
-      = f.input :name, placeholder:  'Name'
-    .form-group
-      = f.select :day, day_options, {}, { class: 'form-select'}
-    .form-group
-      = f.input :time, placeholder: 'Hour range or string'
-    .form-group 
-      = f.input :short_description
-    .form-group 
-      = f.input :long_description
-    .form-group
-      = f.select :day, venue_options, {}, { class: 'form-select' }
+.form-group
+  = f.input :name, placeholder:  'Name'
+.form-group
+  = f.select :day, day_options, {}, { class: 'form-select' }
+.form-group
+  = f.input :time, placeholder: 'Hour range or string'
+.form-group 
+  = f.input :short_description
+.form-group 
+  = f.input :long_description
+.form-group
+  = f.select :day, venue_options, {}, { class: 'form-select' }
+%br
 

@@ -1,6 +1,6 @@
 - if user_signed_in? && (current_user.has_role? :admin)
   .manage
-    %nav.navbar.navbar-light.bg-warning.navbar-expand-lg
+    %nav.navbar.navbar-expand-lg
       %ul.navbar-nav.mr-auto
         %li.navbar-brand Admin: 
         %li.nav-item= link_to 'Dashboard', admin_dashboard_path, class:  'nav-link'

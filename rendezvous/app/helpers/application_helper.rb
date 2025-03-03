@@ -23,6 +23,14 @@ module ApplicationHelper
     }
   end
 
+  def controller_classes
+    classes = "c_#{controller_path.gsub('/', '_')}"
+    if controller_path.match(/admin/)
+      classes += " admin-page"
+    end
+    classes
+  end
+
   def logged_in_user(user)
     if user.first_name
       display = "Welcome #{user.first_name}"
