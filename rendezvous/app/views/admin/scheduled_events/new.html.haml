@@ -1,9 +1,11 @@
 .container 
-  .row.align-just
+  .row.justify-content-center
     .col-md-8
-      %h1.h3 Create FAQ
-      = simple_form_for @scheduled_event do |f|
-        = render partial:  'admin_scheduled_event_fields', locals: { f: f }
-        %br
-        .form-group
-          = f.button :submit, input_html:  { value:  'Create Event' }, class:  'btn btn-primary'
+      .card
+        .card-body 
+          .card-text
+            %h1.h3 Create FAQ
+            = simple_form_for @scheduled_event do |f|
+              = render partial:  'admin_scheduled_event_fields', locals: { f: f }
+              .form-group
+                = f.button :submit, input_html:  { value:  'Create Event' }, class:  'btn btn-primary'

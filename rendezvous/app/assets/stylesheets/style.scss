@@ -10,6 +10,8 @@
 
 	--cambridge-blue: #92B4A7;
 	--indigo-dye: #0B4F6C;
+	--light-gray: #d8d8d8;
+	--medium-gray: #ccc;
 }
 
 /* Rendezvous customizations */
@@ -20,26 +22,40 @@ $hover-color: var(--dark-red);
 $info-color: var(--dark-blue);
 
 // Palette 1
-$body-background: var(--ash-gray);
-$card-background: var(--tea-green);
-$card-title-background: var(--eggplant);
-$secondary-color: var(--eggplant);
+// $body-background: var(--ash-gray);
+// $card-background: var(--tea-green);
+// $card-title-background: var(--eggplant);
+// $secondary-color: var(--eggplant);
 
 // Palette 2
 $body-background: var(--cambridge-blue);
+$admin-body-background: var(--light-gray);
 $card-background: var(--tea-green);
+$admin-card-background: var(--medium-gray);
 $card-title-background: var(--indigo-dye);
 $secondary-color: var(--indigo-dye);
 
 
 body {
 	background-color: $body-background;
+
+	&.admin-page {
+		background-color: $admin_body_background;
+
+		.card {
+			background-color: $admin-card-background;
+		}
+	}
 }
 
 // Font reset
 body, p, li, ol, td {
 	@include outfit-regular;
 	font-size: 18px;
+}
+
+main {
+	margin-top: 30px;
 }
 
 footer {
@@ -56,16 +72,40 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
+a:hover {
+	text-decoration: underline;
+}
+
 /* Bootstrap customizations */
 .bg-rendezvous {
   background-color: $brand-color;
   color: white;
 }
 
-.navbar-brand {
-	font-size: 1.2em;
-	font-weight: bold;
-	margin: 40px 0;
+.manage {
+	background-color: var(--jet);
+	color: white;
+
+	a, a:visited {
+		color: white;
+
+		&:hover {
+			color: var(--citroen-red);
+		}
+	}
+}
+
+.navbar {
+	.navbar-brand {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
+
+	&.top-nav {
+		.navbar-brand {
+			margin: 0 40px;
+		}
+	}
 }
 
 .badge {

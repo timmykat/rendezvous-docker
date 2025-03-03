@@ -45,13 +45,12 @@
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-  %body{ class: "c_#{controller_path.gsub('/', '_')} outfit-regular" }
-    = render partial: 'common/admin_manage'
+  %body{ class: controller_classes + " outfit-regular" }
     %header.bg-rendezvous
       .container
         .row
           .col-md-12
-            %nav.navbar.navbar-dark.bg-rendezvous.navbar-expand-lg
+            %nav.navbar.navbar-dark.bg-rendezvous.navbar-expand-lg.top-nav
               = image_tag "chevrons.png"
               = link_to "Citroen Rendezvous<br />#{Time.now.year}".html_safe, root_path, class: "navbar-brand"
               %button.navbar-toggler{type: 'button', 'data-toggle' => 'collapse', 'data-target' => '#navbarContent' }
@@ -77,16 +76,21 @@
                         - else 
                           = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
 
-      = render partial: 'common/user_manage'
+
+      = render partial: 'common/admin_manage'
+
+      - if !user_is_admin?
+        = render partial: 'common/user_manage'
+        - if (current_registration)
+          .registration-status
+            .container
+              .row
+                .col-md-12.status
+                  = render partial: 'common/registration_status'
 
       = render partial: 'layouts/flash'
 
-      - if (current_registration)
-        .registration-status
-          .container
-            .row
-              .col-md-12.status
-                = render partial: 'common/registration_status'
+
     %main 
       .content
         = yield
