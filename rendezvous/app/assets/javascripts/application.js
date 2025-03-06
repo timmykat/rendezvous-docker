@@ -32,5 +32,3 @@
 //= require purchases
 //= require user
 //= require vehicles
-
-

@@ -1,14 +1,19 @@
 .form-group
-  = f.input :name, placeholder:  'Name'
+  = f.input :name
 .form-group
-  = f.select :day, day_options, {}, { class: 'form-select' }
+  %label 
+    Event day:
+    = f.select :day, day_options, {}, { class: 'form-select'}
 .form-group
   = f.input :time, placeholder: 'Hour range or string'
 .form-group 
-  = f.input :short_description
-.form-group 
-  = f.input :long_description
+  = f.input :short_description, as: :simple_mde
 .form-group
-  = f.select :day, venue_options, {}, { class: 'form-select' }
+  = f.input :long_description, as: :simple_mde
+- if !venue_options.empty?
+  .form-group
+    = f.select :day, venue_options, {}, { class: 'form-select' }
+- else
+  %p No venue options are available
 %br
 
