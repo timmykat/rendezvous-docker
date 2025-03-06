@@ -98,4 +98,30 @@
 
     %footer.footer.text-center
       = render partial: 'common/footer'
+      - if user_is_admin?
+        = javascript_include_tag 'simplemde/dist/simplemde.min', 'data-turbolinks-track': 'reload'
+        = stylesheet_link_tag 'simplemde/dist/simplemde.min', 'data-turbolinks-track': 'reload'
+
+        :javascript
+          function addMde() {
+            console.log('Adding MDE')
+            const textareas = document.querySelectorAll('textarea[id$="_simple_mde"]');
+            console.log(textareas)
+            textareas.forEach((textarea) => {
+              new SimpleMDE({
+                element: textarea,
+                spellChecker: false, // Optional, disable spellchecker if you don't want it
+              });
+            });
+          }
+
+          if (!window.SimpleMDE) {
+            document.addListener(DOMContentLoaded, () => {
+              addMde();
+            })
+          } else {
+            addMde();
+          }
+
+
 
