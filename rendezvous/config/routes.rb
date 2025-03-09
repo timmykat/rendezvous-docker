@@ -56,7 +56,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :faqs, { except: [:show] }
     resources :scheduled_events, { except: [:show] }
-    resources :venues, { except: [:show] }
+    resources :venues
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }
       get 'registrations/new/user/:id', to: 'registrations#new'

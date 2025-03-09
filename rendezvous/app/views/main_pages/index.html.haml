@@ -33,10 +33,12 @@
             .card-title
               %h2.h3 #{event_year} Accommodations
             .card-text
-              %p This year's event hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}<span class="badge bg-rendezvous">New</span>
-              %p 
+              .description
+                @venue.description
+              %p
                 While rooms last, you can reserve on line at our group rate
-                = link_to 'here', config[:hotel][:event_registration_link]
+                = link_to 'here', "https://reservation"
+                or use group code <group code>
 
                 -# You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
                 -# 
@@ -47,73 +49,21 @@
     .row.justify-content-center
       .col-lg-10
         %h2.h3.no-card Schedule Overview
-        .card-group
-          .card
-            .card-body
-              .card-title.text-center
-                %h3 #{relative_date(0, "%A")}
-                %i.fa-solid.fa-route
-              .card-text
-                %ul.list-group
-                  %li.list-group-item
-                    %p
-                      %strong 2-4pm
-                    %p 
-                      Ice cream social
-                      %br Kaleidescope Cafe
-                  %li.list-group-item
-                    %p
-                      %strong 5-7pm
-                    %p 
-                      Pizza, socializing, and packet pick-up
-                      %br VFW Post 420, 190 Excelsior Ave., Saratoga Springs 
-                  %li.list-group-item
-                    %p
-                      %strong Evening
-                    %p Enjoy Saratoga Springs's dinner offerings
-                    %p Socialize at the Hyatt roof-top bar  
-
-          .card
-            .card-body
-              .card-title.text-center
-                %h3 #{relative_date(1, "%A")}
-                %i.fa-solid.fa-car
-              .card-text
-                %ul.list-group
-                  %li.list-group-item
-                    %p
-                      %strong 9am-4pm
-                    %p Showfield is open, #{config[:venue][:name]}, #{config[:venue][:address]}
-                  %li.list-group-item
-                    %p
-                      %strong 11am-6pm
-                    %p Silent auction. Winners announced after dinner.
-                  %li.list-group-item
-                    %p
-                      %strong 4-5:30pm
-                    %p Downtime: RELAX!
-                  %li.list-group-item
-                    %p
-                      %strong 6-8pm
-                    %p Banquet dinner
-                  %li.list-group-item
-                    %p
-                      %strong 8pm
-                    %p People's Choice awards!
-          .card
-            .card-body
-              .card-title.text-center
-                %h3 #{relative_date(2, "%A")}
-                %i.fa-solid.fa-road
-              .card-text
-                %ul.list-group
-                  %li.list-group-item
-                    %p 
-                      %strong 9-11am
-                    %p 
-                      Farewell breakfast
-                      %br American Legion Post 70, 34 West Ave., Saratoga Springs 
-
+        - @events_by_day.each do |day, events|
+          .card-group
+            .card
+              .card-body
+                .card-title.text-center
+                  %h3 #{day}
+                  %i.fa-solid.fa-route
+                .card-text
+                  %ul.list-group
+                    - events.each do |event|
+                      %li.list-group-item
+                        %p
+                          %strong #{event.time}
+                        .description
+                          #{event.short_description}
 / service section
 %section#info
   .container

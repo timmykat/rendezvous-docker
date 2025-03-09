@@ -49,6 +49,7 @@ gem 'daemons'
 gem 'square.rb'
 gem 'dkim'
 gem 'simple_form', '~>5'
+gem 'redcarpet'
 
 gem 'gibbon' # Mailchimp API
 

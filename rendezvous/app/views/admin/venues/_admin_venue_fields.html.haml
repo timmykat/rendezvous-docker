@@ -1,15 +1,27 @@
 .form-group
   = f.input :name
-.form-group
-  = f.input :event_hotel, as: :boolean
+.form-group 
+  %label 
+    Venue type:
+    = f.select :type, sti_options, {}, { class: 'form-select'}
 .form-group
   = f.input :show_field_venue, as: :boolean
 .form-group
-  = f.input :address, as: :simplmde_mde
+  = f.input :address, as: :simple_mde, style: "max-height: 4em;"
 .form-group 
   = f.input :phone
 .form-group 
   = f.input :email
 .form-group
-  = f.input :details, as: :simplmde_mde
+  = f.input :details, as: :simple_mde, style: "max-height: 4em;"
+
+%h3 Event hotel only:
+.form-group 
+  = f.input :reservation_url
+.form-group 
+  = f.input :group_code
+.form-group 
+  = f.input :rooms_available
+.form-group 
+  = f.input :close_date, as: :date 
 %br

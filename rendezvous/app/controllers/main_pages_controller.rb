@@ -1,6 +1,6 @@
 class MainPagesController < ApplicationController
   before_action :set_main_page, only: [:show, :edit, :update, :destroy]
-  before_action :check_test_param, only: [:index] 
+  before_action :check_test_param, only: [:index]
 
   def check_test_param
     session[:test_session] = params[:test] && params[:test].downcase == 'opron'
@@ -8,12 +8,15 @@ class MainPagesController < ApplicationController
 
   # GET /
   def index
-    @pictures = []
-    @cache_buster = "?cb=#{Time.now.to_i}"
+    @accommodations = Admin::EventHotel.first
+    @events_by_day = Admin::ScheduledEvent.all.each_with_object({}) do |event, hash|
+      (hash[event[:day]] ||= []) << event
+    end
   end
   
   def faq
     @title = 'FAQ'
+    @faqs = Admin:Faq.sort(:order).all
   end
   
   def history
@@ -26,6 +29,7 @@ class MainPagesController < ApplicationController
 
   def vendors
     @title = 'Vendors'
+    @faqs = Admin::Vendor.sort(:order).all
   end
   
   def method_missing(method_sym, *arguments, &block)
