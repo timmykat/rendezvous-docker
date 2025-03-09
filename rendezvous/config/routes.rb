@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get 'vendors/index'
+  get 'vendors/edit'
+  get 'vendors/new'
+  get 'vendors/create'
+  get 'vendors/edit'
+  get 'vendors/update'
+  get 'vendors/destroy'
 
   root 'main_pages#index'
 
@@ -25,6 +32,7 @@ Rails.application.routes.draw do
   end
 
   resources :users
+  resources :vendor, { except: [:show] }
 
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
