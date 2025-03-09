@@ -1,6 +1,7 @@
 class MainPagesController < ApplicationController
   before_action :set_main_page, only: [:show, :edit, :update, :destroy]
   before_action :check_test_param, only: [:index]
+  before_action :set_cache_headers
 
   def check_test_param
     session[:test_session] = params[:test] && params[:test].downcase == 'opron'
@@ -12,11 +13,14 @@ class MainPagesController < ApplicationController
     @events_by_day = Admin::ScheduledEvent.all.each_with_object({}) do |event, hash|
       (hash[event[:day]] ||= []) << event
     end
+
+    fresh_when @events_by_day
   end
   
   def faq
     @title = 'FAQ'
     @faqs = Admin:Faq.sort(:order).all
+    fresh_when @faqs
   end
   
   def history
@@ -29,7 +33,7 @@ class MainPagesController < ApplicationController
 
   def vendors
     @title = 'Vendors'
-    @faqs = Admin::Vendor.sort(:order).all
+    @vendors = Admin::Vendor.sort(:order).all
   end
   
   def method_missing(method_sym, *arguments, &block)
@@ -58,6 +62,10 @@ class MainPagesController < ApplicationController
     RendezvousMailer.autoresponse(@name, @email, @message).deliver_later
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
+  end
+
+  def set_cache_headers
+    response.headers['Cache-Control'] = 'public, max-age=86400'
   end
 
   private
