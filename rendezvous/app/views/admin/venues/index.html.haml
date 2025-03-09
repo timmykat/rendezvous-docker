@@ -6,13 +6,14 @@
           .card-text
             %h1.h3 Venues
             %p
-              =link_to "Create new", new_admin_venue_path
+              =link_to "Create new", new_admin_venue_path, class: 'btn btn-primary'
 
             - unless @venues
-              %p No FAQs yet.
+              %p No Venues yet.
             - else
               %ul
                 - @venues.each do |venue|
                   %li
-                    = link_to "Edit", edit_admin_venue_path(venue)
-                    = venue.question
+                    = link_to venue.name, admin_venue_path(venue)
+                    |
+                    = link_to "Edit", edit_admin_venue_path(venue), class: "btn btn-primary"

@@ -6,7 +6,7 @@
           .card-text 
             %h1.h3 FAQs
             %p
-              =link_to "Create new", new_admin_faq_path 
+              =link_to "Create new", new_admin_faq_path, class: 'btn btn-primary'
 
             - unless @faqs
               %p No FAQs yet.

@@ -18,6 +18,7 @@ class Admin::VenuesController < AdminController
       redirect_to new_admin_venue_path
     else
       flash_notice 'The FAQ was successfully created'
+      redirect_to admin_venue_path(@venue)
     end
   end
 
@@ -39,8 +40,18 @@ class Admin::VenuesController < AdminController
   private
     def venue_params
       params.require(:admin_venue).permit(
-        :question, 
-        :response
+        :name,
+        :event_hotel,
+        :show_field_venue,
+        :phone,
+        :email,
+        :address,
+        :details,
+        :reservation_url,
+        :group_code,
+        :rooms_available,
+        :close_date,
+        :type
       )
     end
 end

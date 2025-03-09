@@ -72,6 +72,9 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
+a, a:visited {
+	color: white;
+}
 a:hover {
 	text-decoration: underline;
 }
@@ -85,13 +88,9 @@ a:hover {
 .manage {
 	background-color: var(--jet);
 	color: white;
-
-	a, a:visited {
-		color: white;
-
-		&:hover {
-			color: var(--citroen-red);
-		}
+	
+	a:hover {
+		color: var(--citroen-red);
 	}
 }
 

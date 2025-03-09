@@ -6,7 +6,7 @@
           .card-text
             %h1.h3 Scheduled Events
             %p
-              =link_to "Create new", new_admin_scheduled_event_path
+              =link_to "Create new", new_admin_scheduled_event_path, class: 'btn btn-primary'
             
             - unless @scheduled_events
               %p No scheduled events yet.
