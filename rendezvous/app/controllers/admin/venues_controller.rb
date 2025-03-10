@@ -17,7 +17,7 @@ class Admin::VenuesController < AdminController
       flash_alert_now  @venue.errors.full_messages.to_sentence
       redirect_to new_admin_venue_path
     else
-      flash_notice 'The FAQ was successfully created'
+      flash_notice 'The venue was successfully created'
       redirect_to admin_venue_path(@venue)
     end
   end
@@ -37,6 +37,20 @@ class Admin::VenuesController < AdminController
     end
   end
 
+  def destroy
+    @venue = Admin::Venue.find(params[:id])
+    @venue.destroy
+    redirect_to admin_venues_path
+  end
+
+  def destroy_all
+    Admin::Venue.destroy_all
+  end
+
+  def import
+    import_data "venues.csv", "Admin::Venue"
+  end
+
   private
     def venue_params
       params.require(:admin_venue).permit(
@@ -45,6 +59,7 @@ class Admin::VenuesController < AdminController
         :show_field_venue,
         :phone,
         :email,
+        :website,
         :address,
         :details,
         :reservation_url,

@@ -6,9 +6,13 @@
         %li.nav-item= link_to 'Dashboard', admin_dashboard_path, class:  'nav-link'
         %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
         %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
-        %li.nav-item= link_to 'Manage Scheduled Events', admin_scheduled_events_path, class: 'nav-link'
-        %li.nav-item= link_to 'Manage Venues', admin_venues_path, class: 'nav-link'
-        %li.nav-item= link_to 'Manage FAQs', admin_faqs_path, class: 'nav-link'
+        %li.nav-item 
+          Manage Site Information
+          %ul
+            %li.nav-item= link_to 'Manage Scheduled Events', admin_scheduled_events_path, class: 'nav-link'
+            %li.nav-item= link_to 'Manage Venues', admin_venues_path, class: 'nav-link'
+            %li.nav-item= link_to 'Manage Vendors', vendors_path, class: 'nav-link'
+            %li.nav-item= link_to 'Manage FAQs', admin_faqs_path, class: 'nav-link'
         - if session[:admin_user]
           %li.nav-item= link_to 'Create registration', new_event_registration_path, class:  'nav-link'
         %li.nav-item= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'nav-link'

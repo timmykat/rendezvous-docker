@@ -33,6 +33,11 @@ Rails.application.routes.draw do
 
   resources :users
   resources :vendor, { except: [:show] }
+  resources :faqs do
+    collection do
+      delete_all :destroy_all
+    end
+  end
 
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
@@ -63,8 +68,24 @@ Rails.application.routes.draw do
   get '/admin/dashboard', to: 'admin#dashboard'
   namespace :admin do
     resources :faqs, { except: [:show] }
+    resources :faqs do
+      collection do
+        delete_all :destroy_all
+      end
+    end
     resources :scheduled_events, { except: [:show] }
-    resources :venues
+    resources :scheduled_events do
+      collection do
+        delete_all :destroy_all
+      end
+    end
+    resources :venues, { except: [:show] }
+    resources :venues do
+      collection do
+        delete_all :destroy_all
+      end
+    end
+
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }
       get 'registrations/new/user/:id', to: 'registrations#new'

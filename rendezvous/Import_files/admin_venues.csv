@@ -1,0 +1,11 @@
+show_field_venue,name,address,phone,email,website,details,type,reservation_url,group_code,rooms_available,close_date
+FALSE,Hyatt Place Saratoga Malta,"20 State Farm Pl\
+Malta, NY 12020",518-885-1109,,https://www.hyatt.com/hyatt-place/en-US/albzs-hyatt-place-saratoga-malta,,Admin::EventHotel,https://www.hyatt.com/en-US/group-booking/ALBZS/G-CRDV,G-CRDV,40,
+TRUE,Lakeside Farms,"336 Schauber Rd\
+Ballston Lake, NY 12019",518-399-8359,,https://www.lakesidefarmscidermill.com/,,,,,,
+FALSE,VFW Post 420,"190 Excelsior Ave\
+Saratoga Springs, NY",,,,,,,,,
+FALSE,American Legion Post 70,"34 West Ave\
+Saratoga Springs, NY",,,,,,,,,
+FALSE,Kaleidescope Cafe,"588 Lake Avenue\
+Saratoga Springs, New York 12866",(518) 450-1616,,https://kaleidoscopecafe.com/,,,,,,

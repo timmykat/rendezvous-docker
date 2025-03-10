@@ -34,6 +34,16 @@ class Admin::ScheduledEventsController < AdminController
     end
   end
 
+  def destroy
+    @venue = Admin::ScheduledEvents.find(params[:id])
+    @venue.destroy
+    redirect_to admin_venues_path
+  end
+
+  def destroy_all
+    Admin::ScheduledEvents.destroy_all
+  end
+
   private
     def scheduled_event_params
       params.require(:admin_scheduled_event).permit(
