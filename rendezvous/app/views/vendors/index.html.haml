@@ -24,6 +24,6 @@
                 %br 
                 = vendor.address_as_html
 
-      - if user_id_admin? && @vendors.size > 0
+      - if user_is_admin? && @vendors.size > 0
         %p
           =link_to "Delete all", delete_all_vendors_path, class: 'btn btn-primary'               
