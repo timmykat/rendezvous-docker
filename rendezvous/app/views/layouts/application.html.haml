@@ -76,8 +76,8 @@
                         - else 
                           = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
 
-
-      = render partial: 'common/admin_manage'
+      - if user_is_admin?
+        = render partial: 'common/admin_manage'
 
       - if !user_is_admin?
         = render partial: 'common/user_manage'

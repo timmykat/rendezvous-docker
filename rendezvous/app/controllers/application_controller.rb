@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
     objects = []
     attributes = []
     header_row = true
-    CSV.foreach(Rails.root.join('import_files', filename) do |row|
+    CSV.foreach(Rails.root.join('import_files', filename)) do |row|
       if header_row
         row.each do |attribute_name|
           attributes << attribute_name
