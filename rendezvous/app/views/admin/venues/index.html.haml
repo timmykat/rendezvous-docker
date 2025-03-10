@@ -17,3 +17,7 @@
                     = link_to venue.name, admin_venue_path(venue)
                     |
                     = link_to "Edit", edit_admin_venue_path(venue), class: "btn btn-primary"
+
+            - if @venues.size > 0
+              %p
+                =link_to "Delete all", delete_all_admin_venue_path, class: 'btn btn-primary'                     

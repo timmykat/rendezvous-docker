@@ -3,23 +3,27 @@
     .col-md-offset-2.col-md-8.col-xs-12
       %h1 Supporting Vendors
       - @venders.each do |vendor|
-      .card
-        .card-body
-          .card-title
-            .name 
-              #{vendor.name}
-              - if user_is_admin?
-                =link_to 'Edit', edit_vendor_path(vendor)
-          .card-text
-            .url
-              Website: 
-              = link_to 'www.DaveBurnhamCitroen.com', 'http://www.DaveBurnhamCitroen.com', target:  '_blank'
-            .email
-              Email:
-              = link_to vendor.email, "mailto://#{vendor.email}"
-            .phone
-              Phone: #{vendor.phone}
-            .address
-              Address:
-              %br 
-              = vendor.addres_as_html
+        .card
+          .card-body
+            .card-title
+              .name 
+                #{vendor.name}
+                - if user_is_admin?
+                  =link_to 'Edit', edit_vendor_path(vendor)
+            .card-text
+              .url
+                Website: 
+                = link_to 'www.DaveBurnhamCitroen.com', 'http://www.DaveBurnhamCitroen.com', target:  '_blank'
+              .email
+                Email:
+                = link_to vendor.email, "mailto://#{vendor.email}"
+              .phone
+                Phone: #{vendor.phone}
+              .address
+                Address:
+                %br 
+                = vendor.address_as_html
+
+      - if user_id_admin? && @vendors.size > 0
+        %p
+          =link_to "Delete all", delete_all_vendors_path, class: 'btn btn-primary'               

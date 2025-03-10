@@ -16,3 +16,7 @@
                   %li
                     = link_to "Edit", edit_admin_faq_path(faq)
                     = faq.question
+            
+            - if @faqs.size > 0
+              %p
+                =link_to "Delete all", delete_all_admin_faq_path, class: 'btn btn-primary'                    

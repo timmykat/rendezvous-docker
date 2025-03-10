@@ -34,6 +34,16 @@ class Admin::FaqsController < AdminController
     end
   end
 
+  def destroy
+    @venue = Admin::Faq.find(params[:id])
+    @venue.destroy
+    redirect_to admin_venues_path
+  end
+
+  def destroy_all
+    Admin::Faq.destroy_all
+  end
+
   private
     def faq_params
       params.require(:admin_faq).permit(

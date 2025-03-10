@@ -3,7 +3,7 @@ class CreateVendors < ActiveRecord::Migration[7.1]
     create_table :vendors do |t|
       t.string :name
       t.string :email
-      t.string :url
+      t.string :website
       t.string :phone
       t.text :address
 
