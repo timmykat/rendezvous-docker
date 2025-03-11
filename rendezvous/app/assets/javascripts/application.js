@@ -16,7 +16,10 @@
 //= require html5shiv/dist/html5shiv.min
 //= require respond/main.js
 //= require bootstrap/dist/js/bootstrap
-//= require jquery-ui
+//= require jquery
+//= require jquery_ujs
+//= require jquery-ui/widgets/sortable
+//= require rails_sortable
 //= require js-cookie/dist/js.cookie.min
 //= require tablesorter/dist/js/jquery.tablesorter
 //= require tablesorter/dist/js/jquery.tablesorter.widgets

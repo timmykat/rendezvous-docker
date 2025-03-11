@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   resources :users
 
   get 'vendors/import', to: 'vendors#import'
+  get 'vendors/manage', to: 'vendors#manage'
   delete 'vendors/destroy_all', to: 'vendors#destroy_all', as: :destroy_all_vendors
   resources :vendors, { except: [:show] }
 
@@ -56,7 +57,8 @@ Rails.application.routes.draw do
   
   get '/admin/dashboard', to: 'admin#dashboard'
   namespace :admin do
-    delete 'vendors/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
+    delete 'faqs/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
+    get 'faqs/manage', to: 'faqs#manage'
     resources :faqs, { except: [:show] }
 
     delete 'scheduled_events/destroy_all', to: 'scheduled_events#destroy_all', as: :destroy_all_scheduled_events
@@ -64,7 +66,7 @@ Rails.application.routes.draw do
 
     get 'venues/import', to: 'venues#import'
     delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
-    resources :venues, { except: [:show] }
+    resources :venues
 
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }

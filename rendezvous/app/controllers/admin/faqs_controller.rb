@@ -45,6 +45,10 @@ class Admin::FaqsController < AdminController
     redirect_to admin_venues_path
   end
 
+  def manage
+    @faqs = Admin::Faq.all
+  end
+
   private
     def faq_params
       params.require(:admin_faq).permit(

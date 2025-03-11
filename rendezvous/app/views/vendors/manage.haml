@@ -1,0 +1,29 @@
+.container#vendors
+  .row.justify-content-center
+    .col-md-10
+      %h1 Manage Vendors
+      %table.table
+        %tbody.sortable
+          - @vendors.each_with_sortable_id do |vendor, sortable_id|
+            %tr{id: sortable_id}
+              %td #{vendor.name}
+              %td #{vendor.order}
+              %td=link_to 'Edit', edit_vendor_path(vendor), class: "btn btn-primary"
+              %td=link_to 'Delete', vendor_path(vendor), method: :delete, class: "btn btn-danger"
+
+      %p
+        =link_to "Create new", new_vendor_path, class: 'btn btn-primary'
+      %p
+        =link_to "Import from CSV", vendors_import_path, class: 'btn btn-warning'
+      - if @vendors.size > 0
+        %p
+          =link_to "Destroy all", destroy_all_vendors_path, method: :delete, class: 'btn btn-danger'  
+
+:javascript
+  $(function() {
+    $('.sortable').railsSortable();
+  });
+    
+
+
+              

@@ -1,0 +1,24 @@
+.container#vendors
+  .row.justify-content-center
+    .col-md-6
+      %h1 Manage FAQs
+      %table.table
+        %tbody.sortable
+          - @faqs.each_with_sortable_id do |faq, sortable_id|
+            %tr{id: sortable_id}
+              %td #{faq.question}
+              %td #{faq.order}
+              %td=link_to 'Edit', edit_admin_faq_path(faq), class: "btn btn-primary"
+              %td=link_to 'Delete', delete_admin_faq_path(faq), class: "btn btn-danger"
+
+      %p
+        =link_to "Create new", new_admin_faq_path, class: 'btn btn-primary'
+      - if @faqs.size > 0
+        %p
+          =link_to "Destroy all", destroy_all_admin_faqs_path, method: :delete, class: 'btn btn-danger'  
+    
+:javascript
+  $(function() {
+    $('.sortable').railsSortable();
+  });
+              
