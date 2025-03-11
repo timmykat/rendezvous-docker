@@ -1,6 +1,6 @@
 .container#vendors
-  .row
-    .col-md-offset-2.col-md-8.col-xs-12
+  .row.justify-content-center
+    .col-md-6
       %h1 Supporting Vendors
       - if @vendors.empty?
         %p No vendors listed at the moment 
@@ -10,8 +10,6 @@
             .card-body
               .card-title
                 .name 
-                  - if user_is_admin?
-                    =link_to 'Edit', edit_vendor_path(vendor), class: "btn btn-primary"
                   #{vendor.name}
               .card-text
                 .url
@@ -27,12 +25,4 @@
                   %br 
                   = vendor.address_as_html
 
-      - if user_is_admin?
-        %hr
-        %p
-          =link_to "Create new", new_vendor_path, class: 'btn btn-primary'
-        %p
-          =link_to "Import from CSV", vendors_import_path, class: 'btn btn-warning'
-        - if @vendors.size > 0
-          %p
-            =link_to "Destroy all", destroy_all_vendors_path, method: :delete, class: 'btn btn-danger'               
+             

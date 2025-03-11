@@ -46,6 +46,10 @@ class VendorsController < ApplicationController
     redirect_to vendors_path
   end
 
+  def manage
+    @vendors = Vendor.all
+  end
+
   def import
     import_data "vendors.csv", "Vendor"
   end
