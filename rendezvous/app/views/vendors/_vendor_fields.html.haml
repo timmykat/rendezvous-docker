@@ -1,0 +1,12 @@
+.form-group
+  = f.input :name
+.form-group 
+  = f.input :phone
+.form-group 
+  = f.input :email
+.form-group 
+  = f.input :website
+.form-group 
+  %label Address
+  = f.input :address, as: :simple_mde, style: "max-height: 4em;"
+

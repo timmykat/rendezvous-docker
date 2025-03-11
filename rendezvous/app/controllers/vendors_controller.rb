@@ -16,10 +16,10 @@ class VendorsController < ApplicationController
     if !@vendor.save
       flash_alert_now 'There was a problem creating the vendor.'
       flash_alert_now  @vendor.errors.full_messages.to_sentence
-      redirect_to new_admin_vendor_path
+      redirect_to new_vendor_path
     else
       flash_notice 'The vendor was successfully created.'
-      redirect_to admin_venue_path(@vendor)
+      redirect_to vendor_path(@vendor)
     end
   end
 
@@ -28,21 +28,22 @@ class VendorsController < ApplicationController
     if !@vendor.save
       flash_alert_now 'There was a problem creating the vendor.'
       flash_alert_now  @vendor.errors.full_messages.to_sentence
-      redirect_to new_admin_vendor_path
+      redirect_to edit_vendor_path(@vendor)
     else
       flash_notice 'The vendor was successfully updated.'
-      redirect_to admin_venue_path(@vendor)
+      redirect_to vendors_path
     end
   end
 
   def destroy
-    @venue = Vendor.find(params[:id])
-    @venue.destroy
-    redirect_to admin_venues_path
+    @vendor = Vendor.find(params[:id])
+    @vendor.destroy
+    redirect_to vendor_path
   end
 
   def destroy_all
     Vendor.destroy_all
+    redirect_to vendors_path
   end
 
   def import

@@ -1,17 +1,8 @@
 Rails.application.routes.draw do
-  get 'vendors/index'
-  get 'vendors/edit'
-  get 'vendors/new'
-  get 'vendors/create'
-  get 'vendors/edit'
-  get 'vendors/update'
-  get 'vendors/destroy'
 
   root 'main_pages#index'
 
   # -- Users
-  
-
   devise_for :users,
     controllers: {
       users: 'users',
@@ -32,8 +23,10 @@ Rails.application.routes.draw do
   end
 
   resources :users
-  resources :vendor, { except: [:show] }
+
+  get 'vendors/import', to: 'vendors#import'
   delete 'vendors/destroy_all', to: 'vendors#destroy_all', as: :destroy_all_vendors
+  resources :vendors, { except: [:show] }
 
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
@@ -63,12 +56,15 @@ Rails.application.routes.draw do
   
   get '/admin/dashboard', to: 'admin#dashboard'
   namespace :admin do
+    delete 'vendors/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
     resources :faqs, { except: [:show] }
-    delete 'vendors/destroy_all', to: 'admin_faqs#destroy_all', as: :destroy_all_faqs
+
+    delete 'scheduled_events/destroy_all', to: 'scheduled_events#destroy_all', as: :destroy_all_scheduled_events
     resources :scheduled_events, { except: [:show] }
-    delete 'scheduled_events/destroy_all', to: 'admin_scheduled_events#destroy_all', as: :destroy_all_scheduled_events
+
+    get 'venues/import', to: 'venues#import'
+    delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
     resources :venues, { except: [:show] }
-    delete 'venues/destroy_all', to: 'admin_venues#destroy_all', as: :destroy_all_venues
 
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }
@@ -90,7 +86,6 @@ Rails.application.routes.draw do
   get '/history',           to: 'main_pages#history'
   get '/legal_information', to: 'main_pages#legal_information'
   get '/schedule',          to: 'main_pages#schedule'
-  get '/vendors',           to: 'main_pages#vendors'
 
   resources :pictures, except: [:index]
   get '/gallery',                    to: 'pictures#index'

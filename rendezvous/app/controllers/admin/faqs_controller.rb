@@ -42,6 +42,7 @@ class Admin::FaqsController < AdminController
 
   def destroy_all
     Admin::Faq.destroy_all
+    redirect_to admin_venues_path
   end
 
   private

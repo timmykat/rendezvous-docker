@@ -19,7 +19,7 @@ class MainPagesController < ApplicationController
   
   def faq
     @title = 'FAQ'
-    @faqs = Admin:Faq.sort(:order).all
+    @faqs = Admin:Faq.all.sort_by(&:order)
     fresh_when @faqs
   end
   
@@ -33,7 +33,7 @@ class MainPagesController < ApplicationController
 
   def vendors
     @title = 'Vendors'
-    @vendors = Admin::Vendor.sort(:order).all
+    @vendors = Admin::Vendor.all.sort_by(&:order)
   end
   
   def method_missing(method_sym, *arguments, &block)
