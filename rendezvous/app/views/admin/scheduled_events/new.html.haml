@@ -8,4 +8,4 @@
             = simple_form_for @scheduled_event do |f|
               = render partial:  'admin_scheduled_event_fields', locals: { f: f }
               .form-group
-                = f.button :submit, input_html:  { value:  'Create Event' }, class:  'btn btn-primary'
+                = f.button :submit, input_html:  { value:  'Create Event' }, class:  "btn btn-sm btn-primary"

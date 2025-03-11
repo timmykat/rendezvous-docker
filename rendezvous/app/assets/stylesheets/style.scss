@@ -75,12 +75,9 @@ h1, h2, h3, h4, h5, h6 {
 
 a, a:visited {
 	color: var(--jet);
-
-	&::after {
-		content: "\1F517";
-		margin-left: 5px;;
-	}
+	text-decoration: underline;
 }
+
 a:hover {
 	color: var(--citroen-red);
 }
@@ -92,12 +89,9 @@ a:hover {
 }
 
 .manage {
-	background-color: var(--jet);
-	color: white;
-	
-	a:hover {
-		color: var(--citroen-red);
-	}
+	background-color: palegoldenrod;
+	border-top: solid 2px var(--egplant);
+	border-bottom: solid 2px var(--egplant)
 }
 
 .navbar {

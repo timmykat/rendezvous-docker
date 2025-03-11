@@ -17,9 +17,9 @@
 
             %hr
             %p
-              =link_to "Create new", new_admin_venue_path, class: 'btn sm btn-primary'
+              =link_to "Create new", new_admin_venue_path, class: "btn btn-sm btn-primary"
             %p
-              =link_to "Import from CSV", admin_venues_import_path, class: 'btn btn-sm btn-warning'
+              =link_to "Import from CSV", admin_venues_import_path, class: "btn btn-sm btn-warning"
             - if @venues.size > 0
               %p
-                =link_to "Delete all", admin_destroy_all_venues_path, method: :delete, class: 'btn btn-sm btn-danger'                     
+                =link_to "Delete all", admin_destroy_all_venues_path, method: :delete, class: "btn btn-sm btn-danger"                     
