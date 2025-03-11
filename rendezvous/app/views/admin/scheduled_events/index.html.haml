@@ -4,10 +4,7 @@
       .card
         .card-body 
           .card-text
-            %h1.h3 Scheduled Events
-            %p
-              =link_to "Create new", new_admin_scheduled_event_path, class: 'btn btn-primary'
-            
+            %h1.h3 Scheduled Events            
             - unless @scheduled_events
               %p No scheduled events yet.
             - else
@@ -17,6 +14,9 @@
                     = link_to "Edit", edit_admin_scheduled_event_path(event)
                     = "#{event.time}: #{event.short_description}"
             
+            %hr
+            %p
+              =link_to "Create new", new_admin_scheduled_event_path, class: 'btn btn-primary'
             - if @scheduled_events.size > 0
               %p
-                =link_to "Delete all", admin_destroy_all_scheduled_events_path, class: 'btn btn-primary'                       
+                =link_to "Delete all", admin_destroy_all_scheduled_events_path, method: :delete, class: 'btn btn-danger'                       

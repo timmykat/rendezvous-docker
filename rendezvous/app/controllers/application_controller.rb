@@ -33,32 +33,13 @@ class ApplicationController < ActionController::Base
   end
 
   def import_data(filename, klass_name)
-    objects = []
-    attributes = []
-    header_row = true
-    CSV.foreach(Rails.root.join('import_files', filename)) do |row|
-      if header_row
-        row.each do |attribute_name|
-          attributes << attribute_name
-        end
-        header_row = false
-        next
-      end
-      data_hash = create_data_hash(attributes, row)
-      klass = Object.const_get(klass_name)
-      objects << klass.new(data_hash)
+    file_path = Rails.root.join('import_files', filename)
+    klass = Object.const_get(klass_name)
+    CSV.foreach(file_path, headers: true) do |row|
+      klass.create!(row.to_hash)
     end
-    klass.import objects
+    redirect_to send("#{klass_name.underscore.gsub('/', '_').pluralize}_path")
   end
-
-  def create_data_hash(attributes, data_row)
-    data_hash = {}
-    row.each_with_index do |value, index|
-      data_hash[attributes[index]] = data_row[index]
-    end
-    data_hash
-  end
-
 
   ## Recaptcha v3 -----------
 

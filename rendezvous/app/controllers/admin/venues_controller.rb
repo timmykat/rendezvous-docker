@@ -22,6 +22,10 @@ class Admin::VenuesController < AdminController
     end
   end
 
+  def edit
+    @venue = Admin::Venue.find(params[:id])
+  end
+
   def show
     @venue = Admin::Venue.find(params[:id])
   end
@@ -45,10 +49,11 @@ class Admin::VenuesController < AdminController
 
   def destroy_all
     Admin::Venue.destroy_all
+    redirect_to admin_venues_path
   end
 
   def import
-    import_data "venues.csv", "Admin::Venue"
+    import_data "admin_venues.csv", "Admin::Venue"
   end
 
   private

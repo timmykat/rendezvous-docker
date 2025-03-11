@@ -5,9 +5,6 @@
         .card-body 
           .card-text 
             %h1.h3 FAQs
-            %p
-              =link_to "Create new", new_admin_faq_path, class: 'btn btn-primary'
-
             - unless @faqs
               %p No FAQs yet.
             - else
@@ -17,6 +14,9 @@
                     = link_to "Edit", edit_admin_faq_path(faq)
                     = faq.question
             
+            %hr
+            %p
+              =link_to "Create new", new_admin_faq_path, class: 'btn btn-primary'
             - if @faqs.size > 0
               %p
-                =link_to "Delete all", admin_destroy_all_faqs_path, class: 'btn btn-primary'                    
+                =link_to "Delete all", admin_destroy_all_faqs_path, method: :delete, class: 'btn btn-danger'                    

@@ -16,7 +16,9 @@ module MarkdownConcern
   
       renderer = Redcarpet::Render::HTML.new
       markdown = Redcarpet::Markdown.new(renderer)
-      markdown.render(text).html_safe
+
+      # Need to handle line breaks with backslash
+      markdown.render(text).gsub("\\", "<br />").html_safe
     end
   end
 end

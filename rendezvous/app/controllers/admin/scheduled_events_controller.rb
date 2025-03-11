@@ -41,7 +41,8 @@ class Admin::ScheduledEventsController < AdminController
   end
 
   def destroy_all
-    Admin::ScheduledEvents.destroy_all
+    Admin::ScheduledEvent.destroy_all
+    redirect_to admin_venues_path
   end
 
   private
