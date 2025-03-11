@@ -38,7 +38,7 @@
               %p.amount.bg-success.form-group
                 %label Registration fee: $
                 = f.input_field :registration_fee, disabled:  true, class:  'calculated'
-          = f.button :submit, 'Update registration', class:  'btn btn-primary'
+          = f.button :submit, 'Update registration', class:  "btn btn-sm btn-primary"
             
         %section
           %h2 Payment or Refund
@@ -49,7 +49,7 @@
             .row
               .col-md-12
                 = hidden_field_tag :registration_id, @event_registration.id
-                = f.button :submit, 'Update registration', class:  'btn btn-primary'
+                = f.button :submit, 'Update registration', class:  "btn btn-sm btn-primary"
   
 
               

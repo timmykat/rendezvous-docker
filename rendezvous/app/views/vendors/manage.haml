@@ -8,16 +8,16 @@
             %tr{id: sortable_id}
               %td #{vendor.name}
               %td #{vendor.order}
-              %td=link_to 'Edit', edit_vendor_path(vendor), class: "btn btn-primary"
-              %td=link_to 'Delete', vendor_path(vendor), method: :delete, class: "btn btn-danger"
+              %td=link_to 'Edit', edit_vendor_path(vendor), class: "btn btn-sm btn-primary"
+              %td=link_to 'Delete', vendor_path(vendor), method: :delete, class: "btn btn-sm btn-danger"
 
       %p
-        =link_to "Create new", new_vendor_path, class: 'btn btn-primary'
+        =link_to "Create new", new_vendor_path, class: "btn btn-sm btn-primary"
       %p
-        =link_to "Import from CSV", vendors_import_path, class: 'btn btn-warning'
+        =link_to "Import from CSV", vendors_import_path, class: "btn btn-sm btn-warning"
       - if @vendors.size > 0
         %p
-          =link_to "Destroy all", destroy_all_vendors_path, method: :delete, class: 'btn btn-danger'  
+          =link_to "Destroy all", destroy_all_vendors_path, method: :delete, class: "btn btn-sm btn-danger"  
 
 :javascript
   $(function() {

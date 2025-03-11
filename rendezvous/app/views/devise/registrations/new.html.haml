@@ -33,5 +33,5 @@
                 = f.hidden_field :password_confirmation, class: 'form-control confirm', value: @password, hidden: true, required: true  
 
               .actions
-                = f.submit "Create", class: "btn btn-info"
+                = f.submit "Create", class: "btn btn-sm btn-info"
                 = recaptcha_execute('register_user')

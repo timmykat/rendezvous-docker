@@ -8,14 +8,14 @@
             %tr{id: sortable_id}
               %td #{faq.question}
               %td #{faq.order}
-              %td=link_to 'Edit', edit_admin_faq_path(faq), class: "btn btn-primary"
-              %td=link_to 'Delete', delete_admin_faq_path(faq), class: "btn btn-danger"
+              %td=link_to 'Edit', edit_admin_faq_path(faq), class: "btn btn-sm btn-primary"
+              %td=link_to 'Delete', delete_admin_faq_path(faq), class: "btn btn-sm btn-danger"
 
       %p
-        =link_to "Create new", new_admin_faq_path, class: 'btn btn-primary'
+        =link_to "Create new", new_admin_faq_path, class: "btn btn-sm btn-primary"
       - if @faqs.size > 0
         %p
-          =link_to "Destroy all", destroy_all_admin_faqs_path, method: :delete, class: 'btn btn-danger'  
+          =link_to "Destroy all", destroy_all_admin_faqs_path, method: :delete, class: "btn btn-sm btn-danger"  
     
 :javascript
   $(function() {

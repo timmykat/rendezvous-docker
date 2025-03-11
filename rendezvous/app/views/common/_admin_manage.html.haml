@@ -14,9 +14,9 @@
         %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
     %nav.navbar.navbar-expand-lg
       %ul.navbar-nav
-        %li.navbar-brand Site Content:
-        %li.nav-item= link_to 'Manage Scheduled Events', admin_scheduled_events_path, class: 'nav-link'
-        %li.nav-item= link_to 'Manage Venues', admin_venues_path, class: 'nav-link'
-        %li.nav-item= link_to 'Manage Vendors', vendors_path, class: 'nav-link'
-        %li.nav-item= link_to 'Manage FAQs', admin_faqs_path, class: 'nav-link'
+        %li.navbar-brand Manage Site Content:
+        %li.nav-item= link_to 'Scheduled Events', admin_scheduled_events_path, class: 'nav-link'
+        %li.nav-item= link_to 'Venues', admin_venues_path, class: 'nav-link'
+        %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
+        %li.nav-item= link_to 'FAQs', admin_faqs_manage_path, class: 'nav-link'
 
