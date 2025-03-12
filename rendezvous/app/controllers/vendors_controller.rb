@@ -27,14 +27,14 @@ class VendorsController < ApplicationController
   end
 
   def update
-    @vendor = Vendor.update(vendor_params)
-    if !@vendor.save
+    @vendor = Vendor.find(params[:id])
+    if !@vendor.update(vendor_params)
       flash_alert_now 'There was a problem creating the vendor.'
       flash_alert_now  @vendor.errors.full_messages.to_sentence
       redirect_to edit_vendor_path(@vendor)
     else
       flash_notice 'The vendor was successfully updated.'
-      redirect_to vendors_path
+      redirect_to vendors_manage_path
     end
   end
 
@@ -46,7 +46,7 @@ class VendorsController < ApplicationController
 
   def destroy_all
     Vendor.destroy_all
-    redirect_to vendors_path
+    redirect_to vendors_manage_path
   end
 
   def manage
@@ -55,16 +55,17 @@ class VendorsController < ApplicationController
 
   def import
     import_data "vendors.csv", "Vendor"
+    redirect_to vendors_manaage_path
   end
 
   private
-  def vendor_params
-    params.require(:vendor).permit(
-      :name,
-      :email,
-      :phone,
-      :website,
-      :address
-    )
-  end
+    def vendor_params
+      params.require(:vendor).permit(
+        :name,
+        :email,
+        :phone,
+        :website,
+        :address
+      )
+    end
 end

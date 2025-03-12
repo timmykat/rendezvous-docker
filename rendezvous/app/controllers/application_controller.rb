@@ -38,7 +38,6 @@ class ApplicationController < ActionController::Base
     CSV.foreach(file_path, headers: true) do |row|
       klass.create!(row.to_hash)
     end
-    redirect_to send("#{klass_name.underscore.gsub('/', '_').pluralize}_path")
   end
 
   ## Recaptcha v3 -----------

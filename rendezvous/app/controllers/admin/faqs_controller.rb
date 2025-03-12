@@ -30,7 +30,7 @@ class Admin::FaqsController < AdminController
       flash_alert_now  @faq.errors.full_messages.to_sentence
       render action: :edit
     else
-      redirect_to admin_faq_path(@faq)
+      redirect_to admin_faq_manage_path(@faq)
     end
   end
 
@@ -42,7 +42,7 @@ class Admin::FaqsController < AdminController
 
   def destroy_all
     Admin::Faq.destroy_all
-    redirect_to admin_venues_path
+    redirect_to admin_faqs_manage_path
   end
 
   def manage

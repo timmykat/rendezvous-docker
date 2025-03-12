@@ -1,8 +1,4 @@
 class Admin::VenuesController < AdminController
-
-  def index
-    @venues = Admin::Venue.all
-  end
   
   def new
     @venue = Admin::Venue.new
@@ -41,6 +37,10 @@ class Admin::VenuesController < AdminController
     end
   end
 
+  def manage
+    @venues = Admin::Venue.all
+  end
+
   def destroy
     @venue = Admin::Venue.find(params[:id])
     @venue.destroy
@@ -54,6 +54,7 @@ class Admin::VenuesController < AdminController
 
   def import
     import_data "admin_venues.csv", "Admin::Venue"
+    redirect_to admin_venues_path
   end
 
   private

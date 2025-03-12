@@ -73,13 +73,21 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
-a, a:visited {
+a:not(.btn) {
 	color: var(--jet);
 	text-decoration: underline;
+
+	&:visited {
+		color: var(--jet);
+	}
 }
 
-a:hover {
+a:hover:not(.btn) {
 	color: var(--citroen-red);
+}
+
+svg.bi {
+	color: var(--dark-medium-blue);
 }
 
 /* Bootstrap customizations */
@@ -90,8 +98,8 @@ a:hover {
 
 .manage {
 	background-color: palegoldenrod;
-	border-top: solid 2px var(--egplant);
-	border-bottom: solid 2px var(--egplant)
+	border-top: solid 2px var(--eggplant);
+	border-bottom: solid 2px var(--eggplant)
 }
 
 .navbar {

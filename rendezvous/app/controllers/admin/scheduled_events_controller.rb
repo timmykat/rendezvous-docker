@@ -1,9 +1,5 @@
 class Admin::ScheduledEventsController < AdminController
   
-  def index
-    @venues = Admin::ScheduledEvent.all
-  end
-
   def new
     @scheduled_event = Admin::ScheduledEvent.new
   end
@@ -34,6 +30,10 @@ class Admin::ScheduledEventsController < AdminController
     end
   end
 
+  def manage
+    @scheduled_events = Admin::ScheduledEvent.all
+  end
+
   def destroy
     @venue = Admin::ScheduledEvents.find(params[:id])
     @venue.destroy
@@ -42,7 +42,12 @@ class Admin::ScheduledEventsController < AdminController
 
   def destroy_all
     Admin::ScheduledEvent.destroy_all
-    redirect_to admin_venues_path
+    redirect_to admin_scheduled_events_path
+  end
+
+  def import
+    import_data "admin_scheduled_events.csv", "Admin::ScheduledEvent"
+    redirect_to admin_scheduled_events_path
   end
 
   private
