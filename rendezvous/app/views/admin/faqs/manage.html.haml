@@ -9,7 +9,7 @@
               %td #{faq.question}
               %td #{faq.order}
               %td=link_to 'Edit', edit_admin_faq_path(faq), class: "btn btn-sm btn-primary"
-              %td=link_to 'Delete', delete_admin_faq_path(faq), class: "btn btn-sm btn-danger"
+              %td=link_to 'Delete', admin_faq_path(faq), mothod: :delete, class: "btn btn-sm btn-danger"
 
       %p
         =link_to "Create new", new_admin_faq_path, class: "btn btn-sm btn-primary"

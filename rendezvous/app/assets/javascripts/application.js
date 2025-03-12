@@ -19,6 +19,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui/widgets/sortable
+//= require jquery-ui/widgets/tabs
 //= require rails_sortable
 //= require js-cookie/dist/js.cookie.min
 //= require tablesorter/dist/js/jquery.tablesorter

@@ -1,0 +1,23 @@
+.container#vendors
+  .row.justify-content-center
+    .col-md-8
+      %h1 Manage Scheduled Events
+      %table.table
+        %tbody
+          - @scheduled_events.each do |event|
+            %tr
+              %td #{event.day}
+              %td #{event.time}
+              %td #{event.name}
+              %td=link_to 'Edit', edit_admin_scheduled_event_path(event), class: "btn btn-sm btn-primary"
+              %td=link_to 'Destroy', admin_scheduled_event_path(event), method: :delete, class: "btn btn-sm btn-danger"
+
+      %p
+        =link_to "Create new", new_admin_scheduled_event_path, class: "btn btn-sm btn-primary"
+      %p
+        =link_to "Import from CSV", admin_scheduled_events_import_path, class: "btn btn-sm btn-warning"        
+      - if @scheduled_events.size > 0
+        %p
+          =link_to "Destroy all", admin_destroy_all_scheduled_events_path, method: :delete, class: "btn btn-sm btn-danger"  
+    
+              
