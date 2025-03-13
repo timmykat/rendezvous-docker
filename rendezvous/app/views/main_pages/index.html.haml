@@ -26,44 +26,42 @@
 
 %section#schedule
   .container
-    .row.justify-content-center.mt-3
-      .col-lg-10
+    .row.justify-content-center
+      .col-12
         .card 
           .card-body 
             .card-title
               %h2.h3 #{event_year} Accommodations
-            .card-text
-              .description
-                @venue.description
+            .card-text.col-md-10
+              .description 
+                %p Somehow description will be here.
               %p
                 While rooms last, you can reserve on line at our group rate
-                = link_to 'here', "https://reservation"
-                or use group code <group code>
-
-                -# You can book out our special event rate of #{config[:hotel][:event_rate]} at this 
-                -# 
-                  link
-                by #{config[:hotel][:event_rate_Last_day]}.
+                = link_to 'here', @event_hotel.reservation_url
+                or use group code #{@event_hotel.group_code}
+                by #{@event_hotel.close_date}}.
                 %br
             
-    .row.justify-content-center
-      .col-lg-10
+    .row.justify-content-center.background-color
+      .col-12
         %h2.h3.no-card Schedule Overview
-        - @events_by_day.each do |day, events|
-          .card-group
-            .card
-              .card-body
-                .card-title.text-center
-                  %h3 #{day}
-                  %i.fa-solid.fa-route
-                .card-text
-                  %ul.list-group
-                    - events.each do |event|
-                      %li.list-group-item
-                        %p
-                          %strong #{event.time}
-                        .description
-                          #{event.short_description}
+        .card-group
+          - @events_by_day.each do |day, events|
+            .col-12.col-lg-4
+              .card
+                .card-body
+                  .card-title.text-center
+                    %h3 #{day}
+                    %i.fa-solid.fa-route
+                  .card-text
+                    %ul.list-group
+                      - events.each do |event|
+                        %li.list-group-item
+                          %p
+                            %strong #{event.time}
+                          %p= event.name
+                          .description
+                            = event.short_description.as_html if event.short_description
 / service section
 %section#info
   .container
@@ -90,7 +88,7 @@
             .card-text
               %p
                 We couldn't put on the Rendezvous (nor could we keep our cars going) without our
-                = link_to 'friendly and knowledgeable supporting vendors', '/vendors'
+                = link_to 'friendly and knowledgeable supporting vendors', vendors_path
 
         .card 
           .card-body 
@@ -129,14 +127,14 @@
         
   -# %section.contact-form{ style: "height: 100px;"}
   -#   .container
-    -# .row
-      -#   .form
-      -#     .sbtn.col-lg-12.text-center
-      -#       = form_tag "/contact-us" do
-      -#         = text_field_tag 'name', nil, class: 'name form-input', placeholder: "NAME"
-      -#         = email_field_tag 'email', nil, class: 'email form-input', placeholder: "EMAIL"
-      -#         = text_field_tag 'message', nil, class: 'message form-input', placeholder: "MESSAGE"
-      -#         - if Rails.env != 'development'
-      -#           .captcha
-      -#             = recaptcha_tags
-      -#         = submit_tag 'SEND', class: 'submit-btn', disabled: true
+  -#     .row
+  -#       .form
+  -#         .sbtn.col-lg-12.text-center
+  -#           = form_tag "/contact-us" do
+  -#             = text_field_tag 'name', nil, class: 'name form-input', placeholder: "NAME"
+  -#             = email_field_tag 'email', nil, class: 'email form-input', placeholder: "EMAIL"
+  -#             = text_field_tag 'message', nil, class: 'message form-input', placeholder: "MESSAGE"
+  -#             - if Rails.env != 'development'
+  -#               .captcha
+  -#                 = recaptcha_tags
+  -#             = submit_tag 'SEND', class: 'submit-btn', disabled: true
