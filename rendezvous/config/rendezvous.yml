@@ -9,7 +9,7 @@ registration_window:
   after_rendezvous: 2025-06-16
   test: true
 fees:
-  adult: 75
+  adult: 80
   child: 0
 
 payment_credentials:

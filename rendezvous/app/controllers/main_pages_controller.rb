@@ -9,12 +9,8 @@ class MainPagesController < ApplicationController
 
   # GET /
   def index
-    @accommodations = Admin::EventHotel.first
-    @events_by_day = Admin::ScheduledEvent.all.each_with_object({}) do |event, hash|
-      (hash[event[:day]] ||= []) << event
-    end
-
-    fresh_when @events_by_day
+    @event_hotel = Admin::EventHotel.first
+    @events_by_day = Admin::ScheduledEvent.all.group_by(&:day)
   end
   
   def faq
