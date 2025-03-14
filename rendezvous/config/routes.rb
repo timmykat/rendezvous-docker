@@ -57,6 +57,10 @@ Rails.application.routes.draw do
   
   get '/admin/dashboard', to: 'admin#dashboard'
   namespace :admin do
+    get 'keyed_contents/manage', to: 'keyed_contents#manage'
+    delete 'keyed_contents/destroy_all', to: 'keyed_contents#destroy_all', as: :destroy_all_keyed_contents
+    resources :keyed_contents, { except: [:show] }
+
     get 'faqs/manage', to: 'faqs#manage'
     delete 'faqs/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
     resources :faqs, { except: [:show] }
