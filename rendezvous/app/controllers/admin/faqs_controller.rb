@@ -1,4 +1,5 @@
 class Admin::FaqsController < AdminController
+  before_action :require_admin, { except: :index } 
   
   def index
     @faqs = Admin::Faq.all
@@ -19,10 +20,6 @@ class Admin::FaqsController < AdminController
     end
   end
 
-  def show
-    @faq = Admin::Faq.find(params[:id])
-  end
-
   def update
     @faq = Admin::Faq.find(params[:id])
     if !@faq.update(faq_params)
@@ -34,19 +31,19 @@ class Admin::FaqsController < AdminController
     end
   end
 
+  def manage
+    @faqs = Admin::Faq.all
+  end
+
   def destroy
-    @venue = Admin::Faq.find(params[:id])
-    @venue.destroy
-    redirect_to admin_venues_path
+    @faq = Admin::Faq.find(params[:id])
+    @faq.destroy
+    redirect_to admin_faqs_manage_path
   end
 
   def destroy_all
     Admin::Faq.destroy_all
     redirect_to admin_faqs_manage_path
-  end
-
-  def manage
-    @faqs = Admin::Faq.all
   end
 
   private

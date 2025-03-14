@@ -1,22 +1,19 @@
 .container 
   .row.justify-content-center
-    .col-md-8
+    .col-sm-10.col-12
       .card
         .card-body 
           .card-text 
             %h1.h3 FAQs
             - unless @faqs
-              %p No FAQs yet.
+              %p There are currently no FAQs.
             - else
-              %ul
+              %ul.list-unstyled
                 - @faqs.each do |faq|
                   %li
-                    = link_to "Edit", edit_admin_faq_path(faq)
-                    = faq.question
-            
-            %hr
-            %p
-              =link_to "Create new", new_admin_faq_path, class: "btn btn-sm btn-primary"
-            - if @faqs.size > 0
-              %p
-                =link_to "Delete all", admin_destroy_all_faqs_path, method: :delete, class: "btn btn-sm btn-danger"                    
+                    .card 
+                      .card-body 
+                        .card-text
+                          .question= faq.question
+                          .response= faq.response
+                               
