@@ -2,7 +2,7 @@ class Admin::FaqsController < AdminController
   before_action :require_admin, { except: :index } 
   
   def index
-    @faqs = Admin::Faq.all
+    @faqs = Admin::Faq.sorted
   end
 
   def new
@@ -27,12 +27,13 @@ class Admin::FaqsController < AdminController
       flash_alert_now  @faq.errors.full_messages.to_sentence
       render action: :edit
     else
-      redirect_to admin_faq_manage_path(@faq)
+      @faqs = Admin::Faq.sorted
+      redirect_to admin_faqs_manage_path
     end
   end
 
   def manage
-    @faqs = Admin::Faq.all
+    @faqs = get_objects "Admin::Faq" 
   end
 
   def destroy

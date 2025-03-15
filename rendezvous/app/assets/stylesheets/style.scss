@@ -94,6 +94,22 @@ svg.bi {
 	color: var(--dark-medium-blue);
 }
 
+.CodeMirror,
+.CodeMirror-scroll {
+    height: 150px !important;
+    min-height: 150px !important;
+    max-height: 150px !important;
+}
+
+input[type=checkbox] {
+	display: inlin-block;
+	margin-right: 0.5em;
+}
+
+.ui-sortable-handle {
+	cursor: pointer;
+}
+
 /* Bootstrap customizations */
 .bg-rendezvous {
   background-color: $brand-color;

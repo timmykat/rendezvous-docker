@@ -1,14 +1,18 @@
-.container#vendors
+.container#venues
   .row.justify-content-center
-    .col-md-6
+    .col-md-10
       %h1 Manage Venues
-      %table.table
-        %tbody
-          - @venues.each do |venue|
-            %tr
-              %td #{venue.name}
-              %td=link_to 'Edit', edit_admin_venue_path(venue), class: "btn btn-sm btn-primary"
-              %td=link_to 'Delete', admin_venue_path(venue), method: :delete, class: "btn btn-sm btn-danger"
+    .col-md-10
+      %h2 Editing
+      - @venues.each do |venue|
+        .card 
+          .card-body 
+            .card-text
+              = simple_form_for venue do |f|
+                = render partial:  'admin_venue_fields', locals: { f: f }
+                %br
+                .form-group
+                  = f.button :submit, input_html:  { value:  'Update Content' }, class:  "btn btn-sm btn-primary"
 
       %p
         =link_to "Create new", new_admin_venue_path, class: "btn btn-sm btn-primary"
@@ -17,5 +21,8 @@
       - if @venues.size > 0
         %p
           =link_to "Destroy all", admin_destroy_all_venues_path, method: :delete, class: "btn btn-sm btn-danger"  
+
+    
+
 
               

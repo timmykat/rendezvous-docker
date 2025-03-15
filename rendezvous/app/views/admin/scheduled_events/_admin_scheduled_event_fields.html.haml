@@ -7,6 +7,8 @@
 .form-group
   = f.input :time, placeholder: 'Hour range or string'
 .form-group 
+  = f.input :subevent, as: :boolean
+.form-group 
   = f.input :short_description, as: :simple_mde
 .form-group
   = f.input :long_description, as: :simple_mde

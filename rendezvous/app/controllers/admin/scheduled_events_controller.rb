@@ -26,28 +26,29 @@ class Admin::ScheduledEventsController < AdminController
       flash_alert_now  @scheduled_event.errors.full_messages.to_sentence
       render action: :edit
     else
-      redirect_to admin_scheduled_event_path(@scheduled_event)
+      @scheduled_events = Admin::ScheduledEvent.sorted
+      redirect_to admin_scheduled_events_manage_path
     end
   end
 
   def manage
-    @scheduled_events = Admin::ScheduledEvent.all
+    @scheduled_events = get_objects "Admin::ScheduledEvent"
   end
 
   def destroy
-    @venue = Admin::ScheduledEvents.find(params[:id])
-    @venue.destroy
-    redirect_to admin_venues_path
+    @scheduled_events = Admin::ScheduledEvents.find(params[:id])
+    @scheduled_events.destroy
+    redirect_to admin_scheduled_events_manage_path
   end
 
   def destroy_all
     Admin::ScheduledEvent.destroy_all
-    redirect_to admin_scheduled_events_path
+    redirect_to admin_scheduled_events_manage_path
   end
 
   def import
     import_data "admin_scheduled_events.csv", "Admin::ScheduledEvent"
-    redirect_to admin_scheduled_events_path
+    redirect_to admin_scheduled_events_manage_path
   end
 
   private
