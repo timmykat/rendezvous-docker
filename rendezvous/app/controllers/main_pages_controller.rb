@@ -21,10 +21,16 @@ class MainPagesController < ApplicationController
   
   def history
     @title = 'History'
+    @content = @content = Admin::KeyedContent.find_by_key "page_history"
   end
     
   def legal_information
     @title = 'Legal Information'
+    @content = Admin::KeyedContent.find_by_key "page_legal"
+  end
+
+  def schedule
+    @scheduled_events = Admin::ScheduledEvent.sorted
   end
 
   def vendors
@@ -54,8 +60,8 @@ class MainPagesController < ApplicationController
     @email = params[:email]
     @message = params[:message]
 
-    RendezvousMailer.send_to_us(@name, @email, @message).deliver_later
-    RendezvousMailer.autoresponse(@name, @email, @message).deliver_later
+    RendezvousMailer.send_to_us(@name, @email, @message).deliver
+    RendezvousMailer.autoresponse(@name, @email, @message).deliver
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
   end

@@ -31,6 +31,7 @@ $info-color: var(--dark-blue);
 $body-background: var(--cambridge-blue);
 $admin-body-background: var(--light-gray);
 $card-background: var(--tea-green);
+$nested-card-background: var(--ash-gray);
 $admin-card-background: var(--medium-gray);
 $card-title-background: var(--indigo-dye);
 $secondary-color: var(--indigo-dye);
@@ -73,21 +74,34 @@ h1, h2, h3, h4, h5, h6 {
 	}
 }
 
-a:not(.btn) {
-	color: var(--jet);
-	text-decoration: underline;
+@mixin mixin-citroen-colors {
+	background-color: var(--citroen-red);
+	color: white;
+	
+	a, a:visited {
+		color: white;
+		text-decoration: none;
 
-	&:visited {
-		color: var(--jet);
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 }
 
-a:hover:not(.btn) {
-	color: var(--citroen-red);
+header {
+	@include mixin-citroen-colors;
 }
 
-.row.background-color {
-	background-color: var(--ash-gray);
+.bg-nav {
+	background-color: var(--dark-medium-blue);
+}
+
+.navbar-dark .navbar-nav .nav-link  {
+	color: white;
+
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 svg.bi {
@@ -111,10 +125,6 @@ input[type=checkbox] {
 }
 
 /* Bootstrap customizations */
-.bg-rendezvous {
-  background-color: $brand-color;
-  color: white;
-}
 
 .manage {
 	background-color: palegoldenrod;
@@ -126,6 +136,15 @@ input[type=checkbox] {
 	.navbar-brand {
 		font-size: 1.2em;
 		font-weight: bold;
+	}
+
+	.nav-item.site {
+		display: inline-block;
+		margin-left: 1em;
+	}
+
+	.navbar-rendezvous {
+		@include mixin-citroen-colors;
 	}
 
 	&.top-nav {
@@ -155,15 +174,13 @@ input[type=checkbox] {
 			line-height: 1;
 		}
 	}
-}
 
-.navbar-dark .navbar-nav .nav-link {
-	color: white;
-
-	&:hover {
-		text-decoration: underline;
+	.card {
+		margin: 7px 0;
+		background-color: $nested-card-background;
 	}
 }
+
 
 /* rows hidden by filtering (needed for child rows) */
 .tablesorter .filtered {
