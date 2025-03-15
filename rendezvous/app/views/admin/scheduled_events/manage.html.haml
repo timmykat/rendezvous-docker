@@ -1,23 +1,44 @@
-.container#vendors
+.container#scheduled_events
   .row.justify-content-center
-    .col-md-8
+    .col-md-10
       %h1 Manage Scheduled Events
+    .col-md-8
+      %h2 Ordering
       %table.table
-        %tbody
-          - @scheduled_events.each do |event|
-            %tr
-              %td #{event.day}
-              %td #{event.time}
-              %td #{event.name}
-              %td=link_to 'Edit', edit_admin_scheduled_event_path(event), class: "btn btn-sm btn-primary"
-              %td=link_to 'Destroy', admin_scheduled_event_path(event), method: :delete, class: "btn btn-sm btn-danger"
+        %tbody.sortable
+          - @scheduled_events.each_with_sortable_id do |scheduled_event, sortable_id|
+            %tr{id: sortable_id}
+              %td
+                %svg.bi{ width: "32", height: "32", fill: "currentColor" }
+                  %use{ href: image_path("bootstrap-icons/bootstrap-icons.svg#list") }
+              %td= scheduled_event.day
+              %td= scheduled_event.time
+              %td= scheduled_event.name 
+    .col-md-10
+      %h2 Editing
+      - @scheduled_events.each do |scheduled_event|
+        .card 
+          .card-body 
+            .card-text
+              = simple_form_for scheduled_event do |f|
+                = render partial:  'admin_scheduled_event_fields', locals: { f: f }
+                %br
+                .form-group
+                  = f.button :submit, input_html:  { value:  'Update Content' }, class:  "btn btn-sm btn-primary"
 
       %p
         =link_to "Create new", new_admin_scheduled_event_path, class: "btn btn-sm btn-primary"
       %p
-        =link_to "Import from CSV", admin_scheduled_events_import_path, class: "btn btn-sm btn-warning"        
+        =link_to "Import from CSV", admin_scheduled_events_import_path, class: "btn btn-sm btn-warning"
       - if @scheduled_events.size > 0
         %p
           =link_to "Destroy all", admin_destroy_all_scheduled_events_path, method: :delete, class: "btn btn-sm btn-danger"  
+
+:javascript
+  $(function() {
+    $('.sortable').railsSortable();
+  });
     
+
+
               

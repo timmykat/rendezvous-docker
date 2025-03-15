@@ -3,7 +3,7 @@ class VendorsController < ApplicationController
   before_action :require_admin, { except: :index }
   
   def index
-    @vendors = Vendor.all
+    @vendors = Vendor.sorted
   end
 
   def edit
@@ -33,29 +33,28 @@ class VendorsController < ApplicationController
       flash_alert_now  @vendor.errors.full_messages.to_sentence
       redirect_to edit_vendor_path(@vendor)
     else
-      flash_notice 'The vendor was successfully updated.'
-      redirect_to vendors_manage_path
+      go_to_manage_page "Vendor"
     end
+  end
+
+  def manage
+    @vendors = get_objects "Vendor"
   end
 
   def destroy
     @vendor = Vendor.find(params[:id])
     @vendor.destroy
-    redirect_to vendor_path
+    manage
   end
 
   def destroy_all
     Vendor.destroy_all
-    redirect_to vendors_manage_path
-  end
-
-  def manage
-    @vendors = Vendor.all
+    manage
   end
 
   def import
     import_data "vendors.csv", "Vendor"
-    redirect_to vendors_manaage_path
+    manage
   end
 
   private

@@ -27,15 +27,13 @@ class Admin::KeyedContentsController < ApplicationController
       flash_alert_now  @keyed_content.errors.full_messages.to_sentence
       render action: :edit
     else
+      @keyed_contents = Admin::KeyedContent.all
       redirect_to admin_keyed_contents_manage_path
     end
   end
 
   def manage
-    @keyed_contents = Admin::KeyedContent.all
-    if @keyed_contents.empty?
-      @keyed_contents = [Admin::KeyedContent.new]
-    end
+    @keyed_contents = get_objects "Admin::KeyedContent" 
   end
 
   def destroy

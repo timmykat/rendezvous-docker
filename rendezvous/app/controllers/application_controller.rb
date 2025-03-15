@@ -40,6 +40,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def get_objects(klass_name)
+    klass = Object.const_get(klass_name)
+    variable_name = klass_name.gsub("::", "").underscore
+    if klass.has_attribute? :order
+      objects = klass.sorted
+    else
+      objects = klass.all
+    end
+    if objects.empty?
+      objects = [klass.new]
+    end
+    return objects
+  end
+
   ## Recaptcha v3 -----------
 
   def verify_recaptcha?(token, recaptcha_action)

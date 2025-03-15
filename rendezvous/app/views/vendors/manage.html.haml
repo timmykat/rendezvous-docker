@@ -2,14 +2,28 @@
   .row.justify-content-center
     .col-md-10
       %h1 Manage Vendors
+
+    .col-md-8
+      %h2 Ordering
       %table.table
         %tbody.sortable
           - @vendors.each_with_sortable_id do |vendor, sortable_id|
             %tr{id: sortable_id}
-              %td #{vendor.name}
-              %td #{vendor.order}
-              %td=link_to 'Edit', edit_vendor_path(vendor), class: "btn btn-sm btn-primary"
-              %td=link_to 'Delete', vendor_path(vendor), method: :delete, class: "btn btn-sm btn-danger"
+              %td
+                %svg.bi{ width: "32", height: "32", fill: "currentColor" }
+                  %use{ href: image_path("bootstrap-icons/bootstrap-icons.svg#list") }
+                = vendor.name 
+    .col-md-10
+      %h2 Editing
+      - @vendors.each do |vendor|
+        .card 
+          .card-body 
+            .card-text
+              = simple_form_for vendor do |f|
+                = render partial:  'vendor_fields', locals: { f: f }
+                %br
+                .form-group
+                  = f.button :submit, input_html:  { value:  'Update Content' }, class:  "btn btn-sm btn-primary"
 
       %p
         =link_to "Create new", new_vendor_path, class: "btn btn-sm btn-primary"

@@ -33,28 +33,29 @@ class Admin::VenuesController < AdminController
       flash_alert_now  @venue.errors.full_messages.to_sentence
       render action: :edit
     else
-      redirect_to admin_venue_path(@venue)
+      @venues = Admin::Venue.all
+      redirect_to admin_venues_manage_path
     end
   end
 
   def manage
-    @venues = Admin::Venue.all
+    @venues = get_objects "Admin::Venue"
   end
 
   def destroy
     @venue = Admin::Venue.find(params[:id])
     @venue.destroy
-    redirect_to admin_venues_path
+    redirect_to admin_venues_manage_path
   end
 
   def destroy_all
     Admin::Venue.destroy_all
-    redirect_to admin_venues_path
+    redirect_to admin_venues_manage_path
   end
 
   def import
     import_data "admin_venues.csv", "Admin::Venue"
-    redirect_to admin_venues_path
+    redirect_to admin_venues_manage_path
   end
 
   private
