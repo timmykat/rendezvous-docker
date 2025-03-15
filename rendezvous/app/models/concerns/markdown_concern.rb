@@ -12,7 +12,7 @@ module MarkdownConcern
 
     def as_html(attribute)
       text = send(attribute)
-      return '' if text.blank?
+      return needs_content(attribute) if text.blank?
   
       renderer = Redcarpet::Render::HTML.new
       markdown = Redcarpet::Markdown.new(renderer)
@@ -20,5 +20,14 @@ module MarkdownConcern
       # Need to handle line breaks with backslash
       markdown.render(text).gsub("\\", "<br />").html_safe
     end
+
+    def needs_content(key)
+      if key.nil?
+        "<p style='background-color: red; color: white'>This content needs to be created.</p>".html_safe
+      else 
+        "<p style='background-color: red; color: white'>The content for <em>#{key}</em> needs to be created.</p>".html_safe
+      end
+    end
+
   end
 end

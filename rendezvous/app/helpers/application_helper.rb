@@ -119,8 +119,16 @@ module ApplicationHelper
     return address_arr.join("\n")
   end
 
-  def les_chauffeurs(separator = ", ")
-    return Rails.configuration.rendezvous[:chauffeurs].join(separator)
+  def les_chauffeurs(output = "html")
+    if output == "html"
+      value = "<ul class='list-unstyled'>\n"
+      Rails.configuration.rendezvous[:chauffeurs].each do |c|
+        value += "  <li>#{c}</li>"
+      end
+    else
+      value = Rails.configuration.rendezvous[:chauffeurs].join(', ')
+    end
+    return value.html_safe
   end
 
   def vehicles_list(vehicles)
