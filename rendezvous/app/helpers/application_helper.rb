@@ -23,6 +23,16 @@ module ApplicationHelper
     }
   end
 
+  def bootstrap_icon(icon, size = "32")
+    href = image_path "bootstrap-icons/bootstrap-icons.svg"
+    tag = <<LITERAL
+<svg class="bi" width="#{size}" height="#{size}" fill="currentColor">
+    <use href="#{href}##{icon}"></use>
+</svg>
+LITERAL
+    tag.html_safe
+  end
+
   def controller_classes
     classes = "c_#{controller_path.gsub('/', '_')}"
     if controller_path.match(/admin/)

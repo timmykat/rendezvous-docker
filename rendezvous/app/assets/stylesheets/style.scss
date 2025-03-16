@@ -104,6 +104,35 @@ header {
 	}
 }
 
+.flash-wrapper {
+	position: fixed;
+	top: 40px;
+	left: 50%;
+	width: 600px;
+	max-width: 90%;
+	transform: translateX(-50%);
+	z-index: 200;
+
+	.flash {
+		position: relative;
+		margin: 10px auto;
+		padding: 20px;
+
+		background-color: #ddd;
+		color: var(--jet);
+		border-radius: 5px;
+		border: solid 2px var(--citroen-red);
+		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+
+		.close-flash {
+			position: absolute;
+			font-size: 0.8em;
+			right: 5px;
+			top: 5px;
+		}
+	}
+}
+
 svg.bi {
 	color: var(--dark-medium-blue);
 }
@@ -270,10 +299,6 @@ responsive area
 	input.message{
 		width: 420px;
 	}
-	.banner h1 {
-	  font-size: 60px;
-	  letter-spacing: 3px;
-	}
 	.about-inside{
 		padding: 10px;
 	}
@@ -298,10 +323,6 @@ responsive area
 		width: 200px;
 		height: 50px;
 		border:0;
-	}
-	.banner h1 {
-		  font-size: 38px;
-		  letter-spacing: 0px;
 	}
 	.navbar-header{
 		margin-top: 5px !important;

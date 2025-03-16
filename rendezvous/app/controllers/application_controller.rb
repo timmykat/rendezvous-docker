@@ -14,6 +14,13 @@ class ApplicationController < ActionController::Base
 
   # Need this for other gems that might set flash
   def flash_array
+
+    # For testing
+    # flash.keys << :note
+    # flash[:note] = [
+    #   "This is my flash message"
+    # ]
+
     unless flash.keys.blank?
       flash.keys.each do |type|
         flash[type] = [ flash[type] ] if flash[type].is_a? String

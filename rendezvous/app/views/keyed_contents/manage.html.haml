@@ -1,0 +1,28 @@
+.container#keyed_contents
+  .row.justify-content-center
+    .col-md-10
+      %h1 Manage Content
+    .col-md-10
+      %h2 Editing
+      - @keyed_contents.each do |keyed_content|
+        .card 
+          .card-body 
+            .card-text
+              = simple_form_for keyed_content do |f|
+                = render partial:  'keyed_content_fields', locals: { f: f }
+                %br
+                .form-group
+                  = f.button :submit, input_html:  { value:  'Update Content' }, class:  "btn btn-sm btn-primary"
+
+      %p
+        =link_to "Create new", new_keyed_content_path, class: "btn btn-sm btn-primary"
+      %p
+        =link_to "Import from CSV", keyed_contents_import_path, class: "btn btn-sm btn-warning"
+      - if @keyed_contents.size > 0
+        %p
+          =link_to "Destroy all", destroy_all_keyed_contents_path, method: :delete, class: "btn btn-sm btn-danger"  
+
+    
+
+
+              

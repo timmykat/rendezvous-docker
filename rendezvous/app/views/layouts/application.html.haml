@@ -46,6 +46,7 @@
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
   %body{ class: controller_classes + " outfit-regular" }
+    = render partial: 'layouts/flash'
     %header
       .container
         .row.banner
@@ -96,9 +97,6 @@
               .row
                 .col-md-12.status
                   = render partial: 'common/registration_status'
-
-      = render partial: 'layouts/flash'
-
 
     %main 
       .content

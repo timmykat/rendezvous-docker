@@ -24,10 +24,29 @@ Rails.application.routes.draw do
 
   resources :users
 
+  # CMS content routes
   get 'vendors/import', to: 'vendors#import'
   get 'vendors/manage', to: 'vendors#manage'
   delete 'vendors/destroy_all', to: 'vendors#destroy_all', as: :destroy_all_vendors
   resources :vendors, { except: [:show] }
+
+  get 'keyed_contents/manage', to: 'keyed_contents#manage'
+  delete 'keyed_contents/destroy_all', to: 'keyed_contents#destroy_all', as: :destroy_all_keyed_contents
+  resources :keyed_contents, { except: [:show] }
+
+  get 'faqs/manage', to: 'faqs#manage'
+  delete 'faqs/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
+  resources :faqs, { except: [:show] }
+
+  get 'scheduled_events/import', to: 'scheduled_events#import'
+  get 'scheduled_events/manage', to: 'scheduled_events#manage'
+  delete 'scheduled_events/destroy_all', to: 'scheduled_events#destroy_all', as: :destroy_all_scheduled_events
+  resources :scheduled_events, { except: [:index, :show] }
+
+  get 'venues/import', to: 'venues#import'
+  get 'venues/manage', to: 'venues#manage'
+  delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
+  resources :venues, { except: [:index, :show] }
 
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
@@ -56,25 +75,8 @@ Rails.application.routes.draw do
   get '/admin/graphs', to: 'admin#registration_graphs'
   
   get '/admin/dashboard', to: 'admin#dashboard'
+  
   namespace :admin do
-    get 'keyed_contents/manage', to: 'keyed_contents#manage'
-    delete 'keyed_contents/destroy_all', to: 'keyed_contents#destroy_all', as: :destroy_all_keyed_contents
-    resources :keyed_contents, { except: [:show] }
-
-    get 'faqs/manage', to: 'faqs#manage'
-    delete 'faqs/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
-    resources :faqs, { except: [:show] }
-
-    get 'scheduled_events/import', to: 'scheduled_events#import'
-    get 'scheduled_events/manage', to: 'scheduled_events#manage'
-    delete 'scheduled_events/destroy_all', to: 'scheduled_events#destroy_all', as: :destroy_all_scheduled_events
-    resources :scheduled_events, { except: [:index, :show] }
-
-    get 'venues/import', to: 'venues#import'
-    get 'venues/manage', to: 'venues#manage'
-    delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
-    resources :venues, { except: [:index, :show] }
-
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }
       get 'registrations/new/user/:id', to: 'registrations#new'

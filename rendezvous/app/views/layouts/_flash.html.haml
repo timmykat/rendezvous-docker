@@ -5,8 +5,7 @@
       - flash[type].each do |m|
         .flash{ role: type.to_s }
           .close-flash
-            Close 
-            %i.fa.fa-close
+            = bootstrap_icon 'x-circle', '20'
           .message
             #{m}
 

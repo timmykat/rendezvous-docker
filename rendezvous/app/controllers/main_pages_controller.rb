@@ -9,8 +9,8 @@ class MainPagesController < ApplicationController
 
   # GET /
   def index
-    @event_hotel = Admin::EventHotel.first
-    @events_by_day = Admin::ScheduledEvent.all.group_by(&:day)
+    @event_hotel = EventHotel.first
+    @events_by_day = ScheduledEvent.all.group_by(&:day)
   end
   
   def faq
@@ -21,16 +21,16 @@ class MainPagesController < ApplicationController
   
   def history
     @title = 'History'
-    @content = @content = Admin::KeyedContent.find_by_key "page_history"
+    @content = @content = KeyedContent.find_by_key "page_history"
   end
     
   def legal_information
     @title = 'Legal Information'
-    @content = Admin::KeyedContent.find_by_key "page_legal"
+    @content = KeyedContent.find_by_key "page_legal"
   end
 
   def schedule
-    @scheduled_events = Admin::ScheduledEvent.sorted
+    @scheduled_events = ScheduledEvent.sorted
   end
 
   def vendors
