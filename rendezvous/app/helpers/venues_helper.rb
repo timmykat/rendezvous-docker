@@ -1,6 +1,6 @@
 module VenuesHelper
   def sti_options
-    [["Standard Venue", nil], ["Event Hotel", "Admin::EventHotel"]]
+    [["Standard Venue", nil], ["Event Hotel", "EventHotel"]]
   end
 
   def format_for_schedule(venue)

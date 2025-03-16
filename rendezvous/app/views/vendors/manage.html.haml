@@ -10,8 +10,7 @@
           - @vendors.each_with_sortable_id do |vendor, sortable_id|
             %tr{id: sortable_id}
               %td
-                %svg.bi{ width: "32", height: "32", fill: "currentColor" }
-                  %use{ href: image_path("bootstrap-icons/bootstrap-icons.svg#list") }
+                = bootstrap_icon 'list'
                 = vendor.name 
     .col-md-10
       %h2 Editing

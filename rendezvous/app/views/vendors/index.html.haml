@@ -16,29 +16,25 @@
                   - if !vendor.website.empty?
                     %tr
                       %td
-                        %svg.bi{ width: "32", height: "32", fill: "currentColor" }
-                          %use{ href: image_path("bootstrap-icons/bootstrap-icons.svg#mouse2-fill") }
+                        = bootstrap_icon 'mouse2-fill'
                       %td
                         = link_to vendor.website, vendor.website, target:  '_blank'
                   - if !vendor.email.empty?
                     %tr
                       %td
-                        %svg.bi{ width: "32", height: "32", fill: "currentColor" }
-                          %use{ href: image_path("bootstrap-icons/bootstrap-icons.svg#envelope-at") }
+                        = bootstrap_icon 'envelope-at'
                       %td
                         = link_to vendor.email, "mailto://#{vendor.email}"
                   - if !vendor.phone.empty?            
                     %tr
                       %td
-                        %svg.bi{ width: "32", height: "32", fill: "currentColor" }
-                          %use{ href: image_path("bootstrap-icons/bootstrap-icons.svg#telephone-fill") }
+                        = bootstrap_icon 'telephone-fill'
                       %td
                         = link_to vendor.phone, "tel://#{vendor.phone}"
                   - if !vendor.address.empty?
                     %tr
                       %td
-                        %svg.bi{ width: "32", height: "32", fill: "currentColor" }
-                          %use{ href: image_path("bootstrap-icons/bootstrap-icons.svg#geo-alt") }
+                        = bootstrap_icon 'geo-alt'
                       %td
                         = vendor.address_as_html
 
