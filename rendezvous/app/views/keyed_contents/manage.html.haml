@@ -16,8 +16,6 @@
 
       %p
         =link_to "Create new", new_keyed_content_path, class: "btn btn-sm btn-primary"
-      %p
-        =link_to "Import from CSV", keyed_contents_import_path, class: "btn btn-sm btn-warning"
       - if @keyed_contents.size > 0
         %p
           =link_to "Destroy all", destroy_all_keyed_contents_path, method: :delete, class: "btn btn-sm btn-danger"  

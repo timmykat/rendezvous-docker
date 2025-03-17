@@ -1,10 +1,4 @@
-**Event Pricing**
-      
-The cost for attending the event is $#{config[:fees][:adult]} per adult, free children under the age of 15.
 
-**Refund Policy**
-      
-In case of cancellation, Citroen Rendezvous LLC will refund up to the full registration fee for the event until one (1) week before the event; the last day to request a refund is #{config[:dates][:refund]}.
       
 Donations are non-refundable.
       

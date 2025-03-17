@@ -1,9 +1,9 @@
-.container
-  .row
-    .col-md-offset-2.col-md-8.col-xs-12
-      .card
-        .card-body
+.content
+  .row.justify-content-center
+    .col-md-6.col-12
+      .card 
+        .card-body 
           .card-title
-            %h1= @title
+            %h1.h2= @title
           .card-text
-            = @content
+            = keyed_content("page_history")

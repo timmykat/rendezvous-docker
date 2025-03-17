@@ -28,10 +28,15 @@
     %meta{ :name => "twitter:img:height", :content => '699' }
 
     %title #{Time.new.year} Citroen Rendezvous | The Northeast's largest gathering of Citroën owners, families, and fans
-    = stylesheet_link_tag 'application', :media  => 'all'
 
-    %link{href: "https://fonts.googleapis.com", rel: "preconnect"}/
-    %link{crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
+    %link{ href: "https://fonts.googleapis.com", rel: "preconnect"}/
+    %link{ crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
+    
+    :plain
+      <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
+
+    = stylesheet_link_tag 'application', :media  => 'all'
 
     = csrf_meta_tags
 
@@ -70,6 +75,12 @@
                       %ul.nav.navbar-nav
                         %li.nav-item
                           = link_to 'Info', root_path, class: 'nav-link'
+                        %li.nav-item
+                          = link_to 'Schedule Overview', root_path + '#schedule-overview', class: 'nav-link'
+                        %li.nav-item
+                          = link_to 'Vendors', vendors_path, class: 'nav-link'
+                        %li.nav-item
+                          = link_to 'History', history_path, class: 'nav-link'
                         - if !current_user
                           %li.nav-item
                             = link_to 'Sign In', new_user_session_path, class: 'nav-link'

@@ -20,7 +20,7 @@ class MainPagesController < ApplicationController
   end
   
   def history
-    @title = 'History'
+    @title = 'Rendezvous History'
     @content = @content = KeyedContent.find_by_key "page_history"
   end
     

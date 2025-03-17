@@ -41,6 +41,14 @@ LITERAL
     classes
   end
 
+  def event_fee
+    Rails.configuration.rendezvous[:fees][:adult]
+  end
+
+  def refund_date
+    Rails.configuration.rendezvous[:dates][:refund_date]
+  end
+
   def logged_in_user(user)
     if user.first_name
       display = "Welcome #{user.first_name}"
@@ -163,7 +171,6 @@ LITERAL
     output +=  mailing_address
     output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
     output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
-    output += '<p><em>Facebook:</em> <a href="' + config[:official_contact][:facebook] + '"><i class="fa fa-facebook-square"></i></a></p>' + "\n"
     output.html_safe
   end
 
