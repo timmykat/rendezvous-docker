@@ -81,6 +81,7 @@
                           = link_to 'Vendors', vendors_path, class: 'nav-link'
                         %li.nav-item
                           = link_to 'History', history_path, class: 'nav-link'
+                      %ul.nav.navbar-nav.ml-auto
                         - if !current_user
                           %li.nav-item
                             = link_to 'Sign In', new_user_session_path, class: 'nav-link'

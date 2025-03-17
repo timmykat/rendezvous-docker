@@ -1,24 +1,27 @@
 - if user_signed_in? && (current_user.has_role? :admin)
   .manage
-    %nav.navbar.navbar-light.navbar-expand-lg
-      %ul.navbar-nav.mr-auto
-        %li.navbar-brand Admin: 
-        %li.nav-item= link_to 'Dashboard', admin_dashboard_path, class:  'nav-link'
-        %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
-        %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
-        - if session[:admin_user]
-          %li.nav-item= link_to 'Create registration', new_event_registration_path, class:  'nav-link'
-        %li.nav-item= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'nav-link'
-        - if current_registration && !current_registration.complete?
-          %li.nav-item= link_to 'Delete my registration', event_registration_path(current_registration), method:  :delete, class:  'nav-link', confirmation:  'Are you sure?'
-        %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
-    %nav.navbar.navbar-light.navbar-expand-lg
-      %ul.navbar-nav
-        %li.navbar-brand Manage Site Content:
-        %li.nav-item= link_to 'Scheduled Events', scheduled_events_manage_path, class: 'nav-link'
-        %li.nav-item= link_to 'Content', keyed_contents_manage_path, class: 'nav-link'
-        %li.nav-item= link_to 'Venues', venues_manage_path, class: 'nav-link'
-        %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
-        %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
+    .container-fluid 
+      .row.justify-content-center
+        .col-md-10.col-12
+          %nav.navbar.navbar-light.navbar-expand-lg
+            %ul.navbar-nav.mr-auto
+              %li.navbar-brand Admin: 
+              %li.nav-item= link_to 'Dashboard', admin_dashboard_path, class:  'nav-link'
+              %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
+              %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
+              - if session[:admin_user]
+                %li.nav-item= link_to 'Create registration', new_event_registration_path, class:  'nav-link'
+              %li.nav-item= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'nav-link'
+              - if current_registration && !current_registration.complete?
+                %li.nav-item= link_to 'Delete my registration', event_registration_path(current_registration), method:  :delete, class:  'nav-link', confirmation:  'Are you sure?'
+              %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
+          %nav.navbar.navbar-light.navbar-expand-lg
+            %ul.navbar-nav
+              %li.navbar-brand Manage Site Content:
+              %li.nav-item= link_to 'Scheduled Events', scheduled_events_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'Content', keyed_contents_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'Venues', venues_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
 
 
