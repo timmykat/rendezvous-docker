@@ -33,7 +33,20 @@ class KeyedContentsController < ApplicationController
   end
 
   def manage
-    @keyed_contents = get_objects "KeyedContent" 
+    @keyed_contents = KeyedContent.order(:key)
+    missing_keys = KeyedContent.content_keys - @keyed_contents.map{ |c| c.key }
+    
+    unless missing_keys.empty?
+      missing_keys.each do |key|
+        new_content = KeyedContent.create(key: key)
+        if !new_content.persisted?
+          Rails.logger.error "The content was not saved"
+        end
+      end
+      @keyed_contents = KeyedContent.order(:key)
+    end
+
+    @keyed_contents
   end
 
   def destroy
@@ -47,10 +60,11 @@ class KeyedContentsController < ApplicationController
   end
 
   private
-  def content_params
-    params.require(:keyed_content).permit(
-      :key, 
-      :content
-    )
-  end
+    def content_params
+      params.require(:keyed_content).permit(
+        :key, 
+        :content
+      )
+    end
+
 end

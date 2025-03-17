@@ -1,7 +1,7 @@
 .container#vendors
   .row.justify-content-center
     .col-md-8
-      %h1 Supporting Vendors
+      %h1.page-title Supporting Vendors
       - if @vendors.empty?
         %p No vendors listed at the moment 
       - else
@@ -9,8 +9,7 @@
           .card
             .card-body
               .card-title
-                .name 
-                  #{vendor.name}
+                %h2.h3= vendor.name
               .card-text
                 %table.table
                   - if !vendor.website.empty?
