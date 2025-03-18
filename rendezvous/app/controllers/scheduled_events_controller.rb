@@ -4,6 +4,10 @@ class ScheduledEventsController < AdminController
     @scheduled_event = ScheduledEvent.new
   end
 
+  def index
+    @scheduled_events = get_objects "ScheduledEvent"
+  end
+
   def create
     @scheduled_event = ScheduledEvent.new(scheduled_event_params)
     if !@scheduled_event.save
@@ -12,6 +16,7 @@ class ScheduledEventsController < AdminController
       redirect_to new_scheduled_event_path
     else
       flash_notice 'The FAQ was successfully created'
+      redirect_to scheduled_events_manage_path
     end
   end
 
@@ -39,8 +44,8 @@ class ScheduledEventsController < AdminController
   end
 
   def destroy
-    @scheduled_events = ScheduledEvent.find(params[:id])
-    @scheduled_events.destroy
+    @scheduled_event = ScheduledEvent.find(params[:id])
+    @scheduled_event.destroy
     redirect_to scheduled_events_manage_path
   end
 
