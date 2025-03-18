@@ -126,7 +126,10 @@
                                       #{event.time}
                                       %br 
                                       %em #{event.name}
-                                  %p= event&.venue&.name
+                                  - if event&.venue.nil?
+                                    %p Location TBD 
+                                  - else 
+                                    %p= event&.venue&.name
                                   .description
                                     = event.short_description_as_html
 
