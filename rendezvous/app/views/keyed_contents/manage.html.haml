@@ -4,11 +4,19 @@
       %h1 Manage Content
     .col-md-10
       %h2 Editing
-      - @keyed_contents.each do |keyed_content|
-        .card 
+      %nav.nav.navbar.navbar-light
+        %ul.nav.navbar
+          - @keyed_contents.each do |kc|
+            %li.nav-item
+              = link_to kc.key, "##{kc.key}"
+              - if kc.content.nil? or kc.content.empty?
+                .badge.badge-danger EMPTY
+
+      - @keyed_contents.each do |kc|
+        .card{ id: kc.key }
           .card-body 
             .card-text
-              = simple_form_for keyed_content do |f|
+              = simple_form_for kc do |f|
                 = render partial:  'keyed_content_fields', locals: { f: f }
                 %br
                 .form-group

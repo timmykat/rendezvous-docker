@@ -26,8 +26,14 @@ class VenuesController < AdminController
     @venue = Venue.find(params[:id])
   end
 
+  def event_hotel
+    @venue = EventHotel.first
+  end
+
   def update
     @venue = Venue.find(params[:id])
+    Rails.logger.debug(venue_params)
+    Rails.logger.debug(event_hotel_params)
     if !@venue.update(venue_params)
       flash_alert_now 'There was a problem updating the venue information'
       flash_alert_now  @venue.errors.full_messages.to_sentence
@@ -36,6 +42,17 @@ class VenuesController < AdminController
       @venues = Venue.all
       redirect_to venues_manage_path
     end
+  end
+
+  def update_event_hotel
+    @event_hotel = EventHotel.find(params[:id])
+    if !@event_hotel.update(event_hotel_params)
+      flash_alert_now 'There was a problem updating the venue information'
+      flash_alert_now  @venue.errors.full_messages.to_sentence
+    end
+
+    @venues = Venue.all
+    redirect_to venues_manage_path
   end
 
   def manage
@@ -69,11 +86,25 @@ class VenuesController < AdminController
         :website,
         :address,
         :details,
+        :type
+      )
+    end
+
+    def event_hotel_params
+      params.require(:event_hotel).permit(
+        :name,
+        :event_hotel,
+        :show_field_venue,
+        :phone,
+        :email,
+        :website,
+        :address,
+        :details,
         :reservation_url,
         :group_code,
         :rooms_available,
         :close_date,
-        :type
+        :type     
       )
     end
 end
