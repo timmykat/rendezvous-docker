@@ -48,6 +48,8 @@ Rails.application.routes.draw do
   delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
   resources :venues, { except: [:index, :show] }
 
+  resources :event_hotels, { except: [:new, :index, :show] }
+
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
   namespace :event do

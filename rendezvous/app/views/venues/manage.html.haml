@@ -8,7 +8,7 @@
         .card 
           .card-body 
             .card-text
-              = simple_form_for venue do |f|
+              = simple_form_for venue, html: { name: "venue" } do |f|
                 = render partial:  'venue_fields', locals: { f: f }
                 %br
                 .form-group

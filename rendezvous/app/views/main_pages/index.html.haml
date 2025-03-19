@@ -1,28 +1,6 @@
 - config = Rails.configuration.rendezvous
 / banner area starts here
 %section.banner
-  .container-fluid
-    .row.justify-content-center.align-items-center{style: "min-height: 400px;"}
-      .col-lg-4
-        %h1.h2 #{event_dates}
-        %h2.h3 Saratoga Springs, New York
-        %p
-          Stay tuned for #{event_year} info:
-          %br
-          %a{ href: "https://www.facebook.com/groups/1796592930566951/", target: "_blank" } Connect on Facebook
-          %br
-          %a{ href: "https://citroenvie.com/", target: "_blank" } Check out CITROËNVIE!
-
-        %section#status
-        - if in_registration_window?  
-          %h2.registration_open 
-            Registration is open for #{Time.now.year}!
-        - elsif after_rendezvous? 
-          %h2.registration_closed
-            Thanks for a great Rendezvous! See you next year!  
-        - else  
-          %h2.registration_closed
-            Online registration is now closed. Please register at the event.
 
 %section#welcome
   .container-fluid
