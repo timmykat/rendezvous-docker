@@ -41,7 +41,9 @@ module Rendezvous
 
     config.load_defaults 7.0
     config.active_record.yaml_column_permitted_classes = [Date, Symbol]
+    config.autoload_paths += %W(#{config.root}/lib)
    
     config.rendezvous = YAML::load(ERB.new(File.read("#{Rails.root}/config/rendezvous.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+
   end
 end

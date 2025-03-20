@@ -3,8 +3,6 @@ Rails.application.routes.draw do
   root 'main_pages#index'
 
   # -- Users
-  
-
   devise_for :users,
     controllers: {
       users: 'users',
@@ -26,10 +24,31 @@ Rails.application.routes.draw do
 
   resources :users
 
-  namespace :commerce do
-    resources :purchases, except: [:edit]
-    resources :merchandise, except: [:show]
-  end
+  # CMS content routes
+  get 'vendors/import', to: 'vendors#import'
+  get 'vendors/manage', to: 'vendors#manage'
+  delete 'vendors/destroy_all', to: 'vendors#destroy_all', as: :destroy_all_vendors
+  resources :vendors, { except: [:show] }
+
+  get 'keyed_contents/manage', to: 'keyed_contents#manage'
+  delete 'keyed_contents/destroy_all', to: 'keyed_contents#destroy_all', as: :destroy_all_keyed_contents
+  resources :keyed_contents, { except: [:show] }
+
+  get 'faqs/manage', to: 'faqs#manage'
+  delete 'faqs/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
+  resources :faqs, { except: [:show] }
+
+  get 'scheduled_events/import', to: 'scheduled_events#import'
+  get 'scheduled_events/manage', to: 'scheduled_events#manage'
+  delete 'scheduled_events/destroy_all', to: 'scheduled_events#destroy_all', as: :destroy_all_scheduled_events
+  resources :scheduled_events, { except: [:show] }
+
+  get 'venues/import', to: 'venues#import'
+  get 'venues/manage', to: 'venues#manage'
+  delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
+  resources :venues, { except: [:index, :show] }
+
+  resources :event_hotels, { except: [:new, :index, :show] }
 
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
@@ -39,12 +58,15 @@ Rails.application.routes.draw do
         get :review
         get :payment
         patch :complete
+        get :complete_after_online_payment
+        get :send_to_square
         get :vehicles
         get :send_email_confirmation
+        get :update_vehicles
+        patch :save_updated_vehicles
       end
     end
     resources :registrations, except: [:index]
-    get 'payment_token', to: 'registrations#get_payment_token'
     get '/welcome', to: 'registrations#welcome'
   end
 
@@ -54,7 +76,8 @@ Rails.application.routes.draw do
   get '/admin/labels', to: 'admin#make_labels'
   get '/admin/graphs', to: 'admin#registration_graphs'
   
-  resources :admin, { only: [:index] }
+  get '/admin/dashboard', to: 'admin#dashboard'
+  
   namespace :admin do
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }
@@ -76,7 +99,6 @@ Rails.application.routes.draw do
   get '/history',           to: 'main_pages#history'
   get '/legal_information', to: 'main_pages#legal_information'
   get '/schedule',          to: 'main_pages#schedule'
-  get '/vendors',           to: 'main_pages#vendors'
 
   resources :pictures, except: [:index]
   get '/gallery',                    to: 'pictures#index'
@@ -87,13 +109,12 @@ Rails.application.routes.draw do
   get '/my-pictures', to: 'pictures#my_pictures'
   post '/pictures/upload(.:format)', to:'pictures#upload'
 
-
   # -- AJAX routes
-  get '/ajax/picture/delete/:id',   to: 'pictures#ajax_delete'
-  get '/ajax/find_user_by_email',   to: 'users#find_by_email'
-  get '/ajax/toggle_admin',         to: 'users#toggle_admin'
-  get '/ajax/toggle_tester',        to: 'users#toggle_tester'
-  get '/ajax/delete_users',         to: 'users#delete_users'
-  get '/ajax/toggle_user_testing',  to: 'users#toggle_user_testing'
-
+  get '/ajax/picture/delete/:id',    to: 'pictures#ajax_delete'
+  get '/ajax/find_user_by_email',    to: 'users#find_by_email'
+  get '/ajax/toggle_admin',          to: 'users#toggle_admin'
+  get '/ajax/toggle_tester',         to: 'users#toggle_tester'
+  get '/ajax/delete_users',          to: 'users#delete_users'
+  get '/ajax/toggle_user_testing',   to: 'users#toggle_user_testing'
+  get '/ajax/update_paid_method',    to: 'event/registrations#update_paid_method'
 end

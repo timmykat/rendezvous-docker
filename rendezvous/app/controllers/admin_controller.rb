@@ -4,7 +4,8 @@ class AdminController < ApplicationController
 
   NO_USER_ID = 999999
 
-  before_action :require_admin, :get_data
+  before_action :require_admin
+  before_action :get_data, { only: :dashboard }
 
   def get_data
     @year = params[:year] || Time.now.year
@@ -50,7 +51,7 @@ class AdminController < ApplicationController
     end
   end
 
-  def index
+  def dashboard
     @title = 'Admin'
     @no_user_id = NO_USER_ID
     

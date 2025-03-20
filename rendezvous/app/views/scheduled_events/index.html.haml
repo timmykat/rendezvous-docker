@@ -1,0 +1,21 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body
+          .card-title 
+            %h1.h3 Scheduled Events   
+          .card-text                   
+            - unless @scheduled_events
+              %p No scheduled events yet.
+            - else
+              %table.table
+                %tbody
+                  - @scheduled_events.each do |event|
+                    %tr
+                      %td= event.day 
+                      %td #{event.time} | #{event.name}
+                    %tr
+                      %td{colspan: 2}= event.long_description
+
+                      

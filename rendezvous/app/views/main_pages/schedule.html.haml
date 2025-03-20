@@ -6,70 +6,26 @@
         #{event_year}
         Rendezvous Schedule
       .pull-right= image_tag('rendezvous-logo.png')
-  -# .row
-  -#   .col-md-offset-1.col-md-10.col-xs-12
-  -#     %p #{tbd_message}
-  .row
-    .col-md-offset-1.col-md-10.col-xs-12
-      .day.well.well-sm
-        %h2 #{relative_date(0)}
-        .event
-          .title 2&ndash;4pm - Ice cream social and registration packet pick-up, Kaleidescope Cafe
-          .details
-            %p 558 Lake Avenue, Saratoga Springs
+    %p #{tbd_message}
+  .row.justify-content-center
+    .col-md-10.col-12
+      - current_day = ""
+      - index = -1
+      = @scheduled_events.each do |event|
+        - if event.day != current_day
+          - current_day = day 
+          - index += 1
+          .card
+            .card-body
+              .card-title
+                %h2 #{relative_date(index)}
+              .card-text
+        
+        - else
+          .event
+            .time= event.time
+            .title= event.name
+            .location= format_for_schedule(event.venue)
+            .details
+              = event.long_description
 
-        .event
-          .title 5&ndash;7pm - NEW VENUE: Pizza, socializing, and packet pick-up, Gurtler Bros. VFW Post 420
-          .details
-            %p 190 Excelsior Avenue, Saratoga Springs
-        .event 
-          .title Enjoy dinner at one of the many places Saratoga Springs has to offer 
-          .details 
-            %p https://www.discoversaratoga.org/eat-and-drink/
-      .day.well.well-sm
-        %h2 #{relative_date(1)}
-        %p 
-          %strong Le grand jour!
-        .event
-          .title 9am&ndash;9pm Auto show and BBQ dinner, Lakeside Farms
-          .details
-            %p 336 Schauber Rd., Ballston Lake
-            %p
-              %em SHOW CARS will be directed to park on the show field by model; all others will be asked to park in the lot. Please follow instructions from our volunteer parkers.
-            %p
-              After parking and getting your windshield placard secured, stroll the rows & see your favorites. Be sure to carry your People Choice Ballot and vote for your favorites. Stop by the big tent to see out what the vendors have for sale & pick up this year's T-shirt at the registration table. And don't forget the complimentary continental breakfast!
-        %h3 Show day details
-        .event
-          .title 9am&ndash;4pm Show field open
-          .details
-            %p
-              %em PLEASE no early birds; the vendors and volunteers need time to set up.
-            %p
-              %strong Hunger pangs?
-              %br
-              Visit the
-              = succeed ', ' do
-                = link_to config[:venue][:name], config[:venue][:website], target:  '_blank'
-              right on site. Soups, salads, & sandwiches, burgers & hot dogs are all available at the restaurant, while the market has lots of light snacks.
-        .event
-          .title 11am-6pm: Silent auction
-          .details
-            %p Win stuff <em>and</em> help the Rendezvous! Please give donated items to the auction team well before 11am!
-            %p
-              %em
-                Winners announced after dinner.
-        .event
-          .title 4&ndash;5:30pm Downtime
-          .details
-            %p  Relax, catch a nap, explore
-        .event
-          .title 6&ndash;8pm Banquet dinner
-          .details
-            %p Provided by the friendly folks at Lakeside Farms. The People's Choice Awards and winners of the 50-50 raffle will be announced at <strong>8pm</strong>.
-
-      .day.well.well-sm
-        %h2 #{relative_date(2)}
-        .event
-          .title 9-11am - NEW VENUE: Breakfast, American Legion Adirondack Post 70
-          .details
-            %p  34 West Avenue, Saratoga Springs

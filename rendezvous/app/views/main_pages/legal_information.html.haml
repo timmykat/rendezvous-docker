@@ -1,32 +1,25 @@
-- config = Rails.configuration.rendezvous
 .content
-  .row
-    .col-md-offset-2.col-md-8.col-xs-12
-      %h1 Legal Information
-      %h2#about About
-      %p This website, citroenrendezvous.org , is owned and operated by Citroen Rendezvous LLC:
-      = official_contact()
+  .row.justify-content-center
+    .col-md-8.col-12
+      .card 
+        .card-body 
+          .card-title
+            %h1.h2.page-title= @title
+          .card-text
+            %p
+              This website, citroenrendezvous.org, is owned and operated by Citroen Rendezvous LLC.
+            
+            %h2.h3 Official Contact
+            #{official_contact}
 
-      %h2#event_pricing Event Pricing
-      %p The cost for attending the event is $#{config[:fees][:adult]} per adult, free children under the age of 15.
+            %h2.h3 Policies
 
-      %h2#refund_policy Refund Policy
-      %p In case of cancellation, Citroen Rendezvous LLC will refund up to the full registration fee for the event until one (1) week before the event; the last day to request a refund is #{config[:dates][:refund]}.
-      %p Donations are non-refundable.
-      %p If payment was made by credit card, cancellations will be refunded by crediting your card.
+            %h3.h4 Event Pricing
+            %p The cost for attending the event is $#{event_fee} per adult, free children under the age of 15.
 
-      %h2#privacy_policy Privacy Policy
-      %p We are committed to protecting the privacy of website visitors.
-      %ul
-        %li We collect and store your name, email address, and geographic address.
-        %li We do not save or store your credit card information.
-        %li All information, including usernames, passwords, personal data, and credit card information are transmitted using SSL encryption.
-        %li We will not knowingly provide your personal information to any third parties for the purposes of commerce.
-        %li Our website uses session cookies as a convenience to you.
-        %li The sharing service we use may insert tracking cookies. We have no control over this.
-        %li You have the option to refuse to accept cookies
-        %li
-          You may also use a service called
-          = link_to 'Ghostery', 'https://www.ghostery.com/our-solutions/ghostery-browser-extention/'
-          to control tracking cookies.
-        %li Uploading photos to the website grants consent for us to display them. The copyright for any photographs will remain yours.
+            %h3.h4 Refund Policy
+            %p In case of cancellation, Citroen Rendezvous LLC will refund up to the full registration fee for the event until one (1) week before the event; the last day to request a refund is #{refund_date}.
+            %p If payment was made by credit card, cancellations will be refunded by crediting your card.
+
+            .privacy-policy
+              = keyed_content("page_legal")
