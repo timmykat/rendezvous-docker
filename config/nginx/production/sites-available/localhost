@@ -1,9 +1,9 @@
-#   * Official English Documentation: http://nginx.org/en/docs/
+  #   * Official English Documentation: http://nginx.org/en/docs/
 #   * Official Russian Documentation: http://nginx.org/ru/docs/
 
 user nginx;
 worker_processes auto;
-error_log /var/log/nginx/nginx.error.log;
+error_log /var/log/nginx/error.log;
 pid /var/run/nginx.pid;
 
 # Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
@@ -28,8 +28,23 @@ http {
   client_max_body_size 2M;
 
   upstream rendezvous_app {
-    server rails_app:3000 fail_timeout=0;
+    server unix:///var/www/rendezvous/shared/tmp/sockets/puma.sock fail_timeout=0;
   }
 
-  include /etc/nginx/sites-enabled/*;
+  server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+      root html;
+      index index.html index.htm;
+    }
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+      root html;
+    }
+  }
 }
