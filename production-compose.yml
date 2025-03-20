@@ -1,0 +1,111 @@
+services:
+  nginx:
+    image: nginx
+
+    volumes:
+      - ./config/nginx/development/certs:/etc/nginx/ssl/certs
+      - ./config/nginx/staging/nginx.conf:/etc/nginx/nginx.conf
+      - ./rendezvous/log:/var/log/nginx
+      - ./rendezvous:/var/www/rendezvous
+
+    ports:
+      - 80:80
+      - 443:443
+
+    depends_on:
+      - rails_app
+
+    networks:
+      - rendezvous
+
+  rails_app:
+    image: rails_image
+    build:
+      context: ./rendezvous
+      dockerfile: ../config/docker/Dockerfile
+    
+
+    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+    # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+
+    environment:
+      - APP_DOMAIN
+      - RAILS_ENV
+      - RACK_ENV
+      - RAILS_DEVELOPMENT_HOSTS
+      - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+
+      # Sandbox info
+      - SANDBOX_BRAINTREE_MERCHANT_ID
+      - SANDBOX_BRAINTREE_PUBLIC_KEY
+      - SANDBOX_BRAINTREE_PRIVATE_KEY
+      - SANDBOX_BRAINTREE_TOKENIZATION_KEY
+
+      # Mailer info
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_LOGIN
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRES
+      - BREVO_API_KEY
+
+    ports:
+      - 3000:3000
+
+    links:
+      - db
+
+    networks:
+      - rendezvous
+
+    depends_on:
+      - db
+
+    volumes:
+      - ./rendezvous:/var/www/rendezvous-docker/rendezvous
+      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
+
+  db:
+    image: mysql:8.0.32
+    platform: linux/amd64
+    restart: always
+
+    ports:
+      - 3306:3306
+
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+    networks:
+      - rendezvous
+
+    volumes:
+      - ./init_data/mysql:/docker-entrypoint-initdb.d
+      - ./.ephemeral/mysqld/db_data:/var/lib/mysql
+      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+    networks:
+      - rendezvous
+
+    depends_on:
+      - db
+
+networks:
+  rendezvous:
+    driver: bridge

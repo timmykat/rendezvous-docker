@@ -1,0 +1,44 @@
+name: Deploy Rendezvous Staging
+run-name: Bulding and deploying Rendezvous staging site
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+        with:
+          path: /var/www/rendezvous-docker-staging
+
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}  
+
+      - name: Set Staging Environment
+        run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+
+      - name: Build and push docker images
+        run: |
+          docker compose -f $ENVIRONMENT-compose.yml build
+          docker compose -f $ENVIRONMENT-compose.yml push
+
+      # Deploy via SSH
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTINGER_IP }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          script: |
+            cd /var/www/rendezvous-docker-staging
+            git pull origin staging
+            docker compose -f $ENVIRONMENT-compose.yml down
+            docker compose -f $ENVIRONMENT-compose.yml up -d
