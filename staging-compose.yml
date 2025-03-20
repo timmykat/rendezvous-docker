@@ -69,7 +69,7 @@ services:
       - db
 
     volumes:
-      - ./rendezvous:/var/www/rendezvous
+      - ./rendezvous:/var/www/rendezvous-docker-staging.rendezvous
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   db:
