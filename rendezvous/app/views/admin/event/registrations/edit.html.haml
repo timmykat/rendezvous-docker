@@ -38,18 +38,18 @@
               %p.amount.bg-success.form-group
                 %label Registration fee: $
                 = f.input_field :registration_fee, disabled:  true, class:  'calculated'
-          = f.button :submit, 'Update registration', class:  'btn btn-primary'
+          = f.button :submit, 'Update registration', class:  "btn btn-sm btn-primary"
             
         %section
           %h2 Payment or Refund
-          %p For credit card transactions, please process the payment or refund in the Braintree account. Note the transaction code and enter here.
+          %p For credit card transactions, please process the payment or refund in the Square account. Note the transaction code and enter here.
           = simple_fields_for :transactions do |t|
             = render partial:  'transaction_fields', locals:  { f:  t, payment_methods: config[:payment_methods] }
 
             .row
               .col-md-12
                 = hidden_field_tag :registration_id, @event_registration.id
-                = f.button :submit, 'Update registration', class:  'btn btn-primary'
+                = f.button :submit, 'Update registration', class:  "btn btn-sm btn-primary"
   
 
               

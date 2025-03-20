@@ -1,6 +1,8 @@
-class Vehicle < ActiveRecord::Base
+class Vehicle < ApplicationRecord
 
   belongs_to :user
+  has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :vehicle_id
+  has_many :registrations, class_name: 'Event::Registration', through: :registrations_vehicles
   
   validates :year, inclusion: { in: (1919..2015).map{ |int| int.to_s }, message: "%{value} is not a valid year" }
   validates :marque, presence: true
@@ -39,5 +41,14 @@ class Vehicle < ActiveRecord::Base
       category = 'Non-French'
     end
     category
-  end   
+  end  
+  
+  def at_event?(registration)
+    registrations.each do |r|
+      if r == registration
+        return true
+      end
+    end
+    return false
+  end
 end

@@ -57,7 +57,7 @@
 
           %section
             %h2 Payment
-            %p For credit card transactions, please process the payment or refund in the Braintree account. Note the transaction code and enter here.
+            %p For credit card transactions, please process the payment or refund in the Square account. Note the transaction code and enter here.
             = f.simple_fields_for :transactions do |t|
               = render partial:  'transaction_fields', locals:  { f:  t, payment_methods: config[:payment_methods] }
 
@@ -68,5 +68,5 @@
           .row
             .col-md-12
               .form-group
-                = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  'btn btn-primary'
+                = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  "btn btn-sm btn-primary"
 

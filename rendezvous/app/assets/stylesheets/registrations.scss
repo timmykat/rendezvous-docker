@@ -1,6 +1,18 @@
 // Place all the styles related to the Registrations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.amount {
+  font-size: 1.2em;
+	padding: 10px 20px;
+	background-color: white;
+	border-radius: 5px;
+}
+input.calculated {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+}
+
 .attendee {
   .attendee-type {
     font-weight: bold;
@@ -89,16 +101,21 @@ td#logo {
 }
 .registration-progress {
   text-align: center;
-  .fa {
-    color: #666;
+
+  li.separator {
+    margin-bottom: 0;
+    & > i {
+      color: #666;
+    }
   }
-  .step {
+
+  .list-group-item {
     background-color: $brand-color;
     color: white;
     display: inline-block;
     padding: 5px 20px;
     border-radius: 3px;
-    margin: 20px 0;
+    margin: 20px 5px;
     font-size: 0.9em;
     &.to_do {
       background-color: #444;
@@ -106,6 +123,25 @@ td#logo {
     &.complete {
       background-color: #999;
     }
+
+    &.active {
+      margin-top: 20px;
+    }
+  }
+}
+
+.btn.btn-square-pay {
+  position: relative;
+  display: block;
+  width: 120px;
+  margin-top: 20px;
+  padding-right: 35px;
+
+  &::after {
+    content: image-url('square-icon.png');
+    position: absolute;
+    right: 30px;
+    margin-top: -4px;
   }
 }
 
@@ -126,20 +162,5 @@ body {
     }
   }
 }
-@media screen {
-  .back-bar {
-    background-color: $brand-color;
-    padding: 10px;
-    font-sized: 1.2em;
-    a, a:hover, a:visited {
-      color: white;
-      text-decoration: none;
-    }
-  }
-}
-@media print {
-  .back-bar {
-    display: none;
-  }
-}
+
       

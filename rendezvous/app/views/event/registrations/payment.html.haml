@@ -1,4 +1,7 @@
 - config = Rails.configuration.rendezvous
+:javascript
+  const applicationId = "#{@square_application_id}"
+  const locationId = "#{@square_location_id}"
 
 .container
   .row
@@ -31,72 +34,27 @@
               .col-md-6.col-xs-12
                 .form-group
                   = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', input_html:  { class:  'payment' }
-                #payment-form
-                  .row
-                    .col-md-12
-                      .logos
-                        = image_tag 'credit_card_logos_13'
-                      = hidden_field_tag :payment_method_nonce, ''
-                      .form-group
-                        %label{ for:  'card-number' } Card Number
-                        #card-number.form-control
-                  .row
-                    .col-md-8
-                      .form-group
-                        %label{ for:  'expiration-date' } Expiration Date
-                        #expiration-date.form-control
-                    .col-md-4
-                      .form-group
-                        %label{ for:  'cvv' } CVV
-                        #cvv.form-control
-                  .row
-                    .col-md-12
-                      %table.table.submit-status
-                        %tr.credit-card.text-danger
-                          %td
-                            Credit card valid?
-                          %td
-                            &nbsp;
-                            %i.fa-solid.fa-check.hidden
-                          %td{ id:  'logo', rowspan:  '3' }
-                        %tr.expiration.text-danger
-                          %td
-                            Expiration date valid?
-                          %td
-                            &nbsp;
-                            %i.fa-solid.fa-check.hidden
-                        %tr.cvv.text-danger
-                          %td
-                            CVV valid?
-                          %td
-                            &nbsp;
-                            %i.fa-solid.fa-check.hidden
-                  = f.input_field :status, as:  :hidden, value:  'complete'
-                #mailing-address.hidden
+
+            %section#payment-online
+              %h3 Pay online
+              .row
+                .col-md-6.col-xs-12
+                  #payment-link
+                    We use Square to accept on-line payments.
+                    = link_to "Pay", send_to_square_event_registration_path(@event_registration), type: "button", class:  'btn btn-primary btn-square-pay' 
+
+            %section#payment-cash.hidden
+              %h3 Pay by mail or in person
+              .row
+                .col-md-6.col-xs-12
                   %p
-                    %em You may either pay on arrival, or send check payable to Citroen Rendezvous LLC to:
+                    %em You may either pay on arrival, or send a check payable to Citroen Rendezvous LLC to:
                     %p= mailing_address
                   = f.input_field :status, as:  :hidden, value:  'payment due'
-              .col-md-6.col-xs-12
-                .row
-                  .col-md-12
-                    %p We take the security of your financial information seriously and have taken steps to ensure that the encryption of your sensitive information is as secure as possible.
-                    .ssl
-                      = image_tag 'ssl-assurance.png', style:  'width: 100%;'
-                .row
-                  .col-md-6
-                    %a{ href:  "//www.securitymetrics.com/site_certificate?id=1561486&tk=4752303369d59e6ee11209926d45a11d", target:  "_blank"}
-                      %img{ src:  "https://www.securitymetrics.com/static/apps/super/assets/img/Credit_Card_Safe_corporate.png", alt:  "SecurityMetrics Credit Card Safe"}
-                  .col-md-6
-                    :javascript
-                      if (typeof TrustLogo === 'function') {
-                        TrustLogo(static_file_url("comodo_secure_seal_76x26_transp.png"), "CL1", "none");
-                      }
-                    = link_to 'Essential SSL', "https://www.instantssl.com/", id:  "comodoTL"
-          %section
-            .row
-              .col-md-12
-                .form-group
-                  = f.button :submit, 'Complete registration'.html_safe, class:  'btn btn-primary'
-                  %img{ src: asset_path('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
 
+                  .form-group
+                    = f.button :submit, 'Complete registration'.html_safe, class:  'btn btn-primary complete-registration', id: "card-button"
+                    %img{ src: asset_path('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
+
+= javascript_include_tag 'https://sandbox.web.squarecdn.com/v1/square.js'
+= javascript_include_tag  'payments'

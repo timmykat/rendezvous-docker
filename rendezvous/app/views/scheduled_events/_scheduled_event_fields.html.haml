@@ -1,0 +1,28 @@
+.form-group
+  = f.input :name
+.form-group
+  = f.input :day, collection: day_options, selected: f.object.day, include_blank: '-- Select day --'
+.form-group
+  = f.input :time, placeholder: 'Hour range or string'
+.form-group
+  - if !venue_options.empty?
+    = f.input :venue_id, collection: venue_options, include_blank: '-- Select venue --', selected: f.object.venue_id, class: 'form-select'
+  - else
+    %p No venue options are available
+.form-group 
+  = f.input :has_subevents, as: :boolean
+.form-group
+  - if main_event_options.empty?
+    %label 
+      %em Main Event (optional): You need to set a main event
+  - elsif f.object.has_subevents 
+    %label
+      %em This is a primary event
+  - else
+    = f.input :main_event_id, collection: main_event_options, selected: f.object.main_event_id, include_blank: '-- Select primary event --'
+.form-group 
+  = f.input :short_description, as: :simple_mde
+.form-group
+  = f.input :long_description, as: :simple_mde
+%br
+

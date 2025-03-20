@@ -33,7 +33,7 @@ class Users::SessionsController < Devise::SessionsController
       flash_alert 'We\re sorry, we were unable to authenticate that email address, or your token is expired.'
       redirect_to new_session_path(resource_name)
     elsif resource.admin?
-      redirect_to admin_index_path
+      redirect_to admin_dashboard_path
     else
       redirect_to new_event_registration_path
     end

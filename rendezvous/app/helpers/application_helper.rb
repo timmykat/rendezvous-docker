@@ -23,6 +23,32 @@ module ApplicationHelper
     }
   end
 
+  def bootstrap_icon(icon, size = "32")
+    href = image_path "bootstrap-icons/bootstrap-icons.svg"
+    tag = <<LITERAL
+<svg class="bi" width="#{size}" height="#{size}" fill="currentColor">
+    <use href="#{href}##{icon}"></use>
+</svg>
+LITERAL
+    tag.html_safe
+  end
+
+  def controller_classes
+    classes = "c_#{controller_path.gsub('/', '_')}"
+    if controller_path.match(/admin/)
+      classes += " admin-page"
+    end
+    classes
+  end
+
+  def event_fee
+    Rails.configuration.rendezvous[:fees][:adult]
+  end
+
+  def refund_date
+    Rails.configuration.rendezvous[:dates][:refund_date]
+  end
+
   def logged_in_user(user)
     if user.first_name
       display = "Welcome #{user.first_name}"
@@ -40,7 +66,9 @@ module ApplicationHelper
   end
 
   def in_registration_window?
-    Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+    Rails.configuration.rendezvous[:registration_window][:test] ||
+    (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && 
+    Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
   end
 
   def after_rendezvous?
@@ -109,8 +137,16 @@ module ApplicationHelper
     return address_arr.join("\n")
   end
 
-  def les_chauffeurs(separator = ", ")
-    return Rails.configuration.rendezvous[:chauffeurs].join(separator)
+  def les_chauffeurs(output = "html")
+    if output == "html"
+      value = "<ul class='list-unstyled'>\n"
+      Rails.configuration.rendezvous[:chauffeurs].each do |c|
+        value += "  <li>#{c}</li>"
+      end
+    else
+      value = Rails.configuration.rendezvous[:chauffeurs].join(', ')
+    end
+    return value.html_safe
   end
 
   def vehicles_list(vehicles)
@@ -135,7 +171,6 @@ module ApplicationHelper
     output +=  mailing_address
     output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
     output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
-    output += '<p><em>Facebook:</em> <a href="' + config[:official_contact][:facebook] + '"><i class="fa fa-facebook-square"></i></a></p>' + "\n"
     output.html_safe
   end
 

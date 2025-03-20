@@ -14,6 +14,13 @@ class ApplicationController < ActionController::Base
 
   # Need this for other gems that might set flash
   def flash_array
+
+    # For testing
+    # flash.keys << :note
+    # flash[:note] = [
+    #   "This is my flash message"
+    # ]
+
     unless flash.keys.blank?
       flash.keys.each do |type|
         flash[type] = [ flash[type] ] if flash[type].is_a? String
@@ -30,6 +37,28 @@ class ApplicationController < ActionController::Base
         provinces: CONFIG[:provinces],
         countries: CONFIG[:countries]
       }
+  end
+
+  def import_data(filename, klass_name)
+    file_path = Rails.root.join('import_files', filename)
+    klass = Object.const_get(klass_name)
+    CSV.foreach(file_path, headers: true) do |row|
+      klass.create!(row.to_hash)
+    end
+  end
+
+  def get_objects(klass_name)
+    klass = Object.const_get(klass_name)
+    variable_name = klass_name.gsub("::", "").underscore
+    if klass.has_attribute? :order
+      objects = klass.sorted
+    else
+      objects = klass.all
+    end
+    if objects.empty?
+      objects = [klass.new]
+    end
+    return objects
   end
 
   ## Recaptcha v3 -----------
@@ -93,5 +122,10 @@ class ApplicationController < ActionController::Base
     else
       super
     end
+  end
+
+  def format_for_logging(hash)
+    require 'pp'
+    PP.pp(hash, '')
   end
 end
