@@ -3,22 +3,22 @@ services:
     image: nginx
 
     volumes:
-      - ./config/nginx/development/certs:/etc/nginx/ssl/certs
+      - ./config/nginx/staging/certs:/etc/nginx/ssl/certs
       - ./config/nginx/staging/nginx.conf:/etc/nginx/nginx.conf
-      - ./rendezvous/log:/var/log/nginx
+      - ./config/nginx/shared/sites-available/:/etc/nginx/sites-available/
+      - ./config/nginx/shared/sites-available/:/etc/nginx/sites-enabled/
+      - ./rendezvous/log:/var/log/nginx/staging
       - ./rendezvous:/var/www/rendezvous
 
     ports:
       - 80:80
       - 443:443
 
-    depends_on:
-      - rails_app
-
     networks:
-      - rendezvous
+      - shared_server_network
+      - internal_staging
 
-  rails_app:
+  rails_app_staging:
     image: rails_image
     build:
       context: ./rendezvous
@@ -63,16 +63,16 @@ services:
       - db
 
     networks:
-      - rendezvous
+      - internal_staging
 
     depends_on:
-      - db
+      - db_staging
 
     volumes:
-      - ./rendezvous:/var/www/rendezvous-docker-staging.rendezvous
+      - ./rendezvous:/var/www/rendezvous
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
-  db:
+  db_staging:
     image: mysql:8.0.32
     platform: linux/amd64
     restart: always
@@ -87,7 +87,7 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
     networks:
-      - rendezvous
+      - internal_staging
 
     volumes:
       - ./init_data/mysql:/docker-entrypoint-initdb.d
@@ -101,11 +101,14 @@ services:
       - 8080:8080
 
     networks:
-      - rendezvous
+      - internal_staging
 
     depends_on:
-      - db
+      - db_staging
 
 networks:
-  rendezvous:
+  internal_staging:
     driver: bridge
+
+  shared_server_network:
+    external: true

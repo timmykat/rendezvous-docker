@@ -3,11 +3,10 @@ services:
     image: nginx
 
     volumes:
-      - ./config/nginx/templates:/etc/nginx/templates/
       - ./config/nginx/local/certs:/etc/nginx/ssl/certs
       - ./config/nginx/local/nginx.conf:/etc/nginx/nginx.conf
-      - ./config/nginx/local/sites-available/:/etc/nginx/sites-available/
-      - ./config/nginx/local/sites-available/:/etc/nginx/sites-enabled/
+      - ./config/nginx/shared/sites-available/:/etc/nginx/sites-available/
+      - ./config/nginx/shared/sites-enabled/:/etc/nginx/sites-enabled/
       - ./rendezvous/log:/var/log/nginx
       - ./rendezvous:/var/www/rendezvous
 

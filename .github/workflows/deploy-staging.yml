@@ -15,10 +15,11 @@ jobs:
       - name: Check Out Repository
         uses: actions/checkout@v4
         with:
-          path: /var/www/rendezvous-docker-staging
+          ref: staging
+          fetch-depth: 1
 
       - name: Set up SSH keys
-        uses: webfactory/ssh-agent@v0.5.4
+        uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}  
 
