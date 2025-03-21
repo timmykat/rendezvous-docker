@@ -21,7 +21,7 @@ services:
       - rendezvous
 
   rails_app:
-    image: timmykat/rendezvous_rails_app
+    image: ghcr.io/timmykat/rendezvous_rails_app
     build:
       context: ./rendezvous
       dockerfile: ../config/docker/Dockerfile
