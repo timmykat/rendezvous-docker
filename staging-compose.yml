@@ -60,7 +60,7 @@ services:
       - 3000:3000
 
     links:
-      - db
+      - db_staging
 
     networks:
       - internal_staging
