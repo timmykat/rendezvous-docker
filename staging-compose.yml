@@ -19,7 +19,7 @@ services:
       - internal_staging
 
   rails_app_staging:
-    image: rails_image
+    image: ghcr.io/timmykat/rendezvous_rails_app
     build:
       context: ./rendezvous
       dockerfile: ../config/docker/Dockerfile
