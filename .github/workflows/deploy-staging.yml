@@ -17,20 +17,31 @@ jobs:
         with:
           ref: staging
           fetch-depth: 1
-
-      - name: Set up SSH keys
-        uses: webfactory/ssh-agent@v0.9.1
-        with:
-          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}  
+ 
 
       - name: Set Staging Environment
         run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
 
-      - name: Build and push docker images
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build the Rendezvous rails app image
         run: |
-          docker compose -f $ENVIRONMENT-compose.yml build
+          docker build -f config/docker/Dockerfile -t ${{env.DOCKERHUB_USER}}/rendezvous_rails_app:${{ github.sha }} .
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/rendezvous_rails_app:${{ github.sha }}
 
       # Deploy via SSH
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }} 
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
