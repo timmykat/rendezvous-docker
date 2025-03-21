@@ -13,9 +13,9 @@ WORKDIR $RAILS_ROOT
 # Add gem setup
 RUN gem install bundler
 
-COPY Gemfile Gemfile.lock ./
-
 RUN bundle install
+
+COPY Gemfile Gemfile.lock ./
 
 # Add project files and precompile assets
 COPY . .
