@@ -31,7 +31,7 @@ jobs:
 
       - name: Build the Rendezvous rails app image
         run: |
-          docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} .
+          docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} ./rendezvous
 
       - name: Push Docker image
         run: |
