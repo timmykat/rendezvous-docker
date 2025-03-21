@@ -29,7 +29,6 @@ jobs:
       - name: Build and push docker images
         run: |
           docker compose -f $ENVIRONMENT-compose.yml build
-          docker compose -f $ENVIRONMENT-compose.yml push
 
       # Deploy via SSH
       - name: Deploy via SSH
