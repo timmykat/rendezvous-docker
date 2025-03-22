@@ -17,7 +17,7 @@ for env in "${environments[@]}"; do
   fi
 
   echo "-- Setting permissions for web user"
-  sudo chown -R webuser:webuser /var/www/rendezvous-docker-$env
+  chown -R webuser:webuser /var/www/rendezvous-docker-$env
 
   echo "-- Making nginx certs directories for $env"
   if [ ! -d "/etc/nginx/ssl/certs/$domain" ]; then
@@ -33,7 +33,7 @@ for env in "${environments[@]}"; do
   if [ ! -d "/var/run/mysqld/$domain" ]; then
     mkdir -p /var/run/mysqld/$domain
   fi  
-fi
+done
 
 # Set up share docker network
 echo "-- Setting up shared docker network"
