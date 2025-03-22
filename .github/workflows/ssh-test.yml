@@ -6,7 +6,12 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}
+
+    - name: executing remote ssh commands using private key
       uses: appleboy/ssh-action@master
       with:
         host: ${{ vars.HOSTINGER_IP }}
