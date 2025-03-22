@@ -76,10 +76,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}
 
-      - name: Add the SSH key to the agent
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | ssh-add - <<< ""
-
       # Upload the hostinger setup script
       - name: Upload Hostinger setup script
         run: |
