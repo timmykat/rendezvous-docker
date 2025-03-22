@@ -79,9 +79,7 @@ jobs:
       # Upload the hostinger setup script
       - name: Upload Hostinger setup script
         run: |
-          scp ./bin/setup_hostinger.sh ${{ vars.HOSTINGER_USER }}@${{ vars.HOSTINGER_IP }}:/home/webuser/bin
-        env:
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Use the secret to get the remote host
+          scp -i ~/.ssh/github_rendezvous_rsa ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
 
       - name: Debug the evironment
         run: echo "The environment is $ENVIRONMENT"
