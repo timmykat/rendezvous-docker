@@ -3,6 +3,7 @@ services:
   # The nginx container serves both the production and staging environments
   nginx:
     image: nginx
+    name: rendezvous-nginx
 
     volumes:
       - ./config/nginx/staging/certs:/etc/nginx/ssl/certs
@@ -16,6 +17,9 @@ services:
     ports:
       - 80:80
       - 443:443
+
+    depends_on:
+      - rails_app_staging
 
     networks:
       - shared_server_network
@@ -41,7 +45,7 @@ services:
       - /var/lib/mysql/prod:/var/lib/mysql
       - /var/run/mysqld/prod:/var/run/mysqld
 
-  rails_app_prod:
+  rails_app_staging:
     image: ghcr.io/timmykat/rendezvous_rails_app
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
