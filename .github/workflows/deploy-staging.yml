@@ -54,8 +54,8 @@ jobs:
           SMTP_DOMAIN: ${{vars.SMTP_DOMAIN}}
           SMTP_PORT: ${{vars.SMTP_PORT}}
           SMTP_USER: ${{vars.SMTP_USER}}
-          SITE_ADMIN_SENDING_ADDRESS: ${{var.SITE_ADMIN_SENDING_ADDRESS}}
-          INFO_SENDING_ADDRESS: ${{var.INFO_SENDING_ADDRES}}
+          SITE_ADMIN_SENDING_ADDRESS: ${{vars.SITE_ADMIN_SENDING_ADDRESS}}
+          INFO_SENDING_ADDRESS: ${{vars.INFO_SENDING_ADDRES}}
           BREVO_API_KEY: ${{secrets.BREVO_API_KEY}}          
 
       - name: Push Docker image
