@@ -19,7 +19,7 @@ jobs:
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}  
+          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}  
 
       - name: Set Production Environment
         if: github.ref == 'refs/heads/main'
@@ -40,7 +40,7 @@ jobs:
         with:
           host: ${{ secrets.HOSTINGER_IP }}
           username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
             cd /var/www/rendezvous-docker
             git pull origin hostinger
