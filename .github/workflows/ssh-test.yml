@@ -9,7 +9,7 @@ jobs:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOSTINGER_IP }}
-        username: ${{ secrets.HOSTINGER_USER }}
+        host: ${{ vars.HOSTINGER_IP }}
+        username: ${{ vars.HOSTINGER_USER }}
         key: ${{ secrets.HOSTINGER_SSH_KEY }}
         script: pwd
