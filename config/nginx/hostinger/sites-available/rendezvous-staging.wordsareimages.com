@@ -48,15 +48,15 @@ server {
   }
 
   location / {
-    proxy_pass http://rendezvous_app;
+    proxy_pass http://rendezvous_app_staging;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_redirect off;
   }
 
-  ssl_certificate /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/rendezvous_staging.crt;
-  ssl_certificate_key /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/rendezvous_staging.private.key;
+  ssl_certificate /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/fullchain.pem;
+  ssl_certificate_key /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/privkey.pem;
 
   ssl_dhparam /etc/nginx/ssl/dhparams.pem;
 

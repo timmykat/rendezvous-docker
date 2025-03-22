@@ -14,5 +14,5 @@ development:
 
 staging:
   <<: *default
-  host: localhost
+  host: db_staging
   database: <%= ENV['MYSQL_DATABASE'] %>
