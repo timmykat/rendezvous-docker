@@ -3,7 +3,7 @@ services:
   # The nginx container serves both the production and staging environments
   nginx:
     image: nginx
-    name: rendezvous-nginx
+    container_name: rendezvous-nginx
 
     volumes:
       - ./config/nginx/staging/certs:/etc/nginx/ssl/certs
@@ -89,6 +89,7 @@ services:
   # Staging services
   db_staging:
     image: mysql:8.0.32
+    container_name: rendezvous-db-staging
     platform: linux/amd64
     restart: always
 
@@ -107,6 +108,7 @@ services:
       - /var/run/mysqld/staging:/var/run/mysqld
 
   rails_app_staging:
+    container_name: rendezvous-rails-app-staging
     image: ghcr.io/timmykat/rendezvous_rails_app
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
