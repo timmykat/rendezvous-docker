@@ -77,9 +77,9 @@ jobs:
           ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
 
       # Upload the hostinger setup script
-      - name: Upload Hostinger setup script
-        run: |
-          scp -o StrictHostKeyChecking=no ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
+      # - name: Upload Hostinger setup script
+      #   run: |
+      #     scp -o StrictHostKeyChecking=no ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
 
       - name: Debug the evironment
         run: echo "The environment is $ENVIRONMENT"
@@ -91,6 +91,7 @@ jobs:
           username: ${{ vars.HOSTINGER_USER }}
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
+            chmod 755 ./bin/setup_hostinger.sh
             ./bin/setup_hostinger.sh
             cd /var/www/rendezvous-docker-staging
             if [ ! -d ".git" ]; then
