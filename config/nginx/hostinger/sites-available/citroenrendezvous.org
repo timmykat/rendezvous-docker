@@ -75,8 +75,8 @@ server {
     proxy_redirect off;
   }
 
-  ssl_certificate /etc/nginx/ssl/certs/citroenrendezvous.org/citroenrendezvous_org_chain.crt;
-  ssl_certificate_key /etc/nginx/ssl/certs/citroenrendzvous.org/rendezvous.private.key;
+  ssl_certificate /etc/nginx/ssl/certs/prod/citroenrendezvous_org_chain.crt;
+  ssl_certificate_key /etc/nginx/ssl/certs/prod/rendezvous.private.key;
 
   ssl_dhparam /etc/nginx/ssl/dhparams.pem;
 

@@ -55,8 +55,8 @@ server {
     proxy_redirect off;
   }
 
-  ssl_certificate /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/fullchain.pem;
-  ssl_certificate_key /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/privkey.pem;
+  ssl_certificate /etc/nginx/ssl/certs/staging/fullchain.pem;
+  ssl_certificate_key /etc/nginx/ssl/certs/staging/privkey.pem;
 
   ssl_dhparam /etc/nginx/ssl/dhparams.pem;
 
