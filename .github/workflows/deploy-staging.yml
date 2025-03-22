@@ -2,9 +2,9 @@ name: Deploy Rendezvous Staging
 run-name: Bulding and deploying Rendezvous staging site
 
 on:
-  push:
-    branches:
-      - staging
+  # push:
+  #   branches:
+  #     - staging
   
   workflow_dispatch:
     inputs:
