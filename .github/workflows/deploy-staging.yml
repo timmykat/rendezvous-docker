@@ -5,6 +5,11 @@ on:
   push:
     branches:
       - staging
+  
+  workflow_dispatch:
+    inputs:
+      branches:
+        - staging
 
 jobs:
   deploy:
