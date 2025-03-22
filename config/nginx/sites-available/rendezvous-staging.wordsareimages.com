@@ -55,8 +55,8 @@ server {
     proxy_redirect off;
   }
 
-  ssl_certificate /etc/nginx/ssl/rendezvous_staging.crt;
-  ssl_certificate_key /etc/nginx/ssl/rendezvous_staging.private.key;
+  ssl_certificate /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/rendezvous_staging.crt;
+  ssl_certificate_key /etc/nginx/ssl/certs/rendezvous-staging.wordsareimages.com/rendezvous_staging.private.key;
 
   ssl_dhparam /etc/nginx/ssl/dhparams.pem;
 
