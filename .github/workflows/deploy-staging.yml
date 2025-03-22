@@ -41,7 +41,10 @@ jobs:
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }} 
+          ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}
+
+      - name: Debug the evironment
+        run: echo "The environment is $ENVIRONMENT"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
@@ -50,7 +53,17 @@ jobs:
           username: ${{ secrets.HOSTINGER_USER }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           script: |
+            export ENVIRONMENT=$ENVIRONMENT
             cd /var/www/rendezvous-docker-staging
-            git pull origin staging
+            if [ ! -d ".git" ]; then
+              echo "Not a git repository. Cloning the repository..."
+              # Clone the repository if it's not a Git repository
+              git clone https://github.com/${{ github.repository }} .
+              git checkout staging
+            else
+              echo "Git repository found. Pulling the latest changes..."
+              # If it's a Git repository, pull the latest changes
+              git pull origin staging
+            fi
             docker compose -f $ENVIRONMENT-compose.yml down
             docker compose -f $ENVIRONMENT-compose.yml up -d
