@@ -7,7 +7,6 @@ on:
       - staging
 
 jobs:
-  environment: staging
   deploy:
     runs-on: ubuntu-latest
 
