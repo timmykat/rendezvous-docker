@@ -14,10 +14,6 @@ services:
       # - /var/www/rendezvous-docker/rendezvous:/var/www/rendezvous_prod
       - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous_staging
 
-    environment:
-      - ENABLE_STAGING=true
-      - ENABLE_PROD=false
-
     ports:
       - 80:80
       - 443:443
