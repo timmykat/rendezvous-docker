@@ -29,7 +29,7 @@ jobs:
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+          ssh-private-key: ${{secrets.RENDEZVOUS_REPO_SSH_KEY}}
 
       # Upload the hostinger setup script
       - name: Copy the Hostinger setup script
