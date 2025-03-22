@@ -1,5 +1,7 @@
 name: Remote ssh command test
-on: [workflow_dispatch]
+
+on:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -12,10 +14,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}
 
-    - name: executing remote ssh commands using private key
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ vars.HOSTINGER_IP }}
-        username: ${{ vars.HOSTINGER_USER }}
-        key: ${{ secrets.HOSTINGER_SSH_KEY }}
-        script: pwd
+      - name: Executing remote ssh commands using private key
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOSTINGER_IP }}
+          username: ${{ vars.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          script: pwd
