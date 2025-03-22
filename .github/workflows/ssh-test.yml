@@ -1,10 +1,11 @@
 name: Remote ssh command test
 on: [workflow_dispatch]
-jobs:
 
+jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+
     steps:
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.5.4
