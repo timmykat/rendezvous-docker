@@ -1,0 +1,113 @@
+name: Deploy Rendezvous Staging
+run-name: Bulding and deploying Rendezvous staging site
+
+on:
+  # push:
+  #   branches:
+  #     - staging
+  
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'staging'  # Default value if no input is provided
+        type: string 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+        with:
+          ref: staging
+          fetch-depth: 1
+ 
+
+      - name: Set Staging Environment
+        run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+
+      - name: Use the Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the Rendezvous rails app image
+        run: |
+          docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} ./rendezvous
+        env:
+          APP_DOMAIN: ${{env.APP_DOMAIN}}
+          RAILS_ENV: ${{env.RAILS_ENV}}
+          RACK_ENV: ${{env.RACK_ENV}}
+          RAILS_SECRET_KEY_BASE: ${{env.RAILS_SECRET_KEY_BASE}}
+          RECAPTCHA_PUBLIC_KEY: ${{vars.RECAPTCHA_PUBLIC_KEY}}
+          RECAPTCHA_PRIVATE_KEY: ${{secrets.RECAPTCHA_PRIVATE_KEY}}
+          MAILCHIMP_API_KEY: ${{secrets.MAILCHIMP_API_KEY}}
+          MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
+          MYSQL_USER: ${{env.MYSQL_USER}}
+          MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
+
+          # Square sandbox info
+          SANDBOX_SQUARE_APP_ID: ${{vars.SANDBOX_SQUARE_APP_ID}}
+          SANDBOX_SQUARE_LOCATION_ID: ${{vars.SANDBOX_SQUARE_LOCATION_ID}}
+          SANDBOX_SQUARE_ACCESS_TOKEN: ${{secrets.SANDBOX_SQUARE_ACCESS_TOKEN}}
+
+          # Mailer info
+          SMTP_PASSWORD: ${{secrets.SMTP_PASSWORD}}
+          SMTP_DOMAIN: ${{vars.SMTP_DOMAIN}}
+          SMTP_PORT: ${{vars.SMTP_PORT}}
+          SMTP_USER: ${{vars.SMTP_USER}}
+          SITE_ADMIN_SENDING_ADDRESS: ${{vars.SITE_ADMIN_SENDING_ADDRESS}}
+          INFO_SENDING_ADDRESS: ${{vars.INFO_SENDING_ADDRES}}
+          BREVO_API_KEY: ${{secrets.BREVO_API_KEY}}          
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
+
+      # Deploy via SSH
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+
+      # Upload the hostinger setup script
+      - name: Upload Hostinger setup script
+        run: |
+          scp -i ~/.ssh/github_rendezvous_rsa ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
+
+      - name: Debug the evironment
+        run: echo "The environment is $ENVIRONMENT"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOSTINGER_IP }}
+          username: ${{ vars.HOSTINGER_USER }}
+          key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+          script: |
+            ./bin/setup_hostinger.sh
+            cd /var/www/rendezvous-docker-staging
+            if [ ! -d ".git" ]; then
+              echo "Not a git repository. Cloning the repository..."
+              # Clone the repository if it's not a Git repository
+              git clone https://github.com/${{ github.repository }} .
+              git checkout staging
+            else
+              echo "Git repository found. Pulling the latest changes..."
+              # If it's a Git repository, pull the latest changes
+              git pull origin staging
+            fi
+            if ! docker network ls --filter name=^shared_server_network$ --quiet; then
+              echo "Network shared_server_network not found. Creating it..."
+              docker network create shared_server_network
+            else
+              echo "Network shared_server_network already exists."
+            fi
+            docker compose -f staging-compose.yml down
+            docker compose -f staging-compose.yml up -d
