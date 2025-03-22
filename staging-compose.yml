@@ -1,4 +1,6 @@
 services:
+
+  # The nginx container serves both the production and staging environments
   nginx:
     image: nginx
 
@@ -7,8 +9,9 @@ services:
       - ./config/nginx/staging/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/shared/sites-available/:/etc/nginx/sites-available/
       - ./config/nginx/shared/sites-available/:/etc/nginx/sites-enabled/
-      - ./rendezvous/log:/var/log/nginx/staging
-      - ./rendezvous:/var/www/rendezvous
+      - /var/log/nginx:/var/log/nginx
+      - /var/www/rendezvous-docker/rendezvous:/var/www/rendezvous_prod
+      - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous_staging
 
     ports:
       - 80:80
@@ -16,14 +19,93 @@ services:
 
     networks:
       - shared_server_network
+      - internal_prod
       - internal_staging
+
+  # Production services
+  db_prod:
+    image: mysql:8.0.32
+    restart: always
+
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+    networks:
+      - internal_prod
+
+    volumes:
+      - /var/run/mysqld/init_data:/docker-entrypoint-initdb.d
+      - /var/lib/mysql/prod:/var/lib/mysql
+      - /var/run/mysqld/prod:/var/run/mysqld
+
+  rails_app_prod:
+    image: ghcr.io/timmykat/rendezvous_rails_app
+
+    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+    # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+
+    environment:
+      - PROD_APP_DOMAIN
+      - RAILS_ENV
+      - RACK_ENV
+      - RAILS_DEVELOPMENT_HOSTS
+      - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+
+      # Mailer info
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_LOGIN
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRES
+      - BREVO_API_KEY
+
+    links:
+      - db_prod
+
+    networks:
+      - internal_prod
+
+    depends_on:
+      - db_prod
+
+    volumes:
+      - /var/www/rendezvous-docker/rendezvous:/var/www/rendezvous_prod
+      - /tmp/mysqld/prod:/var/run/mysqld
+
+  # Staging services
+  db_staging:
+    image: mysql:8.0.32
+    profiles: [staging]
+    platform: linux/amd64
+    restart: always
+
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+    networks:
+      - internal_staging
+
+    volumes:
+      - /init_data/mysql:/docker-entrypoint-initdb.d
+      - /var/lib/mysql/staging:/var/lib/mysql
+      - /var/run/mysqld/staging:/var/run/mysqld
 
   rails_app_staging:
     image: ghcr.io/timmykat/rendezvous_rails_app
-    build:
-      context: ./rendezvous
-      dockerfile: ../config/docker/Dockerfile
-    
+    profiles: [staging]
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
@@ -41,12 +123,6 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
 
-      # Sandbox info
-      - SANDBOX_BRAINTREE_MERCHANT_ID
-      - SANDBOX_BRAINTREE_PUBLIC_KEY
-      - SANDBOX_BRAINTREE_PRIVATE_KEY
-      - SANDBOX_BRAINTREE_TOKENIZATION_KEY
-
       # Mailer info
       - SMTP_PASSWORD
       - SMTP_DOMAIN
@@ -55,9 +131,6 @@ services:
       - SITE_ADMIN_SENDING_ADDRESS
       - INFO_SENDING_ADDRES
       - BREVO_API_KEY
-
-    ports:
-      - 3000:3000
 
     links:
       - db_staging
@@ -69,43 +142,16 @@ services:
       - db_staging
 
     volumes:
-      - ./rendezvous:/var/www/rendezvous
-      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
-
-  db_staging:
-    image: mysql:8.0.32
-    platform: linux/amd64
-    restart: always
-
-    environment:
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
-
-    networks:
-      - internal_staging
-
-    volumes:
-      - ./init_data/mysql:/docker-entrypoint-initdb.d
-      - ./.ephemeral/mysqld/db_data:/var/lib/mysql
-      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-
-    networks:
-      - internal_staging
-
-    depends_on:
-      - db_staging
+      - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous_staging
+      - /tmp/mysqld/staging:/var/run/mysqld
 
 networks:
+  internal_prod:
+    driver: bridge
+
   internal_staging:
     driver: bridge
 
+  # Required for prod and staging to both talk to nginx
   shared_server_network:
     external: true

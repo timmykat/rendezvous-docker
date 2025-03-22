@@ -7,6 +7,7 @@ on:
       - staging
 
 jobs:
+  environment: staging
   deploy:
     runs-on: ubuntu-latest
 
@@ -32,6 +33,31 @@ jobs:
       - name: Build the Rendezvous rails app image
         run: |
           docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} ./rendezvous
+        env:
+          APP_DOMAIN: ${{env.APP_DOMAIN}}
+          RAILS_ENV: ${{env.RAILS_ENV}}
+          RACK_ENV: ${{env.RACK_ENV}}
+          RAILS_SECRET_KEY_BASE: ${{env.RAILS_SECRET_KEY_BASE}}
+          RECAPTCHA_PUBLIC_KEY: ${{vars.RECAPTCHA_PUBLIC_KEY}}
+          RECAPTCHA_PRIVATE_KEY: ${{secrets.RECAPTCHA_PRIVATE_KEY}}
+          MAILCHIMP_API_KEY: ${{secrets.MAILCHIMP_API_KEY}}
+          MYSQL_DATABASE: ${{env.MYSQL_DATABASE}}
+          MYSQL_USER: ${{env.MYSQL_USER}}
+          MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
+
+          # Square sandbox info
+          SANDBOX_SQUARE_APP_ID: ${{vars.SANDBOX_SQUARE_APP_ID}}
+          SANDBOX_SQUARE_LOCATION_ID: ${{vars.SANDBOX_SQUARE_LOCATION_ID}}
+          SANDBOX_SQUARE_ACCESS_TOKEN: ${{secrets.SANDBOX_SQUARE_ACCESS_TOKEN}}
+
+          # Mailer info
+          SMTP_PASSWORD: ${{secrets.SMTP_PASSWORD}}
+          SMTP_DOMAIN: ${{vars.SMTP_DOMAIN}}
+          SMTP_PORT: ${{vars.SMTP_PORT}}
+          SMTP_USER: ${{vars.SMTP_USER}}
+          SITE_ADMIN_SENDING_ADDRESS: ${{var.SITE_ADMIN_SENDING_ADDRESS}}
+          INFO_SENDING_ADDRESS: ${{var.INFO_SENDING_ADDRES}}
+          BREVO_API_KEY: ${{secrets.BREVO_API_KEY}}          
 
       - name: Push Docker image
         run: |
@@ -43,6 +69,13 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}
 
+      # Upload the hostinger setup script
+      - name: Upload Hostinger setup script
+        run: |
+          scp .bin/setup_hostinger.sh ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_IP }}:/home/webuser/bin
+        env:
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Use the secret to get the remote host
+
       - name: Debug the evironment
         run: echo "The environment is $ENVIRONMENT"
 
@@ -53,6 +86,7 @@ jobs:
           username: ${{ secrets.HOSTINGER_USER }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           script: |
+            ./bin/setup_hostinger.sh
             cd /var/www/rendezvous-docker-staging
             if [ ! -d ".git" ]; then
               echo "Not a git repository. Cloning the repository..."
