@@ -2,9 +2,9 @@ name: Deploy Rendezvous Staging
 run-name: Bulding and deploying Rendezvous staging site
 
 on:
-  # push:
-  #   branches:
-  #     - staging
+  push:
+    branches:
+      - staging
   
   workflow_dispatch:
     inputs:
@@ -79,7 +79,7 @@ jobs:
       # Upload the hostinger setup script
       - name: Upload Hostinger setup script
         run: |
-          scp -i ~/.ssh/github_rendezvous_rsa ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
+          scp -o StrictHostKeyChecking=no ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
 
       - name: Debug the evironment
         run: echo "The environment is $ENVIRONMENT"
