@@ -64,5 +64,11 @@ jobs:
               # If it's a Git repository, pull the latest changes
               git pull origin staging
             fi
+            if ! docker network ls --filter name=^shared_server_network$ --quiet; then
+              echo "Network shared_server_network not found. Creating it..."
+              docker network create shared_server_network
+            else
+              echo "Network shared_server_network already exists."
+            fi
             docker compose -f staging-compose.yml down
             docker compose -f staging-compose.yml up -d
