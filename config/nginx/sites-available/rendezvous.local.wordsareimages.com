@@ -56,8 +56,8 @@ server {
     proxy_redirect off;
   }
 
-  ssl_certificate /etc/nginx/ssl/certs/fullchain.pem;
-  ssl_certificate_key /etc/nginx/ssl/certs/privkey.pem;
+  ssl_certificate /etc/nginx/ssl/certs/rendezvous.local.wordsareimages.com/fullchain.pem;
+  ssl_certificate_key /etc/nginx/ssl/certs/rendezvous.local.wordsareimages.com/privkey.pem;
 
   # ssl_dhparam /etc/nginx/ssl/dhparams.pem;
 
