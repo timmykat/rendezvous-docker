@@ -53,7 +53,6 @@ jobs:
           username: ${{ secrets.HOSTINGER_USER }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           script: |
-            export ENVIRONMENT=$ENVIRONMENT
             cd /var/www/rendezvous-docker-staging
             if [ ! -d ".git" ]; then
               echo "Not a git repository. Cloning the repository..."
@@ -65,5 +64,5 @@ jobs:
               # If it's a Git repository, pull the latest changes
               git pull origin staging
             fi
-            docker compose -f $ENVIRONMENT-compose.yml down
-            docker compose -f $ENVIRONMENT-compose.yml up -d
+            docker compose -f staging-compose.yml down
+            docker compose -f staging-compose.yml up -d
