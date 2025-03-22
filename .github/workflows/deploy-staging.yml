@@ -8,8 +8,11 @@ on:
   
   workflow_dispatch:
     inputs:
-      branches:
-        - staging
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'staging'  # Default value if no input is provided
+        type: string 
 
 jobs:
   deploy:
