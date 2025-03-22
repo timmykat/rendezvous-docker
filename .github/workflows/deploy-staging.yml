@@ -71,7 +71,7 @@ jobs:
       # Upload the hostinger setup script
       - name: Upload Hostinger setup script
         run: |
-          scp .bin/setup_hostinger.sh ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_IP }}:/home/webuser/bin
+          scp ./bin/setup_hostinger.sh ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_IP }}:/home/webuser/bin
         env:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Use the secret to get the remote host
 
