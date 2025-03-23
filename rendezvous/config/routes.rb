@@ -30,10 +30,12 @@ Rails.application.routes.draw do
   delete 'vendors/destroy_all', to: 'vendors#destroy_all', as: :destroy_all_vendors
   resources :vendors, { except: [:show] }
 
+  get 'keyed_contents/import', to: 'keyed_contents#import'
   get 'keyed_contents/manage', to: 'keyed_contents#manage'
   delete 'keyed_contents/destroy_all', to: 'keyed_contents#destroy_all', as: :destroy_all_keyed_contents
   resources :keyed_contents, { except: [:show] }
 
+  get 'faqs/import', to: 'faqs#import'
   get 'faqs/manage', to: 'faqs#manage'
   delete 'faqs/destroy_all', to: 'faqs#destroy_all', as: :destroy_all_faqs
   resources :faqs, { except: [:show] }

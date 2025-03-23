@@ -47,6 +47,11 @@ class FaqsController < AdminController
     redirect_to faqs_manage_path
   end
 
+  def import
+    import_data "faqs.csv", "Faq"
+    redirect_to faqs_manage_path
+  end
+
   private
     def faq_params
       params.require(:faq).permit(

@@ -59,6 +59,11 @@ class KeyedContentsController < ApplicationController
     redirect_to keyed_contents_manage_path
   end
 
+  def import
+    import_data "keyed_contents.csv", "KeyedContent"
+    redirect_to keyed_contents_manage_path
+  end
+
   private
     def content_params
       params.require(:keyed_content).permit(
