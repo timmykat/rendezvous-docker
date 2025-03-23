@@ -58,7 +58,7 @@ server {
   ssl_certificate /etc/nginx/ssl/certs/staging/fullchain.pem;
   ssl_certificate_key /etc/nginx/ssl/certs/staging/privkey.pem;
 
-  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
+  # ssl_dhparam /etc/nginx/ssl/dhparams.pem;
 
   ssl_session_cache shared:SSL:1m;
   ssl_session_timeout 5m;
