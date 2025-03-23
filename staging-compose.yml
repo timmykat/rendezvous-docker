@@ -93,11 +93,8 @@ services:
     platform: linux/amd64
     restart: always
 
-    environment:
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    env_file:
+      - .hostinger_env
 
     networks:
       - internal_staging
@@ -114,33 +111,11 @@ services:
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
-    environment:
-      - APP_DOMAIN
-      - RAILS_ENV
-      - RACK_ENV
-      - RAILS_DEVELOPMENT_HOSTS
-      - RAILS_SECRET_KEY_BASE
-      - RECAPTCHA_PUBLIC_KEY
-      - RECAPTCHA_PRIVATE_KEY
-      - MAILCHIMP_API_KEY
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-
-      # Mailer info
-      - SMTP_PASSWORD
-      - SMTP_DOMAIN
-      - SMTP_PORT
-      - SMTP_LOGIN
-      - SITE_ADMIN_SENDING_ADDRESS
-      - INFO_SENDING_ADDRES
-      - BREVO_API_KEY
+    env_file:
+      - .hostinger_env
 
     links:
       - db_staging
-
-    networks:
-      - internal_staging
 
     depends_on:
       - db_staging
@@ -149,9 +124,10 @@ services:
       - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous_staging
       - /tmp/mysqld/staging:/var/run/mysqld
 
+    networks:
+      - internal_staging
+
 networks:
-  internal_prod:
-    driver: bridge
 
   internal_staging:
     driver: bridge
