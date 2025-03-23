@@ -115,7 +115,7 @@ services:
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     ports:
-      3001:3000
+      - 3001:3000
 
     environment:
       - APP_DOMAIN
