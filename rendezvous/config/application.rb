@@ -16,9 +16,9 @@ require "sprockets/railtie"
 Bundler.require(*Rails.groups)
 
 # Load dotenv
-if ['production', 'staging'].include? ENV['RAILS_ENV']
-  Dotenv::Rails.load
-end
+# if ['production', 'staging'].include? ENV['RAILS_ENV']
+#   Dotenv::Rails.load
+# end
 
 module Rendezvous
   class Application < Rails::Application
