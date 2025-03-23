@@ -10,7 +10,7 @@ server {
   access_log /var/log/nginx/staging/access.log;
   error_log /var/log/nginx/staging/error.log info;
 
-  root /var/www/rendezvous/current/public;
+  root /var/www/rendezvous-docker-staging/rendezvous/current/public;
 
   # Set canonical domain name and https
   # rewrite ^ https://citroenrendezvous.org$request_uri? permanent;
@@ -71,14 +71,5 @@ server {
   ssl_prefer_server_ciphers on;
 
   ssl_protocols TLSv1.3 TLSv1.2 TLSv1.1;
-
-  ## OCSP STapling
-  #  (see https://support.comodo.com/index.php?/Default/Knowledgebase/Article/View/1091/37/certificate-installation--nginx)
-
-  # resolver 127.0.0.1;
-  # ssl_stapling on;
-  # ssl_stapling_verify on;
-  # ssl_trusted_certificate /etc/ssl/certs/2017/ssl-bundle.crt;
-
 }
 
