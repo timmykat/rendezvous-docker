@@ -75,9 +75,8 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_DOMAIN=${SMTP_DOMAIN}
       - SMTP_PORT=${SMTP_PORT}
-      - SMTP_LOGIN=${SMTP_LOGIN}
       - SITE_ADMIN_SENDING_ADDRESS=${SITE_ADMIN_SENDING_ADDRESS}
-      - INFO_SENDING_ADDRES=${INFO_SENDING_ADDRES}
+      - INFO_SENDING_ADDRESS=${INFO_SENDING_ADDRESS}
       - BREVO_API_KEY=${BREVO_API_KEY}
 
     links:
@@ -89,7 +88,6 @@ services:
     volumes:
       - /var/run/mysqld/staging:/var/run/mysqld
       - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous
-      - /var/www/rendezvous-docker-staging/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
 
     networks:
       - internal_staging
