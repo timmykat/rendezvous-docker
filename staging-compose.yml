@@ -87,8 +87,6 @@ services:
       - db_staging
 
     volumes:
-      - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous
-      - /var/www/rendezvous-docker-staging/rendezvous/log:/var/www/rendezvous/log
       - /var/run/mysqld/staging:/var/run/mysqld
 
     networks:
