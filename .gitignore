@@ -21,6 +21,8 @@ rendezvous/.bundle
 # Ignore local mysql config
 rendezvous/mysql_config
 
+# Ignore database.yml
+database.yml
 
 # Ignore all logfiles and tempfiles.
 rendezvous/log/*
