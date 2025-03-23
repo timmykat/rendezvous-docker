@@ -23,7 +23,6 @@ services:
 
     networks:
       - shared_server_network
-      - internal_prod
       - internal_staging
 
   # Production services
