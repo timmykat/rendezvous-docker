@@ -3,6 +3,7 @@ services:
   # The nginx container serves both the production and staging environments
   nginx:
     image: nginx
+    profiles: [ docker_nginx ]
     container_name: rendezvous-nginx
 
     volumes:
@@ -112,6 +113,9 @@ services:
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+
+    ports:
+      3001:3000
 
     environment:
       - APP_DOMAIN
