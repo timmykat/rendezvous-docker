@@ -6,6 +6,7 @@ namespace :import do
   task :tables => :environment do
     # Define the tables to import with their models and CSV file paths
     tables = {
+      "faqs" => Faq,
       "venues" => Venue,
       "scheduled_events" => ScheduledEvent,
       "vendors" => Vendor,
@@ -18,7 +19,7 @@ namespace :import do
       id_mapping[table_name] = {}
 
       # Define the file path for the CSV
-      file_path = Rails.root.join("tmp", "#{table_name}_export.csv")
+      file_path = Rails.root.join("import_files", "#{table_name}_export.csv")
 
       if File.exist?(file_path)
         puts "Importing data for #{table_name} from #{file_path}"

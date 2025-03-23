@@ -4,6 +4,7 @@ namespace :export do
   task :tables => :environment do
     # Define the tables to export
     tables = {
+      "faqs" => Faq,
       "venues" => Venue,
       "scheduled_events" => ScheduledEvent,
       "vendors" => Vendor,
@@ -12,7 +13,7 @@ namespace :export do
 
     tables.each do |table_name, klass|
       # Define the file path for the CSV
-      file_path = Rails.root.join("tmp", "#{table_name}_export.csv")
+      file_path = Rails.root.join("import_files", "#{table_name}_export.csv")
 
       # Open the CSV file and write the data
       CSV.open(file_path, "wb") do |csv|

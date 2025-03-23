@@ -2,6 +2,13 @@
   .row.justify-content-center
     .col-md-10
       %h1 Manage Venues
+    .col-md-8 
+      %h2 Creating
+      %p
+        =link_to "Create new", new_venue_path, class: "btn btn-sm btn-primary"
+      %p
+        =link_to "Import from CSV", venues_import_path, class: "btn btn-sm btn-warning"
+
     .col-md-10
       %h2 Editing
       - @venues.each do |venue|
@@ -14,13 +21,6 @@
                 .form-group
                   = f.button :submit, input_html:  { value:  'Update Content' }, class:  "btn btn-sm btn-primary"
 
-      %p
-        =link_to "Create new", new_venue_path, class: "btn btn-sm btn-primary"
-      %p
-        =link_to "Import from CSV", venues_import_path, class: "btn btn-sm btn-warning"
-      - if @venues.size > 0
-        %p
-          =link_to "Destroy all", destroy_all_venues_path, method: :delete, class: "btn btn-sm btn-danger"  
 
     
 

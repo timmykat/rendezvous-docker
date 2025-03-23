@@ -3,6 +3,12 @@
     .col-md-10
       %h1 Manage FAQs
     .col-md-8
+      %h2 Creating 
+      %p
+        =link_to "Create new", new_faq_path, class: "btn btn-sm btn-primary"
+      %p
+        =link_to "Import from CSV", faqs_import_path, class: "btn btn-sm btn-warning"
+
       %h2 Ordering
       %table.table
         %tbody.sortable
@@ -23,13 +29,6 @@
                 .form-group
                   = f.button :submit, input_html:  { value:  'Update Content' }, class:  "btn btn-sm btn-primary"
 
-      %p
-        =link_to "Create new", new_faq_path, class: "btn btn-sm btn-primary"
-      %p
-        =link_to "Import from CSV", faqs_import_path, class: "btn btn-sm btn-warning"
-      - if @faqs.size > 0
-        %p
-          =link_to "Destroy all", destroy_all_faqs_path, method: :delete, class: "btn btn-sm btn-danger"  
 
 :javascript
   $(function() {
