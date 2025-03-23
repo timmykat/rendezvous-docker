@@ -78,6 +78,8 @@ jobs:
             fi
             echo "-- Checking out staging branch"
             git checkout staging
+            echo "-- Installing JavaScript dependencies with Yarn --"
+            docker exec -it rendezvous-rails-app-staging yarn install
             echo "-- Setting up the shared network"
             if ! docker network ls --filter name=^shared_server_network$ --quiet; then
               echo "    Not found, creating"
