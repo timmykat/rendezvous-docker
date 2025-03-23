@@ -39,7 +39,8 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ALLOW_EMPTY_PASSWORD}=true
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_ONETIME_PASSWORD=true
 
     networks:
       - internal_staging
