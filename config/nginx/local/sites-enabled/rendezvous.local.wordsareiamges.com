@@ -1,1 +1,0 @@
-/etc/nginx/conf/sites-available/rendezvous.local.wordsareiamges.com

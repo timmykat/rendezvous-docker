@@ -5,17 +5,16 @@ namespace :import do
   desc "Import data from CSV files into the database"
   task :tables => :environment do
     # Define the tables to import with their models and CSV file paths
-    tables = {
+    tables = [
       "faqs" => Faq,
-      "venues" => Venue,
       "scheduled_events" => ScheduledEvent,
       "vendors" => Vendor,
       "keyed_contents" => KeyedContent
-    }
+  ]
 
     id_mapping = {}
 
-    tables.each do |table_name, klass|
+    tables.each do |table_name|
       id_mapping[table_name] = {}
 
       # Define the file path for the CSV
