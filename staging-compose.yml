@@ -92,9 +92,7 @@ services:
     platform: linux/amd64
     restart: always
 
-    env_file:
-      - .hostinger_env
-      
+    environment:
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
