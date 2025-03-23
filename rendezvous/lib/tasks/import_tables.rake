@@ -19,7 +19,7 @@ namespace :import do
       id_mapping[table_name] = {}
 
       # Define the file path for the CSV
-      file_path = Rails.root.join("import_files", "#{table_name}_export.csv")
+      file_path = Rails.root.join("import_files", "#{table_name}_exported.csv")
 
       if File.exist?(file_path)
         puts "Importing data for #{table_name} from #{file_path}"
