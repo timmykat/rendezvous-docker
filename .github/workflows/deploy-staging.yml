@@ -67,19 +67,17 @@ jobs:
           username: ${{ vars.HOSTINGER_USER }}
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
-            echo "-- Ensuring the directory structures --"
-            chmod 755 ./bin/setup_hostinger.sh
-            ./bin/setup_hostinger.sh
             cd /var/www/rendezvous-docker-staging
             echo "-- Updating the git repository --"
             if [ ! -d ".git" ]; then
               echo "    Not a git repository, cloning and checking out"
               git clone https://github.com/${{ github.repository }} .
-              git checkout staging
             else
               echo "    Repository found, pulling the latest changes"
               git pull origin staging
             fi
+            echo "-- Checking out staging branch"
+            git checkout staging
             echo "-- Setting up the shared network"
             if ! docker network ls --filter name=^shared_server_network$ --quiet; then
               echo "    Not found, creating"
