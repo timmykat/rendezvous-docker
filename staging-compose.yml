@@ -94,6 +94,11 @@ services:
 
     env_file:
       - .hostinger_env
+      
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
     networks:
       - internal_staging
@@ -110,8 +115,27 @@ services:
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
-    env_file:
-      - .hostinger_env
+    environment:
+      - APP_DOMAIN
+      - RAILS_ENV
+      - RACK_ENV
+      - RAILS_DEVELOPMENT_HOSTS
+      - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+
+      # Mailer info
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_LOGIN
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRES
+      - BREVO_API_KEY
 
     links:
       - db_staging
