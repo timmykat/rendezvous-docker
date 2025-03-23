@@ -12,6 +12,7 @@
 # Ignore .env files
 .env
 .envrc
+.*_env
 config/production_env_vars
 
 # Ignore bundler config.

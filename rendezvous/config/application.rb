@@ -15,8 +15,8 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-# Load dotenv only in development or test environment
-if ['production'].include? ENV['RAILS_ENV']
+# Load dotenv
+if ['production', 'staging'].include? ENV['RAILS_ENV']
   Dotenv::Rails.load
 end
 
