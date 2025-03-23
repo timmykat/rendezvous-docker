@@ -10,8 +10,8 @@ services:
       - ./config/nginx/hostinger/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/hostinger/sites-available:/etc/nginx/sites-available
       - ./config/nginx/hostinger/sites-enabled:/etc/nginx/sites-enabled
-      - /var/log/nginx:/var/log/nginx
-      # - /var/www/rendezvous-docker/rendezvous:/var/www/rendezvous_prod
+      - /var/log/nginx/staging:/var/log/nginx/staging
+      - /var/log/nginx/prod:/var/log/nginx/prod
       - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous_staging
 
     ports:
