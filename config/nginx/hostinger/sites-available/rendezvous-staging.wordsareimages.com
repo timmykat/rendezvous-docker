@@ -7,8 +7,8 @@ server {
 
   server_name rendezvous-staging.wordsareimages.com;
 
-  access_log /var/www/rendezvous/shared/log/nginx.access.log;
-  error_log /var/www/rendezvous/shared/log/nginx.error.log info;
+  access_log /var/log/nginx/staging/access.log;
+  error_log /var/log/nginx/staging/error.log info;
 
   root /var/www/rendezvous/current/public;
 

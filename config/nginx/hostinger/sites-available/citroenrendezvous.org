@@ -27,8 +27,8 @@ server {
     *.citroenrendezvous.net,
     citroen-rendezvous.org;
 
-  access_log /var/www/rendezvous/shared/log/nginx.access.log;
-  error_log /var/www/rendezvous/shared/log/nginx.error.log info;
+  access_log /var/log/nginx/prod/access.log;
+  error_log /var/log/nginx/prod/error.log info;
 
   root /var/www/rendezvous/current/public;
 
