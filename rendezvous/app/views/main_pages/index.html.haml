@@ -25,13 +25,20 @@
               %h2.h3 #{event_year} Accommodations
             .card-text
               .description 
-                = @event_hotel.details_as_html
-              %p
-                While rooms are still available, you can reserve on line at our group rate
-                = link_to 'here', @event_hotel.reservation_url
-                or use group code #{@event_hotel.group_code}
-                by #{@event_hotel.close_date}.
-                %br
+                -if @event_hotel.nil? 
+                  - if user_is_admin?
+                    %p Event hotel needs to be created
+                  - else
+                    %p Information forthcoming
+                - else
+                  = @event_hotel.details_as_html
+
+                  %p
+                    While rooms are still available, you can reserve on line at our group rate
+                    = link_to 'here', @event_hotel.reservation_url
+                    or use group code #{@event_hotel.group_code}
+                    by #{@event_hotel.close_date}.
+                    %br
 
               %h3.h5 Alternative Accommodations
               = keyed_content("main_other_accommodations")
