@@ -26,66 +26,6 @@ services:
       - shared_server_network
       - internal_staging
 
-  # Production services
-  # db_prod:
-  #   image: mysql:8.0.32
-  #   restart: always
-
-  #   environment:
-  #     - MYSQL_DATABASE
-  #     - MYSQL_USER
-  #     - MYSQL_PASSWORD
-  #     - MYSQL_ALLOW_EMPTY_PASSWORD=true
-
-  #   networks:
-  #     - internal_prod
-
-  #   volumes:
-  #     - /var/run/mysqld/init_data:/docker-entrypoint-initdb.d
-  #     - /var/lib/mysql/prod:/var/lib/mysql
-  #     - /var/run/mysqld/prod:/var/run/mysqld
-
-  # rails_app_prod:
-  #   image: ghcr.io/timmykat/rendezvous_rails_app
-
-  #   command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
-  #   # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
-
-  #   environment:
-  #     - PROD_APP_DOMAIN
-  #     - RAILS_ENV
-  #     - RACK_ENV
-  #     - RAILS_DEVELOPMENT_HOSTS
-  #     - RAILS_SECRET_KEY_BASE
-  #     - RECAPTCHA_PUBLIC_KEY
-  #     - RECAPTCHA_PRIVATE_KEY
-  #     - MAILCHIMP_API_KEY
-  #     - MYSQL_DATABASE
-  #     - MYSQL_USER
-  #     - MYSQL_PASSWORD
-
-  #     # Mailer info
-  #     - SMTP_PASSWORD
-  #     - SMTP_DOMAIN
-  #     - SMTP_PORT
-  #     - SMTP_LOGIN
-  #     - SITE_ADMIN_SENDING_ADDRESS
-  #     - INFO_SENDING_ADDRES
-  #     - BREVO_API_KEY
-
-  #   links:
-  #     - db_prod
-
-  #   networks:
-  #     - internal_prod
-
-  #   depends_on:
-  #     - db_prod
-
-  #   volumes:
-  #     - /var/www/rendezvous-docker/rendezvous:/var/www/rendezvous_prod
-  #     - /tmp/mysqld/prod:/var/run/mysqld
-
   # Staging services
   db_staging:
     image: mysql:8.0.32
@@ -93,11 +33,11 @@ services:
     platform: linux/amd64
     restart: always
 
-    environment:
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ALLOW_EMPTY_PASSWORD}=true
+    # environment:
+    #   - MYSQL_DATABASE=${MYSQL_DATABASE}
+    #   - MYSQL_USER=${MYSQL_USER}
+    #   - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    #   - MYSQL_ALLOW_EMPTY_PASSWORD=${MYSQL_ALLOW_EMPTY_PASSWORD}=true
 
     networks:
       - internal_staging
@@ -117,27 +57,27 @@ services:
     ports:
       - 3001:3000
 
-    environment:
-      - APP_DOMAIN=${APP_DOMAIN}
-      - RAILS_ENV=${RAILS_ENV}
-      - RACK_ENV=${RACK_ENV}
-      - RAILS_DEVELOPMENT_HOSTS=${RAILS_DEVELOPMENT_HOSTS}
-      - RAILS_SECRET_KEY_BASE=${RAILS_SECRET_KEY_BASE}
-      - RECAPTCHA_PUBLIC_KEY=${RECAPTCHA_PUBLIC_KEY}
-      - RECAPTCHA_PRIVATE_KEY=${RECAPTCHA_PRIVATE_KEY}
-      - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    # environment:
+    #   - APP_DOMAIN=${APP_DOMAIN}
+    #   - RAILS_ENV=${RAILS_ENV}
+    #   - RACK_ENV=${RACK_ENV}
+    #   - RAILS_DEVELOPMENT_HOSTS=${RAILS_DEVELOPMENT_HOSTS}
+    #   - RAILS_SECRET_KEY_BASE=${RAILS_SECRET_KEY_BASE}
+    #   - RECAPTCHA_PUBLIC_KEY=${RECAPTCHA_PUBLIC_KEY}
+    #   - RECAPTCHA_PRIVATE_KEY=${RECAPTCHA_PRIVATE_KEY}
+    #   - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY}
+    #   - MYSQL_DATABASE=${MYSQL_DATABASE}
+    #   - MYSQL_USER=${MYSQL_USER}
+    #   - MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-      # Mailer info
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - SMTP_DOMAIN=${SMTP_DOMAIN}
-      - SMTP_PORT=${SMTP_PORT}
-      - SMTP_LOGIN=${SMTP_LOGIN}
-      - SITE_ADMIN_SENDING_ADDRESS=${SITE_ADMIN_SENDING_ADDRESS}
-      - INFO_SENDING_ADDRES=${INFO_SENDING_ADDRES}
-      - BREVO_API_KEY=${BREVO_API_KEY}
+    #   # Mailer info
+    #   - SMTP_PASSWORD=${SMTP_PASSWORD}
+    #   - SMTP_DOMAIN=${SMTP_DOMAIN}
+    #   - SMTP_PORT=${SMTP_PORT}
+    #   - SMTP_LOGIN=${SMTP_LOGIN}
+    #   - SITE_ADMIN_SENDING_ADDRESS=${SITE_ADMIN_SENDING_ADDRESS}
+    #   - INFO_SENDING_ADDRES=${INFO_SENDING_ADDRES}
+    #   - BREVO_API_KEY=${BREVO_API_KEY}
 
     links:
       - db_staging
