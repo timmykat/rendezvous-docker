@@ -5,8 +5,8 @@ services:
     volumes:
       - ./config/nginx/local/certs:/etc/nginx/ssl/certs
       - ./config/nginx/local/nginx.conf:/etc/nginx/nginx.conf
-      - ./config/nginx/shared/sites-available/:/etc/nginx/sites-available/
-      - ./config/nginx/shared/sites-enabled/:/etc/nginx/sites-enabled/
+      - ./config/nginx/local/sites-available/:/etc/nginx/sites-available/
+      - ./config/nginx/local/sites-enabled/:/etc/nginx/sites-enabled/
       - ./rendezvous/log:/var/log/nginx
       - ./rendezvous:/var/www/rendezvous
 
@@ -20,7 +20,7 @@ services:
       - rendezvous
 
   rails_app:
-    image: ghcr.io/timmykat/rendezvous_rails_app
+    image: rails_image
     build:
       context: ./rendezvous
       dockerfile: ../config/docker/Dockerfile
