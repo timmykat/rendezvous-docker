@@ -102,7 +102,7 @@ services:
       - internal_staging
 
     volumes:
-      - /init_data/mysql:/docker-entrypoint-initdb.d
+      - ./config/mysql/init:/docker-entrypoint-initdb.d
       - /var/lib/mysql/staging:/var/lib/mysql
       - /var/run/mysqld/staging:/var/run/mysqld
 
