@@ -79,7 +79,7 @@ jobs:
             echo "-- Checking out staging branch"
             git checkout staging
             echo "-- Installing JavaScript dependencies with Yarn --"
-            docker exec -it rendezvous-rails-app-staging yarn install
+            docker exec rendezvous-rails-app-staging yarn install
             echo "-- Setting up the shared network"
             if ! docker network ls --filter name=^shared_server_network$ --quiet; then
               echo "    Not found, creating"
@@ -88,7 +88,7 @@ jobs:
               echo "    It exists"
             fi
             echo "-- Precompile assets"
-            docker exec -it rendezvous-rails-app-staging rake assets:precompile
+            docker exec rendezvous-rails-app-staging rake assets:precompile
             echo "-- Bring down the site"
             docker compose -f staging-compose.yml down
             echo "-- Relaunch the site"
