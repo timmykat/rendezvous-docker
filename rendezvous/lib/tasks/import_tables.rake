@@ -50,7 +50,7 @@ namespace :import do
             new_id += 1
             puts "Success for #{attributes["name"]}"
             id_mapping[table_name][old_id] = new_object.id
-          rescue ActiveRecord::Error => e
+          rescue ActiveRecord::ActiveRecordError => e
             puts "Failed to import row: #{attributes["name"]}. Error: #{e.message}"
           end
         end
