@@ -5,16 +5,16 @@ namespace :import do
   desc "Import data from CSV files into the database"
   task :tables => :environment do
     # Define the tables to import with their models and CSV file paths
-    tables = [
-      "faqs",
-      "scheduled_events",
-      "vendors",
-      "keyed_contents",
-  ]
+    tables = {
+      "faqs" => "question",
+      "scheduled_events" => "name",
+      "vendors" => "name",
+      "keyed_contents" => "key",
+    }
 
     id_mapping = {}
 
-    tables.each do |table_name|
+    tables.each do |table_name, attrib|
 
       klass = table_name.singularize.camelize.constantize
 
@@ -36,31 +36,21 @@ namespace :import do
           # Delete the ID so it is auto generated
           attributes.delete("id")
 
-          # Resolve foreign keys for associations
-          if table_name == "scheduled_events"
-            # For scheduled_events, we need to map venue_id from the venues table
-            venue = Venue.find_by(name: attributes["name"])  # assuming venue_name is in the CSV
-            attributes["venue_id"] = venue.id if venue
-          end
 
           # Create the record using the attributes, handle potential issues with missing foreign key
           puts "Trying to import row: #{attributes}"
           begin
-            new_object = klass.create!(attributes)
-            new_id += 1
+            existing_object = klass.where(attrib.to_sym => attributes[attrib]).first
+            if existing_object
+              new_object = existing_object.update!(attributes)
+            else
+              new_object = klass.create!(attributes)
+              new_id += 1
+            end
             puts "Success for #{attributes["name"]}"
             id_mapping[table_name][old_id] = new_object.id
           rescue ActiveRecord::ActiveRecordError => e
             puts "Failed to import row: #{attributes["name"]}. Error: #{e.message}"
-          end
-        end
-
-        if table_name == "scheduled_events"
-          # Update sub_events
-          sub_events = ScheduledEvent.where.not(main_event_id: nil)
-          sub_events.each do |sub|
-            puts "Updating: #{sub.name} with new ID: #{id_mapping['scheduled_events'][sub.main_event_id]} "
-            sub.main_event_id = id_mapping['scheduled_events'][sub.main_event_id]
           end
         end
       else
