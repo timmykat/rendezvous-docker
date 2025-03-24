@@ -18,11 +18,6 @@ namespace :import do
 
       klass = table_name.singularize.camelize.constantize
 
-      if klass.respond_to?(:establish_connection)
-        # This might be needed if you're using multiple databases
-        klass.establish_connection(klass.connection_config)
-      end
-
       id_mapping[table_name] = {}
 
       # Define the file path for the CSV
