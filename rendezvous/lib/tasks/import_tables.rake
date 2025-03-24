@@ -12,13 +12,9 @@ namespace :import do
       "keyed_contents" => "key",
     }
 
-    id_mapping = {}
-
     tables.each do |table_name, attrib|
 
       klass = table_name.singularize.camelize.constantize
-
-      id_mapping[table_name] = {}
 
       # Define the file path for the CSV
       file_path = Rails.root.join("import_files", "#{table_name}_exported.csv")
@@ -31,7 +27,6 @@ namespace :import do
         CSV.foreach(file_path, headers: true) do |row|
           # Create a hash of attributes for the record to be imported
           attributes = row.to_hash
-          old_id = row['id']
 
           # Delete the ID so it is auto generated
           attributes.delete("id")
@@ -48,7 +43,6 @@ namespace :import do
               new_id += 1
             end
             puts "Success for #{attributes["name"]}"
-            id_mapping[table_name][old_id] = new_object.id
           rescue ActiveRecord::ActiveRecordError => e
             puts "Failed to import row: #{attributes["name"]}. Error: #{e.message}"
           end
