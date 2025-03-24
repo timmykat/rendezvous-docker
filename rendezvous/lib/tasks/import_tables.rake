@@ -44,13 +44,14 @@ namespace :import do
           end
 
           # Create the record using the attributes, handle potential issues with missing foreign key
+          puts "Trying to import row: #{attributes}"
           begin
             new_object = klass.create!(attributes)
             new_id += 1
-            puts "Imported row: #{attributes}"
+            puts "Success for #{attributes["name"]}"
             id_mapping[table_name][old_id] = new_object.id
-          rescue ActiveRecord::RecordInvalid => e
-            puts "Failed to import row: #{attributes}. Error: #{e.message}"
+          rescue ActiveRecord::Error => e
+            puts "Failed to import row: #{attributes["name"]}. Error: #{e.message}"
           end
         end
 
