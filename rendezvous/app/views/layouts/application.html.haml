@@ -91,6 +91,7 @@
                               = current_user.full_name
                             .dropdown-menu{'aria-labelledBy' => 'navbarDropdown'}
                               = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
+                              = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
                               .dropdown-divider
                               - if @event_registration
                                 = link_to 'View my registration', event_registration_path(@event_registration), class: 'dropdown-item' 
