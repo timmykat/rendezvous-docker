@@ -14,7 +14,7 @@ namespace :import do
 
     id_mapping = {}
 
-    tables.each do |table_name|
+    tables.each do |table_name, klass|
       id_mapping[table_name] = {}
 
       # Define the file path for the CSV
