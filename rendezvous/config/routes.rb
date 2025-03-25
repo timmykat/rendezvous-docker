@@ -77,6 +77,7 @@ Rails.application.routes.draw do
   get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
   get '/admin/labels', to: 'admin#make_labels'
   get '/admin/graphs', to: 'admin#registration_graphs'
+  get '/admin/dedupe', to: 'admin#dedupe'
   
   get '/admin/dashboard', to: 'admin#dashboard'
   
