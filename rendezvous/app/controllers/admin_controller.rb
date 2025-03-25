@@ -7,6 +7,28 @@ class AdminController < ApplicationController
   before_action :require_admin
   before_action :get_data, { only: :dashboard }
 
+  def dedupe
+    notice = []
+    {
+        KeyedContent => :key, 
+        ScheduledEvent => :name, 
+        Vendor => :name, 
+        Venue => :name}.each do |klass, attrib|
+      instances = klass.all
+      dupes_deleted = 0
+      klass_name = klass.to_s
+      instances.group_by(&attrib).each do |name, group|
+        group[1..-1].each do |inst|
+          inst.destroy
+          dupes_deleted += 1
+        end
+      end
+      notice << "Number of #{klass_name} deleted: #{dupes_deleted.to_s}"
+    end
+    flash_notice notice.join("<br>\n")
+    redirect_to admin_dashboard_path
+  end
+
   def get_data
     @year = params[:year] || Time.now.year
     @event_registrations = Event::Registration.alpha.where("year = ?", @year)
