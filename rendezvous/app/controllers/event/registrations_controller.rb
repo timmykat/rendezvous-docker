@@ -2,6 +2,7 @@ require_relative "../../../lib/rendezvous_square/rendezvous_square"
 
 module Event
   class RegistrationsController < ApplicationController
+    layout "registrations"
 
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
     before_action :require_admin, only: [:index]
@@ -27,6 +28,7 @@ module Event
     def new
 
       @title = 'Registration - Start'
+      @step = 'create'
 
       if user_signed_in? && !session[:admin_user]
         @event_registration = current_user.registrations.current.first
@@ -103,6 +105,7 @@ module Event
 
     def edit
       @title = 'Edit Registration'
+      @step = 'edit'
 
       @event_registration = Registration.find(params[:id])
     end
@@ -144,6 +147,7 @@ module Event
 
     def review
       @title = 'Review Registration Information'
+      @step = 'review'
       @event_registration = Registration.find(params[:id])
       @event_registration.status = 'in review'
       @event_registration.save!
@@ -151,6 +155,7 @@ module Event
 
     def payment
       @title = 'Registration - Payment'
+      @step = 'payment'
       @event_registration = Registration.find(params[:id])
       @event_registration.total = @event_registration.registration_fee + @event_registration.donation
       @event_registration.status = 'payment due'
@@ -176,6 +181,7 @@ module Event
 
     def complete_after_online_payment
       @title = 'Complete Registration'
+      @step = 'complete'
       @event_registration = Registration.find(params[:id])
       @event_registration.paid_amount = @event_registration.total
       @event_registration.paid_method = 'credit card'
@@ -196,6 +202,7 @@ module Event
 
     def complete
       @title = 'Complete Registration'
+      @step = 'complete'
       @event_registration = Registration.find(params[:id])
 
       # Set the paid amounts
@@ -219,6 +226,7 @@ module Event
 
     def update_vehicles
       @title = 'Vehicle Information'
+      @step = 'vehicles'
       @event_registration = Registration.find(params[:id])
       @user = @event_registration.user
       @vehicles = @user.vehicles
@@ -252,7 +260,7 @@ module Event
     end
 
     def welcome
-
+      @step = 'welcome'
     end
 
     def send_confirmation_email

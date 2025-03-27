@@ -1,0 +1,100 @@
+- config = Rails.configuration.rendezvous
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "UTF-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "A website for the northeast Citroen enthusiasts gathering", :name => "description"}/
+    %meta{:content => "Citroen Rendezvous, LLC", :name => "author"}/
+
+    %title #{Time.new.year} Citroen Rendezvous | The Northeast's largest gathering of Citroën owners, families, and fans
+
+    %link{ href: "https://fonts.googleapis.com", rel: "preconnect"}/
+    %link{ crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
+    
+    :plain
+      <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
+
+    = stylesheet_link_tag 'application', :media  => 'all'
+
+    = csrf_meta_tags
+
+    = yield :recaptcha_js
+
+    = javascript_include_tag 'application'
+
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
+
+    :javascript
+      var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
+
+  %body{ class: controller_classes + " outfit-regular" }
+    = render partial: 'layouts/flash'
+
+    %header
+      .container
+        .row.banner
+          .col-12
+            .navbar.navbar-banner.top-nav.justify-content-start
+              = image_tag "chevrons.png"
+              .nav-item.site
+                %h1
+                  = link_to "Citroen Rendezvous #{Time.now.year}", root_path
+
+      .container-fluid.px-0
+        .row.no-gutters.bg-nav
+          .col-12
+            .container 
+              .row
+                .col-12
+                  %nav.nav.navbar.navbar-dark.navbar-expand-lg.bg-nav
+                    %button.navbar-toggler{type: 'button', 'data-toggle' => 'collapse', 'data-target' => '#navbarContent' }
+                      %span.navbar-toggler-icon
+                    .collapse.navbar-collapse#navbarContent
+                      %ul.nav.navbar-nav
+                        %li.nav-item
+                          = link_to 'Info', root_path, class: 'nav-link'
+                        %li.nav-item
+                          = link_to 'Schedule Overview', root_path + '#schedule-overview', class: 'nav-link'
+                        %li.nav-item
+                          = link_to 'Vendors', vendors_path, class: 'nav-link'
+                        %li.nav-item
+                          = link_to 'History', history_path, class: 'nav-link'
+                      %ul.nav.navbar-nav.ml-auto
+                        - if !current_user
+                          %li.nav-item
+                            = link_to 'Sign In', new_user_session_path, class: 'nav-link'
+                        - else
+                          %li.nav-item.dropdown
+                            %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
+                              = current_user.full_name
+                            .dropdown-menu{'aria-labelledBy' => 'navbarDropdown'}
+                              = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
+                              = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
+                              .dropdown-divider
+                              - if @event_registration
+                                = link_to 'View my registration', event_registration_path(@event_registration), class: 'dropdown-item' 
+                                = link_to 'Edit my vehicle(s)', update_vehicles_event_registration_path(@event_registration), class: 'dropdown-item'
+                              - else 
+                                = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
+
+      - if user_is_admin?
+        = render partial: 'common/admin_manage'
+
+    %main 
+      .content
+        = yield
+      .push
+
+    %footer.footer
+      .container 
+        .row.justify-content-center
+          = render partial: 'common/footer'
+
+      .debug 
+        Step: #{@step}
+
+

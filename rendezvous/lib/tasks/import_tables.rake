@@ -6,13 +6,29 @@ namespace :import do
   task :tables => :environment do
     # Define the tables to import with their models and CSV file paths
     tables = {
-      "faqs" => "question",
-      "scheduled_events" => "name",
-      "vendors" => "name",
-      "keyed_contents" => "key",
+      "faqs" => {
+        key: "question",
+        omit_attribs: []
+      },
+      "scheduled_events" => {
+        key: "name",
+        omit_attribs: [
+          "venue_id",
+          "main_event_id",
+          "has_subevents"
+        ]
+      },
+      "vendors" =>  {
+        key: "name",
+        omit_attribs: []
+      },
+      "keyed_contents" => {
+        key: "key",
+        omit_attribs: []
+      },
     }
 
-    tables.each do |table_name, attrib|
+    tables.each do |table_name, attrib_info|
 
       klass = table_name.singularize.camelize.constantize
 
@@ -30,12 +46,15 @@ namespace :import do
 
           # Delete the ID so it is auto generated
           attributes.delete("id")
-
+          attrib_info[:omit_attribs].each do |attrib|
+            attributes.delete[attrib]
+          end
 
           # Create the record using the attributes, handle potential issues with missing foreign key
           puts "Trying to import row: #{attributes}"
           begin
-            existing_object = klass.where(attrib.to_sym => attributes[attrib]).first
+            lookup_key = attrib_info[:key]
+            existing_object = klass.where(lookup_key.to_sym => attributes[lookup_key]).first
             if existing_object
               new_object = existing_object.update!(attributes)
             else

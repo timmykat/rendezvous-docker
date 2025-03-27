@@ -2,6 +2,8 @@ require 'csv'
 
 class AdminController < ApplicationController
 
+  layout "admin"
+
   NO_USER_ID = 999999
 
   before_action :require_admin
