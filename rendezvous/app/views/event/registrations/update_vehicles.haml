@@ -2,26 +2,34 @@
 .container.last-step-vehicles
   .row.justify-content-center
     .col-md-8.col-12
-      %h2 You're Registered!
-      %p 
-        %strong Congratulations, you have completed your registration for the Rendezvous!
-      %p 
-        %em 
-          If you're bringing any displayable vehicles (Citroen, other French marque, something eye-catching), please indicate here -- it helps us to plan. If you need to update your vehicle(s), click below. 
+      .card 
+        .card-body 
+          .card-title
+            %h2.h3 You're Registered!
+          .card-text
+            %p 
+              %strong Congratulations, you have completed your registration for the Rendezvous!
+            %p 
+              %em 
+                If you're bringing any displayable vehicles (Citroen, other French marque, something eye-catching), please indicate here -- it helps us to plan. If you need to update your vehicle(s), click below. 
         
-      %button.btn.btn-primary{"data-target" => "#vehicle-modal", "data-toggle" => "modal", type: "button"} Update My Vehicles
-      / = render partial: 'common/user_vehicles_modal'
+            %button.btn.btn-primary{"data-target" => "#vehicle-modal", "data-toggle" => "modal", type: "button"} Update My Vehicles
+            / = render partial: 'common/user_vehicles_modal'
 
-  .row    
-    .col-md-offset-2.col-md-8.col-xs-12
-      %h3 What vehicle(s) are you bringing to the Rendezvous?
-      = simple_form_for @event_registration, url: save_updated_vehicles_event_registration_path, id:  'registration_vehicles' do |f|
-        = f.input :vehicle_ids, as: :check_boxes, collection: @vehicles, label_method: :year_marque_model, value_method: :id, include_hidden: false
+            .row    
+              .col-md-offset-2.col-md-8.col-12
+                %h3 What vehicle(s) are you bringing to the Rendezvous?
+                = simple_form_for @event_registration, url: save_updated_vehicles_event_registration_path, id:  'registration_vehicles' do |f|
+                  = f.input :vehicle_ids, as: :check_boxes, collection: @vehicles, label_method: :year_marque_model, value_method: :id, include_hidden: false
 
-        %br
-        = f.submit "Update Vehicle(s)", class: "btn  btn-primary"
+                  %br
+                  = f.submit "Update Vehicle(s)", class: "btn  btn-primary"
 
-
-= render partial: 'common/user_vehicles_modal'
+      .card 
+        .card-body 
+          .card-title
+            %h2.h3 You're Registered!
+          .card-text
+            = render partial: 'common/user_vehicles_modal'
 
 
