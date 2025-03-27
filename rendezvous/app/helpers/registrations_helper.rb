@@ -1,16 +1,25 @@
 module RegistrationsHelper
 
-  STEP_ARRAY = [ 'welcome', 'sign', 'register', 'review', 'payment', 'vehicles' ]
-  
-  def registration_progress_indicator(current_step, step, registration = nil)  
-    if step == current_step
-      klass = 'active'
-    elsif STEP_ARRAY.index(step) < STEP_ARRAY.index(current_step)
-      klass = 'complete'
-    else
-      klass = 'to_do'
-    end
+  def steps
+    [ 
+      'welcome',
+      'create',
+      'review',
+      'payment',
+      'complete',
+      'vehicles',
+    ]
   end
+
+  def previous_step(current_step)
+    index = steps.index(current_step)
+    prev_step = (index > 0) ? steps[index - 1] : nil
+  end
+
+  def next_step(current_step)
+    index = steps.index(current_step)
+    next_step = (index - 1 < steps.length) ? steps[index + 1] : nil
+  end  
 
   def get_status_icon(status)
     klass = status.gsub(' ', '-')

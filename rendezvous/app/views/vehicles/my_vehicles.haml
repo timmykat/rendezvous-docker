@@ -1,0 +1,12 @@
+.container
+  .row
+    .col-md-12
+      %h1 My Vehicles
+    = field_set_tag 'Vehicles' do
+      %p Please add the vehicles you are bringing to the Rendezvous.
+      #vehicles
+        = f.simple_fields_for @vehicles do |v|
+          = render 'vehicle_fields', f:  v
+        .links
+          = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, class:  "btn btn-primary "
+          Add a vehicle

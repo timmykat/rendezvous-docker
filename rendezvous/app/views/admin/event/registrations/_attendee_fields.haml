@@ -1,0 +1,23 @@
+.nested-fields.card
+  .card-body
+    .card-text
+      .row
+        .col-md-12
+          .registrant.attendee-type
+            You
+          .guest.attendee-type 
+            Guest
+      .row
+        .col-md-12
+          .form-group
+            = f.input :name, label:  'Name (for name tag)', input_html:  { placeholder:  'Name *' }
+      .row
+        .col-md-12
+          %label
+          = f.input :attendee_age, label:  '', collection:  [['Adult, 16+', 'adult'], ['Child, 15- (free)', 'child']], as:  :radio_buttons, item_label_class:  'radio-inline', item_wrapper_tag:  false
+          = f.input :volunteer, inline_label:  'Would like to volunteer'
+      .row
+        .col-md-12
+          .remove_association_action
+            = link_to_remove_association '<i class="fa fa-minus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, class:  'btn btn-danger '
+            Remove this person

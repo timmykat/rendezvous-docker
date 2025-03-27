@@ -1,6 +1,10 @@
 // Place all the styles related to the Registrations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.c_event_registrations main {
+  margin-top: 0;
+}
+
 .amount {
   font-size: 1.2em;
 	padding: 10px 20px;
@@ -99,33 +103,51 @@ td#logo {
     background-position: -120px 0;
   }
 }
-.registration-progress {
-  text-align: center;
 
-  li.separator {
-    margin-bottom: 0;
-    & > i {
-      color: #666;
+
+.registration-step {
+  text-align: center;
+  text-transform: uppercase;
+  background-color: var(--indigo-dye);
+  color: white;
+
+  a, a:visited {
+    color: white;
+
+    &:hover {
+      color: var(--tea-green)
     }
   }
 
   .list-group-item {
-    background-color: $brand-color;
-    color: white;
+    background: transparent;
+    border: none;
     display: inline-block;
-    padding: 5px 20px;
-    border-radius: 3px;
-    margin: 20px 5px;
-    font-size: 0.9em;
-    &.to_do {
-      background-color: #444;
-    }
-    &.complete {
-      background-color: #999;
-    }
+    text-align: center;
+    margin: 20px 0;
+    &.step {
+      width: 12em;
+      font-size: 0.9rem;
+      
+      &.prev::after {
+        font-size: 1.5rem;
+        content: '>>';
+        padding-left: 10px;
+        position: relative;
+        top: 3px;
+      }
 
-    &.active {
-      margin-top: 20px;
+      &.next::before {
+        font-size: 1.5rem;
+        content: '>>';
+        padding-right: 10px;
+        position: relative;
+        top: 3px;
+      }
+
+      &.current {
+        font-size: 2.25rem;
+      }
     }
   }
 }

@@ -1,0 +1,59 @@
+- config = Rails.configuration.rendezvous
+:javascript
+  const applicationId = "#{@square_application_id}"
+  const locationId = "#{@square_location_id}"
+
+= render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
+.container
+  .row.justify-content-center
+    .col-md-8.col-12
+      = simple_form_for @event_registration, url:  complete_event_registration_path(@event_registration), html:  { id:  'event_registration_form' } do |f|
+        %section
+          %h3 Help Out
+          .row
+            .col-md-12
+              %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
+              .form-group
+                %label Donation
+                = f.input :donation, label:  false, collection:  donation_list(config[:suggested_donations], @event_registration.total.to_f), as:  :radio_buttons, input_html:  { class:  'total-calculation' }, item_label_class:  'radio-inline', item_wrapper_tag:  false
+              .row
+                .col-md-3
+                  .form-group
+                    = f.input :donation, label:  false, input_html:  { placeholder:  'Other amount', class:  'total-calculation'}, disabled:  true
+
+              .row
+                .col-md-6.col-xs-12
+                  %p.amount.bg-success.form-group
+                    %label Total (USD):
+                    = f.input_field :total, value:  ("%.2f" % @event_registration.total), readonly: true, class:  'calculated'
+            %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
+          %section#payment-section
+            %h2 Payment Information
+            .row
+              .col-md-6.col-xs-12
+                .form-group
+                  = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', input_html:  { class:  'payment' }
+
+            %section#payment-online
+              %h3 Pay online
+              .row
+                .col-md-6.col-xs-12
+                  #payment-link
+                    We use Square to accept on-line payments.
+                    = link_to "Pay", send_to_square_event_registration_path(@event_registration), type: "button", class:  'btn btn-primary btn-square-pay' 
+
+            %section#payment-cash.hidden
+              %h3 Pay by mail or in person
+              .row
+                .col-md-6.col-xs-12
+                  %p
+                    %em You may either pay on arrival, or send a check payable to Citroen Rendezvous LLC to:
+                    %p= mailing_address
+                  = f.input_field :status, as:  :hidden, value:  'payment due'
+
+                  .form-group
+                    = f.button :submit, 'Complete registration'.html_safe, class:  'btn btn-primary complete-registration', id: "card-button"
+                    %img{ src: asset_path('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
+
+= javascript_include_tag 'https://sandbox.web.squarecdn.com/v1/square.js'
+= javascript_include_tag  'payments'
