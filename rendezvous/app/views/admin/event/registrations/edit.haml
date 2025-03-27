@@ -5,10 +5,10 @@
       %h1.pull-left R#{Time.new.year} Registration
       .pull-right= image_tag('rendezvous-logo.png')
   .row
-    .col-md-6.col-xs-12
+    .col-md-6.col-12
       = render partial:  'common/registration_info' 
 
-    .col-md-6.col-xs-12
+    .col-md-6.col-12
       = simple_form_for @event_registration, url:  admin_event_registration_path(@event_registration), method:  :put, id:  'registration_form' do |f|
         %section
           %h2 Modify Attendees

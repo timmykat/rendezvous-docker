@@ -1,8 +1,22 @@
 // Place all the styles related to the Registrations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.c_event_registrations main {
-  margin-top: 0;
+.c_event_registrations {
+  main {
+    margin-top: 0;
+  }
+  .card {
+    background-color: aliceblue;
+  }
+
+  label {
+    font-weight: bold;
+    color: var(--indigo-dye);
+  } 
+}
+
+.hidden {
+  display: none;
 }
 
 .amount {
@@ -155,15 +169,14 @@ td#logo {
 .btn.btn-square-pay {
   position: relative;
   display: block;
-  width: 120px;
+  width: fit-content;
   margin-top: 20px;
   padding-right: 35px;
 
   &::after {
     content: image-url('square-icon.png');
     position: absolute;
-    right: 30px;
-    margin-top: -4px;
+    margin-top: -2px;
   }
 }
 

@@ -1,10 +1,11 @@
 .card
   .card-body
+    .card-title 
+      %h3.h4= @event_registration.user.full_name
     .card-text
       %p
         %b Registration number:
         #{@event_registration.invoice_number}
-      %h3= @event_registration.user.full_name
       %p= @event_registration.user.email
       %p
         #{@event_registration.user.address1}
@@ -17,7 +18,7 @@
 .card
   .card-body
     .card-title
-      %h3 Fees
+      %h3.h4 Fees
     .card-text
       .row
         .col-md-12
@@ -39,7 +40,7 @@
                 #{number_to_currency(@event_registration.total)} (US)
 
               - if !@event_registration.transactions.empty?
-                %h4 Transactions
+                %h4.h5 Transactions
                 %table.table
                   %thead
                     %tr
@@ -59,7 +60,7 @@
                 %label Balance:
                 #{number_to_currency(@event_registration.balance)} (US)
     - if (@event_registration.status == 'payment due')
-      .col-md-6.col-xs-12
+      .col-md-6.col-12
         %p
           Please print this invoice or the one you received via email and send with a check for the amount due to:
           %br= mailing_address
@@ -68,7 +69,7 @@
   .card
     .card-body
       .card-title
-        %h3 Attendees
+        %h3.h4 Attendees
       .card-text
         %table.table
           %thead
@@ -87,7 +88,7 @@
   .card
     .card-body
       .card-title
-        %h3 Vehicles
+        %h3h4 Vehicles
       .card-text
         %p 
           If you need to update the vehicle(s) you're bringing to the rendezvous, please do so 
@@ -114,7 +115,7 @@
   .card
     .card-body
       .card-title
-        %h3 Email me my registration info
+        %h3.h4 Email me my registration info
       .card-text
         = link_to "Send Email", "/admin/event/registrations/#{@event_registration.id}/send_confirmation_email", class: "btn  btn-info"
 

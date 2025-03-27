@@ -98,7 +98,7 @@
     });
     
     // Toggle CC vs mailing address
-    $('input.payment').on('click', function() {
+    $('input.payment-method').on('click', function() {
       $('#payment-online').toggleClass('hidden');
       $('#payment-cash').toggleClass('hidden');
       $('#payment-paid').toggleClass('hidden');
