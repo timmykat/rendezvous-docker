@@ -1,4 +1,4 @@
-class FaqsController < AdminController
+class FaqsController < ApplicationController
   before_action :require_admin, { except: :index } 
   
   def index

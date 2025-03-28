@@ -150,6 +150,10 @@ header {
 	background-color: var(--dark-medium-blue);
 }
 
+.dropdown-menu {
+	background: whitesmoke;
+}
+
 .navbar-dark .navbar-nav .nav-link  {
 	color: white;
 
@@ -263,7 +267,11 @@ input[type=checkbox] {
 
 	.card {
 		margin: 7px 0;
-		background-color: $nested-card-background;
+		background-color: $nested-card-background;	
+		
+		.card {
+			background-color: whitesmoke;
+		}
 	}
 }
 

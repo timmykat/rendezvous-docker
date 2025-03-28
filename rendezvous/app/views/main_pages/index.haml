@@ -103,6 +103,10 @@
             .card-title
               %h2.h3.no-card Schedule Overview
             .card-text
+              %p
+                %strong 
+                  = link_to 'See here', scheduled_events_path
+                  for a full listing of Rendezvous events.
               .card-group
                 .row.justify-content-center
                   - @events_by_day.each do |day, events|

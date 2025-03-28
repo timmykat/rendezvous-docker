@@ -1,4 +1,4 @@
-class EventHotelsController < AdminController
+class EventHotelsController < ApplicationController
   
   def create
     @event_hotel = EventHotel.new(event_hotel_params)

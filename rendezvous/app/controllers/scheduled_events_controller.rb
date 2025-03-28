@@ -1,11 +1,11 @@
-class ScheduledEventsController < AdminController
+class ScheduledEventsController < ApplicationController
   
   def new
     @scheduled_event = ScheduledEvent.new
   end
 
   def index
-    @scheduled_events = get_objects "ScheduledEvent"
+    @events_by_day = ScheduledEvent.all.group_by(&:day)
   end
 
   def create
