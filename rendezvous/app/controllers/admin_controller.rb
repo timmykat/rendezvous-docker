@@ -7,7 +7,6 @@ class AdminController < ApplicationController
   NO_USER_ID = 999999
 
   before_action :require_admin
-  before_action :get_data, { only: :dashboard }
 
   def dedupe
     notice = []
@@ -29,12 +28,6 @@ class AdminController < ApplicationController
     end
     flash_notice notice.join("<br>\n")
     redirect_to admin_dashboard_path
-  end
-
-  def get_data
-    @year = params[:year] || Time.now.year
-    @event_registrations = Event::Registration.alpha.where("year = ?", @year)
-    @users = User.order(last_name: :asc).all
   end
 
   def registration_graphs
@@ -75,8 +68,9 @@ class AdminController < ApplicationController
     end
   end
 
-  def dashboard
+  def dashboard(csv = false)
     @title = 'Admin'
+    @year = params[:year] || Time.now.year
     @no_user_id = NO_USER_ID
     
     if !params[:onsite_reg].blank?
@@ -85,6 +79,77 @@ class AdminController < ApplicationController
       return
     end
 
+    @annual_question = AnnualQuestion.where(year: Time.now.year).first
+    if !@annual_question
+      @annual_question = AnnualQuestion.new
+    end
+
+    create_table_data
+
+    if csv
+      create_csvs
+    end
+  end
+
+  def make_labels
+    @labels = []
+    Event::Registration.alpha.where("year = ?", @year).each do |r|
+      label = {}
+      label['name'] = "#{r.user.last_name}, #{r.user.first_name}"
+      label['people'] = r.attendees.count
+      label['fee'] = r.outstanding_balance? ? 'PAID' : "Due: $#{r.registration_fee.to_i}"
+      label['donation'] = (r.donation && (r.donation > 0.0)) ? r.donation.to_i : 0
+      label['volunteers'] = get_volunteers(r)
+
+      @labels << label
+    end
+    render layout: 'no_header', template: 'admin/labels'
+  end
+
+  def toggle_user_session
+    session[:admin_user] = !session[:admin_user]
+    redirect_back(fallback_location: root_path)
+  end
+
+  def get_volunteers(registration)
+    volunteers = 0
+    registration.attendees.each do |a|
+      volunteers += 1 if a.volunteer?
+    end
+    return volunteers
+  end
+
+  def create_table_data 
+    query = Event::Registration.where(year: @year)
+    @event_registrations = query.all
+    @users = User.order(last_name: :asc).all
+    @vehicles = Vehicle.joins(:registrations).where(registrations: { year: @year })
+    volunteers = query.joins(:attendees).select(:name).where(attendees: { volunteer: true })
+    total_amount = query.sum(:total)
+    paid_amount = query.sum(:paid_amount)
+    @data = {
+      registrants: User.joins(:registrations).where(registrations: { year: @year }),
+      citroens: query.joins(:vehicles).where(vehicles: { marque: "Citroen" }),
+      non_citroens: query.joins(:vehicles).where.not(vehicles: { marque: "Citroen" }),
+      attendees: query.joins(:attendees).count,
+      newbies: [],
+      adult: query.joins(:attendees).where(attendees: { attendee_age: 'adult'}).count,
+      child: query.joins(:attendees).where(attendees: { attendee_age: 'child'}).count,
+      volunteers: {
+        number: volunteers.length,
+        list: volunteers,
+      },
+      financials: {
+        registration_fees: query.sum(:registration_fee),
+        donations: query.sum(:donation),
+        total: total_amount,
+        paid: paid_amount,
+        due: total_amount - paid_amount
+      }
+    }
+  end
+
+  def create_csvs
     # Create CSV data files
     @files = {}
     csv_file = {}
@@ -261,33 +326,5 @@ class AdminController < ApplicationController
     end
 
     @vehicles = @data[:citroens] + @data[:non_citroens]
-  end
-
-  def make_labels
-    @labels = []
-    Event::Registration.alpha.where("year = ?", @year).each do |r|
-      label = {}
-      label['name'] = "#{r.user.last_name}, #{r.user.first_name}"
-      label['people'] = r.attendees.count
-      label['fee'] = r.outstanding_balance? ? 'PAID' : "Due: $#{r.registration_fee.to_i}"
-      label['donation'] = (r.donation && (r.donation > 0.0)) ? r.donation.to_i : 0
-      label['volunteers'] = get_volunteers(r)
-
-      @labels << label
-    end
-    render layout: 'no_header', template: 'admin/labels'
-  end
-
-  def toggle_user_session
-    session[:admin_user] = !session[:admin_user]
-    redirect_back(fallback_location: root_path)
-  end
-
-  def get_volunteers(registration)
-    volunteers = 0
-    registration.attendees.each do |a|
-      volunteers += 1 if a.volunteer?
-    end
-    return volunteers
   end
 end

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'annual_question/new'
+  get 'annual_question/edit'
 
   root 'main_pages#index'
 
@@ -23,6 +25,8 @@ Rails.application.routes.draw do
   end
 
   resources :users
+
+  resources :annual_questions, { only: [:create, :update, :destroy] }
 
   # CMS content routes
   get 'vendors/import', to: 'vendors#import'

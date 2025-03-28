@@ -110,6 +110,7 @@
               .card-text
                 - if @data
                   %p Total volunteers: #{@data[:volunteers][:number]}
+                - if @files
                   - file = @files['volunteers']
                   - if File.exist? file['path']
                     %p

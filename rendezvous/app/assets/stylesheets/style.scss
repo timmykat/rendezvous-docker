@@ -219,7 +219,12 @@ input[type=checkbox] {
 .manage {
 	background-color: palegoldenrod;
 	border-top: solid 2px var(--eggplant);
-	border-bottom: solid 2px var(--eggplant)
+	border-bottom: solid 2px var(--eggplant);
+
+	label {
+		color: var(--eggplant);
+		font-weight: bold;
+	}
 }
 
 .navbar {

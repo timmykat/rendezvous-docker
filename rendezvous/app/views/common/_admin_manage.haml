@@ -25,4 +25,16 @@
               %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
               %li.nav-item= link_to 'De-dupe', admin_dedupe_path, class: 'nav-link btn  btn-info'
 
+      - if @annual_question
+        .row.justify-content-center
+          .col-md-10 
+            = simple_form_for @annual_question do |f|
+              .row.align-items-center
+                .form-group.col-md-2.col-12 
+                  = f.input :year
+                .form-group.col-md-6.col-12 
+                  = f.input :question
+                .form-group.col-md-3.col-12
+                  = f.button :submit, input_html:  { value:  'Save' }, class:  "btn  btn-primary"
+
 
