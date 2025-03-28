@@ -6,30 +6,35 @@
         .col-md-4.col-12
           .form-group
             = f.input :year, collection:  [*1919..2015].reverse, selected:  (f.object.year.blank? ? nil : f.object.year), include_blank:  '-- Select year --'
-      .row
-        .col-md-12
-          .select-with-other.marques
-            %label Marque
-            .row
+      .row.select-with-other.marques
+        .col-md-6
+          .row
+            .col-md-4
+              .form-group
+                %label Marque (Citroen or other French)
+                = select_tag :select_marque, options_for_select(marques), selected:  selected_marque(f.object), class:  'form-control select-sm'
+            .col-md-4 
+              .form-group
+                %label Model
+                = select_tag :select_model, options_for_select(models), include_blank:  '-- Select Citroën model --', selected:  selected_model(f.object), class:  'form-control select-sm'
+
+      .row.select-with-other.models      
+        .col-md-6
+          .row 
+            .col-md-4.col-12
+              .form-group
+                = text_field_tag :other_marque, nil, label:  'Other marque', class:  'form-control  input-sm', placeholder:  'Non-Citroen marque'
+                = f.input :marque, as:  :hidden, value:  f.object.marque
+
+        .col-md-6.col-12
+          .row
+            .col-md-4.col-12
+              .form-group
+                %label Model
+                = text_field_tag :other_model, nil, label:  'Other model', class:  'form-control input-sm', placeholder:  'Non-Citroen model'
+
               .col-md-4.col-12
-                .form-group
-                  = select_tag :select_marque, options_for_select(marques), selected:  selected_marque(f.object), class:  'form-control select-sm'
-              .col-md-4.col-12
-                .form-group
-                  = text_field_tag :other_marque, nil, label:  'Other marque', class:  'form-control  input-sm', placeholder:  'Non-Citroen marque'
-            = f.input :marque, as:  :hidden, value:  f.object.marque
-      .row
-        .col-md-12
-          .select-with-other.models
-            %label Model
-            .row
-              .col-md-4.col-12
-                .form-group
-                  = select_tag :select_model, options_for_select(models), include_blank:  '-- Select Citroën model --', selected:  selected_model(f.object), class:  'form-control select-sm'
-              .col-md-4.col-12
-                .form-group
-                  = text_field_tag :other_model, nil, label:  'Other model', class:  'form-control input-sm', placeholder:  'Non-Citroen model'
-            = f.input :model, as:  :hidden, value:  f.object.marque
+                = f.input :model, as:  :hidden, value:  f.object.marque
       .row
         .col-md-12
           .form-group

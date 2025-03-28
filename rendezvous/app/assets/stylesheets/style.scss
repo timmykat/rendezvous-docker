@@ -12,6 +12,7 @@
 	--indigo-dye: #0B4F6C;
 	--light-gray: #d8d8d8;
 	--medium-gray: #ccc;
+	--warm-maroon: #8B2F2F;
 }
 
 /* Rendezvous customizations */
@@ -58,6 +59,10 @@ body, p, li, ol, td {
 	font-size: 18px;
 }
 
+@mixin transition {
+	transition: all 0.3s ease-in-out;
+}
+
 section.banner {
   background-image: url('DS-50th-b+w.jpg');
   background-size: cover;
@@ -76,10 +81,11 @@ section.banner {
 }
 
 a, a:visited {
-	color: var(--indigo-dye);
+	color: var(--warm-maroon);
+	@include transition;
 
 	&:hover {
-		color: white;
+		color: var(--medium-gray);
 		text-decoration: underline;
 	}
 
@@ -122,19 +128,22 @@ h1, h2, h3, h4, h5, h6 {
 @mixin mixin-citroen-colors {
 	background-color: var(--citroen-red);
 	color: white;
-	
-	a, a:visited {
-		color: white;
-		text-decoration: none;
-
-		&:hover {
-			text-decoration: underline;
-		}
-	}
 }
 
 header {
 	@include mixin-citroen-colors;
+
+	.banner {
+		a, a:visited {
+			color: white;
+			
+	
+			&:hover {
+				font-size: 1.01em;
+				text-decoration: none;
+			}
+		}
+	}
 }
 
 .bg-nav {
@@ -188,9 +197,8 @@ svg.bi {
 
 .CodeMirror,
 .CodeMirror-scroll {
-    height: 150px !important;
-    min-height: 150px !important;
-    max-height: 150px !important;
+    height: 150px;
+    min-height: 150px;
 }
 
 input[type=checkbox] {
