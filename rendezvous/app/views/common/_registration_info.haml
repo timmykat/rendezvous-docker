@@ -53,7 +53,7 @@
                   %th Other info
                   %th Judging category
                 %tbody
-                  - @event_registration.user.vehicles.each do |v|
+                  - @event_registration.vehicles.each do |v|
                     %tr
                       %td= v.marque
                       %td= v.model
