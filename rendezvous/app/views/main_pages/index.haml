@@ -40,15 +40,23 @@
                     by #{@event_hotel.close_date}.
                     %br
 
-              %h3.h5 Alternative Accommodations
+              %h3.h5 Alternative Accommodations & Information
               = keyed_content("main_other_accommodations")
               %ul
                 %li= link_to 'Airbnb.com', 'https://www.airbnb.com/saratoga-springs-ny/stays', { target: '_blank' }
                 %li= link_to 'Kayak', 'https://www.kayak.com/', { target: '_blank' }
                 %li= link_to 'Expedia', 'https://www.expedia.com/', { target: '_blank' }
-                %li 
-                  Check with the 
-                  = link_to 'Saratoga Springs Convention & Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', { target: '_blank' }
+                %li= link_to 'Saratoga Springs Convention & Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', { target: '_blank' }
+
+%section#mailing-list-signup
+  .container 
+    .row.justify-content-center
+      .col-10.col-12
+        .card 
+          .card-body 
+            .card-text.d-flex.justify-content-center
+              = render partial: 'common/mailchimp_signup'
+
 %section#info
   .container-fluid 
     .row.justify-content-center
@@ -123,11 +131,7 @@
 
               
   / about section ends
-  %section.mailing-list-signup#sign-up
-    .container 
-      .row 
-        .col-lg-12
-          = render partial: 'common/mailchimp_signup' 
+
         
   -# %section.contact-form{ style: "height: 100px;"}
   -#   .container

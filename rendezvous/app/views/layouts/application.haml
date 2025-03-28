@@ -54,14 +54,18 @@
     = render partial: 'layouts/flash'
 
     %header
-      .container
-        .row.banner
+      .container-fluid.px-0
+        .row
           .col-12
-            .navbar.navbar-banner.top-nav.justify-content-start
-              = image_tag "chevrons.png"
-              .nav-item.site
-                %h1
-                  = link_to "Citroen Rendezvous #{Time.now.year}", root_path
+            .container 
+              .row 
+                .col-12
+                  .banner
+                    .navbar.navbar-banner.top-nav.justify-content-start
+                      = image_tag "chevrons.png"
+                      .nav-item.site
+                        %h1
+                          = link_to "Citroen Rendezvous #{Time.now.year}", root_path
 
       .container-fluid.px-0
         .row.no-gutters.bg-nav
@@ -116,12 +120,20 @@
 
         :javascript
           function addMde() {
+            function adjustEditorHeight(editor) {
+              var cm = editor.codemirror;
+              var scrollHeight = cm.getScrollInfo().height;
+              cm.getWrapperElement().style.height = Math.max(150, scrollHeight) + "px";
+            }
+            
             const textareas = document.querySelectorAll('textarea[id$="_simple_mde"]');
             textareas.forEach((textarea) => {
-              new SimpleMDE({
+              simpleMDE = new SimpleMDE({
                 element: textarea,
                 spellChecker: false, // Optional, disable spellchecker if you don't want it
               });
+              simpleMDE.codemirror.on("change", adjustEditorHeight);
+              adjustEditorHeight(simpleMDE);
             });
           }
 

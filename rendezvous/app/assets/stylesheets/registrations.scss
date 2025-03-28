@@ -139,26 +139,9 @@ td#logo {
     display: inline-block;
     text-align: center;
     margin: 20px 0;
+    width: 12rem;
     &.step {
-      width: 12em;
       font-size: 0.9rem;
-      
-      &.prev::after {
-        font-size: 1.5rem;
-        content: '>>';
-        padding-left: 10px;
-        position: relative;
-        top: 3px;
-      }
-
-      &.next::before {
-        font-size: 1.5rem;
-        content: '>>';
-        padding-right: 10px;
-        position: relative;
-        top: 3px;
-      }
-
       &.current {
         font-size: 2.25rem;
       }

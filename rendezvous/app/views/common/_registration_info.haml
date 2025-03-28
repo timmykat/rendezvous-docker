@@ -1,121 +1,103 @@
-.card
-  .card-body
-    .card-title 
-      %h3.h4= @event_registration.user.full_name
-    .card-text
-      %p
-        %b Registration number:
-        #{@event_registration.invoice_number}
-      %p= @event_registration.user.email
-      %p
-        #{@event_registration.user.address1}
-        - unless @event_registration.user.address2.blank?
-          %br #{@event_registration.user.address2}
-        %br #{@event_registration.user.city}, #{@event_registration.user.state_or_province} #{@event_registration.user.postal_code}
-        #{@event_registration.user.country_name.upcase}
+.container 
+  .row.justify-content-center 
+    .col-md-10.col-12
+      .card
+        .card-body
+          .card-title 
+            %h3.h4= @event_registration.user.full_name
+          .card-text
+            %p
+              %b Registration number:
+              #{@event_registration.invoice_number}
+            %p= @event_registration.user.email
+            %p
+              #{@event_registration.user.address1}
+              - unless @event_registration.user.address2.blank?
+                %br #{@event_registration.user.address2}
+              %br #{@event_registration.user.city}, #{@event_registration.user.state_or_province} #{@event_registration.user.postal_code}
+              #{@event_registration.user.country_name.upcase}
 
+      .card
+        .card-body
+          .card-title
+            %h3.h4 Attendees
+          .card-text
+            %table.table
+              %thead
+                %th Name
+                %th Adult, Senior, or Child
+                -# %th Sunday Dinner
+                %th Volunteer
+              %tbody
+                -@event_registration.attendees.each do |a|
+                  %tr
+                    %td= a.name
+                    %td= a.attendee_age
+                    -# %td #{a.sunday_dinner? ? 'yes' : 'no'}
+                    %td #{a.volunteer? ? 'yes' : 'no'}
 
-.card
-  .card-body
-    .card-title
-      %h3.h4 Fees
-    .card-text
-      .row
-        .col-md-12
-          %p
-            %label Registration Status - #{@event_registration.status}
-          %p
-            %label Registration fee:
-            #{number_to_currency(@event_registration.registration_fee)} (US)
-            - if @event_registration.status != Rails.configuration.rendezvous[:registration_statuses][0]
-              %br
-              %label Donation:
-              - if @event_registration.donation.blank?
-                (no donation)
-              - else
-                #{number_to_currency(@event_registration.donation)} (US)
-              %br
-              %br
-                %label Total:
-                #{number_to_currency(@event_registration.total)} (US)
+        .card
+          .card-body
+            .card-title
+              %h3.h4 Vehicle(s) I'm Bringing
+            .card-text
+              %p 
+                If you need to update the vehicle(s) you're bringing to the rendezvous, please do so 
+                %a{href: update_vehicles_event_registration_path(@event_registration)} here. 
 
-              - if !@event_registration.transactions.empty?
-                %h4.h5 Transactions
-                %table.table
-                  %thead
+              %table.table
+                %thead
+                  %th Marque
+                  %th Model
+                  %th Year
+                  %th Other info
+                  %th Judging category
+                %tbody
+                  - @event_registration.user.vehicles.each do |v|
                     %tr
-                      %th Transaction Type
-                      %th Transaction Method
-                      %th Credit Card Transaction ID
-                      %th Amount
-                  %tbody
-                    - @event_registration.transactions.each do |transaction|
-                      %tr
-                        %td= transaction.transaction_type
-                        %td= transaction.transaction_method
-                        %td= transaction.cc_transaction_id
-                        %td #{number_to_currency(transaction.amount)} (US)
+                      %td= v.marque
+                      %td= v.model
+                      %td= v.year
+                      %td= v.other_info
+                      %td= v.judging_category
+      .card
+        .card-body
+          .card-title
+            %h3.h4 Fees
+          .card-text
+            .row
+              .col-md-12
+                %p
+                  %label Registration Status - #{@event_registration.status}
+                %p
+                  %label Registration fee:
+                  #{number_to_currency(@event_registration.registration_fee)} (US)
+                  - if @event_registration.status != Rails.configuration.rendezvous[:registration_statuses][0]
+                    %br
+                    %label Donation:
+                    - if @event_registration.donation.blank?
+                      (no donation)
+                    - else
+                      #{number_to_currency(@event_registration.donation)} (US)
+                    %br
+                    %br
+                      %label Total:
+                      #{number_to_currency(@event_registration.total)} (US)
 
-              %strong
-                %label Balance:
-                #{number_to_currency(@event_registration.balance)} (US)
-    - if (@event_registration.status == 'payment due')
-      .col-md-6.col-12
-        %p
-          Please print this invoice or the one you received via email and send with a check for the amount due to:
-          %br= mailing_address
+                    %strong
+                      %label Balance:
+                      #{number_to_currency(@event_registration.balance)} (US)
+          - if (@event_registration.status == 'payment due')
+            .col-md-6.col-12
+              %p
+                Please print this invoice or the one you received via email and send with a check for the amount due to:
+                %br= mailing_address
 
-- if current_user == @event_registration.user
-  .card
-    .card-body
-      .card-title
-        %h3.h4 Attendees
-      .card-text
-        %table.table
-          %thead
-            %th Name
-            %th Adult, Senior, or Child
-            -# %th Sunday Dinner
-            %th Volunteer
-          %tbody
-            -@event_registration.attendees.each do |a|
-              %tr
-                %td= a.name
-                %td= a.attendee_age
-                -# %td #{a.sunday_dinner? ? 'yes' : 'no'}
-                %td #{a.volunteer? ? 'yes' : 'no'}
-
-  .card
-    .card-body
-      .card-title
-        %h3h4 Vehicles
-      .card-text
-        %p 
-          If you need to update the vehicle(s) you're bringing to the rendezvous, please do so 
-          %a{href: update_vehicles_event_registration_path(@event_registration)} here. 
-
-        %table.table
-          %thead
-            %th Bringing to Rendezvous?
-            %th Marque
-            %th Model
-            %th Year
-            %th Other info
-            %th Judging category
-          %tbody
-            - @event_registration.user.vehicles.each do |v|
-              %td= v.at_event?(@event_registration) ? "Yes" : "No"
-              %td= v.marque
-              %td= v.model
-              %td= v.year
-              %td= v.other_info
-              %td= v.judging_category
-
-- if current_user.has_role? :admin   
-  .card
-    .card-body
-      .card-title
-        %h3.h4 Email me my registration info
-      .card-text
-        = link_to "Send Email", "/admin/event/registrations/#{@event_registration.id}/send_confirmation_email", class: "btn  btn-info"
+      - if current_user.has_role? :admin   
+        .card
+          .card-body
+            .card-title
+              %h3.h4 Email me my registration info
+            .card-text
+              = link_to "Send Email", "/admin/event/registrations/#{@event_registration.id}/send_confirmation_email", class: "btn  btn-info"
 
