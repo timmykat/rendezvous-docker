@@ -1,8 +1,16 @@
-.container
+.container-fluid
   .row
-    .col-md-12
+    .col-12
       %h1 Administrative Info
 
+      .button-toolbar
+        .button-group
+          = link_to 'Update CSVs', admin_dashboard_path({create_csv: "true"}), class: 'btn btn-warning'
+          - @csvs.each do |type, label|
+            =link_to "#{label} <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{type}_data.csv"), class: "btn btn-primary"
+
+  .row
+    .col-12
       #tabbed
         %ul
           %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
@@ -110,12 +118,7 @@
               .card-text
                 - if @data
                   %p Total volunteers: #{@data[:volunteers][:number]}
-                - if @files
-                  - file = @files['volunteers']
-                  - if File.exist? file['path']
-                    %p
-                      Data file:
-                      =link_to "CSV <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{file['name']}")
+
           %table.table
             %thead
               %tr
@@ -135,13 +138,6 @@
               .card-text
                 .row
                   .col-md-12
-                    %h3 Data Files
-                    .data_files
-                      - if @files
-                        - @files.each do |ftype, fdata|
-                          - if File.exist? fdata['path']
-                            %span
-                              =link_to "#{fdata['descriptor']} <i class='fa fa-file-excel-o'></i>".html_safe, "/files/csv/#{fdata['name']}"
             .row
               .col-md-6.col-12
                 .card

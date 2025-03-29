@@ -75,7 +75,7 @@
                               = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
                               = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
                               .dropdown-divider
-                              - if @event_registration
+                              - if @event_registration.id
                                 = link_to 'View my registration', event_registration_path(@event_registration), class: 'dropdown-item' 
                                 = link_to 'Edit my vehicle(s)', update_vehicles_event_registration_path(@event_registration), class: 'dropdown-item'
                               - else 
@@ -94,7 +94,5 @@
         .row.justify-content-center
           = render partial: 'common/footer'
 
-      .debug 
-        Step: #{@step}
 
 

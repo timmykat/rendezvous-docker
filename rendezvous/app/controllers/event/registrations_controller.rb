@@ -29,6 +29,7 @@ module Event
 
       @title = 'Registration - Start'
       @step = 'create'
+      @annual_question = AnnualQuestion.where(year: Time.now.year).first
 
       if user_signed_in? && !session[:admin_user]
         @event_registration = current_user.registrations.current.first

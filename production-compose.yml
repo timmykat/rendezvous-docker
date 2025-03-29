@@ -41,11 +41,16 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
 
+       ## Square ##
+      - SQUARE_LOCATION_ID
+
       # Sandbox info
-      - SANDBOX_BRAINTREE_MERCHANT_ID
-      - SANDBOX_BRAINTREE_PUBLIC_KEY
-      - SANDBOX_BRAINTREE_PRIVATE_KEY
-      - SANDBOX_BRAINTREE_TOKENIZATION_KEY
+      - SANDBOX_SQUARE_APP_ID
+      - SANDBOX_SQUARE_ACCESS_TOKEN
+
+      # Production info
+      - PROD_SQUARE_APP_ID
+      - PROD_SQUARE_ACCESS_TOKEN   
 
       # Mailer info
       - SMTP_PASSWORD

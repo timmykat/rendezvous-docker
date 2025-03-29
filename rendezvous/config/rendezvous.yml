@@ -15,7 +15,7 @@ fees:
 payment_credentials:
   sandbox:
     application_id: <%= ENV['SANDBOX_SQUARE_APP_ID'] %>
-    location_id: <%= ENV['SANDBOX_SQUARE_LOCATION_ID'] %>
+    location_id: <%= ENV['SQUARE_LOCATION_ID'] %>
   production:
     application_id: <%= ENV['PROD_SQUARE_APP_ID'] %>
     location_id: <%= ENV['PROD_SQUARE_LOCATION_ID'] %>
