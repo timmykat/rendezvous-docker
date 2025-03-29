@@ -28,7 +28,13 @@ Rails.application.routes.draw do
 
   resources :annual_questions, { only: [:create, :update, :destroy] }
 
-  # CMS content routes
+  # Site settings
+  namespace :config do
+    get 'site_settings/get', to: 'site_settings#get'
+    post 'site_settings/update', to: 'site_settings#update'
+  end
+
+  # CMS content
   get 'vendors/import', to: 'vendors#import'
   get 'vendors/manage', to: 'vendors#manage'
   delete 'vendors/destroy_all', to: 'vendors#destroy_all', as: :destroy_all_vendors

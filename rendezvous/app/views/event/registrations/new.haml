@@ -1,12 +1,5 @@
-- fee = Rails.configuration.rendezvous[:fees][:adult]
-- unless registration_live?
-  .container
-    .row.justify-content-center
-      .col-md-4.col-12
-        %h1 Pas Trop Vite! 
-        %p Sorry, we're glad you're eager, but we're not quite ready for registration yet.
-        %p We'll let you know through the usual channels when it's registration is open.
-        %p Thanks for your patience!
+- if !show_register
+  = render partial: 'common/too-soon' 
 - else
   = render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
   .container
@@ -18,7 +11,7 @@
               %h2 Let's Get You Registered!
             .card-text
               %p
-                Lakeside have informed us that our expenses with them are up by %10 over last year, so this years registration fee is $80.
+                Lakeside have informed us that our expenses with them are up by %10 over last year, so this years registration fee is $#{event_fee}.
               %p 
                 Thank you for your understanding.
               %p

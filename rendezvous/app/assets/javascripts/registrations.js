@@ -15,8 +15,8 @@
   jQuery(document).ready(function() {
     var setRegistrationFee = function() {
       if (typeof appData != 'undefined') {
-        var total = $('input#event_registration_number_of_adults').val() * appData.fees.adult
-          + $('input#event_registration_number_of_children').val() * appData.fees.child;
+        var total = $('input#event_registration_number_of_adults').val() * appData.event_fee;
+          // + $('input#event_registration_number_of_children').val() * appData.fees.child;  # Registration for kids is free
         $('input#event_registration_registration_fee').val((total).toFixed(2));
       }
     };

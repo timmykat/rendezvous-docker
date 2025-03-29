@@ -1,4 +1,7 @@
+require_dependency Rails.root.join('lib', 'vehicles', 'vehicle_taxonomy')
+
 module ApplicationHelper
+  extend VehicleTaxonomy
 
   RECAPTCHA_SITE_KEY = Rails.configuration.rendezvous[:captcha][:site_key]
 
@@ -42,7 +45,7 @@ LITERAL
   end
 
   def event_fee
-    Rails.configuration.rendezvous[:fees][:adult]
+    Config::SiteSetting.instance.registration_fee
   end
 
   def refund_date
@@ -66,21 +69,21 @@ LITERAL
   end
 
   def in_registration_window?
-    Rails.configuration.rendezvous[:registration_window][:test] ||
-    (Time.now > Rails.configuration.rendezvous[:registration_window][:open] && 
-    Time.now <= Rails.configuration.rendezvous[:registration_window][:close])
+    Time.now > Config::SiteSetting.instance.registration_open_date &&
+      Time.now <= Config::SiteSetting.instance.registration_close_date
   end
 
   def after_rendezvous?
     Time.now > Rails.configuration.rendezvous[:registration_window][:after_rendezvous]
   end
 
-  def is_tester?
+  def user_is_tester?
     current_user && (current_user.has_any_role? :admin, :tester)
   end
 
-  def registration_live?
-    in_registration_window? || session[:test_session]
+  def show_register
+    in_registration_window? ||
+      (Config::SiteSetting.instance.show_registration_override && user_is_tester?)
   end
 
   def static_file(file_path)
@@ -175,11 +178,11 @@ LITERAL
   end
 
   def marques
-    Rails.configuration.rendezvous[:vehicle_marques].map{ |m| [m, m] }
+    VehicleTaxonomy.get_marques
   end
 
-  def models
-    Rails.configuration.rendezvous[:vehicle_models].map{ |m| [m, m] }
+  def citroen_models
+    VehicleTaxonomy.get_citroen_models
   end
 
   def selected_marque(vehicle)
@@ -199,7 +202,7 @@ LITERAL
   end
 
   def selected_model(vehicle)
-    if models.include? vehicle.model
+    if citroen_models.include? vehicle.model
       vehicle.model
     else
       nil
@@ -207,7 +210,7 @@ LITERAL
   end
 
   def other_model(vehicle)
-    if !models.include? vehicle.model
+    if !citroen_models.include? vehicle.model
       vehicle.model
     else
       nil
@@ -232,7 +235,7 @@ LITERAL
   end
 
   def year_list
-    [*2016..2024]
+    [*2016..Time.now.year]
   end
 
   def country_list

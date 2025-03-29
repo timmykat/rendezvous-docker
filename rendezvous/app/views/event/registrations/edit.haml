@@ -1,70 +1,63 @@
-- fee = Rails.configuration.rendezvous[:fees][:adult]
-- unless registration_live?
+- if !show_register
+  = render partial: 'common/too-soon' 
+- else
   .container
     .row.justify-content-center
       .col-md-4.col-12
-        %h1 Pas Trop Vite! 
-        %p Sorry, we're glad you're eager, but we're not quite ready for registration yet.
-        %p We'll let you know through the usual channels when it's registration is open.
-        %p Thanks for your patience!
-  - else
-    .container
-      .row.justify-content-center
-        .col-md-4.col-12
-            .card
-              .card-body
-                .card-text
-                  The registration fee is $#{fee} for adults and free for children. 
-                  #registration-form
-                    - if !user_signed_in?
-                      .cover
-                    = simple_form_for @event_registration, id:  'registration_form' do |f|
-                      %section
-                        %h2 Personal Information
-                        %p * = required
-                        - if session[:admin_user]
-                          %p.bg-warning You are creating a registration for another user.
-                        - else
-                          %p.bg-info You are signed in with your user account.
-                        = f.simple_fields_for :user do |u|
-                          = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
+          .card
+            .card-body
+              .card-text
+                The registration fee is $#{event_fee} for adults and free for children. 
+                #registration-form
+                  - if !user_signed_in?
+                    .cover
+                  = simple_form_for @event_registration, id:  'registration_form' do |f|
+                    %section
+                      %h2 Personal Information
+                      %p * = required
+                      - if session[:admin_user]
+                        %p.bg-warning You are creating a registration for another user.
+                      - else
+                        %p.bg-info You are signed in with your user account.
+                      = f.simple_fields_for :user do |u|
+                        = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
 
-                      %section
-                        %h2 Registration Information
-                        %h3 Attendees
-                        %p.hint (Adults are 16+, and children are 15 and under)
-                        .row
-                          .col-md-12
-                            #attendees
-                              = f.simple_fields_for :attendees do |a|
-                                = render partial:  'attendee_fields', locals:  { f:  a }
-                              .links
-                                = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary '
-                                Add a guest
-                            %br
-                            %br
-                        .row
-                          .col-md-4
-                            .form-group
-                              %label Total adults:
-                              = f.input_field :number_of_adults, disabled:  true, class:  'calculated fee-calculation'
-                        .row
-                          .col-md-4
-                            .form-group
-                              %label Total kids:
-                              = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
-
-                        .row
-                          .col-md-12
-                            %p.amount.form-group
-                              %label 
-                                Registration fee (USD):
-                                = f.input_field :registration_fee, disabled:  true, class:  'calculated'
-                        = f.input_field :year, as:  :hidden, value:  Time.new.year
-                        = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+                    %section
+                      %h2 Registration Information
+                      %h3 Attendees
+                      %p.hint (Adults are 16+, and children are 15 and under)
+                      .row
+                        .col-md-12
+                          #attendees
+                            = f.simple_fields_for :attendees do |a|
+                              = render partial:  'attendee_fields', locals:  { f:  a }
+                            .links
+                              = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary '
+                              Add a guest
+                          %br
+                          %br
+                      .row
+                        .col-md-4
+                          .form-group
+                            %label Total adults:
+                            = f.input_field :number_of_adults, disabled:  true, class:  'calculated fee-calculation'
+                      .row
+                        .col-md-4
+                          .form-group
+                            %label Total kids:
+                            = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
 
                       .row
                         .col-md-12
-                          .form-group
-                            = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  "btn  btn-primary"
+                          %p.amount.form-group
+                            %label 
+                              Registration fee (USD):
+                              = f.input_field :registration_fee, disabled:  true, class:  'calculated'
+                      = f.input_field :year, as:  :hidden, value:  Time.new.year
+                      = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+
+                    .row
+                      .col-md-12
+                        .form-group
+                          = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  "btn  btn-primary"
 
