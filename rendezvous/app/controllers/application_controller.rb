@@ -31,9 +31,9 @@ class ApplicationController < ActionController::Base
   def get_app_data
     @app_data =
       {
-        fees: CONFIG[:fees],
-        marques: CONFIG[:vehicle_marques],
-        models: CONFIG[:vehicle_models],
+        event_fee: Config::SiteSetting.instance.registration_fee,
+        marques: VehicleTaxonomy.get_marques,
+        models: VehicleTaxonomy.get_citroen_models,
         provinces: CONFIG[:provinces],
         countries: CONFIG[:countries]
       }

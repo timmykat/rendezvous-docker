@@ -18,14 +18,20 @@
             %p 
               %em 
                 If you're bringing any displayable vehicles (Citroen, other French marque, something eye-catching), please indicate here -- it helps us to plan. If you need to update your vehicle(s), click below. 
+            %p
+              We've improved the way we handle vehicles. You now can add as many vehicles as you want, and then indicate which one(s) you're bringing to the Rendezvous.
 
+            %button.btn.btn-primary{ type: 'button', 'data-toggle' => 'modal', 'data-target' => '#vehicle-modal'}
+              Update Vehicles
+            %br
+            %br
             = simple_form_for @event_registration, url: save_updated_vehicles_event_registration_path, id:  'registration_vehicles' do |f|
               %ul.list-unstyled
-                = f.input :vehicle_ids, as: :check_boxes, collection: @vehicles, label_method: :year_marque_model, value_method: :id, include_hidden: false, item_wrapper_tag: :li
+                = f.input :vehicle_ids, as: :check_boxes, collection: @vehicles, label_method: :year_marque_model_sale, value_method: :id, include_hidden: false, item_wrapper_tag: :li, label: "Check the vehicles you're bringing"
 
               %br
-              = f.submit "Update Vehicle(s)", class: "btn  btn-primary"
+              = f.submit "I'm Done", class: "btn  btn-success"
 
-= render partial: 'common/user_vehicles_modal'
+= render partial: 'common/user_vehicles_modal', locals: { redirect_url: update_vehicles_event_registration_path(@event_registration) }
 
 

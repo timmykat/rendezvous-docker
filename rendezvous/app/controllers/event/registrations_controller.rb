@@ -1,5 +1,3 @@
-require_relative "../../../lib/rendezvous_square/rendezvous_square"
-
 module Event
   class RegistrationsController < ApplicationController
     layout "registrations"
@@ -13,7 +11,7 @@ module Event
     skip_before_action :verify_authenticity_token, only: [:show]
 
     def check_cutoff
-      unless helpers.registration_live? || helpers.user_is_admin?
+      unless helpers.show_register
         flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
         redirect_to :root
       end

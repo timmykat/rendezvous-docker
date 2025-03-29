@@ -1,0 +1,22 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body 
+          .card-text
+            %h1.h3 Manage Site Settings
+            = simple_form_for @instance, url: config_site_settings_update_path do |f|
+              .form-group
+                = f.input :registration_fee
+              .form-group
+                = f.input :opening_day, as: :date
+              .form-group
+                = f.input :days_duration
+              .form-group
+                = f.input :registration_open, as: :boolean
+              .form-group
+                = f.input :registration_open_date, as: :date
+              .form-group
+                = f.input :user_testing, as: :boolean               
+              .form-group 
+                = f.submit 'Save Settings'

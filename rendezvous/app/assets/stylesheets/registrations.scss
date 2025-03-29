@@ -29,6 +29,14 @@
   }
 }
 
+#vehicle-modal .modal-dialog {
+  max-width: 800px;
+}
+
+#vehicles [data-active] {
+  border: solid 2px var(--dark-red);
+}
+
 .amount {
   font-size: 1.2em;
 	padding: 10px 20px;

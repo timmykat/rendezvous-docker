@@ -19,8 +19,12 @@
               %li.nav-item= link_to 'Venues', venues_manage_path, class: 'nav-link'
               %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
               %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
-              %li.nav-item= link_to 'De-dupe', admin_dedupe_path, class: 'nav-link btn  btn-info'
 
+      .row.justify-content-center
+        .col-md-10
+          .button-group
+            = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning" 
+            = link_to 'De-dupe content', admin_dedupe_path, class: 'btn  btn-warning'     
       - if @annual_question
         .row.justify-content-center
           .col-md-10 
