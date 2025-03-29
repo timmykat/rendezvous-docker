@@ -19,6 +19,16 @@
   display: none;
 }
 
+
+#attendees {
+  .nested-fields:first-child .guest {
+    display: none;
+  }
+  .nested-fields:not(:first-child) .registrant {
+    display: none;
+  }
+}
+
 .amount {
   font-size: 1.2em;
 	padding: 10px 20px;

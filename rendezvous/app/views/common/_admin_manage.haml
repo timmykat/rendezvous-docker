@@ -9,11 +9,7 @@
               %li.nav-item= link_to 'Dashboard', admin_dashboard_path, class:  'nav-link'
               %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
               %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
-              - if session[:admin_user]
-                %li.nav-item= link_to 'Create registration', new_event_registration_path, class:  'nav-link'
               %li.nav-item= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'nav-link'
-              - if current_registration && !current_registration.complete?
-                %li.nav-item= link_to 'Delete my registration', event_registration_path(current_registration), method:  :delete, class:  'nav-link', confirmation:  'Are you sure?'
               %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
           %nav.navbar.navbar-light.navbar-expand-lg
             %ul.navbar-nav

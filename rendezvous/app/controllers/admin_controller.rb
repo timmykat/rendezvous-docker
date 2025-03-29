@@ -72,6 +72,13 @@ class AdminController < ApplicationController
     @title = 'Admin'
     @year = params[:year] || Time.now.year
     @no_user_id = NO_USER_ID
+    @csvs = {
+      'labels' => 'Packet Label Data',
+      'registered_users' => 'Registered Users',
+      'attendees'  => 'Attendee Data',
+      'volunteers'    => 'Volunteer List',
+      'vehicles'      => 'Vehicle Manifest'
+    }
     
     if !params[:onsite_reg].blank?
       @onsite_reg = true
@@ -86,7 +93,7 @@ class AdminController < ApplicationController
 
     create_table_data
 
-    if csv
+    if params[:create_csv]
       create_csvs
     end
   end
@@ -150,10 +157,14 @@ class AdminController < ApplicationController
   end
 
   def create_csvs
+    Rails.logger.info "** CREATING CSVs **"
+    @event_registrations = Event::Registration.where(year: @year).all if @event_registrations.nil?
+
     # Create CSV data files
-    @files = {}
+    files = {}
     csv_file = {}
-    csv_object = {}
+    csv_data = {}
+    
     data_types = {
       'labels' => 'Packet Label Data',
       'registered_users' => 'Registered Users',
@@ -162,37 +173,36 @@ class AdminController < ApplicationController
       # 'sunday_dinner' => 'Sunday Dinner List',
       'vehicles'      => 'Vehicle Manifest'
     }
-   data_types.each do |data_type, descriptor|
+
+    data_types.each do |data_type, descriptor|
       file_name = "#{data_type}_data.csv"
-      @files[data_type] = {
+      files[data_type] = {
         'name'        => file_name,
         'path'        => File.join(Rails.root, 'public', helpers.static_file("csv/#{file_name}")),
         'descriptor'  => descriptor
       }
-      if system("mkdir -p #{File.dirname(@files[data_type]['path'])}")
-        csv_file[data_type] = File.new(@files[data_type]['path'], 'wb')
-        csv_object[data_type] = ::CSV.new(csv_file[data_type])
+      if system("mkdir -p #{File.dirname(files[data_type]['path'])}")
+        csv_file[data_type] = File.new(files[data_type]['path'], 'wb')
+        csv_data[data_type] = ::CSV.new(csv_file[data_type])
       end
     end
 
-   # CSV file headers
-   csv_object['labels'] <<[
-    'last_name',
-    'guests',
-    'people',
-    'fee_status',
-    'donation',
-    'volunteers'
+    # CSV file headers
+    csv_data['labels'] << [
+      'last_name',
+      'guests',
+      'people',
+      'fee_status',
+      'donation',
+      'volunteers'
     ]
-
-    csv_object['registered_users'] << [
+    csv_data['registered_users'] << [
       'full name',
       'email',
       'address',
       'volunteers'
     ]
-
-    csv_object['attendees'] << [
+    csv_data['attendees'] << [
       'Registration number',
       'Registratant',
       'Attendee name',
@@ -203,12 +213,8 @@ class AdminController < ApplicationController
       'Date registration paid',
       ('As of: ' + Time.now.strftime('%Y%m%d'))
     ]
-
-    csv_object['volunteers'] << [ 'Name', 'Email' ]
-
-    # csv_object['sunday_dinner'] << [ 'Name', 'Email' ]
-
-    csv_object['vehicles'] << [
+    csv_data['volunteers'] << [ 'Name', 'Email' ]
+    csv_data['vehicles'] << [
       'number',
       'last_name',
       'first_name',
@@ -220,36 +226,8 @@ class AdminController < ApplicationController
       'info'
     ]
 
-    @data = {
-      registrants: [],
-      citroens: [],
-      non_citroens: [],
-      attendees: [],
-      newbies: [],
-      adult: 0,
-      child: 0,
-      volunteers: {
-        number: 0,
-        list: [],
-      },
-      financials: {
-        registration_fees: 0.0,
-        donations: 0.0,
-        total: 0.0,
-        paid: 0.0,
-        due: 0.0
-      }
-    }
     @event_registrations.each do |registration|
-      @data[:registrants] << registration.user
-      @data[:newbies] << registration.user if registration.user.newbie?
-      @data[:financials][:total]                += registration.total.to_f unless registration.total.blank?
-      @data[:financials][:registration_fees]    += registration.registration_fee.to_f unless registration.registration_fee.blank?
-      @data[:financials][:paid]                 += registration.paid_amount.to_f unless registration.paid_amount.blank?
-      @data[:financials][:due]                  += registration.balance.to_f unless registration.balance.blank?
-      @data[:financials][:donations]            += registration.donation.to_f unless registration.donation.blank?
-
-      csv_object['labels'] << [
+      csv_data['labels'] << [
         "#{registration.user.last_name}",
         registration.attendees.count,
         registration.attendees.map{ |a| a.name }.join('<br>'),
@@ -258,7 +236,7 @@ class AdminController < ApplicationController
         get_volunteers(registration)
       ]
 
-      csv_object['registered_users'] << [
+      csv_data['registered_users'] << [
         registration.user.full_name,
         registration.user.email,
         helpers.address_of_plain(registration.user),
@@ -267,14 +245,8 @@ class AdminController < ApplicationController
 
       nvehicle = 0
       registration.user.vehicles.each do |v|
-         if v.marque == 'Citroen'
-          @data[:citroens]      << v
-        else
-          @data[:non_citroens]  << v
-        end
-
         nvehicle += 1
-        csv_object['vehicles'] << [
+        csv_data['vehicles'] << [
           "#{registration.invoice_number}-#{nvehicle.to_s}",
           registration.user.last_name,
           registration.user.first_name,
@@ -288,20 +260,7 @@ class AdminController < ApplicationController
       end
 
       registration.attendees.each do |a|
-        @data[:attendees] << a.name
-        @data[a.attendee_age.to_sym]  += 1
-        # if a.sunday_dinner?
-        #   @data[:sunday_dinner][:number]            += 1
-        #   @data[:sunday_dinner][:list] << { name: a.name, email:  registration.user.email }
-        # end
-        if a.volunteer?
-          @data[:volunteers][:number]               += 1
-          @data[:volunteers][:list] << { name: a.name, email:  registration.user.email }
-        end
-
-        #Write to CSV
-        # Registered attendees
-        csv_object['attendees'] << [
+        csv_data['attendees'] << [
           registration.invoice_number,
           registration.user.last_name_first,
           a.name,
@@ -314,17 +273,10 @@ class AdminController < ApplicationController
 
         # Volunteers
         if a.volunteer?
-          csv_object['volunteers'] << [ a.name, registration.user.email ]
+          csv_data['volunteers'] << [ a.name, registration.user.email ]
         end
-
-        # Sunday dinner
-        # if a.sunday_dinner?
-        #   csv_object['sunday_dinner'] << [ a.name, registration.user.email ]
-        # end
-
       end
     end
-
-    @vehicles = @data[:citroens] + @data[:non_citroens]
+    flash_notice "New CSVs created"
   end
 end
