@@ -87,16 +87,17 @@ jobs:
             else
               echo "    It exists"
             fi
-            echo "-- Running migrations if needed"
-            if docker exec rendezvous-rails-app-staging bundle exec rails db:migrate:status | grep "down"; then
-              echo "Pending migrations found. Running db:migrate..."
-              docker exec rendezvous-rails-app-staging bundle exec rails db:migrate
-            else
-              echo "No pending migrations. Skipping db:migrate."
-            fi
             echo "-- Precompile assets"
             docker exec rendezvous-rails-app-staging rake assets:precompile
             echo "-- Bring down the site"
             docker compose -f staging-compose.yml down
             echo "-- Relaunch the site"
             docker compose -f staging-compose.yml up -d
+                        echo "-- Running migrations if needed"
+            if docker exec rendezvous-rails-app-staging bundle exec rails db:migrate:status | grep "down"; then
+              echo "Pending migrations found. Running db:migrate..."
+              docker exec rendezvous-rails-app-staging bundle exec rails db:migrate
+            else
+              echo "No pending migrations. Skipping db:migrate."
+            fi
+            
