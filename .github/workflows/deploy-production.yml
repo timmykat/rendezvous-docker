@@ -1,11 +1,18 @@
-name: Deploy Rendezvous Production
-run-name: Bulding and deploying Rendezvous
+name: Deploy Rendezvous Prod
+run-name: Bulding and deploying Rendezvous production site
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main  # adjust to your main branch name
+      - main
+  
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'  # Default value if no input is provided
+        type: string 
 
 jobs:
   deploy:
@@ -15,34 +22,81 @@ jobs:
       # Checkout the repository
       - name: Check Out Repository
         uses: actions/checkout@v4
-
-      - name: Set up SSH keys
-        uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}  
+          ref: main
+          fetch-depth: 1
+ 
 
       - name: Set Production Environment
-        if: github.ref == 'refs/heads/main'
-        run: echo "ENVIRONMENT=production" >> $GITHUB_ENV
-
-      - name: Set Staging Environment
-        if: github.ref != 'refs/heads/main' 
-        run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
-
-      - name: Build and push docker images
         run: |
-          docker compose -f $ENVIRONMENT-compose.yml build
-          docker compose -f $ENVIRONMENT-compose.yml push
+          echo "ENVIRONMENT=production" >> $GITHUB_ENV
+
+      - name: Use the Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the Rendezvous rails app image
+        run: |
+          docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} ./rendezvous        
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
 
       # Deploy via SSH
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+
+      - name: Verify the evironment
+        run: echo "The environment is $ENVIRONMENT"
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOSTINGER_IP }}
-          username: ${{ secrets.HOSTINGER_USER }}
+          host: ${{ vars.HOSTINGER_IP }}
+          username: ${{ vars.HOSTINGER_USER }}
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
-            cd /var/www/rendezvous-docker
-            git pull origin hostinger
-            docker compose -f $ENVIRONMENT-compose.yml down
-            docker compose -f $ENVIRONMENT-compose.yml up -d
+            if [ ! -d "/var/www/rendezvous-docker-prod" ]; then
+              echo "    No repository directory - creating"
+              mkdir -p /var/www/rendezvous-docker-prod
+            fi
+            cd /var/www/rendezvous-docker-prod
+            echo "-- Updating the git repository --"
+            if [ ! -d ".git" ]; then
+              echo "    Not a git repository, cloning and checking out"
+              git clone https://github.com/${{ github.repository }} .
+            else
+              echo "    Repository found, pulling the latest changes"
+              git pull origin main
+            fi
+            echo "-- Checking out main branch"
+            git checkout main
+            echo "-- Installing JavaScript dependencies with Yarn --"
+            docker exec rendezvous-rails-app-prod yarn install
+            echo "-- Setting up the shared network"
+            if ! docker network ls --filter name=^shared_server_network$ --quiet; then
+              echo "    Not found, creating"
+              docker network create shared_server_network
+            else
+              echo "    It exists"
+            fi
+            echo "-- Precompile assets"
+            docker exec rendezvous-rails-app-prod rake assets:precompile
+            echo "-- Bring down the site"
+            docker compose -f production-compose.yml down
+            echo "-- Relaunch the site"
+            docker compose -f production-compose.yml up -d
+                        echo "-- Running migrations if needed"
+            if docker exec rendezvous-rails-app-prod bundle exec rails db:migrate:status | grep "down"; then
+              echo "Pending migrations found. Running db:migrate..."
+              docker exec rendezvous-rails-app-prod bundle exec rails db:migrate
+            else
+              echo "No pending migrations. Skipping db:migrate."
+            fi
+            

@@ -12,7 +12,6 @@ services:
       - ./config/nginx/hostinger/sites-available:/etc/nginx/sites-available
       - ./config/nginx/hostinger/sites-enabled:/etc/nginx/sites-enabled
       - /var/log/nginx/staging:/var/log/nginx/staging
-      - /var/log/nginx/prod:/var/log/nginx/prod
 
     ports:
       - 80:80
