@@ -10,10 +10,11 @@ class Config::SiteSettingsController < ApplicationController
 
   def update
     @instance = Config::SiteSetting.instance
-    if !@instance.update(site_settings_params)
-      flash_alert "There was a problem updating the site settings"
-    else 
+    if @instance.update(site_settings_params)
+      Config::SiteSetting.reload_instance
       flash_notice "The site settings were updated"
+    else 
+      flash_alert "There was a problem updating the site settings"
     end
     redirect_to admin_dashboard_path
   end
@@ -24,8 +25,9 @@ class Config::SiteSettingsController < ApplicationController
         :registration_fee,
         :opening_day,
         :days_duration,
-        :registration_open,
+        :show_registration_override,
         :registration_open_date,
+        :registration_close_date,
         :user_testing      
       )
     end

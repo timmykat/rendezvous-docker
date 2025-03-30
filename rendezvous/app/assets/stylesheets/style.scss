@@ -130,6 +130,25 @@ h1, h2, h3, h4, h5, h6 {
 	color: white;
 }
 
+.row.register {
+	background-color: var(--eggplant);
+}
+
+.btn-register {
+	font-weight: bold;
+	background-color: $brand-color;
+	color: white;
+	border-radius: 35px;
+
+	&:hover {
+		background-color: var(--tea-green);
+	}
+	&:active {
+		background-color: white;
+		border: var(--jet);
+	}
+}
+
 header {
 	@include mixin-citroen-colors;
 
@@ -152,6 +171,7 @@ header {
 
 .dropdown-menu {
 	background: whitesmoke;
+	z-index: 10000;
 }
 
 .navbar-dark .navbar-nav .nav-link  {

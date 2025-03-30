@@ -69,7 +69,10 @@ LITERAL
   end
 
   def in_registration_window?
-    Time.now > Config::SiteSetting.instance.registration_open_date &&
+    return false if Config::SiteSetting.instance.registration_open_date.nil? ||
+      Config::SiteSetting.instance.registration_close_date.nil?
+    
+      Time.now > Config::SiteSetting.instance.registration_open_date &&
       Time.now <= Config::SiteSetting.instance.registration_close_date
   end
 
@@ -81,9 +84,17 @@ LITERAL
     current_user && (current_user.has_any_role? :admin, :tester)
   end
 
+  def test_logic(text, boolean)
+    "#{text}:  #{boolean ? "PASS" : "FAIL"}"
+  end
+
   def show_register
-    in_registration_window? ||
-      (Config::SiteSetting.instance.show_registration_override && user_is_tester?)
+    Rails.logger.debug test_logic("in window", in_registration_window?)
+    Rails.logger.debug test_logic("current reg", (current_user.nil? || !current_user.current_registration))
+    Rails.logger.debug test_logic("override", Config::SiteSetting.instance.show_registration_override)
+    Rails.logger.debug test_logic("allowed_user", (user_is_tester? || user_is_admin?))
+    (in_registration_window? && (current_user.nil? || !current_user.current_registration)) ||
+      (Config::SiteSetting.instance.show_registration_override && (user_is_tester? || user_is_admin?))
   end
 
   def static_file(file_path)
