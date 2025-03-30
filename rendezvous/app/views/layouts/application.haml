@@ -106,7 +106,15 @@
                                 = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
                               - else 
                                 = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
-
+      - if show_register
+        .container-fluid.px-0 
+          .row.no-gutters.register.py-3
+            .col-12 
+              .container 
+                .row.justify-content-center 
+                  .col-md-6.col-12
+                    Registration is open!                        
+                    =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
       - if user_is_admin?
         = render partial: 'common/admin_manage'
 

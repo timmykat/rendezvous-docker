@@ -1,35 +1,42 @@
 - config = Rails.configuration.rendezvous
+= render partial:  'common/registration_step', locals:  { step:  'welcome' }
 .container
   .row.justify-content-center
     .col-md-8.col-12
-      %h1 #{event_year} Citroen Rendezvous Registration
-      %h2 #{event_dates}, Saratoga Springs, New York
-      = render partial:  'common/registration_step', locals:  { step:  'welcome' }
-      .card
-        .card-body
+      .card 
+        .card-body 
+          .card-title
+            %h1.h3 #{event_year} Citroen Rendezvous Registration
+            %h2.h6.mt-1 #{event_dates}, Saratoga Springs, New York
           .card-text
-            %p.bg-info
-              What a relief to be able to meet in person this year!
-              Since we have eliminated one of the meals, registration will be at a vintage amount!
-              %br
-              %br
-              The registration fee is $#{event_fee} per adult (16+), kids 15 and under are free! You may pay by credit card or by check.
-
-            %p.bg-info
-              Your registration does not include accommodations.
-              This year's Rendezvous hotel is the #{config[:hotel][:name]}, #{config[:hotel][:address]}. You can book out our special rate of $189/night at this 
-              %a{href:  "https://citroenrendezvous.us12.list-manage.com/track/click?u=198c738ff80668ca4d472c590&id=eceda0d825&e=882a1f74e7"}
-                link
-              by May 30. You can also find accommodations through the
+            %p
+              It's that time again! This year's registration fee is $#{event_fee} per adult (16+). As usual, kids 15 and under are free. You may pay by credit card on line, send or bring a check.
+              Just as a reminder, the fee includes ice cream at the ice cream social, the Saturday banquet, and the Sunday morning breakfast. 
+              It does not include accommodations.
+            %p
+              
+              This year's Rendezvous hotel is:
+            .card 
+              .card-body 
+                .card-text
+                  = formatted_event_hotel
+                  - unless reservation_url.nil?
+                    If there are rooms left, you can book out our special rate of $189/night
+                    = succeed '.' do
+                      = link_to 'here', reservation_url
+                    by May 30.
+            %p 
+              You can also find accommodations through the normal sites, or the 
               = succeed '.' do
-                = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', target:  '_blank'
+                = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging'
+            
             %p Registration consists of the following steps:
             %ol
               %li
                 Sign in
                 %ul
                   %li You have an account if you have previously registered on line
-                  %li If you've forgotten your password, use the reset password form on the sign-in page
+                  %li We use sign-in links, so no password is required
                   %li You'll have an opportunity to sign up if you don't have an account
               %li Enter your registration information
               %li Review information and pay

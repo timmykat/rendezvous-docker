@@ -1,20 +1,21 @@
 .container
   .row.justify-content-center
-    .col-md-8.col-12
-      - if user_is_admin?
-        %h1 Profile for #{@user.full_name}"
-      - else
-        %h1 Bienvenue, #{current_user.first_name}
+    .col-md-10.col-12
+      .card 
+        .card-body 
+          .card-title
+            - if user_is_admin?
+              %h1.h2 Profile for #{@user.full_name}"
+            - else
+              %h1.h2 Bienvenue, #{current_user.first_name}
 
-        .card
-          .card-body
-            .card-text
-
-              %p If you're here to register, or to finish a registration: 
-              %ul 
+          .card-text
+            %p If you're here to register, or to finish a registration: 
+            %ul 
+              - if current_registration
+                %li= link_to 'Continue my registration', existing_event_registration_path
+              - else
                 %li= link_to 'Create a registration',  new_event_registration_path 
-                - if current_registration
-                  %li= link_to 'Continue my registration', existing_event_registration_path 
 
       .card
         .card-body
