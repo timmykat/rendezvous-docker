@@ -1,6 +1,6 @@
 class Config::SiteSettingsController < ApplicationController
 
-  layout "admin"
+  layout "admin_layout"
 
   before_action :require_admin
 

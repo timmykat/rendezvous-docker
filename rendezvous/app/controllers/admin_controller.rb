@@ -2,7 +2,7 @@ require 'csv'
 
 class AdminController < ApplicationController
 
-  layout "admin"
+  layout "admin_layout"
 
   NO_USER_ID = 999999
 
