@@ -1,7 +1,7 @@
 require 'devise/models/linkable'
 require 'devise/models/token_authenticatable'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
 
   include RoleModel
 

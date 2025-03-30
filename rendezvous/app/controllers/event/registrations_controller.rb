@@ -1,23 +1,20 @@
 module Event
   class RegistrationsController < ApplicationController
+    layout "registrations_layout"
 
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
     before_action :require_admin, only: [:index]
-    before_action :authenticate_user!, except: [:welcome, :get_payment_token]
+    before_action :authenticate_user!, except: [:welcome, :update_paid_method]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
 
     skip_before_action :verify_authenticity_token, only: [:show]
 
     def check_cutoff
-      unless helpers.registration_live? || helpers.user_is_admin?
+      unless helpers.show_register
         flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
         redirect_to :root
       end
-    end
-
-    def get_payment_token
-      render plain:  ENV['BRAINTREE_TOKENIZATION_KEY'], content_type: 'text/plain'
     end
 
     def set_cache_buster
@@ -29,6 +26,8 @@ module Event
     def new
 
       @title = 'Registration - Start'
+      @step = 'create'
+      @annual_question = AnnualQuestion.where(year: Time.now.year).first
 
       if user_signed_in? && !session[:admin_user]
         @event_registration = current_user.registrations.current.first
@@ -105,6 +104,7 @@ module Event
 
     def edit
       @title = 'Edit Registration'
+      @step = 'edit'
 
       @event_registration = Registration.find(params[:id])
     end
@@ -132,8 +132,21 @@ module Event
       end
     end
 
+    # AJAX method
+    def update_paid_method
+      @event_registration = Registration.find(params[:id])
+      respond_to do |format|
+        if @event_registration.update(payment_method_params)
+          format.json {render json: { status: "ok", method: @event_registration.paid_method} }
+        else
+          format.json {render json: { status: "err", method: @event_registration.paid_method} }
+        end
+      end
+    end
+
     def review
       @title = 'Review Registration Information'
+      @step = 'review'
       @event_registration = Registration.find(params[:id])
       @event_registration.status = 'in review'
       @event_registration.save!
@@ -141,125 +154,96 @@ module Event
 
     def payment
       @title = 'Registration - Payment'
-      begin
-        @title = 'Registration - Payment'
-        @event_registration = Registration.find(params[:id])
-        @event_registration.total = @event_registration.registration_fee + @event_registration.donation
-        @event_registration.status = 'payment due'
-        @app_data[:event_registration_fee] = @event_registration.registration_fee
-        @credit_connection = true
-      rescue Braintree::BraintreeError => e
-        @credit_connection = false
-        flash_alert("We're sorry but the connection to our credit card processor isn't available. Please pay later, or register now and choose pay by check.")
-        flash_alert e.inspect
-        # redirect_to payment_event_registration_path(@event_registration)
-      end
+      @step = 'payment'
+      @event_registration = Registration.find(params[:id])
+      @event_registration.total = @event_registration.registration_fee + @event_registration.donation
+      @event_registration.status = 'payment due'
+      @app_data[:event_registration_fee] = @event_registration.registration_fee
+
+      square_env = RendezvousSquare::Base.get_environment
+      @square_app_id = ENV.fetch "#{square_env}_SQUARE_APP_ID"
+      @square_sdk_url = ENV.fetch "#{square_env}_SQUARE_SDK_URL"
+      @square_location_id = ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
     end
 
+    def send_to_square
+      event_registration = Registration.find(params[:id])
+      user = event_registration.user
+      customer_id = ::RendezvousSquare::Customer.find_customer(user.email)
 
-    def complete
-      @title = 'Complete Registration'
-      @event_registration = Registration.find(params[:id])
-      @event_registration.update(event_registration_params)
-
-      # If this is a credit card transaction, set the customer and billing attributes
-      # (have to do it now, in case this is an existing user and the user attributes are removed laster
-
-      if params[:event_registration][:paid_method] == 'credit card' && !params[:payment_method_nonce].blank?
-        braintree_transaction_params = {
-          order_id: @event_registration.invoice_number,
-          amount: @event_registration.total,
-          payment_method_nonce: params[:payment_method_nonce],
-          customer: {
-            first_name: @event_registration.user.first_name,
-            last_name: @event_registration.user.last_name,
-            email: @event_registration.user.email,
-          },
-          billing: {
-            first_name: @event_registration.user.first_name,
-            last_name: @event_registration.user.last_name,
-            street_address: @event_registration.user.address1,
-            extended_address: @event_registration.user.address2,
-            locality: @event_registration.user.city,
-            region: @event_registration.user.state_or_province,
-            postal_code: @event_registration.user.postal_code,
-            country_code_alpha3: @event_registration.user.country
-          },
-          options: {
-            submit_for_settlement: true
-          },
-        }
-
-        gateway = Braintree::Gateway.new(
-          environment: Braintree::Configuration.environment,
-          merchant_id: Braintree::Configuration.merchant_id,
-          public_key: Braintree::Configuration.public_key,
-          private_key: Braintree::Configuration.private_key,
-        )
-
-        result = gateway.transaction.sale(braintree_transaction_params)
-
-        if result.success?
-
-          logger.info "Braintree transaction success for #{@event_registration.user.email}"
-
-          # Create a new transaction
-          @event_registration.transactions << Transaction.new(
-            transaction_method: 'credit card',
-            transaction_type: 'payment',
-            cc_transaction_id: result.transaction.id,
-            amount: @event_registration.total
-          )
-
-          @event_registration.paid_amount = @event_registration.total
-          @event_registration.paid_method = 'credit card'
-          @event_registration.cc_transaction_id = result.transaction.id
-          @event_registration.paid_date = Time.new
-          @event_registration.status = 'complete'
-          @event_registration.save!
-          send_confirmation_email
-          flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-          redirect_to vehicles_event_registration_path(@event_registration)
-          return
-        elsif result.errors
-          logger.debug "Braintree transaction error for #{@event_registration.user.email}"
-          logger.debug result.message
-          flash_alert 'There was a problem with your credit card payment.'
-          flash_alert result.message
-          redirect_to payment_event_registration_path(@event_registration)
-          return
-        end
-      end
-
-      # Set the paid amounts
-      params[:event_registration][:total] = params[:event_registration][:total].to_f
-      if params[:event_registration][:paid_method] == 'credit card'
-        params[:event_registration][:paid_amount] = params[:event_registration][:total]
+      if !customer_id
+        customer_id = ::RendezvousSquare::Customer.create_customer(user)
       else
-        params[:event_registration][:paid_amount] = 0.00
+        Rails.logger.info("Square customer found: " + customer_id)
       end
 
-      # Update the registration
-      if !@event_registration.update(event_registration_params)
+      redirect_url = complete_after_online_payment_event_registration_url(event_registration)
+      Rails.logger.info "***** Redirect URL: " + redirect_url
+      square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(event_registration, customer_id, redirect_url)
+      redirect_to square_payment_link, allow_other_host: true
+    end
+
+    def complete_after_online_payment
+      @title = 'Complete Registration'
+      @step = 'complete'
+      @event_registration = Registration.find(params[:id])
+      @event_registration.paid_amount = @event_registration.total
+      @event_registration.paid_method = 'credit card'
+      @event_registration.cc_transaction_id
+      @event_registration.paid_date = Time.new
+      @event_registration.status = 'complete'
+      if @event_registration.save
+        send_confirmation_email
+        flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
+        redirect_to update_vehicles_event_registration_path(@event_registration)
+        return 
+      else 
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
         redirect_to payment_event_registration_path(@event_registration)
-      elsif helpers.user_is_admin?
-        flash_notice "Registration for #{@event_registration.user.full_name} complete"
-        redirect_to admin_event_registration_path(@event_registration)
+      end
+    end        
+
+    def complete
+      @title = 'Complete Registration'
+      @step = 'complete'
+      @event_registration = Registration.find(params[:id])
+
+      # Set the paid amounts
+      @event_registration.paid_amount = 0.0
+      @event_registration.paid_method = "cash or check"
+
+      # Update the registration
+      if !@event_registration.save
+        flash_alert 'There was a problem completing your registration.'
+        flash_alert @event_registration.errors.full_messages.to_sentence
+        redirect_to payment_event_registration_path(@event_registration)
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to vehicles_event_registration_path(@event_registration)
+        redirect_to update_vehicles_event_registration_path(@event_registration)
       end
     end
 
-    def vehicles
+    def update_vehicles
       @title = 'Vehicle Information'
-
+      @step = 'vehicles'
       @event_registration = Registration.find(params[:id])
       @user = @event_registration.user
+      @vehicles = @user.vehicles
     end
+
+    def save_updated_vehicles
+      @event_registration = Registration.find(params[:id])
+      Rails.logger.debug params.inspect
+      Rails.logger.info(format_for_logging(vehicle_update_params))
+      if (@event_registration.update(vehicle_update_params))
+        flash_notice "You are bringing #{@event_registration.vehicles.count} vehicles"
+      else
+        flash_alert "There was a problem saving your vehicle for this event."
+      end
+      redirect_to event_registration_path(@event_registration)
+    end  
 
     def index
       @title = 'All Registrations'
@@ -278,7 +262,7 @@ module Event
     end
 
     def welcome
-
+      @step = 'welcome'
     end
 
     def send_confirmation_email
@@ -290,7 +274,7 @@ module Event
       end
       unless @event_registration
         if current_user.admin?
-          redirect_to admin_index_path
+          redirect_to admin_dashboard_path
         else
           redirect_to :root
         end
@@ -298,7 +282,6 @@ module Event
     end
 
     private
-
       # Only allows admins and owners to see registration
       def owner_or_admin
         unless (current_user.id == Registration.find(params[:id]).user_id) || (current_user.has_role? :admin)
@@ -318,6 +301,7 @@ module Event
           :paid_amount,
           :paid_method,
           :paid_date,
+          :payment_token,
           :status,
           :invoice_number,
           :user_id,
@@ -327,11 +311,21 @@ module Event
           {:user_attributes=>
             [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
               {vehicles_attributes:
-                [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
+                [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :for_sale, :_destroy]
               }
             ]
           }
         )
+      end
+
+      def payment_method_params
+        params.permit(:id, :paid_method) 
+      end
+
+      def vehicle_update_params
+        params.fetch(:event_registration, {}).permit(vehicle_ids: []).tap do |whitelisted|
+          whitelisted[:vehicle_ids] ||= []  # Ensure it's an array even if nothing is checked
+        end
       end
 
       def event_registration_user_params

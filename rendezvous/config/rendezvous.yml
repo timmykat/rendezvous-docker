@@ -1,22 +1,23 @@
 # The following will most likely change from year to year
 dates:
-  day_one: June 14, 2024
+  day_one: June 13, 2025
   duration: 3
-  refund_date: 'June 7, 2024'
 registration_window:
-  open: 2024-04-05
-  close: 2024-06-07
-  after_rendezvous: 2024-06-16
+  open: 2025-04-01
+  close: 2025-06-06
+  after_rendezvous: 2025-06-16
+  test: true
 fees:
-  adult: 75
+  adult: 80
   child: 0
+
 hotel:
-  name: Courtyard Marriott
-  address: 11 Excelsior Ave, Saratoga Springs
+  name: Hyatt Place Saratoga Malta
+  address: 20 State Farm Place, Ballston Spa, NY, 12020
   website: https://www.marriott.com/en-us/hotels/albss-courtyard-saratoga-springs/overview/
-  event_rate: (FULL)
-  event_rate_link: 
-  event_rate_last_day: May 30
+  event_rate: $189/night
+  event_registration_link: https://www.hyatt.com/en-US/group-booking/ALBZS/G-CRDV
+  event_registration_last_day: May 30
 venue:
   name: Lakeside Farms
   address: 336 Schauber Road, Ballston Lake
@@ -24,10 +25,10 @@ venue:
 
 chauffeurs:
  - Bill Blaufuss
+ - Dave & Jamie Burnham
  - Jon Chomitz
  - Michaela Hellman
  - Tim Kinnel
- - Christoper (Toaph) Westfall
 
 # The following should rarely change
 front_page_message:
@@ -49,7 +50,7 @@ payment_methods:
   - credit card
   - check
   - cash
-  - cash_or_check
+  - cash or check
   - no payment
 registration_statuses:
   - initiated
@@ -82,48 +83,6 @@ merchandise:
     - XXL
     - XXXL
     - no size
-    
-vehicle_marques:
-  - Citroen
-  - Panhard
-  - Peugeot
-  - Renault
-  - Other
-vehicle_models:
-  - C2
-  - Traction Avant (11)
-  - Traction Avant (15)
-  - 2CV (sedan)
-  - 2CV (truckette)
-  - Dyane
-  - D (early)
-  - D (late)
-  - D (wagon)
-  - D (Chapron)
-  - SM
-  - CX (series 1)
-  - CX (series 2)
-  - CXA
-  - GS
-  - GSA
-  - Ami
-  - Dyane
-  - Mehari
-  - Visa
-  - XM
-  - Xantia
-  - C6
-  - 'H-Van'
-judging_categories:
-  - 'C2 / Traction Avant'
-  - 'ID / DS'
-  - '2CV / Truckette'
-  - 'SM'
-  - 'CX / CXA'
-  - 'Ami / Dyane / Mehari / Visa'
-  - 'GS / GSA / XM / Xantia / C6 / H-Van'
-  - 'Other French'
-  - 'Non-French'
 countries:
   USA: United States
   CAN: Canada
@@ -160,21 +119,30 @@ provinces:
 
 print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
 captcha:
-  site_key: <%= ENV['RENDEZVOUS_RECAPTCHA_PUBLIC_KEY'] %>
-  secret_key: <%= ENV['RENDEZVOUS_RECAPTCHA_PRIVATE_KEY'] %>
+  site_key: <%= ENV['RECAPTCHA_PUBLIC_KEY'] %>
+  secret_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
 mailchimp:
   api_key: <%= ENV['RENDEZVOUS_MAILCHIMP_API_KEY'] %>
   list:
     name: Citroen Rendezvous
     list_id: 9e696fe93f
 
+mailer:
+  delivery_method: :smtp
+  use_letter_opener: false    # Overrides production delivery method
+  smtp_settings:
+    address:               <%= ENV['SMTP_DOMAIN'] %>
+    domain:                <%= ENV['APP_DOMAIN'] %>
+    user_name:             <%= ENV['SMTP_USER'] %>
+    password:              <%= ENV['SMTP_PASSWORD'] %>
+    authentication:        :plain
+    enable_starttls_auto:  true
+    enable_starttls:       true
+    ssl:                   true
+    port:                  <%= ENV['SMTP_PORT'] %>
+    openssl_verify_mode:   'none'
+
 development:
-  facebook:
-    app_id: <%= ENV['RENDEZVOUS_FACEBOOK_APP_ID'] %>
-    app_secret: <%= ENV['RENDEZVOUS_FACEBOOK_APP_SECRET'] %>
-  twitter:
-    consumer_key: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_KEY'] %>
-    consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
   mailer:
     delivery_method: :letter_opener
 
@@ -182,37 +150,14 @@ development:
     - tim@wordsareimages.com
 
 production:
-  facebook:
-    app_id: <%= ENV['RENDEZVOUS_FACEBOOK_APP_ID'] %>
-    app_secret: <%= ENV['RENDEZVOUS_FACEBOOK_APP_SECRET'] %>
-  twitter:
-    consumer_key: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_KEY'] %>
-    consumer_secret: <%= ENV['RENDEZVOUS_TWITTER_CONSUMER_SECRET'] %>
-
   mailer:
-    use_letter_opener: false    # Overrides production delivery method
-    delivery_method: :smtp
-    smtp_settings:
-      address:               email-smtp.us-east-1.amazonaws.com
-      domain:                citroenrendezvous.org
-      user_name:             <%= ENV['RENDEZVOUS_SMTP_USER'] %>
-      password:              <%= ENV['RENDEZVOUS_SMTP_PASSWORD'] %>
-      authentication:        :plain
-      tls:                   true
-      port:                  465
+    delivery_method: :letter_opener
 
   inquiry_recipients:
     - wbbw67@gmail.com
     - hellman.michaela@gmail.com
     - tim@wordsareimages.com
-    - toaph@yahoo.com
 
 test:
-  facebook:
-    app_id: <%= ENV['FACEBOOK_APP_ID'] %>
-    app_secret: <%= ENV['FACEBOOK_APP_SECRET'] %>
-  twitter:
-    consumer_key: <%= ENV['TWITTER_CONSUMER_KEY'] %>
-    consumer_secret: <%= ENV['TWITTER_CONSUMER_SECRET'] %>
   mailer:
     delivery_method: test

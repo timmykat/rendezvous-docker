@@ -1,0 +1,46 @@
+= javascript_include_tag 'https://cdn.jsdelivr.net/npm/chart.js'
+
+:javascript
+  = "const dataset = #{@reg_data.html_safe}"
+  = "const eventDates = #{@event_dates.html_safe}"
+  = "const xLabels = #{@xLabels.html_safe}"
+
+.container
+  .row
+    .col-md-12
+      %h1= @title
+      #graphs
+
+:javascript
+  :plain
+    const charts = []
+    const graphContainer = document.getElementById('graphs')
+
+    Object.keys(dataset).forEach(year => {
+      const ctx = document.createElement('canvas').getContext('2d');
+      graphContainer.appendChild(ctx.canvas);
+
+      const chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: dataset[year].map(data => data.daysOut),
+              datasets: [{
+                  label: `Year ${year}`,
+                  data: dataset[year].map(data => data.total),
+                  borderColor: 'rgb(75, 192, 192)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true,
+                      min: 0,
+                      max: 18000
+                  }
+              }
+          }
+      })
+    })
+
+    charts.push(chart)

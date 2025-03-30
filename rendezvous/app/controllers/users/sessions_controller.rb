@@ -13,7 +13,7 @@ class Users::SessionsController < Devise::SessionsController
 
     @user = User.find_by_email(params[:email])
 
-    flash_notice 'Please check your email inbox'
+    flash_notice "Please check your inbox for #{params[:email]}"
     
     if @user
       Rails.logger.debug "Sending the link for a user"
@@ -33,7 +33,7 @@ class Users::SessionsController < Devise::SessionsController
       flash_alert 'We\re sorry, we were unable to authenticate that email address, or your token is expired.'
       redirect_to new_session_path(resource_name)
     elsif resource.admin?
-      redirect_to admin_index_path
+      redirect_to admin_dashboard_path
     else
       redirect_to new_event_registration_path
     end

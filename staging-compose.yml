@@ -1,0 +1,102 @@
+services:
+
+  # The nginx container serves both the production and staging environments
+  nginx:
+    image: nginx
+    profiles: [ docker_nginx ]
+    container_name: rendezvous-nginx
+
+    volumes:
+      - ./config/nginx/hostinger/certs:/etc/nginx/ssl/certs
+      - ./config/nginx/hostinger/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/hostinger/sites-available:/etc/nginx/sites-available
+      - ./config/nginx/hostinger/sites-enabled:/etc/nginx/sites-enabled
+      - /var/log/nginx/staging:/var/log/nginx/staging
+
+    ports:
+      - 80:80
+      - 443:443
+
+    depends_on:
+      - rails_app_staging
+
+    networks:
+      - shared_server_network
+      - internal_staging
+
+  # Staging services
+  db_staging:
+    image: mysql:8.0.32
+    container_name: rendezvous-db-staging
+    platform: linux/amd64
+    restart: always
+
+    environment:
+      - RAILS_ENV=${RAILS_ENV}
+      - RACK_ENV=${RACK_ENV}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+    networks:
+      - internal_staging
+
+    volumes:
+      - ./config/mysql/init:/docker-entrypoint-initdb.d
+      - /var/lib/mysql/staging:/var/lib/mysql
+      - /var/run/mysqld/staging:/var/run/mysqld
+
+  rails_app_staging:
+    container_name: rendezvous-rails-app-staging
+    image: ghcr.io/timmykat/rendezvous_rails_app
+
+    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+    # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+
+    ports:
+      - 3001:3000
+
+    environment:
+      - APP_DOMAIN=${APP_DOMAIN}
+      - RAILS_ENV=${RAILS_ENV}
+      - RACK_ENV=${RACK_ENV}
+      - RAILS_DEVELOPMENT_HOSTS=${RAILS_DEVELOPMENT_HOSTS}
+      - RAILS_SECRET_KEY_BASE=${RAILS_SECRET_KEY_BASE}
+      - RECAPTCHA_PUBLIC_KEY=${RECAPTCHA_PUBLIC_KEY}
+      - RECAPTCHA_PRIVATE_KEY=${RECAPTCHA_PRIVATE_KEY}
+      - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+      # Mailer info
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_DOMAIN=${SMTP_DOMAIN}
+      - SMTP_PORT=${SMTP_PORT}
+      - SITE_ADMIN_SENDING_ADDRESS=${SITE_ADMIN_SENDING_ADDRESS}
+      - INFO_SENDING_ADDRESS=${INFO_SENDING_ADDRESS}
+      - BREVO_API_KEY=${BREVO_API_KEY}
+
+    links:
+      - db_staging
+
+    depends_on:
+      - db_staging
+
+    volumes:
+      - /var/run/mysqld/staging:/var/run/mysqld
+      - /var/www/rendezvous-docker-staging/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
+      - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous
+
+    networks:
+      - internal_staging
+
+networks:
+
+  internal_staging:
+    driver: bridge
+
+  # Required for prod and staging to both talk to nginx
+  shared_server_network:
+    external: true

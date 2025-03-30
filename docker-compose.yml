@@ -1,15 +1,16 @@
-version: '3.3'
 services:
   nginx:
     image: nginx
 
     volumes:
-      - ./config/nginx/local/certs:/etc/ssl/certs
-      - ./config/nginx/docker/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/local/certs:/etc/nginx/ssl/certs
+      - ./config/nginx/local/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/local/sites-available/:/etc/nginx/sites-available/
+      - ./config/nginx/local/sites-enabled/:/etc/nginx/sites-enabled/
+      - ./rendezvous/log:/var/log/nginx
       - ./rendezvous:/var/www/rendezvous
 
     ports:
-      - 8080:8080
       - 443:443
 
     depends_on:
@@ -29,116 +30,92 @@ services:
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     environment:
-      - RAILS_DEVELOPMENT_HOSTS
+      - APP_DOMAIN
       - RAILS_ENV
       - RACK_ENV
-      - RENDEZVOUS_FACEBOOK_APP_ID
-      - RENDEZVOUS_FACEBOOK_APP_SECRET
-      - RENDEZVOUS_TWITTER_CONSUMER_KEY
-      - RENDEZVOUS_TWITTER_CONSUMER_SECRET
-      - RENDEZVOUS_RECAPTCHA_PUBLIC_KEY
-      - RENDEZVOUS_RECAPTCHA_PRIVATE_KEY
-      - MAILCHIMP_API_KEY
-      - RENDEZVOUS_SES_SENDING_ADDRESS
-      - RENDEZVOUS_SMTP_USER
-      - RENDEZVOUS_SMTP_PASSWORD
-      - DEVISE_SECRET_KEY
-      - BRAINTREE_MERCHANT_ID
-      - BRAINTREE_PUBLIC_KEY
-      - BRAINTREE_PRIVATE_KEY
-      - BRAINTREE_TOKENIZATION_KEY
-      - GMAIL_USER
-      - GMAIL_PASS
+      - RAILS_DEVELOPMENT_HOSTS
       - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
-      - MYSQL_HOST=mysql
-      - MYSQL_ALLOW_EMPTY_PASSWORD
+
+      ## Square ##
+      # Sandbox info
+      - SANDBOX_SQUARE_LOCATION_ID
+      - SANDBOX_SQUARE_APP_ID
+      - SANDBOX_SQUARE_ACCESS_TOKEN
+      - SANDBOX_SQUARE_SDK_URL
+
+      # Production info
+      - PROD_SQUARE_LOCATION_ID
+      - PROD_SQUARE_APP_ID
+      - PROD_SQUARE_ACCESS_TOKEN 
+      - PROD_SQUARE_SDK_URL     
+
+      # Mailer info
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_USER
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRESS
+      - BREVO_API_KEY
 
     ports:
       - 3000:3000
 
     links:
-      - mysql
+      - db
 
     networks:
       - rendezvous
 
     depends_on:
-      - mysql
+      - db
 
     volumes:
       - ./rendezvous:/var/www/rendezvous
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
-  delayed_job:
-    profiles: [full]
-    image: rails_image
-    command: /var/www/rendezvous/bin/delayed_job_docker.sh
-    environment:
-      - RAILS_DEVELOPMENT_HOSTS
-      - RAILS_ENV
-      - RACK_ENV
-      - RENDEZVOUS_FACEBOOK_APP_ID
-      - RENDEZVOUS_FACEBOOK_APP_SECRET
-      - RENDEZVOUS_TWITTER_CONSUMER_KEY
-      - RENDEZVOUS_TWITTER_CONSUMER_SECRET
-      - RENDEZVOUS_RECAPTCHA_PUBLIC_KEY
-      - RENDEZVOUS_RECAPTCHA_PRIVATE_KEY
-      - MAILCHIMP_API_KEY
-      - RENDEZVOUS_SES_SENDING_ADDRESS
-      - RENDEZVOUS_SMTP_USER
-      - RENDEZVOUS_SMTP_PASSWORD
-      - DEVISE_SECRET_KEY
-      - BRAINTREE_MERCHANT_ID
-      - BRAINTREE_PUBLIC_KEY
-      - BRAINTREE_PRIVATE_KEY
-      - BRAINTREE_TOKENIZATION_KEY
-      - GMAIL_USER
-      - GMAIL_PASS
-      - RAILS_SECRET_KEY_BASE
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_HOST=mysql
-      - MYSQL_ALLOW_EMPTY_PASSWORD
-
-    networks:
-      - rendezvous
-
-    links:
-      - mysql
-
-    depends_on:
-      - rails_app
-      - mysql
-
-    volumes:
-      - ./rendezvous:/var/www/rendezvous
-      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
-
-  mysql:
+  db:
     image: mysql:8.0.32
     platform: linux/amd64
+    restart: always
 
     ports:
       - 3306:3306
+
     environment:
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
-      - MYSQL_HOST
-      - MYSQL_ALLOW_EMPTY_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
     networks:
       - rendezvous
 
     volumes:
-      - ./.ephemeral/mysqld/db_init/rendezvous_init.sql:/docker-entrypoint-initdb.d/rendezvous_init.sql"
+      - ./init_data/mysql:/docker-entrypoint-initdb.d
       - ./.ephemeral/mysqld/db_data:/var/lib/mysql
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
-      - ./.data:/tmp/.data
+
+  adminer:
+    profiles: 
+      - debug
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+    networks:
+      - rendezvous
+
+    depends_on:
+      - db
+
 networks:
   rendezvous:
     driver: bridge

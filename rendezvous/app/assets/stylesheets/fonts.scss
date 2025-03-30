@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap');
+
+@mixin outfit-regular {
+  font-family: "Outfit", Verdana, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.outfit-italic {
+  font-family: "Outfit", Verdana, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.outfit-bold {
+  font-family: "Outfit", Verdana, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 650;
+  font-style: normal;
+}
+
+.outfit-bold-italic {
+  font-family: "Outfit", Verdana, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 650;
+  font-style: italic;
+}
+
+@mixin prompt-bold {
+  font-family: "Prompt", Verdana, sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+  
