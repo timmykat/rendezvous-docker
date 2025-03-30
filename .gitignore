@@ -10,8 +10,7 @@
 .data
 
 # Ignore .env files
-.env
-.envrc
+.env*
 .*_env
 config/production_env_vars
 
