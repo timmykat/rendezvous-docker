@@ -1,0 +1,96 @@
+- if !show_register
+  = render partial: 'common/too-soon' 
+- else
+  = render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
+  .container
+    .row.justify-content-center  
+      .col-md-8.col-12
+        .card
+          .card-body
+            .card-title
+              %h2 Let's Get You Registered!
+            .card-text
+              %p
+                Lakeside have informed us that our expenses with them are up by %10 over last year, so this years registration fee is $#{event_fee}.
+              %p 
+                Thank you for your understanding.
+              %p
+                If you've previously registered, we've already filled in your basic information. We are now using Square to process credit cards, so address is no longer required.
+              %p 
+                Let us know who you're bringing, if anyone. Then we'll give you a chance to review, followed by payment. 
+            #registration-form
+              - if !user_signed_in?
+                .cover
+
+              = content_for :recaptcha_js do
+                = include_recaptcha_js
+
+              = simple_form_for @event_registration, id:  'registration_form' do |f|
+                %section
+                  %p * = required
+                  - if session[:admin_user]
+                    %p.bg-warning You are creating a registration for another user.
+                  - else
+                    %p.bg-info You are signed in with your user account.
+                  = f.simple_fields_for :user do |u|
+                    = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
+
+                %section
+                  %h2.h3 Registration Information
+                  %h3.h4 Attendees
+                  %p.hint (Adults are 16+ and children are 15 and under)
+                  .row
+                    .col-12
+                      #attendees
+                        = f.simple_fields_for :attendees do |a|
+                          = render partial:  'attendee_fields', locals:  { f:  a }
+                        .links
+                          = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary '
+                          Add a guest
+                      %br
+                      %br
+                  .row
+                    .col-md-4
+                      .form-group
+                        %label Total adults:
+                        = f.input_field :number_of_adults, disabled:  true, class:  'calculated fee-calculation'
+                  .row
+                    .col-md-4
+                      .form-group
+                        %label Total kids:
+                        = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
+
+                  .row
+                    .col-12
+                      %p.amount.form-group
+                        %label 
+                          Registration fee (USD):
+                          = f.input_field :registration_fee, disabled:  true, class:  'calculated'
+                  = f.input_field :year, as:  :hidden, value:  Time.new.year
+                  = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+
+                  .row 
+                    .col-12
+                      .card 
+                        .card-body 
+                          .card-title 
+                            Post-Rendezvous Route Lunch
+                          .card-text 
+                            %p 
+                              This year, Patrick Jehanno, owner of 
+                              = link_to "Shadow 66 restaurant", "https://www.instagram.com/shadow66restaurant"
+                              in 
+                              = link_to "Ghent, NY", "https://www.google.com/maps/dir/Saratoga+Springs,+New+York/Ghent,+New+York/@42.7013769,-74.0428778,10z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x89de384ec75bd439:0x641d456a1b94a2a8!2m2!1d-73.7849756!2d43.0833706!1m5!1m1!1s0x89ddf2aa4ad0bd27:0x5d2c524b9bd267f!2m2!1d-73.6300729!2d42.320699!3e0?entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoASAFQAw%3D%3D" 
+                              (approximately an hour from Saratoga Springs) has invited homeward-bound Citroenistas to stop there for lunch at approximately 1pm.
+                              This is not an official Rendezvous event, so lunch is on you. If you think you might join in, please let us know below.
+                            .form-group 
+                              %label= @annual_question.question
+                              = f.input :annual_answer, collection: ['Sorry, not interested', 'Maybe', 'Definitely'], as: :select, include_blank: false, label: false
+                               
+                  .row
+                    .col-12
+                      .form-group
+                        = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  "btn  btn-primary"
+                        = recaptcha_execute('register_event')
+            
+

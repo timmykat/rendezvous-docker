@@ -9,6 +9,7 @@ gem 'rails', '7.1.3.2'
 # Security updates
 gem 'sprockets-rails', '~> 3'
 gem "actionpack", "7.1.3.2"
+gem "actiontext", "7.1.3.2"
 
 # Load environment variables in development
 gem 'dotenv-rails'
@@ -35,6 +36,7 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'font-awesome-sass', '~> 6.4.0'
+gem 'rails_sortable'
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1'
@@ -45,9 +47,10 @@ gem 'mini_magick'
 gem 'cocoon'
 gem 'role_model'
 gem 'daemons'
-gem 'braintree'
+gem 'square.rb'
 gem 'dkim'
 gem 'simple_form', '~>5'
+gem 'redcarpet'
 
 gem 'gibbon' # Mailchimp API
 

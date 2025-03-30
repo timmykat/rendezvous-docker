@@ -1,0 +1,33 @@
+name: Restart Rendezvous Staging
+run-name: Bulding and deploying Rendezvous staging site
+
+on:  
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to restart'
+        required: true
+        default: 'staging'  # Default value if no input is provided
+        type: string 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Debug the evironment
+        run: echo "The environment is $ENVIRONMENT"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOSTINGER_IP }}
+          username: ${{ vars.HOSTINGER_USER }}
+          key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+          script: |
+            echo "-- Precompile assets"
+            docker exec -it rendezvous-rails-app-staging rake assets:precompile
+            echo "-- Bring down the site"
+            docker compose -f staging-compose.yml down
+            echo "-- Relaunch the site"
+            docker compose -f staging-compose.yml up -d

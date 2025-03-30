@@ -16,7 +16,7 @@
 
     // payment method
     let $creditCardMethod = $('input[value="credit card"]')
-    let $cashMethod = $('input[value="cash_or_check"]')
+    let $cashMethod = $('input[value="cash or check"]')
 
     // Cart fields
     let $cartItems = $('#cart_items')

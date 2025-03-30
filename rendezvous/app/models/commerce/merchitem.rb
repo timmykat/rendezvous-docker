@@ -1,5 +1,5 @@
 module Commerce
-  class Merchitem < ActiveRecord::Base
+  class Merchitem < ApplicationRecord
     
     validates :sku, presence: true, on: :update
 

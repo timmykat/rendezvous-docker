@@ -1,0 +1,19 @@
+.container 
+  .row.justify-content-center
+    .col-sm-10.col-12
+      .card
+        .card-body 
+          .card-text 
+            %h1.h3 FAQs
+            - unless @faqs
+              %p There are currently no FAQs.
+            - else
+              %ul.list-unstyled
+                - @faqs.each do |faq|
+                  %li
+                    .card 
+                      .card-body 
+                        .card-text
+                          .question= faq.question
+                          .response= faq.response
+                               
