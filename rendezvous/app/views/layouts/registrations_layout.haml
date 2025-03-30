@@ -82,6 +82,9 @@
                                 = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
                               - else 
                                 = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
+                              - if user_is_admin?
+                                .dropdown-divider 
+                                  = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
 
       - if user_is_admin?
         = render partial: 'common/admin_manage'
