@@ -13,12 +13,16 @@
               .form-group
                 = f.input :days_duration
               .form-group
+                = f.input :refund_date, as: :date
+              .form-group
                 = f.input :show_registration_override, as: :boolean
               .form-group
                 = f.input :registration_open_date, as: :date
               .form-group
                 = f.input :registration_close_date, as: :date    
               .form-group
-                = f.input :user_testing, as: :boolean               
+                = f.input :user_testing, as: :boolean
+              .form_group 
+                = f.input :square_environment, as: :select, collection: ['SANDBOX', 'PROD'], label: 'Select Square Environment', include_blank: '-- Default is SANDBOX --'               
               .form-group 
                 = f.submit 'Save Settings'

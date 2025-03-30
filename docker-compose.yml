@@ -43,15 +43,17 @@ services:
       - MYSQL_PASSWORD
 
       ## Square ##
-      - SQUARE_LOCATION_ID
-
       # Sandbox info
+      - SANDBOX_SQUARE_LOCATION_ID
       - SANDBOX_SQUARE_APP_ID
       - SANDBOX_SQUARE_ACCESS_TOKEN
+      - SANDBOX_SQUARE_SDK_URL
 
       # Production info
+      - PROD_SQUARE_LOCATION_ID
       - PROD_SQUARE_APP_ID
-      - PROD_SQUARE_ACCESS_TOKEN      
+      - PROD_SQUARE_ACCESS_TOKEN 
+      - PROD_SQUARE_SDK_URL     
 
       # Mailer info
       - SMTP_PASSWORD

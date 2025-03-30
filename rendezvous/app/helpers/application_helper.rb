@@ -49,7 +49,7 @@ LITERAL
   end
 
   def refund_date
-    Rails.configuration.rendezvous[:dates][:refund_date]
+    Config::SiteSetting.instance.refund_date || Time.now
   end
 
   def logged_in_user(user)

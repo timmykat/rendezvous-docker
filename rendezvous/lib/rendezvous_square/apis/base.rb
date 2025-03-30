@@ -8,26 +8,18 @@ module RendezvousSquare
 
     extend self
   
-    SQUARE_ENV = :sandbox
-    SQUARE_CONFIG = Rails.configuration.rendezvous[:payment_credentials][SQUARE_ENV]
-    SQUARE_APPLICATION_ID = SQUARE_CONFIG[:application_id]
-    SQUARE_LOCATION_ID = SQUARE_CONFIG[:location_id]
-  
-    def get_payment_environment
-      if Rails.env.production?
-        prefix = "PRODUCTION"
-      else
-        prefix = "SANDBOX"
-      end
-      return prefix     
+    def get_environment
+      Config::SiteSetting.instance.square_environment || 'SANDBOX'     
     end
+
+    SQUARE_LOCATION_ID = ENV.fetch "#{get_environment}_SQUARE_LOCATION_ID"
   
     def get_square_client
       return ::Square::Client.new(
         bearer_auth_credentials: ::BearerAuthCredentials.new(
-          access_token: ENV.fetch(get_payment_environment + '_SQUARE_ACCESS_TOKEN')
+          access_token: ENV.fetch("#{get_environment}_SQUARE_ACCESS_TOKEN")
         ),
-        environment: get_payment_environment.downcase,
+        environment: get_environment.downcase == 'prod' ? 'production' : 'sandbox',
         timeout: 1
       )
     end

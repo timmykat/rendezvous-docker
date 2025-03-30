@@ -1,6 +1,6 @@
 - config = Rails.configuration.rendezvous
 :javascript
-  const applicationId = "#{@square_application_id}"
+  const applicationId = "#{@square_app_id}"
   const locationId = "#{@square_location_id}"
 
 = render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
@@ -64,5 +64,5 @@
                         = f.button :submit, 'Complete registration'.html_safe, class:  'btn btn-primary complete-registration', id: "card-button"
                         %img{ src: asset_path('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
 
-= javascript_include_tag 'https://sandbox.web.squarecdn.com/v1/square.js'
+= javascript_include_tag @square_sdk_url
 = javascript_include_tag  'payments'
