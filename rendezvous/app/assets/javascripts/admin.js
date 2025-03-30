@@ -37,7 +37,7 @@
   
             let $checkbox = $(this)
             let user_id = $checkbox.attr('name')
-            $.get('/ajax/toggle_user_testing', { user_id: user_id}, (data) => {
+            $.get('/ajax/toggle_user_testing', {user_id: user_id}, (data) => {
                 console.log(data)
                 $checkbox.prop('checked', data.status)
             })
@@ -67,6 +67,10 @@
         $('#select_all').on('change', function(e) {
             console.log('Changed')
             $('.delete_user').prop('checked', $(this).prop('checked'))
+        })
+
+        $('.toggle_admin_bar').on('click', function() {
+            $('header .manage').toggle()
         })
 
         // $('button#delete_users').on('click', function() {

@@ -1,0 +1,11 @@
+- if user_signed_in?
+  .manage
+    %nav.navbar.navbar-light.bg-light.navbar-expand-lg
+      %ul.navbar-nav.mr-auto
+        %li.nav-item=link_to 'My profile<br />and vehicle(s)'.html_safe, user_path(current_user), class:  'nav-link'
+        - if current_registration
+          %li.nav-item= link_to 'My registration', event_registration_path(current_registration), class:  'nav-link'
+        %li.nav-item= link_to 'My photos', my_pictures_path, class:  'nav-link'
+        %li.nav-item= link_to 'Sign out', destroy_user_session_path, method:  :delete, class:  'nav-link'
+        %li.nav-item= link_to 'Photo Gallery',gallery_path, class:  'nav-link'
+        %li.nav-item= link_to 'Main page',root_path, class:  'nav-link'

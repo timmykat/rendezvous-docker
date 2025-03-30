@@ -1,0 +1,31 @@
+- config = Rails.configuration.rendezvous
+.container
+  .row
+    .col-md-offset-1.col-md-10.col-12.heading
+      %h1.pull-left
+        #{event_year}
+        Rendezvous Schedule
+      .pull-right= image_tag('rendezvous-logo.png')
+    %p #{tbd_message}
+  .row.justify-content-center
+    .col-md-10.col-12
+      - current_day = ""
+      - index = -1
+      = @scheduled_events.each do |event|
+        - if event.day != current_day
+          - current_day = day 
+          - index += 1
+          .card
+            .card-body
+              .card-title
+                %h2 #{relative_date(index)}
+              .card-text
+        
+        - else
+          .event
+            .time= event.time
+            .title= event.name
+            .location= format_for_schedule(event.venue)
+            .details
+              = event.long_description
+

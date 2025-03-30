@@ -1,0 +1,40 @@
+.container#faqs
+  .row.justify-content-center
+    .col-md-10
+      %h1 Manage FAQs
+    .col-md-8
+      %h2 Creating 
+      %p
+        =link_to "Create new", new_faq_path, class: "btn  btn-primary"
+      %p
+        =link_to "Import from CSV", faqs_import_path, class: "btn  btn-warning"
+
+      %h2 Ordering
+      %table.table
+        %tbody.sortable
+          - @faqs.each_with_sortable_id do |faq, sortable_id|
+            %tr{id: sortable_id}
+              %td
+                = bootstrap_icon 'list'
+                = faq.name 
+    .col-md-10
+      %h2 Editing
+      - @faqs.each do |faq|
+        .card 
+          .card-body 
+            .card-text
+              = simple_form_for faq do |f|
+                = render partial:  'faq_fields', locals: { f: f }
+                %br
+                .form-group
+                  = f.button :submit, input_html:  { value:  'Update Content' }, class:  "btn  btn-primary"
+
+
+:javascript
+  $(function() {
+    $('.sortable').railsSortable();
+  });
+    
+
+
+              

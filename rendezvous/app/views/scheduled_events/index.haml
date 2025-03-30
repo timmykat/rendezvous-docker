@@ -1,0 +1,28 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body
+          .card-title 
+            %h1.h3 Scheduled Events   
+          .card-text                   
+            - unless @events_by_day
+              %p No scheduled events yet.
+            - else
+              - @events_by_day.each do |day, events|
+                .card-group
+                  .card
+                    .card-body
+                      .card-title
+                        %h3.h4 #{day}
+                      .card-text 
+                        - events.each do |event|
+                          .card 
+                            .card-body 
+                              .card-title 
+                                #{event.time} | #{event.name}
+                              .card-text
+                                #{event.long_description}
+
+
+                      

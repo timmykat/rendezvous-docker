@@ -14,6 +14,7 @@ module MainPagesHelper
 
   SHORT_FORMAT = "%B %-d"
   FULL_FORMAT = "%A, %B %-d"
+  DAY_ONLY_FORMAT = "%A"
   START_DATE = Date.parse(config[:dates][:day_one])
   END_DATE = START_DATE + (config[:dates][:duration] - 1)
 
@@ -39,8 +40,8 @@ module MainPagesHelper
     return output.html_safe
   end
 
-  def relative_date(i)
-    return (START_DATE + i).strftime(FULL_FORMAT)
+  def relative_date(i, format = FULL_FORMAT)
+    return (START_DATE + i).strftime(format)
   end
 
   def tbd_message

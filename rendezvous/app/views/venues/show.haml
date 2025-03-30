@@ -1,0 +1,16 @@
+.container
+  .row.justify-content-center 
+    .col-md-4
+      %h1 Venue: #{@venue.name}
+      %ul
+        %li Show field venue? #{@venue.show_field_venue ? 'Yes' : 'No'}
+        %li Phone: #{@venue.phone}
+        %li Email: #{@venue.email}
+        %li 
+          Address:
+          %br
+          = @venue.address_as_html
+        %li
+          Details:
+          %br
+          = @venue.details_as_html

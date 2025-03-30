@@ -15,10 +15,10 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-# Load dotenv only in development or test environment
-if ['production'].include? ENV['RAILS_ENV']
-  Dotenv::Rails.load
-end
+# Load dotenv
+# if ['production', 'staging'].include? ENV['RAILS_ENV']
+#   Dotenv::Rails.load
+# end
 
 module Rendezvous
   class Application < Rails::Application
@@ -41,7 +41,14 @@ module Rendezvous
 
     config.load_defaults 7.0
     config.active_record.yaml_column_permitted_classes = [Date, Symbol]
+    
+    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += %W(#{config.root}/lib/rendezvous_square)
+    config.autoload_paths += %W(#{config.root}/lib/vehicles)
+
+    config.eager_load_paths += %W(#{config.root}/lib)
    
     config.rendezvous = YAML::load(ERB.new(File.read("#{Rails.root}/config/rendezvous.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+
   end
 end

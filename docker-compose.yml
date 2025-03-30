@@ -3,14 +3,14 @@ services:
     image: nginx
 
     volumes:
-      - ./config/nginx/templates:/etc/nginx/templates/
       - ./config/nginx/local/certs:/etc/nginx/ssl/certs
       - ./config/nginx/local/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/local/sites-available/:/etc/nginx/sites-available/
+      - ./config/nginx/local/sites-enabled/:/etc/nginx/sites-enabled/
       - ./rendezvous/log:/var/log/nginx
       - ./rendezvous:/var/www/rendezvous
 
     ports:
-      - 80:80
       - 443:443
 
     depends_on:
@@ -42,11 +42,18 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
 
+      ## Square ##
       # Sandbox info
-      - SANDBOX_BRAINTREE_MERCHANT_ID
-      - SANDBOX_BRAINTREE_PUBLIC_KEY
-      - SANDBOX_BRAINTREE_PRIVATE_KEY
-      - SANDBOX_BRAINTREE_TOKENIZATION_KEY
+      - SANDBOX_SQUARE_LOCATION_ID
+      - SANDBOX_SQUARE_APP_ID
+      - SANDBOX_SQUARE_ACCESS_TOKEN
+      - SANDBOX_SQUARE_SDK_URL
+
+      # Production info
+      - PROD_SQUARE_LOCATION_ID
+      - PROD_SQUARE_APP_ID
+      - PROD_SQUARE_ACCESS_TOKEN 
+      - PROD_SQUARE_SDK_URL     
 
       # Mailer info
       - SMTP_PASSWORD
@@ -54,7 +61,7 @@ services:
       - SMTP_PORT
       - SMTP_USER
       - SITE_ADMIN_SENDING_ADDRESS
-      - INFO_SENDING_ADDRES
+      - INFO_SENDING_ADDRESS
       - BREVO_API_KEY
 
     ports:
@@ -96,6 +103,8 @@ services:
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   adminer:
+    profiles: 
+      - debug
     image: adminer
     restart: always
     ports:

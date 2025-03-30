@@ -15,8 +15,8 @@
   jQuery(document).ready(function() {
     var setRegistrationFee = function() {
       if (typeof appData != 'undefined') {
-        var total = $('input#event_registration_number_of_adults').val() * appData.fees.adult
-          + $('input#event_registration_number_of_children').val() * appData.fees.child;
+        var total = $('input#event_registration_number_of_adults').val() * appData.event_fee;
+          // + $('input#event_registration_number_of_children').val() * appData.fees.child;  # Registration for kids is free
         $('input#event_registration_registration_fee').val((total).toFixed(2));
       }
     };
@@ -96,22 +96,27 @@
     $('form').bind('submit', function() {
       $('input.calculated, input[type=email]').prop('disabled', false);
     });
-    
-    // Toggle CC vs mailing address
-    $('input.payment').on('click', function() {
-      $('#payment-form').toggleClass('hidden');
-      $('#mailing-address').toggleClass('hidden');
-      $('#payment-paid').toggleClass('hidden');
-    });  
-    
-    // Transactions
-    $('#transaction_transaction_method').on('change', function(e) {
-      if (e.target.value == 'credit card') {
-        $('#transaction_cc_transaction_id').attr('disabled', false);
+
+    const showChecked = function(value) {
+      if (value == 'credit card') {
+        $('#payment-online').show();
+        $('#payment-cash').hide();
+        $('#payment-paid').show()
       } else {
-        $('#transaction_cc_transaction_id').attr('disabled', true);
+        $('#payment-online').hide();
+        $('#payment-cash').show();
+        $('#payment-paid').hide()        
       }
-    });
+    }
+    
+    // Set payment method
+    $('input.payment-method:checked').each(function() {
+        showChecked($(this).val())
+    })
+
+    $('input.payment-method').on('click', function() {
+      showChecked($(this).val())
+    });  
 
     // Spinner
     $('.go-to-payment').click(function(e) {

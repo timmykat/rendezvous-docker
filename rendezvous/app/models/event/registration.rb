@@ -1,10 +1,12 @@
 
 module Event
-  class Registration < ActiveRecord::Base
+  class Registration < ApplicationRecord
     
     belongs_to :user
     has_many :attendees, dependent: :destroy
     has_many :transactions, dependent: :destroy
+    has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :registration_id, dependent: :destroy
+    has_many :vehicles, through: :registrations_vehicles
     
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true

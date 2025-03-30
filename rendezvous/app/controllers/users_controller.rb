@@ -23,7 +23,11 @@ class UsersController < ApplicationController
       flash_alert_now  @user.errors.full_messages.to_sentence
       render action: :edit
     else
-      redirect_to user_path(@user)
+      if params[:redirect_url]
+        redirect_to params[:redirect_url]
+      else
+        redirect_to user_path(@user)
+      end
     end
   end
 
@@ -85,9 +89,11 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(
-        [:email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
+        [:email, :password, :password_confirmation, 
+        :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, 
+        :citroenvie,
           {vehicles_attributes:
-            [:id, :year, :marque, :model, :other_info, :_destroy]
+            [:id, :year, :marque, :model, :other_info, :for_sale, :_destroy]
           }
         ]
       )

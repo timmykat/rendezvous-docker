@@ -1,0 +1,2 @@
+class EventHotel < Venue
+end

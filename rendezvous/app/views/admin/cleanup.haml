@@ -1,0 +1,53 @@
+.container
+  .row
+    .col-md-12
+      %h1 Cleanup
+      %h2 Suspicious User Records
+
+      %p Number of users: #{@users.size.to_s}
+      - if @users_to_delete
+        - n = @users_to_delete.size.to_s
+      - else
+        - n = '0'
+
+      %p Number of users to delete: #{n}
+
+      - if !@users_to_delete.empty?
+        .card
+          .card-body
+            .card-text
+
+              %p Number of users to delete: #{@users_to_delete.size.to_s}
+              = form_with url: admin_cleanup_path, method: :post do |f|
+                = f.hidden_field :confirm_delete, value: "true"
+                %ul
+                  - @users_to_delete.each do |user|
+                    %li #{user.full_name} #{ f.hidden_field 'user_ids[]', value: user.id }
+
+                = f.submit 'DELETE', data: { confirm: 'Are you sure?'}, class: "btn  btn-danger"
+
+          = form_with url: admin_cleanup_path, method: :post do |f|
+            %p
+              = check_box_tag "select_all", "select_all", false, id: "select_all", class: "select_all"
+              = label_tag "select_all", "&nbsp;&nbsp;Select All&nbsp;&nbsp;&nbsp;&nbsp;".html_safe, style: "font-weight: normal"
+              = f.submit 'Select for DELETE', class: "btn  btn-warning"
+            %table.table.striped
+              %thead
+                %tr
+                  %th Delete
+                  %th Name
+                  %th Email
+                  %th Number of Vehicles
+                  %th Number of Registrations
+              
+              %tbody
+                - @users.each do |user|
+                  %tr
+                    %td
+                      = check_box_tag "user_ids[]", user.id, false, id: "user_#{user.id}", class: "delete_user"
+                      = label_tag "user_#{user.id}", "&nbsp;&nbsp;Delete".html_safe, style: "font-weight: normal"
+                    %td #{user.full_name}
+                    %td #{user.email}
+                    %td #{user.vehicles.size} vehicles
+                    %td #{user.registrations.size} registrations
+            = f.submit 'Select for DELETE', class: "btn  btn-warning"

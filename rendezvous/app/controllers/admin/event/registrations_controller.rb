@@ -80,7 +80,7 @@ class Admin::Event::RegistrationsController < AdminController
     rescue Exception => e
       Rails.logger.debug e.inspect
       flash_notice = 'There was a problem creating the registration'
-      redirect_to admin_index_path, notice: flash_notice
+      redirect_to admin_dashboard_path, notice: flash_notice
       return
     end
 
@@ -182,7 +182,7 @@ class Admin::Event::RegistrationsController < AdminController
     else 
       flash_notice 'The registration has been deleted'
     end
-    redirect_to admin_index_path
+    redirect_to admin_dashboard_path
   end
   
   def cancel
@@ -226,7 +226,7 @@ class Admin::Event::RegistrationsController < AdminController
       else
         flash_notice('No registration found')
       end
-      redirect_to admin_index_path
+      redirect_to admin_dashboard_path
     else
       redirect_to :root
     end

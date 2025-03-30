@@ -1,16 +1,25 @@
 module RegistrationsHelper
 
-  STEP_ARRAY = [ 'welcome', 'sign', 'register', 'review', 'payment', 'vehicles' ]
-  
-  def registration_progress_indicator(current_step, step, registration = nil)  
-    if step == current_step
-      klass = 'active'
-    elsif STEP_ARRAY.index(step) < STEP_ARRAY.index(current_step)
-      klass = 'complete'
-    else
-      klass = 'to_do'
-    end
+  def steps
+    [ 
+      'welcome',
+      'create',
+      'review',
+      'payment',
+      'complete',
+      'vehicles',
+    ]
   end
+
+  def previous_step(current_step)
+    index = steps.index(current_step)
+    prev_step = (index > 0) ? steps[index - 1] : nil
+  end
+
+  def next_step(current_step)
+    index = steps.index(current_step)
+    next_step = (index - 1 < steps.length) ? steps[index + 1] : nil
+  end  
 
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
@@ -29,18 +38,18 @@ module RegistrationsHelper
   end
     
   def donation_list(raw_values, registration_fees)
-    cc_fee = '%.2f' % braintree_fee(registration_fees)
+    cc_fee = '%.2f' % credit_card_fee(registration_fees)
     list = raw_values.map{ |v| ["$#{v.to_s}", v]  }
     list.unshift ["Credit card fee ($#{ cc_fee})", cc_fee.to_f]
     list << ['Other', 'other']
   end
 
-  def braintree_fee(amount)
-    0.49 + 0.0259 * amount
+  def credit_card_fee(amount)
+    0.10 + 0.026 * amount   # For Square
   end
   
   def payment_options
-    [[' Credit Card', 'credit card'], [' Cash or Check', 'cash_or_check']]
+    [[' Credit Card', 'credit card'], [' Cash or Check', 'cash or check']]
   end
 
   def attended_rendezvous_years(user)
@@ -52,4 +61,13 @@ module RegistrationsHelper
     edit_event_registration_path(current_registration)
   end
 
+  def vehicle_at_rendezvous(registration, vehicle)
+    bringing = false
+    registration.vehicles.each do |v|
+      if v == vehicle
+        return true
+      end
+    end
+    return false
+  end
 end

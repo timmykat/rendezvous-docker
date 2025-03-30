@@ -1,0 +1,13 @@
+%p Welcome back!
+
+%p If you requested this login link, click the link below to log in. Otherwise, just delete this email.
+
+%p The link is valid for 10 minutes.
+
+%p
+  NOTE: We are sending the bare URL. If it's presented as a link, your email client has created it. To avoid clicking on phishing links, you should make it a practice to hover over links and make sure the url you will be taken to is the one you expect.
+
+%p
+  Sign in to my Citroen Rendezvous account: 
+  %br
+    = sign_in_with_link_url(login_token: @login_token)

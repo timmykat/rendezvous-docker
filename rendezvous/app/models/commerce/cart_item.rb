@@ -1,5 +1,5 @@
 module Commerce
-  class CartItem < ActiveRecord::Base
+  class CartItem < ApplicationRecord
     belongs_to :purchase,  class_name: 'Commerce::Purchase'
     belongs_to :merchitem, optional: true
   end

@@ -1,6 +1,54 @@
 // Place all the styles related to the Registrations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.c_event_registrations {
+  main {
+    margin-top: 0;
+  }
+  .card {
+    background-color: aliceblue;
+  }
+
+  label {
+    font-weight: bold;
+    color: var(--indigo-dye);
+  } 
+}
+
+.hidden {
+  display: none;
+}
+
+
+#attendees {
+  .nested-fields:first-child .guest {
+    display: none;
+  }
+  .nested-fields:not(:first-child) .registrant {
+    display: none;
+  }
+}
+
+#vehicle-modal .modal-dialog {
+  max-width: 800px;
+}
+
+#vehicles [data-active] {
+  border: solid 2px var(--dark-red);
+}
+
+.amount {
+  font-size: 1.2em;
+	padding: 10px 20px;
+	background-color: white;
+	border-radius: 5px;
+}
+input.calculated {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+}
+
 .attendee {
   .attendee-type {
     font-weight: bold;
@@ -87,25 +135,49 @@ td#logo {
     background-position: -120px 0;
   }
 }
-.registration-progress {
+
+
+.registration-step {
   text-align: center;
-  .fa {
-    color: #666;
-  }
-  .step {
-    background-color: $brand-color;
+  text-transform: uppercase;
+  background-color: var(--indigo-dye);
+  color: white;
+
+  a, a:visited {
     color: white;
+
+    &:hover {
+      color: var(--tea-green)
+    }
+  }
+
+  .list-group-item {
+    background: transparent;
+    border: none;
     display: inline-block;
-    padding: 5px 20px;
-    border-radius: 3px;
+    text-align: center;
     margin: 20px 0;
-    font-size: 0.9em;
-    &.to_do {
-      background-color: #444;
+    width: 12rem;
+    &.step {
+      font-size: 0.9rem;
+      &.current {
+        font-size: 2.25rem;
+      }
     }
-    &.complete {
-      background-color: #999;
-    }
+  }
+}
+
+.btn.btn-square-pay {
+  position: relative;
+  display: block;
+  width: fit-content;
+  margin-top: 20px;
+  padding-right: 35px;
+
+  &::after {
+    content: image-url('square-icon.png');
+    position: absolute;
+    margin-top: -2px;
   }
 }
 
@@ -126,20 +198,5 @@ body {
     }
   }
 }
-@media screen {
-  .back-bar {
-    background-color: $brand-color;
-    padding: 10px;
-    font-sized: 1.2em;
-    a, a:hover, a:visited {
-      color: white;
-      text-decoration: none;
-    }
-  }
-}
-@media print {
-  .back-bar {
-    display: none;
-  }
-}
+
       

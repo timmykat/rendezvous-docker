@@ -1,0 +1,41 @@
+.container#vendors
+  .row.justify-content-center
+    .col-md-8
+      %h1.page-title Supporting Vendors
+      - if @vendors.empty?
+        %p No vendors listed at the moment 
+      - else
+        - @vendors.each do |vendor|
+          .card
+            .card-body
+              .card-title
+                %h2.h3= vendor.name
+              .card-text
+                %table.table
+                  - if !vendor.website.empty?
+                    %tr
+                      %td
+                        = bootstrap_icon 'mouse2-fill'
+                      %td
+                        = link_to vendor.website, vendor.website, target:  '_blank'
+                  - if !vendor.email.empty?
+                    %tr
+                      %td
+                        = bootstrap_icon 'envelope-at'
+                      %td
+                        = link_to vendor.email, "mailto://#{vendor.email}"
+                  - if !vendor.phone.empty?            
+                    %tr
+                      %td
+                        = bootstrap_icon 'telephone-fill'
+                      %td
+                        = link_to vendor.phone, "tel://#{vendor.phone}"
+                  - if !vendor.address.empty?
+                    %tr
+                      %td
+                        = bootstrap_icon 'geo-alt'
+                      %td
+                        = vendor.address_as_html
+
+
+             

@@ -1,4 +1,7 @@
+require_dependency Rails.root.join('lib', 'vehicles', 'vehicle_taxonomy')
+
 module ApplicationHelper
+  extend VehicleTaxonomy
 
   RECAPTCHA_SITE_KEY = Rails.configuration.rendezvous[:captcha][:site_key]
 
@@ -23,6 +26,32 @@ module ApplicationHelper
     }
   end
 
+  def bootstrap_icon(icon, size = "32")
+    href = image_path "bootstrap-icons/bootstrap-icons.svg"
+    tag = <<LITERAL
+<svg class="bi" width="#{size}" height="#{size}" fill="currentColor">
+    <use href="#{href}##{icon}"></use>
+</svg>
+LITERAL
+    tag.html_safe
+  end
+
+  def controller_classes
+    classes = "c_#{controller_path.gsub('/', '_')}"
+    if controller_path.match(/admin/)
+      classes += " admin-page"
+    end
+    classes
+  end
+
+  def event_fee
+    Config::SiteSetting.instance.registration_fee
+  end
+
+  def refund_date
+    Config::SiteSetting.instance.refund_date || Time.now
+  end
+
   def logged_in_user(user)
     if user.first_name
       display = "Welcome #{user.first_name}"
@@ -40,19 +69,32 @@ module ApplicationHelper
   end
 
   def in_registration_window?
-    Time.now > Rails.configuration.rendezvous[:registration_window][:open] && Time.now <= Rails.configuration.rendezvous[:registration_window][:close]
+    return false if Config::SiteSetting.instance.registration_open_date.nil? ||
+      Config::SiteSetting.instance.registration_close_date.nil?
+    
+      Time.now > Config::SiteSetting.instance.registration_open_date &&
+      Time.now <= Config::SiteSetting.instance.registration_close_date
   end
 
   def after_rendezvous?
     Time.now > Rails.configuration.rendezvous[:registration_window][:after_rendezvous]
   end
 
-  def is_tester?
+  def user_is_tester?
     current_user && (current_user.has_any_role? :admin, :tester)
   end
 
-  def registration_live?
-    in_registration_window? || session[:test_session]
+  def test_logic(text, boolean)
+    "#{text}:  #{boolean ? "PASS" : "FAIL"}"
+  end
+
+  def show_register
+    Rails.logger.debug test_logic("in window", in_registration_window?)
+    Rails.logger.debug test_logic("current reg", (current_user.nil? || !current_user.current_registration))
+    Rails.logger.debug test_logic("override", Config::SiteSetting.instance.show_registration_override)
+    Rails.logger.debug test_logic("allowed_user", (user_is_tester? || user_is_admin?))
+    (in_registration_window? && (current_user.nil? || !current_user.current_registration)) ||
+      (Config::SiteSetting.instance.show_registration_override && (user_is_tester? || user_is_admin?))
   end
 
   def static_file(file_path)
@@ -65,6 +107,10 @@ module ApplicationHelper
 
   def current_registration
     current_user  && current_user.registrations.where("year='#{Time.now.year.to_s}'").first
+  end
+
+  def registration_complete
+    current_registration && (current_registration.status == 'complete')
   end
 
   def sign_in_method(user)
@@ -109,8 +155,16 @@ module ApplicationHelper
     return address_arr.join("\n")
   end
 
-  def les_chauffeurs(separator = ", ")
-    return Rails.configuration.rendezvous[:chauffeurs].join(separator)
+  def les_chauffeurs(output = "html")
+    if output == "html"
+      value = "<ul class='list-unstyled'>\n"
+      Rails.configuration.rendezvous[:chauffeurs].each do |c|
+        value += "  <li>#{c}</li>"
+      end
+    else
+      value = Rails.configuration.rendezvous[:chauffeurs].join(', ')
+    end
+    return value.html_safe
   end
 
   def vehicles_list(vehicles)
@@ -135,16 +189,15 @@ module ApplicationHelper
     output +=  mailing_address
     output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
     output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
-    output += '<p><em>Facebook:</em> <a href="' + config[:official_contact][:facebook] + '"><i class="fa fa-facebook-square"></i></a></p>' + "\n"
     output.html_safe
   end
 
   def marques
-    Rails.configuration.rendezvous[:vehicle_marques].map{ |m| [m, m] }
+    VehicleTaxonomy.get_marques
   end
 
-  def models
-    Rails.configuration.rendezvous[:vehicle_models].map{ |m| [m, m] }
+  def citroen_models
+    VehicleTaxonomy.get_citroen_models
   end
 
   def selected_marque(vehicle)
@@ -164,7 +217,7 @@ module ApplicationHelper
   end
 
   def selected_model(vehicle)
-    if models.include? vehicle.model
+    if citroen_models.include? vehicle.model
       vehicle.model
     else
       nil
@@ -172,11 +225,18 @@ module ApplicationHelper
   end
 
   def other_model(vehicle)
-    if !models.include? vehicle.model
+    if !citroen_models.include? vehicle.model
       vehicle.model
     else
       nil
     end
+  end
+
+  def vehicles_for_sale
+    Vehicle.joins(:registrations)
+      .merge(Event::Registration.current)
+      .where(for_sale: true)
+      .distinct.count
   end
 
   def month_list
@@ -197,7 +257,7 @@ module ApplicationHelper
   end
 
   def year_list
-    [*2016..2024]
+    [*2016..Time.now.year]
   end
 
   def country_list

@@ -1,4 +1,4 @@
-class Transaction < ActiveRecord::Base
+class Transaction < ApplicationRecord
 
   belongs_to :registration, class_name: 'Event::Registration'
 

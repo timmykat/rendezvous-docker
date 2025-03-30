@@ -1,0 +1,23 @@
+The very first Citroën Rendezvous occurred at Cummington Farms, MA. almost forty years ago.  It was organized by three people:  Robert Buchanan of the Citroën Autoclub Canada, Al Smollen, and Lance Hellman. With Citroën having recently exited the North American market, devoted owners were looking for a way to keep their cars on the road. 
+
+Each of the organizers made efforts to advertise this first in the region event with Lance mailing copies of his fledgling Citroën newsletter "Chevrons" to all of the Hollywood, Citroen Car Club members who resided in the North East. So new was the event that it was not actually called a "Rendezvous", but...indicative of that era, it was termed it a "Cit In".   Not knowing quite what to expect, the organizers were delighted to have eighty or so Citroën owners from the North East and Canada motor to Cummington Farms and eagerly participate. It was like a gathering, or reunion, of long lost family members.  
+
+Folks were excited to have the opportunity to attend and were hopefully for another "Cit In" the following year. Way back then as well as now, there's tremendous enthusiasm for attending and continuing this event. But after that first event Don's wife forbid his further Citroen involvement. Luckily, Michael Cox stepped in and collected from Don a shoebox containing file cards with each participants address. If he had not, the "Cit In" may not have continued.   
+
+Michael and his wife, Cherise, spearheaded the Rendezvous for the next 25 years or so every Father's Day weekend. The second year Citroën owners gathered at Cummington Farms, thereafter the Rendezvous moved to Northfield Mountain near South Deerfield MA. In addition to the Citroën Rendezvous, Michael started the Citroen Quarterly newsletter as a way to keep owners connected throughout the year and to share maintenance tips & tricks.
+
+During this time, many of the cars evolved from daily drivers to, if not all out show cars, weekend cruisers. Starting somewhere around the early '90's, the multi-colors, rusty DS's were replaced with near showroom quality Citroëns of nearly all models. 
+
+Importing, both private and full on businesses, began in the mid to late '80's. CXAutomotive, a partnership between Andre Pol and a NJ family of Citroën fans, began importing all flavors of CX's to give folks a modern Citroën alternative. Escargot Motors in Toronto and David Allen in Georgia filled the 2CV market by importing the tin snail. 
+
+Other businesses grew to help owners keep their cars on the road. Early on, former dealers like Red Dellinger and backyard wizards like Rod Burwell kept many Cits safe and sound. From there specialists like Dave Burnham and David Hume focused on not just routine maintenance, but also frame off restorations. All the while, parts gurus Brad Nauss, Western Hemispheres and others, kept supplying all the bits needed to keep a Citroën going. 
+
+In 2002, Michael and Cherise capped off their 25 year run by hosting the 12th ICCCR in Amherst MA. This is the only time the ICCCR has been held outside of Europe. With the help of many, they were able to arrange shipping so that folks from Europe could send their cars over for the party. All in all, nearly 1,000 cars were there. Simply awesome! 
+
+Having given notice at the Rendezvous in 2001 that the ICCCR would be their capstone Michael & Cherise handed the reins over to a group called Drive She Said lead by Robert Monteleone & Kim Walter.  For 2003, the Rendezvous moved to Saratoga Springs, NY, a city that has a multitude of shops, restaurants and motel accommodations and the party has gotten even bigger. Northfield was a very affordable location to gather, but the location was isolated and lacked amenities...having only a snack bar and bathrooms.   
+
+Kim and Robert encouraged all to contribute to the Rendezvous in new ways. New events were added to the weekend, like the silent auction & roving accordion players. Friends old & new continued to gather over Father's Day weekend to drive, talk, & enjoy Citroëns. 
+
+The last remaining large club, Citroenvie, keeps folks connected digitally now and helps keeps attendance at 100 cars every year. Local groups, too, play a role in maintaining the vibe all year. And our vendors continue to support owners throughout North America. 
+
+Beginning in 2016, a new group of _chauffeurs_ stepped in to keep this amazing weekend going. We will continue to meet over Father's Day weekend in Saratoga Springs, NY. If you are passionate about Citroëns or just old cars in general, please make plans to join us. Citroën ownership is not required, but, be warned, it is contagious! 

@@ -1,0 +1,4 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin/opt/scripts
+
+0 2 * * * root /opt/scripts/rotating_db_backups.sh  2>&1

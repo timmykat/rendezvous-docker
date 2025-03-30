@@ -1,4 +1,4 @@
-class Attendee < ActiveRecord::Base
+class Attendee < ApplicationRecord
   belongs_to :registration, class_name: 'Event::Registration'
   
   validates :name, presence: true

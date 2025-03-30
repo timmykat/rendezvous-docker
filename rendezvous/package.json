@@ -6,8 +6,8 @@
   "license": "MIT",
   "dependencies": {
     "@nathanvda/cocoon": "^1.2.14",
-    "bootstrap": "^3",
-    "braintree-web": "^3.92.1",
+    "bootstrap": "^4",
+    "bootstrap-icons": "^1.11.3",
     "browserify": "^17.0.0",
     "browserify-sign": "4.2.2",
     "dropzone": "^6.0.0-beta.2",
@@ -19,6 +19,7 @@
     "lazyload": "^2.0.0-rc.2",
     "magnific-popup": "^1.1.0",
     "respond": "^0.9.0",
+    "simplemde": "^1.11.2",
     "tablesorter": "^2.31.3"
   }
 }

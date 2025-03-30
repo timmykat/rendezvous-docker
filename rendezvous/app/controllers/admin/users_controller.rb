@@ -5,7 +5,7 @@ class Admin::UsersController < AdminController
     confirm_delete = params[:confirm_delete]
     if confirm_delete && !@users_to_delete.empty?
       @users_to_delete.destroy_all
-      redirect_to admin_index_path, notice: "Sus users deleted"
+      redirect_to admin_dashboard_path, notice: "Sus users deleted"
     end
   end
 
