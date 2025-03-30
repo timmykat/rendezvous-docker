@@ -280,6 +280,11 @@ input[type=checkbox] {
 	}
 }
 
+.vehicles-for-sale tr, .vehicles-for-sale td {
+	border-top: solid 1px var(--jet);
+	border-bottom: solid 1px var(--jet);
+}
+
 
 /* rows hidden by filtering (needed for child rows) */
 .tablesorter .filtered {
