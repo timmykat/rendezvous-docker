@@ -1,0 +1,22 @@
+.container.vehicles-for-sale
+  .row.justify-content-center
+    .col-md-10.col-12
+      .card 
+        .card-body 
+          .card-title
+            %h1.h2 Vehicles for Sale at the #{Time.now.year} Rendezvous
+          .card-text
+            %p The following vehicles will be available for sale at the Rendezvous.
+            
+            %table.table.mt-5
+              %tbody
+                - @vehicles.each do |v|
+                  %tr
+                    %td
+                      %strong #{v.year} #{v.marque}  #{v.model}
+                      %br
+                      %em Seller: 
+                      #{v.user.full_name}
+                    %td
+                      = v.other_info.empty? ? "No additional info was provided" : v.other_info
+                    
