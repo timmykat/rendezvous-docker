@@ -59,7 +59,7 @@ services:
       - SMTP_PORT
       - SMTP_USER
       - SITE_ADMIN_SENDING_ADDRESS
-      - INFO_SENDING_ADDRES
+      - INFO_SENDING_ADDRESS
       - BREVO_API_KEY
 
     ports:

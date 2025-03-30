@@ -109,6 +109,10 @@ LITERAL
     current_user  && current_user.registrations.where("year='#{Time.now.year.to_s}'").first
   end
 
+  def registration_complete
+    current_registration && (current_registration.status == 'complete')
+  end
+
   def sign_in_method(user)
     if user.provider
       user.provider.titlecase
@@ -226,6 +230,13 @@ LITERAL
     else
       nil
     end
+  end
+
+  def vehicles_for_sale
+    Vehicle.joins(:registrations)
+      .merge(Event::Registration.current)
+      .where(for_sale: true)
+      .distinct.count
   end
 
   def month_list

@@ -17,7 +17,7 @@
                 %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
                 .form-group
                   %label Amount
-                  = f.input :donation, label:  false, collection:  donation_list(config[:suggested_donations], @event_registration.total.to_f), as:  :radio_buttons, input_html:  { class:  'total-calculation' }, item_label_class:  'radio-inline', item_wrapper_tag:  false
+                  = f.input :donation, label:  false, collection:  donation_list(config[:suggested_donations], @event_registration.total.to_f), as:  :radio_buttons, input_html:  { class:  'total-calculation mr-2' }, item_label_class:  'radio-inline', item_wrapper_tag:  false
                 .row
                   .col-md-3
                     .form-group
@@ -40,7 +40,7 @@
                   .col-md-6.col-12
                     .form-group
                       %ul.list-unstyled
-                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', item_wrapper_tag: :li, input_html:  { class:  'payment-method' }
+                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
 
                 %section#payment-online
                   %h3.h4 Pay online with Square

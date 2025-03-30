@@ -1,17 +1,16 @@
 .container.invoice
   .row.justify-content-center
-    .col-md-10.col-12.heading.px-4
+    .col-md-8.col-12.heading
       .card 
         .card-body 
           .card-text
             .row 
               .col-md-5.col-12.order-md-1.order-2
-
                 %h1.h2 R#{Time.new.year} Registration
               .col-md-5.col-12.order-md-2.order-1.d-flex.justify-content-end
                 = image_tag('rendezvous-logo.png')
   
-  = render partial:  'common/registration_info'      
+= render partial:  'common/registration_info'      
     
   
   

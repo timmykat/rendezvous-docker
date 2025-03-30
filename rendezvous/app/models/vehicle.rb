@@ -2,7 +2,7 @@ class Vehicle < ApplicationRecord
   extend VehicleTaxonomy
 
   belongs_to :user
-  has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :vehicle_id
+  has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :vehicle_id, dependent: :destroy
   has_many :registrations, class_name: 'Event::Registration', through: :registrations_vehicles
 
   scope :for_sale, -> { where(for_sale: true) }

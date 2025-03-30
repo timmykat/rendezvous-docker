@@ -1,14 +1,13 @@
 .container 
   .row.justify-content-center 
-    .col-md-10.col-12
+    .col-md-8.col-12
       .card
         .card-body
           .card-title 
             %h3.h4= @event_registration.user.full_name
           .card-text
             %p
-              %b Registration number:
-              #{@event_registration.invoice_number}
+              %label Registration Status - #{@event_registration.status}
             %p= @event_registration.user.email
             %p
               #{@event_registration.user.address1}
@@ -41,9 +40,13 @@
             .card-title
               %h3.h4 Vehicle(s) I'm Bringing
             .card-text
-              %p 
-                If you need to update the vehicle(s) you're bringing to the rendezvous, please do so 
-                %a{href: update_vehicles_event_registration_path(@event_registration)} here. 
+              - if registration_complete
+                %p
+                  You can update this by selecting from the dropdown in the nav bar.
+              - else
+                %p 
+                  You can update this after completing payment.
+
 
               %table.table
                 %thead
@@ -52,6 +55,7 @@
                   %th Year
                   %th Other info
                   %th Judging category
+                  %th For sale?
                 %tbody
                   - @event_registration.vehicles.each do |v|
                     %tr
@@ -60,6 +64,7 @@
                       %td= v.year
                       %td= v.other_info
                       %td= v.judging_category
+                      %td= v.for_sale? ? 'Yes' : 'No'
       .card
         .card-body
           .card-title
@@ -67,8 +72,6 @@
           .card-text
             .row
               .col-md-12
-                %p
-                  %label Registration Status - #{@event_registration.status}
                 %p
                   %label Registration fee:
                   #{number_to_currency(@event_registration.registration_fee)} (US)

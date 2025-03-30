@@ -52,4 +52,4 @@
             %h3.text-center.text-info OR
             %p.printed-form
               If you prefer not to register on line, or are having problems registering, please print this registration form and send it in with your registration fee payment:
-              = link_to '<i class="fa  fa-file-pdf-o"></i>'.html_safe, 'Rendezvous-registration-form.pdf', target:  '_blank'
+              = link_to '<i class="fa  fa-file-pdf-o"></i>'.html_safe, "/Rendezvous-registration-#{Time.now.year}.pdf"

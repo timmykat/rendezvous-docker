@@ -213,9 +213,6 @@ module Event
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
         redirect_to payment_event_registration_path(@event_registration)
-      elsif helpers.user_is_admin?
-        flash_notice "Registration for #{@event_registration.user.full_name} complete"
-        redirect_to admin_event_registration_path(@event_registration)
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
@@ -233,9 +230,10 @@ module Event
 
     def save_updated_vehicles
       @event_registration = Registration.find(params[:id])
+      Rails.logger.debug params.inspect
       Rails.logger.info(format_for_logging(vehicle_update_params))
       if (@event_registration.update(vehicle_update_params))
-        flash_notice "Vehicle(s) for this event saved."
+        flash_notice "You are bringing #{@event_registration.vehicles.count} vehicles"
       else
         flash_alert "There was a problem saving your vehicle for this event."
       end
@@ -308,7 +306,7 @@ module Event
           {:user_attributes=>
             [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
               {vehicles_attributes:
-                [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
+                [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :for_sale, :_destroy]
               }
             ]
           }
@@ -320,7 +318,9 @@ module Event
       end
 
       def vehicle_update_params
-        params.require(:event_registration).permit(vehicle_ids: [])
+        params.fetch(:event_registration, {}).permit(vehicle_ids: []).tap do |whitelisted|
+          whitelisted[:vehicle_ids] ||= []  # Ensure it's an array even if nothing is checked
+        end
       end
 
       def event_registration_user_params
