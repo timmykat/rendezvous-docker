@@ -1,6 +1,6 @@
 module Event
   class RegistrationsController < ApplicationController
-    layout "registrations"
+    layout "registrations_layout"
 
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
     before_action :require_admin, only: [:index]

@@ -1,4 +1,5 @@
 - config = Rails.configuration.rendezvous
+- current_registration = current_user ? current_user.current_registration : nil
 !!!
 %html{:lang => "en"}
   %head
@@ -100,9 +101,9 @@
                               = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
                               = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
                               .dropdown-divider
-                              - if @event_registration
-                                = link_to 'View my registration', event_registration_path(@event_registration), class: 'dropdown-item' 
-                                = link_to 'Edit my vehicle(s)', update_vehicles_event_registration_path(@event_registration), class: 'dropdown-item'
+                              - if current_registration
+                                = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item' 
+                                = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
                               - else 
                                 = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
 
