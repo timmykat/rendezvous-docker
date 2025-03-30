@@ -78,9 +78,6 @@ services:
       - INFO_SENDING_ADDRESS=${INFO_SENDING_ADDRESS}
       - BREVO_API_KEY=${BREVO_API_KEY}
 
-    links:
-      - db_staging
-
     depends_on:
       - db_staging
 
