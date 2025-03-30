@@ -159,6 +159,11 @@ module Event
       @event_registration.total = @event_registration.registration_fee + @event_registration.donation
       @event_registration.status = 'payment due'
       @app_data[:event_registration_fee] = @event_registration.registration_fee
+
+      square_env = RendezvousSquare::Base.get_environment
+      @square_app_id = ENV.fetch "#{square_env}_SQUARE_APP_ID"
+      @square_sdk_url = ENV.fetch "#{square_env}_SQUARE_SDK_URL"
+      @square_location_id = ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
     end
 
     def send_to_square

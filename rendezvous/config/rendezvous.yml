@@ -2,7 +2,6 @@
 dates:
   day_one: June 13, 2025
   duration: 3
-  refund_date: 'June 6, 2025'
 registration_window:
   open: 2025-04-01
   close: 2025-06-06
@@ -11,14 +10,6 @@ registration_window:
 fees:
   adult: 80
   child: 0
-
-payment_credentials:
-  sandbox:
-    application_id: <%= ENV['SANDBOX_SQUARE_APP_ID'] %>
-    location_id: <%= ENV['SQUARE_LOCATION_ID'] %>
-  production:
-    application_id: <%= ENV['PROD_SQUARE_APP_ID'] %>
-    location_id: <%= ENV['PROD_SQUARE_LOCATION_ID'] %>
 
 hotel:
   name: Hyatt Place Saratoga Malta
