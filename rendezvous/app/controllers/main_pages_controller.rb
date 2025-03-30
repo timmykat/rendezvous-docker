@@ -1,6 +1,7 @@
 class MainPagesController < ApplicationController
   before_action :set_main_page, only: [:show, :edit, :update, :destroy]
-  before_action :check_test_param, only: [:index] 
+  before_action :check_test_param, only: [:index]
+  before_action :set_cache_headers
 
   def check_test_param
     session[:test_session] = params[:test] && params[:test].downcase == 'opron'
@@ -8,25 +9,33 @@ class MainPagesController < ApplicationController
 
   # GET /
   def index
-    @pictures = Picture.front_page_set
-    @cache_buster = "?cb=#{Time.now.to_i}"
-    render layout: 'main_page'
+    @event_hotel = EventHotel.first
+    @events_by_day = ScheduledEvent.all.group_by(&:day)
   end
   
   def faq
     @title = 'FAQ'
+    @faqs = Admin:Faq.sorted
+    fresh_when @faqs
   end
   
   def history
-    @title = 'History'
+    @title = 'Rendezvous History'
+    @content = @content = KeyedContent.find_by_key "page_history"
   end
     
   def legal_information
     @title = 'Legal Information'
+    @content = KeyedContent.find_by_key "page_legal"
+  end
+
+  def schedule
+    @scheduled_events = ScheduledEvent.sorted
   end
 
   def vendors
     @title = 'Vendors'
+    @vendors = Admin::Vendor.sorted
   end
   
   def method_missing(method_sym, *arguments, &block)
@@ -51,10 +60,14 @@ class MainPagesController < ApplicationController
     @email = params[:email]
     @message = params[:message]
 
-    RendezvousMailer.send_to_us(@name, @email, @message).deliver_later
-    RendezvousMailer.autoresponse(@name, @email, @message).deliver_later
+    RendezvousMailer.send_to_us(@name, @email, @message).deliver
+    RendezvousMailer.autoresponse(@name, @email, @message).deliver
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
+  end
+
+  def set_cache_headers
+    response.headers['Cache-Control'] = 'public, max-age=86400'
   end
 
   private

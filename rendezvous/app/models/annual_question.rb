@@ -1,0 +1,2 @@
+class AnnualQuestion < ApplicationRecord
+end

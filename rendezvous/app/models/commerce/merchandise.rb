@@ -1,5 +1,5 @@
 module Commerce
-  class Merchandise < ActiveRecord::Base
+  class Merchandise < ApplicationRecord
     
     attribute :sku, presence: true
     attribute :untracked_merchandise, presence: true

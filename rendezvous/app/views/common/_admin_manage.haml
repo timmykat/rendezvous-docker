@@ -1,0 +1,41 @@
+- if user_signed_in? && (current_user.has_role? :admin)
+  .manage
+    .container-fluid 
+      .row.justify-content-center
+        .col-md-10.col-12
+          %nav.navbar.navbar-light.navbar-expand-lg
+            %ul.navbar-nav.mr-auto
+              %li.navbar-brand Admin: 
+              %li.nav-item= link_to 'Dashboard', admin_dashboard_path, class:  'nav-link'
+              %li.nav-item= link_to 'Dashboard + User Data', admin_dashboard_path({with_users: true}), class:  'nav-link'
+              %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
+              %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
+              %li.nav-item= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'nav-link'
+              %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
+          %nav.navbar.navbar-light.navbar-expand-lg
+            %ul.navbar-nav
+              %li.navbar-brand Manage Site Content:
+              %li.nav-item= link_to 'Scheduled Events', scheduled_events_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'Content', keyed_contents_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'Venues', venues_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
+              %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
+
+      .row.justify-content-center
+        .col-md-10
+          .button-group
+            = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning" 
+            = link_to 'De-dupe content', admin_dedupe_path, class: 'btn  btn-warning'     
+      - if @annual_question
+        .row.justify-content-center
+          .col-md-10 
+            = simple_form_for @annual_question do |f|
+              .row.align-items-center
+                .form-group.col-md-2.col-12 
+                  = f.input :year
+                .form-group.col-md-6.col-12 
+                  = f.input :question
+                .form-group.col-md-3.col-12
+                  = f.button :submit, input_html:  { value:  'Save' }, class:  "btn  btn-primary"
+
+

@@ -1,0 +1,103 @@
+name: Deploy Rendezvous Staging
+run-name: Bulding and deploying Rendezvous staging site
+
+on:
+  push:
+    branches:
+      - staging
+  
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'staging'  # Default value if no input is provided
+        type: string 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+        with:
+          ref: staging
+          fetch-depth: 1
+ 
+
+      - name: Set Staging Environment
+        run: |
+          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+
+      - name: Use the Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the Rendezvous rails app image
+        run: |
+          docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} ./rendezvous        
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
+
+      # Deploy via SSH
+      - name: Set up SSH keys
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+
+      # Upload the hostinger setup script
+      # - name: Upload Hostinger setup script
+      #   run: |
+      #     scp -o StrictHostKeyChecking=no ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
+
+      - name: Debug the evironment
+        run: echo "The environment is $ENVIRONMENT"
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOSTINGER_IP }}
+          username: ${{ vars.HOSTINGER_USER }}
+          key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+          script: |
+            cd /var/www/rendezvous-docker-staging
+            echo "-- Updating the git repository --"
+            if [ ! -d ".git" ]; then
+              echo "    Not a git repository, cloning and checking out"
+              git clone https://github.com/${{ github.repository }} .
+            else
+              echo "    Repository found, pulling the latest changes"
+              git pull origin staging
+            fi
+            echo "-- Checking out staging branch"
+            git checkout staging
+            echo "-- Installing JavaScript dependencies with Yarn --"
+            docker exec rendezvous-rails-app-staging yarn install
+            echo "-- Setting up the shared network"
+            if ! docker network ls --filter name=^shared_server_network$ --quiet; then
+              echo "    Not found, creating"
+              docker network create shared_server_network
+            else
+              echo "    It exists"
+            fi
+            echo "-- Precompile assets"
+            docker exec rendezvous-rails-app-staging rake assets:precompile
+            echo "-- Bring down the site"
+            docker compose -f staging-compose.yml down
+            echo "-- Relaunch the site"
+            docker compose -f staging-compose.yml up -d
+                        echo "-- Running migrations if needed"
+            if docker exec rendezvous-rails-app-staging bundle exec rails db:migrate:status | grep "down"; then
+              echo "Pending migrations found. Running db:migrate..."
+              docker exec rendezvous-rails-app-staging bundle exec rails db:migrate
+            else
+              echo "No pending migrations. Skipping db:migrate."
+            fi
+            

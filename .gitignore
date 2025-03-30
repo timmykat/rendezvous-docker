@@ -10,10 +10,9 @@
 .data
 
 # Ignore .env files
+.env*
+.*_env
 config/production_env_vars
-
-# Ignore database file
-rendezvous/database.yml
 
 # Ignore bundler config.
 rendezvous/.bundle
@@ -21,6 +20,8 @@ rendezvous/.bundle
 # Ignore local mysql config
 rendezvous/mysql_config
 
+# Ignore database.yml
+database.yml
 
 # Ignore all logfiles and tempfiles.
 rendezvous/log/*

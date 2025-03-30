@@ -1,5 +1,5 @@
 module Commerce
-    class Purchase < ActiveRecord::Base
+    class Purchase < ApplicationRecord
 
         attribute :amount, :decimal, default: 0.0
         attribute :cc_transaction_amount, :decimal, default: 0.0
