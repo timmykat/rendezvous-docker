@@ -13,7 +13,7 @@ class Users::SessionsController < Devise::SessionsController
 
     @user = User.find_by_email(params[:email])
 
-    flash_notice 'Please check your email inbox'
+    flash_notice "Please check your inbox for #{params[:email]}"
     
     if @user
       Rails.logger.debug "Sending the link for a user"

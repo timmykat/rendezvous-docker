@@ -91,7 +91,7 @@ class AdminController < ApplicationController
       @annual_question = AnnualQuestion.new
     end
 
-    create_table_data
+    create_table_data(params[:with_users])
 
     if params[:create_csv]
       create_csvs
@@ -126,10 +126,12 @@ class AdminController < ApplicationController
     return volunteers
   end
 
-  def create_table_data 
+  def create_table_data(with_users)
     query = Event::Registration.where(year: @year)
     @event_registrations = query.all
-    @users = User.order(last_name: :asc).all
+    if (with_users)
+      @users = User.order(last_name: :asc).all
+    end
     @vehicles = Vehicle.joins(:registrations).where(registrations: { year: @year })
     volunteers = query.joins(:attendees).select(:name).where(attendees: { volunteer: true })
     total_amount = query.sum(:total)

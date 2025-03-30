@@ -90,10 +90,10 @@ a, a:visited {
 	}
 
 	&.btn {
-		color: white;
+		color: white !important;
 
 		&:hover {
-			color: #999;
+			color: #999 !important;
 			text-decoration: none;
 		}
 	}
