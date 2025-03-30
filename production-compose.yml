@@ -82,9 +82,6 @@ services:
     ports:
       - 3000:3000
 
-    links:
-      - db
-
     networks:
       - internal_prod
 
