@@ -69,6 +69,10 @@
             $('.delete_user').prop('checked', $(this).prop('checked'))
         })
 
+        $('.toggle_admin_bar').on('click', function() {
+            $('header .manage').toggle()
+        })
+
         // $('button#delete_users').on('click', function() {
         //     let $checkedUsers = $('.delete_user:checked');
         //     let forDeletion = $.map($checkedUsers, function($check, index) {
