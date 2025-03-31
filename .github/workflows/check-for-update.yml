@@ -60,13 +60,13 @@ jobs:
           echo "$CHANGED_FILES"
 
           # Check if any changed files are outside .github/
-          should_update="false"
+          SHOULD_UPDATE="false"
           for FILE in $CHANGED_FILES; do
-            if [[ "$FILE" != .github/* ]]; then
-              should_update="true"
+            if [[ "$FILE" != ^\.github/ ]]; then
+              SHOULD_UPDATE="true"
               break
             fi
           done
 
-          echo "should_update=$should_update" >> $GITHUB_OUTPUT
+          echo "should_update=$SHOULD_UPDATEpdate" >> $GITHUB_OUTPUT
           fi
