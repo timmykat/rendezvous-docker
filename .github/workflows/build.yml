@@ -1,0 +1,54 @@
+name: Build App (Staging)
+run-name: Bulding Rendezvous app
+
+on:
+  push:
+    branches:
+      - main
+      -staging
+  
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'staging'  # Default value if no input is provided
+        type: string 
+
+jobs:
+  build-app:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch: ['staging', 'main']
+
+    steps:
+      # Checkout the repository
+      - name: Check Out Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{matrix.branch}}
+          fetch-depth: 1
+ 
+      - name: Set ${{matrix.branch}} environment
+        run: |
+          if [ "${{ matrix.branch }}" == "staging" ]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+          elif [ "${{ matrix.branch }}" == "main" ]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_ENV
+          fi
+
+      - name: Use the Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the Rendezvous rails app image
+        run: |
+          docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} ./rendezvous        
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}

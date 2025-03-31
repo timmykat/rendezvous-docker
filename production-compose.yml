@@ -1,6 +1,7 @@
 services:
   nginx:
     image: nginx
+    container_name: rendezvous-nginx
 
     volumes:
       - ./config/nginx/hostinger/certs:/etc/nginx/ssl/certs
