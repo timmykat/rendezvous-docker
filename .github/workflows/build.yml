@@ -9,6 +9,8 @@ on:
 jobs:
   build-app:
     runs-on: ubuntu-latest
+    with:
+      ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
 
     steps:
       # Checkout the repository

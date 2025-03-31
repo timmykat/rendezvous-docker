@@ -12,11 +12,11 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'staging' }}
     uses: ./.github/workflows/deploy-staging.yml
     with:
-      secrets: inherit
+      ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
 
   # Deploy to Production
   deploy-production:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     uses: ./.github/workflows/deploy-production.yml
     with:
-      secrets: inherit
+      ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
