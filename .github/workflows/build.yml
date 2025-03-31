@@ -15,14 +15,14 @@ jobs:
       - name: Check Out Repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}"
+          ref: ${{ github.ref_name }}
           fetch-depth: 1
  
-      - name: Set ${{ github.ref_name }}" branch
+      - name: Set ${{ github.ref_name }} branch
         run: |
-          if [ "${{ github.ref_name }}"" == "staging" ]; then
+          if [ "${{ github.ref_name }}" == "staging" ]; then
             echo "ENVIRONMENT=staging" >> $GITHUB_ENV
-          elif [ "${{ github.ref_name }}"" == "main" ]; then
+          elif [ "${{ github.ref_name }}" == "main" ]; then
             echo "ENVIRONMENT=production" >> $GITHUB_ENV
           fi
 
