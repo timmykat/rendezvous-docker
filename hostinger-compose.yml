@@ -118,8 +118,8 @@ services:
 
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
-      - /var/lib/mysql/staging:/var/lib/mysql
-      - /var/run/mysqld/staging:/var/run/mysqld
+      - /var/lib/mysql/prod:/var/lib/mysql
+      - /var/run/mysqld/prod:/var/run/mysqld
 
   rails_app_staging:
     container_name: rendezvous-rails-app-staging

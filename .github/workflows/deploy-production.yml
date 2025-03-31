@@ -42,10 +42,12 @@ jobs:
           username: ${{ vars.HOSTINGER_USER }}
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
-            if [ ! -d "/var/www/rendezvous-docker-prod" ]; then
-              echo "    No repository directory - creating"
-              mkdir -p /var/www/rendezvous-docker-prod
-            fi
+            echo "-- Make sure all the necessary host directories exist"
+            echo "    Creating docker app directories"
+            mkdir -p /var/www/rendezvous-docker-prod/rendezvous/config/
+            mkdir -p /var/run/mysqld/prod
+            mkdir -p /var/lib/mysql/prod
+            mkdir -p /var/run/mysqld/prod
             cd /var/www/rendezvous-docker-prod
             echo "-- Pulling the latest Docker image from the registry --"
             docker pull ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:latest
@@ -55,6 +57,12 @@ jobs:
 
             echo "-- Launching the new container with the latest image --"
             docker compose -f hostinger-compose.yml up -d
+
+            echo "-- Check to see if the container is running"
+            if ! docker ps --filter "name=rendezvous-rails-app-prod" | grep -q "rendezvous-rails-app-prod"; then
+              echo "The rails container is not running"
+              exit 1
+            fi
 
             echo "-- Installing JavaScript dependencies with Yarn inside the container --"
             docker exec rendezvous-rails-app-prod yarn install
