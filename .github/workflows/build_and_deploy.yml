@@ -9,10 +9,10 @@ on:
 jobs:
   # Deploy to Staging
   deploy-staging:
-    if: ${{ github.event.workflow_run.head_branch == 'refs/heads/staging' }}
+    if: ${{ github.event.workflow_run.head_branch == 'staging' }}
     uses: ./.github/workflows/deploy-staging.yml
 
   # Deploy to Production
   deploy-production:
-    if: ${{ github.event.workflow_run.head_branch == 'refs/heads/main' }}
+    if: ${{ github.event.workflow_run.head_branch == 'main' }}
     uses: ./.github/workflows/deploy-production.yml
