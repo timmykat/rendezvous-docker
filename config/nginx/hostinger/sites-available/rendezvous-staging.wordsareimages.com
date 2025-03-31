@@ -19,16 +19,6 @@ server {
   merge_slashes off;
   rewrite ^(.*?)//+(.*?)$ $1/$2 permanent;
 
-  if (-f $document_root/files/show_maintenance.txt) {
-    return 503;
-    break;
-  }
-
-  error_page 503 @maintenance;
-  location @maintenance {
-    rewrite ^(.*)$ /files/maintenance.html break;
-  }
-
   # Asset files
   location ~ ^/(assets|packs|files|uploads)/ {
     gzip_static on;
@@ -48,7 +38,7 @@ server {
   }
 
   location / {
-    proxy_pass http://172.17.0.1:3001;
+    proxy_pass http://rails_app_staging;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;

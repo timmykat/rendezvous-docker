@@ -1,11 +1,7 @@
 name: Deploy Rendezvous Prod
 run-name: Bulding and deploying Rendezvous production site
 
-on:
-  push:
-    branches:
-      - main
-  
+on:  
   workflow_dispatch:
     inputs:
       branch:
@@ -15,39 +11,13 @@ on:
         type: string 
 
 jobs:
-  build-app:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Checkout the repository
-      - name: Check Out Repository
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 1
- 
-      - name: Set Production Environment
-        run: |
-          echo "ENVIRONMENT=production" >> $GITHUB_ENV
-
-      - name: Use the Github Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build the Rendezvous rails app image
-        run: |
-          docker build -f config/docker/Dockerfile -t ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }} ./rendezvous        
-
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
-
-
   deploy-app:  
     runs-on: ubuntu-latest
+      env:
+        CONTAINER_NAME: "rendezvous-rails-app-prod"
+        MAX_CHECKS: 10
+        COUNT: 0
+        STOPPED: true
 
     steps:
       - name: Set up SSH keys
@@ -80,22 +50,32 @@ jobs:
             fi
             echo "-- Checking out main branch"
             git checkout main
+            echo "-- Restart the site"
+            docker compose down
+            docker compose -f hostinger-compose.yml up
+            echo "-- Checking for the container to come up"
+            while [ $COUNT -lt $MAX_CHECKS ]
+            do
+              if docker ps -q -f name=${CONTAINER_NAME}; then
+                echo "The container is running."
+                STOPPED=false
+                break
+              fi
+              sleep 2
+              COUNT=$((COUNT + 1))
+            done
+            if STOPPED; then
+              echo "The app container never started"
+              exit 1
+            fi
             echo "-- Installing JavaScript dependencies with Yarn --"
             docker exec rendezvous-rails-app-prod yarn install
-            echo "-- Setting up the shared network"
-            if ! docker network ls --filter name=^shared_server_network$ --quiet; then
-              echo "    Not found, creating"
-              docker network create shared_server_network
-            else
-              echo "    It exists"
-            fi
             echo "-- Precompile assets"
             docker exec rendezvous-rails-app-prod rake assets:precompile
-            echo "-- Bring down the site"
-            docker compose -f production-compose.yml down
+
             echo "-- Relaunch the site"
-            docker compose -f production-compose.yml up -d
-                        echo "-- Running migrations if needed"
+            docker compose -f hostinger-compose.yml up -d
+            echo "-- Running migrations if needed"
             if docker exec rendezvous-rails-app-prod bundle exec rails db:migrate:status | grep "down"; then
               echo "Pending migrations found. Running db:migrate..."
               docker exec rendezvous-rails-app-prod bundle exec rails db:migrate
