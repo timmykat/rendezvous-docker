@@ -31,10 +31,11 @@ jobs:
     steps:
       - name: Set environment
         run: |
-          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
-          
+          echo "ENVIRONMENT=${{ inputs.branch }}" >> $GITHUB_ENV
+
       - name: Debug SSH Key Length
-        run: echo "SSH key length: $(echo "${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}" | wc -c)"
+        run: |
+          echo "SSH key length: $(echo ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }} | wc -c)"
 
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.9.1
@@ -46,7 +47,7 @@ jobs:
       #   run: |
       #     scp -o StrictHostKeyChecking=no ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
 
-      - name: Debug the evironment
+      - name: Debug the environment
         run: echo "The environment is $ENVIRONMENT"
 
       - name: Deploy via SSH
