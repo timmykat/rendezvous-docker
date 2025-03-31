@@ -1,19 +1,5 @@
-name: Build App (Staging)
+name: Build App
 run-name: Bulding Rendezvous app
-
-on:
-  push:
-    branches:
-      - main
-      -staging
-  
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to build'
-        required: true
-        default: 'staging'  # Default value if no input is provided
-        type: string 
 
 jobs:
   build-app:
