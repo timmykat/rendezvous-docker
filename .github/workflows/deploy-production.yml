@@ -1,7 +1,9 @@
 name: Deploy Rendezvous Prod
 run-name: Bulding and deploying Rendezvous production site
 
-on:  
+on:
+  worflow_call:
+    
   workflow_dispatch:
     inputs:
       branch:
