@@ -40,3 +40,12 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
+
+      # Set secret as an environment variable for the next workflow
+      - name: Pass SSH key to the next workflow
+        run: |
+          echo "SSH_PRIVATE_KEY=${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}" >> $GITHUB_ENV
+          echo "HOSTINGER_IP=${{ vars.HOSTINGER_IP }}" >> $GITHUB_ENV
+          echo "HOSTINGER_USER=${{ vars.HOSTINGER_USER }}" >> $GITHUB_ENV
+
+

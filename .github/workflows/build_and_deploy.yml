@@ -11,12 +11,14 @@ jobs:
   deploy-staging:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'staging' }}
     uses: ./.github/workflows/deploy-staging.yml
-    with:
-      ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+    env:
+      SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }} 
 
   # Deploy to Production
   deploy-production:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     uses: ./.github/workflows/deploy-production.yml
-    with:
-      ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+    env:
+      SSH_PRIVATE_KEY: ${{ env.SSH_PRIVATE_KEY }}
+      HOSTINGER_IP: ${{ env.HOSTINGER_IP }}"
+      HOSTINGER_USER: ${{ env.HOSTINGER_USER }}"
