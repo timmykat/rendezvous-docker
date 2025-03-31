@@ -1,6 +1,7 @@
 services:
   nginx:
     image: nginx
+    container_name: rendezvous-nginx
 
     volumes:
       - ./config/nginx/hostinger/certs:/etc/nginx/ssl/certs
@@ -81,9 +82,6 @@ services:
 
     ports:
       - 3000:3000
-
-    links:
-      - db
 
     networks:
       - internal_prod
