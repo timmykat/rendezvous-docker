@@ -1,31 +1,28 @@
 name: Build App
-run-name: Bulding Rendezvous app
+run-name: Build Rendezvous app
 on:
   push:
     branches:
       - staging
       - main
-      
+
 jobs:
   build-app:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch: ['staging', 'main']
 
     steps:
       # Checkout the repository
       - name: Check Out Repository
         uses: actions/checkout@v4
         with:
-          ref: ${{matrix.branch}}
+          ref: ${{ github.ref }}"
           fetch-depth: 1
  
-      - name: Set ${{matrix.branch}} environment
+      - name: Set ${{ github.ref }}" branch
         run: |
-          if [ "${{ matrix.branch }}" == "staging" ]; then
+          if [ "${{ github.ref }}"" == "staging" ]; then
             echo "ENVIRONMENT=staging" >> $GITHUB_ENV
-          elif [ "${{ matrix.branch }}" == "main" ]; then
+          elif [ "${{ github.ref }}"" == "main" ]; then
             echo "ENVIRONMENT=production" >> $GITHUB_ENV
           fi
 
