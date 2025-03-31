@@ -1,7 +1,12 @@
 name: Deploy Rendezvous Staging
-run-name: Bulding and deploying Rendezvous staging site
+run-name: Building and deploying Rendezvous staging site
 
-on:  
+on:
+  workflow_run:
+    workflows: ["Build App"]
+    types:
+      - completed
+
   workflow_dispatch:
     inputs:
       branch:
@@ -21,18 +26,13 @@ jobs:
       STOPPED: true
 
     steps:
+      - name: Debug the environment
+        run: echo "The environment is $ENVIRONMENT"
+
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
-
-      # Upload the hostinger setup script
-      # - name: Upload Hostinger setup script
-      #   run: |
-      #     scp -o StrictHostKeyChecking=no ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
-
-      - name: Debug the evironment
-        run: echo "The environment is $ENVIRONMENT"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
@@ -42,25 +42,22 @@ jobs:
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
             cd /var/www/rendezvous-docker-staging
-            echo "-- Updating the git repository --"
-            if [ ! -d ".git" ]; then
-              echo "    Not a git repository, cloning and checking out"
-              git clone https://github.com/${{ github.repository }} .
-            else
-              echo "    Repository found, pulling the latest changes"
-              git pull origin staging
-            fi
-            echo "-- Checking out staging branch"
-            git checkout staging
-            echo "-- Installing JavaScript dependencies with Yarn --"
-            docker exec rendezvous-rails-app-staging yarn install
-            echo "-- Precompile assets"
-            docker exec rendezvous-rails-app-staging rake assets:precompile
-            echo "-- Bring down the site"
+            echo "-- Pulling the Docker image from the registry --"
+            docker pull ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
+
+            echo "-- Stopping the existing container --"
             docker compose -f hostinger-compose.yml down
-            echo "-- Relaunch the site"
+
+            echo "-- Launching the new container with the latest image --"
             docker compose -f hostinger-compose.yml up -d
-                        echo "-- Running migrations if needed"
+
+            echo "-- Installing JavaScript dependencies with Yarn inside the container --"
+            docker exec rendezvous-rails-app-staging yarn install
+
+            echo "-- Precompiling assets inside the container --"
+            docker exec rendezvous-rails-app-staging rake assets:precompile
+
+            echo "-- Running migrations if needed --"
             if docker exec rendezvous-rails-app-staging bundle exec rails db:migrate:status | grep "down"; then
               echo "Pending migrations found. Running db:migrate..."
               docker exec rendezvous-rails-app-staging bundle exec rails db:migrate
