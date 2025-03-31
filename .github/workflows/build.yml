@@ -1,10 +1,10 @@
 name: "Build App"
 run-name: Build App
-# on:
-#   push:
-#     branches:
-#       - staging
-#       - main
+on:
+  push:
+    branches:
+      - staging
+      - main
 
 jobs:
   build-app:

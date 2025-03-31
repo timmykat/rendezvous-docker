@@ -11,8 +11,12 @@ jobs:
   deploy-staging:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'staging' }}
     uses: ./.github/workflows/deploy-staging.yml
+    with:
+      secrets: inherit
 
   # Deploy to Production
   deploy-production:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
     uses: ./.github/workflows/deploy-production.yml
+    with:
+      secrets: inherit
