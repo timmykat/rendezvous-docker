@@ -10,6 +10,7 @@ on:
         default: 'staging'  # Default value if no input is provided
         type: string 
 
+jobs:
   deploy-app:  
     runs-on: ubuntu-latest
       env:
