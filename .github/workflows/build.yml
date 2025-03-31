@@ -1,6 +1,11 @@
 name: Build App
 run-name: Bulding Rendezvous app
-
+on:
+  push:
+    branches:
+      - staging
+      - main
+      
 jobs:
   build-app:
     runs-on: ubuntu-latest
