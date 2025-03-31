@@ -33,22 +33,22 @@ jobs:
         run: |
           echo "ENVIRONMENT=${{ inputs.branch }}" >> $GITHUB_ENV
 
+      - name: Debug the environment
+        run: echo "The environment is $ENVIRONMENT"
+
+      - name: Debug SSH environment
+        run: |
+          echo "Checking SSH environment variables:"
+          env | grep SSH
+
       - name: Debug SSH Key Length
         run: |
-          echo "SSH key length: $(echo ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }} | wc -c)"
+          echo "SSH key length: {#RENDEZVOUS_REPO_SSH_KEY}"
 
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
-
-      # Upload the hostinger setup script
-      # - name: Upload Hostinger setup script
-      #   run: |
-      #     scp -o StrictHostKeyChecking=no ./bin/setup_hostinger.sh ${{vars.HOSTINGER_USER}}@${{vars.HOSTINGER_IP}}:/home/webuser/bin
-
-      - name: Debug the environment
-        run: echo "The environment is $ENVIRONMENT"
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
