@@ -1,7 +1,9 @@
 name: Deploy Rendezvous Prod
 run-name: Bulding and deploying Rendezvous production site
 
-on:  
+on:
+  workflow_call:
+    
   workflow_dispatch:
     inputs:
       branch:
@@ -41,42 +43,22 @@ jobs:
               mkdir -p /var/www/rendezvous-docker-prod
             fi
             cd /var/www/rendezvous-docker-prod
-            echo "-- Updating the git repository --"
-            if [ ! -d ".git" ]; then
-              echo "    Not a git repository, cloning and checking out"
-              git clone https://github.com/${{ github.repository }} .
-            else
-              echo "    Repository found, pulling the latest changes"
-              git pull origin main
-            fi
-            echo "-- Checking out main branch"
-            git checkout main
-            echo "-- Restart the site"
-            docker compose down
-            docker compose -f hostinger-compose.yml up
-            echo "-- Checking for the container to come up"
-            while [ $COUNT -lt $MAX_CHECKS ]
-            do
-              if docker ps -q -f name=${CONTAINER_NAME}; then
-                echo "The container is running."
-                STOPPED=false
-                break
-              fi
-              sleep 2
-              COUNT=$((COUNT + 1))
-            done
-            if STOPPED; then
-              echo "The app container never started"
-              exit 1
-            fi
-            echo "-- Installing JavaScript dependencies with Yarn --"
+            echo "-- Pulling the Docker image from the registry --"
+            docker pull ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
+
+            echo "-- Stopping the existing container --"
+            docker compose -f hostinger-compose.yml down
+
+            echo "-- Launching the new container with the latest image --"
+            docker compose -f hostinger-compose.yml up -d
+
+            echo "-- Installing JavaScript dependencies with Yarn inside the container --"
             docker exec rendezvous-rails-app-prod yarn install
-            echo "-- Precompile assets"
+
+            echo "-- Precompiling assets inside the container --"
             docker exec rendezvous-rails-app-prod rake assets:precompile
 
-            echo "-- Relaunch the site"
-            docker compose -f hostinger-compose.yml up -d
-            echo "-- Running migrations if needed"
+            echo "-- Running migrations if needed --"
             if docker exec rendezvous-rails-app-prod bundle exec rails db:migrate:status | grep "down"; then
               echo "Pending migrations found. Running db:migrate..."
               docker exec rendezvous-rails-app-prod bundle exec rails db:migrate
