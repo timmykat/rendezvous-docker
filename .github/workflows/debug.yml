@@ -1,0 +1,17 @@
+name: Debug Workflow Run
+
+on:
+  workflow_run:
+    workflows: ["Build App"]
+    types:
+      - completed
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print GitHub Event Data
+        run: |
+          echo "Triggered by workflow: ${{ github.event.workflow_run.name }}"
+          echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Head branch: ${{ github.event.workflow_run.head_branch }}"

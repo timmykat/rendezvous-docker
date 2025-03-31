@@ -3,7 +3,6 @@ services:
   # The nginx container serves both the production and staging environments
   nginx:
     image: nginx
-    profiles: [ docker_nginx ]
     container_name: rendezvous-nginx
 
     volumes:
@@ -32,11 +31,9 @@ services:
     restart: always
 
     environment:
-      - RAILS_ENV=${RAILS_ENV}
-      - RACK_ENV=${RACK_ENV}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
     networks:
@@ -58,28 +55,39 @@ services:
       - 3001:3000
 
     environment:
-      - APP_DOMAIN=${APP_DOMAIN}
-      - RAILS_ENV=${RAILS_ENV}
-      - RACK_ENV=${RACK_ENV}
-      - RAILS_DEVELOPMENT_HOSTS=${RAILS_DEVELOPMENT_HOSTS}
-      - RAILS_SECRET_KEY_BASE=${RAILS_SECRET_KEY_BASE}
-      - RECAPTCHA_PUBLIC_KEY=${RECAPTCHA_PUBLIC_KEY}
-      - RECAPTCHA_PRIVATE_KEY=${RECAPTCHA_PRIVATE_KEY}
-      - MAILCHIMP_API_KEY=${MAILCHIMP_API_KEY}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - APP_DOMAIN
+      - RAILS_ENV
+      - RACK_ENV
+      - RAILS_DEVELOPMENT_HOSTS
+      - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+
+      ## Square ##
+      # Sandbox info
+      - SANDBOX_SQUARE_LOCATION_ID
+      - SANDBOX_SQUARE_APP_ID
+      - SANDBOX_SQUARE_ACCESS_TOKEN
+      - SANDBOX_SQUARE_SDK_URL
+
+      # Production info
+      - PROD_SQUARE_LOCATION_ID
+      - PROD_SQUARE_APP_ID
+      - PROD_SQUARE_ACCESS_TOKEN 
+      - PROD_SQUARE_SDK_URL     
 
       # Mailer info
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - SMTP_DOMAIN=${SMTP_DOMAIN}
-      - SMTP_PORT=${SMTP_PORT}
-      - SITE_ADMIN_SENDING_ADDRESS=${SITE_ADMIN_SENDING_ADDRESS}
-      - INFO_SENDING_ADDRESS=${INFO_SENDING_ADDRESS}
-      - BREVO_API_KEY=${BREVO_API_KEY}
-
-    links:
-      - db_staging
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_USER
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRESS
+      - BREVO_API_KEY
 
     depends_on:
       - db_staging
