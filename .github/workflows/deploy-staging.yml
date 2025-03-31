@@ -6,7 +6,7 @@ on:
     inputs:
       branch:
         description: 'Branch to deploy'
-        required: true
+        required: false
         default: 'staging'  # Default value if no input is provided
         type: string 
 
