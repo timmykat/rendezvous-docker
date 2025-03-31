@@ -1,5 +1,5 @@
 name: "Build App"
-run-name: Build Rendezvous app
+run-name: Build App
 on:
   push:
     branches:

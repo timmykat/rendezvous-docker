@@ -2,7 +2,7 @@ name: Deploy Rendezvous Staging
 run-name: Bulding and deploying Rendezvous staging site
 
 on:
-  worflow_call:
+  worfklow_call:
     
   workflow_dispatch:
     inputs:
