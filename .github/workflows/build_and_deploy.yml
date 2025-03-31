@@ -4,17 +4,15 @@ on:
   workflow_run:
     workflows: ["Build App"]
     types:
-      - completed
+      - success
 
 jobs:
   # Deploy to Staging
   deploy-staging:
-    needs: build-app  # Ensure this runs after the build job
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/staging' }}
+    if: ${{ github.event.workflow_run.head_branch == 'refs/heads/staging' }}
     uses: ./.github/workflows/deploy-staging.yml
 
   # Deploy to Production
   deploy-production:
-    needs: build-app  # Ensure this runs after the build job
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' }}
+    if: ${{ github.event.workflow_run.head_branch == 'refs/heads/main' }}
     uses: ./.github/workflows/deploy-production.yml
