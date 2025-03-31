@@ -3,7 +3,13 @@ run-name: Bulding and deploying Rendezvous staging site
 
 on:
   workflow_call:
-    
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'staging'  # Default value if no input is provided
+        type: string 
+
   workflow_dispatch:
     inputs:
       branch:
@@ -23,6 +29,13 @@ jobs:
       STOPPED: true
 
     steps:
+      - name: Set environment
+        run: |
+          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+          
+      - name: Debug SSH Key Length
+        run: echo "SSH key length: $(echo "${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}" | wc -c)"
+
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.9.1
         with:
