@@ -13,11 +13,12 @@ on:
 jobs:
   deploy-app:  
     runs-on: ubuntu-latest
-      env:
-        CONTAINER_NAME: "rendezvous-rails-app-prod"
-        MAX_CHECKS: 10
-        COUNT: 0
-        STOPPED: true
+    
+    env:
+      CONTAINER_NAME: "rendezvous-rails-app-prod"
+      MAX_CHECKS: 10
+      COUNT: 0
+      STOPPED: true
 
     steps:
       - name: Set up SSH keys
