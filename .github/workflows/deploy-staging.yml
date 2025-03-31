@@ -32,14 +32,14 @@ jobs:
       - name: Set up SSH keys
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ secreats.RENDEZVOUS_REPO_SSH_KEY }}
+          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ vars.HOSTINGER_IP }}
           username: ${{ vars.HOSTINGER_USER }}
-          key: ${{ secreats.RENDEZVOUS_REPO_SSH_KEY }}
+          key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
             cd /var/www/rendezvous-docker-staging
             echo "-- Pulling the Docker image from the registry --"
