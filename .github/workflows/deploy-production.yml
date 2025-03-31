@@ -47,11 +47,11 @@ jobs:
               mkdir -p /var/www/rendezvous-docker-prod
             fi
             cd /var/www/rendezvous-docker-prod
-            echo "-- Pulling the Docker image from the registry --"
-            docker pull ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:${{ github.sha }}
+            echo "-- Pulling the latest Docker image from the registry --"
+            docker pull ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:latest
 
             echo "-- Stopping the existing container --"
-            docker compose -f hostinger-compose.yml down
+            docker compose down
 
             echo "-- Launching the new container with the latest image --"
             docker compose -f hostinger-compose.yml up -d
@@ -61,6 +61,10 @@ jobs:
 
             echo "-- Precompiling assets inside the container --"
             docker exec rendezvous-rails-app-prod rake assets:precompile
+
+            echo "-- Restart the container"
+            docker compose down
+            docker compose -f hostinger-compose.yml up -d
 
             echo "-- Running migrations if needed --"
             if docker exec rendezvous-rails-app-prod bundle exec rails db:migrate:status | grep "down"; then
