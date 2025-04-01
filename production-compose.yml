@@ -74,6 +74,7 @@ services:
       - /var/run/mysqld/prod:/var/run/mysqld
       - /var/www/rendezvous-docker-prod/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
       - /var/www/rendezvous-docker-prod/rendezvous:/var/www/rendezvous
+      - /var/www/rendezvous-docker-prod/rendezvous/log:/var/www/rendezvous/log
 
 networks:
   rendezvous-prod-network:
