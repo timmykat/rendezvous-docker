@@ -7,16 +7,16 @@ on:
       - main
 
 jobs:
-  check-for-update:
-    uses: timmykat/rendezvous-docker/.github/workflows/check-for-update.yml@main
-    with:
-      repo: "timmykat/rendezvous-docker"
-      branch: "main"
-      registry_image: "ghcr.io/timmykat/rendezvous_rails_app:latest"
+  # check-for-update:
+  #   uses: timmykat/rendezvous-docker/.github/workflows/check-for-update.yml@main
+  #   with:
+  #     repo: "timmykat/rendezvous-docker"
+  #     branch: "main"
+  #     registry_image: "ghcr.io/timmykat/rendezvous_rails_app:latest"
   
   build:
-    needs: check-for-update
-    if: needs.check-for-update.outputs.should_update == 'true'
+    # needs: check-for-update
+    # if: needs.check-for-update.outputs.should_update == 'true'
     runs-on: ubuntu-latest
 
     steps:
