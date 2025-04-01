@@ -16,7 +16,9 @@ services:
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
       - /var/lib/mysql/prod:/var/lib/mysql
-      - /var/run/mysqld/prod:/var/run/mysqld
+    
+    ports:
+      - 3306:3306
 
   rails_app_prod:
     build:
