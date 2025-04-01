@@ -43,8 +43,9 @@ jobs:
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
             cd /var/www/rendezvous-docker-prod
-            echo "-- Pulling the latest Docker image from the registry --"
-            docker pull ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:latest
+            echo "-- Pulling the latest --"
+            git pull
+            git checkout main
 
             echo "-- Stopping the existing container --"
             docker compose down
