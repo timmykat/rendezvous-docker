@@ -20,23 +20,25 @@
                   - if vehicles_for_sale > 0
                     %li.nav-item
                       = link_to "For Sale at the Event (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
-                -# %ul.nav.navbar-nav.ml-auto
-                -#   - if !current_user
-                -#     %li.nav-item
-                -#       = link_to 'Sign In', new_user_session_path, class: 'nav-link'
-                -#   - else
-                -#     %li.nav-item.dropdown
-                -#       %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
-                -#         = current_user.full_name
-                -#       .dropdown-menu{'aria-labelledBy' => 'navbarDropdown'}
-                -#         = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
-                -#         = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
-                -#         .dropdown-divider
-                -#         - if registration_complete
-                -#           = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
-                -#           = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
-                -#         - if !current_registration 
-                -#           = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
-                -#         - if user_is_admin?
-                -#           .dropdown-divider 
-                -#           = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
+
+                - if !show_registration
+                  %ul.nav.navbar-nav.ml-auto
+                    - if !current_user
+                      %li.nav-item
+                        = link_to 'Sign In', new_user_session_path, class: 'nav-link'
+                    - else
+                      %li.nav-item.dropdown
+                        %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
+                          = current_user.full_name
+                        .dropdown-menu{'aria-labelledBy' => 'navbarDropdown'}
+                          = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
+                          = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
+                          .dropdown-divider
+                          - if registration_complete
+                            = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
+                            = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
+                          - if !current_registration 
+                            = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
+                          - if user_is_admin?
+                            .dropdown-divider 
+                            = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
