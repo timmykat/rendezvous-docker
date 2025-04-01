@@ -20,11 +20,11 @@
                   - if vehicles_for_sale > 0
                     %li.nav-item
                       = link_to "For Sale at the Event (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
+                  %li.nav-item
+                    %span.badge.badge-danger Registration Coming Soon!
  
                   %ul.nav.navbar-nav.ml-auto
-                    - if !show_register
-                      %li.nav-item Registration Coming Soon!
-                    - else 
+                    - if show_register
                       - if !current_user
                         %li.nav-item
                           = link_to 'Sign In', new_user_session_path, class: 'nav-link'
