@@ -64,7 +64,7 @@ services:
       - BREVO_API_KEY
 
     expose:
-      - 3001:3000
+      - 3000:3000
 
     networks:
       - rendezvous-prod-network
