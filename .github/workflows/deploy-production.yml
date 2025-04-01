@@ -42,14 +42,6 @@ jobs:
           username: ${{ vars.HOSTINGER_USER }}
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
-            echo "-- Make sure all the necessary host directories exist"
-            echo "    Creating docker app directories"
-            mkdir -p /var/www/rendezvous-docker-prod/rendezvous/config/
-            mdkir -p /var/log/nginx/prod
-            mkdir -p /var/log/nginx/staging
-            mkdir -p /var/run/mysqld/prod
-            mkdir -p /var/lib/mysql/prod
-            mkdir -p /var/run/mysqld/prod
             cd /var/www/rendezvous-docker-prod
             echo "-- Pulling the latest Docker image from the registry --"
             docker pull ghcr.io/${{ github.repository_owner }}/rendezvous_rails_app:latest
