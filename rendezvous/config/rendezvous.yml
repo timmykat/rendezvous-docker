@@ -142,17 +142,6 @@ mailer:
     port:                  <%= ENV['SMTP_PORT'] %>
     openssl_verify_mode:   'none'
 
-development:
-  mailer:
-    delivery_method: :letter_opener
-
-  inquiry_recipients:
-    - tim@wordsareimages.com
-
-production:
-  mailer:
-    delivery_method: :letter_opener
-
   inquiry_recipients:
     - wbbw67@gmail.com
     - hellman.michaela@gmail.com

@@ -8,8 +8,6 @@ class ApplicationController < ActionController::Base
 
   CONFIG = Rails.configuration.rendezvous
 
-  Rails.logger.info(CONFIG[:mailer].inspect)
-
   RECAPTCHA_MINIMUM_SCORE = 0.5
 
   # Need this for other gems that might set flash

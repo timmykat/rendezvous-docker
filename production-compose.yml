@@ -1,28 +1,5 @@
 services:
-  nginx:
-    image: nginx
-    container_name: rendezvous-nginx
-
-    volumes:
-      - ./config/nginx/hostinger/certs:/etc/nginx/ssl/certs
-      - ./config/nginx/hostinger/nginx.conf:/etc/nginx/nginx.conf
-      - ./config/nginx/hostinger/sites-available:/etc/nginx/sites-available
-      - ./config/nginx/hostinger/sites-enabled:/etc/nginx/sites-enabled
-      - /var/log/nginx/prod:/var/log/nginx/prod
-
-    ports:
-      - 80:80
-      - 443:443
-
-    depends_on:
-      - rails_app_prod
-
-    networks:
-      - shared_server_network
-      - internal_prod
-
   db_prod:
-    container_name: rendezvous-db-prod
     image: mysql:8.0.32
     platform: linux/amd64
     restart: always
@@ -34,16 +11,19 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
     networks:
-      - internal_prod
+      - rendezvous-prod-network
 
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
       - /var/lib/mysql/prod:/var/lib/mysql
-      - /var/run/mysqld/prod:/var/run/mysqld
+    
+    ports:
+      - 3306:3306
 
   rails_app_prod:
-    container_name: rendezvous-rails-app-prod
-    image: ghcr.io/timmykat/rendezvous_rails_app
+    build:
+      context: ./rendezvous
+      dockerfile: ../config/docker/Dockerfile
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
@@ -61,30 +41,33 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
 
-       ## Square ##
-      - SQUARE_LOCATION_ID
-
+      ## Square ##
       # Sandbox info
+      - SANDBOX_SQUARE_LOCATION_ID
       - SANDBOX_SQUARE_APP_ID
       - SANDBOX_SQUARE_ACCESS_TOKEN
+      - SANDBOX_SQUARE_SDK_URL
 
       # Production info
+      - PROD_SQUARE_LOCATION_ID
       - PROD_SQUARE_APP_ID
-      - PROD_SQUARE_ACCESS_TOKEN   
+      - PROD_SQUARE_ACCESS_TOKEN 
+      - PROD_SQUARE_SDK_URL     
 
       # Mailer info
       - SMTP_PASSWORD
       - SMTP_DOMAIN
       - SMTP_PORT
+      - SMTP_USER
       - SITE_ADMIN_SENDING_ADDRESS
       - INFO_SENDING_ADDRESS
       - BREVO_API_KEY
 
-    ports:
+    expose:
       - 3000:3000
 
     networks:
-      - internal_prod
+      - rendezvous-prod-network
 
     depends_on:
       - db_prod
@@ -93,11 +76,10 @@ services:
       - /var/run/mysqld/prod:/var/run/mysqld
       - /var/www/rendezvous-docker-prod/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
       - /var/www/rendezvous-docker-prod/rendezvous:/var/www/rendezvous
+      - /var/www/rendezvous-docker-prod/rendezvous/log:/var/www/rendezvous/log
+      - /var/www/rendezvous-docker-prod/rendezvous/app/views:/var/www/rendezvous/app/views
+      - /var/www/html:/var/www/rendezvous/public
 
 networks:
-  internal_prod:
+  rendezvous-prod-network:
     driver: bridge
-
-  # Required for prod and staging to both talk to nginx
-  shared_server_network:
-    external: true
