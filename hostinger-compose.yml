@@ -10,7 +10,7 @@ services:
       - ./config/nginx/hostinger/sites-available:/etc/nginx/sites-available
       - ./config/nginx/hostinger/sites-enabled:/etc/nginx/sites-enabled
       - /var/log/nginx/prod:/var/log/nginx/prod
-      - /var/log/nginx/staging:/var/log/nginx/staging
+      # - /var/log/nginx/staging:/var/log/nginx/staging
 
     ports:
       - 80:80
@@ -18,7 +18,7 @@ services:
 
     depends_on:
       - rails_app_prod
-      - rails_app_staging
+      # - rails_app_staging
 
     networks:
       - rendezvous-network
@@ -99,81 +99,81 @@ services:
       - /var/www/rendezvous-docker-prod/rendezvous:/var/www/rendezvous
 
 #### Staging services
-  db_staging:
-    image: mysql:8.0.32
-    container_name: rendezvous-db-staging
-    platform: linux/amd64
-    restart: always
+  # db_staging:
+  #   image: mysql:8.0.32
+  #   container_name: rendezvous-db-staging
+  #   platform: linux/amd64
+  #   restart: always
 
-    environment:
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+  #   environment:
+  #     - MYSQL_DATABASE
+  #     - MYSQL_USER
+  #     - MYSQL_PASSWORD
+  #     - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
-    networks:
-      - rendezvous-network
+  #   networks:
+  #     - rendezvous-network
 
-    volumes:
-      - ./config/mysql/init:/docker-entrypoint-initdb.d
-      - /var/lib/mysql/prod:/var/lib/mysql
-      - /var/run/mysqld/prod:/var/run/mysqld
+  #   volumes:
+  #     - ./config/mysql/init:/docker-entrypoint-initdb.d
+  #     - /var/lib/mysql/prod:/var/lib/mysql
+  #     - /var/run/mysqld/prod:/var/run/mysqld
 
-  rails_app_staging:
-    container_name: rendezvous-rails-app-staging
-    image: ghcr.io/timmykat/rendezvous_rails_app:latest
+  # rails_app_staging:
+  #   container_name: rendezvous-rails-app-staging
+  #   image: ghcr.io/timmykat/rendezvous_rails_app:latest
 
-    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
-    # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+  #   command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+  #   # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
-    expose:
-      - "3000"
+  #   expose:
+  #     - "3000"
 
-    environment:
-      - APP_DOMAIN
-      - RAILS_ENV
-      - RACK_ENV
-      - RAILS_DEVELOPMENT_HOSTS
-      - RAILS_SECRET_KEY_BASE
-      - RECAPTCHA_PUBLIC_KEY
-      - RECAPTCHA_PRIVATE_KEY
-      - MAILCHIMP_API_KEY
-      - MYSQL_DATABASE
-      - MYSQL_USER
-      - MYSQL_PASSWORD
+  #   environment:
+  #     - APP_DOMAIN
+  #     - RAILS_ENV
+  #     - RACK_ENV
+  #     - RAILS_DEVELOPMENT_HOSTS
+  #     - RAILS_SECRET_KEY_BASE
+  #     - RECAPTCHA_PUBLIC_KEY
+  #     - RECAPTCHA_PRIVATE_KEY
+  #     - MAILCHIMP_API_KEY
+  #     - MYSQL_DATABASE
+  #     - MYSQL_USER
+  #     - MYSQL_PASSWORD
 
-      ## Square ##
-      # Sandbox info
-      - SANDBOX_SQUARE_LOCATION_ID
-      - SANDBOX_SQUARE_APP_ID
-      - SANDBOX_SQUARE_ACCESS_TOKEN
-      - SANDBOX_SQUARE_SDK_URL
+  #     ## Square ##
+  #     # Sandbox info
+  #     - SANDBOX_SQUARE_LOCATION_ID
+  #     - SANDBOX_SQUARE_APP_ID
+  #     - SANDBOX_SQUARE_ACCESS_TOKEN
+  #     - SANDBOX_SQUARE_SDK_URL
 
-      # Production info
-      - PROD_SQUARE_LOCATION_ID
-      - PROD_SQUARE_APP_ID
-      - PROD_SQUARE_ACCESS_TOKEN 
-      - PROD_SQUARE_SDK_URL     
+  #     # Production info
+  #     - PROD_SQUARE_LOCATION_ID
+  #     - PROD_SQUARE_APP_ID
+  #     - PROD_SQUARE_ACCESS_TOKEN 
+  #     - PROD_SQUARE_SDK_URL     
 
-      # Mailer info
-      - SMTP_PASSWORD
-      - SMTP_DOMAIN
-      - SMTP_PORT
-      - SMTP_USER
-      - SITE_ADMIN_SENDING_ADDRESS
-      - INFO_SENDING_ADDRESS
-      - BREVO_API_KEY
+  #     # Mailer info
+  #     - SMTP_PASSWORD
+  #     - SMTP_DOMAIN
+  #     - SMTP_PORT
+  #     - SMTP_USER
+  #     - SITE_ADMIN_SENDING_ADDRESS
+  #     - INFO_SENDING_ADDRESS
+  #     - BREVO_API_KEY
 
-    depends_on:
-      - db_staging
+  #   depends_on:
+  #     - db_staging
 
-    volumes:
-      - /var/run/mysqld/staging:/var/run/mysqld
-      - /var/www/rendezvous-docker-staging/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
-      - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous
+  #   volumes:
+  #     - /var/run/mysqld/staging:/var/run/mysqld
+  #     - /var/www/rendezvous-docker-staging/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
+  #     - /var/www/rendezvous-docker-staging/rendezvous:/var/www/rendezvous
 
-    networks:
-      - rendezvous-network
+  #   networks:
+  #     - rendezvous-network
 
 networks:
   rendezvous-network:
