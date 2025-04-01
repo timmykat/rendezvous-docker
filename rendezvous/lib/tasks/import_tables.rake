@@ -47,7 +47,7 @@ namespace :import do
           # Delete the ID so it is auto generated
           attributes.delete("id")
           attrib_info[:omit_attribs].each do |attrib|
-            attributes.delete[attrib]
+            attributes.delete[attrib] if attributes.keys.includes? attrib
           end
 
           # Create the record using the attributes, handle potential issues with missing foreign key
