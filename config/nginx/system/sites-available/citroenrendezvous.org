@@ -30,7 +30,7 @@ server {
   access_log /var/log/nginx/prod/access.log;
   error_log /var/log/nginx/prod/error.log info;
 
-  root /var/www/rendezvous-docker-prod/rendezvous/current/public;
+  root /var/www/html;
 
   # Set canonical domain name and https
   # rewrite ^ https://citroenrendezvous.org$request_uri? permanent;
