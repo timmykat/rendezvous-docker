@@ -21,7 +21,7 @@
                     %li.nav-item
                       = link_to "For Sale at the Event (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
 
-                - if !show_registration
+                - if show_register
                   %ul.nav.navbar-nav.ml-auto
                     - if !current_user
                       %li.nav-item
