@@ -10,6 +10,7 @@ services:
       - ./config/nginx/hostinger/nginx.conf:/etc/nginx/nginx.conf
       - ./config/nginx/hostinger/sites-available:/etc/nginx/sites-available
       - ./config/nginx/hostinger/sites-enabled:/etc/nginx/sites-enabled
+      - /var/log/nginx/prod:/var/log/nginx/prod
       - /var/log/nginx/staging:/var/log/nginx/staging
 
     ports:
@@ -46,7 +47,7 @@ services:
 
   rails_app_prod:
     container_name: rendezvous-rails-app-prod
-    image: ghcr.io/timmykat/rendezvous_rails_app
+    image: ghcr.io/timmykat/rendezvous_rails_app:latest
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
@@ -123,7 +124,7 @@ services:
 
   rails_app_staging:
     container_name: rendezvous-rails-app-staging
-    image: ghcr.io/timmykat/rendezvous_rails_app
+    image: ghcr.io/timmykat/rendezvous_rails_app:latest
 
     command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
