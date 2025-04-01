@@ -11,7 +11,7 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
     networks:
-      - rendezvous-network
+      - rendezvous-prod-network
 
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
@@ -65,7 +65,7 @@ services:
       - 3001:3000
 
     networks:
-      - rendezvous-network
+      - rendezvous-prod-network
 
     depends_on:
       - db_prod
@@ -74,3 +74,7 @@ services:
       - /var/run/mysqld/prod:/var/run/mysqld
       - /var/www/rendezvous-docker-prod/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
       - /var/www/rendezvous-docker-prod/rendezvous:/var/www/rendezvous
+
+networks:
+  rendezvous-prod-network:
+    driver: bridge
