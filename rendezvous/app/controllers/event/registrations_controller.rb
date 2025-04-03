@@ -11,7 +11,7 @@ module Event
     skip_before_action :verify_authenticity_token, only: [:show]
 
     def check_cutoff
-      unless helpers.show_register
+      if Time.now > Config::SiteSetting.instance.registration_close_date
         flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
         redirect_to :root
       end

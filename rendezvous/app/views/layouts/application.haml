@@ -70,7 +70,7 @@
 
       = render partial: 'common/site_nav_bar'                      
 
-      - if show_register
+      - if registration_is_open || user_is_tester?
         .container-fluid.px-0 
           .row.no-gutters.register.py-3
             .col-12 

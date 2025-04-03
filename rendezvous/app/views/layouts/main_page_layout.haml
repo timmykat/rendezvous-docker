@@ -70,14 +70,14 @@
                     %li
                       %a{href: root_path( anchor: 'home' )} home
 
-                    - if show_register
+                    - if registration_is_open
                       %li
                         = link_to 'Register', new_event_registration_path, class: 'registration-link'
                     %li
                       %a{href: root_path( anchor: 'info' )} info
                     -# %li
                     -#   %a{:href => "/#contact"} contact us
-                    -# - if show_register && !current_user
+                    -# - if registration_is_open && !current_user
                     %li
                       %a{href: new_user_session_path } sign in
     = yield

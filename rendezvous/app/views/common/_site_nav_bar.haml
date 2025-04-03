@@ -24,7 +24,7 @@
                     %span.badge.badge-danger Registration Coming Soon!
  
                   %ul.nav.navbar-nav.ml-auto
-                    - if show_register
+                    - if registration_is_open || user_is_tester?
                       - if !current_user
                         %li.nav-item
                           = link_to 'Sign In', new_user_session_path, class: 'nav-link'
