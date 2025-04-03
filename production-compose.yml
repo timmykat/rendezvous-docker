@@ -74,7 +74,6 @@ services:
 
     volumes:
       - ./rendezvous/:/var/www/rendezvous
-      - /var/www/html:/var/www/rendezvous/public
 
 volumes:
   - rendzvous_prod_data:
