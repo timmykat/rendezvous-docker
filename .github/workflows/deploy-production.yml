@@ -34,6 +34,9 @@ jobs:
             echo "-- Stopping the existing container --"
             docker compose -f production-compose.yml down
 
+            echo "-- Rebuilding the container"
+            docker compose -f production-compose.yml build
+
             echo "-- Launching the new container with the latest image --"
             docker compose -f production-compose.yml up -d
 
