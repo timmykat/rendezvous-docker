@@ -9,8 +9,6 @@
     = f.input :venue_id, collection: venue_options, include_blank: '-- Select venue --', selected: f.object.venue_id, class: 'form-select'
   - else
     %p No venue options are available
-.form-group 
-  = f.input :has_subevents, as: :boolean
 .form-group
   - if main_event_options.empty?
     %label 
