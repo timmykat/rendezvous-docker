@@ -73,7 +73,7 @@ services:
       - db_prod
 
     volumes:
-      -./rendezvous/:/var/www/rendezvous
+      - ./rendezvous/:/var/www/rendezvous
       - /var/www/html:/var/www/rendezvous/public
 
 volumes:
