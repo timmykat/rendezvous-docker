@@ -15,7 +15,7 @@ services:
 
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
-      - rendzvous_prod_data:/var/lib/mysql
+      - rendezvous_prod_data:/var/lib/mysql
     
     ports:
       - 3306:3306
@@ -76,7 +76,7 @@ services:
       - ./rendezvous/:/var/www/rendezvous
 
 volumes:
-  - rendzvous_prod_data:
+  - rendzvous_prod_data: {}
 
 networks:
   rendezvous_prod_network:
