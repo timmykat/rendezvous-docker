@@ -76,7 +76,7 @@ services:
       - ./rendezvous/:/var/www/rendezvous
 
 volumes:
-  - rendezvous_prod_data: {}
+  rendezvous_prod_data:
 
 networks:
   rendezvous_prod_network:
