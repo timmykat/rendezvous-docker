@@ -20,8 +20,10 @@
                   - if vehicles_for_sale > 0
                     %li.nav-item
                       = link_to "For Sale at the Event (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
-                  %li.nav-item
-                    %span.badge.badge-danger Registration Coming Soon!
+                  
+                  -unless registration_is_open || user_is_tester?
+                    %li.nav-item
+                      %span.badge.badge-danger Registration Coming Soon!
  
                   %ul.nav.navbar-nav.ml-auto
                     - if registration_is_open || user_is_tester?
