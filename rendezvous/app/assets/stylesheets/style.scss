@@ -130,8 +130,11 @@ h1, h2, h3, h4, h5, h6 {
 	color: white;
 }
 
-.row.register {
+.row.registration-open {
 	background-color: var(--eggplant);
+	a, a:visited {
+		color: white;
+	}
 }
 
 .btn-register {
