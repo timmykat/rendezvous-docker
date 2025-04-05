@@ -1,5 +1,6 @@
 require 'devise/models/linkable'
 require 'devise/models/token_authenticatable'
+require 'role_model'
 
 class User < ApplicationRecord
 
