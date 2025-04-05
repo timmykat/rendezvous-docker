@@ -16,7 +16,7 @@ services:
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
       - rendezvous_prod_data:/var/lib/mysql
-    
+
     ports:
       - 3306:3306
 
@@ -51,8 +51,8 @@ services:
       # Production info
       - PROD_SQUARE_LOCATION_ID
       - PROD_SQUARE_APP_ID
-      - PROD_SQUARE_ACCESS_TOKEN 
-      - PROD_SQUARE_SDK_URL     
+      - PROD_SQUARE_ACCESS_TOKEN
+      - PROD_SQUARE_SDK_URL
 
       # Mailer info
       - SMTP_PASSWORD
