@@ -46,7 +46,10 @@
                   %h3.h4 Pay online with Square
                   %ul
                     %li Clicking the button below will take you to Square to pay.
-                    %li You will then return to citroenrendezvous.org to complete your registration
+                    %li 
+                      You will then be returned to citroenrendezvous.org to complete your registration.
+                      %strong It takes a several moments for Square to process your payment&mdash;%please
+                      don't close your browser or click away until you've been returned to our site.
                   
                   #payment-link      
                     = link_to "Make Payment", send_to_square_event_registration_path(@event_registration), type: "button", class:  'btn btn-primary btn-square-pay' 
