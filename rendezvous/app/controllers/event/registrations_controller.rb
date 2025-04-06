@@ -4,7 +4,7 @@ module Event
 
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
     before_action :require_admin, only: [:index]
-    before_action :authenticate_user!, except: [:welcome, :update_paid_method]
+    before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
 
@@ -27,13 +27,18 @@ module Event
 
       @title = 'Registration - Start'
       @step = 'create'
-      @annual_question = AnnualQuestion.where(year: Time.now.year).first
+      @annual_question = AnnualQuestion.where(year: Date.current.year).first
 
       if user_signed_in? && !session[:admin_user]
         @event_registration = current_user.registrations.current.first
         if !@event_registration.blank?
-          flash_notice("You've already created a registration.")
-          redirect_to edit_user_path(current_user)
+          if !['payment due', 'complete'].include?(@event_registration.status)
+            flash_notice("You've already created a registration but haven't finished")
+            redirect_to review_event_registration_path(@event_registration)
+          else
+            flash_notice("You've already registered")
+            redirect_to event_registration_path(@event_registration)
+          end
           return
         end
       end
@@ -132,7 +137,24 @@ module Event
       end
     end
 
-    # AJAX method
+    # AJAX methods
+    def update_fees
+      @event_registration = Registration.find(params[:id])
+      respond_to do |format|
+        if !@event_registration.update(update_fees_params)
+          format.json { render json: { status: "error", data: { 
+              donation:  @event_registration.donation,
+              total: @event_registration.total 
+            }}}
+        else
+          format.json { render json: { status: "ok", data: { 
+            donation:  @event_registration.donation,
+            total: @event_registration.total 
+          }}}
+        end
+      end
+    end
+
     def update_paid_method
       @event_registration = Registration.find(params[:id])
       respond_to do |format|
@@ -148,6 +170,13 @@ module Event
       @title = 'Review Registration Information'
       @step = 'review'
       @event_registration = Registration.find(params[:id])
+      # If user is a vendor, add the registration fee
+      if (@event_registration.user.has_role? :vendor)
+        vendor_fee = Config::SiteSetting.instance.vendor_fee
+        @event_registration.vendor_fee = vendor_fee
+        @event_registration.total = @event_registration.registration_fee + vendor_fee
+        @event_registration.save!
+      end 
       @event_registration.status = 'in review'
       @event_registration.save!
     end
@@ -156,7 +185,6 @@ module Event
       @title = 'Registration - Payment'
       @step = 'payment'
       @event_registration = Registration.find(params[:id])
-      @event_registration.total = @event_registration.registration_fee + @event_registration.donation
       @event_registration.status = 'payment due'
       @app_data[:event_registration_fee] = @event_registration.registration_fee
 
@@ -295,6 +323,7 @@ module Event
           :number_of_adults,
           :number_of_children,
           :registration_fee,
+          :vendor_fee,
           :donation,
           :total,
           :year,
@@ -316,6 +345,10 @@ module Event
             ]
           }
         )
+      end
+
+      def update_fees_params
+        params.permit(:id, :donation, :total)
       end
 
       def payment_method_params

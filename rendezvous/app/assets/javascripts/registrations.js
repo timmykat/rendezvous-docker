@@ -13,6 +13,8 @@
 
 (function($) {
   jQuery(document).ready(function() {
+    const registrationId = $('[data-registration_id]').data('registration_id')
+    
     var setRegistrationFee = function() {
       if (typeof appData != 'undefined') {
         var total = $('input#event_registration_number_of_adults').val() * appData.event_fee;
@@ -67,17 +69,24 @@
           donation = $('input[name="event_registration[donation]"][type=number]').val();
         }
 
+        var vendorFee = $('input[name="event_registration[vendor_fee]"]').val()
+
         if ($.isNumeric(donation)) {
           donation = parseFloat(donation);
         } else {
           donation = 0.
         }
-        var total = parseFloat(appData.event_registration_fee) + donation;
+        var total = parseFloat(appData.event_registration_fee) + donation + parseFloat(vendorFee);
         $('input#event_registration_total').val(total.toFixed(2));
+
+        // Update donation and total in the DB
+        console.log(registrationId, donation, total)
+        $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total})
       }
     };
     
     // Update total
+    $(document).on('load', setTotal)
     $('.total-calculation').on('click blur', function(e) {
       setTotal();
     });
@@ -107,6 +116,7 @@
         $('#payment-cash').show();
         $('#payment-paid').hide()        
       }
+      $.get('/event/ajax/update_paid_method', { id: registrationId, paid_method: value})
     }
     
     // Set payment method

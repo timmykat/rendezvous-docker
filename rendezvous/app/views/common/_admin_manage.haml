@@ -6,8 +6,6 @@
           %nav.navbar.navbar-light.navbar-expand-lg
             %ul.navbar-nav.mr-auto
               %li.navbar-brand Admin: 
-              %li.nav-item= link_to 'Dashboard', admin_dashboard_path, class:  'nav-link'
-              %li.nav-item= link_to 'Dashboard + User Data', admin_dashboard_path({with_users: true}), class:  'nav-link'
               %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
               %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
               %li.nav-item= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'nav-link'

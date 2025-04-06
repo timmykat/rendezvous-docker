@@ -10,7 +10,15 @@
       = simple_form_for @event_registration, url:  complete_event_registration_path(@event_registration), html:  { id:  'event_registration_form' } do |f|
         %section
           .card 
-            .card-body 
+            .card-body
+              - if @event_registration.user.has_role? :vendor
+                .card-title
+                  %h2.h3 Vendor Fee
+                .card.text
+                  - if @event_registration.user.vendor
+                    %p Vendor: #{@event_registration.user.vendor.name}
+                  .form-group.vendor-fee
+                    = f.input :vendor_fee, input_html: { readonly: true, value: vendor_fee } 
               .card-title
                 %h2.h3 Donation
               .card.text
@@ -21,11 +29,16 @@
                 .row
                   .col-md-3
                     .form-group
-                      = f.input :donation, label:  false, input_html:  { placeholder:  'Other amount', class:  'total-calculation'}, disabled:  true
+                      = f.input :donation, label:  false, input_html:  { placeholder:  'Other', class:  'total-calculation'}, disabled:  true
 
+          .card 
+            .card-body 
+              .card-title
+                %h2.h3 Total
+              .card.text
                 .row
                   .col-md-6.col-12
-                    %p.amount.bg-success.form-group
+                    %p.amount.form-group.text-large
                       %label Total (USD):
                       = f.input_field :total, value:  ("%.2f" % @event_registration.total), readonly: true, class:  'calculated'
 

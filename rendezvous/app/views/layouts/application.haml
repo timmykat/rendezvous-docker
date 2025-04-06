@@ -66,7 +66,7 @@
                       = image_tag "chevrons.png"
                       .nav-item.site
                         %h1
-                          = link_to "Citroen Rendezvous #{Time.now.year}", root_path
+                          = link_to "Citroen Rendezvous #{Date.current.year}", root_path
 
       = render partial: 'common/site_nav_bar'                      
 
@@ -79,7 +79,7 @@
                   .col-12
                     Registration is open!                        
                     =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
-                    =link_to '(If you prefer paper <i class="fa  fa-file-pdf-o"></i>)'.html_safe, "/Rendezvous-registration-#{Time.now.year}.pdf", class: 'ml-3'
+                    =link_to '(If you prefer paper <i class="fa  fa-file-pdf-o"></i>)'.html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
 
     %main 
       .content

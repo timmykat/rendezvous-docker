@@ -77,6 +77,15 @@
                   #{number_to_currency(@event_registration.registration_fee)} (US)
                   - if @event_registration.status != Rails.configuration.rendezvous[:registration_statuses][0]
                     %br
+                    - if @event_registration.user.has_role? :vendor
+                      - vendor_name = @event_registration.user.vendor&.name
+                      - if !vendor_name.nil?
+                        %label Vendor: 
+                        #{vendor_name}
+                        %br
+                      %label Vendor Fee:
+                      #{number_to_currency(@event_registration.vendor_fee)} (US)
+                    %br
                     %label Donation:
                     - if @event_registration.donation.blank?
                       (no donation)
