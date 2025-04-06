@@ -3,7 +3,7 @@ class VendorsController < ApplicationController
   before_action :require_admin, { except: :index }
   
   def index
-    @vendors = Vendor.sorted
+    @vendors = Vendor.order(:order).all
   end
 
   def edit
