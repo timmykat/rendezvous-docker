@@ -70,7 +70,7 @@ class AdminController < ApplicationController
 
   def dashboard(csv = false)
     @title = 'Admin'
-    @year = params[:year] || Time.now.year
+    @year = params[:year] || Date.current.year
     @no_user_id = NO_USER_ID
     @csvs = {
       'labels' => 'Packet Label Data',
@@ -86,12 +86,12 @@ class AdminController < ApplicationController
       return
     end
 
-    @annual_question = AnnualQuestion.where(year: Time.now.year).first
+    @annual_question = AnnualQuestion.where(year: Date.current.year).first
     if !@annual_question
       @annual_question = AnnualQuestion.new
     end
 
-    create_table_data(params[:with_users])
+    create_table_data
 
     if params[:create_csv]
       create_csvs
@@ -126,12 +126,28 @@ class AdminController < ApplicationController
     return volunteers
   end
 
-  def create_table_data(with_users)
+  def create_table_data
     query = Event::Registration.where(year: @year)
     @event_registrations = query.all
-    if (with_users)
-      @users = User.order(last_name: :asc).all
+    case (params[:user_type])
+    when 'all_users'
+      @users = User.all
+      @type = 'All users'
+    when 'registrant'
+      @users = User.with_registrations
+      @type = 'Any Registrant'
+    when 'testers'
+      @users = User.with_role :tester
+      @type = 'Site Testers'
+    when 'vendors'
+      @users = User.with_role :vendor
+      @type = 'Vendors'
+    else 
+      @users = User.with_current_registration
+      @type = 'Currently registered'
     end
+    @user_count = @users.nil? ? 0 : @users.pluck(:id, :last_name).count
+
     @vehicles = Vehicle.joins(:registrations).where(registrations: { year: @year })
     volunteers = query.joins(:attendees).select(:name).where(attendees: { volunteer: true })
     total_amount = query.sum(:total)

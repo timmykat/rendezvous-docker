@@ -8,6 +8,8 @@ class User < ApplicationRecord
 
   before_save :set_country
 
+  attr_accessor :role
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -19,6 +21,7 @@ class User < ApplicationRecord
   has_many :vehicles, dependent: :destroy
   has_many :registrations, class_name: 'Event::Registration'
   has_many :authorizations
+  has_one  :vendor
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -33,10 +36,26 @@ class User < ApplicationRecord
   # Password policy
   validate :password_complexity
 
+  default_scope { order(last_name: :asc) }
+
+  scope :with_current_registration, -> {
+    joins(:registrations)
+      .where('registrations.year = ?', Date.current.year)
+      .select('users.*')
+      .distinct
+  }
+
+  scope :with_registrations, -> {
+    joins(:registrations)
+      .group('users.id')
+      .having('COUNT(registrations.id) > 0')
+      .select('users.*')
+  }
+
   accepts_nested_attributes_for :pictures, allow_destroy: true
   accepts_nested_attributes_for :vehicles, allow_destroy: true, reject_if: lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
 
-  roles :admin, :organizer, :registrant, :tester, :superuser
+  roles :admin, :organizer, :registrant, :tester, :superuser, :vendor
 
   def password_complexity
     if password.present?
@@ -50,7 +69,7 @@ class User < ApplicationRecord
   end
 
   def newbie?
-    self.registrations.length == 1 && self.registrations.first.created_at.year == Time.now.year
+    self.registrations.length == 1 && self.registrations.first.created_at.year == Date.current.year
   end
 
   def postal_code_by_country
@@ -96,7 +115,7 @@ class User < ApplicationRecord
   end
 
   def current_registration
-    self.registrations.where(year: Time.now.year).first
+    self.registrations.where(year: Date.current.year).first
   end
 
   def attending
@@ -113,5 +132,10 @@ class User < ApplicationRecord
 
   def self.find_by_token(token)
     User.where(login_token: token).first
+  end
+
+  def self.with_role role
+    mask = User.mask_for role
+    User.where('roles_mask & ? > 0', mask)
   end
 end

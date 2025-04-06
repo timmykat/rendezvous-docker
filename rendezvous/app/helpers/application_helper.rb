@@ -97,7 +97,7 @@ LITERAL
   end
 
   def current_registration
-    current_user  && current_user.registrations.where("year='#{Time.now.year.to_s}'").first
+    current_user  && current_user.registrations.where("year='#{Date.current.year.to_s}'").first
   end
 
   def registration_complete
@@ -248,7 +248,7 @@ LITERAL
   end
 
   def year_list
-    [*2016..Time.now.year]
+    [*2016..Date.current.year]
   end
 
   def country_list

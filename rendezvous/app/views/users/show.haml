@@ -61,7 +61,7 @@
               %li 
                 %em Recorded Rendezvous attendance: #{attended_rendezvous_years(@user)}
               %li 
-                %em Registered for the #{Time.now.year} Rendezvous: #{@user.attending ? 'Yes' : 'No'}
+                %em Registered for the #{Date.current.year} Rendezvous: #{@user.attending ? 'Yes' : 'No'}
               %li
                 %em Interested in Citroenvie: #{@user.citroenvie? ? 'Yes' : 'No'}
 
