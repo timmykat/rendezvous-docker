@@ -125,11 +125,13 @@ Rails.application.routes.draw do
   post '/pictures/upload(.:format)', to:'pictures#upload'
 
   # -- AJAX routes
-  get '/ajax/picture/delete/:id',    to: 'pictures#ajax_delete'
-  get '/ajax/find_user_by_email',    to: 'users#find_by_email'
-  get '/ajax/toggle_admin',          to: 'users#toggle_admin'
-  get '/ajax/toggle_tester',         to: 'users#toggle_tester'
-  get '/ajax/delete_users',          to: 'users#delete_users'
-  get '/ajax/toggle_user_testing',   to: 'users#toggle_user_testing'
-  get '/ajax/update_paid_method',    to: 'event/registrations#update_paid_method'
+  get '/ajax/find_user_by_email',         to: 'users#find_by_email'
+  get '/ajax/delete_users',               to: 'users#delete_users'
+
+  namespace :event do
+    post '/ajax/update_fees',               to: 'registrations#update_fees'
+    get '/ajax/update_paid_method',         to: 'registrations#update_paid_method'
+  end
+
+  get '/ajax/toggle/role/user/:id',  to: 'users#toggle_role'
 end

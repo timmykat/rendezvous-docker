@@ -8,15 +8,15 @@ services:
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_ROOT_PASSWORD
 
     networks:
-      - rendezvous-prod-network
+      - rendezvous_prod_network
 
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
-      - /var/lib/mysql/prod:/var/lib/mysql
-    
+      - rendezvous_prod_data:/var/lib/mysql
+
     ports:
       - 3306:3306
 
@@ -51,8 +51,8 @@ services:
       # Production info
       - PROD_SQUARE_LOCATION_ID
       - PROD_SQUARE_APP_ID
-      - PROD_SQUARE_ACCESS_TOKEN 
-      - PROD_SQUARE_SDK_URL     
+      - PROD_SQUARE_ACCESS_TOKEN
+      - PROD_SQUARE_SDK_URL
 
       # Mailer info
       - SMTP_PASSWORD
@@ -67,19 +67,21 @@ services:
       - 3000:3000
 
     networks:
-      - rendezvous-prod-network
+      rendezvous_prod_network:
+        ipv4_address: 192.168.1.100
 
     depends_on:
       - db_prod
 
     volumes:
-      - /var/run/mysqld/prod:/var/run/mysqld
-      - /var/www/rendezvous-docker-prod/rendezvous/config/database.yml:/var/www/rendezvous/config/database.yml
-      - /var/www/rendezvous-docker-prod/rendezvous:/var/www/rendezvous
-      - /var/www/rendezvous-docker-prod/rendezvous/log:/var/www/rendezvous/log
-      - /var/www/rendezvous-docker-prod/rendezvous/app/views:/var/www/rendezvous/app/views
-      - /var/www/html:/var/www/rendezvous/public
+      - ./rendezvous/:/var/www/rendezvous
+
+volumes:
+  rendezvous_prod_data:
 
 networks:
-  rendezvous-prod-network:
+  rendezvous_prod_network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24

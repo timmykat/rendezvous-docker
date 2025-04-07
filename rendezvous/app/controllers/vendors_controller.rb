@@ -3,7 +3,7 @@ class VendorsController < ApplicationController
   before_action :require_admin, { except: :index }
   
   def index
-    @vendors = Vendor.sorted
+    @vendors = Vendor.order(:order).all
   end
 
   def edit
@@ -22,7 +22,7 @@ class VendorsController < ApplicationController
       redirect_to new_vendor_path
     else
       flash_notice 'The vendor was successfully created.'
-      redirect_to vendor_path(@vendor)
+      redirect_to vendors_manage_path
     end
   end
 
@@ -31,9 +31,9 @@ class VendorsController < ApplicationController
     if !@vendor.update(vendor_params)
       flash_alert_now 'There was a problem creating the vendor.'
       flash_alert_now  @vendor.errors.full_messages.to_sentence
-      redirect_to edit_vendor_path(@vendor)
+      redirect_to vendors_manage_path
     else
-      go_to_manage_page "Vendor"
+      redirect_to vendors_manage_path
     end
   end
 
@@ -61,6 +61,7 @@ class VendorsController < ApplicationController
     def vendor_params
       params.require(:vendor).permit(
         :name,
+        :user_id,
         :email,
         :phone,
         :website,

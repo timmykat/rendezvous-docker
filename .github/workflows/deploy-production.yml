@@ -2,29 +2,13 @@ name: Deploy Rendezvous Prod
 run-name: Bulding and deploying Rendezvous production site
 
 on:
-  workflow_run:
-    workflows: ["Build App"]
-    types:
-      - completed
-    
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to deploy'
-        required: true
-        default: 'main'  # Default value if no input is provided
-        type: string 
+  push:
+    branches:
+      - main
 
 jobs:
   deploy-app:  
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.head_branch == 'main' }}
-    
-    env:
-      CONTAINER_NAME: "rendezvous-rails-app-prod"
-      MAX_CHECKS: 10
-      COUNT: 0
-      STOPPED: true
 
     steps:
       - name: Set up SSH keys
@@ -48,32 +32,38 @@ jobs:
             git checkout main
 
             echo "-- Stopping the existing container --"
-            docker compose down
+            docker compose -f production-compose.yml down
+
+            echo "-- Rebuilding the container"
+            docker compose -f production-compose.yml build
 
             echo "-- Launching the new container with the latest image --"
-            docker compose -f hostinger-compose.yml up -d
+            docker compose -f production-compose.yml up -d
 
             echo "-- Check to see if the container is running"
-            if ! docker ps --filter "name=rendezvous-rails-app-prod" | grep -q "rendezvous-rails-app-prod"; then
+            CONTAINER_ID=$(docker ps --filter "name=rails_app_pro" --format="{{.ID}}"")
+            if [ -z "$CONTAINER_D" ]; then
               echo "The rails container is not running"
               exit 1
             fi
 
             echo "-- Installing JavaScript dependencies with Yarn inside the container --"
-            docker exec rendezvous-rails-app-prod yarn install
+            docker exec "$CONTAINER_ID" yarn install
 
             echo "-- Precompiling assets inside the container --"
             docker exec rendezvous-rails-app-prod rake assets:precompile
 
             echo "-- Restart the container"
-            docker compose down
-            docker compose -f hostinger-compose.yml up -d
+            docker compose -f production-compose.yml down
+            docker compose -f production-compose.yml up -d
 
             echo "-- Running migrations if needed --"
-            if docker exec rendezvous-rails-app-prod bundle exec rails db:migrate:status | grep "down"; then
+            if docker exec "$CONTAINER_ID" bundle exec rails db:migrate:status | grep "down"; then
               echo "Pending migrations found. Running db:migrate..."
-              docker exec rendezvous-rails-app-prod bundle exec rails db:migrate
+              docker exec "$CONTAINER_ID" bundle exec rails db:migrate
             else
               echo "No pending migrations. Skipping db:migrate."
             fi
+
+            echo "-- DONE --"
             

@@ -12,7 +12,7 @@ module Event
     accepts_nested_attributes_for :attendees, allow_destroy: true
     accepts_nested_attributes_for :transactions, allow_destroy: true
     
-    scope :current, -> { where(year: Time.now.year) }
+    scope :current, -> { where(year: Date.current.year) }
     scope :alpha, -> { joins(:user).order( :last_name )}
 
     attribute :donation, :decimal, default: 0.0
