@@ -15,8 +15,8 @@
                 .card-title
                   %h2.h3 Vendor Fee
                 .card.text
-                  - if @event_registration.user.vendor
-                    %p Vendor: #{@event_registration.user.vendor.name}
+                  - if @event_registration.user&.vendor
+                    %p Vendor: #{@event_registration.user&.vendor.name}
                   .form-group.vendor-fee
                     = f.input :vendor_fee, input_html: { readonly: true, value: vendor_fee } 
               .card-title
