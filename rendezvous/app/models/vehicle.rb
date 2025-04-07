@@ -24,7 +24,7 @@ class Vehicle < ApplicationRecord
   end
   
   def judging_category
-    VehicleTaxonomy.get_category(marque, model)
+    VehicleTaxonomy.get_category(self)
   end  
   
   def at_event?(registration)
