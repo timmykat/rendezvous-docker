@@ -1,5 +1,6 @@
 class Vehicle < ApplicationRecord
   extend VehicleTaxonomy
+  include StripWhitespace
 
   belongs_to :user
   has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :vehicle_id, dependent: :destroy

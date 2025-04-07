@@ -1,4 +1,6 @@
 class Attendee < ApplicationRecord
+  include StripWhitespace
+  
   belongs_to :registration, class_name: 'Event::Registration'
 
   before_validation :normalize_age
