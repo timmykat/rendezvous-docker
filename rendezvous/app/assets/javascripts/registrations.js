@@ -80,7 +80,6 @@
         $('input#event_registration_total').val(total.toFixed(2));
 
         // Update donation and total in the DB
-        console.log(registrationId, donation, total)
         $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total})
       }
     };
