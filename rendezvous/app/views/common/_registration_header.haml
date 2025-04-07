@@ -2,7 +2,7 @@
 .container 
   .row.justify-content-center
     .col-12.col-md-8
-      %h1  #{Time.now.year} Citroen Rendezvous Registration
+      %h1  #{Date.current.year} Citroen Rendezvous Registration
       %h2  Saratoga Springs, New York
 
       = render partial: 'common/registration_step', locals: { current_step: current_step, registration: registration }

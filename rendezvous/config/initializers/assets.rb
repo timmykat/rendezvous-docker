@@ -8,6 +8,6 @@ Rails.application.config.assets.paths << Rails.root.join('vendor/assets')
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += %w(labels purchases payments @nathanvda/cocoon/cocoon)
+Rails.application.config.assets.precompile += %w(labels purchases @nathanvda/cocoon/cocoon)
 Rails.application.config.assets.precompile += %w(simplemde/dist/simplemde.min.js simplemde/dist/simplemde.min.css)
 Rails.application.config.assets.precompile += %w(bootstrap-icons/bootstrap-icons.svg)

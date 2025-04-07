@@ -50,7 +50,7 @@ module RendezvousSquare
           customer_id: customer_id,
           line_items: [
             {
-              name: Time.now.year.to_s + " Rendezvous registration",
+              name: Date.current.year.to_s + " Rendezvous registration",
               quantity: "1",
               base_price_money: {
                 amount: integerize(registration.total),

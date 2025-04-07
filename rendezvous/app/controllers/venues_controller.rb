@@ -14,7 +14,7 @@ class VenuesController < AdminController
       redirect_to new_venue_path
     else
       flash_notice 'The venue was successfully created'
-      redirect_to venue_path(@venue)
+      redirect_to venues_manage_path
     end
   end
 

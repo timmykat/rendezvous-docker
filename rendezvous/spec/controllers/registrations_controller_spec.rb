@@ -15,7 +15,7 @@ RSpec.describe Event::RegistrationsController, type: :controller do
 
   it "creates an invoice number" do
     @event_registration = build(:registration)
-    year = Time.now.year
+    year = Date.current.year
     Registration.stub(:invoice_number).and_return("CR#{year}-999")
     expect(@event_registration.invoice_number).to be_equal("CR#{year}-999")
   end

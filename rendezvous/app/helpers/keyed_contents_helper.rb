@@ -8,7 +8,7 @@ module KeyedContentsHelper
   def keyed_content(key)
     record = KeyedContent.find_by_key key
     if record.nil? || record.content.nil?
-      content = needs_content(key)
+      content = needs_content(key) || ""
     else 
       content = record.as_html(:content)
     end

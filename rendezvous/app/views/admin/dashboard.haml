@@ -17,12 +17,12 @@
           %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-2'
           %li= link_to '<i class="fa fa-bullhorn"></i> Volunteer List'.html_safe, '#tabbed-3'
           %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-5'
-          %li= link_to '<i class="fa fa-female"></i><i class="fa fa-male"></i> Site Users'.html_safe, '#tabbed-6'
+          %li= link_to "<i class=\"fa fa-female\"></i><i class=\"fa fa-male\"></i> Site Users #{@type}".html_safe, '#tabbed-6'
         #tabbed-1
           .row 
             .col-md-4
               = form_with url: admin_dashboard_path, method: :get do |f|
-                - options = options_for_select( (Event::Registration.distinct.pluck(:year) + [Time.now.year.to_s]).uniq.sort.reverse, @year )
+                - options = options_for_select( (Event::Registration.distinct.pluck(:year) + [Date.current.year.to_s]).uniq.sort.reverse, @year )
                 .form-group
                   = f.label :year
                   = f.select :year, options, {}, { class:  'form-select' }
@@ -134,7 +134,7 @@
           .card
             .card-body
               .card-title
-                %h2 Summary for #{Time.now.year}
+                %h2 Summary for #{Date.current.year}
               .card-text
                 .row
                   .col-md-12
@@ -210,13 +210,14 @@
                                     %br
         - if @users
           #tabbed-6
-            %h2 Site Users
-            %p Number of users: #{@users.size}
+            %h2 Site Users #{@type}
+            %p Number of users: #{@user_count}
             -# - if current_user.has_role? :superuser
             -#   %button{class: 'btn btn-danger delete_users'} DELETE checked users
             %table#user-table.table.tablesorter.striped
               %thead
                 %tr
+                  %th.tablesorter-header.filter-false User Roles
                   %th.is-testing.tablesorter-header.filter-false Actions
                   %th.last-name.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Last Name 
                   %th.first-name.tablesorter-header.filter-false First Name
@@ -229,16 +230,12 @@
                     %td
                     %td
                   - @users.each do |user|
-                    %tr{ class:  ((user.has_role? :admin) ? 'bg-info' : '' ) }
+                    %tr
                       %td
-                        - registration = user.current_registration
-                        - if registration.blank?
-                          = link_to 'Create Reg', admin_event_path(user.id), class: 'link-warning'
-                        - else
-                          = link_to 'Edit Reg', edit_admin_event_registration_path(registration.id), class: 'link-secondary'
-                        %br
-                        = check_box_tag user.id, user.is_testing, user.is_testing, id: "user_#{user.id}", class: "user_test"
-                        = label_tag "user_#{user.id}", "&nbsp;&nbsp;Test?".html_safe, style: "font-weight: normal"
+                        - [:tester, :vendor, :admin].each do |role|
+                          = check_box_tag role, '1', user.has_role?(role), "data-toggle" => "role/user/#{user.id}?role=#{role.to_s}"
+                          = label_tag role.to_s.titleize
+                          %br                        
 
                       %td= link_to user.last_name, user_path(user)
                       %td= user.first_name

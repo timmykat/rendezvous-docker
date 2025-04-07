@@ -19,7 +19,11 @@ module RegistrationsHelper
   def next_step(current_step)
     index = steps.index(current_step)
     next_step = (index - 1 < steps.length) ? steps[index + 1] : nil
-  end  
+  end
+
+  def vendor_fee
+    Config::SiteSetting.instance.vendor_fee
+  end
 
   def get_status_icon(status)
     klass = status.gsub(' ', '-')

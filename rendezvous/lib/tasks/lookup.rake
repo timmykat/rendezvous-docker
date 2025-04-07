@@ -47,7 +47,7 @@ namespace :users do
 
   desc "Look up all registrants. Defaults to the current year, but other years can be an argument"
   task :registered, [:year] => [:environment] do |t, args|
-    year = args[:year] ? args[:year] : Time.now.year
+    year = args[:year] ? args[:year] : Date.current.year
     puts '-----'
     regs = Event::Registration.where(year: args[:year]).all.sort_by { |r| r.user.last_name.downcase }
     puts "Registrants:"

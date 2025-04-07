@@ -27,12 +27,12 @@ class RendezvousMailer < ApplicationMailer
     Rails.logger.info "Sending registration confirmation email"
     @email = event_registration.user.email
     @event_registration = event_registration
-    mail(to: @email, subject: "Thanks for registering for the #{Time.now.year} Rendezvous!")
+    mail(to: @email, subject: "Thanks for registering for the #{Date.current.year} Rendezvous!")
   end
 
   def send_registration_open_notice(user)
       @name = user.first_name
       @email = user.email
-      mail(to: @email, subject: "Rendezvous registration is open for #{Time.now.year}!")
+      mail(to: @email, subject: "Rendezvous registration is open for #{Date.current.year}!")
   end
 end

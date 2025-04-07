@@ -8,7 +8,7 @@ class Picture < ApplicationRecord
   end
   
   def initialize(attributes = {})
-    attributes[:year] ||= Time.now.year.to_s
+    attributes[:year] ||= Date.current.year.to_s
     super(attributes)
   end
 end

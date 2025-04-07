@@ -42,7 +42,7 @@
               = image_tag "chevrons.png"
               .nav-item.site
                 %h1
-                  = link_to "Citroen Rendezvous #{Time.now.year}", root_path
+                  = link_to "Citroen Rendezvous #{Date.current.year}", root_path
 
       = render partial: 'common/site_nav_bar' 
 

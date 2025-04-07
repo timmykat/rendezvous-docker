@@ -1,5 +1,7 @@
 .container-fluid.px-0.sticky-top
-  .row.no-gutters.justify-content-center 
+  .row.no-gutters.justify-content-center
+    - unless registration.nil? 
+      .registration-id{ "data-registration_id" => registration.id}
     .registration-step.vw-100
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
         %li.list-group-item.step.prev

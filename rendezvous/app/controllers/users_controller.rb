@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
 
   before_action :authenticate_user!, only: [:welcome, :edit, :update]
-  before_action :require_admin, only: [:toggle_admin]
 
   def welcome
     @user = User.find(params[:id])
@@ -45,23 +44,13 @@ class UsersController < ApplicationController
     ]
   end
 
-  def toggle_admin
-    user = User.find(params[:user_id])
-    if params[:admin] == 'admin'
-      user.roles << :admin
-    else
-      user.roles.delete :admin
-    end
-    user.save!
-    render json: true
-  end
-
-  def toggle_tester
-    user = User.find(params[:user_id])
-    if params[:tester] == 'tester'
-      user.roles << :tester
-    else
-      user.roles.delete :tester
+  def toggle_role
+    user = User.find(params[:id])
+    role = params[:role].to_sym
+    if user.has_role? role
+      user.roles.delete role
+    else 
+      user.roles << role
     end
     user.save!
     render json: true
@@ -75,15 +64,6 @@ class UsersController < ApplicationController
       u.destroy
     end
     render js: "window.location = '/admin#tabbed-6'"
-  end
-
-  def toggle_user_testing
-    user = User.find(params[:user_id])
-    if user
-      user.is_testing = !user.is_testing
-      user.save(validate: false)
-      render json: { user: user.id, status: user.is_testing? }
-    end 
   end
 
   private

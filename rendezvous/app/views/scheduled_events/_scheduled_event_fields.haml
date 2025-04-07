@@ -10,17 +10,6 @@
   - else
     %p No venue options are available
 .form-group 
-  = f.input :has_subevents, as: :boolean
-.form-group
-  - if main_event_options.empty?
-    %label 
-      %em Main Event (optional): You need to set a main event
-  - elsif f.object.has_subevents 
-    %label
-      %em This is a primary event
-  - else
-    = f.input :main_event_id, collection: main_event_options, selected: f.object.main_event_id, include_blank: '-- Select primary event --'
-.form-group 
   = f.input :short_description, as: :simple_mde
 .form-group
   = f.input :long_description, as: :simple_mde

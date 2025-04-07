@@ -13,56 +13,12 @@
             }
         });
 
-        $('.admin_check').on('change', function(e) {
-            let checked = false;
-            let $user = $(this).parent().parent();
-            let userId = $(this).attr('id').replace('is_admin_user_', '');
-            let sendData = { user_id: userId }
-            if ($(this).is(":checked")) {
-                sendData.admin = 'admin';
-                checked = true;
-            } else {
-                sendData.admin = false;
-            }
-            $.get('/ajax/toggle_admin', sendData, function() {
-                if (checked) {
-                    $user.addClass('bg-success');
-                } else {
-                    $user.removeClass('bg-success');
-                }
-            });
-        });
-
-        $('[type=checkbox].user_test').on('change', function(e) {
-  
-            let $checkbox = $(this)
-            let user_id = $checkbox.attr('name')
-            $.get('/ajax/toggle_user_testing', {user_id: user_id}, (data) => {
-                console.log(data)
-                $checkbox.prop('checked', data.status)
-            })
+        $('[data-toggle]').on('click', function(e) {
+            let path = '/ajax/toggle/' + $(this).data('toggle')
+            console.log(path)
+            $.get(path)
         })
 
-        $('.tester_check').on('change', function(e) {
-            let checked = false;
-            let $user = $(this).parent().parent();
-            let userId = $(this).attr('id').replace('is_tester_user_', '');
-            let sendData = { user_id: userId }
-            if ($(this).is(":checked")) {
-                sendData.tester = 'tester';
-                checked = true;
-            } else {
-                sendData.tester = false;
-            }
-
-            $.get('/ajax/toggle_tester', sendData, function() {
-                if (checked) {
-                    $user.addClass('bg-info');
-                } else {
-                    $user.removeClass('bg-info');
-                }
-            });
-        });
 
         $('#select_all').on('change', function(e) {
             console.log('Changed')

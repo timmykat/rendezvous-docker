@@ -22,9 +22,10 @@ module MarkdownConcern
     end
 
     def needs_content(key)
+      return false if Rails.env.production?
       if key.nil?
         "<p style='background-color: red; color: white'>This content needs to be created.</p>".html_safe
-      else 
+      else
         "<p style='background-color: red; color: white'>The content for <em>#{key}</em> needs to be created.</p>".html_safe
       end
     end

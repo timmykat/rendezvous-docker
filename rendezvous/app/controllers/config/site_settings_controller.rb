@@ -6,6 +6,7 @@ class Config::SiteSettingsController < ApplicationController
 
   def get
     @instance = Config::SiteSetting.instance
+    set_defaults
   end
 
   def update
@@ -20,6 +21,13 @@ class Config::SiteSettingsController < ApplicationController
   end
 
   private
+    def set_defaults
+      @instance.registration_fee ||= 80.0
+      @instance.days_duration ||= 3
+      @instance.square_environment ||= 'SANDBOX'
+      @instance.vendor_fee ||= 300.0
+    end
+
     def site_settings_params
       params.require(:config_site_setting).permit(
         :registration_fee,
@@ -30,7 +38,8 @@ class Config::SiteSettingsController < ApplicationController
         :registration_open_date,
         :registration_close_date,
         :square_environment,
-        :user_testing      
+        :user_testing,
+        :vendor_fee      
       )
     end
 end

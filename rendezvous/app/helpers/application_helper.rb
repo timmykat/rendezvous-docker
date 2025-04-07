@@ -68,12 +68,8 @@ LITERAL
     current_user && (current_user != @user)
   end
 
-  def in_registration_window?
-    return false if Config::SiteSetting.instance.registration_open_date.nil? ||
-      Config::SiteSetting.instance.registration_close_date.nil?
-    
-      Time.now > Config::SiteSetting.instance.registration_open_date &&
-      Time.now <= Config::SiteSetting.instance.registration_close_date
+  def before_cutoff_date?
+    Time.now <= Config::SiteSetting.instance.registration_close_date
   end
 
   def after_rendezvous?
@@ -88,13 +84,8 @@ LITERAL
     "#{text}:  #{boolean ? "PASS" : "FAIL"}"
   end
 
-  def show_register
-    Rails.logger.debug test_logic("in window", in_registration_window?)
-    Rails.logger.debug test_logic("current reg", (current_user.nil? || !current_user.current_registration))
-    Rails.logger.debug test_logic("override", Config::SiteSetting.instance.show_registration_override)
-    Rails.logger.debug test_logic("allowed_user", (user_is_tester? || user_is_admin?))
-    (in_registration_window? && (current_user.nil? || !current_user.current_registration)) ||
-      (Config::SiteSetting.instance.show_registration_override && (user_is_tester? || user_is_admin?))
+  def registration_is_open
+    Config::SiteSetting.instance.registration_is_open && before_cutoff_date?
   end
 
   def static_file(file_path)
@@ -106,7 +97,7 @@ LITERAL
   end
 
   def current_registration
-    current_user  && current_user.registrations.where("year='#{Time.now.year.to_s}'").first
+    current_user  && current_user.registrations.where("year='#{Date.current.year.to_s}'").first
   end
 
   def registration_complete
@@ -257,7 +248,7 @@ LITERAL
   end
 
   def year_list
-    [*2016..Time.now.year]
+    [*2016..Date.current.year]
   end
 
   def country_list
