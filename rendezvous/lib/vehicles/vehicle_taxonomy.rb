@@ -85,7 +85,8 @@ module VehicleTaxonomy
   def self.get_category(marque, model)
     return "NONE" if marque.nil? || model.nil?
 
-    categories = VEHICLES[:marques][marque][:categories]
+    categories = VEHICLES.dig():marques, marque, :categories)
+    return "NONE" if categories.nil?
 
     category = nil
     if marque != "Citroen" || (marque == "Citroen" && !get_citroen_models.include?(model))
