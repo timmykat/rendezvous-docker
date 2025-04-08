@@ -14,7 +14,7 @@
             .form-group
               = f.input :attendee_age, label:  '', collection:  [['Adult, 16+', 'adult'], ['Child, 15- (free)', 'child']], as:  :radio_buttons, item_label_class:  'form-check-label ms-2', item_wrapper_tag:  false
             .form-group
-              = f.input :volunteer, inline_label:  'Would like to volunteer'
+              = f.input :volunteer, inline_label:  "Would like to volunteer (<a href='#' data-toggle='modal', data-target='#volunteer-info'>What volunteer tasks are there?</a>)".html_safe
                 
             .row
               .col-md-12

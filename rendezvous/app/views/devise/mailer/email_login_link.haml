@@ -8,5 +8,6 @@
   NOTE: Always be cautious about clicking on email links. If you are not expecting an email, hover over links and make sure the url you will be taken to is the one you expect.
 
 %p
-  Sign in to my Citroen Rendezvous account: 
-  = link_to 'SIGN IN', sign_in_with_link_url(login_token: @login_token)
+  Sign in to my Citroen Rendezvous account:
+  %strong 
+    = link_to 'SIGN IN', sign_in_with_link_url(login_token: @login_token)
