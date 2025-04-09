@@ -206,7 +206,6 @@ module Event
       end
 
       redirect_url = complete_after_online_payment_event_registration_url(event_registration)
-      Rails.logger.info "***** Redirect URL: " + redirect_url
       square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(event_registration, customer_id, redirect_url)
       redirect_to square_payment_link, allow_other_host: true
     end
@@ -263,8 +262,6 @@ module Event
 
     def save_updated_vehicles
       @event_registration = Registration.find(params[:id])
-      Rails.logger.debug params.inspect
-      Rails.logger.info(format_for_logging(vehicle_update_params))
       if (@event_registration.update(vehicle_update_params))
         flash_notice "You are bringing #{@event_registration.vehicles.count} vehicles"
       else
