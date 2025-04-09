@@ -175,7 +175,6 @@ class AdminController < ApplicationController
   end
 
   def create_csvs
-    Rails.logger.info "** CREATING CSVs **"
     @event_registrations = Event::Registration.where(year: @year).all if @event_registrations.nil?
 
     # Create CSV data files
