@@ -1,37 +1,38 @@
 - if user_signed_in? && (current_user.has_role? :admin)
   .manage
-    .container-fluid 
-      .row.justify-content-center
-        .col-12
-          .row
-            .col-md-4.col-12
-              %ul.navbar-nav
-                %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
-                %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
-                %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
-
-            .col-md-4.col-12  
-              %ul.navbar-nav
-                %li.nav-item= link_to 'Content', keyed_contents_manage_path, class: 'nav-link'                
-                %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
-                %li.nav-item= link_to 'Scheduled Events', scheduled_events_manage_path, class: 'nav-link'
-                %li.nav-item= link_to 'Venues', venues_manage_path, class: 'nav-link'
-                %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
-
-            .col-md-4.col-12  
-              %ul.navbar-nav
-                %li.nav-item= link_to 'Packet labels CSV', admin_download_csv_path({type: 'packet_labels', format: :csv}), class: 'nav-link'
-                %li.nav-item= link_to 'Dash placards CSV', admin_download_csv_path({type: 'dash_placards', format: :csv}), class: 'nav-link'
-                %li.nav-item= link_to 'Attendees CSV', admin_download_csv_path({type: 'attendees', format: :csv}), class: 'nav-link'
-                %li.nav-item= link_to 'Volunteers list CSV', admin_download_csv_path({type: 'volunteers', format: :csv}), class: 'nav-link'
-
-
-      .row.justify-content-center
+    .container-fluid
+      .row.justify-content-center.mt-2
         .col-md-10
           .button-group
             = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning" 
-            = link_to 'De-dupe content', admin_dedupe_path, class: 'btn  btn-warning'     
+            = link_to 'De-dupe content', admin_dedupe_path, class: 'btn  btn-warning'
+      %hr    
+      .row.justify-content-center
+        .col-12
+          .row
+            .col-md-4.col-12  
+              %ul.list-group.text-sm
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Content', keyed_contents_manage_path                
+                %li.list-group-item.bg-light.bg-gradient= link_to 'FAQs', faqs_manage_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Scheduled Events', scheduled_events_manage_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Venues', venues_manage_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Vendors', vendors_manage_path
+
+            .col-md-4.col-12  
+              %ul.list-group.text-sm
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Packet labels CSV', admin_download_csv_path({type: 'packet_labels', format: :csv})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Dash placards CSV', admin_download_csv_path({type: 'dash_placards', format: :csv})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Attendees CSV', admin_download_csv_path({type: 'attendees', format: :csv})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Volunteers list CSV', admin_download_csv_path({type: 'volunteers', format: :csv})
+
+            .col-md-4.col-12
+              %ul.list-group.text-sm
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Registration Graphs', admin_graphs_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Cleanup Page', admin_cleanup_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true)
+ 
       - if @annual_question
+        %hr
         .row.justify-content-center
           .col-md-10 
             = simple_form_for @annual_question do |f|
@@ -41,6 +42,48 @@
                 .form-group.col-md-6.col-12 
                   = f.input :question
                 .form-group.col-md-3.col-12
-                  = f.button :submit, input_html:  { value:  'Save' }, class:  "btn  btn-primary"
+                  = f.button :submit, input_html:  { value:  'Save' }, class:  "btn  btn-primary mt-3"
+        .row.justify-content-center
+          .col-md-10
+            #annual_question_results 
 
+:javascript
+  const dataset = #{@annual_question_data.to_json}
+
+  console.log(dataset.options)
+  console.log(dataset.number)
+
+  loadChartJs(() => {
+    const graphContainer = document.getElementById('annual_question_results');
+    const canvas = document.createElement('canvas');
+    graphContainer.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: dataset.options,
+        datasets: [{
+          label: 'Survey Responses',
+          data: dataset.number,
+          barThickness: 30,
+          categoryPercentage: 1.0,
+          barPercentage: 0.8,
+          backgroundColor: [
+            'hsl(160, 30%, 60%)',
+            'hsl(20, 30%, 60%)',
+            'hsl(240, 30%, 60%)'
+          ]
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        scales: {
+          x: {
+            beginAtZero: true
+          }
+        }
+      }
+    })
+  })
 

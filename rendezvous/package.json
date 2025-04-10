@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@nathanvda/cocoon": "^1.2.14",
-    "bootstrap": "^4",
+    "bootstrap": "^5",
     "bootstrap-icons": "^1.11.3",
     "browserify": "^17.0.0",
     "browserify-sign": "4.2.2",

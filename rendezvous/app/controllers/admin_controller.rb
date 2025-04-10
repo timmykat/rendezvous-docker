@@ -61,6 +61,19 @@ class AdminController < ApplicationController
   }
 
   before_action :require_admin
+  before_action :calculate_annual_question
+
+  def calculate_annual_question
+    # @annual_question_data = {
+    #   number: Event::Registration.current.group(:annual_answer).reverse.count,
+    #   options: AnnualQuestion::RESPONSES.reverse
+    # }
+
+    @annual_question_data = {
+      number: [15, 26, 43],
+      options: AnnualQuestion::RESPONSES.reverse
+    }
+  end
 
   def dedupe
     notice = []
@@ -95,12 +108,16 @@ class AdminController < ApplicationController
       "2022" => "2022-06-16",
       "2023" => "2023-06-30",
       "2024" => "2024-06-14",
+      "2025" => "2025-06-13",
     }
 
     rendezvous_years = Event::Registration.group(:year).pluck(:year).sort.reverse
+ 
+    
 
     reg_data = {}
     rendezvous_years.each do |year|
+      Rails.logger.debug year
       event_date = DateTime.strptime(event_dates[year], "%Y-%m-%d")
       reg_data[year.to_s] = []
       registrations = Event::Registration.where(year: year).order(:updated_at).all
@@ -220,7 +237,6 @@ class AdminController < ApplicationController
     csv = CSV.generate(headers: true) do |csv_data|
       csv_data << CSV_TYPES[type.to_sym][:headers]
       Event::Registration.where(year: Date.current.year).all.each do |r|
-        Rails.logger.debug r
         case type
           when 'attendees'
             r.attendees do |a|
