@@ -11,6 +11,10 @@ module RegistrationsHelper
     ]
   end
 
+  def annual_question_responses
+    AnnualQuestion::RESPONSES
+  end
+
   def previous_step(current_step)
     index = steps.index(current_step)
     prev_step = (index > 0) ? steps[index - 1] : nil

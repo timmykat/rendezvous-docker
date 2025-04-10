@@ -317,6 +317,7 @@ module Event
 
       def event_registration_params
         params.require(:event_registration).permit(
+          :annual_answer,
           :number_of_adults,
           :number_of_children,
           :registration_fee,
