@@ -2,22 +2,29 @@
   .manage
     .container-fluid 
       .row.justify-content-center
-        .col-md-10.col-12
-          %nav.navbar.navbar-light.navbar-expand-lg
-            %ul.navbar-nav.mr-auto
-              %li.navbar-brand Admin: 
-              %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
-              %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
-              %li.nav-item= link_to "#{session[:admin_user] ? 'Stop' : 'Start'} Admin Session", admin_toggle_user_session_path, class:  'nav-link'
-              %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
-          %nav.navbar.navbar-light.navbar-expand-lg
-            %ul.navbar-nav
-              %li.navbar-brand Manage Site Content:
-              %li.nav-item= link_to 'Scheduled Events', scheduled_events_manage_path, class: 'nav-link'
-              %li.nav-item= link_to 'Content', keyed_contents_manage_path, class: 'nav-link'
-              %li.nav-item= link_to 'Venues', venues_manage_path, class: 'nav-link'
-              %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
-              %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
+        .col-12
+          .row
+            .col-md-4.col-12
+              %ul.navbar-nav
+                %li.nav-item= link_to 'Registration Graphs', admin_graphs_path, class:  'nav-link'
+                %li.nav-item= link_to 'Cleanup Page', admin_cleanup_path, class:  'nav-link'
+                %li.nav-item= link_to 'Onsite Registration', admin_dashboard_path(onsite_reg: true), class:  'nav-link'
+
+            .col-md-4.col-12  
+              %ul.navbar-nav
+                %li.nav-item= link_to 'Content', keyed_contents_manage_path, class: 'nav-link'                
+                %li.nav-item= link_to 'FAQs', faqs_manage_path, class: 'nav-link'
+                %li.nav-item= link_to 'Scheduled Events', scheduled_events_manage_path, class: 'nav-link'
+                %li.nav-item= link_to 'Venues', venues_manage_path, class: 'nav-link'
+                %li.nav-item= link_to 'Vendors', vendors_manage_path, class: 'nav-link'
+
+            .col-md-4.col-12  
+              %ul.navbar-nav
+                %li.nav-item= link_to 'Packet labels CSV', admin_download_csv_path({type: 'packet_labels', format: :csv}), class: 'nav-link'
+                %li.nav-item= link_to 'Dash placards CSV', admin_download_csv_path({type: 'dash_placards', format: :csv}), class: 'nav-link'
+                %li.nav-item= link_to 'Attendees CSV', admin_download_csv_path({type: 'attendees', format: :csv}), class: 'nav-link'
+                %li.nav-item= link_to 'Volunteers list CSV', admin_download_csv_path({type: 'volunteers', format: :csv}), class: 'nav-link'
+
 
       .row.justify-content-center
         .col-md-10
