@@ -3,12 +3,6 @@
     .col-12
       %h1 Administrative Info
 
-      .button-toolbar
-        .button-group
-          = link_to 'Update CSVs', admin_dashboard_path({create_csv: "true"}), class: 'btn btn-warning'
-          - @csvs.each do |type, label|
-            =link_to "#{label} <i class='fa fa-file-excel-o'></i>".html_safe, static_file("/csv/#{type}_data.csv"), class: "btn btn-primary"
-
   .row
     .col-12
       #tabbed
