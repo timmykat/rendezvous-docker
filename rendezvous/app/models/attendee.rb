@@ -25,6 +25,6 @@ class Attendee < ApplicationRecord
   end
 
   def normalize_age
-    self.category = 'adult' if category == 'senior'
+    self.attendee_age = 'adult' if self.attendee_age == 'senior'
   end
 end
