@@ -65,15 +65,18 @@
     var setTotal = function() {
       if (typeof appData != 'undefined') {
         let donation = $('input[name="event_registration[donation]"]').val()
+        console.log('Donation', donation)
 
         var vendorFee = $('input[name="event_registration[vendor_fee]"]').val()
 
         if ($.isNumeric(donation)) {
+          console.log('Is numeric')
           donation = parseFloat(donation);
         } else {
           donation = 0.
         }
         var total = parseFloat(appData.event_registration_fee) + donation + parseFloat(vendorFee);
+        console.log('Total')
         $('input#event_registration_total').val(total.toFixed(2));
 
         // Update donation and total in the DB
@@ -92,11 +95,12 @@
     $('input[type=radio].total-calculation').on('click', function(e) {
       let val = $(this).val()
       if (val == 'other') {
-        $('input#event_registration_donation').val('')
+        $('input#event_registration_donation').val(parseFloat(0.0).toFixed(2))
       } else {
         val = parseFloat(val).toFixed(2)
         $('input#event_registration_donation').val(val);
       }
+      setTotal()
     });
     
     
