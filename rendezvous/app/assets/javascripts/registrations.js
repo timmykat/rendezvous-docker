@@ -67,7 +67,8 @@
         let donation = $('input[name="event_registration[donation]"]').val()
         console.log('Donation', donation)
 
-        var vendorFee = $('input[name="event_registration[vendor_fee]"]').val()
+        let vendorFee = $('input[name="event_registration[vendor_fee]"]').val() || 0.0
+        vendorFee = parsFloat(vendorFee)
 
         if ($.isNumeric(donation)) {
           console.log('Is numeric')
