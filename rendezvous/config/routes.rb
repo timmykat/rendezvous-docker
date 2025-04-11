@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get 'donations/index'
+  get 'donations/new'
+  get 'donations/create'
+  get 'donations/show'
+  get 'donations/edit'
+  get 'donations/update'
+  get 'donations/destroy'
   get 'annual_question/new'
   get 'annual_question/edit'
 

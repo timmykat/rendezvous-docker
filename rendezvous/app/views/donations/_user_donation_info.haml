@@ -1,0 +1,19 @@
+.user_fields
+  .row
+    .col-md-12
+      .form-group
+        = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *'
+        - if user_signed_in?
+          = f.input :id, as:  :hidden, input_html:  { value:  current_user.id }
+  .row
+    .col-md-12
+      %label Name
+  .row
+    .col-md-6.col-12
+      .form-group
+        = f.input :first_name, placeholder:  'First name *'
+    .col-md-6.col-12
+      .form-group
+        = f.input :last_name, placeholder:  'Last name *' 
+
+

@@ -1,0 +1,5 @@
+.form-group
+  = f.simple_fields_for :user do |u|
+    = render partial:  'user_donation_info', locals:  { f:  u }
+.form-group
+  = f.input :amount
