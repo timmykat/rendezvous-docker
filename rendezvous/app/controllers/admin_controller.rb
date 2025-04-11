@@ -6,7 +6,74 @@ class AdminController < ApplicationController
 
   NO_USER_ID = 999999
 
+  CSV_TYPES = {
+    attendees: {
+      headers: [
+        'Registration number',
+        'Registrant',
+        'Attendee name',
+        'Adult or child',
+        'Volunteer?',
+        'Donation?',
+        'Date registration paid',
+        ('As of: ' + Time.now.strftime('%Y%m%d'))
+      ]
+    },
+    dash_placards: {
+      headers: [
+        'number',
+        'last_name',
+        'first_name',
+        'full_name',
+        'year',
+        'marque',
+        'model',
+        'category',
+        'info'
+      ]
+    }, 
+    packet_labels: {
+      headers: [
+        'last_name',
+        'guests',
+        'people',
+        'fee_status',
+        'donation',
+        'volunteers'
+      ]
+    },
+    
+    volunteers: {
+      headers: [ 
+        'Name', 
+        'Email' 
+      ]
+    },
+    winners: {
+      headers: [
+        'Category',
+        'Owner',
+        'Year',
+        'Make',
+        'Model'
+      ]
+    }
+  }
+
   before_action :require_admin
+  before_action :calculate_annual_question
+
+  def calculate_annual_question
+    # @annual_question_data = {
+    #   number: Event::Registration.current.group(:annual_answer).reverse.count,
+    #   options: AnnualQuestion::RESPONSES.reverse
+    # }
+
+    @annual_question_data = {
+      number: [15, 26, 43],
+      options: AnnualQuestion::RESPONSES.reverse
+    }
+  end
 
   def dedupe
     notice = []
@@ -41,12 +108,16 @@ class AdminController < ApplicationController
       "2022" => "2022-06-16",
       "2023" => "2023-06-30",
       "2024" => "2024-06-14",
+      "2025" => "2025-06-13",
     }
 
     rendezvous_years = Event::Registration.group(:year).pluck(:year).sort.reverse
+ 
+    
 
     reg_data = {}
     rendezvous_years.each do |year|
+      Rails.logger.debug year
       event_date = DateTime.strptime(event_dates[year], "%Y-%m-%d")
       reg_data[year.to_s] = []
       registrations = Event::Registration.where(year: year).order(:updated_at).all
@@ -72,13 +143,6 @@ class AdminController < ApplicationController
     @title = 'Admin'
     @year = params[:year] || Date.current.year
     @no_user_id = NO_USER_ID
-    @csvs = {
-      'labels' => 'Packet Label Data',
-      'registered_users' => 'Registered Users',
-      'attendees'  => 'Attendee Data',
-      'volunteers'    => 'Volunteer List',
-      'vehicles'      => 'Vehicle Manifest'
-    }
     
     if !params[:onsite_reg].blank?
       @onsite_reg = true
@@ -92,25 +156,6 @@ class AdminController < ApplicationController
     end
 
     create_table_data
-
-    if params[:create_csv]
-      create_csvs
-    end
-  end
-
-  def make_labels
-    @labels = []
-    Event::Registration.alpha.where("year = ?", @year).each do |r|
-      label = {}
-      label['name'] = "#{r.user.last_name}, #{r.user.first_name}"
-      label['people'] = r.attendees.count
-      label['fee'] = r.outstanding_balance? ? 'PAID' : "Due: $#{r.registration_fee.to_i}"
-      label['donation'] = (r.donation && (r.donation > 0.0)) ? r.donation.to_i : 0
-      label['volunteers'] = get_volunteers(r)
-
-      @labels << label
-    end
-    render layout: 'no_header', template: 'admin/labels'
   end
 
   def toggle_user_session
@@ -174,127 +219,80 @@ class AdminController < ApplicationController
     }
   end
 
-  def create_csvs
-    Rails.logger.info "** CREATING CSVs **"
-    @event_registrations = Event::Registration.where(year: @year).all if @event_registrations.nil?
+  def download_csv
+    type = CSV_TYPES.keys.include?(params[:type].to_sym) ? params[:type] : nil
+    return if type.nil?
 
-    # Create CSV data files
-    files = {}
-    csv_file = {}
-    csv_data = {}
-    
-    data_types = {
-      'labels' => 'Packet Label Data',
-      'registered_users' => 'Registered Users',
-      'attendees'  => 'Attendee Data',
-      'volunteers'    => 'Volunteer List',
-      # 'sunday_dinner' => 'Sunday Dinner List',
-      'vehicles'      => 'Vehicle Manifest'
-    }
-
-    data_types.each do |data_type, descriptor|
-      file_name = "#{data_type}_data.csv"
-      files[data_type] = {
-        'name'        => file_name,
-        'path'        => File.join(Rails.root, 'public', helpers.static_file("csv/#{file_name}")),
-        'descriptor'  => descriptor
-      }
-      if system("mkdir -p #{File.dirname(files[data_type]['path'])}")
-        csv_file[data_type] = File.new(files[data_type]['path'], 'wb')
-        csv_data[data_type] = ::CSV.new(csv_file[data_type])
+    respond_to do |format|
+      format.csv do
+        send_data get_csv_data(type), 
+          filename: "#{type}-#{Date.current.strftime('%Y-%m-%d')}.csv", 
+          type: "text/csv",
+          disposition: 'attachment'
       end
     end
+  end
 
-    # CSV file headers
-    csv_data['labels'] << [
-      'last_name',
-      'guests',
-      'people',
-      'fee_status',
-      'donation',
-      'volunteers'
-    ]
-    csv_data['registered_users'] << [
-      'full name',
-      'email',
-      'address',
-      'volunteers'
-    ]
-    csv_data['attendees'] << [
-      'Registration number',
-      'Registratant',
-      'Attendee name',
-      'Adult or child',
-      'Volunteer?',
-      # 'Sunday dinner?',
-      'Donation?',
-      'Date registration paid',
-      ('As of: ' + Time.now.strftime('%Y%m%d'))
-    ]
-    csv_data['volunteers'] << [ 'Name', 'Email' ]
-    csv_data['vehicles'] << [
-      'number',
-      'last_name',
-      'first_name',
-      'full_name',
-      'year',
-      'marque',
-      'model',
-      'category',
-      'info'
-    ]
+  def get_csv_data(type)
+    csv = CSV.generate(headers: true) do |csv_data|
+      csv_data << CSV_TYPES[type.to_sym][:headers]
+      Event::Registration.where(year: Date.current.year).all.each do |r|
+        case type
+          when 'attendees'
+            r.attendees do |a|
+              csv_data << [
+                r.invoice_number,
+                r.user.last_name_first,
+                a.name,
+                a.attendee_age.titlecase,
+                (a.volunteer? ? 'Yes' : 'No'),
+                # (a.sunday_dinner? ? 'Yes' : 'No'),
+                (!r.donation.blank? && (r.donation.to_f > 0.0)) ? 'Yes' : 'No',
+                r.paid_date
+              ]
+            end
+            break
 
-    @event_registrations.each do |registration|
-      csv_data['labels'] << [
-        "#{registration.user.last_name}",
-        registration.attendees.count,
-        registration.attendees.map{ |a| a.name }.join('<br>'),
-        registration.outstanding_balance? ? registration.registration_fee : 'paid',
-        (registration.donation && (registration.donation > 0.0)) ? registration.donation : '',
-        get_volunteers(registration)
-      ]
+          when 'dash_placards'
+            r.vehicles.each_with_index do |v, index|
+              csv_data << [
+                "#{r.invoice_number}-#{(index + 1).to_s}",
+                r.user.last_name,
+                r.user.first_name,
+                r.user.full_name,
+                v.year,
+                v.marque,
+                v.model,
+                v.judging_category,
+                v.other_info
+              ]
+            end
+            break
 
-      csv_data['registered_users'] << [
-        registration.user.full_name,
-        registration.user.email,
-        helpers.address_of_plain(registration.user),
-        get_volunteers(registration)       
-      ]
+          when 'packet_labels'
+            csv_data << [
+              "#{r.user.last_name}",
+              r.attendees.count,
+              r.attendees.map{ |a| a.name }.join('<br>'),
+              r.outstanding_balance? ? r.registration_fee : 'paid',
+              (r.donation && (r.donation > 0.0)) ? r.donation : '',
+              get_volunteers(r)
+            ]
+            break
 
-      nvehicle = 0
-      registration.user.vehicles.each do |v|
-        nvehicle += 1
-        csv_data['vehicles'] << [
-          "#{registration.invoice_number}-#{nvehicle.to_s}",
-          registration.user.last_name,
-          registration.user.first_name,
-          registration.user.full_name,
-          v.year,
-          v.marque,
-          v.model,
-          v.judging_category,
-          v.other_info
-        ]
-      end
-
-      registration.attendees.each do |a|
-        csv_data['attendees'] << [
-          registration.invoice_number,
-          registration.user.last_name_first,
-          a.name,
-          a.attendee_age.titlecase,
-          (a.volunteer? ? 'Yes' : 'No'),
-          # (a.sunday_dinner? ? 'Yes' : 'No'),
-          (!registration.donation.blank? && (registration.donation.to_f > 0.0)) ? 'Yes' : 'No',
-          registration.paid_date
-        ]
-
-        # Volunteers
-        if a.volunteer?
-          csv_data['volunteers'] << [ a.name, registration.user.email ]
+          when 'volunteers'
+            r.attendees do |a|
+              if a.volunteer?
+                csv_data << [
+                  a.name, 
+                  registration.user.email
+                ]
+              end
+            end
+            break
         end
       end
     end
-    flash_notice "New CSVs created"
+    return csv
   end
 end

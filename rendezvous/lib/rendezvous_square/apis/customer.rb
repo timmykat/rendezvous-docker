@@ -39,7 +39,7 @@ module RendezvousSquare
     end
 
     def create_customer(user)
-      Rails.logger.info("Creating new Square customer: " + user.email)
+      Rails.logger.debug("Creating new Square customer: " + user.email)
       body = create_customer_object(user)
       result = api.create_customer(body: body)
 

@@ -78,7 +78,7 @@
                   - if @event_registration.status != Rails.configuration.rendezvous[:registration_statuses][0]
                     %br
                     - if @event_registration.user.has_role? :vendor
-                      - vendor_name = @event_registration.user.vendor&.name
+                      - vendor_name = @event_registration.user&.vendor&.name
                       - if !vendor_name.nil?
                         %label Vendor: 
                         #{vendor_name}

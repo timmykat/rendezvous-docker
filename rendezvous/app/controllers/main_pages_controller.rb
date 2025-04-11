@@ -21,7 +21,7 @@ class MainPagesController < ApplicationController
   
   def history
     @title = 'Rendezvous History'
-    @content = @content = KeyedContent.find_by_key "page_history"
+    @content = KeyedContent.find_by_key "page_history"
   end
     
   def legal_information
@@ -36,6 +36,11 @@ class MainPagesController < ApplicationController
   def vendors
     @title = 'Vendors'
     @vendors = Admin::Vendor.sorted
+  end
+
+  def volunteering
+    @title = 'Volunteering'
+    @content = KeyedContent.find_by_key 'page_volunteering'
   end
   
   def method_missing(method_sym, *arguments, &block)

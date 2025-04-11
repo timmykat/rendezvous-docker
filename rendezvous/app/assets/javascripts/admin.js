@@ -15,13 +15,11 @@
 
         $('[data-toggle]').on('click', function(e) {
             let path = '/ajax/toggle/' + $(this).data('toggle')
-            console.log(path)
             $.get(path)
         })
 
 
         $('#select_all').on('change', function(e) {
-            console.log('Changed')
             $('.delete_user').prop('checked', $(this).prop('checked'))
         })
 

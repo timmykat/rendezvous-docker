@@ -82,17 +82,18 @@ module VehicleTaxonomy
     VEHICLES[:marques]["Citroen"][:categories].values.flat_map { |category| category[:models] }
   end
 
-  def self.get_category(marque, model)
-    return nil if marque.nil? && model.nil?
+  def self.get_category(v)
+    return "NONE" if v.marque.nil? || v.model.nil?
 
-    categories = VEHICLES[:marques][marque][:categories]
+    categories = VEHICLES.dig(:marques, v.marque, :categories)
+    return "NONE" if categories.nil?
 
     category = nil
-    if marque != "Citroen" || (marque == "Citroen" && !get_citroen_models.include?(model))
-      category = VEHICLES[:marques][marque][:categories].key
+    if v.marque != "Citroen" || (v.marque == "Citroen" && !get_citroen_models.include?(v.model))
+      category = VEHICLES[:marques][v.marque][:categories].keys.first
     else
-      return "UNKNOWN" if model.nil?
-      category = categories.find{ |category, data| data[:models].include?(model) }&.first
+      return "NONE" if v.model.nil?
+      category = categories.find{ |category, data| data[:models].include?(v.model) }&.first
     end
   end
 end

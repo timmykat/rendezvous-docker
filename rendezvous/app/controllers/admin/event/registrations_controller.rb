@@ -92,7 +92,7 @@ class Admin::Event::RegistrationsController < AdminController
     session[:admin_user] = true
     user = User.find_by_email(params[:user][:email])
 
-    Rails.logger.info user.blank? ? "No user for #{params[:user][:email]}" : "Found user #{user.full_name}"
+    Rails.logger.warn user.blank? ? "No user for #{params[:user][:email]}" : "Found user #{user.full_name}"
 
     if user.blank?
       user = User.new(new_user_params)
@@ -100,12 +100,9 @@ class Admin::Event::RegistrationsController < AdminController
       password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
       user.password = password
       user.password_confirmation = password
-      Rails.logger.info "Saving user #{user.full_name}"
       if !user.save
         flash_alert_now 'There was a problem saving the user.'
         flash_alert_now user.errors.full_messages.to_sentence        
-      else
-        Rails.logger.info "Successful"
       end
     else
       flash_notice 'This user already exists'
