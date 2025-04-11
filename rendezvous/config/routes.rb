@@ -85,14 +85,13 @@ Rails.application.routes.draw do
   end
 
 
-  # Admin routes
-  get '/admin/toggle_user_session', to: 'admin#toggle_user_session'
-  get '/admin/labels', to: 'admin#make_labels'
-  get '/admin/graphs', to: 'admin#registration_graphs'
-  get '/admin/dedupe', to: 'admin#dedupe'
-  
-  get '/admin/dashboard', to: 'admin#dashboard'
-  
+  get '/admin/dedupe',            to: 'admin#dedupe'
+  get '/admin/dashboard',         to: 'admin#dashboard'
+  get '/admin/download_csv',      to: 'admin#download_csv', defaults: { format: 'csv' }
+  get '/admin/graphs',            to: 'admin#registration_graphs'
+  get '/admin/cleanup',           to: 'users#cleanup'
+  post '/admin/cleanup',          to: 'users#cleanup'
+
   namespace :admin do
     namespace :event do
       resources  :registrations, { only: [ :create, :show, :edit, :update ] }
@@ -103,15 +102,13 @@ Rails.application.routes.draw do
       get 'registrations/:id/delete', to: 'registrations#delete', as: 'delete_registration'
       get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
     end
-    resources :transactions, { only: [ :create ] }
-    get 'cleanup',    to: 'users#cleanup'
-    post 'cleanup',   to: 'users#cleanup'
   end
 
   # -- Content
   get '/',                  to: 'main_pages#index'
   get '/faq',               to: 'main_pages#faq'
   get '/history',           to: 'main_pages#history'
+  get '/volunteering',      to: 'main_pages#volunteering'
   get '/legal_information', to: 'main_pages#legal_information'
   get '/schedule',          to: 'main_pages#schedule'
 

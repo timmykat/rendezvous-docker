@@ -1,8 +1,12 @@
 class Attendee < ApplicationRecord
+  include StripWhitespace
+  
   belongs_to :registration, class_name: 'Event::Registration'
+
+  before_validation :normalize_age
   
   validates :name, presence: true
-  validates :attendee_age, inclusion: { in: ['adult', 'child'] } 
+  validates :attendee_age, inclusion: { in: ['adult', 'senior', 'child'] } 
   
   def self.sunday_dinner_count
     Attendee.where(sunday_dinner: true).count
@@ -18,5 +22,9 @@ class Attendee < ApplicationRecord
   
   def self.child_count
     Attendee.where(attendee_age: 'child').count
+  end
+
+  def normalize_age
+    self.attendee_age = 'adult' if self.attendee_age == 'senior'
   end
 end

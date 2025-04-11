@@ -1,2 +1,12 @@
-%h1 KeyedContents#new
-%p Find me in app/views/admin/keyed_contents/new.html.haml
+.container 
+  .row.justify-content.center
+    .col-md-8
+      .card
+        .card-body 
+          .card-text
+            %h1.h3 Create Keyed Content
+            = simple_form_for @keyed_content do |f|
+              = render partial:  'keyed_content_fields', locals: { f: f }
+              %br
+              .form-group
+                = f.button :submit, input_html:  { value:  'Create Keyed Content' }, class:  "btn  btn-primary"

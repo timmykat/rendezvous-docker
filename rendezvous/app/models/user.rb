@@ -5,6 +5,7 @@ require 'role_model'
 class User < ApplicationRecord
 
   include RoleModel
+  include StripWhitespace
 
   before_save :set_country
 

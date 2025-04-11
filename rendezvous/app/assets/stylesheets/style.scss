@@ -80,6 +80,11 @@ section.banner {
 	font-weight: bold;
 }
 
+button[data-dismiss] {
+	border: none;
+	background: none;
+}
+
 a, a:visited {
 	color: var(--warm-maroon);
 	@include transition;

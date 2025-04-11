@@ -15,8 +15,8 @@
                 .card-title
                   %h2.h3 Vendor Fee
                 .card.text
-                  - if @event_registration.user.vendor
-                    %p Vendor: #{@event_registration.user.vendor.name}
+                  - if @event_registration.user&.vendor
+                    %p Vendor: #{@event_registration.user&.vendor.name}
                   .form-group.vendor-fee
                     = f.input :vendor_fee, input_html: { readonly: true, value: vendor_fee } 
               .card-title
@@ -24,12 +24,14 @@
               .card.text
                 %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
                 .form-group
-                  %label Amount
-                  = f.input :donation, label:  false, collection:  donation_list(config[:suggested_donations], @event_registration.total.to_f), as:  :radio_buttons, input_html:  { class:  'total-calculation mr-2' }, item_label_class:  'radio-inline', item_wrapper_tag:  false
+                  - donation_list(config[:suggested_donations], @event_registration.total.to_f).each do |rb|
+                    %input.radio-inline.total-calculation{type: 'radio', name: :suggested_donation, value: rb[1]}
+                    %span.mr-2= rb[0]
                 .row
                   .col-md-3
                     .form-group
-                      = f.input :donation, label:  false, input_html:  { placeholder:  'Other', class:  'total-calculation'}, disabled:  true
+                      %label Donation Amount
+                      = f.input :donation, label:  false, input_html:  { class:  'total-calculation'}
 
           .card 
             .card-body 

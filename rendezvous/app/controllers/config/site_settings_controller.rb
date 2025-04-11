@@ -35,7 +35,7 @@ class Config::SiteSettingsController < ApplicationController
         :days_duration,
         :refund_date,
         :show_registration_override,
-        :registration_open_date,
+        :registration_is_open,
         :registration_close_date,
         :square_environment,
         :user_testing,

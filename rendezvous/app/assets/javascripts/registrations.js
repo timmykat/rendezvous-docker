@@ -64,23 +64,24 @@
     // Get final total on payment page
     var setTotal = function() {
       if (typeof appData != 'undefined') {
-        var donation = $('input[name="event_registration[donation]"]:checked').val();
-        if (donation == 'other') {
-          donation = $('input[name="event_registration[donation]"][type=number]').val();
-        }
+        let donation = $('input[name="event_registration[donation]"]').val()
+        console.log('Donation', donation)
 
-        var vendorFee = $('input[name="event_registration[vendor_fee]"]').val()
+        let vendorFee = $('input[name="event_registration[vendor_fee]"]').val() || 0.0
+        vendorFee = parseFloat(vendorFee)
 
         if ($.isNumeric(donation)) {
+          console.log('Is numeric')
           donation = parseFloat(donation);
         } else {
           donation = 0.
         }
         var total = parseFloat(appData.event_registration_fee) + donation + parseFloat(vendorFee);
+        console.log('Total')
         $('input#event_registration_total').val(total.toFixed(2));
 
         // Update donation and total in the DB
-        console.log(registrationId, donation, total)
+        const registrationId = $('[data-registration_id]').data('registration_id')
         $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total})
       }
     };
@@ -93,11 +94,14 @@
 
     // Toggle access to donation other amount field
     $('input[type=radio].total-calculation').on('click', function(e) {
-      if ($(this).val() == 'other') {
-        $('input#event_registration_donation').attr('disabled', false);
+      let val = $(this).val()
+      if (val == 'other') {
+        $('input#event_registration_donation').val(parseFloat(0.0).toFixed(2))
       } else {
-        $('input#event_registration_donation').attr('disabled', true).val('');
+        val = parseFloat(val).toFixed(2)
+        $('input#event_registration_donation').val(val);
       }
+      setTotal()
     });
     
     
@@ -116,6 +120,7 @@
         $('#payment-cash').show();
         $('#payment-paid').hide()        
       }
+      const registrationId = $('[data-registration_id]').data('registration_id')
       $.get('/event/ajax/update_paid_method', { id: registrationId, paid_method: value})
     }
     

@@ -1,5 +1,6 @@
 class Vehicle < ApplicationRecord
   extend VehicleTaxonomy
+  include StripWhitespace
 
   belongs_to :user
   has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :vehicle_id, dependent: :destroy
@@ -23,7 +24,7 @@ class Vehicle < ApplicationRecord
   end
   
   def judging_category
-    VehicleTaxonomy.get_category(marque, model)
+    VehicleTaxonomy.get_category(self)
   end  
   
   def at_event?(registration)

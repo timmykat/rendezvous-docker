@@ -3,6 +3,7 @@ class KeyedContentsController < ApplicationController
 
   def new
     @keyed_content = KeyedContent.new
+    @keyed_content.key = params[:keyed_content][:key]
   end
 
   def create
@@ -34,6 +35,7 @@ class KeyedContentsController < ApplicationController
 
   def manage
     @keyed_contents = KeyedContent.order(:key)
+
     missing_keys = KeyedContent.content_keys - @keyed_contents.map{ |c| c.key }
     
     unless missing_keys.empty?
@@ -65,6 +67,10 @@ class KeyedContentsController < ApplicationController
   end
 
   private
+    def new_key_param
+      params.require(:keyed_content).permit(:key)
+    end
+
     def content_params
       params.require(:keyed_content).permit(
         :key, 

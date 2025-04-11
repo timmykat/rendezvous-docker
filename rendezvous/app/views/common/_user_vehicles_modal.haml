@@ -1,8 +1,8 @@
 .modal.fade{tabindex: "-1", id: "vehicle-modal"}
   .modal-dialog.modal-dialog-centered
     .modal-content
-      .modal-header.pull-right
-        %button.btn-close{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} X Close
+      .modal-header.s-flex
+        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} #{bootstrap_icon 'x-circle', '20'}
       .modal-body
         = simple_form_for @user, url: user_path(@user, { redirect_url: redirect_url }), method: :put do |f|
           = render partial:  'common/user_info', locals:  { f:  f, vehicles:  true }

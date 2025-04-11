@@ -34,7 +34,6 @@
           $formDataModel.val(value)
         }
       });
-      console.log($formDataMarque.val(), $formDataModel.val())
     }
 
     const setVehicleInputs = function(event, $vehicle) {

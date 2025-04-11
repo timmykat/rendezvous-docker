@@ -19,14 +19,10 @@ module RendezvousSquare
       post_body[:checkout_options] = {
         redirect_url: redirect_url
       }
-
-      Rails.logger.info("Checkout link post body")
-      Rails.logger.info(post_body)
   
       result = api.create_payment_link(body: post_body)
   
       if result.success?
-        Rails.logger.info result.data.payment_link[:url]
         return result.data.payment_link[:long_url]
       elsif result.error?
         Rails.logger.error result.errors

@@ -4,10 +4,14 @@
       %h1 Manage Content
     .col-md-8 
       %h2 Creating
+      = simple_form_for :keyed_content, url: new_keyed_content_path, method: :get do |f|
+        .form-group
+          = f.input :key, label: 'New key'
+        .form-group
+          = f.submit 'Create', class: "btn  btn-warning"
+
       %p
-        =link_to "Create new", new_keyed_content_path, class: "btn  btn-primary"
-      %p
-        =link_to "Import from CSV", keyed_contents_import_path, class: "btn  btn-warning"
+        = link_to "Import from CSV", keyed_contents_import_path, class: "btn  btn-warning"
 
     .col-md-10
       %h2 Editing

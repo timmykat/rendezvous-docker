@@ -16,9 +16,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
 
-      - name: Verify the evironment
-        run: echo "The environment is $ENVIRONMENT"
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -41,8 +38,8 @@ jobs:
             docker compose -f production-compose.yml up -d
 
             echo "-- Check to see if the container is running"
-            CONTAINER_ID=$(docker ps --filter "name=rails_app_pro" --format="{{.ID}}"")
-            if [ -z "$CONTAINER_D" ]; then
+            CONTAINER_ID=$(docker ps --filter "name=rails_app_pro" --format="{{.ID}}")
+            if [ -z "$CONTAINER_ID" ]; then
               echo "The rails container is not running"
               exit 1
             fi
@@ -51,7 +48,7 @@ jobs:
             docker exec "$CONTAINER_ID" yarn install
 
             echo "-- Precompiling assets inside the container --"
-            docker exec rendezvous-rails-app-prod rake assets:precompile
+            docker exec "$CONTAINER_ID" rake assets:precompile
 
             echo "-- Restart the container"
             docker compose -f production-compose.yml down
