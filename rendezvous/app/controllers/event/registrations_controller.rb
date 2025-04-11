@@ -322,6 +322,7 @@ module Event
 
       def update_payment_params
         params.permit(
+          :id,
           :registration_fee,
           :vendor_fee,
           :donation,
