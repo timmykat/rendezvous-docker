@@ -47,43 +47,40 @@
           .col-md-10
             #annual_question_results 
 
-:javascript
-  const dataset = #{@annual_question_data.to_json}
+-# :javascript
+-#   const dataset = #{@annual_question_data.to_json}
 
-  console.log(dataset.options)
-  console.log(dataset.number)
+-#   loadChartJs(() => {
+-#     const graphContainer = document.getElementById('annual_question_results');
+-#     const canvas = document.createElement('canvas');
+-#     graphContainer.appendChild(canvas);
+-#     const ctx = canvas.getContext('2d');
 
-  loadChartJs(() => {
-    const graphContainer = document.getElementById('annual_question_results');
-    const canvas = document.createElement('canvas');
-    graphContainer.appendChild(canvas);
-    const ctx = canvas.getContext('2d');
-
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: dataset.options,
-        datasets: [{
-          label: 'Survey Responses',
-          data: dataset.number,
-          barThickness: 30,
-          categoryPercentage: 1.0,
-          barPercentage: 0.8,
-          backgroundColor: [
-            'hsl(160, 30%, 60%)',
-            'hsl(20, 30%, 60%)',
-            'hsl(240, 30%, 60%)'
-          ]
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        scales: {
-          x: {
-            beginAtZero: true
-          }
-        }
-      }
-    })
-  })
+-#     new Chart(ctx, {
+-#       type: 'bar',
+-#       data: {
+-#         labels: dataset.options,
+-#         datasets: [{
+-#           label: 'Survey Responses',
+-#           data: dataset.number,
+-#           barThickness: 30,
+-#           categoryPercentage: 1.0,
+-#           barPercentage: 0.8,
+-#           backgroundColor: [
+-#             'hsl(160, 30%, 60%)',
+-#             'hsl(20, 30%, 60%)',
+-#             'hsl(240, 30%, 60%)'
+-#           ]
+-#         }]
+-#       },
+-#       options: {
+-#         indexAxis: 'y',
+-#         scales: {
+-#           x: {
+-#             beginAtZero: true
+-#           }
+-#         }
+-#       }
+-#     })
+-#   })
 
