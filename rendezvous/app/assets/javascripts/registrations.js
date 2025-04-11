@@ -80,6 +80,7 @@
         $('input#event_registration_total').val(total.toFixed(2));
 
         // Update donation and total in the DB
+        const registrationId = $('[data-registration_id]').data('registration_id')
         $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total})
       }
     };
@@ -115,6 +116,7 @@
         $('#payment-cash').show();
         $('#payment-paid').hide()        
       }
+      const registrationId = $('[data-registration_id]').data('registration_id')
       $.get('/event/ajax/update_paid_method', { id: registrationId, paid_method: value})
     }
     
