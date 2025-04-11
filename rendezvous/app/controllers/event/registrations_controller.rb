@@ -195,8 +195,13 @@ module Event
     end
 
     def send_to_square
-      event_registration = Registration.find(params[:id])
-      user = event_registration.user
+      @event_registration = Registration.find(params[:id]) 
+      if !@event_registration.update(update_payment_params)
+        flash_alert "There was a problem making your payment update; no payment submitted"
+        render :payment
+      end
+
+      user = @event_registration.user
       customer_id = ::RendezvousSquare::Customer.find_customer(user.email)
 
       if !customer_id
@@ -205,8 +210,8 @@ module Event
         Rails.logger.info("Square customer found: " + customer_id)
       end
 
-      redirect_url = complete_after_online_payment_event_registration_url(event_registration)
-      square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(event_registration, customer_id, redirect_url)
+      redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
+      square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(@event_registration, customer_id, redirect_url)
       redirect_to square_payment_link, allow_other_host: true
     end
 
@@ -315,6 +320,18 @@ module Event
         end
       end
 
+      def update_payment_params
+        params.permit(
+          :registration_fee,
+          :vendor_fee,
+          :donation,
+          :total,
+          :paid_amount,
+          :paid_method,
+          :paid_date
+        )
+      end
+
       def event_registration_params
         params.require(:event_registration).permit(
           :annual_answer,
@@ -333,7 +350,7 @@ module Event
           :invoice_number,
           :user_id,
           { attendees_attributes:
-            [:id, :name, :attendee_age, :volunteer, :sunday_dinner, :_destroy]
+            [:id, :name, :attendee_age, :volunteer, :_destroy]
           },
           {:user_attributes=>
             [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,

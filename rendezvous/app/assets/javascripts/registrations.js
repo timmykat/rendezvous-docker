@@ -64,10 +64,7 @@
     // Get final total on payment page
     var setTotal = function() {
       if (typeof appData != 'undefined') {
-        var donation = $('input[name="event_registration[donation]"]:checked').val();
-        if (donation == 'other') {
-          donation = $('input[name="event_registration[donation]"][type=number]').val();
-        }
+        let donation = $('input[name="event_registration[donation]"]').val()
 
         var vendorFee = $('input[name="event_registration[vendor_fee]"]').val()
 
@@ -93,10 +90,12 @@
 
     // Toggle access to donation other amount field
     $('input[type=radio].total-calculation').on('click', function(e) {
-      if ($(this).val() == 'other') {
-        $('input#event_registration_donation').attr('disabled', false);
+      let val = $(this).val()
+      if (val == 'other') {
+        $('input#event_registration_donation').val('')
       } else {
-        $('input#event_registration_donation').attr('disabled', true).val('');
+        val = parseFloat(val).toFixed(2)
+        $('input#event_registration_donation').val(val);
       }
     });
     
