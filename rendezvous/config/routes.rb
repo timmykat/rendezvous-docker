@@ -108,6 +108,7 @@ Rails.application.routes.draw do
   get '/',                  to: 'main_pages#index'
   get '/faq',               to: 'main_pages#faq'
   get '/history',           to: 'main_pages#history'
+  get '/volunteering',      to: 'main_pages#volunteering'
   get '/legal_information', to: 'main_pages#legal_information'
   get '/schedule',          to: 'main_pages#schedule'
 
