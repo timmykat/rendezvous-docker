@@ -2,6 +2,8 @@
   = f.input :name
 .form-group
   = f.input :owner_id, collection: User.with_role(:vendor), label_method: :email, value_method: :id, label: "Owner" 
+.form-group
+  = f.input :owner_display_name
 .form-group 
   = f.input :phone
 .form-group 
