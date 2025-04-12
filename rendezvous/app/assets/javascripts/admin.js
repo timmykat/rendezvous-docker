@@ -1,5 +1,13 @@
 (function($) {
     jQuery(document).ready(function() {
+        const getCsrfHeaders = function() {
+            let token = $('meta[name="csrf-token"]').attr('content')
+            return {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": token
+            }
+        }
+
         $('#tabbed').tabs();
 
         $('#user-table').tablesorter({
@@ -15,7 +23,11 @@
 
         $('[data-toggle]').on('click', function(e) {
             let path = $(this).data('toggle')
-            $.get(path)
+            $.ajax({
+                url: path,
+                method: 'GET',
+                headers: getCsrfHeaders()
+            })
         })
 
 
