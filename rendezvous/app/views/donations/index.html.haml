@@ -1,2 +1,21 @@
-%h1 Donations#index
-%p Find me in app/views/donations/index.html.haml
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body 
+          .card-title
+            %h1.h3 Donations
+          .card-text
+            %table.table
+              %thead
+                %th Year
+                %th Name
+                %th Amount
+              %tbody
+                - @donations.each do |donation|
+                  %tr
+                    %td
+                      donation.user&.full_name || %donation.email 
+                    %td
+                      donation.amount
+            

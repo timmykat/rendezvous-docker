@@ -1,0 +1,14 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body 
+          .card-title
+            %h1.h3 Thank you!
+          .card-text
+             = keyed_content 'page_donation_thanks'
+
+            %p Your donation: 
+            
+            %p Amount: #{@donation.amount}
+            %p Date: #{donation.date.strftime("%B %d, %Y")}
