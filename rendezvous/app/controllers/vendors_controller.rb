@@ -62,6 +62,7 @@ class VendorsController < ApplicationController
       params.require(:vendor).permit(
         :name,
         :owner_id,
+        :owner_display_name,
         :email,
         :phone,
         :website,
