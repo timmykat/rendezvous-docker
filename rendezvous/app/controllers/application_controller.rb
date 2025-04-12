@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
 
   def verify_recaptcha?(token, recaptcha_action, email)
     
-    Check if user is whitelisted
+    # Check if user is whitelisted
     user = User.find_by_email(email)
     if user && user.recaptcha_whitelisted?
       Rails.logger.warn "Skipping recaptcha for #{user.email}"
