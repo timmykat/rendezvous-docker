@@ -12,10 +12,10 @@
                 %h2.h3= vendor.name
               .card-text
                 %table.table
-                  - if vendor.owner.present?
+                  - if owner_name(vendor)
                     %tr
                       %td= bootstrap_icon 'person-raised-hand'
-                      %td= vendor.owner.full_name                   
+                      %td= owner_name(vendor)                   
                   - if vendor.website.present?
                     %tr
                       %td= bootstrap_icon 'mouse2-fill'
