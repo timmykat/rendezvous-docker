@@ -13,8 +13,8 @@ module RendezvousSquare
       (currency_amount * 100).round()
     end
 
-    def create_square_payment_link(registration, customer_id, redirect_url)
-      post_body = create_checkout_body(registration, customer_id)
+    def create_square_payment_link(object, customer_id, redirect_url)
+      post_body = create_checkout_body(object, customer_id)
 
       post_body[:checkout_options] = {
         redirect_url: redirect_url
@@ -30,14 +30,22 @@ module RendezvousSquare
       end
     end
 
-    def create_checkout_body(registration, customer_id)
-      return {
-        idempotency_key: Base.idempotency_key,
-        order: create_order_object(registration, customer_id)
-      }
+    def create_checkout_body(object, customer_id)
+      case object
+      when Event::Registraion
+        return {
+          idempotency_key: Base.idempotency_key,
+          order: create_order_registration_object(object, customer_id)
+        }
+      when Donation
+        return {
+          idempotency_key: Base.idempotency_key,
+          order: create_order_donation_object(object, customer_id)
+        }
+      end
     end
 
-    def create_order_object(registration, customer_id)
+    def create_order_registration_object(registration, customer_id)
       return {
           source: {
             name: "web registration"
@@ -56,6 +64,27 @@ module RendezvousSquare
             }
           ]
         }
-    end   
+    end
+    
+    def create_order_donation_object(donation, customer_id)
+      return {
+          source: {
+            name: "web donation"
+          },
+          location_id: SQUARE_LOCATION_ID,
+          customer_id: customer_id,
+          line_items: [
+            {
+              name: Date.current.year.to_s + " Donation",
+              quantity: "1",
+              base_price_money: {
+                amount: integerize(donation.amount),
+                currency: "USD"
+              },
+              note: "Non-registration donation"
+            }
+          ]
+        }
+    end 
   end
 end

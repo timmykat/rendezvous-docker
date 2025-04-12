@@ -1,0 +1,15 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body 
+          .card-title
+            %h1.h3 Make a Donation
+          .card-text
+            = keyed_content 'page_donation'
+              
+            = simple_form_for send_to_square_path(@donation) do |f|
+              = render partial:  'donation_fields', locals: { f: f }
+              %br
+              .form-group
+                = f.button :submit, input_html:  { value:  'Donate' }, class:  "btn  btn-primary"
