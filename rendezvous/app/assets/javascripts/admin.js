@@ -14,7 +14,7 @@
         });
 
         $('[data-toggle]').on('click', function(e) {
-            let path = '/ajax/toggle/' + $(this).data('toggle')
+            let path = $(this).data('toggle')
             $.get(path)
         })
 

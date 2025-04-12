@@ -212,10 +212,10 @@
               %thead
                 %tr
                   %th.tablesorter-header.filter-false User Roles
-                  %th.is-testing.tablesorter-header.filter-false Actions
                   %th.last-name.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Last Name 
                   %th.first-name.tablesorter-header.filter-false First Name
                   %th.email.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Email
+                  %th.recaptcha-whitelisted.filter-false Recaptcha
                 %tbody
                   %tr{role: 'search', class: 'tablesorter-filter-row tablesorter-ignoreRow'}
                     %td
@@ -227,7 +227,7 @@
                     %tr
                       %td
                         - [:tester, :vendor, :admin].each do |role|
-                          = check_box_tag role, '1', user.has_role?(role), "data-toggle" => "role/user/#{user.id}?role=#{role.to_s}"
+                          = check_box_tag role, '1', user.has_role?(role), "data-toggle" => ajax_toggle_role_path(user, role: role)
                           = label_tag role.to_s.titleize
                           %br                        
 
@@ -235,5 +235,7 @@
                       %td= user.first_name
                       %td= user.email
                       %td
+                        = check_box_tag :recaptcha_whitelisted,'1', user.recaptcha_whitelisted?, "data-toggle" => ajax_toggle_whitelist_path(user)
+                        Whitelisted?
 
                           

@@ -56,9 +56,12 @@ module Event
 
     # Create or update the user
     def create
-      unless verify_recaptcha?(params[:recaptcha_token], 'register_event')
-        Rails.logger.warn "Event registration: recaptcha failed for email #{params[:event_registration][:user_attributes][:email]}"
-        redirect_to root_path, notice: 'You have failed reCAPTCHA verification for event registration'
+      email = params[:event_registration][:user_attributes][:email]
+
+      failure_message = verify_recaptcha?(params[:recaptcha_token], 'register_event', email)
+      if failure_message
+        Rails.logger.warn "Event registration: recaptcha failed for #{email}"
+        redirect_to root_path, notice: failure_message
         return
       end
 
@@ -70,7 +73,7 @@ module Event
           redirect_to event_welcome_path and return
         end
       else
-        user = User.find_by_email(params[:event_registration][:user_attributes][:email])
+        user = User.find_by_email(email)
         if user.blank?
           password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
           params[:event_registration][:user_attributes][:password] = password
