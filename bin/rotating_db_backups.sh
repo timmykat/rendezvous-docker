@@ -10,19 +10,21 @@ DB_NAME="rendezvous"
 BACKUP_ROOT="/var/backups/rendezvous"  # Change to your desired backup location
 MAX_BACKUPS=7  # Number of backups to keep
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-DATE=$(date +"%Y-%m-%d)
+DATE=$(date +"%Y-%m-%d)")
 
 mkdir -p "$BACKUP_ROOT/daily" "$BACKUP_ROOT/weekly" "$BACKUP_ROOT/monthly"
 
 # Perform the backup
 BACKUP_FILE="$BACKUP_ROOT/daily/db-backup-$TIMESTAMP.sql"
 BACKUP_FILE_GZ="$BACKUP_FILE.gz"
-docker exec "$CONTAINER_ID" mysqldump -u "$MYSQL_USER" -p "$MYSQL_PASSWORD" "$DB_NAME" > "$BACKUP_FILE"
+docker exec "$CONTAINER_ID" mysqldump -u "$MYSQL_BACKUP_USER" -p"$MYSQL_BACKUP_PASSWORD" "$DB_NAME" > "$BACKUP_FILE"
 
 # Compress the backup
 gzip "$BACKUP_FILE"
+
+# Notify
 FILE_SIZE=$(ls -l $BACKUP_FILE_GZ | awk '{print $5/1024 " k"}')
-echo -e "Backup run completed.\n\n Backup file: $BACKUP_FILE_GZ\nFile size: $FILE_SIZE" | mail -s "Rendezvous backup notification $DATE" -r "Rendezvous Backups <info@citroenrendezvous.org>" kinnel@warpmail.net
+# echo -e "Backup run completed.\n\n Backup file: $BACKUP_FILE\nFile size: $FILE_SIZE" | mail -s "Rendezvous backup notification $DATE" -r "Rendezvous Backups <info@citroenrendezvous.org>" kinnel@warpmail.net
 
 # Determine backup type
 DAY_OF_WEEK=$(date +%u)  # 1 = Monday, 7 = Sunday

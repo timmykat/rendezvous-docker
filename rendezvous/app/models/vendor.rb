@@ -2,7 +2,7 @@ class Vendor < ApplicationRecord
   include MarkdownConcern
   markdown_attributes :address
 
-  belongs_to :user, optional: true
+  belongs_to :owner, class_name: 'User', optional: true
 
   include RailsSortable::Model
   set_sortable :order

@@ -61,14 +61,27 @@ class ApplicationController < ActionController::Base
 
   ## Recaptcha v3 -----------
 
-  def verify_recaptcha?(token, recaptcha_action)
+  def verify_recaptcha?(token, recaptcha_action, email)
+    
+    # Check if user is whitelisted
+    user = User.find_by_email(email)
+    if user && user.recaptcha_whitelisted?
+      Rails.logger.warn "Skipping recaptcha for #{user.email}"
+      return nil
+    end
+
     Rails.logger.debug "Recaptcha action: #{recaptcha_action}"
+    # Continue normal recaptcha
     secret_key = CONFIG[:captcha][:secret_key]
     uri = URI.parse("https://www.google.com/recaptcha/api/siteverify?secret=#{secret_key}&response=#{token}")
     response = Net::HTTP.get_response(uri)
     json = JSON.parse(response.body)
     Rails.logger.debug "Recaptcha response: #{json}"
-    json['success'] && json['score'] > RECAPTCHA_MINIMUM_SCORE && json['action'] == recaptcha_action
+    if json['success'] && (json['score'] > RECAPTCHA_MINIMUM_SCORE) && (json['action'] == recaptcha_action)
+      return nil
+    else
+      "We're sorry, you seem to be a bot"
+    end
   end
 
   ## Recaptcha v3 -----------

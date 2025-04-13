@@ -44,6 +44,14 @@ class UsersController < ApplicationController
     ]
   end
 
+  def toggle_whitelist
+    user = User.find(params[:id])
+    user.recaptcha_whitelisted = !user.recaptcha_whitelisted
+    user.save!
+    Rails.logger.debug "Recaptcha | #{user.email} | #{user.recaptcha_whitelisted ? 'whitelisted' : 'not whitelisted'}"
+    render json: true
+  end
+
   def toggle_role
     user = User.find(params[:id])
     role = params[:role].to_sym
