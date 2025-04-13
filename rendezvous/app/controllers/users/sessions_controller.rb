@@ -4,10 +4,11 @@ class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
   def request_login_link
-
-    unless verify_recaptcha?(recaptcha_param, 'get_login_link')
-      Rails.logger.warn "Login link: recaptcha failed for email #{params[:email]}"
-      redirect_to root_path, notice: 'You have failed reCAPTCHA verification for login'
+    email = params[:email]
+    failure_message = verify_recaptcha?(recaptcha_param, 'get_login_link', email)
+    if failure_message
+      Rails.logger.warn "Login link: recaptcha failed for #{email}"
+      redirect_to root_path, notice: failure_message
       return
     end
 

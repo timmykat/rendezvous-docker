@@ -22,7 +22,7 @@ class User < ApplicationRecord
   has_many :vehicles, dependent: :destroy
   has_many :registrations, class_name: 'Event::Registration'
   has_many :authorizations
-  has_one  :vendor
+  has_one  :vendor, foreign_key: :owner_id
   has_one  :donation
 
   validates :first_name, presence: true

@@ -12,30 +12,26 @@
                 %h2.h3= vendor.name
               .card-text
                 %table.table
-                  - if !vendor.website.empty?
+                  - if owner_name(vendor)
                     %tr
-                      %td
-                        = bootstrap_icon 'mouse2-fill'
-                      %td
-                        = link_to vendor.website, vendor.website, target:  '_blank'
-                  - if !vendor.email.empty?
+                      %td= bootstrap_icon 'person-raised-hand'
+                      %td= owner_name(vendor)                   
+                  - if vendor.website.present?
                     %tr
-                      %td
-                        = bootstrap_icon 'envelope-at'
-                      %td
-                        = link_to vendor.email, "mailto://#{vendor.email}"
-                  - if !vendor.phone.empty?            
+                      %td= bootstrap_icon 'mouse2-fill'
+                      %td= link_to vendor.website, vendor.website, target:  '_blank'
+                  - if vendor.email.present?
                     %tr
-                      %td
-                        = bootstrap_icon 'telephone-fill'
-                      %td
-                        = link_to vendor.phone, "tel://#{vendor.phone}"
-                  - if !vendor.address.empty?
+                      %td= bootstrap_icon 'envelope-at'
+                      %td= link_to vendor.email, "mailto://#{vendor.email}"
+                  - if vendor.phone.present?      
                     %tr
-                      %td
-                        = bootstrap_icon 'geo-alt'
-                      %td
-                        = vendor.address_as_html
+                      %td= bootstrap_icon 'telephone-fill'
+                      %td= link_to vendor.phone, "tel://#{vendor.phone}"
+                  - if vendor.address.present?
+                    %tr
+                      %td= bootstrap_icon 'geo-alt'
+                      %td= vendor.address_as_html
 
 
              
