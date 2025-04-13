@@ -5,35 +5,57 @@ class DonationsController < ApplicationController
   def index
   end
 
-  def make_a_donation
+  def new
     @donation = Donation.new
   end
 
   def create
-    @donation = Donation.find(params[:id])
+    @donation = Donation.new(donation_params)
 
-    if !@donation.update(donation_params)
-      flash_alert 'There was a problem creating your donation'
-      render :make_a_donation
-    else
-      @donation.status = 'created'
-      @donation.save
+    user = User.find(params[:user][:id])
 
-      customer_id = ::RendezvousSquare::Customer.find_customer(@donation.email)
-      if !customer_id
-        customer_id = ::RendezvousSquare::Customer.create_customer(user)
-      else
-        Rails.logger.info("Square customer found: " + customer_id)
-      end
-
-      redirect_url = thank_you_url(@donation)
-      square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(@donation, customer_id, redirect_url)
-      redirect_to square_payment_link, allow_other_host: true
+    if user.nil?
+      user = User.create(params[:user])
     end
+    @donation.user = user
+
+    if !@donation.save
+      flash_alert 'There was a problem creating your donation'
+      render :new
+      return
+    end
+
+    @donation.status = 'created'
+
+    # Look for associated user
+    user = User.find_by_email(@donation.email)
+    if user
+      @donation.user = user
+    end
+
+    @donation.save
+
+    customer_id = ::RendezvousSquare::Customer.find_customer(@donation.email)
+    if !customer_id
+      customer_id = ::RendezvousSquare::Customer.create_customer(user)
+    else
+      Rails.logger.info("Square customer found: " + customer_id)
+    end
+
+    if user.vendor
+      redirect_url = thank_you_url(@donation, type: 'vendor')
+    else
+      redirect_url = thank_you_url(@donation, type: 'standard')
+    end
+
+    square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(@donation, customer_id, redirect_url)
+    redirect_to square_payment_link, allow_other_host: true
+
   end
 
   def thank_you
     @donation = Donation.find(params[:id])
+    @type = params[:type]
     @donation.status = 'complete'
     @donation.save
   end
@@ -57,4 +79,15 @@ class DonationsController < ApplicationController
 
   def destroy
   end
+
+  private 
+    def donation_params
+      params.require(:donation).permit(
+        :amount,
+        :email,
+        { user_attributes: [
+          :id, :email, :first_name, :last_name, :city, :state_or_province, :postal_code, :country
+        ]}
+      )
+    end
 end

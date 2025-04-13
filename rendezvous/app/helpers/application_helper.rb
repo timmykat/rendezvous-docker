@@ -26,6 +26,10 @@ module ApplicationHelper
     }
   end
 
+  def random_id
+    return SecureRandom.hex(5)
+  end
+
   def bootstrap_icon(icon, size = "32")
     href = image_path "bootstrap-icons/bootstrap-icons.svg"
     tag = <<LITERAL

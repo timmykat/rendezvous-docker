@@ -1,19 +1,33 @@
-.user_fields
+.user_fields{'data-autocomplete' => "#{random_id}"}
   .row
     .col-md-12
       .form-group
-        = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *'
-        - if user_signed_in?
-          = f.input :id, as:  :hidden, input_html:  { value:  current_user.id }
+        = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', input_html: {'data-attribute' => '' }
+        = f.input :id, as:  :hidden, input_html: {'data-autocomplete-target' => ''}
   .row
     .col-md-12
       %label Name
   .row
     .col-md-6.col-12
       .form-group
-        = f.input :first_name, placeholder:  'First name *'
+        = f.input :first_name, placeholder:  'First name *', input_html: {'data-autocomplete-target' => ''}
     .col-md-6.col-12
       .form-group
-        = f.input :last_name, placeholder:  'Last name *' 
+        = f.input :last_name, placeholder:  'Last name *', input_html: {'data-autocomplete-target' => ''} 
+
+  .row
+    .col-md-8.col-12
+      .form-group
+        = f.input :city, class:  'form-control', placeholder:  'City *', input_html: {'data-autocomplete-target' => ''}
+    .col-md-4.col-12
+      .form-group
+        = f.input :postal_code, class:  'form-control', placeholder:  'Zip/Postal Code *', input_html: {'data-autocomplete-target' => ''}
+  .row
+    .col-md-6.col-12
+      .form-group
+        = f.input :state_or_province, collection:  state_province_list, as:  :grouped_select, group_method:  :last, include_blank:  '-- State/Prov (US/Can) --', class:  'form-control', input_html: {'data-autocomplete-target' => ''}
+    .col-md-6.col-12
+      #country
+        = f.input :country, collection:  country_list, as:  :select, :selected => 'USA', class:  'form-control', input_html: {'data-autocomplete-target' => ''}
 
 
