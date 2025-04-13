@@ -1,14 +1,4 @@
 Rails.application.routes.draw do
-  get 'donations/index'
-  get 'donations/new'
-  get 'donations/create'
-  get 'donations/show'
-  get 'donations/edit'
-  get 'donations/update'
-  get 'donations/destroy'
-  get 'annual_question/new'
-  get 'annual_question/edit'
-
   root 'main_pages#index'
 
   # -- Users
@@ -111,6 +101,9 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :donations, { only: [ :new, :create, :index ] }
+  get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
+
   # -- Content
   get '/',                  to: 'main_pages#index'
   get '/faq',               to: 'main_pages#faq'
@@ -131,6 +124,7 @@ Rails.application.routes.draw do
   # -- AJAX routes
   get '/ajax/find_user_by_email',         to: 'users#find_by_email'
   get '/ajax/delete_users',               to: 'users#delete_users'
+  get '/ajax/user/autocomplete',          to: 'users#autocomplete'
 
   namespace :event do
     post '/ajax/update_fees',               to: 'registrations#update_fees'

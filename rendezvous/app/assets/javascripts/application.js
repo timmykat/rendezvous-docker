@@ -11,6 +11,7 @@
 // about supported directives.
 //
 
+//= require throttle-debounce/throttle-debounce
 //= require jquery/dist/jquery
 //= require rails-ujs
 //= require html5shiv/dist/html5shiv.min

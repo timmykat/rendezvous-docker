@@ -18,17 +18,17 @@ class User < ApplicationRecord
 
   include Devise::Models::TokenAuthenticatable
 
+
   has_many :pictures, dependent: :destroy
   has_many :vehicles, dependent: :destroy
   has_many :registrations, class_name: 'Event::Registration'
   has_many :authorizations
   has_one  :vendor, foreign_key: :owner_id
-  has_one  :donation
+  has_many  :donations
 
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, presence: true
-  validates :address1, presence: true, on: :update, allow_blank: true
   validates :city, presence: true, on: :update, allow_blank: true
 #   validates :password, length: { in: 6..20 }
 

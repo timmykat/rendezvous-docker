@@ -64,6 +64,25 @@ class UsersController < ApplicationController
     render json: true
   end
 
+  def autocomplete
+    user = User.find_by_email(params[:email])
+    if user
+      respond_to do |format|
+        format.json do 
+          render json: user.as_json(only: [
+            :id,
+            :first_name,
+            :last_name,
+            :city,
+            :state_or_province,
+            :postal_code,
+            :country
+          ])
+        end
+      end
+    end
+  end
+
   def delete_users
     user_ids = params[:users].split(',')
     users = User.find(user_ids)

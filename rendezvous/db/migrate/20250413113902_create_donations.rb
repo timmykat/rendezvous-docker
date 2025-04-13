@@ -7,7 +7,7 @@ class CreateDonations < ActiveRecord::Migration[7.1]
       t.string  :first_name
       t.string  :last_name
       t.decimal :amount, precision: 6, scale: 2
-      s.string  :status
+      t.string  :status
 
       t.timestamps
     end

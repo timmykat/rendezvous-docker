@@ -32,7 +32,7 @@ module RendezvousSquare
 
     def create_checkout_body(object, customer_id)
       case object
-      when Event::Registraion
+      when Event::Registration
         return {
           idempotency_key: Base.idempotency_key,
           order: create_order_registration_object(object, customer_id)

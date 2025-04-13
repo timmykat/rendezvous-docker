@@ -8,7 +8,7 @@
           .card-text
             = keyed_content 'page_donation'
               
-            = simple_form_for send_to_square_path(@donation) do |f|
+            = simple_form_for @donation, method: :post do |f|
               = render partial:  'donation_fields', locals: { f: f }
               %br
               .form-group

@@ -1,5 +1,12 @@
-.form-group
-  = f.simple_fields_for :user do |u|
-    = render partial:  'user_donation_info', locals:  { f:  u }
-.form-group
-  = f.input :amount
+.card 
+  .card-body 
+    .card-title Personal Information
+    .card-text
+      = f.simple_fields_for :user do |u|
+        = render partial:  'user_donation_info', locals:  { f:  u }
+.card 
+  .card-body 
+    .card-title Amount
+    .card-text
+      .form-group
+        = f.input :amount, label: false
