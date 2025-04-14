@@ -7,6 +7,7 @@ class DonationsController < ApplicationController
 
   def new
     @donation = Donation.new
+    @donation.user = User.new
   end
 
   def create

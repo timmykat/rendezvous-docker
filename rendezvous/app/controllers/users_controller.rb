@@ -30,20 +30,6 @@ class UsersController < ApplicationController
     end
   end
 
-  def find_by_email
-    user = User.find_by_email(params[:email])
-    render json: user, only: [
-      :first_name, 
-      :last_name, 
-      :address1, 
-      :address2,
-      :city, 
-      :state_or_province,
-      :postal_code,
-      :country 
-    ]
-  end
-
   def toggle_whitelist
     user = User.find(params[:id])
     user.recaptcha_whitelisted = !user.recaptcha_whitelisted
