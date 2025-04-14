@@ -10,4 +10,6 @@ class Donation < ApplicationRecord
   validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }, presence: true
 
   validates :user, presence: true
+
+  accepts_nested_attributes_for :user
 end

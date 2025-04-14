@@ -30,49 +30,71 @@ window.onload = (e) => {
         })
     });
 
-    const throttle = window.throttleDebounce.throttle;
-    const debounce = window.throttleDebounce.debounce;
-    const autocompleteUrl = '/ajax/user/autocomplete'
-    const extractAttribute = (name) => {
-        const match = name?.match(/\[([a-z_]+)\]$/)
-        return match && match[1]
-    }
-    const getCsrfHeaders = function() {
-        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        return {
-            "Content-Type": "application/json",
-            "X-CSRF-Token": token
+    const donationPage = document.querySelector('body.c_donations')
+    if (donationPage) {
+        const throttle = window.throttleDebounce.throttle;
+        const debounce = window.throttleDebounce.debounce;
+        const autocompleteUrl = '/ajax/user/autocomplete'
+        const extractAttribute = (name) => {
+            const match = name?.match(/\[([a-z_]+)\]$/)
+            return match && match[1]
         }
-    }
-    const debounceAutocomplete = debounce(500, function(event) {
-        const field = event.target;
-        const container = field.closest('[data-autocomplete]')
-        let name = field.getAttribute('name')
-        if (name == null) return
-        const searchAttribute = extractAttribute(name)
-        const searchValue = encodeURIComponent(field.value)
-        const url = `${autocompleteUrl}?${searchAttribute}=${searchValue}`
-        const targetFields = container.querySelectorAll('[data-autocomplete-target]')
-        fetch(url, {headers: getCsrfHeaders})
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                targetFields.forEach(field => {
-                    console.log(field)
-                    let name = field.getAttribute('name')
-                    let dataAttribute = extractAttribute(name)
-                    console.log(dataAttribute)
-                    field.value = data[dataAttribute]
+        const getCsrfHeaders = function() {
+            let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            return {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": token
+            }
+        }
+        const debounceAutocomplete = debounce(500, function(event) {
+            const field = event.target;
+            const container = field.closest('[data-autocomplete]')
+            let name = field.getAttribute('name')
+            if (name == null) return
+            const searchAttribute = extractAttribute(name)
+            const searchValue = encodeURIComponent(field.value)
+            const url = `${autocompleteUrl}?${searchAttribute}=${searchValue}`
+            const targetFields = container.querySelectorAll('[data-autocomplete-target]')
+            fetch(url, {headers: getCsrfHeaders})
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    targetFields.forEach(field => {
+                        console.log(field)
+                        let name = field.getAttribute('name')
+                        let dataAttribute = extractAttribute(name)
+                        console.log(dataAttribute)
+                        field.value = data[dataAttribute]
+                    })
                 })
-            })
-    })
-    
+        })
+        
 
-    document.querySelectorAll('[data-autocomplete]').forEach((element) => {
-        let autocompleteId = element.getAttribute('[data-autocomplete]')
-        let field = element.querySelector('[data-attribute]')
-        field.addEventListener('keyup', debounceAutocomplete)
-    })
+        document.querySelectorAll('[data-autocomplete]').forEach((element) => {
+            let autocompleteId = element.getAttribute('[data-autocomplete]')
+            let field = element.querySelector('[data-attribute]')
+            field.addEventListener('keyup', debounceAutocomplete)
+        })
+
+        const isNumeric = function(value) {
+            return typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value));
+        }
+
+        const donationSelector = document.querySelector('.form-group.donation-amount')
+        const amountField = donationSelector.querySelector('input[name="donation[amount]"]')
+        donationSelector.querySelectorAll('input[type=radio]').forEach(radio => {
+            radio.addEventListener('click', (e) => {
+                input = e.target
+                let value = input.value
+                if (isNumeric(value)) {
+                    amountField.value = parseFloat(value).toFixed(2)
+                } else {
+                    amountField.value = ''
+                }
+            })
+        })
+    }
+
 }
 
 

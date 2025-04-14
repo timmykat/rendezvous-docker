@@ -1,3 +1,4 @@
+- config = Rails.configuration.rendezvous
 .card 
   .card-body 
     .card-title Personal Information
@@ -8,5 +9,10 @@
   .card-body 
     .card-title Amount
     .card-text
-      .form-group
-        = f.input :amount, label: false
+      .form-group.donation-amount
+        - donation_list(config[:suggested_donations], nil).each do |rb|
+          %input.radio-inline{type: 'radio', name: :suggested_donation, value: rb[1]}
+          %span.mr-2= rb[0]
+        .row 
+          .col-md-3    
+            = f.input :amount, label: false
