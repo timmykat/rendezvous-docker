@@ -8,35 +8,34 @@ class DonationsController < ApplicationController
   def new
     @donation = Donation.new
     @donation.user = User.new
+    @donation.status = 'initialized'
   end
 
   def create
-    @donation = Donation.new(donation_params)
-
-    user = User.find(params[:user][:id])
-
-    if user.nil?
-      user = User.create(params[:user])
+    user = User.find(params[:donation][:user_attributes][:id])
+    if !user
+      params[:user] = params[:donation][:user_attributes]
+      user = User.create(user_params)
     end
+    @donation = Donation.new()
+    @donation.first_name = user.first_name
+    @donation.last_name = user.last_name
     @donation.user = user
+    @donation.amount = params[:donation][:amount]
+    @donation.status = params[:donation][:status]
+
+    Rails.logger.debug @donation.user
 
     if !@donation.save
-      flash_alert 'There was a problem creating your donation'
+      flash_alert @donation.errors.full_messages.to_sentence
       render :new
       return
     end
 
     @donation.status = 'created'
-
-    # Look for associated user
-    user = User.find_by_email(@donation.email)
-    if user
-      @donation.user = user
-    end
-
     @donation.save
 
-    customer_id = ::RendezvousSquare::Customer.find_customer(@donation.email)
+    customer_id = ::RendezvousSquare::Customer.find_customer(@donation.user.email)
     if !customer_id
       customer_id = ::RendezvousSquare::Customer.create_customer(user)
     else
@@ -51,7 +50,6 @@ class DonationsController < ApplicationController
 
     square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(@donation, customer_id, redirect_url)
     redirect_to square_payment_link, allow_other_host: true
-
   end
 
   def thank_you
@@ -81,13 +79,35 @@ class DonationsController < ApplicationController
   def destroy
   end
 
-  private 
+  private
+    def user_params
+      params.require(:user).permit(
+        :id,
+        :email,
+        :first_name,
+        :last_name, 
+        :city,
+        :state_or_province,
+        :postal_code,
+        :country
+      )
+    end
+
     def donation_params
       params.require(:donation).permit(
         :amount,
-        :email,
-        { user_attributes: [
-          :id, :email, :first_name, :last_name, :city, :state_or_province, :postal_code, :country
+        :first_name,
+        :last_name,
+        :status,
+        { user_attributes: [ 
+          :id,
+          :email,
+          :first_name,
+          :last_name, 
+          :city,
+          :state_or_province,
+          :postal_code,
+          :country
         ]}
       )
     end
