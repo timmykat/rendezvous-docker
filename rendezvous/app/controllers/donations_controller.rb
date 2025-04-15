@@ -19,10 +19,10 @@ class DonationsController < ApplicationController
       params[:user] = params[:donation][:user_attributes]
       user = User.create(user_params)
       # Set a password for the user
-      user.set_password
+      user.generate_password
       user.save
     end
-    
+
     @donation = Donation.new()
     @donation.first_name = user.first_name
     @donation.last_name = user.last_name
