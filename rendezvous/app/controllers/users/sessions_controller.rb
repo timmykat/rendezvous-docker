@@ -4,6 +4,7 @@ class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
   def request_login_link
+    store_location_for(:user, request.referrer || request.fullpath)
     email = params[:email]
     failure_message = verify_recaptcha?(recaptcha_param, 'get_login_link', email)
     if failure_message
@@ -33,10 +34,8 @@ class Users::SessionsController < Devise::SessionsController
     if !resource
       flash_alert 'We\re sorry, we were unable to authenticate that email address, or your token is expired.'
       redirect_to new_session_path(resource_name)
-    elsif resource.admin?
-      redirect_to admin_dashboard_path
     else
-      redirect_to new_event_registration_path
+      redirect_to after_sign_in_path_for(resource)
     end
   end
 
