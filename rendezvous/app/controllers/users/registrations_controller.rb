@@ -14,8 +14,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def create
 
-    unless verify_recaptcha?(params[:recaptcha_token], 'register_user')
-      Rails.logger.warn "Login link: recaptcha failed for email #{params[:email]}"
+    unless verify_recaptcha?(params[:recaptcha_token], 'register_user', params[:user][:email])
+      Rails.logger.warn "Login link: recaptcha failed for email #{params[:user][:email]}"
       redirect_to root_path, notice: 'You have failed reCAPTCHA verification for user registration'
       return
     end
