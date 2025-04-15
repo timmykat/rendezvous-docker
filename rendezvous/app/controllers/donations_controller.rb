@@ -12,11 +12,17 @@ class DonationsController < ApplicationController
   end
 
   def create
-    user = User.find(params[:donation][:user_attributes][:id])
+    if !params[:donation][:user_attributes][:id].empty?
+      user = User.find(params[:donation][:user_attributes][:id])
+    end
     if !user
       params[:user] = params[:donation][:user_attributes]
       user = User.create(user_params)
+      # Set a password for the user
+      user.set_password
+      user.save
     end
+    
     @donation = Donation.new()
     @donation.first_name = user.first_name
     @donation.last_name = user.last_name
