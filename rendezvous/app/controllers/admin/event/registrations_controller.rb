@@ -98,7 +98,7 @@ class Admin::Event::RegistrationsController < AdminController
       user = User.new(new_user_params)
 
       # Set a password for the user
-      user.set_password
+      user.generate_password
 
       if !user.save
         flash_alert_now 'There was a problem saving the user.'

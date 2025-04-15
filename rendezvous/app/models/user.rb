@@ -59,7 +59,7 @@ class User < ApplicationRecord
 
   roles :admin, :organizer, :registrant, :tester, :superuser, :vendor
 
-  def set_password
+  def generate_password
     password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
     self.password = password
     self.password_confirmation = password
