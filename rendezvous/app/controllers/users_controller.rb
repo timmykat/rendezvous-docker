@@ -52,9 +52,11 @@ class UsersController < ApplicationController
 
   def autocomplete
     user = User.find_by_email(params[:email])
-    if user
-      respond_to do |format|
-        format.json do 
+    respond_to do |format|
+      format.json do 
+        if !user
+          render json: { status: 'not found' }
+        else
           render json: user.as_json(only: [
             :id,
             :first_name,

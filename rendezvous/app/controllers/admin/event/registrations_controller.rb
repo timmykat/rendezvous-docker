@@ -96,10 +96,10 @@ class Admin::Event::RegistrationsController < AdminController
 
     if user.blank?
       user = User.new(new_user_params)
+
       # Set a password for the user
-      password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
-      user.password = password
-      user.password_confirmation = password
+      user.set_password
+
       if !user.save
         flash_alert_now 'There was a problem saving the user.'
         flash_alert_now user.errors.full_messages.to_sentence        

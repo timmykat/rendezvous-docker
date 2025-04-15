@@ -64,10 +64,13 @@ window.onload = (e) => {
             fetch(url, {headers: getCsrfHeaders})
                 .then(response => response.json())
                 .then(data => {
+                    if (data.status === 'not found') {
+                        clearFields(targetFields)
+                        return;
+                    }
                     targetFields.forEach(field => {
                         let name = field.getAttribute('name')
                         let dataAttribute = extractAttribute(name)
-                        console.log(dataAttribute)
                         field.value = data[dataAttribute]
                     })
                 })
