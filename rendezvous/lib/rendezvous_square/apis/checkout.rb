@@ -54,7 +54,7 @@ module RendezvousSquare
           customer_id: customer_id,
           line_items: [
             {
-              name: Date.current.year.to_s + " Rendezvous registration",
+              name: Date.current.year.to_s + " Citroen Rendezvous registration",
               quantity: "1",
               base_price_money: {
                 amount: integerize(registration.total),
@@ -75,7 +75,7 @@ module RendezvousSquare
           customer_id: customer_id,
           line_items: [
             {
-              name: Date.current.year.to_s + " Donation",
+              name: Date.current.year.to_s + " Citroen Rendezvous Donation",
               quantity: "1",
               base_price_money: {
                 amount: integerize(donation.amount),

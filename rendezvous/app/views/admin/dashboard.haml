@@ -46,11 +46,19 @@
                   %td.text-left
                     %ul.list-unstyled
                       %li
-                        = link_to 'View', event_registration_path(registration.id), class:  'btn btn-sm btn-primary mb-1 mr-1'
-                        = link_to 'Edit', edit_admin_event_registration_path(registration.id), class:  'btn btn-sm btn-warning mb-1'
+                        = link_to 'View', event_registration_path(registration.id)
+                      %li  
+                        = link_to 'Edit', edit_event_registration_path(registration.id)
+                      - if registration.status != 'complete'
+                        %li
+                          = link_to 'Review', review_event_registration_path(registration.id)
+                        %li
+                          = link_to 'Payment', payment_event_registration_path(registration.id)
                       %li
-                        = link_to 'Cancel', admin_event_cancel_registration_path(registration.id), data: { confirm: "Are you sure?" }, class:  'btn btn-sm btn-danger mr-1'
-                        = link_to 'DELETE', admin_event_delete_registration_path(registration.id), data: { confirm: "Are you sure?" }, class:  'btn btn-sm btn-danger'
+                        = link_to 'Cancel', admin_event_cancel_registration_path(registration.id), data: { confirm: "Are you sure?" }
+                      %li   
+                        = link_to 'DELETE', admin_event_delete_registration_path(registration.id), data: { confirm: "Are you sure?" }
+                          
                   %td.text-center
                     = registration.status
                     .status-icon

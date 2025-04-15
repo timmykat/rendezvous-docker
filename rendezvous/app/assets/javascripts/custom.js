@@ -46,21 +46,25 @@ window.onload = (e) => {
                 "X-CSRF-Token": token
             }
         }
+        const clearFields = function(targetFields) {
+            targetFields.forEach(field => {
+                let name = field.getAttribute('name')
+                field.value = ''
+            })
+        }
         const debounceAutocomplete = debounce(500, function(event) {
             const field = event.target;
             const container = field.closest('[data-autocomplete]')
+            const targetFields = container.querySelectorAll('[data-autocomplete-target]')
             let name = field.getAttribute('name')
             if (name == null) return
             const searchAttribute = extractAttribute(name)
             const searchValue = encodeURIComponent(field.value)
             const url = `${autocompleteUrl}?${searchAttribute}=${searchValue}`
-            const targetFields = container.querySelectorAll('[data-autocomplete-target]')
             fetch(url, {headers: getCsrfHeaders})
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
                     targetFields.forEach(field => {
-                        console.log(field)
                         let name = field.getAttribute('name')
                         let dataAttribute = extractAttribute(name)
                         console.log(dataAttribute)
