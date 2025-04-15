@@ -29,9 +29,9 @@
                   - unless registration_is_open || user_is_tester?
                     %li.nav-item.placeholder #{"&nbsp;&nbsp;".html_safe}
                   - else
-                    -# - if !current_user
-                    -#   %li.nav-item
-                    -#     = link_to 'Sign In', new_user_session_path, class: 'nav-link'
+                    - if !current_user
+                      %li.nav-item
+                        -# = link_to 'Sign In', new_user_session_path, class: 'nav-link'
                     - else
                       %li.nav-item.dropdown
                         %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
