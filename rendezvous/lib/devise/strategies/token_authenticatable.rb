@@ -12,14 +12,18 @@ module Devise
       end
 
       def authenticate!
+        Rails.logger.debug params[:login_token]
         resource = User.find_by_token(params[:login_token])
+
+        Rails.logger.debug resource.to_s
 
         hashed = false
         validity = validate(resource)
         if validity == :valid
           hashed = true
           remember_me(resource)
-          resource.after_token_authentication
+          # Moving the following to the landing page handler
+          #resource.expire_token
           success!(resource)
         else
           Rails.logger.debug "Authentication FAIL"

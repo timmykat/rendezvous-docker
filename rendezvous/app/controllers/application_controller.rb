@@ -102,7 +102,11 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    stored_location_for(resource) || root_path
+    if !resource.current_registration
+      event_welcome_path
+    else
+      landing_page_path
+    end
   end
 
   def after_sign_out_path_for(resource_or_scope)

@@ -69,15 +69,15 @@ Rails.application.configure do
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = true
-  mailconf = Rails.configuration.rendezvous[:mailer]
-  mailconf[:smtp_settings][:openssl_verify_mode] = OpenSSL::SSL::VERIFY_NONE
+  mail_config = Rails.configuration.mailer
+  mail_config[:smtp_settings][:openssl_verify_mode] = OpenSSL::SSL::VERIFY_NONE
 
-  config.action_mailer.delivery_method = mailconf[:delivery_method].to_sym
+  config.action_mailer.delivery_method = mail_config[:delivery_method].to_sym
   config.action_mailer.default_url_options = { 
     protocol: 'https', 
     host: 'rendezvous.local.wordsareimages.com'
   }
-  config.action_mailer.smtp_settings = mailconf[:smtp_settings].clone
+  config.action_mailer.smtp_settings = mail_config[:smtp_settings].clone
 
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
 

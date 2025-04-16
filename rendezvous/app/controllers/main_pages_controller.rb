@@ -2,6 +2,7 @@ class MainPagesController < ApplicationController
   before_action :set_main_page, only: [:show, :edit, :update, :destroy]
   before_action :check_test_param, only: [:index]
   before_action :set_cache_headers
+  before_action :authenticate_user!, only: [ :landing_page ]
 
   def check_test_param
     session[:test_session] = params[:test] && params[:test].downcase == 'opron'
@@ -41,6 +42,11 @@ class MainPagesController < ApplicationController
   def volunteering
     @title = 'Volunteering'
     @content = KeyedContent.find_by_key 'page_volunteering'
+  end
+
+  def landing_page
+    current_user.expire_token
+    @registration = current_user.current_registration
   end
   
   def method_missing(method_sym, *arguments, &block)

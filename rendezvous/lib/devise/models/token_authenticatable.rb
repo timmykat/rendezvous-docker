@@ -19,23 +19,25 @@ module Devise
       end
 
       def send_login_link
+        Rails.logger.debug Rails.configuration.mailer
         generate_login_token!
         send_devise_notification(:email_login_link, @raw_login_token)
       end
 
-      def after_token_authentication
-        Rails.logger.debug "Expiring the token"
+      def expire_token
         self.update_attribute(:login_token_sent_at, nil)
       end
 
       protected 
-        def generate_login_token          
-          self.login_token = @raw_login_token = Devise.friendly_token
+        def scanner_friendly_token
+          @raw_login_token = SecureRandom.alphanumeric(10)
+          digest = Devise.token_generator.digest(self.class, :login_token, @raw_login_token)
+          self.login_token = digest
           self.login_token_sent_at = Time.now.utc
         end
 
         def generate_login_token!
-          generate_login_token && save(validate: false)
+          scanner_friendly_token && save(validate: false)
           @raw_login_token
         end
     end
