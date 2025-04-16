@@ -21,12 +21,12 @@
                     %li.nav-item
                       = link_to "For Sale at the Event (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
                   
-                  -unless registration_is_open || user_is_tester?
+                  -unless registration_is_open
                     %li.nav-item
                       %span.badge.badge-danger Registration Coming Soon!
 
                 %ul.nav.navbar-nav
-                  - unless registration_is_open || user_is_tester?
+                  - unless registration_is_open
                     %li.nav-item.placeholder #{"&nbsp;&nbsp;".html_safe}
                   - else
                     - if !current_user

@@ -76,7 +76,7 @@ LITERAL
     Time.now > Rails.configuration.rendezvous[:registration_window][:after_rendezvous]
   end
 
-  def user_is_tester?
+  def user_can_test
     current_user && (current_user.has_any_role? :admin, :tester)
   end
 
@@ -85,7 +85,9 @@ LITERAL
   end
 
   def registration_is_open
-    Config::SiteSetting.instance.registration_is_open && before_cutoff_date?
+    Rails.logger.debug Config::SiteSetting.instance.registration_is_open ? 'Is open' : 'Is not open'
+    Rails.logger.debug before_cutoff_date? ? 'Is before cutoff date' : 'Is after cutoff date'
+    (Config::SiteSetting.instance.registration_is_open && before_cutoff_date?)
   end
 
   def static_file(file_path)

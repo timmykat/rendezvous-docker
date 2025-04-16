@@ -20,8 +20,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     post :request_login_link, to: 'users/sessions#request_login_link'
-    get :sign_in_with_link, to: 'users/sessions#create_with_link'
-    # post :sign_up, to: 'users/registrations#create'
+    get 'u/:login_token',       to: 'users/sessions#create_with_link', as: :sign_in_with_link
   end
 
   resources :users
@@ -105,12 +104,13 @@ Rails.application.routes.draw do
   end
 
   # -- Content
-  get '/',                  to: 'main_pages#index'
-  get '/faq',               to: 'main_pages#faq'
-  get '/history',           to: 'main_pages#history'
-  get '/volunteering',      to: 'main_pages#volunteering'
-  get '/legal_information', to: 'main_pages#legal_information'
-  get '/schedule',          to: 'main_pages#schedule'
+  get '/',                          to: 'main_pages#index'
+  get '/faq',                       to: 'main_pages#faq'
+  get '/history',                   to: 'main_pages#history'
+  get '/volunteering',              to: 'main_pages#volunteering'
+  get '/landing_page',  to: 'main_pages#landing_page'
+  get '/legal_information',         to: 'main_pages#legal_information'
+  get '/schedule',                  to: 'main_pages#schedule'
 
   resources :pictures, except: [:index]
   get '/gallery',                    to: 'pictures#index'

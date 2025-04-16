@@ -70,16 +70,16 @@
 
       = render partial: 'common/site_nav_bar'                      
 
-      - if registration_is_open || user_is_tester?
+      - if registration_is_open
         .container-fluid.px-0 
           .row.no-gutters.registration-open.py-3
             .col-12 
               .container 
                 .row.justify-content-center 
                   .col-12
-                    -# Registration is open!                        
-                    -# =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
-                    -# =link_to '(If you prefer paper <i class="fa  fa-file-pdf-o"></i>)'.html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
+                    Registration is open!                        
+                    =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
+                    =link_to '(If you prefer paper <i class="fa  fa-file-pdf-o"></i>)'.html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
 
     %main 
       .content
