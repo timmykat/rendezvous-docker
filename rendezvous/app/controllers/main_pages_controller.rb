@@ -1,7 +1,6 @@
 class MainPagesController < ApplicationController
   before_action :set_main_page, only: [:show, :edit, :update, :destroy]
   before_action :check_test_param, only: [:index]
-  before_action :set_cache_headers
   before_action :authenticate_user!, only: [ :landing_page ]
 
   def check_test_param
@@ -75,12 +74,6 @@ class MainPagesController < ApplicationController
     RendezvousMailer.autoresponse(@name, @email, @message).deliver
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
-  end
-
-  def set_cache_headers
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    response.headers['Pragma'] = 'no-cache'
-    response.headers['Expires'] = 0
   end
 
   private
