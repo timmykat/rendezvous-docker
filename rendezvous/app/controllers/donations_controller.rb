@@ -7,7 +7,11 @@ class DonationsController < ApplicationController
 
   def new
     @donation = Donation.new
-    @donation.user = User.new
+    if current_user
+      @donation.user = current_user
+    else
+      @donation.user = User.new
+    end
     @donation.status = 'initialized'
   end
 
@@ -63,6 +67,18 @@ class DonationsController < ApplicationController
     @type = params[:type]
     @donation.status = 'complete'
     @donation.save
+
+    transaction_id = params[:transactionId]
+    order_id = params[:orderId]
+    if transaction_id && order_id
+      transaction = SquareTransaction.new
+      transaction.user = @donation.user
+      transaction.amount = @donation.amount
+      transaction.transaction_id = transaction_id
+      transaction.order_id = order_id
+      transaction.donation_id = @donation.id
+      transaction.save
+    end
   end
 
   def get_registration_donations

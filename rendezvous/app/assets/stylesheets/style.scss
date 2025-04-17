@@ -80,6 +80,20 @@ section.banner {
 	font-weight: bold;
 }
 
+.btn.btn-square-pay {
+  position: relative;
+  display: block;
+  width: fit-content;
+  margin-top: 20px;
+  padding-right: 35px;
+
+  &::after {
+    content: image-url('square-icon.png');
+    position: absolute;
+    margin-top: -2px;
+  }
+}
+
 button[data-dismiss] {
 	border: none;
 	background: none;

@@ -2,6 +2,7 @@ class Donation < ApplicationRecord
   
   belongs_to :user
   belongs_to :registration, optional: true
+  has_one :square_transaction
 
   STATUSES = ['initialized', 'created', 'complete']
 

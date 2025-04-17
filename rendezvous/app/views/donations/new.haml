@@ -11,5 +11,11 @@
             = simple_form_for @donation, method: :post do |f|
               = render partial:  'donation_fields', locals: { f: f }
               %br
+
+              %p
+                We use Square to process payments.
+              %p
+                It takes a several moments for Square to process your payment; after you pay, please
+                wait to be returned to our site.
               .form-group
-                = f.button :submit, input_html:  { value:  'Donate' }, class:  "btn  btn-primary"
+                = button_tag "Make Donation", type: :submit, class:  "btn btn-primary btn-square-pay"
