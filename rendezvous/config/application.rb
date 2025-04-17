@@ -41,6 +41,11 @@ module Rendezvous
 
     config.load_defaults 7.0
     config.active_record.yaml_column_permitted_classes = [Date, Symbol]
+    config.action_dispatch.default_headers = {
+      'Cache-Control' => 'no-cache, no-store, must-revalidate',
+      'Pragma' => 'no-cache',
+      'Expires' => '0'
+    }
     
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += %W(#{config.root}/lib/rendezvous_square)
