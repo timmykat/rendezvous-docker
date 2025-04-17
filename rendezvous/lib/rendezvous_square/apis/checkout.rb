@@ -16,11 +16,15 @@ module RendezvousSquare
     def create_square_payment_link(object, customer_id, redirect_url)
       post_body = create_checkout_body(object, customer_id)
 
+      Rails.logger.debug post_body
+
       post_body[:checkout_options] = {
         redirect_url: redirect_url
       }
   
       result = api.create_payment_link(body: post_body)
+
+      Rails.logger.debug result
   
       if result.success?
         return result.data.payment_link[:long_url]

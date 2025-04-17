@@ -6,12 +6,12 @@
           .card-title
             %h1.h3 Thank you for supporting the Citroen Rendezvous!
           .card-text
-             = keyed_content 'page_donation_thanks'
+            = keyed_content 'page_donation_thanks'
 
             - if @type == 'vendor'
               %p Your vendor contribution (marketing expense):
             - else 
               %p Your donation: 
             
-            %p Amount: #{@donation.amount}
-            %p Date: #{donation.date.strftime("%B %d, %Y")}
+            %p Amount: #{number_to_currency(@donation.amount)}
+            %p Date: #{@donation.created_at.strftime("%B %d, %Y")}

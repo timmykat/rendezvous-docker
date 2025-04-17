@@ -222,9 +222,21 @@ module Event
       @title = 'Complete Registration'
       @step = 'complete'
       @event_registration = Registration.find(params[:id])
+
+      transaction_id = params[:transactionId]
+      order_id = params[:orderId]
+      if transaction_id && order_id
+        transaction = SquareTransaction.new
+        transaction.user = @event_registration.user
+        transaction.amount = @event_registration.total
+        transaction.transaction_id = transaction_id
+        transaction.order_id = order_id
+        transaction.registration_id = @event_registration.id
+        transaction.save
+      end
+
       @event_registration.paid_amount = @event_registration.total
       @event_registration.paid_method = 'credit card'
-      @event_registration.cc_transaction_id
       @event_registration.paid_date = Time.new
       @event_registration.status = 'complete'
       if @event_registration.save
@@ -235,7 +247,7 @@ module Event
       else 
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
-        redirect_to payment_event_registration_path(@event_registration)
+        render payment_event_registration_path(@event_registration)
       end
     end        
 
@@ -252,7 +264,7 @@ module Event
       if !@event_registration.save
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
-        redirect_to payment_event_registration_path(@event_registration)
+        render :show
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
