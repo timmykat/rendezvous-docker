@@ -10,7 +10,7 @@
               .collapse.navbar-collapse.justify-content-between#navbarContent
                 %ul.nav.navbar-nav
                   %li.nav-item
-                    = link_to 'Info', root_path, class: 'nav-link'
+                    = link_to 'Home', root_path, class: 'nav-link'
                   %li.nav-item
                     = link_to 'Schedule Overview', root_path + '#schedule-overview', class: 'nav-link'
                   %li.nav-item
@@ -23,36 +23,9 @@
                     %li.nav-item
                       = link_to "For Sale (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
                   
-                  -unless registration_is_open || user_is_tester?
+                  -unless registration_is_open
                     %li.nav-item
                       %span.badge.badge-danger Registration Coming Soon!
 
-                %ul.nav.navbar-nav
-                  - unless registration_is_open || user_is_tester?
-                    %li.nav-item.placeholder #{"&nbsp;&nbsp;".html_safe}
-                  - else
-                    - if !current_user
-                      %li.nav-item
-                        = link_to 'Sign In', new_user_session_path, class: 'nav-link'
-                    - else
-                      %li.nav-item.dropdown
-                        %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
-                          = current_user.full_name
-                        .dropdown-menu{'aria-labelledBy' => 'navbarDropdown'}
-                          = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
-                          = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
-                          .dropdown-divider
-                          - if registration_complete
-                            = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
-                            = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
-                          - if !current_registration 
-                            = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
-                          - if user_is_admin?
-                            .dropdown-divider
-                            = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
-                            = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item' 
-                            = link_to 'Site Testers', admin_dashboard_path({user_type: 'testers'}), class: 'dropdown-item'    
-                            = link_to 'Vendors', admin_dashboard_path({user_type: 'vendors'}), class: 'dropdown-item'
-                            = link_to 'Any Registrants', admin_dashboard_path({user_type: 'registrant'}), class: 'dropdown-item'                              
-                            = link_to 'All Users', admin_dashboard_path({user_type: 'all_users'}), class: 'dropdown-item' 
-                            = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
+                = render partial: 'common/user_nav'
+

@@ -138,8 +138,9 @@ class User < ApplicationRecord
     end
   end
 
-  def self.find_by_token(token)
-    User.where(login_token: token).first
+  def self.find_by_token(login_token)
+    digest = Devise.token_generator.digest(User, :login_token, login_token)
+    User.where(login_token: digest).first
   end
 
   def self.with_role role

@@ -1,0 +1,19 @@
+.container 
+  .row.justify-content-center 
+    .col-md-6.col-12 
+      .card 
+        .card-body 
+          .card-title 
+            %h2.h3 Welcome/Bienvenue
+          .card-text 
+            %h3.h5.mt-3 What do you want to do next?
+            
+            %ul.list-group
+              - if !@registration
+                %li.list-group-item= link_to 'Register for the Rendezvous', new_event_registration_path
+              - if @registration && !@registration.complete?
+                %li.list-group-item= link_to 'Review my registration', review_event_registration_path(@registration)
+                %li.list-group-item= link_to 'Pay my registration fee', payment_event_registration_path(@registration)
+              %li.list-group-item= link_to 'Update my vehicles', edit_user_path(current_user)
+              %li.list-group-item= link_to 'Check the schedule', schedule_path
+              
