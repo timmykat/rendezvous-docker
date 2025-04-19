@@ -89,7 +89,7 @@ services:
       - ./rendezvous/:/var/www/rendezvous
 
 ## New Relic services
-  new_relic_agent:
+  newrelic-infra:
     container_name: newrelic-infra
     image: newrelic/infrastructure:latest
     cap_add:
@@ -120,11 +120,12 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "newrelic-infra:/etc/newrelic-infra"
     environment:
-      - NRIA_LICENSE_KEY=***REMOVED***
+      - NRIA_LICENSE_KEY
     restart: unless-stopped
 
 volumes:
   rendezvous_prod_data:
+  newrelic-infra:
 
 networks:
   rendezvous_prod_network:
