@@ -52,6 +52,9 @@ gem 'dkim'
 gem 'simple_form', '~>5'
 gem 'redcarpet'
 
+# Monitoring
+gem 'newrelic_rpm'
+
 gem 'gibbon' # Mailchimp API
 
 # Application server
