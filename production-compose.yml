@@ -93,7 +93,6 @@ services:
     image: newrelic/infrastructure:latest
     cap_add:
       - SYS_PTRACE
-    network_mode: host
     pid: host
     privileged: true
     volumes:
