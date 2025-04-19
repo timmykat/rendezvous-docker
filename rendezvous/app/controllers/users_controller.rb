@@ -52,6 +52,18 @@ class UsersController < ApplicationController
 
   def autocomplete
     user = User.find_by_email(params[:email])
+    if (params[:reg_page])
+      if user.current_registration
+        respond_to do |format|
+          format.json do 
+            render json: {
+              existing_registration: edit_event_registration_path(user.current_registration)
+            }
+          end
+        end
+        return
+      end
+    end
     respond_to do |format|
       format.json do 
         if !user

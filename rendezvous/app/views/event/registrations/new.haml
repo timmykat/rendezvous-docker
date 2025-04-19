@@ -8,7 +8,7 @@
         .card
           .card-body
             .card-title
-              %h2 Let's Get You Registered!
+              %h2= @title
             .card-text
               %p
                 Lakeside have informed us that our expenses with them are up by %10 over last year, so this years registration fee is $#{event_fee}.
@@ -18,7 +18,7 @@
                 If you've previously registered, we've already filled in your basic information. We are now using Square to process credit cards, so address is no longer required.
               %p 
                 Let us know who you're bringing, if anyone. Then we'll give you a chance to review, followed by payment. 
-            #registration-form
+            #registration-form.new_registration
               - if !user_signed_in?
                 .cover
 
@@ -28,12 +28,12 @@
               = simple_form_for @event_registration, id:  'registration_form' do |f|
                 %section
                   %p * = required
-                  - if session[:admin_user]
-                    %p.bg-warning You are creating a registration for another user.
+                  - if current_user.admin?
+                    .alert.alert-warning You are creating a registration for another user.
                   - else
-                    %p.bg-info You are signed in with your user account.
+                    .alert.alert-info You are signed in with your user account.
                   = f.simple_fields_for :user do |u|
-                    = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
+                    = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true }
 
                 %section
                   %h2.h3 Registration Information

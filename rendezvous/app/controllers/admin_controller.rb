@@ -159,11 +159,6 @@ class AdminController < ApplicationController
     create_table_data
   end
 
-  def toggle_user_session
-    session[:admin_user] = !session[:admin_user]
-    redirect_back(fallback_location: root_path)
-  end
-
   def get_volunteers(registration)
     volunteers = 0
     registration.attendees.each do |a|

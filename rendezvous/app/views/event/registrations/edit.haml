@@ -13,12 +13,12 @@
                   .cover
                 = simple_form_for @event_registration, id:  'registration_form' do |f|
                   %section
-                    %h2 Personal Information
+                    %h2 Rendezvous Registration
                     %p * = required
-                    - if session[:admin_user]
-                      %p.bg-warning You are creating a registration for another user.
+                    - if current_user.admin?
+                      .alert.alert-warning You are editing a registration for another user.
                     - else
-                      %p.bg-info You are signed in with your user account.
+                      .alert.alert-info You are signed in with your user account.
                     = f.simple_fields_for :user do |u|
                       = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
 
@@ -48,13 +48,19 @@
                           = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
 
                     .row
-                      .col-md-12
+                      .col-12
                         %p.amount.form-group
                           %label 
                             Registration fee (USD):
                             = f.input_field :registration_fee, disabled:  true, class:  'calculated'
                     = f.input_field :year, as:  :hidden, value:  Time.new.year
-                    = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+                    
+                    .row
+                      .col-12
+                        - if user_is_admin?
+                          = f.input :status, as: :select, collection: Rails.configuration.rendezvous[:registration_statuses]
+                    = f.input_field :status, as:  :hidden
+
 
                   .row
                     .col-md-12

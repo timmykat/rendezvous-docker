@@ -24,12 +24,16 @@ module Event
     end
 
     def new
+      if current_user && current_user.admin?
+        @title = "Create new registration"
+      else 
+        @title = "Let's get you registered!"
+      end
 
-      @title = 'Registration - Start'
       @step = 'create'
       @annual_question = AnnualQuestion.where(year: Date.current.year).first
 
-      if user_signed_in? && !session[:admin_user]
+      if current_user && !current_user.admin?
         @event_registration = current_user.registrations.current.first
         if !@event_registration.blank?
           if !['payment due', 'complete'].include?(@event_registration.status)
@@ -46,7 +50,7 @@ module Event
       @event_registration = Registration.new
       @event_registration.attendees.build
 
-      if user_signed_in? && !session[:admin_user]
+      if current_user && !current_user.admin?
         @event_registration.user = current_user
       else
         @event_registration.build_user
@@ -65,7 +69,7 @@ module Event
         return
       end
 
-      if user_signed_in? && !session[:admin_user]
+      if current_user && !current_user.admin?
         user = User.find(current_user.id)
         if !user.update(event_registration_user_params)
           flash_alert 'There was a problem saving the user.'
@@ -82,9 +86,8 @@ module Event
           if !user.save
             flash_alert_now 'There was a problem saving your user information.'
             flash_alert_now user.errors.full_messages.to_sentence
-            @event_registration = Registration.new
-            @event_registration.attendees.build
-            render 'registration_form' and return
+            render :new
+            return
           end
         end
       end

@@ -31,8 +31,14 @@ window.onload = (e) => {
     });
 
     const donationPage = document.querySelector('body.c_donations')
-    if (donationPage) {
-        const throttle = window.throttleDebounce.throttle;
+    const newRegistrationPage = document.querySelector('body.c_event_registrations .new_registration')
+
+    if (donationPage || newRegistrationPage) {
+        const autoComplete = document.querySelector('[data-autocomplete]')
+        const fieldName = autoComplete.getAttribute('data-autocomplete')
+        const targetFields = autoComplete.querySelectorAll('[data-autocomplete-target]')
+        const autocompleteTrigger = autoComplete.querySelector(`input[name*=${fieldName}`)
+
         const debounce = window.throttleDebounce.debounce;
         const autocompleteUrl = '/ajax/user/autocomplete'
         const extractAttribute = (name) => {
@@ -52,21 +58,30 @@ window.onload = (e) => {
                 field.value = ''
             })
         }
-        const debounceAutocomplete = debounce(500, function(event) {
+        const debounceAutocomplete = debounce(500, function(event) {      
             const field = event.target;
-            const container = field.closest('[data-autocomplete]')
-            const targetFields = container.querySelectorAll('[data-autocomplete-target]')
+            
             let name = field.getAttribute('name')
             if (name == null) return
             const searchAttribute = extractAttribute(name)
             const searchValue = encodeURIComponent(field.value)
-            const url = `${autocompleteUrl}?${searchAttribute}=${searchValue}`
+            let url = `${autocompleteUrl}?${searchAttribute}=${searchValue}`
+            if (newRegistrationPage) {
+                url += '&reg_page=1'
+            }
             fetch(url, {headers: getCsrfHeaders})
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'not found') {
                         clearFields(targetFields)
                         return;
+                    }
+                    if (data.existing_registration) {
+                        const alert = document.querySelector('.alert')
+                        alert.classList.remove('alert-warning')
+                        alert.classList.add('alert-danger')
+                        alert.innerHTML = `This user already has a registration: <a href="${data.existing_registration}">EDIT</a>`
+                        return
                     }
                     targetFields.forEach(field => {
                         let name = field.getAttribute('name')
@@ -75,31 +90,28 @@ window.onload = (e) => {
                     })
                 })
         })
-        
 
-        document.querySelectorAll('[data-autocomplete]').forEach((element) => {
-            let autocompleteId = element.getAttribute('[data-autocomplete]')
-            let field = element.querySelector('[data-attribute]')
-            field.addEventListener('keyup', debounceAutocomplete)
-        })
+        autocompleteTrigger.addEventListener('keyup', debounceAutocomplete)
 
         const isNumeric = function(value) {
             return typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value));
         }
 
-        const donationSelector = document.querySelector('.form-group.donation-amount')
-        const amountField = donationSelector.querySelector('input[name="donation[amount]"]')
-        donationSelector.querySelectorAll('input[type=radio]').forEach(radio => {
-            radio.addEventListener('click', (e) => {
-                input = e.target
-                let value = input.value
-                if (isNumeric(value)) {
-                    amountField.value = parseFloat(value).toFixed(2)
-                } else {
-                    amountField.value = ''
-                }
+        if (donationPage) {
+            const donationSelector = document.querySelector('.form-group.donation-amount')
+            const amountField = donationSelector.querySelector('input[name="donation[amount]"]')
+            donationSelector.querySelectorAll('input[type=radio]').forEach(radio => {
+                radio.addEventListener('click', (e) => {
+                    input = e.target
+                    let value = input.value
+                    if (isNumeric(value)) {
+                        amountField.value = parseFloat(value).toFixed(2)
+                    } else {
+                        amountField.value = ''
+                    }
+                })
             })
-        })
+        }
     }
 
 }

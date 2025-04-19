@@ -32,7 +32,7 @@ class Admin::TransactionsController < AdminController
       flash_notice 'The transaction was successfully created'
     end
         
-    redirect_to edit_admin_event_registration_path(event_registration)
+    redirect_to edit_event_registration_path(event_registration)
         
   end
   

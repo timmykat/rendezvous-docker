@@ -3,7 +3,7 @@
     .card-title
       %h1 Create a registration onsite
     .card-text
-      = form_with(model: User.new, url: admin_event_registrations_new_withemail_path, method: :get) do |f|
+      = form_with(model: User.new, url: event_registrations_new_withemail_path, method: :get) do |f|
         .form-group
           = f.label :email
           = f.email_field :email, autofocus: true, required: true, class: 'form-control'

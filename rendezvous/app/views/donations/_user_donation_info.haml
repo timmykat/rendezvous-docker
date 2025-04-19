@@ -1,8 +1,8 @@
-.user_fields{'data-autocomplete' => "#{random_id}"}
+.user_fields{'data-autocomplete' => "email"}
   .row
     .col-md-12
       .form-group
-        = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', input_html: {'data-attribute' => '' }
+        = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *'
         = f.input :id, as:  :hidden, input_html: {'data-autocomplete-target' => ''}
   .row
     .col-md-12

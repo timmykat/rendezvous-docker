@@ -55,9 +55,9 @@
                         %li
                           = link_to 'Payment', payment_event_registration_path(registration.id)
                       %li
-                        = link_to 'Cancel', admin_event_cancel_registration_path(registration.id), data: { confirm: "Are you sure?" }
+                        = link_to 'Cancel', event_cancel_registration_path(registration.id), data: { confirm: "Are you sure?" }
                       %li   
-                        = link_to 'DELETE', admin_event_delete_registration_path(registration.id), data: { confirm: "Are you sure?" }
+                        = link_to 'DELETE', event_delete_registration_path(registration.id), data: { confirm: "Are you sure?" }
                           
                   %td.text-center
                     = registration.status
