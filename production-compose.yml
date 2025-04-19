@@ -88,6 +88,7 @@ services:
     volumes:
       - ./rendezvous/:/var/www/rendezvous
 
+## New Relic services
   new_relic_agent:
     container_name: newrelic-infra
     image: newrelic/infrastructure:latest
@@ -104,6 +105,23 @@ services:
     restart: unless-stopped
     networks:
       - rendezvous_prod_network
+
+  infrastructure-bundle:
+    image: newrelic/infrastructure-bundle:latest
+    container_name: infrastructure-bundle
+    networks:
+      - rendezvous_prod_network
+    cap_add:
+      - SYS_PTRACE
+    privileged: true
+    pid: host
+    volumes:
+      - "/:/host:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "newrelic-infra:/etc/newrelic-infra"
+    environment:
+      - NRIA_LICENSE_KEY=***REMOVED***
+    restart: unless-stopped
 
 volumes:
   rendezvous_prod_data:
