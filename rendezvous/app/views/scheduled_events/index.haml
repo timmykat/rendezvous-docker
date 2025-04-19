@@ -22,7 +22,10 @@
                               .card-title 
                                 #{event.time} | #{event.name}
                               .card-text
-                                #{event.long_description}
+                                - if event.venue
+                                  .location= format_for_schedule(event.venue).html_safe
+                                .description
+                                  #{event.long_description}
 
 
                       
