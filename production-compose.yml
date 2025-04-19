@@ -98,7 +98,7 @@ services:
     volumes:
       - "/:/host:ro"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "config/new_relic/mysql-config.yml:/etc/newrelic-infra/integrations.d/mysql-config.yml:ro"
+      - "./config/new_relic/mysql-config.yml:/etc/newrelic-infra/integrations.d/mysql-config.yml:ro"
     environment:
       - NRIA_LICENSE_KEY
     restart: unless-stopped
