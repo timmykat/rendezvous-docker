@@ -31,6 +31,8 @@ module Event
     validates :status, inclusion: { in: Rails.configuration.rendezvous[:registration_statuses] }
     
     serialize :events, JSON
+
+    before_save :ensure_total
     
     def validate_minimum_number_of_adults
       if number_of_adults < 1
@@ -64,6 +66,16 @@ module Event
 
     def cancelled?
       status =~ /cancelled/
+    end
+
+    def ensure_total
+      total = registration_fee || 0.0
+      if !donation.empty?
+        total += donation
+      end
+      if !vendor_fee.blank?
+        total += vendor_fee
+      end
     end
     
     def self.invoice_number
