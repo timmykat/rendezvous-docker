@@ -70,7 +70,7 @@ module Event
 
     def ensure_total
       total = registration_fee || 0.0
-      if !donation.empty?
+      if !donation.blank?
         total += donation
       end
       if !vendor_fee.blank?
