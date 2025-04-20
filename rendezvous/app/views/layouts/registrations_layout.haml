@@ -32,6 +32,7 @@
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
   %body{ class: controller_classes + " outfit-regular" }
+    = render partial: 'common/active_users'
     = render partial: 'layouts/flash'
 
     %header

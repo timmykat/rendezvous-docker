@@ -11,14 +11,12 @@
         $('#tabbed').tabs();
 
         $('#user-table').tablesorter({
+            theme: 'blue',
             widthFixed: true,
             widgets: ["zebra", "filter"],
             ignoreCase: true,
-            headers: {
-                '.address': {
-                    sorter: false
-                }
-            }
+            filter_columnFilters: true,
+            filter_saveFilters : true,
         });
 
         $('[data-toggle]').on('click', function(e) {
