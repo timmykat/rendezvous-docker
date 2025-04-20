@@ -26,6 +26,18 @@ module ApplicationHelper
     }
   end
 
+  def get_active_users
+    if current_user && current_user.admin?
+      n = User.where('last_active > ?', 10.minutes.ago).count - 1
+      if n == 0
+       "There are no other active users."
+      elsif n == 1
+        "There is 1 active user."
+      else
+        "There are #{n} active users."
+    end
+  end
+
   def random_id
     return SecureRandom.hex(5)
   end
