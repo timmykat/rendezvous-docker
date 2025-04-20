@@ -29,7 +29,9 @@
                 %section
                   %p * = required
                   - if current_user.admin?
-                    .alert.alert-warning You are creating a registration for another user.
+                    .alert.alert-warning 
+                      You are creating a registration for another user.
+                      = f.input :created_by_admin, as: :boolean
                   - else
                     .alert.alert-info You are signed in with your user account.
                   = f.simple_fields_for :user do |u|

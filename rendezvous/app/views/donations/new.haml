@@ -9,6 +9,10 @@
             = keyed_content 'page_donation'
               
             = simple_form_for @donation, method: :post do |f|
+              - if current_user && current_user.admin?
+                .alert.alert-warning 
+                  You are creating a donation for another person
+                  = f.input :created_by_admin, as: :boolean
               = render partial:  'donation_fields', locals: { f: f }
               %br
 

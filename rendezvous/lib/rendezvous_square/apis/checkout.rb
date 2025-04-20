@@ -54,7 +54,7 @@ module RendezvousSquare
           source: {
             name: "web registration"
           },
-          location_id: SQUARE_LOCATION_ID,
+          location_id: Base.get_location_id,
           customer_id: customer_id,
           line_items: [
             {
@@ -75,7 +75,7 @@ module RendezvousSquare
           source: {
             name: "web donation"
           },
-          location_id: SQUARE_LOCATION_ID,
+          location_id: Base.get_location_id,
           customer_id: customer_id,
           line_items: [
             {

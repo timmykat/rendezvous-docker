@@ -2,16 +2,24 @@
   .row.justify-content-center
     .col-md-8
       .card
-        .card-body 
+        .card-body
           .card-title
-            %h1.h3 Thank you for supporting the Citroen Rendezvous!
-          .card-text
-            = keyed_content 'page_donation_thanks'
+            - if @donation.created_by_admin
+              %h1.h3 The donation  was created
+            - else
+              %h1.h3 Thank you for supporting the Citroen Rendezvous!
+          .card-text 
+            - if @donation.created_by_admin
+              %p This donation was created for #{@donation.user.full_name}
+            - else
+              = keyed_content 'page_donation_thanks'
 
             - if @type == 'vendor'
-              %p Your vendor contribution (marketing expense):
+              %p 
+                %strong Vendor contribution (marketing expense)
             - else 
-              %p Your donation: 
+              %p 
+                %strong Donation
             
             %p Amount: #{number_to_currency(@donation.amount)}
             %p Date: #{@donation.created_at.strftime("%B %d, %Y")}

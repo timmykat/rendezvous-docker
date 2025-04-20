@@ -47,7 +47,12 @@ module Event
         end
       end
 
-      @event_registration = Registration.new
+      if current_user.admin? 
+        @event_registration = Registration.new(created_by_admin: true)
+      else
+        @event_registration = Registration.new
+      end
+
       @event_registration.attendees.build
 
       if current_user && !current_user.admin?
@@ -101,6 +106,9 @@ module Event
       params[:event_registration][:total] = params[:event_registration][:registration_fee]
 
       @event_registration = Registration.new(event_registration_params)
+      if current_user.admin?
+        @event_registration.created_by_admin = params[:event_registration][:created_by_admin]
+      end
       @event_registration.invoice_number = Registration.invoice_number
 
       if !@event_registration.save

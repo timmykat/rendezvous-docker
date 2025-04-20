@@ -6,16 +6,20 @@ class DonationsController < ApplicationController
   end
 
   def new
-    @donation = Donation.new
-    if current_user
-      @donation.user = current_user
+    if current_user && current_user.admin?
+      @donation = Donation.new(created_by_admin: true, status: 'initialized')
+      @donation.build_user
+    elsif current_user
+      @donation = Donation.new(user: current_user, status: 'initialized')
     else
-      @donation.user = User.new
+      @donation = Donation.new(status: 'initialized')
+      @donation.build_user
     end
-    @donation.status = 'initialized'
   end
 
   def create
+    @donation = Donation.new()
+
     if !params[:donation][:user_attributes][:id].empty?
       user = User.find(params[:donation][:user_attributes][:id])
     end
@@ -27,7 +31,10 @@ class DonationsController < ApplicationController
       user.save
     end
 
-    @donation = Donation.new()
+    if current_user.admin?
+      @donation.created_by_admin = params[:donation][:created_by_admin]
+    end
+
     @donation.first_name = user.first_name
     @donation.last_name = user.last_name
     @donation.user = user

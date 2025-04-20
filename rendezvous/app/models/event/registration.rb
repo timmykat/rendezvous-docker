@@ -1,6 +1,8 @@
 
 module Event
   class Registration < ApplicationRecord
+
+    include AdminCreatable
     
     belongs_to :user
     has_many :attendees, dependent: :destroy

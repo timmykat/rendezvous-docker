@@ -1,4 +1,6 @@
 class Donation < ApplicationRecord
+
+include AdminCreatable
   
   belongs_to :user
   belongs_to :registration, optional: true

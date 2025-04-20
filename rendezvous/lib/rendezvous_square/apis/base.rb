@@ -12,7 +12,9 @@ module RendezvousSquare
       Config::SiteSetting.instance.square_environment || 'SANDBOX'     
     end
 
-    SQUARE_LOCATION_ID = ENV.fetch "#{get_environment}_SQUARE_LOCATION_ID"
+    def get_location_id
+      ENV.fetch "#{get_environment}_SQUARE_LOCATION_ID"
+    end
   
     def get_square_client
       return ::Square::Client.new(

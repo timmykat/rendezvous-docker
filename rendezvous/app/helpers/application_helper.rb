@@ -35,6 +35,7 @@ module ApplicationHelper
         "There is 1 active user."
       else
         "There are #{n} active users."
+      end
     end
   end
 

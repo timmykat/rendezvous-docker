@@ -5,9 +5,13 @@
       .card 
         .card-body 
           .card-text
-            %p Please review the information below. If you need to change it please go back to the previous page and correct anything that needs changing.
-            %p
-              %strong You will be able to add or change vehicles after you complete your payment.
+            - if current_user.admin? && @event_registration.created_by_admin
+              .alert.alert-warning 
+                Review the registration for #{@event_registration.user.full_name}
+            - else
+              %p Please review the information below. If you need to change it please go back to the previous page and correct anything that needs changing.
+              %p
+                %strong You will be able to add or change vehicles after you complete your payment.
 = render partial:  'common/registration_info'
 .container
   .row.justify-content-center
