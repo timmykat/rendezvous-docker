@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :get_app_data
   before_action :flash_array
+  before_action :update_active_user
 
   CONFIG = Rails.configuration.rendezvous
 
@@ -35,6 +36,12 @@ class ApplicationController < ActionController::Base
         provinces: CONFIG[:provinces],
         countries: CONFIG[:countries]
       }
+  end
+
+  def update_active_user
+    if current_user
+      current_user.update_column(:last_active, Time.current)
+    end
   end
 
   def import_data(filename, klass_name)

@@ -179,6 +179,8 @@ class AdminController < ApplicationController
     when 'all_users'
       @users = User.all
       @type = 'All users'
+    when 'active'
+      @users = User.where('last_active > ?', 10.minutes.ago)
     when 'registrant'
       @users = User.with_registrations
       @type = 'Any Registrant'
