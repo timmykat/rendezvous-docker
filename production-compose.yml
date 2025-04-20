@@ -89,39 +89,22 @@ services:
       - ./rendezvous/:/var/www/rendezvous
 
 ## New Relic services
-  # newrelic-infra:
-  #   container_name: newrelic-infra
-  #   image: newrelic/infrastructure:latest
-  #   cap_add:
-  #     - SYS_PTRACE
-  #   pid: host
-  #   privileged: true
-  #   volumes:
-  #     - "/:/host:ro"
-  #     - "/var/run/docker.sock:/var/run/docker.sock"
-  #     - "./config/new_relic/mysql-config.yml:/etc/newrelic-infra/integrations.d/mysql-config.yml:ro"
-  #   environment:
-  #     - NRIA_LICENSE_KEY
-  #   restart: unless-stopped
-  #   networks:
-  #     - rendezvous_prod_network
-
-  # infrastructure-bundle:
-  #   image: newrelic/infrastructure-bundle:latest
-  #   container_name: infrastructure-bundle
-  #   networks:
-  #     - rendezvous_prod_network
-  #   cap_add:
-  #     - SYS_PTRACE
-  #   privileged: true
-  #   pid: host
-  #   volumes:
-  #     - "/:/host:ro"
-  #     - "/var/run/docker.sock:/var/run/docker.sock"
-  #     - "newrelic-infra-volume:/etc/newrelic-infra"
-  #   environment:
-  #     - NRIA_LICENSE_KEY
-  #   restart: unless-stopped
+  newrelic-infra:
+    container_name: newrelic-infra
+    image: newrelic/infrastructure-bundle:latest
+    cap_add:
+      - SYS_PTRACE
+    pid: host
+    privileged: true
+    volumes:
+      - "/:/host:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./config/new_relic/mysql-config.yml:/etc/newrelic-infra/integrations.d/mysql-config.yml:ro"
+    environment:
+      - NRIA_LICENSE_KEY
+    restart: unless-stopped
+    networks:
+      - rendezvous_prod_network
 
 volumes:
   rendezvous_prod_data:

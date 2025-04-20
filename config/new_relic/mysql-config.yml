@@ -13,8 +13,9 @@ integrations:
       # If not empty `socket` parameter will discard `port` parameter
       # SOCKET: <PATH_TO_LOCAL_SOCKET_FILE_NAME>
 
-      USERNAME: new_relic
-      PASSWORD: monitoring1!
+      USERNAME: ${NR_MYSQL_USER}
+      PASSWORD: ${NR_MYSQL_PASSWORD}
+
 
       # Extended metrics
       EXTENDED_METRICS: true
