@@ -15,7 +15,7 @@ integrations:
 
       USERNAME: ${NR_MYSQL_USER}
       PASSWORD: ${NR_MYSQL_PASSWORD}
-
+      DATABASE: ${MYSQL_DATABASE}
 
       # Extended metrics
       EXTENDED_METRICS: true

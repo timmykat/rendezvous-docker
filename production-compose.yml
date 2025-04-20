@@ -101,7 +101,10 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./config/new_relic/mysql-config.yml:/etc/newrelic-infra/integrations.d/mysql-config.yml:ro"
     environment:
-      - NRIA_LICENSE_KEY
+      - NRIA_LICENSE_KEY=${NRIA_LICENSE_KEY}
+      - NR_MYSQL_USER=${NR_MYSQL_USER}
+      - NR_MYSQL_PASSWORD=${NR_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     restart: unless-stopped
     networks:
       - rendezvous_prod_network
