@@ -74,7 +74,7 @@ module VehicleTaxonomy
     }
   }
 
-  def get_all_categories
+  def self.get_all_categories
     VEHICLES[:marques].values.flat_map do |marque_data|
       marque_data[:categories].keys
     end.uniq

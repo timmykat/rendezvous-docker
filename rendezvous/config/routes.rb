@@ -98,6 +98,10 @@ Rails.application.routes.draw do
   #     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
   end
 
+  get '/voting/ballot(/:id)',               to: 'voting/ballots#ballot', as: :get_voting_ballot
+  get '/_ajax/voting/ballots/:id/:code',    to: 'voting/ballots#vote'
+  get '/_ajax/voting/vehicle/:code',        to: 'vehicles#ajax_info'
+
 
   resources :donations, { only: [ :new, :create, :index ] }
   get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you

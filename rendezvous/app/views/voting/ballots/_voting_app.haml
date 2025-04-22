@@ -1,0 +1,19 @@
+#voting-app{ "data-controller" => "voting", "data-ballotid" => ballot_id }
+  .card 
+    .card-body 
+      .card-title People's Choice Voting
+      .card-text
+        %p Select the QR code with your phone camera
+        %p If you prefer, enter the voting ID on the dash card
+        %p The app will keep track of categories and let you know if you've voted for more than one vehicle in a category.
+        
+
+        #reader.mb-3{'data-voting-target' => 'reader'} 
+        %label Voting ID:
+        %input{type: "text", id: "selection", 'data-voting-target' => 'selection'}
+        %button.btn.btn-info{'data-voting-target' => 'addButton'} Vote
+
+        .selection
+          %strong
+            Your pick:
+          .selection-info{'data-voting-target' => 'selectionInfo'}     

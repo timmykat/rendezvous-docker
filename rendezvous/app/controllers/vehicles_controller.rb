@@ -12,4 +12,13 @@ class VehiclesController < ApplicationController
       .distinct
   end
 
+  def ajax_info
+    vehicle = Vehicle.find_by_qr_code(params[:code])
+
+    respond_to do |format|
+      format.json do
+        render json: { vehicleInfo: vehicle.voting_info_format }
+      end
+    end
+  end
 end

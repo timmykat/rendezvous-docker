@@ -81,6 +81,10 @@ LITERAL
     end
   end
 
+  def voting_on?
+    Config::SiteSetting.instance.voting_on
+  end
+
   def user_is_admin?
     current_user && (current_user != @user)
   end

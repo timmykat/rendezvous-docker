@@ -39,7 +39,8 @@ class Config::SiteSettingsController < ApplicationController
         :registration_close_date,
         :square_environment,
         :user_testing,
-        :vendor_fee      
+        :vendor_fee,
+        :voting_on     
       )
     end
 end

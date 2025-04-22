@@ -1,0 +1,19 @@
+.container
+  .row.justify-content-center 
+    .col-md-6.col-12
+      .card 
+        .card-body 
+          .card-title
+            %h1.h2 Peoples Choice Ballot
+          .card-text
+            %p You can select as many candidates in a category as you like, but you can not submit your ballot until you've narrowed it down to one per category.
+ 
+            = render partial: 'voting_app', locals: { ballot_id: @ballot.id }
+
+ 
+            %h2.h3 View your choices
+            = render partial: 'accordion_view', locals: { categorized_selections: @ballot.categorized_selections }
+
+            
+
+            

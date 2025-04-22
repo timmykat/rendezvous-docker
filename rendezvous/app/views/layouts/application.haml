@@ -43,7 +43,7 @@
 
     = yield :recaptcha_js
 
-    = javascript_include_tag 'application'
+    = javascript_include_tag 'application-sprockets'
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
@@ -81,7 +81,16 @@
                     Registration is open!                        
                     =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
                     =link_to '(If you prefer paper <i class="fa  fa-file-pdf-o"></i>)'.html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
-
+      
+      - if current_user && voting_on?
+        .container-fluid.px-0 
+          .row.no-gutters.py-3
+            .col-12 
+              .container 
+                .row.justify-content-center 
+                  .col-md-2.col-12.text-center                       
+                    =link_to 'VOTE', get_voting_ballot_path, class: 'ml-3 px-5 btn btn-lg btn-info'
+      
     %main 
       .content
         = yield
