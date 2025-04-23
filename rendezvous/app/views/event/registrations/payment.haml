@@ -80,7 +80,7 @@
 
                       .form-group
                         = f.button :submit, 'Complete registration'.html_safe, class:  'btn btn-primary complete-registration', id: "card-button"
-                        %img{ src: asset_path('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
+                        %img{ src: image_url('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
 
-= javascript_include_tag @square_sdk_url
+= javascript_include_tag @square_sdk_url, defer: true
 

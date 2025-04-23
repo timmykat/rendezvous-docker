@@ -1,6 +1,12 @@
 import { Application } from "@hotwired/stimulus"
-import { definitionsFromContext } from "@hotwired/stimulus-loading"
 
 const application = Application.start()
 const context = require.context(".", true, /\.js$/)
-application.load(definitionsFromContext(context))
+context.keys().forEach(filename => {
+  const controllerName = filename
+    .replace(/^.\//, '')
+    .replace(/_controller\.js$/, '')
+    .replace(/\//g, "--")
+
+  application.register(controllerName, context(filename).default)
+})

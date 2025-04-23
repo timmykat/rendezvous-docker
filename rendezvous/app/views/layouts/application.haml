@@ -16,7 +16,7 @@
     %meta{ :property => "og:url", :content => 'https://citroenrendezvous.org' }
     %meta{ :property => "og:title", :content => 'Citroen Rendezvous' }
     %meta{ :property => "og:description", :content => "The Northeast&#039;s largest gathering of Citroens and their fans, friends, and family." }
-    %meta{ :property => "og:image", :content => asset_url('social_share_image.jpg') }
+    %meta{ :property => "og:image", :content => image_url('social_share_image.jpg') }
     %meta{ :property => "og:image:type", :content => 'image/jpeg' }
     %meta{ :property => "og:image:width", :content => '1200' }
     %meta{ :property => "og:image:height", :content => '699' }
@@ -37,13 +37,13 @@
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
 
-    = stylesheet_link_tag 'application', :media  => 'all'
+    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
 
     = csrf_meta_tags
 
     = yield :recaptcha_js
 
-    = javascript_include_tag 'application-sprockets'
+    = javascript_include_tag 'application', defer: true
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
@@ -80,7 +80,7 @@
                   .col-12
                     Registration is open!                        
                     =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
-                    =link_to '(If you prefer paper <i class="fa  fa-file-pdf-o"></i>)'.html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
+                    =link_to "#{icon(:pdf)}".html_safe.html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
       
       - if current_user && voting_on?
         .container-fluid.px-0 
@@ -98,36 +98,6 @@
 
     %footer.footer.text-center
       = render partial: 'common/footer'
-      - if user_is_admin?
-        = javascript_include_tag 'simplemde/dist/simplemde.min', 'data-turbolinks-track': 'reload'
-        = stylesheet_link_tag 'simplemde/dist/simplemde.min', 'data-turbolinks-track': 'reload'
-
-        :javascript
-          function addMde() {
-            function adjustEditorHeight(editor) {
-              var cm = editor.codemirror;
-              var scrollHeight = cm.getScrollInfo().height;
-              cm.getWrapperElement().style.height = Math.max(150, scrollHeight) + "px";
-            }
-            
-            const textareas = document.querySelectorAll('textarea[id$="_simple_mde"]');
-            textareas.forEach((textarea) => {
-              simpleMDE = new SimpleMDE({
-                element: textarea,
-                spellChecker: false, // Optional, disable spellchecker if you don't want it
-              });
-              simpleMDE.codemirror.on("change", adjustEditorHeight);
-              adjustEditorHeight(simpleMDE);
-            });
-          }
-
-          if (!window.SimpleMDE) {
-            document.addListener(DOMContentLoaded, () => {
-              addMde();
-            })
-          } else {
-            addMde();
-          }
 
 
 

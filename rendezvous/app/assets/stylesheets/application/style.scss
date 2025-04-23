@@ -1,3 +1,5 @@
+@use '../application/fonts' as fonts;
+
 :root {
 	--citroen-red: #E1393E;
 	--dark-medium-blue: #1E6994;
@@ -55,7 +57,7 @@ body {
 
 // Font reset
 body, p, li, ol, td {
-	@include outfit-regular;
+	@include fonts.outfit-regular;
 	font-size: 18px;
 }
 
@@ -88,7 +90,7 @@ section.banner {
   padding-right: 35px;
 
   &::after {
-    content: image-url('square-icon.png');
+    content: url('/square-icon.png');
     position: absolute;
     margin-top: -2px;
   }
@@ -127,7 +129,7 @@ footer {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	@include prompt-bold;
+	@include fonts.prompt-bold;
 	font-weight: bold;
 
 	&.no-card {

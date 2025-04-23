@@ -121,7 +121,7 @@ label.radio-inline {
 }
 td#logo {
   padding: 0 10px;
-  background-image: image-url('credit_card_logos_13.gif');
+  background-image: url('/credit_card_logos_13.gif');
   background-position: 400px 0;
   background-repeat: no-repeat;
   width: 55px;
@@ -171,7 +171,7 @@ body {
   .simple {
     h1 {
       height: 90px;
-      background: image-url("rendezvous-logo.png") no-repeat right center;
+      background: url("/rendezvous-logo.png") no-repeat right center;
     }
     .content .invoice {
       margin: 40px;

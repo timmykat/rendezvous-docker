@@ -17,14 +17,14 @@
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
 
-    = stylesheet_link_tag 'application', :media  => 'all'
+    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
 
     = csrf_meta_tags
 
     = yield :recaptcha_js
 
-    = javascript_importmap_tags
-    -# = javascript_include_tag 'application-sprockets'
+    = javascript_include_tag 'application', defer: true
+    = javascript_include_tag 'voting', defer: true
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'

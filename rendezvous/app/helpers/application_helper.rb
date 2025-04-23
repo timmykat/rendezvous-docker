@@ -43,8 +43,38 @@ module ApplicationHelper
     return SecureRandom.hex(5)
   end
 
-  def bootstrap_icon(icon, size = "32")
-    href = image_path "bootstrap-icons/bootstrap-icons.svg"
+  def icon(icon, size = "32")
+    bootstrap_icon bootstrap_icon_map[icon], size
+
+  def bootstrap_icon_map
+    {
+      add_person: "person-plus-fill",
+      address: "geo-alt" 
+      bank: "bank",
+      car: "car-front-fill",
+      close: "x-circle",
+      email: "envelope-at",
+      left_arrow: "arrow-left-circle-fill",
+      list: "list",
+      minus: "dash-square-fill",
+      mouse: "mouse-2-fill",
+      pdf: "file-earmark-pdf-fill",
+      person_f: "person-standing-dress", 
+      person_m: "person-standing",
+      phone: "telephone-fill"
+      plus: "plus-square-fill",
+      registered: "check-square-fill",
+      remove_person; "person-dash-fill",
+      right_arrow: "arrow-right-circle-fill",
+      speaker: "megaphone-fill",
+      spreadsheet: "file-spreadsheet",
+      table: "table",
+      vendor: "person-raised-hand"
+    }
+  end
+
+  def bootstrap_icon(icon, size)
+    href = image_url("bootstrap-icons/bootstrap-icons.svg")
     tag = <<LITERAL
 <svg class="bi" width="#{size}" height="#{size}" fill="currentColor">
     <use href="#{href}##{icon}"></use>

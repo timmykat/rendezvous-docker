@@ -8,7 +8,6 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
-require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -46,6 +45,8 @@ module Rendezvous
       'Pragma' => 'no-cache',
       'Expires' => '0'
     }
+
+    config.assets.paths << Rails.root.join("app", "assets", "images")
     
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += %W(#{config.root}/lib/rendezvous_square)
