@@ -21,20 +21,26 @@ module Voting
 
     def vote
       ballot = Voting::Ballot.find(params[:id])
-      Rails.logger.debug ballot
       vehicle = Vehicle.find_by_qr_code(params[:code])
-      Rails.logger.debug vehicle
-      Rails.logger.debug ballot.user
+
+      if vehicle.nil? || ballot.nil?
+        # Handle error, possibly by rendering a proper error message or redirecting
+        render ballot_path, alert: 'Invalid ballot or vehicle.'
+        return
+      end
+
       vehicle.vote_by(ballot.user)
-  
+      Rails.logger.debug ballot.categorized_selections
       respond_to do |format|
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
-            "#accordion-content",
+            "accordion-content",
             partial: 'voting/ballots/accordion_view',
-            locals: { categorized_selections: [] } #ballot.categorized_selections }
+            locals: { categorized_selections: ballot.categorized_selections }
           )
+          return
         end
+        format.html { head :ok }
       end
     end
   end

@@ -45,26 +45,29 @@ module ApplicationHelper
 
   def icon(icon, size = "32")
     bootstrap_icon bootstrap_icon_map[icon], size
+  end
 
   def bootstrap_icon_map
     {
       add_person: "person-plus-fill",
-      address: "geo-alt" 
+      address: "geo-alt",
       bank: "bank",
       car: "car-front-fill",
       close: "x-circle",
+      collapse: "chevron-compact-down",
       email: "envelope-at",
+      expand: "chevron-compact-up",
       left_arrow: "arrow-left-circle-fill",
       list: "list",
       minus: "dash-square-fill",
       mouse: "mouse-2-fill",
       pdf: "file-earmark-pdf-fill",
-      person_f: "person-standing-dress", 
+      person_f: "person-standing-dress",
       person_m: "person-standing",
-      phone: "telephone-fill"
+      phone: "telephone-fill",
       plus: "plus-square-fill",
       registered: "check-square-fill",
-      remove_person; "person-dash-fill",
+      remove_person: "person-dash-fill",
       right_arrow: "arrow-right-circle-fill",
       speaker: "megaphone-fill",
       spreadsheet: "file-spreadsheet",
@@ -190,7 +193,7 @@ LITERAL
     end
     if !user.postal_code.blank?
       locale += " " + user.postal_code
-    end 
+    end
     address_arr << locale
     if !user.country_name.blank?
       address_arr << user.country_name

@@ -12,9 +12,9 @@ module Voting
 
     def categorized_selections
       categorized_selections = VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
-      return categorized_selections if selections.nil? || selections.empty?
-      selections.each do |vehicle|
-        categorized_selections[vehicle.judging_category] << vehicle
+      return categorized_selections unless self.selections.present?
+      self.selections.each do |vehicle|
+        categorized_selections[vehicle.judging_category] << vehicle if categorized_selections[vehicle.judging_category].present?
       end
       categorized_selections
     end

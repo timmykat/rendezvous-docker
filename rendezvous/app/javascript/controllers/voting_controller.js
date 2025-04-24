@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { debounce } from "throttle-debounce"
+import { Html5Qrcode } from "html5-qrcode"
 
 const CODE_LENGTH = 6
 
@@ -62,11 +63,11 @@ export default class extends Controller {
     const ballotId = this.element.dataset.ballotid
     const url = `${this.baseVoteUrl}/${ballotId}/${code}`
     console.log(url)
-    fetch(url, { headers: this.getTurboHeaders() })
-      .then(response => response.text())
-      .then(turboStream => {
-        document.body.insertAdjacentHTML("beforeend", turboStream)
-      })
+    fetch(url, {
+      headers: {
+        Accept: "text/vnd.turbo-stream.html"
+      }
+    })
   }
 
   getBasicHeaders() {

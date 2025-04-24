@@ -113,10 +113,9 @@ const isNumeric = (value) => {
   
 // Main initialization function to be called on DOMContentLoaded
 const initCustom = () => {
-initStickyHeader();
-initScrollLinks();
-initAutocomplete();
-initDonationPage();
+  initStickyHeader();
+  initScrollLinks();
+  initAutocomplete();
 };
   
 // Execute the `init` function when the DOM is ready

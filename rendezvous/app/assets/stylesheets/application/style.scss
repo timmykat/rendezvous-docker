@@ -21,7 +21,7 @@
 // Original primary: $brand-color
 // Original button color: #cfc91d
 $brand-color: var(--citroen-red);
-$hover-color: var(--dark-red); 
+$hover-color: var(--dark-red);
 $info-color: var(--dark-blue);
 
 // Palette 1
@@ -180,8 +180,8 @@ header {
 	.banner {
 		a, a:visited {
 			color: white;
-			
-	
+
+
 			&:hover {
 				font-size: 1.01em;
 				text-decoration: none;
@@ -234,10 +234,6 @@ header {
 			top: 5px;
 		}
 	}
-}
-
-svg.bi {
-	color: var(--dark-medium-blue);
 }
 
 .form-group .simple_mde > *:not(label){
@@ -317,8 +313,8 @@ input[type=checkbox] {
 
 	.card {
 		margin: 7px 0;
-		background-color: $nested-card-background;	
-		
+		background-color: $nested-card-background;
+
 		.card {
 			background-color: whitesmoke;
 		}

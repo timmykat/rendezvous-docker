@@ -211,10 +211,6 @@ header .banner a:hover, header .banner a:visited:hover {
   top: 5px;
 }
 
-svg.bi {
-  color: var(--dark-medium-blue);
-}
-
 .form-group .simple_mde > *:not(label) {
   background-color: white;
 }

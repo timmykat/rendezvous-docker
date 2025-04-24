@@ -32,7 +32,7 @@
 
     %link{ href: "https://fonts.googleapis.com", rel: "preconnect"}/
     %link{ crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
-    
+
     :plain
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
@@ -59,8 +59,8 @@
       .container-fluid.px-0
         .row
           .col-12
-            .container 
-              .row 
+            .container
+              .row
                 .col-12
                   .banner
                     .navbar.navbar-banner.top-nav.justify-content-start
@@ -69,29 +69,29 @@
                         %h1
                           = link_to "Citroen Rendezvous #{Date.current.year}", root_path
 
-      = render partial: 'common/site_nav_bar'                      
+      = render partial: 'common/site_nav_bar'
 
       - if registration_is_open && !current_registration
-        .container-fluid.px-0 
+        .container-fluid.px-0
           .row.no-gutters.registration-open.py-3
-            .col-12 
-              .container 
-                .row.justify-content-center 
+            .col-12
+              .container
+                .row.justify-content-center
                   .col-12
-                    Registration is open!                        
+                    Registration is open!
                     =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
-                    =link_to "#{icon(:pdf)}".html_safe.html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
-      
+                    =link_to "Prefer paper? #{icon(:pdf)}".html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
+
       - if current_user && voting_on?
-        .container-fluid.px-0 
+        .container-fluid.px-0
           .row.no-gutters.py-3
-            .col-12 
-              .container 
-                .row.justify-content-center 
-                  .col-md-2.col-12.text-center                       
+            .col-12
+              .container
+                .row.justify-content-center
+                  .col-md-2.col-12.text-center
                     =link_to 'VOTE', get_voting_ballot_path, class: 'ml-3 px-5 btn btn-lg btn-info'
-      
-    %main 
+
+    %main
       .content
         = yield
       .push
