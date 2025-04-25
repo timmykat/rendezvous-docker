@@ -5,7 +5,7 @@ import { Html5Qrcode } from "html5-qrcode"
 const CODE_LENGTH = 6
 
 export default class extends Controller {
-  static targets = ["reader", "selection", "selectionInfo", "addButton"]
+  static targets = ["reader", "selection", "ballot", "selectionInfo"]
 
   connect () {
     console.log('Voting controller connected')
@@ -19,11 +19,11 @@ export default class extends Controller {
       }
     });
 
-    this.addButtonTarget.addEventListener('click', () => {
-      console.log('Clicked vote')
-      const code = this.selectionTarget.value
-      this.submitSelection(code)
-    })
+    // this.addButtonTarget.addEventListener('click', () => {
+    //   console.log('Clicked vote')
+    //   const code = this.selectionTarget.value
+    //   this.submitSelection(code)
+    // })
 
     this.selectionTarget.addEventListener('keyup', () => this.debouncedFetchInfo())
 
@@ -48,8 +48,6 @@ export default class extends Controller {
     })
   }
 
-
-
   getInfo (url) {
     fetch(url, { headers: this.getJsonHeaders() })
       .then(response => response.json())
@@ -59,16 +57,15 @@ export default class extends Controller {
       })
   }
 
-  submitSelection(code) {
-    const ballotId = this.element.dataset.ballotid
-    const url = `${this.baseVoteUrl}/${ballotId}/${code}`
-    console.log(url)
-    fetch(url, {
-      headers: {
-        Accept: "text/vnd.turbo-stream.html"
-      }
-    })
-  }
+  // submitSelection(code) {
+  //   const ballotId = this.element.dataset.ballotid
+  //   const url = `${this.baseVoteUrl}/${ballotId}/${code}`
+  //   fetch(url, {
+  //     headers: {
+  //       Accept: "text/vnd.turbo-stream.html"
+  //     }
+  //   })
+  // }
 
   getBasicHeaders() {
     let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
@@ -88,6 +85,17 @@ export default class extends Controller {
     const headers = this.getBasicHeaders()
     headers['Accept'] = "text/vnd.turbo-stream.html"
     return headers
+  }
+
+  updateAction(event) {
+    console.log(event)
+    const code = this.selectionTarget.value.trim()
+    const id = this.ballotTarget.value
+
+    const form = event.target
+    form.action = `/_ajax/voting/ballots/${id}/${encodeURIComponent(code)}`
+    console.log(form)
+    form.submit()
   }
 }
 

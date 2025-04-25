@@ -56,5 +56,6 @@ module Rendezvous
    
     config.rendezvous = YAML::load(ERB.new(File.read("#{Rails.root}/config/rendezvous.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.mailer = YAML::load(ERB.new(File.read("#{Rails.root}/config/mailer.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+    config.recaptcha = YAML::load(ERB.new(File.read("#{Rails.root}/config/recaptcha.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
   end
 end

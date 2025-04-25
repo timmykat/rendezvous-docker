@@ -1,9 +1,14 @@
 #voting-app {
-  .selection {
+  .selection-wrapper {
     background: #eee;
     color: black;
+    border: solid 1px var(--cambridge-blue);
     padding: 10px;
     margin: 10px;
-    border: solid 1px var(--cambridge-blue);
+
+    .selection-info {
+      line-height: 1.4;
+      margin-top: 10px;
+    }
   }
 }

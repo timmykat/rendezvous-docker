@@ -3,7 +3,7 @@ require_dependency Rails.root.join('lib', 'vehicles', 'vehicle_taxonomy')
 module ApplicationHelper
   extend VehicleTaxonomy
 
-  RECAPTCHA_SITE_KEY = Rails.configuration.rendezvous[:captcha][:site_key]
+  RECAPTCHA_SITE_KEY = Rails.configuration.recaptcha[:site_key]
 
   def include_recaptcha_js
     raw %Q{
@@ -17,8 +17,11 @@ module ApplicationHelper
     raw %Q{
       <input name="recaptcha_token" type="hidden" id="#{id}"/>
       <script>
-        grecaptcha.ready(function() {
-          grecaptcha.execute('#{RECAPTCHA_SITE_KEY}', {action: '#{action}'}).then(function(token) {
+        grecaptcha.ready(() => {
+          console.log("Getting recaptcha token")
+          grecaptcha.execute("#{RECAPTCHA_SITE_KEY}", {action: "#{action}"})
+          .then(token => {
+            console.log("Recaptcha token: ", token)
             document.getElementById("#{id}").value = token;
           });
         });

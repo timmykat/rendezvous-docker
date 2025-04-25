@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
 
     Rails.logger.debug "Recaptcha action: #{recaptcha_action}"
     # Continue normal recaptcha
-    secret_key = CONFIG[:captcha][:secret_key]
+    secret_key = Rails.configuration.recaptcha[:secret_key]
     uri = URI.parse("https://www.google.com/recaptcha/api/siteverify?secret=#{secret_key}&response=#{token}")
     response = Net::HTTP.get_response(uri)
     json = JSON.parse(response.body)

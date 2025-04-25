@@ -1,12 +1,14 @@
 .selections-view
-  #accordion-content
-    - categorized_selections.each do |category, vehicles|
+  %turbo-frame{ id: 'categories-content'}
+    %pre #{selections.inspect}
+    - selections.each do |category, vehicles|
       .alert.alert-info.d-flex.justify-content-between
         #{category} 
         -if vehicles.length == 0
           .badge.badge-primary.ml-5 No selections yet
       - if vehicles.any?
         %ul.list-unstyled
-        - vehicles.each do |v|
-          %li #{v.year_marque_model} (owner: #{v.user.full_name})
+          - vehicles.each do |v|
+            %li #{v.year_marque_model} (owner: #{v.user.full_name})
+
         

@@ -1,4 +1,4 @@
-#voting-app{ "data-controller" => "voting", "data-ballotid" => ballot_id }
+#voting-app{ "data-controller" => "voting"}
   .card 
     .card-body 
       .card-title People's Choice Voting
@@ -8,12 +8,16 @@
         %p The app will keep track of categories and let you know if you've voted for more than one vehicle in a category.
         
 
-        #reader.mb-3{'data-voting-target' => 'reader'} 
-        %label Voting ID:
-        %input{type: "text", id: "selection", 'data-voting-target' => 'selection'}
-        %button.btn.btn-info{'data-voting-target' => 'addButton'} Vote
+        #reader.mb-3{'data-voting-target' => 'reader'}
 
-        .selection
-          %strong
-            Your pick:
-          .selection-info{'data-voting-target' => 'selectionInfo'}     
+        = form_with url: "", method: :get, data: { turbo_frame: "categories-content" } do |f|
+          %label Voting ID:
+          = f.text_field :code, id: "selection", data: { voting_target: "selection" }
+          = hidden_field_tag :id, ballot.id, data: { voting_target: "ballot" }
+          = f.submit "Vote", data: { action: "submit->voting#updateAction" }, class: "btn btn-primary"
+
+        .selection-wrapper
+          .selection-info{'data-voting-target' => 'selectionInfo'} 
+
+  %h2.h3 Your selections
+  = render partial: 'selections', locals: { selections: selections }    

@@ -7,15 +7,18 @@ module Voting
     # year
 
     belongs_to :user
-    has_many :ballot_selections, class_name: 'Voting::BallotSelection'
+    has_many :ballot_selections, class_name: 'Voting::BallotSelection', dependent: :destroy
     has_many :selections, through: :ballot_selections, source: :votable, source_type: 'Vehicle'
 
     def categorized_selections
       categorized_selections = VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
       return categorized_selections unless self.selections.present?
+      Rails.logger.debug self.selections
       self.selections.each do |vehicle|
-        categorized_selections[vehicle.judging_category] << vehicle if categorized_selections[vehicle.judging_category].present?
+        Rails.logger.debug "#{vehicle.year_marque_model}: #{vehicle.judging_category}"
+        categorized_selections[vehicle.judging_category] << vehicle
       end
+      Rails.logger.debug categorized_selections
       categorized_selections
     end
 

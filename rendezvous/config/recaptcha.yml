@@ -1,0 +1,2 @@
+site_key: <%= ENV['RECAPTCHA_PUBLIC_KEY'] %>
+secret_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>

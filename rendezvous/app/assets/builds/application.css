@@ -205,6 +205,7 @@ header .banner a:hover, header .banner a:visited:hover {
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 .flash-wrapper .flash .close-flash {
+  cursor: pointer;
   position: absolute;
   font-size: 0.8em;
   right: 5px;
@@ -231,6 +232,10 @@ input[type=checkbox] {
 }
 
 /* Bootstrap customizations */
+.badge {
+  height: fit-content;
+}
+
 .manage {
   background-color: palegoldenrod;
   border-top: solid 2px var(--eggplant);
@@ -584,12 +589,16 @@ body .simple .content .invoice p {
   line-height: 1.4;
 }
 
-#voting-app .selection {
+#voting-app .selection-wrapper {
   background: #eee;
   color: black;
+  border: solid 1px var(--cambridge-blue);
   padding: 10px;
   margin: 10px;
-  border: solid 1px var(--cambridge-blue);
+}
+#voting-app .selection-wrapper .selection-info {
+  line-height: 1.4;
+  margin-top: 10px;
 }
 
 body.labels {

@@ -38,9 +38,11 @@ class Vehicle < ApplicationRecord
 
   def voting_info_format
     info = <<~EOF
-    #{self.year_marque_model}<br>
-    Category: #{self.judging_category}<br>
-    Owner: #{self.user.full_name}
+    <div class="selection">
+        <div class="category mb-3 font-weight-bold">Category: #{self.judging_category}</div>
+        <div class="vehicle font-weight-bold">#{self.year_marque_model}</div>
+        <div class="owner font-weight-bold">Owner: #{self.user.full_name}</div>
+    </div>
     EOF
 
     info.html_safe

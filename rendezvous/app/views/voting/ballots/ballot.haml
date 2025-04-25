@@ -8,11 +8,8 @@
           .card-text
             %p You can select as many candidates in a category as you like, but you can not submit your ballot until you've narrowed it down to one per category.
  
-            = render partial: 'voting_app', locals: { ballot_id: @ballot.id }
+            = render partial: 'voting_app', locals: { ballot: @ballot, selections: @selections }
 
- 
-            %h2.h3 View your choices
-            = render partial: 'accordion_view', locals: { categorized_selections: @ballot.categorized_selections }
 
             
 

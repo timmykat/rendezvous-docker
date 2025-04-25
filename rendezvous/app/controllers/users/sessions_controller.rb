@@ -6,7 +6,7 @@ class Users::SessionsController < Devise::SessionsController
   def request_login_link
     store_location_for(:user, request.referrer || request.fullpath)
     email = params[:email]
-    failure_message = verify_recaptcha?(recaptcha_param, 'get_login_link', email)
+    failure_message = verify_recaptcha?(params[:recaptcha_token], 'get_login_link', email)
     if failure_message
       Rails.logger.warn "Login link: recaptcha failed for #{email}"
       redirect_to root_path, notice: failure_message
@@ -47,9 +47,5 @@ class Users::SessionsController < Devise::SessionsController
       user_params.require(:user).permit(
         [:login_token]
       )
-    end
-
-    def recaptcha_param
-      params.require(:recaptcha_token)
     end
 end

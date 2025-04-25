@@ -228,6 +228,7 @@ header {
 		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 
 		.close-flash {
+			cursor: pointer;
 			position: absolute;
 			font-size: 0.8em;
 			right: 5px;
@@ -256,6 +257,9 @@ input[type=checkbox] {
 }
 
 /* Bootstrap customizations */
+.badge {
+	height: fit-content;
+}
 
 .manage {
 	background-color: palegoldenrod;
