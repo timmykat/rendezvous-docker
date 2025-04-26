@@ -216,6 +216,23 @@ class AdminController < ApplicationController
     }
   end
 
+  def print(item)
+    case item:
+    when 'placards'
+      @vehicles = Event::Registration.current.flat_map(&:vehicles)
+      render :placards
+      return
+    when 'labels'
+      @registrations = Event::Registration.current
+      render :labels
+      return
+    when 'certificates'
+      @winners = nil
+      render :certificates
+      return
+    end
+  end
+
   def download_csv
     type = CSV_TYPES.keys.include?(params[:type].to_sym) ? params[:type] : nil
     return if type.nil?
