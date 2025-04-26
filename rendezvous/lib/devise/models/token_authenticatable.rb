@@ -19,7 +19,6 @@ module Devise
       end
 
       def send_login_link
-        Rails.logger.debug Rails.configuration.mailer
         generate_login_token!
         send_devise_notification(:email_login_link, @raw_login_token)
       end

@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { debounce } from "throttle-debounce"
 import { Html5Qrcode } from "html5-qrcode"
+import Cookies from "js-cookie"
 
 const CODE_LENGTH = 6
 
@@ -8,8 +9,8 @@ export default class extends Controller {
   static targets = ["reader", "selection", "ballot", "selectionInfo"]
 
   connect () {
-    console.log('Voting controller connected')
     this.baseVoteUrl = `${window.location.origin}/_ajax/voting/ballots`
+    this.handleInputPreference()
 
     this.debouncedFetchInfo = debounce(500, () => {
       const code = this.selectionTarget.value;
@@ -18,12 +19,6 @@ export default class extends Controller {
         this.getInfo(url);
       }
     });
-
-    // this.addButtonTarget.addEventListener('click', () => {
-    //   console.log('Clicked vote')
-    //   const code = this.selectionTarget.value
-    //   this.submitSelection(code)
-    // })
 
     this.selectionTarget.addEventListener('keyup', () => this.debouncedFetchInfo())
 
@@ -36,6 +31,40 @@ export default class extends Controller {
             scanner.stop(); // stop after success
         }
     );
+  }
+
+  handleInputPreference () {
+    const COOKIE_NAME = 'voting_input_preference'
+    const inputPreference = Cookies.get(COOKIE_NAME) || 'scan'
+    this.setInputPreference(inputPreference)
+    const tabButtons = this.element.querySelectorAll('#voting-tabs button')
+    tabButtons.forEach(b => {
+      b.addEventListener('click', e => {
+        const preference = e.target.getAttribute('aria-controls')
+        Cookies.set(COOKIE_NAME, preference)
+        this.setInputPreference(preference)
+      })
+    })
+  }
+
+  setInputPreference (preference) {
+    const tabButtons = this.element.querySelectorAll('button[aria-controls]')
+    const tabPanes = this.element.querySelectorAll('.tab-content .tab-pane')
+    tabButtons.forEach(b => {
+      if (b.getAttribute('aria-controls') === preference) {
+        b.classList.add('active')
+      } else {
+        b.classList.remove('active')
+      }
+    })
+
+    tabPanes.forEach(p => {
+      if (p.id === preference) {
+        p.classList.add('active')
+      } else {
+        p.classList.remove('active')
+      }
+    })
   }
 
   debouncedFetchInfo () {
@@ -85,17 +114,6 @@ export default class extends Controller {
     const headers = this.getBasicHeaders()
     headers['Accept'] = "text/vnd.turbo-stream.html"
     return headers
-  }
-
-  updateAction(event) {
-    console.log(event)
-    const code = this.selectionTarget.value.trim()
-    const id = this.ballotTarget.value
-
-    const form = event.target
-    form.action = `/_ajax/voting/ballots/${id}/${encodeURIComponent(code)}`
-    console.log(form)
-    form.submit()
   }
 }
 

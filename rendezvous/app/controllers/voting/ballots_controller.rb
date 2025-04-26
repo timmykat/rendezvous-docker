@@ -4,7 +4,7 @@ module Voting
     
     layout 'ballot_layout'
 
-    before_action :authenticate_user!
+    before_action :authenticate_user!, { only: [:ballot] }
 
     def ballot
       if params[:id].present?
@@ -24,42 +24,40 @@ module Voting
       @ballot = Voting::Ballot.find(params[:id])
       vehicle = Vehicle.find_by_qr_code(params[:code])
 
-      if vehicle.nil? || ballot.nil?
+      if vehicle.nil? || @ballot.nil?
         # Handle error, possibly by rendering a proper error message or redirecting
-        render ballot_path, alert: 'Invalid ballot or vehicle.'
+        redirect_to ballot_path, alert: 'Invalid ballot or vehicle.'
         return
       end
 
       vehicle.vote_by(@ballot.user)
       @selections = @ballot.categorized_selections
 
-      Rails.logger.debug @selections
-
       respond_to do |format|
         format.turbo_stream do
-          turbo_stream_response = render_to_string(
-            turbo_stream: turbo_stream.replace(
+          if @selections.present?
+            render turbo_stream: turbo_stream.update(
               "categories-content",
               partial: 'voting/ballots/selections',
               locals: { selections: @selections }
-            ))
-          Rails.logger.debug "*****"
-          Rails.logger.debug turbo_stream_response
-          Rails.logger.debug "*****"
-          render turbo_stream: turbo_stream.replace(
-            "categories-content",
-            partial: 'voting/ballots/selections',
-            locals: { selections: @selections }
-          )
-          return
+            )
+            return
+          end
         end
-        format.html { head :ok }
       end
+      #     else
+      #       Rails.logger.debug 'Oops, no selection' 
+      #       render partial: "voting/ballots/selections", status: :unprocessable_entity, locals: { selections: @selections }
+      #     end
+      #   end
+      #     format.html do
+      #       if @selections.present? 
+      #         render head :ok
+      #       else
+      #         render :ballot, status: :unprocessable_entity
+      #       end
+      #   end
+      # end
     end
-
-    private
-      def categorize_selections(selections)
-        selections.group_by(&:category)
-      end
   end
 end

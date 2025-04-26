@@ -13,9 +13,6 @@
               If you already have an account, please
               %a{ href: new_user_session_path } sign in here.
 
-            = content_for :recaptcha_js do
-              = include_recaptcha_js
-
             = form_for(resource, url: user_registration_path, method: :post) do |f|
               .form-group
                 = f.label :email, nil, class: 'required'
@@ -33,5 +30,6 @@
                 = f.hidden_field :password_confirmation, class: 'form-control confirm', value: @password, hidden: true, required: true  
 
               .actions
+                = recaptcha_script('register_user')
                 = f.submit "Create", class: "btn  btn-info"
-                = recaptcha_execute('register_user')
+

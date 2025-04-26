@@ -589,16 +589,36 @@ body .simple .content .invoice p {
   line-height: 1.4;
 }
 
+main {
+  margin-top: 0;
+}
+
+#voting-app input[name=code] {
+  text-transform: uppercase;
+}
+#voting-app .tab-content > .tab-pane {
+  display: block !important; /* override Bootstrap */
+  visibility: hidden;
+  position: absolute;
+  z-index: -1;
+}
+#voting-app .tab-content > .tab-pane.active {
+  visibility: visible;
+  position: static;
+  z-index: auto;
+}
 #voting-app .selection-wrapper {
   background: #eee;
-  color: black;
-  border: solid 1px var(--cambridge-blue);
-  padding: 10px;
+  color: var(--cambridge-blue);
   margin: 10px;
 }
-#voting-app .selection-wrapper .selection-info {
+#voting-app .selection-wrapper .selection {
+  margin: 20px;
   line-height: 1.4;
   margin-top: 10px;
+}
+#voting-app .selection-wrapper .selection .info {
+  font-size: 1.2rem;
 }
 
 body.labels {

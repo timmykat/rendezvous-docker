@@ -18,10 +18,8 @@
 
     = csrf_meta_tags
 
-    = yield :recaptcha_js
-
     = javascript_include_tag 'application', defer: true
-    = javascript_include_tag, 'admin', defer: true
+    = javascript_include_tag 'admin', defer: true
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
@@ -89,6 +87,5 @@
       } else {
         addMde();
       }
-
 
 

@@ -18,7 +18,6 @@ class Users::SessionsController < Devise::SessionsController
     flash_notice "Please check your inbox at #{params[:email]} for your sign-in link"
     
     if @user
-      Rails.logger.debug "Sending the link for a user"
       @user.send_login_link
     end
 

@@ -7,7 +7,6 @@ module VenueHelper
 
   def reservation_url
     venue = EventHotel.first
-    Rails.logger.debug "Rezzy link: #{venue.reservation_url}"
     venue.reservation_url
   end
 end

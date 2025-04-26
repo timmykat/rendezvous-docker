@@ -5,28 +5,24 @@ module ApplicationHelper
 
   RECAPTCHA_SITE_KEY = Rails.configuration.recaptcha[:site_key]
 
-  def include_recaptcha_js
-    raw %Q{
-      <script src="https://www.google.com/recaptcha/api.js?render=#{RECAPTCHA_SITE_KEY}"></script>
-    }
-  end
-
-  def recaptcha_execute(action)
+  # include this as part of the forms where you want them, just before submit
+  def recaptcha_script(action)
     id = "recaptcha_token_#{SecureRandom.hex(10)}"
-
-    raw %Q{
-      <input name="recaptcha_token" type="hidden" id="#{id}"/>
-      <script>
-        grecaptcha.ready(() => {
-          console.log("Getting recaptcha token")
-          grecaptcha.execute("#{RECAPTCHA_SITE_KEY}", {action: "#{action}"})
-          .then(token => {
-            console.log("Recaptcha token: ", token)
-            document.getElementById("#{id}").value = token;
+    recaptcha_js =<<~EOF
+        <input name="recaptcha_token" type="hidden" id="#{id}"/>
+        <script src="https://www.google.com/recaptcha/api.js?render=#{RECAPTCHA_SITE_KEY}"></script>
+        <script>
+          grecaptcha.ready(() => {
+            console.log("Getting recaptcha token")
+            grecaptcha.execute("#{RECAPTCHA_SITE_KEY}", {action: "#{action}"})
+            .then(token => {
+              console.log("Recaptcha token: ", token)
+              document.getElementById("#{id}").value = token;
+            });
           });
-        });
-      </script>
-    }
+        </script>
+    EOF
+    recaptcha_js.html_safe
   end
 
   def get_active_users
@@ -47,13 +43,14 @@ module ApplicationHelper
   end
 
   def icon(icon, size = "32")
-    bootstrap_icon bootstrap_icon_map[icon], size
+    bootstrap_icon(bootstrap_icon_map[icon], size)
   end
 
   def bootstrap_icon_map
     {
       add_person: "person-plus-fill",
       address: "geo-alt",
+      back: "chevron-double-left",
       bank: "bank",
       car: "car-front-fill",
       close: "x-circle",
@@ -142,8 +139,6 @@ LITERAL
   end
 
   def registration_is_open
-    Rails.logger.debug Config::SiteSetting.instance.registration_is_open ? 'Is open' : 'Is not open'
-    Rails.logger.debug before_cutoff_date? ? 'Is before cutoff date' : 'Is after cutoff date'
     (Config::SiteSetting.instance.registration_is_open && before_cutoff_date?)
   end
 

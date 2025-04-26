@@ -41,8 +41,6 @@
 
     = csrf_meta_tags
 
-    = yield :recaptcha_js
-
     = javascript_include_tag 'application', defer: true
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
@@ -98,6 +96,5 @@
 
     %footer.footer.text-center
       = render partial: 'common/footer'
-
 
 

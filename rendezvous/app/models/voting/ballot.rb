@@ -13,12 +13,9 @@ module Voting
     def categorized_selections
       categorized_selections = VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
       return categorized_selections unless self.selections.present?
-      Rails.logger.debug self.selections
       self.selections.each do |vehicle|
-        Rails.logger.debug "#{vehicle.year_marque_model}: #{vehicle.judging_category}"
         categorized_selections[vehicle.judging_category] << vehicle
       end
-      Rails.logger.debug categorized_selections
       categorized_selections
     end
 

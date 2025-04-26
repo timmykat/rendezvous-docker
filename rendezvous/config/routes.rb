@@ -99,7 +99,7 @@ Rails.application.routes.draw do
   end
 
   get '/voting/ballot(/:id)',               to: 'voting/ballots#ballot', as: :get_voting_ballot
-  get '/_ajax/voting/ballots/:id/:code',    to: 'voting/ballots#vote', as: :_ajax_voting_ballots
+  post '/turbo/voting/ballots/vote',        to: 'voting/ballots#vote', as: :turbo_vote
   get '/_ajax/voting/vehicle/:code',        to: 'vehicles#ajax_info'
 
 

@@ -21,40 +21,35 @@
 
     = csrf_meta_tags
 
-    = yield :recaptcha_js
-
     = javascript_include_tag 'application', defer: true
     = javascript_include_tag 'voting', defer: true
 
-    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
-    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
-
   %body{ class: controller_classes + " outfit-regular" }
-    = render partial: 'common/active_users'
-    = render partial: 'layouts/flash'
+    .container{style: "max-width: 540px"}
+      .row.justify-content-center 
+        .col-12
+          = render partial: 'layouts/flash'
 
-    %header
-      .container
-        .row.banner
-          .col-12
-            .navbar.navbar-banner.top-nav.justify-content-start
-              = image_tag "chevrons.png"
-              .nav-item.site
-                %h1
-                  = link_to "Citroen Rendezvous #{Date.current.year}", root_path
+          %header
+            .container
+              .row.banner
+                .col-12
+                  .navbar.navbar-banner.top-nav.justify-content-start
+                    .nav-item.site
+                      %h1.h2 Citroen Rendezvous
+                      %h2.h4 People's Choice
 
-      = render partial: 'common/site_nav_bar' 
-    %main 
-      .content
-        = yield
+            = render partial: 'common/simple_nav_bar' 
 
-    %footer.footer
-      .container 
-        .row.justify-content-center
-          = render partial: 'common/footer'
+          %main 
+            .content
+              = yield
+
+          %footer.footer
+            .container 
+              .row.justify-content-center
+                = render partial: 'common/footer'
     
-
-
 
 
 

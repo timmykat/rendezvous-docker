@@ -11,6 +11,11 @@ class ApplicationController < ActionController::Base
 
   RECAPTCHA_MINIMUM_SCORE = 0.5
 
+  def render(*args)
+    Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
+    super(*args)  # Call the original render method
+  end
+
   # Need this for other gems that might set flash
   def flash_array
 

@@ -118,7 +118,6 @@ class AdminController < ApplicationController
 
     reg_data = {}
     rendezvous_years.each do |year|
-      Rails.logger.debug year
       event_date = DateTime.strptime(event_dates[year], "%Y-%m-%d")
       reg_data[year.to_s] = []
       registrations = Event::Registration.where(year: year).order(:updated_at).all

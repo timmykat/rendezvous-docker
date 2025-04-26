@@ -1,14 +1,37 @@
+main {
+  margin-top: 0;
+}
+
 #voting-app {
+  input[name='code'] {
+    text-transform: uppercase;
+  }
+  
+  .tab-content > .tab-pane {
+    display: block !important; /* override Bootstrap */
+    visibility: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+  
+  .tab-content > .tab-pane.active {
+    visibility: visible;
+    position: static;
+    z-index: auto;
+  }
+
   .selection-wrapper {
     background: #eee;
-    color: black;
-    border: solid 1px var(--cambridge-blue);
-    padding: 10px;
+    color: var(--cambridge-blue);
     margin: 10px;
 
-    .selection-info {
+    .selection {
+      margin: 20px;
       line-height: 1.4;
       margin-top: 10px;
+      .info {
+        font-size: 1.2rem;
+      }
     }
   }
 }

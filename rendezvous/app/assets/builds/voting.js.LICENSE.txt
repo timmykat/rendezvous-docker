@@ -2,3 +2,5 @@
 Turbo 8.0.13
 Copyright © 2025 37signals LLC
  */
+
+/*! js-cookie v3.0.5 | MIT */

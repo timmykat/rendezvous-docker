@@ -22,9 +22,6 @@
               - if !user_signed_in?
                 .cover
 
-              = content_for :recaptcha_js do
-                = include_recaptcha_js
-
               = simple_form_for @event_registration, id:  'registration_form' do |f|
                 %section
                   %p * = required
@@ -92,7 +89,8 @@
                   .row
                     .col-12
                       .form-group
+                        = recaptcha_script('register_event')
                         = f.button :submit, input_html:  { value:  "Continue to payment #{icon(:right_arrow)}".html_safe }, class:  "btn  btn-primary"
-                        = recaptcha_execute('register_event')
+                        
             
 

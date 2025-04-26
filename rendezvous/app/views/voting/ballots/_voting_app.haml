@@ -1,23 +1,42 @@
 #voting-app{ "data-controller" => "voting"}
   .card 
     .card-body 
-      .card-title People's Choice Voting
+      .card-title Vote!
       .card-text
-        %p Select the QR code with your phone camera
-        %p If you prefer, enter the voting ID on the dash card
-        %p The app will keep track of categories and let you know if you've voted for more than one vehicle in a category.
+        %p You can select as many candidates in a category as you like, but you can not submit your ballot until you've narrowed it down to one per category.
+
+        .card 
+          .card-body 
+            .card-text
+              %ul.nav.nav-pills.mb-3{ id: 'voting-tabs', role: :tablist }
+                %li.nav-item{ role: 'presentation' }
+                  %button.nav-link.active{ id: 'scan-tab', 'data-toggle' => 'pill', 'data-target' => '#scan', type: :button, role: :tab, 'aria-controls' => 'scan', 'aria-selected' => true } Scan
+                %li.nav-item{ role: 'presentation' }
+                  %button.nav-link{ id: 'type-in-tab', 'data-toggle' => 'pill', 'data-target'=> '#type-in', type: :button, role: :tab, 'aria-controls' => 'type-in', 'aria-selected' => true } Type In
+
+              = form_with url: turbo_vote_path, method: :post, data: { turbo_frame: "categories-content" } do |f|
+                .tab-content
+                  .tab-pane.active{ id: 'scan', role: 'tab-panel', 'aria-labelled-by' => 'scan-tab'}
+                    %p Select the QR code with your phone camera
+                    %p If you prefer, enter the voting ID on the dash card
+                    %p The app will keep track of categories and let you know if you've voted for more than one vehicle in a category.
         
+                    #reader.mb-3{'data-voting-target' => 'reader'}
 
-        #reader.mb-3{'data-voting-target' => 'reader'}
+                  .tab-pane{ id: 'type-in', role: 'tab-panel', 'aria-labelled-by' => 'scan-tab'}
+                    .form-group
+                      %label Vehicle ID:
+                      = f.text_field :code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
+                    = hidden_field_tag :id, ballot.id, data: { voting_target: "ballot" }
 
-        = form_with url: "", method: :get, data: { turbo_frame: "categories-content" } do |f|
-          %label Voting ID:
-          = f.text_field :code, id: "selection", data: { voting_target: "selection" }
-          = hidden_field_tag :id, ballot.id, data: { voting_target: "ballot" }
-          = f.submit "Vote", data: { action: "submit->voting#updateAction" }, class: "btn btn-primary"
+                %hr
 
-        .selection-wrapper
-          .selection-info{'data-voting-target' => 'selectionInfo'} 
+                .selection-wrapper
+                  .selection-info{'data-voting-target' => 'selectionInfo'} 
+                
+                .text-center
+                  = f.submit "Vote", class: "btn btn-danger"
+
 
   %h2.h3 Your selections
-  = render partial: 'selections', locals: { selections: selections }    
+  = render partial: 'selections', locals: { selections: selections }   

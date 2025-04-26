@@ -1,14 +1,13 @@
-.selections-view
-  %turbo-frame{ id: 'categories-content'}
-    %pre #{selections.inspect}
+%turbo-frame{ id: 'categories-content'}
+  .selections
     - selections.each do |category, vehicles|
-      .alert.alert-info.d-flex.justify-content-between
-        #{category} 
-        -if vehicles.length == 0
+      .alert.alert-warning.d-flex.justify-content-between
+        %strong #{category} 
+        -if vehicles.nil? || vehicles.length == 0
           .badge.badge-primary.ml-5 No selections yet
-      - if vehicles.any?
+      - unless vehicles.nil? 
         %ul.list-unstyled
           - vehicles.each do |v|
-            %li #{v.year_marque_model} (owner: #{v.user.full_name})
+            %li.alert.alert-info.ml-3 #{v.year_marque_model} (owner: #{v.user.full_name})
 
         

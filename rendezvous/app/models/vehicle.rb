@@ -40,8 +40,10 @@ class Vehicle < ApplicationRecord
     info = <<~EOF
     <div class="selection">
         <div class="category mb-3 font-weight-bold">Category: #{self.judging_category}</div>
-        <div class="vehicle font-weight-bold">#{self.year_marque_model}</div>
-        <div class="owner font-weight-bold">Owner: #{self.user.full_name}</div>
+        <div class="info">
+          <div class="vehicle">#{self.year_marque_model}</div>
+          <div class="owner">Owner: #{self.user.full_name}</div>
+        </div>
     </div>
     EOF
 
