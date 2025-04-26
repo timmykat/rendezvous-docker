@@ -57,6 +57,7 @@ module ApplicationHelper
       collapse: "chevron-compact-down",
       email: "envelope-at",
       expand: "chevron-compact-up",
+      info: 'question-circle-fill',
       left_arrow: "arrow-left-circle-fill",
       list: "list",
       minus: "dash-square-fill",

@@ -1,25 +1,24 @@
 #voting-app{ "data-controller" => "voting"}
+  = render partial: 'instructions'
   .card 
     .card-body 
-      .card-title Vote!
+      .card-title 
+        %h2.h4.d-flex.justify-content-between.align-items-center 
+          Enter selection
+          =link_to icon(:info, '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
       .card-text
-        %p You can select as many candidates in a category as you like, but you can not submit your ballot until you've narrowed it down to one per category.
-
         .card 
           .card-body 
             .card-text
               %ul.nav.nav-pills.mb-3{ id: 'voting-tabs', role: :tablist }
                 %li.nav-item{ role: 'presentation' }
-                  %button.nav-link.active{ id: 'scan-tab', 'data-toggle' => 'pill', 'data-target' => '#scan', type: :button, role: :tab, 'aria-controls' => 'scan', 'aria-selected' => true } Scan
+                  %button.nav-link.active{ id: 'scan-tab', 'data-toggle' => 'pill', 'data-target' => '#scan', type: :button, role: :tab, 'aria-controls' => 'scan', 'aria-selected' => true } SCAN
                 %li.nav-item{ role: 'presentation' }
-                  %button.nav-link{ id: 'type-in-tab', 'data-toggle' => 'pill', 'data-target'=> '#type-in', type: :button, role: :tab, 'aria-controls' => 'type-in', 'aria-selected' => true } Type In
+                  %button.nav-link{ id: 'type-in-tab', 'data-toggle' => 'pill', 'data-target'=> '#type-in', type: :button, role: :tab, 'aria-controls' => 'type-in', 'aria-selected' => true } TYPE IN
 
               = form_with url: turbo_vote_path, method: :post, data: { turbo_frame: "categories-content" } do |f|
                 .tab-content
                   .tab-pane.active{ id: 'scan', role: 'tab-panel', 'aria-labelled-by' => 'scan-tab'}
-                    %p Select the QR code with your phone camera
-                    %p If you prefer, enter the voting ID on the dash card
-                    %p The app will keep track of categories and let you know if you've voted for more than one vehicle in a category.
         
                     #reader.mb-3{'data-voting-target' => 'reader'}
 
@@ -29,13 +28,13 @@
                       = f.text_field :code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
                     = hidden_field_tag :id, ballot.id, data: { voting_target: "ballot" }
 
-                %hr
-
-                .selection-wrapper
-                  .selection-info{'data-voting-target' => 'selectionInfo'} 
-                
-                .text-center
-                  = f.submit "Vote", class: "btn btn-danger"
+                #vote-action-container{'data-voting-target' => 'voteActionContainer'}
+                  .action-wrapper 
+                    .selection-info{'data-voting-target' => 'selectionInfo'} 
+                    
+                    .text-center.d-flex.align-items-center.mt-4
+                      = f.submit "Vote", id: 'vote-button', class: "btn btn-primary mr-3"
+                      = link_to 'CANCEL', '#', 'data-voting-target' => 'cancel'
 
 
   %h2.h3 Your selections

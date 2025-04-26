@@ -1,15 +1,23 @@
 import { Controller } from "@hotwired/stimulus"
 import { debounce } from "throttle-debounce"
-import { Html5Qrcode } from "html5-qrcode"
+import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode"
 import Cookies from "js-cookie"
 
 const CODE_LENGTH = 6
 
 export default class extends Controller {
-  static targets = ["reader", "selection", "ballot", "selectionInfo"]
+  static targets = [
+    "ballot", 
+    "cancel", 
+    "reader", 
+    "selection", 
+    "selectionInfo", 
+    "voteActionContainer"
+  ]
 
   connect () {
-    this.baseVoteUrl = `${window.location.origin}/_ajax/voting/ballots`
+    this.main = document.querySelector('main')
+    this.scanner = new Html5Qrcode(this.readerTarget.id)
     this.handleInputPreference()
 
     this.debouncedFetchInfo = debounce(500, () => {
@@ -21,22 +29,36 @@ export default class extends Controller {
     });
 
     this.selectionTarget.addEventListener('keyup', () => this.debouncedFetchInfo())
+    this.cancelTarget.addEventListener('click', e => {
+      this.voteActionContainerTarget.style.visibility = 'hidden'
+    })
+  }
 
-    const scanner = new Html5Qrcode(this.readerTarget.id)
-    scanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        (decodedText) => {
-            this.selectionTarget.value = decodedText;
-            scanner.stop(); // stop after success
-        }
-    );
+  handleScanner (preference) { 
+    const state = this.scanner.getState()
+    if (preference === 'scan') {
+      if (state !== Html5QrcodeScannerState.SCANNING) {
+        this.scanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            (decodedText) => {
+                this.selectionTarget.value = decodedText;
+                scanner.stop(); // stop after success
+            }
+        );
+      }
+    } else {
+      if (state === Html5QrcodeScannerState.SCANNING) {
+        this.scanner.stop()
+      }
+    }
   }
 
   handleInputPreference () {
     const COOKIE_NAME = 'voting_input_preference'
     const inputPreference = Cookies.get(COOKIE_NAME) || 'scan'
     this.setInputPreference(inputPreference)
+    this.handleScanner(inputPreference)
     const tabButtons = this.element.querySelectorAll('#voting-tabs button')
     tabButtons.forEach(b => {
       b.addEventListener('click', e => {
@@ -81,20 +103,14 @@ export default class extends Controller {
     fetch(url, { headers: this.getJsonHeaders() })
       .then(response => response.json())
       .then(data => {
-        if (typeof data.vehicleInfo === "string") 
-            this.selectionInfoTarget.innerHTML = data.vehicleInfo
+        if (typeof data.vehicleInfo === "string") {
+          this.voteActionContainerTarget.style.visibility = 'visible'
+          this.selectionInfoTarget.innerHTML = data.vehicleInfo
+        } else {
+          this.voteContainer.style.visibility = 'hidden'
+        }
       })
   }
-
-  // submitSelection(code) {
-  //   const ballotId = this.element.dataset.ballotid
-  //   const url = `${this.baseVoteUrl}/${ballotId}/${code}`
-  //   fetch(url, {
-  //     headers: {
-  //       Accept: "text/vnd.turbo-stream.html"
-  //     }
-  //   })
-  // }
 
   getBasicHeaders() {
     let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')

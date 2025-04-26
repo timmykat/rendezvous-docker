@@ -217,7 +217,7 @@ class AdminController < ApplicationController
   end
 
   def print(item)
-    case item:
+    case item
     when 'placards'
       @vehicles = Event::Registration.current.flat_map(&:vehicles)
       render :placards

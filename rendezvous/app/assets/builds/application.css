@@ -589,12 +589,25 @@ body .simple .content .invoice p {
   line-height: 1.4;
 }
 
-main {
+:root {
+  --appWidth: 540px;
+}
+
+.c_voting_ballots > .container {
+  max-width: var(--appWidth);
+}
+.c_voting_ballots > .container main {
   margin-top: 0;
+}
+
+#voting-instructions Ul > li {
+  font-size: 1.3rem;
+  line-height: 1.3;
 }
 
 #voting-app input[name=code] {
   text-transform: uppercase;
+  font-size: 2.5rem;
 }
 #voting-app .tab-content > .tab-pane {
   display: block !important; /* override Bootstrap */
@@ -607,18 +620,49 @@ main {
   position: static;
   z-index: auto;
 }
-#voting-app .selection-wrapper {
+#voting-app #vote-action-container {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  visibility: hidden;
+  background: transparent;
+}
+#voting-app #vote-action-container .action-wrapper {
+  width: 100%;
+  max-width: var(--appWidth);
+  height: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: #eee;
-  color: var(--cambridge-blue);
-  margin: 10px;
-}
-#voting-app .selection-wrapper .selection {
-  margin: 20px;
+  color: var(--darkblue);
+  border: solid 2px var(--citroen-red);
+  padding: 10px;
   line-height: 1.4;
-  margin-top: 10px;
 }
-#voting-app .selection-wrapper .selection .info {
-  font-size: 1.2rem;
+#voting-app #vote-action-container .selection {
+  font-size: 1.5;
+  border-radius: 10px;
+  margin: 20px 0;
+  padding: 30px;
+  background-color: var(--cambridge-blue);
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+  font-size: 1.5rem;
+}
+#voting-app #vote-action-container .selection .category {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+#voting-app #categories-content .category {
+  font-size: 1.4rem;
 }
 
 body.labels {
