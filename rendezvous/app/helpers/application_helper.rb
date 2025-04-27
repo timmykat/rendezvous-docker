@@ -42,8 +42,8 @@ module ApplicationHelper
     return SecureRandom.hex(5)
   end
 
-  def icon(icon, size = "32")
-    bootstrap_icon(bootstrap_icon_map[icon], size)
+  def icon(icon, args = {})
+    bootstrap_icon(bootstrap_icon_map[icon], args)
   end
 
   def bootstrap_icon_map
@@ -55,6 +55,7 @@ module ApplicationHelper
       car: "car-front-fill",
       close: "x-circle",
       collapse: "chevron-compact-down",
+      delete: 'trash3',
       email: "envelope-at",
       expand: "chevron-compact-up",
       info: 'question-circle-fill',
@@ -77,14 +78,13 @@ module ApplicationHelper
     }
   end
 
-  def bootstrap_icon(icon, size)
+  def bootstrap_icon(icon, args)
+    size = args.fetch(:size, '32')
+    data = args[:data]
     href = image_url("bootstrap-icons/bootstrap-icons.svg")
-    tag = <<LITERAL
-<svg class="bi" width="#{size}" height="#{size}" fill="currentColor">
-    <use href="#{href}##{icon}"></use>
-</svg>
-LITERAL
-    tag.html_safe
+    content_tag(:svg, width: size, height: size, fill: "currentColor", class: "bi", data: data) do
+      content_tag(:use, nil, href: "#{href}##{icon}")
+    end
   end
 
   def controller_classes

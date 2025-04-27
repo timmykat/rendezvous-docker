@@ -50,7 +50,7 @@
     visibility: hidden;
     background: transparent;
 
-    .action-wrapper {
+    .selection-wrapper, .error-wrapper {
       width: 100%;
       max-width: var(--appWidth);
       height: 100vw;
@@ -64,8 +64,10 @@
       padding: 10px;
       line-height: 1.4;
     }
-
-    .selection {
+    .error-wrapper {
+      display: none;
+    }
+    .selection-info, .error-info {
       font-size: 1.5;
       border-radius: 10px;
       margin: 20px 0;
@@ -78,9 +80,13 @@
         font-weight: bold;
       }
     }
+    .error-info {
+      background-color: var(--citroen-red);
+      color: white;
+    }
   }
 
-  #categories-content {
+  #categories-content-frame {
     .category {
       font-size: 1.4rem;
     }

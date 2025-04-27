@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { Turbo } from "@hotwired/turbo"
 import { debounce } from "throttle-debounce"
 import { Html5Qrcode, Html5QrcodeScannerState } from "html5-qrcode"
 import Cookies from "js-cookie"
@@ -8,15 +9,22 @@ const CODE_LENGTH = 6
 export default class extends Controller {
   static targets = [
     "ballot", 
-    "cancel", 
+    "cancel",
+    "errorInfo",
+    "errorWrapper",
     "reader", 
-    "selection", 
+    "selection",
     "selectionInfo", 
-    "voteActionContainer"
+    "selectionWrapper", 
+    "voteActionContainer",
+    "votingForm",
+    "warningInfo",
+    "warningWrapper"
   ]
 
   connect () {
     this.main = document.querySelector('main')
+    this.ballotId = this.element.dataset.ballotId
     this.scanner = new Html5Qrcode(this.readerTarget.id)
     this.handleInputPreference()
 
@@ -30,6 +38,11 @@ export default class extends Controller {
 
     this.selectionTarget.addEventListener('keyup', () => this.debouncedFetchInfo())
     this.cancelTarget.addEventListener('click', e => {
+      this.voteActionContainerTarget.style.visibility = 'hidden'
+    })
+
+    // Clear the selection field and close the overlay once the form has been submitted
+    this.votingFormTarget.addEventListener('submit', e => {
       this.voteActionContainerTarget.style.visibility = 'hidden'
     })
   }
@@ -103,11 +116,18 @@ export default class extends Controller {
     fetch(url, { headers: this.getJsonHeaders() })
       .then(response => response.json())
       .then(data => {
-        if (typeof data.vehicleInfo === "string") {
+        if (data.status === 'found') {
           this.voteActionContainerTarget.style.visibility = 'visible'
           this.selectionInfoTarget.innerHTML = data.vehicleInfo
+          this.selectionWrapperTarget.style.display = 'flex'
+          this.errorWrapperTarget.style.display = 'none'
+        } else if (data.status === 'already selected') {
+          this.voteActionContainerTarget.style.visibility = 'visible'
+          this.errorInfoTarget.innerHTML = data.errorInfo
+          this.selectionWrapperTarget.style.display = 'none'
+          this.errorWrapperTarget.style.display = 'flex'
         } else {
-          this.voteContainer.style.visibility = 'hidden'
+          this.voteActionContainerTarget.style.visibility = 'hidden'
         }
       })
   }

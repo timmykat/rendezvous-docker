@@ -4,7 +4,7 @@ module Voting
     STATUSES = ["voting", "submissible:some", "submissible:all", "submitted"]
 
     validates :status, presence: true, inclusion: STATUSES
-    # year
+    default_scope { where(year: Date.current.year) }
 
     belongs_to :user
     has_many :ballot_selections, class_name: 'Voting::BallotSelection', dependent: :destroy
@@ -16,7 +16,7 @@ module Voting
       self.selections.each do |vehicle|
         categorized_selections[vehicle.judging_category] << vehicle
       end
-      categorized_selections
+      categorized_selections.sort_by { |_category, vehicles| vehicles.size }.to_h
     end
 
     def get_status

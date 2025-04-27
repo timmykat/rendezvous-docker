@@ -21,12 +21,12 @@ module Voting
     end
 
     def vote
-      @ballot = Voting::Ballot.find(params[:id])
+      @ballot = Voting::Ballot.find(params[:ballot_id])
       vehicle = Vehicle.find_by_qr_code(params[:code])
 
       if vehicle.nil? || @ballot.nil?
         # Handle error, possibly by rendering a proper error message or redirecting
-        redirect_to ballot_path, alert: 'Invalid ballot or vehicle.'
+        redirect_to @balloth, alert: 'Invalid ballot or vehicle.'
         return
       end
 
@@ -34,30 +34,24 @@ module Voting
       @selections = @ballot.categorized_selections
 
       respond_to do |format|
-        format.turbo_stream do
-          if @selections.present?
-            render turbo_stream: turbo_stream.update(
-              "categories-content",
-              partial: 'voting/ballots/selections',
-              locals: { selections: @selections }
-            )
-            return
-          end
-        end
+        format.turbo_stream
+        format.html { head :no_content }
       end
-      #     else
-      #       Rails.logger.debug 'Oops, no selection' 
-      #       render partial: "voting/ballots/selections", status: :unprocessable_entity, locals: { selections: @selections }
-      #     end
-      #   end
-      #     format.html do
-      #       if @selections.present? 
-      #         render head :ok
-      #       else
-      #         render :ballot, status: :unprocessable_entity
-      #       end
-      #   end
-      # end
+      return
+    end
+
+    def delete_selection
+      @ballot = Voting::Ballot.find(params[:ballot_id])
+      vehicle_id = params[:vehicle_id]
+      @ballot.selections.delete(vehicle_id)
+      @ballot.save
+      @selections = @ballot.categorized_selections
+
+      respond_to do |format|
+        format.turbo_stream
+        format.html { head :no_content }
+      end
+      return
     end
   end
 end

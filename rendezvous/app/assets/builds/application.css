@@ -634,7 +634,7 @@ body .simple .content .invoice p {
   visibility: hidden;
   background: transparent;
 }
-#voting-app #vote-action-container .action-wrapper {
+#voting-app #vote-action-container .selection-wrapper, #voting-app #vote-action-container .error-wrapper {
   width: 100%;
   max-width: var(--appWidth);
   height: 100vw;
@@ -648,7 +648,10 @@ body .simple .content .invoice p {
   padding: 10px;
   line-height: 1.4;
 }
-#voting-app #vote-action-container .selection {
+#voting-app #vote-action-container .error-wrapper {
+  display: none;
+}
+#voting-app #vote-action-container .selection-info, #voting-app #vote-action-container .error-info {
   font-size: 1.5;
   border-radius: 10px;
   margin: 20px 0;
@@ -657,11 +660,15 @@ body .simple .content .invoice p {
   box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
   font-size: 1.5rem;
 }
-#voting-app #vote-action-container .selection .category {
+#voting-app #vote-action-container .selection-info .category, #voting-app #vote-action-container .error-info .category {
   margin-bottom: 20px;
   font-weight: bold;
 }
-#voting-app #categories-content .category {
+#voting-app #vote-action-container .error-info {
+  background-color: var(--citroen-red);
+  color: white;
+}
+#voting-app #categories-content-frame .category {
   font-size: 1.4rem;
 }
 

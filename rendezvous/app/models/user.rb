@@ -26,7 +26,7 @@ class User < ApplicationRecord
   has_one  :vendor, foreign_key: :owner_id
   has_many :donations
   has_many :square_transactions
-  has_many :ballots, through: :ballot_selection
+  has_many :ballots, class_name: 'Voting::Ballot'
 
   validates :first_name, presence: true
   validates :last_name, presence: true
