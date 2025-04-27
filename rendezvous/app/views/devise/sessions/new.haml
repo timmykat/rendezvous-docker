@@ -10,13 +10,12 @@
               %h2.h3 Send me a login link
               %p Enter your email below to get your login link.
 
-              = form_with(url: request_login_link_path, method: :post) do |f|
+              = form_with(url: request_login_link_path, method: :post, id: 'email_link_form') do |f|
                 .form-group
                   = f.label :email
                   = f.email_field :email, autofocus: true, placeholder: "you@example.com", required: true, class: 'form-control'
                 
                 .actions
-                  = recaptcha_script('get_login_link')
                   = f.submit "Get Link" , class: "btn  btn-info"
                   
 
@@ -42,5 +41,14 @@
               NOTE: Some people are having problems logging in or registering. If you're not getting a login email, please check your spam folder. Otherwise, please use the 
               %a{ href: "/Rendezvous-registration-#{Date.current.year}.pdf" } alternative registration form
               and send with payment to the indicated address.
+  
+:javascript
+  document.addEventListener('turbolinks:load', () => {
+    const recaptcha = new RecaptchaHandler('email_link_form', 'get_login_link');
+    recaptcha.prepare();
+    recaptcha.execute();
+  })
+
+  
 
  

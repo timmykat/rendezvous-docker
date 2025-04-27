@@ -89,8 +89,11 @@
                   .row
                     .col-12
                       .form-group
-                        = recaptcha_script('register_event')
                         = f.button :submit, input_html:  { value:  "Continue to payment #{icon(:right_arrow)}".html_safe }, class:  "btn  btn-primary"
                         
-            
-
+:javascript
+  document.addEventListener('turbolinks:load', () => {
+    const recaptcha = new RecaptchaHandler('registration_form', 'register_event');
+    recaptcha.prepare();
+    recaptcha.execute();
+  })

@@ -34,7 +34,7 @@
         document.head.appendChild(script);
       }
 
-  %body{ class: controller_classes + " outfit-regular" }
+  %body{ class: controller_classes + " outfit-regular", 'data-site-key' => get_recaptcha_key }
     = render partial: 'layouts/flash'
 
     %header

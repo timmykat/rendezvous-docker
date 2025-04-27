@@ -30,7 +30,7 @@
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-  %body{ class: controller_classes + " outfit-regular" }
+  %body{ class: controller_classes + " outfit-regular", 'data-site-key' => get_recaptcha_key }
     = render partial: 'common/active_users'
     = render partial: 'layouts/flash'
 

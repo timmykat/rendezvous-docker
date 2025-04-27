@@ -2,7 +2,7 @@ module Voting
   class BallotsController < ApplicationController
     include ::Turbo::StreamsHelper
     
-    layout 'ballot_layout'
+    layout 'ballot_layout', only: [:ballot]
 
     before_action :authenticate_user!, { only: [:ballot] }
 
@@ -26,7 +26,7 @@ module Voting
 
       if vehicle.nil? || @ballot.nil?
         # Handle error, possibly by rendering a proper error message or redirecting
-        redirect_to @balloth, alert: 'Invalid ballot or vehicle.'
+        redirect_to @ballot, alert: 'Invalid ballot or vehicle.'
         return
       end
 
@@ -34,7 +34,7 @@ module Voting
       @selections = @ballot.categorized_selections
 
       respond_to do |format|
-        format.turbo_stream
+        format.turbo_stream { render layout: false }
         format.html { head :no_content }
       end
       return
@@ -48,7 +48,7 @@ module Voting
       @selections = @ballot.categorized_selections
 
       respond_to do |format|
-        format.turbo_stream
+        format.turbo_stream { render layout: false }
         format.html { head :no_content }
       end
       return

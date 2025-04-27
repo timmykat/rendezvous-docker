@@ -1,2 +1,2 @@
-= turbo_stream.update "categories-content-frame" do
-  = render partial: "voting/ballots/selections", locals: { ballotId: @ballot.id, selections: @selections }
+= turbo_stream.replace "categories-content-frame" do
+  = render partial: "voting/ballots/selections"

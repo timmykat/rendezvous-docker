@@ -8,7 +8,6 @@ const CODE_LENGTH = 6
 
 export default class extends Controller {
   static targets = [
-    "ballot", 
     "cancel",
     "errorInfo",
     "errorWrapper",
@@ -23,20 +22,20 @@ export default class extends Controller {
   ]
 
   connect () {
-    this.main = document.querySelector('main')
-    this.ballotId = this.element.dataset.ballotId
     this.scanner = new Html5Qrcode(this.readerTarget.id)
     this.handleInputPreference()
 
-    this.debouncedFetchInfo = debounce(500, () => {
+    this.debouncedGetVehicle = debounce(500, () => {
       const code = this.selectionTarget.value;
       if (code.length === CODE_LENGTH) {
         const url = `/_ajax/voting/vehicle/${code}`;
-        this.getInfo(url);
+        this.getVehicle(url);
       }
     });
 
-    this.selectionTarget.addEventListener('keyup', () => this.debouncedFetchInfo())
+    // Fetching the vehicle based on selection field input by hand
+    this.selectionTarget.addEventListener('keyup', () => this.debouncedGetVehicle())
+    // this.selectionTarget.addEventListener('change', () => this.debouncedGetVehicle())
     this.cancelTarget.addEventListener('click', e => {
       this.voteActionContainerTarget.style.visibility = 'hidden'
     })
@@ -47,6 +46,7 @@ export default class extends Controller {
     })
   }
 
+  // Manage the QR code scanner
   handleScanner (preference) { 
     const state = this.scanner.getState()
     if (preference === 'scan') {
@@ -67,6 +67,7 @@ export default class extends Controller {
     }
   }
 
+  // Handle user choice of scanner or typing in data
   handleInputPreference () {
     const COOKIE_NAME = 'voting_input_preference'
     const inputPreference = Cookies.get(COOKIE_NAME) || 'scan'
@@ -102,17 +103,7 @@ export default class extends Controller {
     })
   }
 
-  debouncedFetchInfo () {
-    debounce(500, e => {
-      const code = this.selectionTarget.value 
-      if (code.trim().length === CODE_LENGTH) {
-        const url = `/_ajax/voting/vehicle/${code}`
-        this.getInfo(url)
-      }
-    })
-  }
-
-  getInfo (url) {
+  getVehicle (url) {
     fetch(url, { headers: this.getJsonHeaders() })
       .then(response => response.json())
       .then(data => {
@@ -133,7 +124,7 @@ export default class extends Controller {
   }
 
   getBasicHeaders() {
-    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    
     return {          
       "Content-Type": "application/json",
       "X-CSRF-Token": token
@@ -141,15 +132,12 @@ export default class extends Controller {
   }
 
   getJsonHeaders () {
-    const headers = this.getBasicHeaders()
-    headers['Accept'] = 'application/json'
-    return headers
-  }
-
-  getTurboHeaders () {
-    const headers = this.getBasicHeaders()
-    headers['Accept'] = "text/vnd.turbo-stream.html"
-    return headers
+    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    return {          
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "X-CSRF-Token": token
+    }  
   }
 }
 

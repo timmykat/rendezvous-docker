@@ -16,7 +16,7 @@
                 %li.nav-item{ role: 'presentation' }
                   %button.nav-link{ id: 'type-in-tab', 'data-toggle' => 'pill', 'data-target'=> '#type-in', type: :button, role: :tab, 'aria-controls' => 'type-in', 'aria-selected' => true } TYPE IN
 
-              = form_with url: turbo_vote_path, method: :post, data: { turbo_frame: "categories-content-frame", voting_target: "votingForm" } do |f|
+              = form_with url: turbo_vote_path, method: :post, data: { turbo_frame: 'categories-content-frame', voting_target: "votingForm" } do |f|
                 .tab-content
                   .tab-pane.active{ id: 'scan', role: 'tab-panel', 'aria-labelled-by' => 'scan-tab'}
         
@@ -26,7 +26,8 @@
                     .form-group
                       %label Vehicle ID:
                       = f.text_field :code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
-                      = f.hidden_field :ballot_id, value: ballot.id
+                      = f.hidden_field :ballot_id, value: @ballot.id
+                
                 #vote-action-container{'data-voting-target' => 'voteActionContainer'}
                   .warning-wrapper{'data-voting-target' => 'warningWrapper'} 
                     .warning-info{'data-voting-target' => 'warningInfo'} 
@@ -41,4 +42,4 @@
                     = link_to 'CLOSE', '#', 'data-voting-target' => 'cancel'
 
   %h2.h3 Your selections
-  = render partial: 'selections', locals: { ballotId: ballot.id, selections: selections }   
+  = render partial: 'selections'  

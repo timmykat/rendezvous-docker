@@ -1,6 +1,6 @@
 = turbo_frame_tag('categories-content-frame') do
   .selections
-    - selections.each do |category, vehicles|
+    - @selections.each do |category, vehicles|
       .category.alert.alert-warning.d-flex.justify-content-between
         %strong #{category} 
         -if vehicles.nil? || vehicles.length == 0
@@ -11,9 +11,9 @@
         %ul.vehicles.list-unstyled
           - vehicles.each do |v|
             %li.alert.alert-info.ml-3.d-flex.align-items-center
-              = form_with url: turbo_delete_vehicle_path, method: :post, data: { turbo_frame: "categories-content-frame" } do |f|
+              = form_with url: turbo_delete_vehicle_path, method: :post, data: { turbo_frame: 'categories-content-frame' }  do |f|
                 = f.hidden_field :vehicle_id, value: v.id
-                = f.hidden_field :ballot_id, value: ballotId
+                = f.hidden_field :ballot_id, value: @ballot.id
                 = f.button type: :submit, class: 'btn', style: 'color: red;' do 
                   = icon(:delete, size: '24')
               #{v.year_marque_model} | #{v.user.full_name}

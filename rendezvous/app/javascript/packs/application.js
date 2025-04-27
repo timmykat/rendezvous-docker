@@ -13,7 +13,9 @@ import 'magnific-popup/dist/jquery.magnific-popup.min';
 import 'lazyload/lazyload.min';
 import 'cocoon-js';
 import { initCustom } from '../modules/custom'
-import '../modules/main_pages'; 
+import '../modules/main_pages';
+import { RecaptchaHandler } from '../modules/recaptcha';
+window.RecaptchaHandler = RecaptchaHandler
 import '../modules/user'; 
 import '../modules/vehicles'; 
 

@@ -6,23 +6,8 @@ module ApplicationHelper
   RECAPTCHA_SITE_KEY = Rails.configuration.recaptcha[:site_key]
 
   # include this as part of the forms where you want them, just before submit
-  def recaptcha_script(action)
-    id = "recaptcha_token_#{SecureRandom.hex(10)}"
-    recaptcha_js =<<~EOF
-        <input name="recaptcha_token" type="hidden" id="#{id}"/>
-        <script src="https://www.google.com/recaptcha/api.js?render=#{RECAPTCHA_SITE_KEY}"></script>
-        <script>
-          grecaptcha.ready(() => {
-            console.log("Getting recaptcha token")
-            grecaptcha.execute("#{RECAPTCHA_SITE_KEY}", {action: "#{action}"})
-            .then(token => {
-              console.log("Recaptcha token: ", token)
-              document.getElementById("#{id}").value = token;
-            });
-          });
-        </script>
-    EOF
-    recaptcha_js.html_safe
+  def get_recaptcha_key
+    Rails.configuration.recaptcha[:site_key]
   end
 
   def get_active_users
