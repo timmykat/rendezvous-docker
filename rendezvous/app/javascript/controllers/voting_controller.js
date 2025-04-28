@@ -23,6 +23,7 @@ export default class extends Controller {
 
   connect () {
     this.scanner = new Html5Qrcode(this.readerTarget.id)
+    this.qrEvent = new Event('QRCODE_READ', { bubbles: true })
     this.handleInputPreference()
 
     this.debouncedGetVehicle = debounce(500, () => {
@@ -35,6 +36,8 @@ export default class extends Controller {
 
     // Fetching the vehicle based on selection field input by hand
     this.selectionTarget.addEventListener('keyup', () => this.debouncedGetVehicle())
+    document.addEventListener('QRCODE_READ', () => this.debouncedGetVehicle())
+
     // this.selectionTarget.addEventListener('change', () => this.debouncedGetVehicle())
     this.cancelTarget.addEventListener('click', e => {
       this.voteActionContainerTarget.style.visibility = 'hidden'
@@ -56,7 +59,8 @@ export default class extends Controller {
             { fps: 10, qrbox: 250 },
             (decodedText) => {
                 this.selectionTarget.value = decodedText;
-                scanner.stop(); // stop after success
+                document.dispatchEvent(this.qrEvent)
+                this.scanner.stop(); // stop after success
             }
         );
       }
