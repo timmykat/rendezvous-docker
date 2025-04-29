@@ -42,6 +42,7 @@ rendezvous/public/files/csv/*.csv
 rendezvous/public/uploads/*
 rendezvous/public/files/registrations/*
 rendezvous/public/assets/*
+rendezvous/public/qr_codes/*
 
 rendezvous.sass-cache
 rendezvous/public/packs
