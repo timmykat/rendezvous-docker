@@ -1,0 +1,21 @@
+.modal{tabindex: "-1", id: "voting-instructions"}
+  .modal-dialog.modal-dialog-centered
+    .modal-content
+      .modal-header
+        %h2.h4 INSTRUCTIONS
+        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} #{icon(:close, size: '20')}
+      .modal-body
+        %ul
+          %li.mb-3 
+            Vote by aiming your camera at the QR code on the dash placard to get the ID. 
+          %li.mb-3 
+            The
+            %strong VOTE
+            button will become active - just click to vote.
+          %li.mb-3 
+            %em Alternatively, 
+            select
+            %strong TYPE IN
+            to enter the car ID from the dash card yourself.
+          %li.mb-3
+            You can vote for up to 3 choices per category. The app will keep track of that for you.

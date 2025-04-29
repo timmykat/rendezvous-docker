@@ -119,9 +119,6 @@ provinces:
   - YT
 
 print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
-captcha:
-  site_key: <%= ENV['RECAPTCHA_PUBLIC_KEY'] %>
-  secret_key: <%= ENV['RECAPTCHA_PRIVATE_KEY'] %>
 mailchimp:
   api_key: <%= ENV['RENDEZVOUS_MAILCHIMP_API_KEY'] %>
   list:

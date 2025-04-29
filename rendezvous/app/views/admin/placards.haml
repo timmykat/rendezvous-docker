@@ -1,0 +1,27 @@
+- vehicles.each do |v|     
+    .placard
+      %header
+        .text
+          Citroën Rendezvous
+        .logo
+          %img{ src: url('rendezvous-2025-logo.png')}
+        .text
+
+      .datum
+        %span.label Entry Number:
+        %span.value #{v.code}
+
+      .datum
+        %span.label Category:
+        %span.value #{v.judging_category}     
+
+      .datum
+        %span.label Vehicle:
+        %span.value #{v.year_marque_model}
+
+      .datum 
+        %span.label Owner:
+        %span.value #{v.user.full_name}
+
+      .qr-code 
+        %img{ src: "/qr_codes/qr_#{v.code}.png" }

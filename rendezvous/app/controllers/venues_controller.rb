@@ -32,8 +32,6 @@ class VenuesController < AdminController
 
   def update
     @venue = Venue.find(params[:id])
-    Rails.logger.debug(venue_params)
-    Rails.logger.debug(event_hotel_params)
     if !@venue.update(venue_params)
       flash_alert_now 'There was a problem updating the venue information'
       flash_alert_now  @venue.errors.full_messages.to_sentence

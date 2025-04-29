@@ -1,0 +1,56 @@
+- config = Rails.configuration.rendezvous
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "UTF-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %meta{:content => "Peoples Choice Ballot", :name => "description"}/
+    %meta{:content => "Citroen Rendezvous, LLC", :name => "author"}/
+
+    %title #{Time.new.year} Citroen Rendezvous Peoples Choice Ballot
+
+    %link{ href: "https://fonts.googleapis.com", rel: "preconnect"}/
+    %link{ crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
+    
+    :plain
+      <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
+
+    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
+
+    = csrf_meta_tags
+
+    = javascript_include_tag 'application', defer: true
+    = javascript_include_tag 'voting', defer: true
+
+  %body{ class: controller_classes + " outfit-regular" }
+    .container
+      .row.justify-content-center 
+        .col-12
+          = render partial: 'layouts/flash'
+
+          %header
+            .container
+              .row.banner
+                .col-12
+                  .navbar.navbar-banner.top-nav.justify-content-start
+                    .nav-item.site
+                      %h1.h2 Citroen Rendezvous
+                      %h2.h4 People's Choice
+
+            = render partial: 'common/simple_nav_bar' 
+
+          %main 
+            .content
+              = yield
+
+          %footer.footer
+            .container 
+              .row.justify-content-center
+                = render partial: 'common/footer'
+    
+
+
+
+

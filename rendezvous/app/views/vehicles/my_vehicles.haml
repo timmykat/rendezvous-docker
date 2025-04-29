@@ -8,5 +8,5 @@
         = f.simple_fields_for @vehicles do |v|
           = render 'vehicle_fields', f:  v
         .links
-          = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, class:  "btn btn-primary "
+          = link_to_add_association "#{icon(:plus)}#{icon(:car)}".html_safe.html_safe, f, :vehicles
           Add a vehicle

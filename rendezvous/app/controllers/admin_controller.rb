@@ -118,7 +118,6 @@ class AdminController < ApplicationController
 
     reg_data = {}
     rendezvous_years.each do |year|
-      Rails.logger.debug year
       event_date = DateTime.strptime(event_dates[year], "%Y-%m-%d")
       reg_data[year.to_s] = []
       registrations = Event::Registration.where(year: year).order(:updated_at).all
@@ -215,6 +214,23 @@ class AdminController < ApplicationController
         due: total_amount - paid_amount
       }
     }
+  end
+
+  def print(item)
+    case item
+    when 'placards'
+      @vehicles = Event::Registration.current.flat_map(&:vehicles)
+      render :placards
+      return
+    when 'labels'
+      @registrations = Event::Registration.current
+      render :labels
+      return
+    when 'certificates'
+      @winners = nil
+      render :certificates
+      return
+    end
   end
 
   def download_csv

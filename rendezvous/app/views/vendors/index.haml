@@ -14,23 +14,23 @@
                 %table.table
                   - if owner_name(vendor)
                     %tr
-                      %td= bootstrap_icon 'person-raised-hand'
+                      %td= icon(:vendor)
                       %td= owner_name(vendor)                   
                   - if vendor.website.present?
                     %tr
-                      %td= bootstrap_icon 'mouse2-fill'
+                      %td= icon(:website)
                       %td= link_to vendor.website, vendor.website, target:  '_blank'
                   - if vendor.email.present?
                     %tr
-                      %td= bootstrap_icon 'envelope-at'
+                      %td= icon(:email)
                       %td= link_to vendor.email, "mailto://#{vendor.email}"
                   - if vendor.phone.present?      
                     %tr
-                      %td= bootstrap_icon 'telephone-fill'
+                      %td= icon(:phone)
                       %td= link_to vendor.phone, "tel://#{vendor.phone}"
                   - if vendor.address.present?
                     %tr
-                      %td= bootstrap_icon 'geo-alt'
+                      %td= icon(:address)
                       %td= vendor.address_as_html
 
 

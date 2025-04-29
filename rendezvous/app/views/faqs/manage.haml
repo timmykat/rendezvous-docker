@@ -15,7 +15,7 @@
           - @faqs.each_with_sortable_id do |faq, sortable_id|
             %tr{id: sortable_id}
               %td
-                = bootstrap_icon 'list'
+                = icon(:list)
                 = faq.name 
     .col-md-10
       %h2 Editing

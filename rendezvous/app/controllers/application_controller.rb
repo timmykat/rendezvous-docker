@@ -11,6 +11,11 @@ class ApplicationController < ActionController::Base
 
   RECAPTCHA_MINIMUM_SCORE = 0.5
 
+  def render(*args)
+    Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
+    super(*args)  # Call the original render method
+  end
+
   # Need this for other gems that might set flash
   def flash_array
 
@@ -81,7 +86,7 @@ class ApplicationController < ActionController::Base
 
     Rails.logger.debug "Recaptcha action: #{recaptcha_action}"
     # Continue normal recaptcha
-    secret_key = CONFIG[:captcha][:secret_key]
+    secret_key = Rails.configuration.recaptcha[:secret_key]
     uri = URI.parse("https://www.google.com/recaptcha/api/siteverify?secret=#{secret_key}&response=#{token}")
     response = Net::HTTP.get_response(uri)
     json = JSON.parse(response.body)
