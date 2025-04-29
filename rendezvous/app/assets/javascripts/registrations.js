@@ -1,7 +1,7 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 // Number.prototype.currency = function(c, d, t){
-// var n = this, 
+// let n = this, 
 //     c = isNaN(c = Math.abs(c)) ? 2 : c, 
 //     d = d == undefined ? "." : d, 
 //     t = t == undefined ? "," : t, 
@@ -14,18 +14,25 @@
 (function($) {
   jQuery(document).ready(function() {
     const registrationId = $('[data-registration_id]').data('registration_id')
+
+    let setPaymentSpinner = () => {
+      $('.btn-square-pay').on('click', () => {
+        let spinnerHtml = '<div class="spinner-grow text-primary" role="status"></div>'
+        $(this).html("Connecting" + spinnerHtml)
+      })
+    }
     
-    var setRegistrationFee = function() {
+    let setRegistrationFee = () => {
       if (typeof appData != 'undefined') {
-        var total = $('input#event_registration_number_of_adults').val() * appData.event_fee;
+        let total = $('input#event_registration_number_of_adults').val() * appData.event_fee;
           // + $('input#event_registration_number_of_children').val() * appData.fees.child;  # Registration for kids is free
         $('input#event_registration_registration_fee').val((total).toFixed(2));
       }
     };
-    var getAttendeeTotals = function() {
-      var adults = $('#attendees input[value="adult"]:visible:checked').length;
+    let getAttendeeTotals = () => {
+      let adults = $('#attendees input[value="adult"]:visible:checked').length;
       $('input#event_registration_number_of_adults').val(adults); 
-      var children = $('#attendees input[value="child"]:visible:checked').length;
+      let children = $('#attendees input[value="child"]:visible:checked').length;
       $('input#event_registration_number_of_children').val(children);  
       setRegistrationFee();  
     }
@@ -41,28 +48,28 @@
     getAttendeeTotals(); 
     
     if ($('input#event_registration_user_attributes_last_name').length > 0) {
-      var firstName = $('input#event_registration_user_attributes_first_name').val();
-      var lastName = $('input#event_registration_user_attributes_last_name').val();
+      let firstName = $('input#event_registration_user_attributes_first_name').val();
+      let lastName = $('input#event_registration_user_attributes_last_name').val();
       $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
     }
     
 
     // Get adult and kid totals
-    $('#attendees').on('click', 'input[type=radio]', function(e) { 
+    $('#attendees').on('click', 'input[type=radio]', (e) => { 
       getAttendeeTotals(); 
     });
-    $('#attendees').on('cocoon:after-insert cocoon:after-remove', function(e) {
+    $('#attendees').on('cocoon:after-insert cocoon:after-remove', (e) => {
       getAttendeeTotals();
     });
     
 
     // Update registration fee
-    $('.fee-calculation').on('change click keyup', function(e) {
+    $('.fee-calculation').on('change click keyup', (e) => {
       setRegistrationFee();  
     });
     
     // Get final total on payment page
-    var setTotal = function() {
+    let setTotal = () => {
       if (typeof appData != 'undefined') {
         let donation = $('input[name="event_registration[donation]"]').val()
         console.log('Donation', donation)
@@ -76,7 +83,7 @@
         } else {
           donation = 0.
         }
-        var total = parseFloat(appData.event_registration_fee) + donation + parseFloat(vendorFee);
+        let total = parseFloat(appData.event_registration_fee) + donation + parseFloat(vendorFee);
         console.log('Total')
         $('input#event_registration_total').val(total.toFixed(2));
 
@@ -85,15 +92,16 @@
         $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total})
       }
     };
+
     
     // Update total
     $(document).on('load', setTotal)
-    $('.total-calculation').on('click blur', function(e) {
+    $('.total-calculation').on('click blur', (e) => {
       setTotal();
     });
 
     // Toggle access to donation other amount field
-    $('input[type=radio].total-calculation').on('click', function(e) {
+    $('input[type=radio].total-calculation').on('click', (e) => {
       let val = $(this).val()
       if (val == 'other') {
         $('input#event_registration_donation').val(parseFloat(0.0).toFixed(2))
@@ -106,11 +114,11 @@
     
     
     // Enable the email, amount and adult- and child-count fields upon form submission
-    $('form').bind('submit', function() {
+    $('form').bind('submit', () => {
       $('input.calculated, input[type=email]').prop('disabled', false);
     });
 
-    const showChecked = function(value) {
+    const showChecked = (value) => {
       if (value == 'credit card') {
         $('#payment-online').show();
         $('#payment-cash').hide();
@@ -125,17 +133,15 @@
     }
     
     // Set payment method
-    $('input.payment-method:checked').each(function() {
+    $('input.payment-method:checked').each(() => {
         showChecked($(this).val())
     })
 
-    $('input.payment-method').on('click', function() {
+    $('input.payment-method').on('click', () => {
       showChecked($(this).val())
     });  
 
     // Spinner
-    $('.go-to-payment').click(function(e) {
-      $('.review-loader').show();
-    })
+    setPaymentSpinner()
   });
 }) (jQuery);

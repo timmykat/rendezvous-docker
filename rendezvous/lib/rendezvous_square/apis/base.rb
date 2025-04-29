@@ -22,7 +22,7 @@ module RendezvousSquare
           access_token: ENV.fetch("#{get_environment}_SQUARE_ACCESS_TOKEN")
         ),
         environment: get_environment.downcase == 'prod' ? 'production' : 'sandbox',
-        timeout: 1
+        max_retries: 1
       )
     end
   
