@@ -3,27 +3,11 @@ require_dependency Rails.root.join('lib', 'vehicles', 'vehicle_taxonomy')
 module ApplicationHelper
   extend VehicleTaxonomy
 
-  RECAPTCHA_SITE_KEY = Rails.configuration.rendezvous[:captcha][:site_key]
+  RECAPTCHA_SITE_KEY = Rails.configuration.recaptcha[:site_key]
 
-  def include_recaptcha_js
-    raw %Q{
-      <script src="https://www.google.com/recaptcha/api.js?render=#{RECAPTCHA_SITE_KEY}"></script>
-    }
-  end
-
-  def recaptcha_execute(action)
-    id = "recaptcha_token_#{SecureRandom.hex(10)}"
-
-    raw %Q{
-      <input name="recaptcha_token" type="hidden" id="#{id}"/>
-      <script>
-        grecaptcha.ready(function() {
-          grecaptcha.execute('#{RECAPTCHA_SITE_KEY}', {action: '#{action}'}).then(function(token) {
-            document.getElementById("#{id}").value = token;
-          });
-        });
-      </script>
-    }
+  # include this as part of the forms where you want them, just before submit
+  def get_recaptcha_key
+    Rails.configuration.recaptcha[:site_key]
   end
 
   def get_active_users
@@ -43,14 +27,49 @@ module ApplicationHelper
     return SecureRandom.hex(5)
   end
 
-  def bootstrap_icon(icon, size = "32")
-    href = image_path "bootstrap-icons/bootstrap-icons.svg"
-    tag = <<LITERAL
-<svg class="bi" width="#{size}" height="#{size}" fill="currentColor">
-    <use href="#{href}##{icon}"></use>
-</svg>
-LITERAL
-    tag.html_safe
+  def icon(icon, args = {})
+    bootstrap_icon(bootstrap_icon_map[icon], args)
+  end
+
+  def bootstrap_icon_map
+    {
+      add_person: "person-plus-fill",
+      address: "geo-alt",
+      back: "chevron-double-left",
+      bank: "bank",
+      car: "car-front-fill",
+      close: "x-circle",
+      collapse: "chevron-compact-down",
+      delete: 'trash3',
+      email: "envelope-at",
+      expand: "chevron-compact-up",
+      info: 'question-circle-fill',
+      left_arrow: "arrow-left-circle-fill",
+      list: "list",
+      minus: "dash-square-fill",
+      mouse: "mouse-2-fill",
+      pdf: "file-earmark-pdf-fill",
+      person_f: "person-standing-dress",
+      person_m: "person-standing",
+      phone: "telephone-fill",
+      plus: "plus-square-fill",
+      registered: "check-square-fill",
+      remove_person: "person-dash-fill",
+      right_arrow: "arrow-right-circle-fill",
+      speaker: "megaphone-fill",
+      spreadsheet: "file-spreadsheet",
+      table: "table",
+      vendor: "person-raised-hand"
+    }
+  end
+
+  def bootstrap_icon(icon, args)
+    size = args.fetch(:size, '32')
+    data = args[:data]
+    href = image_url("bootstrap-icons/bootstrap-icons.svg")
+    content_tag(:svg, width: size, height: size, fill: "currentColor", class: "bi", data: data) do
+      content_tag(:use, nil, href: "#{href}##{icon}")
+    end
   end
 
   def controller_classes
@@ -81,6 +100,10 @@ LITERAL
     end
   end
 
+  def voting_on?
+    Config::SiteSetting.instance.voting_on
+  end
+
   def user_is_admin?
     current_user && (current_user != @user)
   end
@@ -102,8 +125,6 @@ LITERAL
   end
 
   def registration_is_open
-    Rails.logger.debug Config::SiteSetting.instance.registration_is_open ? 'Is open' : 'Is not open'
-    Rails.logger.debug before_cutoff_date? ? 'Is before cutoff date' : 'Is after cutoff date'
     (Config::SiteSetting.instance.registration_is_open && before_cutoff_date?)
   end
 
@@ -156,7 +177,7 @@ LITERAL
     end
     if !user.postal_code.blank?
       locale += " " + user.postal_code
-    end 
+    end
     address_arr << locale
     if !user.country_name.blank?
       address_arr << user.country_name

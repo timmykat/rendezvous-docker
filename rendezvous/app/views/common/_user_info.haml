@@ -84,5 +84,5 @@
                     = render 'common/vehicle_fields', f:  v
                   .card-footer
                     .links
-                      = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-car" ></i>'.html_safe, f, :vehicles, class:  "btn btn-primary ", partial:  'common/vehicle_fields'
+                      = link_to_add_association "#{icon(:plus)}#{icon(:car)}".html_safe, f, :vehicles, partial:  'common/vehicle_fields'
                       Add a vehicle

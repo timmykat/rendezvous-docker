@@ -8,7 +8,6 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
-require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -46,6 +45,8 @@ module Rendezvous
       'Pragma' => 'no-cache',
       'Expires' => '0'
     }
+
+    config.assets.paths << Rails.root.join("app", "assets", "images")
     
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += %W(#{config.root}/lib/rendezvous_square)
@@ -55,5 +56,6 @@ module Rendezvous
    
     config.rendezvous = YAML::load(ERB.new(File.read("#{Rails.root}/config/rendezvous.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.mailer = YAML::load(ERB.new(File.read("#{Rails.root}/config/mailer.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+    config.recaptcha = YAML::load(ERB.new(File.read("#{Rails.root}/config/recaptcha.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
   end
 end

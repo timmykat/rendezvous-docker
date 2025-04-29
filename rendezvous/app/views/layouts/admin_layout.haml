@@ -14,13 +14,12 @@
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
 
-    = stylesheet_link_tag 'application', :media  => 'all'
+    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
 
     = csrf_meta_tags
 
-    = yield :recaptcha_js
-
-    = javascript_include_tag 'application'
+    = javascript_include_tag 'application', defer: true
+    = javascript_include_tag 'admin', defer: true
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
@@ -35,7 +34,7 @@
         document.head.appendChild(script);
       }
 
-  %body{ class: controller_classes + " outfit-regular" }
+  %body{ class: controller_classes + " outfit-regular", 'data-site-key' => get_recaptcha_key }
     = render partial: 'layouts/flash'
 
     %header
@@ -62,6 +61,31 @@
         .row.justify-content-center
           = render partial: 'common/footer'
 
+    :javascript
+      function addMde() {
+        function adjustEditorHeight(editor) {
+          var cm = editor.codemirror;
+          var scrollHeight = cm.getScrollInfo().height;
+          cm.getWrapperElement().style.height = Math.max(150, scrollHeight) + "px";
+        }
+        
+        const textareas = document.querySelectorAll('textarea[id$="_simple_mde"]');
+        textareas.forEach((textarea) => {
+          simpleMDE = new SimpleMDE({
+            element: textarea,
+            spellChecker: false, // Optional, disable spellchecker if you don't want it
+          });
+          simpleMDE.codemirror.on("change", adjustEditorHeight);
+          adjustEditorHeight(simpleMDE);
+        });
+      }
 
+      if (!window.SimpleMDE) {
+        document.addListener(DOMContentLoaded, () => {
+          addMde();
+        })
+      } else {
+        addMde();
+      }
 
 

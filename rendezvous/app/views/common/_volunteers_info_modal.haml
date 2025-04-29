@@ -3,6 +3,6 @@
     .modal-content
       .modal-header
         %h4.h5.mt-1 Volunteer Tasks
-        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} #{bootstrap_icon 'x-circle', '20'}
+        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} #{icon(:close, size: '20')}
       .modal-body
         = keyed_content('modal_volunteers_info')

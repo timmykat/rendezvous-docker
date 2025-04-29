@@ -1,0 +1,15 @@
+.container-fluid.px-0
+  .row.no-gutters.bg-nav
+    .col-12
+      .container
+        .row
+          .col-12
+            %nav.nav.navbar.navbar-dark.navbar-expand-lg.bg-nav
+              %button.navbar-toggler{type: 'button', 'data-toggle' => 'collapse', 'data-target' => '#navbarContent' }
+                %span.navbar-toggler-icon
+              .collapse.navbar-collapse.justify-content-between#navbarContent
+                %ul.nav.navbar-nav
+                  %li.nav-item
+                    = link_to "#{icon(:back)} Home".html_safe, root_path, class: 'nav-link'
+                  
+

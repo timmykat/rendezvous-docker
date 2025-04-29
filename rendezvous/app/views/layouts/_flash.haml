@@ -5,7 +5,7 @@
       - flash[type].each do |m|
         .flash{ role: type.to_s }
           .close-flash
-            = bootstrap_icon 'x-circle', '20'
+            = icon(:close, size: '24')
           .message
             = m.html_safe unless m.blank?
 

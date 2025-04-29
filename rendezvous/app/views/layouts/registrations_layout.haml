@@ -17,13 +17,12 @@
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
 
-    = stylesheet_link_tag 'application', :media  => 'all'
+    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
 
     = csrf_meta_tags
 
-    = yield :recaptcha_js
-
-    = javascript_include_tag 'application'
+    = javascript_include_tag 'application', defer: true
+    = javascript_include_tag 'registration', defer: true
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
@@ -31,7 +30,7 @@
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-  %body{ class: controller_classes + " outfit-regular" }
+  %body{ class: controller_classes + " outfit-regular", 'data-site-key' => get_recaptcha_key }
     = render partial: 'common/active_users'
     = render partial: 'layouts/flash'
 
@@ -60,8 +59,6 @@
         .row.justify-content-center
           = render partial: 'common/footer'
       = render partial:'common/volunteers_info_modal'
-    
-
 
 
 

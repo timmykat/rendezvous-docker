@@ -22,9 +22,6 @@
               - if !user_signed_in?
                 .cover
 
-              = content_for :recaptcha_js do
-                = include_recaptcha_js
-
               = simple_form_for @event_registration, id:  'registration_form' do |f|
                 %section
                   %p * = required
@@ -47,7 +44,7 @@
                         = f.simple_fields_for :attendees do |a|
                           = render partial:  'attendee_fields', locals:  { f:  a }
                         .links
-                          = link_to_add_association '<i class="fa fa-plus" ></i> <i class="fa fa-male" ></i>'.html_safe, f, :attendees, class:  'btn btn-primary '
+                          = link_to_add_association "#{icon(:add_person)}".html_safe, f, :attendees, class:  'btn btn-primary '
                           Add a guest
                       %br
                       %br
@@ -92,7 +89,11 @@
                   .row
                     .col-12
                       .form-group
-                        = f.button :submit, input_html:  { value:  'Continue to payment <i class="fa fa-arrow-right">'.html_safe }, class:  "btn  btn-primary"
-                        = recaptcha_execute('register_event')
-            
-
+                        = f.button :submit, input_html:  { value:  "Continue to payment #{icon(:right_arrow)}".html_safe }, class:  "btn  btn-primary"
+                        
+:javascript
+  document.addEventListener('turbolinks:load', () => {
+    const recaptcha = new RecaptchaHandler('registration_form', 'register_event');
+    recaptcha.prepare();
+    recaptcha.execute();
+  })

@@ -3,7 +3,7 @@ class RendezvousMailer < ApplicationMailer
   helper :application
 
   def no_email_found(email)
-    Rails.logger.debug "No email found mailer: " + email
+    Rails.logger.warn "No email found mailer: " + email
     @email = email
     mail to: @email, subject: 'Incorrect email for sign-in to the Citroen Rendezvous site'
   end
@@ -24,7 +24,6 @@ class RendezvousMailer < ApplicationMailer
   end
   
   def registration_confirmation(event_registration)
-    Rails.logger.debug "Sending registration confirmation email"
     @email = event_registration.user.email
     @event_registration = event_registration
     mail(to: @email, subject: "Thanks for registering for the #{Date.current.year} Rendezvous!")

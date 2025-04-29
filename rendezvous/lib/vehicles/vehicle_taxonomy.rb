@@ -74,6 +74,12 @@ module VehicleTaxonomy
     }
   }
 
+  def self.get_all_categories
+    VEHICLES[:marques].values.flat_map do |marque_data|
+      marque_data[:categories].keys
+    end.uniq
+  end
+
   def self.get_marques
     VEHICLES[:marques].keys
   end
@@ -83,16 +89,14 @@ module VehicleTaxonomy
   end
 
   def self.get_category(v)
-    return "NONE" if v.marque.nil? || v.model.nil?
-
     categories = VEHICLES.dig(:marques, v.marque, :categories)
-    return "NONE" if categories.nil?
+    return "Non-French" if categories.nil?
 
     category = nil
     if v.marque != "Citroen" || (v.marque == "Citroen" && !get_citroen_models.include?(v.model))
       category = VEHICLES[:marques][v.marque][:categories].keys.first
     else
-      return "NONE" if v.model.nil?
+      return "Non-French" if v.model.nil?
       category = categories.find{ |category, data| data[:models].include?(v.model) }&.first
     end
   end

@@ -41,8 +41,6 @@ class DonationsController < ApplicationController
     @donation.amount = params[:donation][:amount]
     @donation.status = params[:donation][:status]
 
-    Rails.logger.debug @donation.user
-
     if !@donation.save
       flash_alert @donation.errors.full_messages.to_sentence
       render :new

@@ -15,7 +15,7 @@
           - @scheduled_events.each_with_sortable_id do |scheduled_event, sortable_id|
             %tr{id: sortable_id}
               %td
-                = bootstrap_icon 'list'
+                = icon(:list)
               %td= scheduled_event.day
               %td= scheduled_event.time
               %td= scheduled_event.name 

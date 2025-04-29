@@ -25,9 +25,7 @@ class ScheduledEventsController < ApplicationController
   end
 
   def update
-    Rails.logger.debug(scheduled_event_params)
     @scheduled_event = ScheduledEvent.find(params[:id])
-    Rails.logger.debug(@scheduled_event)
     if !@scheduled_event.update(scheduled_event_params)
       flash_alert_now 'There was a problem updating the scheduled event information'
       flash_alert_now  @scheduled_event.errors.full_messages.to_sentence

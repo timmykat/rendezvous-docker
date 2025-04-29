@@ -23,6 +23,9 @@ certs
 # Ignore bundler config.
 rendezvous/.bundle
 
+# Ignore build files
+rendezvous/app/assets/build
+
 # Ignore local mysql config
 rendezvous/mysql_config
 
@@ -39,6 +42,7 @@ rendezvous/public/files/csv/*.csv
 rendezvous/public/uploads/*
 rendezvous/public/files/registrations/*
 rendezvous/public/assets/*
+rendezvous/public/qr_codes/*
 
 rendezvous.sass-cache
 rendezvous/public/packs
