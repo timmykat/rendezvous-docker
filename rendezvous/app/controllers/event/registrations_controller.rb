@@ -216,13 +216,13 @@ module Event
       end
 
       user = @event_registration.user
-      response = RendezvousSquare::Base.with_error_handling do
-        customer_id = ::RendezvousSquare::Customer.find_customer(user.email)
+      customer_id = ::RendezvousSquare::Base.with_error_handling do
+        ::RendezvousSquare::Customer.find_customer(user.email)
       end
 
-      if !customer_id
-        response = RendezvousSquare::Base.with_error_handling do
-          customer_id = ::RendezvousSquare::Customer.create_customer(user)
+      if customer_id.nil?
+        customer_id = ::RendezvousSquare::Base.with_error_handling do
+          ::RendezvousSquare::Customer.create_customer(user)
         end
       else
         Rails.logger.info("Square customer found: " + customer_id)
@@ -230,9 +230,15 @@ module Event
 
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
 
-      response = RendezvousSquare::Base.with_error_handling do
-        square_payment_link = RendezvousSquare::Checkout.create_square_payment_link(@event_registration, customer_id, redirect_url)
+      square_payment_link = ::RendezvousSquare::Base.with_error_handling do
+        RendezvousSquare::Checkout.create_square_payment_link(@event_registration, customer_id, redirect_url)
+      end
+
+      unless square_payment_link.nil?
         redirect_to square_payment_link, allow_other_host: true
+      else 
+        flash_alert "Square was unable to generate a payment link."
+        redirect_to payment_event_registration_path(@event_registration)
       end
     end
 

@@ -82,18 +82,29 @@ section.banner {
 	font-weight: bold;
 }
 
-.btn.btn-square-pay {
-  position: relative;
-  display: block;
-  width: fit-content;
-  margin-top: 20px;
-  padding-right: 35px;
+#payment-link {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 15px;
+	padding-top: 20px;
 
-  &::after {
-    content: url('/square-icon.png');
-    position: absolute;
-    margin-top: -2px;
-  }
+	.btn {
+		&.btn-square-pay {
+			position: relative;
+			display: block;
+			width: fit-content;
+		
+			padding-right: 35px;
+		
+			&::after {
+				content: url('/square-icon.png');
+				position: absolute;
+				margin-top: -2px;
+			}
+		}
+	}
+
 }
 
 button[data-dismiss] {

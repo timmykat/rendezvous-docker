@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-$(document).ready(function() {
+$(function(){
   // Toggle access to vehicle other fields
 
   const otherFrench = ['Panhard', 'Peugeot', 'Renault']

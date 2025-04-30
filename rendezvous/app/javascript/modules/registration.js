@@ -1,23 +1,24 @@
 import $ from 'jquery'
 
-$(document).ready(function() {
+$(function(){
   const registrationId = $('[data-registration_id]').data('registration_id')
+  const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
 
-  let setPaymentSpinner = () => {
-    $('.btn-square-pay').on('click', () => {
+  let setPaymentSpinner = function() {
+    $('.btn-square-pay').on('click', function() {
       let spinnerHtml = '<div class="spinner-grow text-primary" role="status"></div>'
-      $(this).html("Connecting" + spinnerHtml)
+      $(this).html("Connecting...").after(spinnerHtml).removeClass('btn-square-pay')
     })
   }
   
-  let setRegistrationFee = () => {
+  let setRegistrationFee = function() {
     if (typeof appData != 'undefined') {
       let total = $('input#event_registration_number_of_adults').val() * appData.event_fee;
         // + $('input#event_registration_number_of_children').val() * appData.fees.child;  # Registration for kids is free
       $('input#event_registration_registration_fee').val((total).toFixed(2));
     }
   };
-  let getAttendeeTotals = () => {
+  let getAttendeeTotals = function() {
     let adults = $('#attendees input[value="adult"]:visible:checked').length;
     $('input#event_registration_number_of_adults').val(adults); 
     let children = $('#attendees input[value="child"]:visible:checked').length;
@@ -43,21 +44,21 @@ $(document).ready(function() {
   
 
   // Get adult and kid totals
-  $('#attendees').on('click', 'input[type=radio]', (e) => { 
+  $('#attendees').on('click', 'input[type=radio]', function() { 
     getAttendeeTotals(); 
   });
-  $('#attendees').on('cocoon:after-insert cocoon:after-remove', (e) => {
+  $('#attendees').on('cocoon:after-insert cocoon:after-remove', function() {
     getAttendeeTotals();
   });
   
 
   // Update registration fee
-  $('.fee-calculation').on('change click keyup', (e) => {
+  $('.fee-calculation').on('change click keyup', function() {
     setRegistrationFee();  
   });
   
   // Get final total on payment page
-  let setTotal = () => {
+  let setTotal = function() {
     if (typeof appData != 'undefined') {
       let donation = $('input[name="event_registration[donation]"]').val()
       console.log('Donation', donation)
@@ -77,19 +78,26 @@ $(document).ready(function() {
 
       // Update donation and total in the DB
       const registrationId = $('[data-registration_id]').data('registration_id')
-      $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total})
+      $.ajax({
+        url: '/event/ajax/update_fees', 
+        method: 'POST',
+        data: { id: registrationId, donation: donation, total: total},
+        headers: {
+          "X-CSRF-Token": CSRF_TOKEN
+        }
+      })
     }
   };
 
   
   // Update total
   $(document).on('load', setTotal)
-  $('.total-calculation').on('click blur', (e) => {
+  $('.total-calculation').on('click blur', function() {
     setTotal();
   });
 
   // Toggle access to donation other amount field
-  $('input[type=radio].total-calculation').on('click', (e) => {
+  $('input[type=radio].total-calculation').on('click', function() {
     let val = $(this).val()
     if (val == 'other') {
       $('input#event_registration_donation').val(parseFloat(0.0).toFixed(2))
@@ -102,11 +110,11 @@ $(document).ready(function() {
   
   
   // Enable the email, amount and adult- and child-count fields upon form submission
-  $('form').bind('submit', () => {
+  $('form').bind('submit', function() {
     $('input.calculated, input[type=email]').prop('disabled', false);
   });
 
-  const showChecked = (value) => {
+  const showChecked = function(value) {
     if (value == 'credit card') {
       $('#payment-online').show();
       $('#payment-cash').hide();
@@ -117,15 +125,22 @@ $(document).ready(function() {
       $('#payment-paid').hide()        
     }
     const registrationId = $('[data-registration_id]').data('registration_id')
-    $.get('/event/ajax/update_paid_method', { id: registrationId, paid_method: value})
+    $.get({
+      url: '/event/ajax/update_paid_method', 
+      method: 'GET',
+      data: { id: registrationId, paid_method: value},
+      headers: {
+        "X-CSRF-Token": CSRF_TOKEN
+      }
+    })
   }
   
   // Set payment method
-  $('input.payment-method:checked').each(() => {
+  $('input.payment-method:checked').each(function() {
       showChecked($(this).val())
   })
 
-  $('input.payment-method').on('click', () => {
+  $('input.payment-method').on('click', function() {
     showChecked($(this).val())
   });  
 

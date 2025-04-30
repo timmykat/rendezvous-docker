@@ -1,4 +1,4 @@
-require 'square.rb'
+require 'square'
 require 'securerandom'
 
 module RendezvousSquare
@@ -16,7 +16,7 @@ module RendezvousSquare
   
     def get_square_client
       return ::Square::Client.new(
-        bearer_auth_credentials: ::BearerAuthCredentials.new(
+        bearer_auth_credentials: ::Square::BearerAuthCredentials.new(
           access_token: ENV.fetch("#{get_environment}_SQUARE_ACCESS_TOKEN")
         ),
         environment: get_environment.downcase == 'prod' ? 'production' : 'sandbox',
@@ -38,7 +38,7 @@ module RendezvousSquare
         "DNK": "DK",
         "ESP": "ES",
         "FRA": "FR",
-        "GBR": "GB"
+        "GBR": "GB",
         "HRV": "HR",
         "IRL": "IE",
         "ITA": "IT",
@@ -78,8 +78,8 @@ module RendezvousSquare
           # You can raise a custom error if you want
           raise "Square network request failed after retries: #{e.message}"
         end
-      rescue Square::ApiError => e
-        Rails.logger.error("Square API error details: #{e.response_details}") if e.respond_to?(:response_details)
+      rescue ::Square::APIException => e
+        Rails.logger.error("Square API exception details: #{e.response_details}") if e.respond_to?(:response_details)
         raise
       end
     end

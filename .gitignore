@@ -24,7 +24,7 @@ certs
 rendezvous/.bundle
 
 # Ignore build files
-rendezvous/app/assets/build
+rendezvous/app/assets/builds
 
 # Ignore local mysql config
 rendezvous/mysql_config

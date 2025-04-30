@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-$(document).ready(function() {
+$(function(){
     const getCsrfHeaders = function() {
         let token = $('meta[name="csrf-token"]').attr('content')
         return {
