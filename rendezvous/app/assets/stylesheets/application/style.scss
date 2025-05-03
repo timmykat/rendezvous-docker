@@ -82,6 +82,24 @@ section.banner {
 	font-weight: bold;
 }
 
+/* Bootstrap icon colors */
+svg.bi {
+	padding-right: 5px;
+	fill: white;
+
+	&.add_person, &.plus {
+			color: var(--dark-medium-blue);
+	}
+
+	&.remove_person, &.minus {
+			color: darkred;
+	}
+
+	&.car {
+			color: var(--citroen-red)
+	}
+}
+
 #payment-link {
 	display: flex;
 	align-items: center;

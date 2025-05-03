@@ -8,13 +8,17 @@ module Votable
     before_create :generate_unique_code
   end
 
-  def vote_by(user)
-    ballot = ::Voting::Ballot.find_or_create_by(user: user)
+  # Handle anonymous voting
+  def vote_by(voter_id)
+    ballot = ::Voting::Ballot.find_or_create_by(voter_id: voter_id)
+
+    # Create a ballot selection if it doesn't already exist
     ballot.ballot_selections.find_or_create_by(votable: self)
   end
 
-  def voted_by?(user)
-    ballots.exists?(user: user)
+  # Check if this item has already been voted by the given anonymous voter
+  def voted_by?(voter_id)
+    ballots.exists?(voter_id: voter_id)
   end
 
   private

@@ -1,6 +1,29 @@
 class UsersController < ApplicationController
 
-  before_action :authenticate_user!, only: [:welcome, :edit, :update]
+  before_action :authenticate_user!, only: [:welcome, :edit, :update, :new_by_admin, :create_by_admin]
+  before_action :require_admin, only: [:new_by_admin, :create_by_admin]
+
+  def new_user_by_admin
+    @user = User.new
+    @user.is_admin_created = true
+    @user.email 
+  end
+
+  def create_user_by_admin
+    @user = User.new(user_params)
+    @user.generate_password
+    if @user.email.blank?
+      @user.generate_email_address
+    end
+    Rails.logger.debug @user
+    if !@user.save
+      render :new_user_by_admin, alert: "Unable to create user: #{@user.errors.full_messages}"
+    else
+      flash_notice "User created with email #{@user.email}"
+      redirect_to @user
+    end
+  end
+
 
   def welcome
     @user = User.find(params[:id])
@@ -97,7 +120,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(
         [:email, :password, :password_confirmation, 
-        :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, 
+        :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :is_admin_created, 
         :citroenvie,
           {vehicles_attributes:
             [:id, :year, :marque, :model, :other_info, :for_sale, :_destroy]

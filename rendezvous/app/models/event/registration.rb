@@ -6,7 +6,7 @@ module Event
     
     belongs_to :user
     has_many :attendees, dependent: :destroy
-    has_many :transactions, dependent: :destroy
+    has_many :transactions, class_name: 'SquareTransaction', dependent: :destroy
     has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :registration_id, dependent: :destroy
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'

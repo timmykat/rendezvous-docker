@@ -2,7 +2,7 @@
   .modal-dialog.modal-dialog-centered
     .modal-content
       .modal-header.s-flex
-        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} #{icon 'close', '20'}
+        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} #{icon('close', size: '20')}
       .modal-body
         = simple_form_for @user, url: user_path(@user, { redirect_url: redirect_url }), method: :put do |f|
           = render partial:  'common/user_info', locals:  { f:  f, vehicles:  true }

@@ -7,11 +7,11 @@
     .col-12
       #tabbed
         %ul
-          %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
-          %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-2'
-          %li= link_to '<i class="fa fa-bullhorn"></i> Volunteer List'.html_safe, '#tabbed-3'
-          %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-5'
-          %li= link_to "<i class=\"fa fa-female\"></i><i class=\"fa fa-male\"></i> Site Users #{@type}".html_safe, '#tabbed-6'
+          %li= link_to ' Registrations', '#tabbed-1'
+          %li= link_to 'Vehicles', '#tabbed-2'
+          %li= link_to 'Volunteer List', '#tabbed-3'
+          %li= link_to 'Summary'.html_safe, '#tabbed-5'
+          %li= link_to 'User Management', '#tabbed-6'
         #tabbed-1
           .row 
             .col-md-4
@@ -212,10 +212,12 @@
                                     %br
         - if @users
           #tabbed-6
-            %h2 Site Users #{@type}
+            %h2 #{@type} 
             %p Number of users: #{@user_count}
-            -# - if current_user.has_role? :superuser
-            -#   %button{class: 'btn btn-danger delete_users'} DELETE checked users
+           
+            %p
+              =link_to "New user", new_user_by_admin_path, class: "btn btn-primary"
+            %br
             %table#user-table.table.tablesorter.striped
               %thead
                 %tr

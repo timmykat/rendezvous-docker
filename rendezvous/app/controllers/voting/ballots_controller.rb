@@ -4,8 +4,6 @@ module Voting
     
     layout 'ballot_layout', only: [:ballot]
 
-    before_action :authenticate_user!, { only: [:ballot] }
-
     def ballot
       if params[:id].present?
         @ballot = Voting::Ballot.find(params[:id])

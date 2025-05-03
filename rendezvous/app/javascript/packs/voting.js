@@ -3,3 +3,5 @@ import '@hotwired/turbo-rails'
 import Cookies from "js-cookie"
 import "html5-qrcode"
 import "../controllers"
+
+import '../modules/jquery_tabs'

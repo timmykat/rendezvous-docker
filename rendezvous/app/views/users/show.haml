@@ -45,7 +45,7 @@
                 - if @user.vehicles.blank?
                   %p Currently no vehicles registered.
                   %p
-                    = link_to 'Add a vehicle', edit_user_path(@user)
+                    = link_to 'Add a vehicle', edit_user_path(@user), class: 'btn btn-primary'
                 - else
                   %ul
                     - @user.vehicles.each do |v|

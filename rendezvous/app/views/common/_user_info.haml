@@ -3,11 +3,16 @@
     .user_fields
       .row
         .col-md-12
+          - if user_is_admin?
+            .form-group 
+              =f.input :is_admin_created, as: :boolean
+
           .form-group
-            = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', disabled:  !user_is_admin?
-            - if user_signed_in? && !user_is_admin?
+            - if (@user == current_user)
+              = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', disabled:  true
               = f.input :id, as:  :hidden, input_html:  { value:  current_user.id }
             - elsif user_is_admin?
+              = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', disabled:  false
               = f.input :id, as: :hidden, input_html: {'data-autocomplete-target' => ''}
         
       .row

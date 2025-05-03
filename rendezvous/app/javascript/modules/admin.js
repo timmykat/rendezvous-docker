@@ -9,8 +9,6 @@ $(function(){
         }
     }
 
-    $('#tabbed').tabs();
-
     $('#user-table').tablesorter({
         theme: 'blue',
         widthFixed: true,
