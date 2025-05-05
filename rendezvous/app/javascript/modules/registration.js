@@ -19,18 +19,21 @@ $(function(){
     }
   };
   let getAttendeeTotals = function() {
+    if (!$('#attendees')) return
     let adults = $('#attendees input[value="adult"]:visible:checked').length;
+    console.log('Adults', adults)
     $('input#event_registration_number_of_adults').val(adults); 
     let children = $('#attendees input[value="child"]:visible:checked').length;
+    console.log('Children', children)
     $('input#event_registration_number_of_children').val(children);  
     setRegistrationFee();  
   }
       
   // Remove the remove button from the first attendee and lock and hide the child selection
-  $('#attendees .remove_association_action:first').remove();
-  $('#attendees input[value="child"]:first').attr('disabled', true);
-  $('#attendees input[value="child"]:first').parent().hide();
-  $('#attendees .event_registration_attendees_name input:first').attr('placeholder', 'Your name *');
+  $('#attendees').find('.remove_association_action').first().remove();
+  $('#attendees').find('input[value="child"]').first().attr('disabled', true);
+  $('#attendees').find('input[value="child"]').first().parent().hide();
+  $('#attendees').find('.event_registration_attendees_name input').first().attr('placeholder', 'Your name *');
   
   // Initialize - set the first attendee info and get totals
   // $('#attendees input[value="adult"]:first').attr('checked', 'checked');
@@ -39,6 +42,7 @@ $(function(){
   if ($('input#event_registration_user_attributes_last_name').length > 0) {
     let firstName = $('input#event_registration_user_attributes_first_name').val();
     let lastName = $('input#event_registration_user_attributes_last_name').val();
+    console.log('Setting reg name', firstName + ' ' + lastName)
     $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
   }
   
@@ -47,10 +51,11 @@ $(function(){
   $('#attendees').on('click', 'input[type=radio]', function() { 
     getAttendeeTotals(); 
   });
-  $('#attendees').on('cocoon:after-insert cocoon:after-remove', function() {
+
+  $(document).on('cocoon:after-insert cocoon:after-remove', function(e, insertedItem) {
+    console.log('Cocoon fired on ', e.target)
     getAttendeeTotals();
   });
-  
 
   // Update registration fee
   $('.fee-calculation').on('change click keyup', function() {
@@ -93,6 +98,7 @@ $(function(){
   // Update total
   $(document).on('load', setTotal)
   $('.total-calculation').on('click blur', function() {
+    console.log('Setting total')
     setTotal();
   });
 

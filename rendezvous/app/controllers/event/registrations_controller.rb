@@ -114,7 +114,7 @@ module Event
       if !@event_registration.save
         flash_alert_now('There was a problem creating your registration.')
         flash_alert_now @event_registration.errors.full_messages.to_sentence
-        render 'registration_form' and return
+        render :new and return
       else
         sign_in(@event_registration.user) unless (session[:user_admin] || user_signed_in?)
         redirect_to review_event_registration_path(@event_registration)

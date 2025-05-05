@@ -84,7 +84,7 @@
           .card-body
             .card-text
               = field_set_tag 'Vehicles', class: 'legend-sm' do
-                #vehicles
+                #vehicles{ 'data-cocoon': true }
                   = f.simple_fields_for :vehicles do |v|
                     = render 'common/vehicle_fields', f:  v
                   .card-footer
