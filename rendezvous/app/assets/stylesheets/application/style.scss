@@ -104,6 +104,13 @@ svg.bi {
 	}
 }
 
+.button-with-spinner {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 15px;
+}
+
 #payment-link {
 	display: flex;
 	align-items: center;

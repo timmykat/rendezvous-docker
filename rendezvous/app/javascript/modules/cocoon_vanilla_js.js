@@ -84,7 +84,6 @@ export const addFieldsHandler = (btn) => {
       };
       insertionNodeElem.insertAdjacentHTML(methodMap[insertionMethod] || 'beforebegin', content_item);
 
-      console.log('Triggering cocoon:after-insert')
       insertionNodeElem.dispatchEvent(
         new CustomEvent('cocoon:after-insert', { detail: content_item, bubbles: true, cancelable: true })
       );
@@ -112,7 +111,6 @@ export const removeFieldsHandler = (btn) => {
         if (nodeToDelete) nodeToDelete.style.display = 'none';
       }
 
-      console.log('Triggering cocoon:after-remove')
       triggerNode?.dispatchEvent(
         new CustomEvent('cocoon:after-remove', { detail: nodeToDelete, bubbles: true, cancelable: true })
       );
@@ -129,11 +127,9 @@ export const hideDestroyedFields = () => {
 };
 
 export const registerCocoonHandlers = () => {
-  console.log('Registering cocoon handlers')
   cocoon?.addEventListener('click', (e) => {
     const addBtn = e.target.closest('.add_fields');
     if (addBtn) {
-      console.log('Clicked add fields')
       e.preventDefault();
       e.stopPropagation();
       addFieldsHandler(addBtn);
@@ -144,7 +140,6 @@ export const registerCocoonHandlers = () => {
       e.target.closest('.remove_fields.existing');
 
     if (removeBtn) {
-      console.log('Clicked remove fields')
       e.preventDefault();
       e.stopPropagation();
       removeFieldsHandler(removeBtn);

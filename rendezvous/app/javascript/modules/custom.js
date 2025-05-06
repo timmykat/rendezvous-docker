@@ -1,6 +1,6 @@
 import { debounce } from 'throttle-debounce';
 
-const scrollToElement = (el) => {
+export const scrollToElement = (el) => {
     if (el) {
         const yOffset = -50; // Adjust this value to account for any fixed headers, etc.
         const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
@@ -9,7 +9,7 @@ const scrollToElement = (el) => {
 }
 
 // Initialize the sticky header on scroll
-const initStickyHeader = () => {
+export const initStickyHeader = () => {
     window.addEventListener('scroll', e => {
       let header = document.querySelector('header');
       if (!header) return;
@@ -25,7 +25,7 @@ const initStickyHeader = () => {
   };
 
 // Initialize scroll links (anchor links in header)
-const initScrollLinks = () => {
+export const initScrollLinks = () => {
     let scrollLinks = document.querySelectorAll('header.top-header a[href*="#"]');
     scrollLinks?.forEach(link => {
       link.addEventListener('click', e => {
@@ -38,7 +38,7 @@ const initScrollLinks = () => {
   };
 
 // Autocomplete functionality for donation and registration pages
-const initAutocomplete = () => {
+export const initAutocomplete = () => {
     const donationPage = document.querySelector('body.c_donations');
     const newRegistrationPage = document.querySelector('body.c_event_registrations .new_registration');
   
@@ -104,19 +104,42 @@ const initAutocomplete = () => {
   
       autocompleteTrigger.addEventListener('keyup', debounceAutocomplete);
     }
-  };
+};
 
-  // Helper function to check if a value is numeric
+// Helper function to check if a value is numeric
 const isNumeric = (value) => {
-    return typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value));
-  };
+  return typeof value === 'string' && value.trim() !== '' && !Number.isNaN(Number(value));
+};
+
+export const setButtonSpinner = () => {
+  document.querySelectorAll('[data-button-spinner]').forEach(button => {
+    button.addEventListener('click', e => {
+      const clicked = e.currentTarget;
+
+      // Avoid adding multiple spinners
+      if (clicked.nextSibling?.classList?.contains('spinner-grow')) return;
+
+      const spinner = document.createElement('div');
+      spinner.classList.add('spinner-grow', 'text-primary');
+      spinner.setAttribute('role', 'status');
+
+      const newText = clicked.dataset.buttonSpinner;
+      if (clicked.tagName === 'INPUT') {
+        clicked.value = newText;
+      } else {
+        clicked.textContent = newText;
+      }
+
+      clicked.after(spinner);
+    });
+  });
+}
+
   
 // Main initialization function to be called on DOMContentLoaded
-const initCustom = () => {
-  initStickyHeader();
-  initScrollLinks();
-  initAutocomplete();
+export const initCustom = () => {
+  initStickyHeader()
+  initScrollLinks()
+  initAutocomplete()
+  setButtonSpinner()
 };
-  
-// Execute the `init` function when the DOM is ready
-document.addEventListener('DOMContentLoaded', initCustom);

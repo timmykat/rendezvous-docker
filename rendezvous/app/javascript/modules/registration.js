@@ -21,10 +21,8 @@ $(function(){
   let getAttendeeTotals = function() {
     if (!$('#attendees')) return
     let adults = $('#attendees input[value="adult"]:visible:checked').length;
-    console.log('Adults', adults)
     $('input#event_registration_number_of_adults').val(adults); 
     let children = $('#attendees input[value="child"]:visible:checked').length;
-    console.log('Children', children)
     $('input#event_registration_number_of_children').val(children);  
     setRegistrationFee();  
   }
@@ -42,7 +40,6 @@ $(function(){
   if ($('input#event_registration_user_attributes_last_name').length > 0) {
     let firstName = $('input#event_registration_user_attributes_first_name').val();
     let lastName = $('input#event_registration_user_attributes_last_name').val();
-    console.log('Setting reg name', firstName + ' ' + lastName)
     $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
   }
   
@@ -53,7 +50,6 @@ $(function(){
   });
 
   $(document).on('cocoon:after-insert cocoon:after-remove', function(e, insertedItem) {
-    console.log('Cocoon fired on ', e.target)
     getAttendeeTotals();
   });
 
@@ -66,19 +62,16 @@ $(function(){
   let setTotal = function() {
     if (typeof appData != 'undefined') {
       let donation = $('input[name="event_registration[donation]"]').val()
-      console.log('Donation', donation)
 
       let vendorFee = $('input[name="event_registration[vendor_fee]"]').val() || 0.0
       vendorFee = parseFloat(vendorFee)
 
       if ($.isNumeric(donation)) {
-        console.log('Is numeric')
         donation = parseFloat(donation);
       } else {
         donation = 0.
       }
       let total = parseFloat(appData.event_registration_fee) + donation + parseFloat(vendorFee);
-      console.log('Total')
       $('input#event_registration_total').val(total.toFixed(2));
 
       // Update donation and total in the DB
@@ -98,7 +91,6 @@ $(function(){
   // Update total
   $(document).on('load', setTotal)
   $('.total-calculation').on('click blur', function() {
-    console.log('Setting total')
     setTotal();
   });
 

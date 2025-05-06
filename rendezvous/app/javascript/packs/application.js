@@ -12,7 +12,10 @@ import 'jquery-ui/ui/widgets/tabs';
 import 'magnific-popup/dist/jquery.magnific-popup.min';
 import 'lazyload/lazyload.min';
 
-import { initCustom } from '../modules/custom'
+import { initCustom, setButtonSpinner } from '../modules/custom'
+document.addEventListener('DOMContentLoaded', () => initCustom())
+window.setButtonSpinner = setButtonSpinner
+
 import '../modules/main_pages';
 import { RecaptchaHandler } from '../modules/recaptcha';
 window.RecaptchaHandler = RecaptchaHandler

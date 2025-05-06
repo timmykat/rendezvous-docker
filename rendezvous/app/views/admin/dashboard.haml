@@ -61,8 +61,6 @@
                           
                   %td.text-center
                     = registration.status
-                    .status-icon
-                      %i{ class: get_status_icon(registration.status) } 
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
                   %td.text-center= registration.number_of_adults
                   %td.text-center= registration.number_of_children

@@ -6,5 +6,3 @@ import "throttle-debounce"
 import "jquery"
 import "jquery_ujs"
 import "./jquery_ui"
-
-console.log("App JS loaded")
