@@ -2,7 +2,7 @@ services:
   db_prod:
     image: mysql:8.0.32
     platform: linux/amd64
-    restart: always
+    restart: unless-stopped
 
     environment:
       - MYSQL_DATABASE
