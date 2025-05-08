@@ -76,7 +76,7 @@ class UsersController < ApplicationController
   def autocomplete
     user = User.find_by_email(params[:email])
     if (params[:reg_page])
-      if user.present? && .current_registration
+      if user.present? && user.current_registration
         respond_to do |format|
           format.json do 
             render json: {
