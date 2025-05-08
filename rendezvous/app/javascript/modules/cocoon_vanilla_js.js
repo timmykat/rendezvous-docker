@@ -127,8 +127,7 @@ export const hideDestroyedFields = () => {
 };
 
 export const registerCocoonHandlers = () => {
-  console.log('Cocoon', cocoon)
-  cocoon.addEventListener('click', (e) => {
+  cocoon?.addEventListener('click', (e) => {
     console.log('Cocoon click')
     const addBtn = e.target.closest('.add_fields');
     if (addBtn) {
