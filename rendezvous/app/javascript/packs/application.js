@@ -22,6 +22,7 @@ window.RecaptchaHandler = RecaptchaHandler
 import '../modules/user'; 
 import '../modules/vehicles'; 
 import { registerCocoonHandlers } from '../modules/cocoon_vanilla_js'
+window.registerCocoonHandlers = registerCocoonHandlers
 registerCocoonHandlers()
 
 Rails.start()

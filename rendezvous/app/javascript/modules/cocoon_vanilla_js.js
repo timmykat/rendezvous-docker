@@ -4,7 +4,7 @@ const create_new_id = () => new Date().getTime() + cocoon_element_counter++;
 
 const newcontent_braced = id => '[' + id + ']$1';
 const newcontent_underscord = id => '_' + id + '_$1';
-const cocoon = document.querySelector('[data-coccon]')
+const cocoon = document.querySelector('[data-cocoon]')
 
 const getInsertionNodeElem = (insertionNode, insertionTraversal, btn) => {
   if (!insertionNode) return btn.parentNode;
@@ -127,9 +127,12 @@ export const hideDestroyedFields = () => {
 };
 
 export const registerCocoonHandlers = () => {
-  cocoon?.addEventListener('click', (e) => {
+  console.log('Cocoon', cocoon)
+  cocoon.addEventListener('click', (e) => {
+    console.log('Cocoon click')
     const addBtn = e.target.closest('.add_fields');
     if (addBtn) {
+      console.log('Cocoon add click')
       e.preventDefault();
       e.stopPropagation();
       addFieldsHandler(addBtn);
@@ -140,6 +143,7 @@ export const registerCocoonHandlers = () => {
       e.target.closest('.remove_fields.existing');
 
     if (removeBtn) {
+      console.log('Cocoon remove click')
       e.preventDefault();
       e.stopPropagation();
       removeFieldsHandler(removeBtn);
