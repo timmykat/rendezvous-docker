@@ -235,7 +235,7 @@
                     %tr
                       %td
                         - [:tester, :vendor, :admin].each do |role|
-                          = check_box_tag role, '1', user.has_role?(role), "data-toggle" => ajax_toggle_role_path(user, role: role)
+                          = check_box_tag role, '1', user.has_role?(role), "data-nobs-toggle" => ajax_toggle_role_path(user, role: role)
                           = label_tag role.to_s.titleize
                           %br                        
 
@@ -243,7 +243,7 @@
                       %td= user.first_name
                       %td= user.email
                       %td
-                        = check_box_tag :recaptcha_whitelisted,'1', user.recaptcha_whitelisted?, "data-toggle" => ajax_toggle_whitelist_path(user)
+                        = check_box_tag :recaptcha_whitelisted,'1', user.recaptcha_whitelisted?, "data-nobs-toggle" => ajax_toggle_whitelist_path(user)
                         Whitelisted?
 
                           

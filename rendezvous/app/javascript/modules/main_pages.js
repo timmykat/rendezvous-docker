@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-$(function(){
+document.addEventListener('turbolinks:load', function(){
   $('#register').on('click', function() {
     window.location.assign('/register');
   });
@@ -35,5 +35,5 @@ $(function(){
   $('.close-flash').on('click', function() {
     $(this).closest('.flash').fadeOut(200);
   });
-});
+})
 

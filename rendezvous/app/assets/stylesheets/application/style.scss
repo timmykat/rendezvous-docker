@@ -93,14 +93,17 @@ svg.bi {
 
 	&.add_person, &.plus {
 			color: var(--dark-medium-blue);
+			fill: var(--dark-medium-blue);
 	}
 
 	&.remove_person, &.minus {
 			color: darkred;
+			fill: darkred;
 	}
 
 	&.car {
-			color: var(--citroen-red)
+			color: var(--citroen-red);
+			fill: var(--citroen-red);
 	}
 }
 

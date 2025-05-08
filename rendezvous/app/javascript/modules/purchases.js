@@ -1,4 +1,4 @@
-$(function(){
+document.addEventListener('turbolinks:load',  function(){
   const creditCardSurchage = 0.03  // 3% credit card surcharge
 
   // Set up sources and targets

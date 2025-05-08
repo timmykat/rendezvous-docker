@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
-$(function(){
+document.addEventListener('turbolinks:load', function(){
+    console.log('Loading jquery')
     const getCsrfHeaders = function() {
         let token = $('meta[name="csrf-token"]').attr('content')
         return {
@@ -9,6 +10,7 @@ $(function(){
         }
     }
 
+    console.log("Tablesorting users")
     $('#user-table').tablesorter({
         theme: 'blue',
         widthFixed: true,
@@ -18,7 +20,7 @@ $(function(){
         filter_saveFilters : true,
     });
 
-    $('[data-toggle]').on('click', function(e) {
+    $('[data-nobs-toggle]').on('click', function(e) {
         let path = $(this).data('toggle')
         $.ajax({
             url: path,
@@ -35,4 +37,4 @@ $(function(){
     $('.toggle_admin_bar').on('click', function() {
         $('header .manage').toggle()
     })
-});
+})
