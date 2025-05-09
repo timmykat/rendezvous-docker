@@ -89,18 +89,22 @@ document.addEventListener('turbo:load',  function(){
 
   // Set up everything when loaded
   $('#vehicles .nested-fields').each(function() {
+    console.log('Setting vehicle inputs for load')
     setVehicleInputs('load', $(this))
   });
 
   // Set up event handlers
   $('#vehicles').on('change', 'select', function() {
-    $vehicle = $(this).closest('.nested-fields')
+    console.log($(this))
+    const $vehicle = $(this).closest('.nested-fields')
+    console.log('Setting vehicle inputs for load', $vehicle)
     setVehicleInputs('change', $vehicle);
     updateRealValues($vehicle)
   });
 
   $('#vehicles').on('blur', 'input[type=text]', function() {
-    $vehicle = $(this).closest('.nested-fields')
+    const $vehicle = $(this).closest('.nested-fields')
+    console.log('Setting vehicle inputs for blur', $vehicle)
     setVehicleInputs('blur', $vehicle);
     updateRealValues($vehicle)
   });

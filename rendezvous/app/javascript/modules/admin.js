@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-document.addEventListener('turbolinks:load', function(){
+document.addEventListener('turbo:load', function(){
     console.log('Loading jquery')
     const getCsrfHeaders = function() {
         let token = $('meta[name="csrf-token"]').attr('content')

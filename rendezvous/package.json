@@ -23,7 +23,6 @@
     "jquery": "^3.7.1",
     "jquery-ui": "^1.14.1",
     "jquery-ui-themeroller": "^0.0.5",
-    "jquery-ujs": "^1.2.3",
     "js-cookie": "^3.0.5",
     "lazyload": "^2.0.0-rc.2",
     "magnific-popup": "^1.2.0",

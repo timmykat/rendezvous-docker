@@ -129,10 +129,8 @@ export const hideDestroyedFields = () => {
 export const registerCocoonHandlers = () => {
   const cocoon = document.querySelector('[data-cocoon]')
   cocoon?.addEventListener('click', (e) => {
-    console.log('Cocoon click')
     const addBtn = e.target.closest('.add_fields');
     if (addBtn) {
-      console.log('Cocoon add click')
       e.preventDefault();
       e.stopPropagation();
       addFieldsHandler(addBtn);
@@ -143,7 +141,6 @@ export const registerCocoonHandlers = () => {
       e.target.closest('.remove_fields.existing');
 
     if (removeBtn) {
-      console.log('Cocoon remove click')
       e.preventDefault();
       e.stopPropagation();
       removeFieldsHandler(removeBtn);
