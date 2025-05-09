@@ -5,10 +5,7 @@ module.exports = {
   mode: "production",
   devtool: "source-map",
   entry: {
-    admin: "./app/javascript/packs/admin.js",
-    application: "./app/javascript/packs/application.js",
-    registration: "./app/javascript/packs/registration.js",
-    voting: "./app/javascript/packs/voting.js"
+    application: "./app/javascript/packs/application.js"
   },
   output: {
     filename: "[name].js",

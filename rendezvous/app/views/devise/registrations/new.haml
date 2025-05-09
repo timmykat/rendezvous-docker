@@ -33,7 +33,7 @@
                 = f.submit "Create", class: "btn  btn-info"
 
 :javascript
-  document.addEventListener('turbolinks:load', () => {
+  document.addEventListener('turbo:load', () => {
     const recaptcha = new RecaptchaHandler('user_registration_form', 'register_user');
     recaptcha.prepare();
     recaptcha.execute();

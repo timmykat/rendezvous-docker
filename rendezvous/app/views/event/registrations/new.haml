@@ -92,7 +92,7 @@
                         = f.submit 'Create registration', class:  "btn  btn-primary"
                         
 :javascript
-  document.addEventListener('turbolinks:load', () => {
+  document.addEventListener('turbo:load', () => {
     const recaptcha = new RecaptchaHandler('new_event_registration', 'register_event');
     recaptcha.prepare();
     recaptcha.execute();

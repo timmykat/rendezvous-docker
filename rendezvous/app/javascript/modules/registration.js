@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-document.addEventListener('turbolinks:load',  function(){
+document.addEventListener('turbo:load',  function(){
   const registrationId = $('[data-registration_id]').data('registration_id')
   const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
 

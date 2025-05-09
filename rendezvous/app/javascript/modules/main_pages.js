@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-document.addEventListener('turbolinks:load', function(){
+document.addEventListener('turbo:load', function(){
   $('#register').on('click', function() {
     window.location.assign('/register');
   });

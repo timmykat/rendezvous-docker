@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-document.addEventListener('turbolinks:load',  function(){
+document.addEventListener('turbo:load',  function(){
   // Email confirmation
   var emailRegex =  /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
   $('.sign-up input[type=email]').on('keyup', function(e) {

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-document.addEventListener('turbolinks:load',  function(){
+document.addEventListener('turbo:load',  function(){
   // Toggle access to vehicle other fields
 
   const otherFrench = ['Panhard', 'Peugeot', 'Renault']

@@ -4,7 +4,6 @@ const create_new_id = () => new Date().getTime() + cocoon_element_counter++;
 
 const newcontent_braced = id => '[' + id + ']$1';
 const newcontent_underscord = id => '_' + id + '_$1';
-const cocoon = document.querySelector('[data-cocoon]')
 
 const getInsertionNodeElem = (insertionNode, insertionTraversal, btn) => {
   if (!insertionNode) return btn.parentNode;
@@ -119,6 +118,7 @@ export const removeFieldsHandler = (btn) => {
 };
 
 export const hideDestroyedFields = () => {
+  const cocoon = document.querySelector('[data-cocoon]')
   cocoon?.querySelectorAll('.remove_fields.existing.destroyed').forEach((btn) => {
     const wrapperClass = btn.dataset.wrapperClass || 'nested-fields';
     const field = btn.closest(`.${wrapperClass}`);
@@ -127,6 +127,7 @@ export const hideDestroyedFields = () => {
 };
 
 export const registerCocoonHandlers = () => {
+  const cocoon = document.querySelector('[data-cocoon]')
   cocoon?.addEventListener('click', (e) => {
     console.log('Cocoon click')
     const addBtn = e.target.closest('.add_fields');
@@ -150,6 +151,6 @@ export const registerCocoonHandlers = () => {
   });
 
   document.addEventListener('DOMContentLoaded', hideDestroyedFields);
-  document.addEventListener('turbolinks:load', hideDestroyedFields);
+  document.addEventListener('turbo:load', hideDestroyedFields);
   document.addEventListener('turbo:load', hideDestroyedFields);
 };
