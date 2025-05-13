@@ -33,6 +33,7 @@ document.addEventListener('turbo:load', function(){
   // Let the user dismiss the flash
   // $('.flash-wrapper').delay(5000).fadeOut(400);
   $('.close-flash').on('click', function() {
+    console.log('close clicked')
     $(this).closest('.flash').fadeOut(200);
   });
 })

@@ -2,6 +2,8 @@ export class RecaptchaHandler {
   constructor (formId, action) {
     this.formId = formId
     this.action = action
+    console.log(this.formId)
+    console.log(this.action)
   }
 
   prepare () {
