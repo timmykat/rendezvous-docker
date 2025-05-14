@@ -22,4 +22,4 @@
               =link_to "Import from CSV", venues_import_path, class: "btn  btn-warning"
             - if @venues.size > 0
               %p
-                =link_to "Delete all", destroy_all_venues_path, method: :delete, class: "btn  btn-danger"                     
+                =button_to "Delete all", destroy_all_venues_path, method: :delete, class: "btn  btn-danger", data: { turbo: false }                   

@@ -22,7 +22,7 @@
             = link_to 'Review my registration', review_event_registration_path(current_registration), class: 'dropdown-item'
             = link_to 'Pay for my registration', payment_event_registration_path(current_registration), class: 'dropdown-item'    
           = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
-          = link_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
+          = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item', data: { turbo: false }   
           - if user_is_admin?
             .dropdown-divider
             .dropdown-item 
