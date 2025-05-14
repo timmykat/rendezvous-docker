@@ -29,8 +29,8 @@
                 = f.hidden_field :password, class: 'form-control primary', value: @password, required: true
                 = f.hidden_field :password_confirmation, class: 'form-control confirm', value: @password, hidden: true, required: true  
 
-              .actions
-                = f.submit "Create", class: "btn  btn-info"
+              .actions.button-with-spinner
+                = f.submit "Sign Up", class: "btn  btn-info", data: { 'button-spinner' => 'Creating link...', turbo: false }
 
 :javascript
   document.addEventListener('DOMContentLoaded', () => {
