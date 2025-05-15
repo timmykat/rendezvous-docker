@@ -74,6 +74,7 @@ Rails.application.routes.draw do
         get :send_to_square
         get :vehicles
         get :send_email_confirmation
+        get :post_reg_update_vehicles
         get :update_vehicles
         patch :save_updated_vehicles
       end

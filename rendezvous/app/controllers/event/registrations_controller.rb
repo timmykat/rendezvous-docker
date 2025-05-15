@@ -296,6 +296,12 @@ module Event
       end
     end
 
+    def post_reg_update_vehicles
+      @event_registration = current_registration
+      @user = @event_registration.user
+      @vehicles = @user.vehicles
+    end
+
     def update_vehicles
       @title = 'Vehicle Information'
       @step = 'vehicles'
