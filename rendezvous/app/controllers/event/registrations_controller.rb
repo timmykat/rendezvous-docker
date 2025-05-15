@@ -297,7 +297,7 @@ module Event
     end
 
     def post_reg_update_vehicles
-      @event_registration = current_registration
+      @event_registration = Registration.find(params[:id])
       @user = @event_registration.user
       @vehicles = @user.vehicles
     end

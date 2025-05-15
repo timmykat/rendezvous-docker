@@ -14,6 +14,6 @@
               - if @registration && !@registration.complete?
                 %li.list-group-item= link_to 'Review my registration', review_event_registration_path(@registration)
                 %li.list-group-item= link_to 'Pay my registration fee', payment_event_registration_path(@registration)
-              %li.list-group-item= link_to 'Update my vehicles', edit_user_path(current_user)
+              %li.list-group-item= link_to 'Update my vehicles', post_reg_update_vehicles_event_registration_path(@registration)
               %li.list-group-item= link_to 'Check the schedule', schedule_path
               
