@@ -191,7 +191,7 @@ class AdminController < ApplicationController
     @user_count = @users.nil? ? 0 : @users.pluck(:id, :last_name).count
 
     @vehicles = Vehicle.joins(:registrations).where(registrations: { year: @year })
-    volunteers = query.joins(:attendees).select(:name).where(attendees: { volunteer: true })
+    @volunteers = Attendee.joins(registration: :user).where(registrations: { year: 2025 }, volunteer: true).select('attendees.name AS name, users.email AS email')
     total_amount = query.sum(:total)
     paid_amount = query.sum(:paid_amount)
     @data = {
@@ -202,10 +202,6 @@ class AdminController < ApplicationController
       newbies: [],
       adult: query.joins(:attendees).where(attendees: { attendee_age: 'adult'}).count,
       child: query.joins(:attendees).where(attendees: { attendee_age: 'child'}).count,
-      volunteers: {
-        number: volunteers.length,
-        list: volunteers,
-      },
       financials: {
         registration_fees: query.sum(:registration_fee),
         donations: query.sum(:donation),

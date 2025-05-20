@@ -116,8 +116,8 @@
               .card-title
                 %h2 Volunteer List
               .card-text
-                - if @data
-                  %p Total volunteers: #{@data[:volunteers][:number]}
+                - if @volunteers
+                  %p Total volunteers: #{@volunteers.size}
 
           %table.table
             %thead
@@ -126,7 +126,7 @@
                 %th Email (of registered user)
               %tbody
                 - if @data
-                  - @data[:volunteers][:list].each do |volunteer|
+                  - @volunteers.each do |volunteer|
                     %tr
                       %td= volunteer[:name]
                       %td= volunteer[:email]
@@ -195,7 +195,7 @@
                             %tr
                               %td
                                 %em  Volunteers
-                              %td.text-right= @data[:volunteers][:number]
+                              %td.text-right= @volunteers.length
                             %tr
                               %td
                                 %em  Vehicles
