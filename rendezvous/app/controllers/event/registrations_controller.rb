@@ -202,6 +202,7 @@ module Event
       @event_registration.status = 'payment due'
       @app_data[:event_registration_fee] = @event_registration.registration_fee
 
+      # Set up square env
       square_env = RendezvousSquare::Base.get_environment
       @square_app_id = ENV.fetch "#{square_env}_SQUARE_APP_ID"
       @square_sdk_url = ENV.fetch "#{square_env}_SQUARE_SDK_URL"
@@ -425,6 +426,10 @@ module Event
 
       def update_fees_params
         params.permit(:id, :donation, :total)
+      end
+
+      def cash_payment_params
+        params.require(:event_registration).permit(:donation, :total, :paid_method, :paid_amount, :status)
       end
 
       def payment_method_params
