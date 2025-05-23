@@ -281,6 +281,21 @@ module Event
       @event_registration = Registration.find(params[:id])
 
       # Set the paid amounts
+      if current_user.admin?
+        if !@event_registration.update(cash_payment_params)
+          flash_alert 'Something went wrong with the completion attempt'
+          render :payment
+        else
+          if @event_registration.status == 'complete'
+            @event_registration.paid_date = Time.new
+            @event_registration.save
+          end
+          flash_notice 'The registration was successfully updated.'
+          redirect_to admin_dashboard_path
+        end
+        return
+      end
+
       @event_registration.paid_amount = 0.0
       @event_registration.paid_method = "cash or check"
 
