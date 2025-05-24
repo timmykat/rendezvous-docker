@@ -20,12 +20,17 @@ document.addEventListener('turbo:load', function(){
         filter_saveFilters : true,
     });
 
-    $('[data-nobs-toggle]').on('click', function(e) {
+    $('[data-nobs-toggle]').on('click', function() {
+        const $el = $(this)
+        const $checkbox = $el.find('input[type="checkbox"]')
         let path = $(this).data('nobs-toggle')
         $.ajax({
             url: path,
             method: 'GET',
-            headers: getCsrfHeaders()
+            headers: getCsrfHeaders(),
+            success: function() {
+                $checkbox.toggle()
+            }
         })
     })
 
