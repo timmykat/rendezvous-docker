@@ -21,7 +21,7 @@ document.addEventListener('turbo:load', function(){
     });
 
     $('[data-nobs-toggle]').on('click', function(e) {
-        let path = $(this).data('toggle')
+        let path = $(this).data('nobs-toggle')
         $.ajax({
             url: path,
             method: 'GET',

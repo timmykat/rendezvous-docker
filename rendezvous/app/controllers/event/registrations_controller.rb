@@ -188,7 +188,7 @@ module Event
       if (@event_registration.user.has_role? :vendor)
         vendor_fee = Config::SiteSetting.instance.vendor_fee
         @event_registration.vendor_fee = vendor_fee
-        @event_registration.ensure_total
+        # @event_registration.ensure_total
         @event_registration.save!
       end 
       @event_registration.status = 'in review'

@@ -41,19 +41,19 @@ module Event
     end
     
     def validate_payment
-      if !paid_amount.nil?
-        if (paid_amount.to_f > total.to_f)
+      if !self.paid_amount.nil?
+        if (self.paid_amount.to_f > self.total.to_f)
           errors[:base] << "The paid amount is more than the owed amount."
         end
       end
     end
       
     def balance
-      total.to_f - paid_amount.to_f
+      self.total.to_f - self.paid_amount.to_f
     end
     
     def outstanding_balance?
-      balance > 0.0
+      self.balance > 0.0
     end
 
     def owed_a_refund?
@@ -61,20 +61,20 @@ module Event
     end
 
     def complete?
-      status == 'complete'
+      self.status == 'complete'
     end
 
     def cancelled?
-      status =~ /cancelled/
+      self.status =~ /cancelled/
     end
 
     def ensure_total
-      total = registration_fee || 0.0
-      if !donation.blank?
-        total += donation
+      self.total = self.registration_fee || 0.0
+      if !self.donation.blank?
+        self.total += self.donation
       end
-      if !vendor_fee.blank?
-        total += vendor_fee
+      if !self.vendor_fee.blank?
+        self.total += self.vendor_fee
       end
     end
     

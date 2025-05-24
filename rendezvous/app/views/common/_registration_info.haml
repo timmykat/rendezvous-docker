@@ -95,6 +95,11 @@
                     %br
                       %label Total:
                       #{number_to_currency(@event_registration.total)} (US)
+                    
+                    - if (@event_registration.paid_amount > 0.0)
+                      %br
+                        %label Paid:
+                        #{number_to_currency(@event_registration.paid_amount)} (US)
 
                     %strong
                       %label Balance:
