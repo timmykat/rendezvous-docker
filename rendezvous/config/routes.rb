@@ -90,6 +90,8 @@ Rails.application.routes.draw do
   get '/admin/graphs',            to: 'admin#registration_graphs'
   get '/admin/cleanup',           to: 'users#cleanup'
   post '/admin/cleanup',          to: 'users#cleanup'
+  get '/admin/manage_qr_codes',   to: 'admin#manage_qr_codes'
+  get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
 
   namespace :event do
   #     resources  :registrations, { only: [ :create, :show, :edit, :update ] }
@@ -101,8 +103,8 @@ Rails.application.routes.draw do
   #     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
   end
 
-  get '/voting/ballot(/:id)',                   to: 'voting/ballots#ballot', as: :get_voting_ballot
-  post '/turbo/voting/ballots/vote',            to: 'voting/ballots#vote', as: :turbo_vote
+  get '/voting/ballot/:code(/:ballot_id)',             to: 'voting/ballots#ballot', as: :get_voting_ballot
+  post '/turbo/voting/ballots/vote',            to: 'voting/ballots#vote', as: :vote
   post '/turbo/voting/ballots/vehicle/delete',  to: 'voting/ballots#delete_selection', as: :turbo_delete_vehicle
   get '/_ajax/voting/vehicle/:code',            to: 'vehicles#ajax_info'
 

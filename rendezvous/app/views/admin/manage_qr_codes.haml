@@ -1,0 +1,50 @@
+.container 
+  .row.justify-content-center 
+    .col-md6.col-12
+      .card 
+        .card-body 
+          .card-title 
+            %h1.h3 Vehicle QR Codes 
+          .card-text 
+            %p
+              %strong Last generated: #{@last_generated}
+
+            %p.button-with-spinner
+              = link_to 'Generate New Codes', admin_generate_qr_codes_path, class: 'btn btn-info button', data: { 'button-spinner' => 'Generating...', turbo: false }
+            %p.button-with-spinner
+              = link_to 'Regenerate All Codes', admin_generate_qr_codes_path({regenerate: true}), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+            %p
+              %strong Sample 1:
+              %br
+              = image_tag @vehicles[0].server_qr_file_path
+            %p
+              %strong Sample 2:
+              %br
+              = image_tag @vehicles[1].server_qr_file_path
+
+            %table
+              %thead
+                %tr
+                  %th
+                    Owner
+                  %th
+                    Vehicle
+                  %th
+                    Code
+                  %th
+                    QR Code
+              %tbody
+                - @vehicles.each do |v|
+                  %tr
+                    %td #{v.user.full_name}
+                    %td #{v.year_marque_model}
+                    %td #{v.code}
+                    %td
+                      - if v.server_qr_file_path
+                        %div{style: 'padding: 5px 20px'}
+                          = image_tag v.server_qr_file_path, {style: 'width: 40px; height: 40px;'}
+                      - else 
+                        (no image yet)
+
+      

@@ -10,6 +10,9 @@
       margin-top: 0;
     }
   }
+  .card {
+    background: white;
+  }
 }
 
 #voting-instructions Ul > li {
@@ -37,30 +40,19 @@
   }
 
   #vote-action-container {
-    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    visibility: hidden;
-    background: transparent;
 
     .selection-wrapper, .error-wrapper {
-      width: 100%;
       max-width: var(--appWidth);
-      height: 100vw;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       background: #eee;
       color: var(--darkblue);
-      border: solid 2px var(--citroen-red);
       padding: 10px;
       line-height: 1.4;
     }

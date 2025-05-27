@@ -1,19 +1,21 @@
 module Voting
   class BallotsController < ApplicationController
-    include ::Turbo::StreamsHelper
     
     layout 'ballot_layout', only: [:ballot]
 
     def ballot
-      if params[:id].present?
-        @ballot = Voting::Ballot.find(params[:id])
+      @code = params[:code]
+      @vehicle = Vehicle.find_by_qr_code(@code)
+
+      if params[:ballot_id].present?
+        @ballot = Voting::Ballot.find(params[:ballot_id])
         @ballot.get_status
         @ballot.save
+        @selections = @ballot.categorized_selections
+        @already_selected = already_selected?(@vehicle)
       else
-        @ballot = Voting::Ballot.where(year: Date.current.year).where(user: current_user).first
-        if !@ballot.present?
-          @ballot = Voting::Ballot.create(year: Date.current.year, user: current_user, status: 'voting')
-        end
+        @ballot = Ballot.create(year: Date.current.year, status: 'voting')
+        session[:ballot_id] = @ballot.id
         @selections = @ballot.categorized_selections
       end
     end
@@ -28,14 +30,10 @@ module Voting
         return
       end
 
-      vehicle.vote_by(@ballot.user)
+      vehicle.vote_by(@ballot)
+      @ballot.save
       @selections = @ballot.categorized_selections
-
-      respond_to do |format|
-        format.turbo_stream { render layout: false }
-        format.html { head :no_content }
-      end
-      return
+      redirect_to get_voting_ballot_path(@ballot, anchor: 'tabbed-2')
     end
 
     def delete_selection
@@ -50,6 +48,11 @@ module Voting
         format.html { head :no_content }
       end
       return
+    end
+
+    private
+    def already_selected?(vehicle)
+      @ballot.categorized_selections.values.any? { |vehicles| vehicles.include?(vehicle) }
     end
   end
 end

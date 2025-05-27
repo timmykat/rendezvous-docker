@@ -20,6 +20,7 @@
 
             .col-md-4.col-12  
               %ul.list-group.text-sm
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Manage QR Codes', admin_manage_qr_codes_path
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Packet labels CSV', admin_download_csv_path({type: 'packet_labels', format: :csv})
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Dash placards CSV', admin_download_csv_path({type: 'dash_placards', format: :csv})
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Attendees CSV', admin_download_csv_path({type: 'attendees', format: :csv})

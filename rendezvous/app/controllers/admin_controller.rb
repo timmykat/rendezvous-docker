@@ -1,4 +1,5 @@
 require 'csv'
+require 'fileutils'
 
 class AdminController < ApplicationController
 
@@ -210,6 +211,23 @@ class AdminController < ApplicationController
         due: total_amount - paid_amount
       }
     }
+  end
+
+  def manage_qr_codes
+    @vehicles = Vehicle.all
+    @last_generated = "Not implemented"
+  end
+
+  def generate_qr_codes
+    regenerate = params[:regenerate] == "true"
+    if regenerate
+      FileUtils.rm_rf(Dir.glob(Rails.root.join('public', 'qr_codes', '*')))
+    end
+    @vehicles = Vehicle.all
+    @vehicles.each do |v|
+      v.create_qr_code(regenerate)
+    end
+    redirect_to admin_manage_qr_codes_path
   end
 
   def print(item)

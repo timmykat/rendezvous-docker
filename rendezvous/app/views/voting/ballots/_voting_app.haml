@@ -1,57 +1,49 @@
-#voting-app{ "data-controller" => "voting"}
+#voting-app
   = render partial: 'modal_instructions'
   
-  #tabs
-    %ul.nav.nav-pills.mb-3{ id: 'voting-tabs', role: :tablist }
-      %li.nav-item{ role: 'presentation' }
-        %button.nav-link.active{ id: 'vote-tab', 'data-toggle' => 'pill', 'data-target' => '#vote', type: :button, role: :tab, 'aria-controls' => 'vote', 'aria-selected' => true } VOTE
-      %li.nav-item{ role: 'presentation' }
-        %button.nav-link{ id: 'selections-tab', 'data-toggle' => 'pill', 'data-target' => '#my_selections', type: :button, role: :tab, 'aria-controls' => 'my_selections', 'aria-selected' => false } Selections
+  #tabbed
+    %ul
+      %li
+        %a{ href: '#tabbed-1' } VOTE
+      %li
+        %a{ href: '#tabbed-2' } My Selections
 
-    
-    .tab-content 
-      .tab-pane.active{ id: 'vote', role: 'tab-panel', 'aria-labelled-by' => 'vote-tab'}
-        .card 
-          .card-body 
-            .card-title 
-              %h2.h4.d-flex.justify-content-between.align-items-center 
-                Enter selection
-                =link_to icon(:info, size: '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
-            .card-text
-              .card 
-                .card-body 
-                  .card-text
-                    %ul.nav.nav-pills.mb-3{ id: 'input-tabs', role: :tablist }
-                      %li.nav-item{ role: 'presentation' }
-                        %button.nav-link.active{ id: 'scan-tab', 'data-toggle' => 'pill', 'data-target' => '#scan', type: :button, role: :tab, 'aria-controls' => 'scan', 'aria-selected' => true } SCAN
-                      %li.nav-item{ role: 'presentation' }
-                        %button.nav-link{ id: 'type-in-tab', 'data-toggle' => 'pill', 'data-target'=> '#type-in', type: :button, role: :tab, 'aria-controls' => 'type-in', 'aria-selected' => true } TYPE IN
-
-                    = form_with url: turbo_vote_path, method: :post, data: { turbo_frame: 'categories-content-frame', voting_target: "votingForm" } do |f|
-                      .tab-content
-                        .tab-pane.active{ id: 'scan', role: 'tab-panel', 'aria-labelled-by' => 'scan-tab'}
-              
-                          #reader.mb-3{'data-voting-target' => 'reader'}
-
-                        .tab-pane{ id: 'type-in', role: 'tab-panel', 'aria-labelled-by' => 'scan-tab'}
-                          .form-group
-                            %label Vehicle ID:
-                            = f.text_field :code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
-                            = f.hidden_field :ballot_id, value: @ballot.id
-                      
-                      #vote-action-container{'data-voting-target' => 'voteActionContainer'}
-                        .warning-wrapper{'data-voting-target' => 'warningWrapper'} 
-                          .warning-info{'data-voting-target' => 'warningInfo'} 
-                        .selection-wrapper{'data-voting-target' => 'selectionWrapper'} 
-                          .selection-info{'data-voting-target' => 'selectionInfo'} 
-                          
-                          .text-center.d-flex.align-items-center.mt-4
-                            = f.submit "Vote", id: 'vote-button', class: "btn btn-primary mr-3"
-                            = link_to 'CANCEL', '#', 'data-voting-target' => 'cancel'
-                        .error-wrapper{'data-voting-target' => 'errorWrapper'}
-                          .error-info.mb-3{'data-voting-target' => 'errorInfo'} 
-                          = link_to 'CLOSE', '#', 'data-voting-target' => 'cancel'
-    
-    .tab-content 
-      .tab-pane.active{ id: 'my_selections', role: 'tab-panel', 'aria-labelled-by' => 'selections-tab'}
-        = render partial: 'selections'  
+    #tabbed-1
+      .card 
+        .card-body 
+          .card-title 
+            %h2.h4.d-flex.justify-content-between.align-items-center 
+              Enter selection
+              =link_to icon(:info, size: '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
+          .card-text
+            .card 
+              .card-body 
+                .card-text
+                  = form_with url: vote_path, method: :post, do |f|
+                    .form-group
+                      %label Vehicle ID:
+                      = f.text_field :code, value: @code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
+                      = f.hidden_field :ballot_id, value: @ballot.id
+                    
+                    #vote-action-container
+                      - if @already_selected
+                        .warning-wrapper
+                          .warning-info
+                            You already selected that one!
+                      - elsif !@vehicle.nil?
+                        .selection-wrapper
+                          .selection-info
+                            .category Category: #{@vehicle.judging_category}
+                            .info
+                              .vehicle #{@vehicle.year_marque_model}
+                              .owner Owner: #{@vehicle.user.full_name}
+                        
+                        .text-center.d-flex.align-items-center.mt-4
+                          = f.submit "Vote", id: 'vote-button', class: "btn btn-primary mr-3"
+                          = link_to 'CANCEL', '#', 'data-voting-target' => 'cancel'
+                      .error-wrapper{'data-voting-target' => 'errorWrapper'}
+                        .error-info.mb-3{'data-voting-target' => 'errorInfo'} 
+                        = link_to 'CLOSE', '#', 'data-voting-target' => 'cancel'
+  
+    #tabbed-2
+      = render partial: 'selections'  
