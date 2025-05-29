@@ -92,6 +92,7 @@ Rails.application.routes.draw do
   post '/admin/cleanup',          to: 'users#cleanup'
   get '/admin/manage_qr_codes',   to: 'admin#manage_qr_codes'
   get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
+  get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'
 
   namespace :event do
   #     resources  :registrations, { only: [ :create, :show, :edit, :update ] }
@@ -103,10 +104,10 @@ Rails.application.routes.draw do
   #     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
   end
 
-  get '/voting/ballot/:code(/:ballot_id)',             to: 'voting/ballots#ballot', as: :get_voting_ballot
-  post '/turbo/voting/ballots/vote',            to: 'voting/ballots#vote', as: :vote
-  post '/turbo/voting/ballots/vehicle/delete',  to: 'voting/ballots#delete_selection', as: :turbo_delete_vehicle
-  get '/_ajax/voting/vehicle/:code',            to: 'vehicles#ajax_info'
+  get     '/voting/ballot',                     to: 'voting/ballots#ballot', as: :get_voting_ballot
+  post    '/voting/ballots/vote',              to: 'voting/ballots#vote', as: :vote
+  delete  '/voting/ballots/vehicle/delete',    to: 'voting/ballots#delete_selection', as: :delete_vehicle_selection
+  get     '/_ajax/voting/vehicle/:code',        to: 'vehicles#ajax_info'
 
 
   resources :donations, { only: [ :new, :create, :index ] }

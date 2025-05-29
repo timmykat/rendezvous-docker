@@ -88,6 +88,7 @@
                   %p Total: #{@vehicles.count}
                 - else
                   %p No vehicles yet
+
           %table.table
             %thead
               %tr
@@ -138,6 +139,21 @@
               .card-text
                 .row
                   .col-md-12
+            
+
+            .row.justify-content-center
+              .col-md-8.col-12
+                .card
+                  .card-body
+                    .card-title
+                      %h3 Annual Question Responses 
+                    .card-body 
+                      %p
+                        %strong #{@annual_question.question}
+                      %p Responses:
+                      %ul
+                        - @annual_responses.each do |answer, number|
+                          %li #{number} | #{answer}
             .row
               .col-md-6.col-12
                 .card

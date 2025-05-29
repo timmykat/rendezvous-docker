@@ -56,4 +56,35 @@ class Vehicle < ApplicationRecord
     end
     return false
   end
+
+  def self.top_3_by_category
+    current_year = Date.current.year
+
+    # Subquery: vote counts for current year's ballots
+    vote_counts = Voting::BallotSelection
+      .joins(:ballot)
+      .where(
+        votable_type: 'Vehicle',
+        ballots: { year: current_year }
+      )
+      .group(:votable_id)
+      .select(:votable_id, 'COUNT(*) AS vote_count')
+
+    # Join Vehicles with vote counts
+    vehicles_with_votes = Vehicle
+      .joins("JOIN (#{vote_counts.to_sql}) AS votes ON votes.votable_id = vehicles.id")
+      .select('vehicles.*, votes.vote_count')
+      .index_by(&:id)
+
+    # Group by judging category
+    grouped = vehicles_with_votes.values.group_by(&:judging_category)
+
+    # Sort and return top 3 per category
+    grouped.transform_values do |vehicles|
+      vehicles
+        .sort_by { |v| -v.vote_count.to_i }
+        .first(3)
+        .map { |v| [v, v.vote_count.to_i] }
+    end
+  end
 end

@@ -10,40 +10,40 @@
 
     #tabbed-1
       .card 
-        .card-body 
-          .card-title 
-            %h2.h4.d-flex.justify-content-between.align-items-center 
-              Enter selection
-              =link_to icon(:info, size: '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
-          .card-text
-            .card 
-              .card-body 
-                .card-text
-                  = form_with url: vote_path, method: :post, do |f|
-                    .form-group
-                      %label Vehicle ID:
-                      = f.text_field :code, value: @code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
-                      = f.hidden_field :ballot_id, value: @ballot.id
-                    
-                    #vote-action-container
-                      - if @already_selected
-                        .warning-wrapper
-                          .warning-info
-                            You already selected that one!
-                      - elsif !@vehicle.nil?
-                        .selection-wrapper
-                          .selection-info
-                            .category Category: #{@vehicle.judging_category}
-                            .info
-                              .vehicle #{@vehicle.year_marque_model}
-                              .owner Owner: #{@vehicle.user.full_name}
-                        
-                        .text-center.d-flex.align-items-center.mt-4
-                          = f.submit "Vote", id: 'vote-button', class: "btn btn-primary mr-3"
-                          = link_to 'CANCEL', '#', 'data-voting-target' => 'cancel'
-                      .error-wrapper{'data-voting-target' => 'errorWrapper'}
-                        .error-info.mb-3{'data-voting-target' => 'errorInfo'} 
-                        = link_to 'CLOSE', '#', 'data-voting-target' => 'cancel'
+        .card-body
+          - if @code.nil?
+            .card-text 
+              %p Select your camera and scan the QR code on your next People's Choice selection!
+          - else  
+            .card-title 
+              %h2.h4.d-flex.justify-content-between.align-items-center 
+                Enter selection
+                =link_to icon(:info, size: '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
+            .card-text
+              .card 
+                .card-body 
+                  .card-text
+                    = form_with url: vote_path, method: :post, data: { turbo: false } do |f|
+                      .form-group
+                        %label Vehicle ID:
+                        = f.text_field :code, value: @code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
+                        = f.hidden_field :ballot_id, value: @ballot.id
+                      
+                      #vote-action-container
+                        - if @already_selected
+                          .warning-wrapper
+                            .warning-info
+                              You already selected that one!
+                        - elsif !@vehicle.nil?
+                          .selection-wrapper
+                            .selection-info
+                              .category Category: #{@vehicle.judging_category}
+                              .info
+                                .vehicle #{@vehicle.year_marque_model}
+                                .owner Owner: #{@vehicle.user.full_name}
+                          
+                          .text-center.d-flex.align-items-center.mt-4
+                            = f.submit "Vote", id: 'vote-button', class: "btn btn-primary mr-3"
   
     #tabbed-2
       = render partial: 'selections'  

@@ -1,0 +1,20 @@
+.container 
+  .row.justify-content-center 
+    .col-md-8.col-12
+      .card 
+        .card-body 
+          .card-title 
+            %h1.h3 Peoples Choice Results
+          .card-text
+            - @results.each do |category, winners|
+              %ul
+                %li 
+                  %strong #{category}
+                %li
+                  %ul
+                    - winners.each do |vehicle|
+                      %li
+                        %p 
+                          #{vehicle[0].year_marque_model}
+                          %br
+                          #{vehicle[0].user.full_name}

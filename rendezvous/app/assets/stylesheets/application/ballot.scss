@@ -15,6 +15,10 @@
   }
 }
 
+svg.bi.delete {
+  padding: 0;
+}
+
 #voting-instructions Ul > li {
   font-size: 1.3rem;
   line-height: 1.3;
@@ -24,6 +28,19 @@
   input[name='code'] {
     text-transform: uppercase;
     font-size: 2.5rem;
+  }
+
+  .selections .btn {
+    display: inline-block;
+    margin-right: 10px;
+    background: white;
+    border-radius: 7px; 
+    color: red;
+    border: solid 1px var(--indigo-dye);
+
+    svg.bi.delete {
+      padding: 0;
+    }
   }
 
   .tab-content > .tab-pane {

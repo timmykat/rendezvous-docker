@@ -152,6 +152,7 @@ class AdminController < ApplicationController
     end
 
     @annual_question = AnnualQuestion.where(year: Date.current.year).first
+    @annual_responses = Event::Registration.where.not(annual_answer: nil).group(:annual_answer).count
     if !@annual_question
       @annual_question = AnnualQuestion.new
     end
@@ -211,6 +212,10 @@ class AdminController < ApplicationController
         due: total_amount - paid_amount
       }
     }
+  end
+
+  def peoples_choice_results
+    @results = Vehicle.top_3_by_category
   end
 
   def manage_qr_codes

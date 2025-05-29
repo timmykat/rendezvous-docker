@@ -4,11 +4,9 @@ module Voting
     layout 'ballot_layout', only: [:ballot]
 
     def ballot
-      @code = params[:code]
-      @vehicle = Vehicle.find_by_qr_code(@code)
-
-      if params[:ballot_id].present?
-        @ballot = Voting::Ballot.find(params[:ballot_id])
+      ballot_id = params[:ballot_id] || session[:ballot_id]
+      unless ballot_id.nil?
+        @ballot = Voting::Ballot.find(ballot_id)
         @ballot.get_status
         @ballot.save
         @selections = @ballot.categorized_selections
@@ -18,6 +16,9 @@ module Voting
         session[:ballot_id] = @ballot.id
         @selections = @ballot.categorized_selections
       end
+
+      @code = params[:code]
+      @vehicle = @code.nil? ? nil : Vehicle.find_by_qr_code(@code)
     end
 
     def vote
@@ -33,7 +34,7 @@ module Voting
       vehicle.vote_by(@ballot)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path(@ballot, anchor: 'tabbed-2')
+      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, anchor: 'tabbed-2'})
     end
 
     def delete_selection
@@ -42,12 +43,7 @@ module Voting
       @ballot.selections.delete(vehicle_id)
       @ballot.save
       @selections = @ballot.categorized_selections
-
-      respond_to do |format|
-        format.turbo_stream { render layout: false }
-        format.html { head :no_content }
-      end
-      return
+      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, anchor: 'tabbed-2'})
     end
 
     private

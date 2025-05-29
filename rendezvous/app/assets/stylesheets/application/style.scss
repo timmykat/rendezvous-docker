@@ -85,11 +85,6 @@ section.banner {
 /* Bootstrap icon colors */
 svg.bi {
 	padding-right: 5px;
-	fill: white;
-
-	&.close {
-		fill: black;
-	}
 
 	&.add_person, &.plus {
 			color: var(--dark-medium-blue);
