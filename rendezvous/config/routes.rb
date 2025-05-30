@@ -90,6 +90,7 @@ Rails.application.routes.draw do
   get '/admin/graphs',            to: 'admin#registration_graphs'
   get '/admin/cleanup',           to: 'users#cleanup'
   post '/admin/cleanup',          to: 'users#cleanup'
+  get '/admin/print',              to: 'admin#print'
   get '/admin/manage_qr_codes',   to: 'admin#manage_qr_codes'
   get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
   get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'

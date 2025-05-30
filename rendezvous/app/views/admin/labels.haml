@@ -1,15 +1,37 @@
-.container
+.wrapper 
+  - @registrations.each do |r|
+    .label-wrapper 
+      .label
 
-  - @labels.each do |label, index|
-    .label 
-      .name #{label['name']}
-      .people People: #{label['people']}
-      .fee Fee: #{label['fee']}
-      - if label['donation'] > 0
-        .donation You donated - thank you!
-      - if label['volunteers'] > 0
-        .volunteers Number of volunteers: #{label['volunteers']}
+        .content 
+          .info
+            .name #{r.user.last_name}
+            .people 
+              Citronistas: #{r.number_of_people}
+              %ul{style: 'list-style: none;'}
+                - r.attendees.each do |a|
+                  %li 
+                    #{a.name}
+                    - if a.volunteer?
+                      (volunteer)
+            .fee
+              - if r.balance > 0.0
+                Due: #{number_to_currency(r.balance)}
+              - else
+                Paid - thank you!
+                
+            - if r.donation > 0
+              .thank-you.donation You donated - thank you!
+            
+        .ident
+          .info
+            .title Citroën Rendezvous 2025
+            .loc Saratoga Springs, NY
+          .logo
+            = image_tag 'R25_iconique.png', :alt => 'Citroen Rendezvous' 
+ 
+   
 
-      = image_tag 'rendezvous-logo.png', :alt => 'Citroen Rendezvous', :class => 'logo'
+    
 
 

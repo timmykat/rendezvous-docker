@@ -47,6 +47,14 @@ module Event
         end
       end
     end
+
+    def number_of_people
+      self.attendees.count
+    end
+
+    def number_of_volunteers
+      self.attendees.where(volunteer: true).count
+    end
       
     def balance
       self.total.to_f - self.paid_amount.to_f

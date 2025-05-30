@@ -3,7 +3,7 @@ require 'fileutils'
 
 class AdminController < ApplicationController
 
-  layout "admin_layout"
+  layout :select_layout
 
   NO_USER_ID = 999999
 
@@ -65,16 +65,15 @@ class AdminController < ApplicationController
   before_action :require_admin
   before_action :calculate_annual_question
 
+  def select_layout
+    action_name == 'print' ? "print_layout" : "admin_layout"
+  end
+
   def calculate_annual_question
     # @annual_question_data = {
     #   number: Event::Registration.current.group(:annual_answer).reverse.count,
     #   options: AnnualQuestion::RESPONSES.reverse
     # }
-
-    @annual_question_data = {
-      number: [15, 26, 43],
-      options: AnnualQuestion::RESPONSES.reverse
-    }
   end
 
   def dedupe
@@ -235,14 +234,15 @@ class AdminController < ApplicationController
     redirect_to admin_manage_qr_codes_path
   end
 
-  def print(item)
+  def print
+    item = params[:item]
     case item
     when 'placards'
-      @vehicles = Event::Registration.current.flat_map(&:vehicles)
+      @vehicles = Event::Registration.current.flat_map(&:vehicles).limit(10)
       render :placards
       return
     when 'labels'
-      @registrations = Event::Registration.current
+      @registrations = Event::Registration.current.limit(10)
       render :labels
       return
     when 'certificates'
