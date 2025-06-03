@@ -1,27 +1,24 @@
-- vehicles.each do |v|     
-    .placard
-      %header
-        .text
-          Citroën Rendezvous
-        .logo
-          %img{ src: url('R25_iconique.png')}
-        .text
+- @vehicles.each do |v|     
+  .placard
+    %header
+      .logo
+        %img{ src: asset_url('R25_iconique.png')}
+      .text
+        Citroen Rendezvous 2025
 
-      .datum
-        %span.label Entry Number:
-        %span.value #{v.code}
+    .datum
+      %span.label Category:
+      %span.value #{v.judging_category}     
 
-      .datum
-        %span.label Category:
-        %span.value #{v.judging_category}     
+    .datum
+      %span.label Vehicle:
+      %span.value #{v.year_marque_model}
 
-      .datum
-        %span.label Vehicle:
-        %span.value #{v.year_marque_model}
+    .datum 
+      %span.label Owner:
+      %span.value #{v.user.full_name}
 
-      .datum 
-        %span.label Owner:
-        %span.value #{v.user.full_name}
-
-      .qr-code 
-        %img{ src: "/qr_codes/qr_#{v.code}.png" }
+    .qr-code-id 
+      %img{ src: "/qr_codes/qr_#{v.code}.png" }
+      %span.code #{v.code} 
+      %span (People's Choice ID)

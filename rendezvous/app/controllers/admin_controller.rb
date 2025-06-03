@@ -238,7 +238,9 @@ class AdminController < ApplicationController
     item = params[:item]
     case item
     when 'placards'
-      @vehicles = Event::Registration.current.flat_map(&:vehicles).limit(10)
+      # @vehicles = Vehicle.joins(:registrations)
+      # .where(registrations: { year: Date.current.year })
+      @vehicles = Vehicle.limit(10)
       render :placards
       return
     when 'labels'
