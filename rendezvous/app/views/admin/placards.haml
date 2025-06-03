@@ -7,10 +7,6 @@
         Citroen Rendezvous 2025
 
     .datum
-      %span.label Category:
-      %span.value #{v.judging_category}     
-
-    .datum
       %span.label Vehicle:
       %span.value #{v.year_marque_model}
 
@@ -18,6 +14,10 @@
       %span.label Owner:
       %span.value #{v.user.full_name}
 
+    .datum
+      %span.label Category:
+      %span.value #{v.judging_category}
+        
     .qr-code-id 
       %img{ src: "/qr_codes/qr_#{v.code}.png" }
       %span.code #{v.code} 
