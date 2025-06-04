@@ -13,7 +13,7 @@ class VehiclesController < ApplicationController
   end
 
   def ajax_info
-    vehicle = Vehicle.find_by_qr_code(params[:code])
+    vehicle = Vehicle.find_by_code(params[:code])
     ballot = current_user.ballots.where(year: Date.current.year).first
 
     if vehicle.nil?

@@ -20,6 +20,7 @@
 
             .col-md-4.col-12  
               %ul.list-group.text-sm
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Peoples Choice Hand Count', voting_hand_ballot_path
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Peoples Choice Results', admin_peoples_choice_results_path
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Manage QR Codes', admin_manage_qr_codes_path
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Print packet labels', admin_print_path({item: 'labels'})

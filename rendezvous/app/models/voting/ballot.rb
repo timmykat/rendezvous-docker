@@ -1,7 +1,7 @@
 module Voting
   class Ballot < ApplicationRecord
     
-    STATUSES = ["voting", "submissible:some", "submissible:all", "submitted"]
+    STATUSES = ["voting", "hand_tally", "submissible:some", "submissible:all", "submitted"]
 
     validates :status, presence: true, inclusion: STATUSES
     default_scope { where(year: Date.current.year) }

@@ -106,6 +106,8 @@ Rails.application.routes.draw do
   end
 
   get     '/voting/ballot',                     to: 'voting/ballots#ballot', as: :get_voting_ballot
+  get     '/voting/hand_ballot',               to: 'voting/ballots#hand_ballot'
+  post     '/voting/hand_count',               to: 'voting/ballots#hand_count'
   post    '/voting/ballots/vote',              to: 'voting/ballots#vote', as: :vote
   delete  '/voting/ballots/vehicle/delete',    to: 'voting/ballots#delete_selection', as: :delete_vehicle_selection
   get     '/_ajax/voting/vehicle/:code',        to: 'vehicles#ajax_info'

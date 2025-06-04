@@ -1,0 +1,13 @@
+.card 
+  .card-body
+    .card-title 
+      Hand Count
+    .card-text
+      %p All you need to do is enter the code. The correct category will be assigned.
+
+      = form_tag voting_hand_count_path, method: :post do
+        - (1..@number_of_categories).each do |i|
+          .form-group
+            = text_field_tag "code[]", nil, class: 'form-control', style: "text-transform: uppercase;" 
+        
+        = submit_tag 'Enter', class: 'btn btn-primary'

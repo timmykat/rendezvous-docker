@@ -1,7 +1,29 @@
 module Voting
   class BallotsController < ApplicationController
     
-    layout 'ballot_layout', only: [:ballot]
+    layout 'ballot_layout', only: [:ballot, :hand_ballot]
+
+    before_action :require_admin, only: [:hand_ballot, :hand_count]
+
+    def hand_ballot
+      @ballot = Ballot.new
+      @codes = []
+      @number_of_categories = VehicleTaxonomy::VEHICLES[:marques].values.sum { |marque_data| marque_data[:categories].keys.count }
+    end
+
+    def hand_count
+      @ballot = Ballot.create(year: Date.current.year, status: 'hand_tally')
+      params[:code].each do |code|
+        vehicle = Vehicle.find_by_code(code)
+        vehicle.vote_by(@ballot) unless vehicle.nil?
+      end
+      if @ballot.save
+        flash_notice 'Ballot successfully counted'
+      else
+        flash_alert 'Something went wrong'
+      end
+      redirect_to voting_hand_ballot_path
+    end
 
     def ballot
       ballot_id = params[:ballot_id] || session[:ballot_id]
@@ -18,12 +40,12 @@ module Voting
       end
 
       @code = params[:code]
-      @vehicle = @code.nil? ? nil : Vehicle.find_by_qr_code(@code)
+      @vehicle = @code.nil? ? nil : Vehicle.find_by_code(@code)
     end
 
     def vote
       @ballot = Voting::Ballot.find(params[:ballot_id])
-      vehicle = Vehicle.find_by_qr_code(params[:code])
+      vehicle = Vehicle.find_by_code(params[:code])
 
       if vehicle.nil? || @ballot.nil?
         # Handle error, possibly by rendering a proper error message or redirecting
