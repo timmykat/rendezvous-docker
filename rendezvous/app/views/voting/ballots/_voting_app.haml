@@ -34,6 +34,10 @@
                           .warning-wrapper
                             .warning-info
                               You already selected that one!
+                        - elsif @limit_reached
+                          .warning-wrapper 
+                            .warning-info 
+                              You've reached your vote limit for #{@category}. You need to delete a selection to vote for this one.
                         - elsif !@vehicle.nil?
                           .selection-wrapper
                             .selection-info
@@ -41,9 +45,13 @@
                               .info
                                 .vehicle #{@vehicle.year_marque_model}
                                 .owner Owner: #{@vehicle.user.full_name}
-                          
                           .text-center.d-flex.align-items-center.mt-4
                             = f.submit "Vote", id: 'vote-button', class: "btn btn-primary mr-3"
+                        - else
+                          .warning-wrapper 
+                            .warning-info
+                              That is not a valid selection.                          
+
   
     #tabbed-2
       = render partial: 'selections'  

@@ -10,11 +10,10 @@
               %ul
                 %li 
                   %strong #{category}
-                %li
-                  %ul
+                  %ol
                     - winners.each do |vehicle|
                       %li
                         %p 
-                          #{vehicle[0].year_marque_model}
+                          #{vehicle[0].year_marque_model} &mdash; #{vehicle[0].user.full_name}
                           %br
-                          #{vehicle[0].user.full_name}
+                          Votes: #{vehicle[1]}

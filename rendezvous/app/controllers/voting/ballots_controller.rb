@@ -5,6 +5,8 @@ module Voting
 
     before_action :require_admin, only: [:hand_ballot, :hand_count]
 
+    PER_CATEGORY_LIMIT = 3
+
     def hand_ballot
       @ballot = Ballot.new
       @codes = []
@@ -27,20 +29,22 @@ module Voting
 
     def ballot
       ballot_id = params[:ballot_id] || session[:ballot_id]
+      @code = params[:code]
+      @vehicle = @code.nil? ? nil : Vehicle.find_by_code(@code)
+
       unless ballot_id.nil?
         @ballot = Voting::Ballot.find(ballot_id)
         @ballot.get_status
         @ballot.save
         @selections = @ballot.categorized_selections
+        @category = @vehicle.nil? ? "" : @vehicle.judging_category
         @already_selected = already_selected?(@vehicle)
+        @limit_reached = @vehicle.nil? ? false : limit_reached?(@vehicle)
       else
         @ballot = Ballot.create(year: Date.current.year, status: 'voting')
         session[:ballot_id] = @ballot.id
         @selections = @ballot.categorized_selections
       end
-
-      @code = params[:code]
-      @vehicle = @code.nil? ? nil : Vehicle.find_by_code(@code)
     end
 
     def vote
@@ -71,6 +75,11 @@ module Voting
     private
     def already_selected?(vehicle)
       @ballot.categorized_selections.values.any? { |vehicles| vehicles.include?(vehicle) }
+    end
+
+    def limit_reached?(vehicle)
+      category = vehicle.judging_category
+      @selections[category].size >= PER_CATEGORY_LIMIT
     end
   end
 end

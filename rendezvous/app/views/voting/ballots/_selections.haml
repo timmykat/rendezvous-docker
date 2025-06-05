@@ -4,7 +4,7 @@
       %strong #{category} 
       -if vehicles.nil? || vehicles.length == 0
         .badge.badge-primary.ml-5 No selections
-      - elsif vehicles.length == 3
+      - elsif vehicles.length >= 3
         .badge.badge-warning.ml-5 Limit reached
     - unless vehicles.nil? 
       %ul.vehicles.list-unstyled
