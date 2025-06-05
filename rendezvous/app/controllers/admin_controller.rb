@@ -238,13 +238,13 @@ class AdminController < ApplicationController
     item = params[:item]
     case item
     when 'placards'
-      # @vehicles = Vehicle.joins(:registrations)
-      # .where(registrations: { year: Date.current.year })
-      @vehicles = Vehicle.limit(10)
+      @vehicles = Vehicle.joins(user: :registrations)
+       .where(registrations: { year: 2025 })
+       .distinct
       render :placards
       return
     when 'labels'
-      @registrations = Event::Registration.current.limit(10)
+      @registrations = Event::Registration.current
       render :labels
       return
     when 'certificates'
