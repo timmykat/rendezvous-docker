@@ -14,7 +14,7 @@ class Vehicle < ApplicationRecord
   
   validates :year, inclusion: { in: (1919..2025).map{ |int| int.to_s }, message: "%{value} is not a valid year" }
   validates :marque, presence: true
-  validates :code, presence: true, uniqueness: true
+  before_validation :generate_code
 
   def self.find_by_code(code)
     Vehicle.where("UPPER(code) = ?", code.upcase).first

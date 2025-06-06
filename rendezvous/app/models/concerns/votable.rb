@@ -7,7 +7,8 @@ module Votable
     has_many :ballot_selections, as: :votable, dependent: :destroy
     has_many :ballots, through: :ballot_selections
 
-    before_create :generate_unique_code
+    validates :code, presence: true, uniqueness: true
+    before_validation :generate_unique_code, on: :create
   end
 
   # Handle anonymous voting
@@ -89,7 +90,6 @@ module Votable
         self.code = generate_code
         break unless self.class.exists?(code: code)
       end
-      self.save
     end
 
     def generate_code(length = 4)
