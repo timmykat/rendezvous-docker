@@ -88,6 +88,58 @@ services:
     volumes:
       - ./rendezvous/:/var/www/rendezvous
 
+  worker_prod:
+    build:
+      context: ./rendezvous
+      dockerfile: ../config/docker/Dockerfile
+
+    command: ["bundle","exec","rails","jobs:work"]
+    # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+
+    environment:
+      - APP_DOMAIN
+      - RAILS_ENV
+      - RACK_ENV
+      - RAILS_DEVELOPMENT_HOSTS
+      - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+
+      ## Mail service
+      - MAIL_SERVICE  
+
+      # Mailsender mailer info 
+      - MAILSENDER_SMTP_PASSWORD
+      - MAILSENDER_SMTP_DOMAIN
+      - MAILSENDER_SMTP_PORT
+      - MAILSENDER_SMTP_USER
+      - MAILSENDER_API_KEY
+
+      # Brevo mailer info
+      - BREVO_SMTP_PASSWORD
+      - BREVO_SMTP_DOMAIN
+      - BREVO_SMTP_PORT
+      - BREVO_SMTP_USER
+      - BREVO_API_KEY
+
+      # Mail addresses
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRESS
+
+    networks:
+      rendezvous_prod_network:
+        ipv4_address: 192.168.1.100
+
+    depends_on:
+      - db_prod
+
+    volumes:
+      - ./rendezvous/:/var/www/rendezvous
+
 ## New Relic services
   newrelic-infra:
     container_name: newrelic-infra

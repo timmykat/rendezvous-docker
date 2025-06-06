@@ -93,6 +93,62 @@ services:
       - ./rendezvous:/var/www/rendezvous
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
+  worker:
+    image: rails_image
+    build:
+      context: ./rendezvous
+      dockerfile: ../config/docker/Dockerfile
+    
+
+    command: ["bundle","exec","rails","jobs:work"]
+
+    environment:
+      - APP_DOMAIN
+      - RAILS_ENV
+      - RACK_ENV
+      - RAILS_DEVELOPMENT_HOSTS
+      - RAILS_SECRET_KEY_BASE
+      - RECAPTCHA_PUBLIC_KEY
+      - RECAPTCHA_PRIVATE_KEY
+      - MAILCHIMP_API_KEY
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD 
+
+      ## Mail service
+      - MAIL_SERVICE  
+
+      # Mailsender mailer info 
+      - MAILSENDER_SMTP_PASSWORD
+      - MAILSENDER_SMTP_DOMAIN
+      - MAILSENDER_SMTP_PORT
+      - MAILSENDER_SMTP_USER
+      - MAILSENDER_API_KEY
+
+      # Brevo mailer info
+      - BREVO_SMTP_PASSWORD
+      - BREVO_SMTP_DOMAIN
+      - BREVO_SMTP_PORT
+      - BREVO_SMTP_USER
+      - BREVO_API_KEY
+
+      # Mail addresses
+      - SITE_ADMIN_SENDING_ADDRESS
+      - INFO_SENDING_ADDRESS
+
+    links:
+      - db
+
+    networks:
+      - rendezvous
+
+    depends_on:
+      - db
+
+    volumes:
+      - ./rendezvous:/var/www/rendezvous
+      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
+
   db:
     image: mysql:8.0.32
     platform: linux/amd64

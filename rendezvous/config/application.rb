@@ -45,6 +45,7 @@ module Rendezvous
       'Pragma' => 'no-cache',
       'Expires' => '0'
     }
+    config.active_job.queue_adapter = :delayed_job
 
     config.assets.paths << Rails.root.join("app", "assets", "images")
     

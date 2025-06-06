@@ -225,12 +225,13 @@ class AdminController < ApplicationController
   def generate_qr_codes
     regenerate = params[:regenerate] == "true"
     if regenerate
+      Rails.logger.debug "Removing old QR codes"
       FileUtils.rm_rf(Dir.glob(Rails.root.join('public', 'qr_codes', '*')))
     end
-    @vehicles = Vehicle.all
-    @vehicles.each do |v|
-      v.create_qr_code(regenerate)
-    end
+    Rails.logger.debug "Kicking off job"
+    QrGenerationJob.perform_later(regenerate)
+    flash_notice 'QR generation job started'
+    @vehicles = nil
     redirect_to admin_manage_qr_codes_path
   end
 
