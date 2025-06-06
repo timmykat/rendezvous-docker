@@ -54,6 +54,7 @@ module Votable
     return unless regenerate
 
     generate_unique_code
+    self.save
     url = get_voting_ballot_url({code: self.code})
     qr = RQRCode::QRCode.new(url) 
     qr_png = qr.as_png(border_modules: 4, size: 300)
