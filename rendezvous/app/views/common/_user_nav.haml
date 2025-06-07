@@ -1,39 +1,44 @@
 %ul.nav.navbar-nav
-  - unless registration_is_open
-    %li.nav-item.placeholder #{"&nbsp;&nbsp;".html_safe}
-  - else
-    - if !current_user
+  %li.nav-item.dropdown
+    - if !registration_is_open
       %li.nav-item
-        = link_to 'Sign In', new_user_session_path, class: 'nav-link'
+        .span.badge.badge-danger Registration Is Now Closed!
+    - if registration_is_open && current_user.nil?
+      %li.nav-item
+      = link_to 'Sign In', new_user_session_path, class: 'nav-link'
     - else
-      %li.nav-item.dropdown
-        %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
-          My Registration
-        .dropdown-menu{'aria-labelledBy' => 'navbarDropdown'}
-          .dropdown-item
-            %em= current_user.full_name
-          .dropdown-divider
-          - if !current_registration 
-            = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
-          - elsif registration_complete
-            = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
-            = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
-          - else
-            = link_to 'Review my registration', review_event_registration_path(current_registration), class: 'dropdown-item'
-            = link_to 'Pay for my registration', payment_event_registration_path(current_registration), class: 'dropdown-item'    
-          = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
-          = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item', data: { turbo: false }   
-          - if user_is_admin?
-            .dropdown-divider
-            .dropdown-item 
-              %strong Admin Menu
-            = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
-            = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
-            = link_to 'Active Users', admin_dashboard_path({user_type: 'active'}), class: 'dropdown-item'   
-            = link_to 'Vendors', admin_dashboard_path({user_type: 'vendors'}), class: 'dropdown-item'
-            = link_to 'Any Registrants', admin_dashboard_path({user_type: 'registrant'}), class: 'dropdown-item'                              
-            = link_to 'All Users', admin_dashboard_path({user_type: 'all_users'}), class: 'dropdown-item' 
-            = link_to 'Site Testers', admin_dashboard_path({user_type: 'testers'}), class: 'dropdown-item'  
-            = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
+      %li.nav-item.placeholder #{"&nbsp;&nbsp;".html_safe}
+    - if user_is_admin?
+      .dropdown-item 
+        %strong Admin Menu
+        = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
+        = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
+        = link_to 'Active Users', admin_dashboard_path({user_type: 'active'}), class: 'dropdown-item'   
+        = link_to 'Vendors', admin_dashboard_path({user_type: 'vendors'}), class: 'dropdown-item'
+        = link_to 'Any Registrants', admin_dashboard_path({user_type: 'registrant'}), class: 'dropdown-item'                              
+        = link_to 'All Users', admin_dashboard_path({user_type: 'all_users'}), class: 'dropdown-item' 
+        = link_to 'Site Testers', admin_dashboard_path({user_type: 'testers'}), class: 'dropdown-item'  
+        = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
+      .dropdown-divider 
+
+  - if registration_is_open && current_user
+    %li.nav-item
+      %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
+        My Registration
+      .dropdown-menu{'aria-labelledBy' => 'navbarDropdown'}
+        .dropdown-item
+          %em= current_user.full_name
+        .dropdown-divider
+        - if !current_registration 
+          = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
+        - elsif registration_complete
+          = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
+          = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
+        - else
+          = link_to 'Review my registration', review_event_registration_path(current_registration), class: 'dropdown-item'
+          = link_to 'Pay for my registration', payment_event_registration_path(current_registration), class: 'dropdown-item'    
+        = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
+        = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item', data: { turbo: false }  
+
 
         

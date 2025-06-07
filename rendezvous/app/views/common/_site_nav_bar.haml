@@ -7,25 +7,57 @@
             %nav.nav.navbar.navbar-dark.navbar-expand-lg.bg-nav
               %button.navbar-toggler{type: 'button', 'data-toggle' => 'collapse', 'data-target' => '#navbarContent' }
                 %span.navbar-toggler-icon
-              .collapse.navbar-collapse.justify-content-between#navbarContent
+
+              .collapse.navbar-collapse#navbarContent
                 %ul.nav.navbar-nav
-                  %li.nav-item
-                    = link_to 'Home', root_path, class: 'nav-link'
-                  %li.nav-item
-                    = link_to 'Schedule Overview', root_path + '#schedule-overview', class: 'nav-link'
-                  %li.nav-item
-                    = link_to 'Vendors', vendors_path, class: 'nav-link'
-                  %li.nav-item
-                    = link_to 'Volunteering', volunteering_path, class: 'nav-link'
-                  %li.nav-item
-                    = link_to 'Donate', new_donation_path, class: 'nav-link'                  
+                  %li.nav-item= link_to 'Home', root_path, class: 'nav-link'
+                  %li.nav-item= link_to 'Schedule Overview', root_path + '#schedule-overview', class: 'nav-link'
+                  %li.nav-item= link_to 'Vendors', vendors_path, class: 'nav-link'
+                  %li.nav-item= link_to 'Volunteering', volunteering_path, class: 'nav-link'
+                  %li.nav-item= link_to 'Donate', new_donation_path, class: 'nav-link'
                   - if vehicles_for_sale > 0
-                    %li.nav-item
-                      = link_to "For Sale (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
-                  
-                  -unless registration_is_open
-                    %li.nav-item
-                      %span.badge.badge-danger Registration Is Now Closed!
+                    %li.nav-item= link_to "For Sale (#{vehicles_for_sale})", vehicles_for_sale_path, class: 'nav-link'
 
-                = render partial: 'common/user_nav'
+                / Right-aligned section
+                %ul.nav.navbar-nav.ml-auto
+                  - if !registration_is_open
+                    %li.nav-item
+                      %span.badge.badge-danger.mt-2 Registration Is Now Closed!
+                  - elsif registration_is_open && current_user.nil?
+                    %li.nav-item= link_to 'Sign In', new_user_session_path, class: 'nav-link'
 
+                  - elsif current_user
+                    %li.nav-item.dropdown
+                      %a.nav-link.dropdown-toggle#navbarDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
+                        My Registration
+                      .dropdown-menu.dropdown-menu-right{'aria-labelledby' => 'navbarDropdown'}
+                        %span.dropdown-item
+                          %em= current_user.full_name
+                        .dropdown-divider
+                        - if !current_registration
+                          = link_to "Register", new_event_registration_path, class: 'dropdown-item'
+                        - elsif registration_complete
+                          = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
+                          = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
+                        - else
+                          = link_to 'Review my registration', review_event_registration_path(current_registration), class: 'dropdown-item'
+                          = link_to 'Pay for my registration', payment_event_registration_path(current_registration), class: 'dropdown-item'
+                        = link_to 'View my info', user_path(current_user), class: 'dropdown-item'
+                        = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item', data: { turbo: false }
+
+                  - if user_is_admin?
+                    %li.nav-item.dropdown
+                      %a.nav-link.dropdown-toggle#adminDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
+                        Admin
+                      .dropdown-menu.dropdown-menu-right{'aria-labelledby' => 'adminDropdown'}
+                        %span.dropdown-item
+                          %strong Admin Menu
+                        .dropdown-divider
+                        = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
+                        = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
+                        = link_to 'Active Users', admin_dashboard_path({user_type: 'active'}), class: 'dropdown-item'
+                        = link_to 'Vendors', admin_dashboard_path({user_type: 'vendors'}), class: 'dropdown-item'
+                        = link_to 'Any Registrants', admin_dashboard_path({user_type: 'registrant'}), class: 'dropdown-item'
+                        = link_to 'All Users', admin_dashboard_path({user_type: 'all_users'}), class: 'dropdown-item'
+                        = link_to 'Site Testers', admin_dashboard_path({user_type: 'testers'}), class: 'dropdown-item'
+                        = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
