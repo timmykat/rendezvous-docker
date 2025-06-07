@@ -8,6 +8,8 @@ require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
+require "active_storage/engine"
+
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -46,6 +48,8 @@ module Rendezvous
       'Expires' => '0'
     }
     config.active_job.queue_adapter = :delayed_job
+
+    config.active_storage.service = :local
 
     config.assets.paths << Rails.root.join("app", "assets", "images")
     

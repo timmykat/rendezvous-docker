@@ -9,6 +9,7 @@ class Vehicle < ApplicationRecord
 
   has_many :ballot_selections, as: :votable, class_name: 'Voting::BallotSelection', dependent: :destroy
   has_many :ballots, through: :ballot_selection
+  has_one :qr_code, as: :votable
 
   scope :for_sale, -> { where(for_sale: true) }
   

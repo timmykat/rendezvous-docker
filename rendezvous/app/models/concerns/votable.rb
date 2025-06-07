@@ -7,8 +7,7 @@ module Votable
     has_many :ballot_selections, as: :votable, dependent: :destroy
     has_many :ballots, through: :ballot_selections
 
-    validates :code, presence: true, uniqueness: true
-    before_validation :generate_unique_code, on: :create
+    has_one :qr_code
   end
 
   # Handle anonymous voting
@@ -83,18 +82,4 @@ module Votable
       puts "⚠️ Image not found at #{logo_path}"
     end
   end
-
-
-  private
-    def generate_unique_code
-      loop do
-        self.code = generate_code
-        break unless self.class.exists?(code: code)
-      end
-    end
-
-    def generate_code(length = 4)
-      chars = %w[A C D E F G H J K L M N P Q R T U V W X Y Z 2 3 4 5 6 7 8 9] # User friendly characters
-      Array.new(length) { chars.sample }.join
-    end
 end
