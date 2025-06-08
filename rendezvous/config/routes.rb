@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
   resources :venues, { except: [:index, :show] }
 
+  resources :vehicles
   get 'vehicles/for_sale', to: 'vehicles#for_sale'
 
   resources :event_hotels, { except: [:new, :index, :show] }
@@ -81,6 +82,8 @@ Rails.application.routes.draw do
     end
     resources :registrations, except: [:index]
     get '/welcome', to: 'registrations#welcome'
+    get '/registration/by_admin', to: 'registrations#by_admin'
+    post '/registration/create_by_admin', to: 'registrations#create_by_admin'
   end
 
 

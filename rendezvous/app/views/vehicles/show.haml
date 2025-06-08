@@ -1,0 +1,11 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-title 
+          %h1.h3 Vehicle #{@vehicle.id}
+        .card-body 
+          .card-text
+            %p #{@vehicle.year_marque_model}
+            %p #{@vehicle.details}
+            %p Owner: #{@vehicle.user.full_name}

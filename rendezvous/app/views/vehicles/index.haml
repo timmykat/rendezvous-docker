@@ -1,0 +1,32 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body
+          .card-title 
+            %h1.h3 All Vehicles
+          .card-text
+            %table
+              %thead
+                %tr
+                  %th
+                    Owner
+                  %th
+                    Vehicle
+                  %th
+                    Code
+                  %th
+                    QR Code
+              %tbody
+                - @vehicles.each do |v|
+                  %tr
+                    %td= link_to 'Edit', edit_vehicle_path(v)
+                    %td #{v.user.full_name}
+                    %td #{v.year_marque_model}
+                    %td #{v.code}
+                    %td
+                      - if v.server_qr_file_path
+                        %div{style: 'padding: 5px 20px'}
+                          = image_tag v.server_qr_file_path, {style: 'width: 60px; height: 60px;'}
+                      - else 
+                        (no image yet)

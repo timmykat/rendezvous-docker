@@ -19,6 +19,6 @@
       %span.value #{v.judging_category}
         
     .qr-code-id 
-      %img{ src: "/qr_codes/qr_#{v.code}.png" }
+      = image_tag url_for(v.qr_code.image)
       %span.code #{v.code} 
       %span (People's Choice ID)

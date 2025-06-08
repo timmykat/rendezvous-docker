@@ -9,16 +9,16 @@ class Vehicle < ApplicationRecord
 
   has_many :ballot_selections, as: :votable, class_name: 'Voting::BallotSelection', dependent: :destroy
   has_many :ballots, through: :ballot_selection
-  has_one :qr_code, as: :votable
+  has_one :qr_code, as: :votable, inverse_of: :votable
 
   scope :for_sale, -> { where(for_sale: true) }
   
   validates :year, inclusion: { in: (1919..2025).map{ |int| int.to_s }, message: "%{value} is not a valid year" }
   validates :marque, presence: true
-  before_validation :generate_code
 
   def self.find_by_code(code)
-    Vehicle.where("UPPER(code) = ?", code.upcase).first
+    qr_code = QrCode.where("UPPER(code) = ?", code.upcase).first
+    Vehicle.where(qr_code: qr_code)
   end
   
   def full_spec

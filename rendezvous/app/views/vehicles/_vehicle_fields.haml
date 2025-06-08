@@ -1,0 +1,76 @@
+- config = Rails.configuration.rendezvous
+- vehicle = f.object
+%rendezvous-vehicle{ class: "card#{" nested-fields" if nested}"}
+  .card-body{'data-autocomplete' => "email_lookup"}
+    .card-text
+      .row
+        .col-md-4.col-12
+          .form-group
+            = f.input :year, collection:  [*1919..2015].reverse, selected:  (f.object.year.blank? ? nil : f.object.year), include_blank:  '-- Select year --'
+      .row.marques
+        .col-12
+          %table.table
+            %thead
+              %tr
+                %th
+                  %label Marque
+                %th
+                  %label Model
+            %tbody
+              %tr.selects
+                %td
+                  .form-group.marque-select
+                    = select_tag :select_marque, options_for_select(marques, selected:  selected_marque(vehicle)), class:  'form-control select-sm marque'
+                %td
+                  .form-group.model-select
+                    = select_tag :select_model, options_for_select(citroen_models, selected:  selected_model(vehicle)), include_blank:  '-- Select Citroën model --', class:  'form-control select-sm model'
+              %tr.fill-in
+                %td
+                  .form-group.other-marque-text
+                    %label Non-French Marque
+                    = text_field_tag :other_marque, nil, class:  'form-control  input-sm marque text'
+                    
+                %td
+                  .form-group.other-model-field
+                    %label Non-Citroen Model
+                    = text_field_tag :other_model, nil, class:  'form-control input-sm model text'
+              %tr.form-values
+                %td{ colspan: 2}
+                  = f.input :marque, as: :hidden, value:  vehicle.marque, input_html: { class: 'marque data' }
+                  = f.input :model, as: :hidden, value: vehicle.model, input_html: { class: 'model data' }
+
+          .col-md-12
+            .form-group
+              = f.input :other_info, input_html:  { class: 'input-sm', placeholder:  'Unusual Citroen model, distinguishing features, historical notes, etc.' }
+
+          .col-md-12
+            %p We are offering the opportunity for you to let people know if your vehicle will be for sale at the Rendezvous. 
+            = f.input :for_sale, as: :boolean, label: "This vehicle will be for sale"
+
+      - unless nested
+        .row 
+          .col-md-12 
+            .form-group
+              - if !vehicle.qr_code.present?
+                - if @available_qr_codes.blank?
+                  %p Please generate unattached QR codes.
+                - else 
+                  = f.input :qr_code, collection: @available_qr_codes, as: :select, label: 'Voting code for Peoples Choice Award'
+              - else
+                %label Voting code for Peoples Choice Award
+                = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control', disabled: true
+      
+            .form-group
+              - if vehicle.user.present?
+                %p Owner: #{vehicle.user.full_name}
+              - else
+                %label Email lookup to attach owner
+                = text_field_tag :email_lookup, '', class: 'form-control'
+                = f.input :user_id, as: :hidden, input_html: {'data-autocomplete-target' => ''}
+
+      - if nested
+        %br
+        = link_to_remove_association "#{icon(:minus)}#{icon(:car)}".html_safe, f
+        Remove this vehicle
+
+

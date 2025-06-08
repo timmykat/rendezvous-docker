@@ -3,7 +3,7 @@ module Event
     layout "registrations_layout"
 
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
-    before_action :require_admin, only: [:index]
+    before_action :require_admin, only: [:index, :register_by_admin]
     before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
@@ -11,7 +11,7 @@ module Event
     skip_before_action :verify_authenticity_token, only: [:show]
 
     def check_cutoff
-      if Time.now > Config::SiteSetting.instance.registration_close_date
+      if !current_user&.admin? && Time.now > Config::SiteSetting.instance.registration_close_date
         flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
         redirect_to :root
       end
@@ -63,9 +63,21 @@ module Event
       @event_registration.user.vehicles.build
     end
 
+    def by_admin
+      session[:admin_created] = true
+      @title = "Registration by admin"
+      @step = 'create'
+      @annual_question = AnnualQuestion.where(year: Date.current.year).first
+      @event_registration = Registration.new(created_by_admin: true)
+      @event_registration.attendees.build
+      @event_registration.build_user
+      @event_registration.user.vehicles.build
+    end
+
     # Create or update the user
     def create
       email = params[:event_registration][:user_attributes][:email]
+      user_id = params[:event_registration][:user_attributes][:id] || params[:event_registration][:user_id]
 
       failure_message = verify_recaptcha?(params[:recaptcha_token], 'register_event', email)
       if failure_message
@@ -74,8 +86,8 @@ module Event
         return
       end
 
-      if current_user && !current_user.admin?
-        user = User.find(current_user.id)
+      if !user_id.nil?
+        user = User.find(user_id)
         if !user.update(event_registration_user_params)
           flash_alert 'There was a problem saving the user.'
           flash_alert user.errors.full_messages.to_sentence
@@ -117,6 +129,40 @@ module Event
         render :new and return
       else
         sign_in(@event_registration.user) unless (session[:user_admin] || user_signed_in?)
+        redirect_to review_event_registration_path(@event_registration)
+      end
+    end
+
+    def create_by_admin
+      user_id = params[:event_registration][:user_attributes][:id]
+      email = params[:event_registration][:user_attributes][:email]
+      if !user_id.nil?
+        user = User.find(user_id)
+      end
+      if !user.present?
+        user = User.find_by_email(email)
+      end
+      if !user.present?
+        user = create_new_user
+      end
+
+      failure_message = verify_recaptcha?(params[:recaptcha_token], 'register_event', email)
+      if failure_message
+        Rails.logger.warn "Event registration: recaptcha failed for #{email}"
+        redirect_to root_path, notice: failure_message
+        return
+      end
+
+      # Remove user attributes now that we have user
+      params[:event_registration][:user_attributes] = nil
+      @event_registration = Registration.new(event_registration_params)
+      @event_registration.user = user
+
+      if !@event_registration.save
+        flash_alert_now('There was a problem creating the registration.')
+        flash_alert_now @event_registration.errors.full_messages.to_sentence
+        render :by_admin and return
+      else
         redirect_to review_event_registration_path(@event_registration)
       end
     end
@@ -267,7 +313,11 @@ module Event
       if @event_registration.save
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to update_vehicles_event_registration_path(@event_registration)
+        if current_user.admin?
+          redirect_to user_path(@event_registration.user)
+        else
+          redirect_to update_vehicles_event_registration_path(@event_registration)
+        end
         return 
       else 
         flash_alert 'There was a problem completing your registration.'
@@ -292,7 +342,7 @@ module Event
             @event_registration.save
           end
           flash_notice 'The registration was successfully updated.'
-          redirect_to admin_dashboard_path
+          redirect_to user_path(@event_registration.user)
         end
         return
       end
@@ -373,6 +423,21 @@ module Event
     end
 
     private
+      def create_new_user
+        password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
+        params[:event_registration][:user_attributes][:password] = password
+        params[:event_registration][:user_attributes][:password_confirmation] = password
+        user = User.new(event_registration_user_params)
+        if !user.save
+          flash_alert_now 'There was a problem saving that user information.'
+          flash_alert_now user.errors.full_messages.to_sentence
+          render :by_admin
+          return
+        else
+          return user
+        end
+      end
+
       # Only allows admins and owners to see registration
       def owner_or_admin
         unless (current_user.id == Registration.find(params[:id]).user_id) || (current_user.has_role? :admin)

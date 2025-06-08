@@ -46,6 +46,7 @@ export const initAutocomplete = () => {
       const autoComplete = document.querySelector('[data-autocomplete]');
       const fieldName = autoComplete.getAttribute('data-autocomplete');
       const targetFields = autoComplete.querySelectorAll('[data-autocomplete-target]');
+      const firstAttendeeField = document.querySelector('input[name="event_registration[attendees_attributes][0][name]"')
       const autocompleteTrigger = autoComplete.querySelector(`input[name*=${fieldName}]`);
   
       const autocompleteUrl = '/ajax/user/autocomplete';
@@ -70,28 +71,29 @@ export const initAutocomplete = () => {
         });
       };
   
-      const debounceAutocomplete = debounce(500, function(event) {
+      const debounceAutocomplete = debounce(1000, function(event) {
+        console.log(event)
         const field = event.target;
         let name = field.getAttribute('name');
+        console.log(name)
         if (name == null) return;
-        const searchAttribute = extractAttribute(name);
-        const searchValue = encodeURIComponent(field.value);
+        const searchAttribute = extractAttribute(name)
+        const searchValue = encodeURIComponent(field.value)
         let url = `${autocompleteUrl}?${searchAttribute}=${searchValue}`;
+        console.log('Autocomplete url: ', url)
         if (newRegistrationPage) {
           url += '&reg_page=1';
         }
         fetch(url, { headers: getCsrfHeaders() })
           .then(response => response.json())
           .then(data => {
+            console.log('Fetch data:', data)
             if (data.status === 'not found') {
               clearFields(targetFields);
               return;
             }
             if (data.existing_registration) {
-              const alert = document.querySelector('.alert');
-              alert.classList.remove('alert-warning');
-              alert.classList.add('alert-danger');
-              alert.innerHTML = `This user already has a registration: <a href="${data.existing_registration}">EDIT</a>`;
+              alert(`This user already has a registration! (${data.existing_registration})`)
               return;
             }
             targetFields.forEach(field => {
@@ -99,6 +101,7 @@ export const initAutocomplete = () => {
               let dataAttribute = extractAttribute(name);
               field.value = data[dataAttribute];
             });
+            firstAttendeeField.value = `${data.first_name} ${data.last_name}`
           });
       });
   

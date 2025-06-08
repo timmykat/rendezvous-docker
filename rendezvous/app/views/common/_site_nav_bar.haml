@@ -54,6 +54,7 @@
                           %strong Admin Menu
                         .dropdown-divider
                         = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
+                        = link_to 'Create a registration', event_registration_by_admin_path, class: 'dropdown-item'
                         = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
                         = link_to 'Active Users', admin_dashboard_path({user_type: 'active'}), class: 'dropdown-item'
                         = link_to 'Vendors', admin_dashboard_path({user_type: 'vendors'}), class: 'dropdown-item'

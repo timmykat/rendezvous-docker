@@ -232,6 +232,7 @@ module ApplicationHelper
   end
 
   def selected_marque(vehicle)
+    return nil if vehicle.nil?
     if marques.include? vehicle.marque
       vehicle.marque
     elsif vehicle.marque.blank?
@@ -242,12 +243,14 @@ module ApplicationHelper
   end
 
   def other_marque(vehicle)
+    return nil if vehicle.nil?
     if !marques.include? vehicle.marque
       vehicle.marque
     end
   end
 
   def selected_model(vehicle)
+    return nil if vehicle.nil?
     if citroen_models.include? vehicle.model
       vehicle.model
     else

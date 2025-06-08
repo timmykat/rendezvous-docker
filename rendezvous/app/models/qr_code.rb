@@ -42,7 +42,7 @@ class QrCode < ApplicationRecord
     Array.new(length) { chars.sample }.join
   end
 
-  def self.generate_image(url)
+  def self.generate_image(path, url)
     qr = RQRCode::QRCode.new(url) 
     qr_png = qr.as_png(border_modules: 4, size: 300)
     qr_image = MiniMagick::Image.read(qr_png.to_s)
@@ -64,7 +64,7 @@ class QrCode < ApplicationRecord
       end
     end
 
-    qr_image.write(full_qr_file_path)
-    puts "QR image generated and saved to #{full_qr_file_path}"    
+    qr_image.write(path)
+    puts "QR image generated and saved to #{path}"    
   end
 end

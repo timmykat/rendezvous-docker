@@ -28,7 +28,8 @@ console.log('Tabs loaded')
 import '../modules/main_pages';
 import '../modules/registration';
 import '../modules/user'; 
-import '../modules/vehicles';
+import { Vehicle } from '../modules/Vehicle';
+window.customElements.define('rendezvous-vehicle', Vehicle)
 
 import { Cookies } from "js-cookie"
 window.Cookies = Cookies

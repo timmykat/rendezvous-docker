@@ -21,7 +21,7 @@ class User < ApplicationRecord
 
   has_many :pictures, dependent: :destroy
   has_many :vehicles, dependent: :destroy
-  has_many :registrations, class_name: 'Event::Registration'
+  has_many :registrations, class_name: 'Event::Registration', inverse_of: :user
   has_many :authorizations
   has_one  :vendor, foreign_key: :owner_id
   has_many :donations

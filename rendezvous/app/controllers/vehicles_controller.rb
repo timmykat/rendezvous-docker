@@ -1,5 +1,32 @@
 class VehiclesController < ApplicationController
-  before_action :authenticate_user!, { only: [:my_vehicles] }
+  before_action :authenticate_user!, { only: [:new, :edit, :my_vehicles] }
+  before_action :require_admin, { only: [:index] }
+
+  def index
+    @vehicles = Vehicle.all
+  end
+  
+  def new
+    @vehicle = Vehicle.new
+  end
+
+  def show
+    @vehicle = Vehicle.find(params[:id])
+  end
+
+  def edit
+    @vehicle = Vehicle.find(params[:id])
+  end
+
+  def create
+    @vehicle = Vehicle.create(vehicle_params)
+    if @vehicle.persisted?
+      flash_notice 'The vehicle was successfully created'
+      redirect_to vehicle_path(@vehicle)
+    else
+      flash_alert @vehicle.errors.full_messages
+    end
+  end
 
   def my_vehicles
     @vehicles = current_user.vehicles.all
@@ -40,5 +67,15 @@ class VehiclesController < ApplicationController
         render json: data
       end
     end
+  end
+
+  private
+  def vehicle_params
+    params.require(:vehicle).permit(
+      :year,
+      :marque,
+      :model,
+      :user_id
+    )
   end
 end
