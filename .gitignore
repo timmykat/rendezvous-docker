@@ -20,6 +20,9 @@ mysql-config.yml
 # Ignore ssl certs
 certs
 
+# Ignore storage
+rendezvous/storage
+
 # Ignore bundler config.
 rendezvous/.bundle
 
