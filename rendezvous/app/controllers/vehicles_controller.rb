@@ -18,6 +18,17 @@ class VehiclesController < ApplicationController
     @vehicle = Vehicle.find(params[:id])
   end
 
+  def update
+    @vehicle = Vehicle.find(params[:i])
+    if @vehicle.update(vehicle_params)
+      flash_notice 'Updated'
+      redirect_to vehicle_path(@vehicle.id)
+    else
+      flash_alert @vehicle.errors.full_messages
+      render :edit
+    end
+  end
+
   def create
     @vehicle = Vehicle.create(vehicle_params)
     if @vehicle.persisted?
@@ -75,7 +86,8 @@ class VehiclesController < ApplicationController
       :year,
       :marque,
       :model,
-      :user_id
+      :user_id,
+      qr_code_attributes: [:id, :code, :_destroy]
     )
   end
 end

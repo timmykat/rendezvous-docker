@@ -1,0 +1,24 @@
+- @qr_codes.each do |qr_code|     
+  .placard
+    %header
+      .logo
+        %img{ src: asset_url('R25_iconique.png')}
+      .text
+        Citroen Rendezvous 2025
+
+    .datum
+      %span.label Vehicle:
+      %span.value
+
+    .datum 
+      %span.label Owner:
+      %span.value
+
+    .datum
+      %span.label Category:
+      %span.value
+        
+    .qr-code-id 
+      = image_tag url_for(qr_code.image)
+      %span.code #{qr.code} 
+      %span (People's Choice ID)

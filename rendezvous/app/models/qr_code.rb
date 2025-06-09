@@ -8,15 +8,20 @@ class QrCode < ApplicationRecord
 
   before_validation :generate_unique_code
 
+  scope :unassigned, -> {
+    where(votable_type: nil).where(votable_id: nil)
+  }
+
   def self.generate!(max_attempts = 5)
     attempts = 0
     begin
-      QrCode.create!
+      qr = QrCode.create!
     rescue ActiveRecord::RecordNotUnique
       attempts += 1
       retry if attempts < max_attempts
       raise
     end
+    return qr.code
   end
 
   def assigned?

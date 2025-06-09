@@ -7,5 +7,6 @@
         .card-body 
           .card-text
             %p #{@vehicle.year_marque_model}
-            %p #{@vehicle.details}
+            %p #{@vehicle.other_info}
             %p Owner: #{@vehicle.user.full_name}
+            %p= link_to 'Edit this vehicle', edit_vehicle_path(@vehicle), class: 'btn btn-primary'

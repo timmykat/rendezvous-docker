@@ -1,0 +1,13 @@
+.container-fluid.px-0
+  .row.no-gutters.bg-nav
+    .col-12
+      .container
+        .row
+          .col-12
+            %nav.nav.navbar.navbar-dark.navbar-expand-lg.bg-nav
+              %ul.nav.navbar-nav
+                %li.nav-item= link_to 'Create User', new_user_by_admin_path, class: 'btn btn-primary'
+                %li.nav-item= link_to 'Create Registration', new_by_admin_path, class: 'btn btn-primary'
+                %li.nav-item= link_to 'Create Vehicle', vehicle_path, class: 'btn btn-info'
+                %li.nav-item= link_to 'User List', users_path, class: 'btn btn-info'
+                %li.nav-item= link_to 'Take Donation', new_donation_path, class: 'btn btn-warn'

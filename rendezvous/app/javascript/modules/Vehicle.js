@@ -14,7 +14,6 @@ export class Vehicle extends HTMLElement {
     this.marqueDataField = this.querySelector('input.marque.data')
     this.modelDataField = this.querySelector('input.model.data')
     this.setEventListeners()
-    this.setInitialControls()
   }
 
   setEventListeners () {
@@ -34,18 +33,22 @@ export class Vehicle extends HTMLElement {
       this.setInputFieldStates()
       this.updateFormValues()
     })
+    document.addEventListener('DOMContentLoaded', () => {
+      this.setInitialControls()
+    })
   }
 
   setInitialControls () {
     const marque = this.marqueDataField?.value
     const model = this.modelDataField?.value
-
+    console.log("Marque: ", marque)
+    console.log("Model: ", model)
     if (!marque) {
       console.log('No initial data')
       return
     }
 
-    if (!(marque !== 'Citroen' || OTHER_FRENCH.includes(marque))) {
+    if (!(marque === 'Citroen' || OTHER_FRENCH.includes(marque))) {
       this.marqueSelect.value = 'Non-French'
       this.otherMarqueText = marque
     } else {

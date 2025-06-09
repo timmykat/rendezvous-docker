@@ -244,6 +244,10 @@ class AdminController < ApplicationController
        .distinct
       render :placards
       return
+    when 'blank_placards'
+      @qr_codes = QrCode.where("votable IS NULL").limit(30)
+      render :placards
+      return
     when 'labels'
       @registrations = Event::Registration.current
       render :labels

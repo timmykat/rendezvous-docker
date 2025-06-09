@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     @user = User.new
     @user.is_admin_created = true
     @user.vehicles.build
+    @available_qr_codes = QrCode.unassigned
   end
 
   def create_user_by_admin
@@ -127,7 +128,8 @@ class UsersController < ApplicationController
         :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :is_admin_created, 
         :citroenvie,
           {vehicles_attributes:
-            [:id, :year, :marque, :model, :other_info, :for_sale, :_destroy]
+            [:id, :year, :marque, :model, :other_info, :for_sale, :_destroy,
+            qr_code_attributes: [:id, :code, :_destroy]]
           }
         ]
       )

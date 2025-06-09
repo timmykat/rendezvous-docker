@@ -46,10 +46,9 @@
               = f.input :other_info, input_html:  { class: 'input-sm', placeholder:  'Unusual Citroen model, distinguishing features, historical notes, etc.' }
 
           .col-md-12
-            %p We are offering the opportunity for you to let people know if your vehicle will be for sale at the Rendezvous. 
             = f.input :for_sale, as: :boolean, label: "This vehicle will be for sale"
 
-      - unless nested
+      - if user_is_admin?
         .row 
           .col-md-12 
             .form-group
@@ -57,7 +56,7 @@
                 - if @available_qr_codes.blank?
                   %p Please generate unattached QR codes.
                 - else 
-                  = f.input :qr_code, collection: @available_qr_codes, as: :select, label: 'Voting code for Peoples Choice Award'
+                  = f.input :qr_code, collection: @available_qr_codes.map { |q| [q.code, q.id] }, as: :select, label: 'Voting code for Peoples Choice Award', include_blank: '--- Select a code ---'
               - else
                 %label Voting code for Peoples Choice Award
                 = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control', disabled: true

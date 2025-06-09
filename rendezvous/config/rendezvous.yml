@@ -52,6 +52,7 @@ payment_methods:
   - check
   - cash
   - cash or check
+  - square on site
   - no payment
 registration_statuses:
   - initiated
