@@ -6,6 +6,6 @@
           .card-text
             %h1.h3 Create Vehicle
             = simple_form_for @vehicle do |f|
-              = render partial: 'vehicle_fields', locals: { f: f, nested: false }
+              = render partial: 'vehicle_fields', locals: { f: v, nested: false }
               .form-group
                 = f.button :submit, input_html:  { value:  'Create vehicle' }, class:  "btn  btn-primary"

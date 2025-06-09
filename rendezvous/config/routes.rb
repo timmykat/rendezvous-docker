@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   end
 
   resources :users
+  get :index, to: 'users#index'
   get :new_user_by_admin, to: 'users#new_user_by_admin'
   post :create_user_by_admin, to: 'users#create_user_by_admin'
 

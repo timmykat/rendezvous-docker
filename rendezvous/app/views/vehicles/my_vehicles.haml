@@ -6,7 +6,7 @@
       %p Please add the vehicles you are bringing to the Rendezvous.
       #vehicles{ 'data-cocoon': true }
         = f.simple_fields_for @vehicles do |v|
-          = render 'vehicle_fields', f:  v
+          = render partial: 'vehicle_fields', locals: { f: v, nested: true }
         .links
           = link_to_add_association "#{icon(:plus)}#{icon(:car)}".html_safe.html_safe, f, :vehicles
           Add a vehicle

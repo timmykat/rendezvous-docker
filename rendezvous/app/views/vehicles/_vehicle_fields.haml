@@ -2,11 +2,13 @@
 - vehicle = f.object
 %rendezvous-vehicle{ class: "card#{" nested-fields" if nested}"}
   .card-body{'data-autocomplete' => "email_lookup"}
+    .card-title 
+      Vehicle
     .card-text
       .row
         .col-md-4.col-12
           .form-group
-            = f.input :year, collection:  [*1919..2015].reverse, selected:  (f.object.year.blank? ? nil : f.object.year), include_blank:  '-- Select year --'
+            = f.input :year, collection:  [*1919..2015].reverse, selected:  (vehicle.blank? ? nil : vehicle.year), include_blank:  '-- Select year --'
       .row.marques
         .col-12
           %table.table

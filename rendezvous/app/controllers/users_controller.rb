@@ -1,12 +1,13 @@
 class UsersController < ApplicationController
 
   before_action :authenticate_user!, only: [:welcome, :edit, :update, :new_by_admin, :create_by_admin]
-  before_action :require_admin, only: [:new_by_admin, :create_by_admin]
+  before_action :require_admin, only: [:new_by_admin, :create_by_admin, :index]
+  before_action :select_layout
 
   def new_user_by_admin
     @user = User.new
     @user.is_admin_created = true
-    @user.email 
+    @user.vehicles.build
   end
 
   def create_user_by_admin
@@ -24,6 +25,9 @@ class UsersController < ApplicationController
     end
   end
 
+  def index
+    @users = User.all
+  end
 
   def welcome
     @user = User.find(params[:id])
@@ -127,6 +131,10 @@ class UsersController < ApplicationController
           }
         ]
       )
+    end
+
+    def select_layout
+      ['index', 'new_by_admin', 'create_by_admin'].include?(action_name) ? "admin_layout" : "application"
     end
 
 end
