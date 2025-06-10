@@ -1,0 +1,9 @@
+.container
+  .row.justify-content-center
+    .col-md-8.col-12
+      .card
+        .card-body
+          .card-title 
+            %h1.h4 Update vehicles for #{@user.full_name}
+          .card-text
+            = render partial: 'common/update_registration_vehicles_form'

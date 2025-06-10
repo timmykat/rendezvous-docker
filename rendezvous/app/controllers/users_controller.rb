@@ -27,7 +27,11 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.all
+    if (params[:registered])
+      @users = User.joins(:registrations).where(registrations: { year: Date.current.year}).all
+    else
+      @users = User.all
+    end
   end
 
   def welcome

@@ -139,6 +139,12 @@ class AdminController < ApplicationController
     end
   end
 
+  def update_user_vehicles
+    @user = User.find(params[:id])
+    @event_registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
+    @vehicles = @user.vehicles
+  end
+
   def dashboard(csv = false)
     @title = 'Admin'
     @year = params[:year] || Date.current.year

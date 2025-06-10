@@ -6,9 +6,10 @@
           .col-12
             %nav.nav.navbar.navbar-dark.navbar-expand-lg.bg-nav
               %ul.nav.navbar-nav
+                %li.nav-item= link_to 'Registered User List', users_path({registered: true}), class: 'btn btn-info mr-2'
                 %li.nav-item= link_to 'Create User', new_user_by_admin_path, class: 'btn btn-primary mr-2'
                 %li.nav-item= link_to 'Create Registration', event_registration_by_admin_path, class: 'btn btn-primary mr-2'
-                %li.nav-item= link_to 'User List', users_path, class: 'btn btn-info mr-2'
+                %li.nav-item= link_to 'All Users List', users_path, class: 'btn btn-info mr-2'
                 %li.nav-item= link_to 'Take Donation', new_donation_path, class: 'btn btn-warning mr-2'
             
               %ul.nav.navbar-nav.ml-auto

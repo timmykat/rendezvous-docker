@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-document.addEventListener('turbo:load', function(){
+function adminFunctions() {
     console.log('Loading jquery')
     const getCsrfHeaders = function() {
         let token = $('meta[name="csrf-token"]').attr('content')
@@ -10,8 +10,7 @@ document.addEventListener('turbo:load', function(){
         }
     }
 
-    console.log("Tablesorting users")
-    $('#user-table').tablesorter({
+    $('#user-table, #registration-table').tablesorter({
         theme: 'blue',
         widthFixed: true,
         widgets: ["zebra", "filter"],
@@ -42,4 +41,7 @@ document.addEventListener('turbo:load', function(){
     $('.toggle_admin_bar').on('click', function() {
         $('header .manage').toggle()
     })
-})
+}
+
+document.addEventListener('turbo:load', adminFunctions)
+document.addEventListener('DOMContentLoaded', adminFunctions)

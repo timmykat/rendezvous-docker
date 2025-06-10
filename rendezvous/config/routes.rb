@@ -99,6 +99,8 @@ Rails.application.routes.draw do
   get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
   get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'
 
+  get '/admin/update_user_vehicles/:id', to: 'admin#update_user_vehicles', as: :update_user_vehicles
+
   namespace :event do
   #     resources  :registrations, { only: [ :create, :show, :edit, :update ] }
   #     get 'registrations/new/user/:id', to: 'registrations#new'

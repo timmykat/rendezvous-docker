@@ -7,11 +7,10 @@
     .col-12
       #tabbed
         %ul
-          %li= link_to ' Registrations', '#tabbed-1'
+          %li= link_to 'Registrations', '#tabbed-1'
           %li= link_to 'Vehicles', '#tabbed-2'
           %li= link_to 'Volunteer List', '#tabbed-3'
           %li= link_to 'Summary'.html_safe, '#tabbed-5'
-          %li= link_to 'User Management', '#tabbed-6'
         #tabbed-1
           .row 
             .col-md-4
@@ -26,20 +25,19 @@
           %h2= "Registrations for #{@year}"
           %p Number of registrations: #{@event_registrations.size}
 
-          %table.table.striped
+          %table#registration-table.table.tablesorter.striped
             %thead
               %tr
 
-                %th.text-center Actions
-                %th.text-center Status
-                %th Name
-                %th.text-center Adults
-                %th.text-center Children
-                %th.text-center Fee
-                %th.text-center Donation
-                %th.text-center Total
-                %th.text-center Paid
-                %th.text-center Balance
+                %th.tablesorter-header.filter-false.text-center Actions
+                %th.tablesorter-header.filter-false.text-center Status
+                %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'}  Name
+                %th.tablesorter-header.filter-false.text-center Adults, Children
+                %th.tablesorter-header.filter-false.text-center Fee
+                %th.tablesorter-header.filter-false.text-center Donation
+                %th.tablesorter-header.filter-false.text-center Total
+                %th.tablesorter-header.filter-false.text-center Paid
+                %th.tablesorter-header.filter-false.text-center Balance
             %tbody
               - @event_registrations.each do |registration|
                 %tr{class:  'text-center' }
@@ -62,8 +60,7 @@
                   %td.text-center
                     = registration.status
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
-                  %td.text-center= registration.number_of_adults
-                  %td.text-center= registration.number_of_children
+                  %td.text-center #{registration.number_of_adults}, #{registration.number_of_children}
                   %td.text-right= number_to_currency(registration.registration_fee)
                   %td.text-right= number_to_currency(registration.donation)
                   %td.text-right= number_to_currency(registration.total)
@@ -224,42 +221,6 @@
                                   - @data[:newbies].each do |newbie|
                                     = newbie.full_name
                                     %br
-        - if @users
-          #tabbed-6
-            %h2 #{@type} 
-            %p Number of users: #{@user_count}
-           
-            %p
-              =link_to "New user", new_user_by_admin_path, class: "btn btn-primary"
-            %br
-            %table#user-table.table.tablesorter.striped
-              %thead
-                %tr
-                  %th.tablesorter-header.filter-false User Roles
-                  %th.last-name.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Last Name 
-                  %th.first-name.tablesorter-header.filter-false First Name
-                  %th.email.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Email
-                  %th.recaptcha-whitelisted.filter-false Recaptcha
-                %tbody
-                  %tr{role: 'search', class: 'tablesorter-filter-row tablesorter-ignoreRow'}
-                    %td
-                    %td{'data-column' => '0' }
-                    %td
-                    %td
-                    %td
-                  - @users.each do |user|
-                    %tr
-                      %td
-                        - [:tester, :vendor, :admin].each do |role|
-                          = check_box_tag role, '1', user.has_role?(role), "data-nobs-toggle" => ajax_toggle_role_path(user, role: role)
-                          = label_tag role.to_s.titleize
-                          %br                        
 
-                      %td= link_to user.last_name, user_path(user)
-                      %td= user.first_name
-                      %td= user.email
-                      %td
-                        = check_box_tag :recaptcha_whitelisted,'1', user.recaptcha_whitelisted?, "data-nobs-toggle" => ajax_toggle_whitelist_path(user)
-                        Whitelisted?
 
                           
