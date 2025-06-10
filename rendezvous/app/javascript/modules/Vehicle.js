@@ -48,19 +48,18 @@ export class Vehicle extends HTMLElement {
       return
     }
 
-    if (!(marque === 'Citroen' || OTHER_FRENCH.includes(marque))) {
-      this.marqueSelect.value = 'Non-French'
-      this.otherMarqueText = marque
-    } else {
-      this.marqueSelect.value = marque
-    }
-
     if (marque === 'Citroen') {
+      this.marqueSelect.value = marque
       this.modelSelect.value = model
+    } else if (OTHER_FRENCH.includes(marque)) {
+      this.marqueSelect.value = marque
+      this.otherModelText.value = model
     } else {
-      this.modelSelect.value = null
-      this.otherModelText = model
+      this.marqueSelect.value = 'Non-French'
+      this.otherMarqueText.value = marque
+      this.otherModelText.value = model  
     }
+    this.setInputFieldStates()
   }
 
   setInputFieldStates () {
