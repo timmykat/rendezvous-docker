@@ -47,9 +47,18 @@
                   %p
                     = link_to 'Add a vehicle', edit_user_path(@user), class: 'btn btn-primary'
                 - else
-                  %ul
+                  %table
+                    %tbody
                     - @user.vehicles.each do |v|
-                      %li= v.full_spec
+                      %tr
+                        %td{cols: 2} #{v.year_marque_model}
+                      %tr
+                        %td{cols: 2} #{v.judging_category}
+                      %tr
+                        %td #{v.code}
+                        %td
+                          %div{style: 'padding: 5px 20px'}
+                            = image_tag qr_code_url(v.code), {style: 'width: 60px; height: 60px;'}
 
             =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning" 
       

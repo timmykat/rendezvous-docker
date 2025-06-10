@@ -15,7 +15,6 @@ class QrCode < ApplicationRecord
   FILE_BASE = Rails.root.join('public', 'qr_codes')
 
   include Rails.application.routes.url_helpers
-  include Rails.application.routes.url_helpers
   Rails.application.routes.default_url_options[:host] ||= Rails.application.config.action_mailer.default_url_options[:host]
 
   def self.generate!(max_attempts = 5)
@@ -54,6 +53,10 @@ class QrCode < ApplicationRecord
     Array.new(length) { chars.sample }.join
   end
 
+  def self.get_image_path(code)
+    File.join('/qr_codes', "qr_#{code}.png")
+  end
+
   def self.generate_image(code)
     filepath = File.join(FILE_BASE, "qr_#{code}.png")
     url = Rails.application.routes.url_helpers.get_voting_ballot_url({code: code})
@@ -66,7 +69,6 @@ class QrCode < ApplicationRecord
 
     # Add logo if it exists
     if File.exist?(logo_path)
-      puts 'Adding logo'
       # Open the logo image
       logo = MiniMagick::Image.open(logo_path)
   
@@ -80,6 +82,6 @@ class QrCode < ApplicationRecord
     end
 
     qr_image.write(filepath)
-    puts "QR image generated and saved to #{filepath}"    
+    return url    
   end
 end

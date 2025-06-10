@@ -17,6 +17,9 @@ namespace :votable do
     task :generate, [:number] =>  :environment do |t, args|
       Rails.application.eager_load!
 
+      include Rails.application.routes.url_helpers
+      Rails.application.routes.default_url_options[:host] ||= Rails.application.config.action_mailer.default_url_options[:host]
+
       puts "Creating #{args[:number]} QR codes"
 
       (1..(args[:number].to_i)).each do |qr|
