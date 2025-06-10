@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 function adminFunctions() {
-    console.log('Loading jquery')
+
     const getCsrfHeaders = function() {
         let token = $('meta[name="csrf-token"]').attr('content')
         return {
@@ -33,13 +33,23 @@ function adminFunctions() {
         })
     })
 
-
     $('#select_all').on('change', function(e) {
         $('.delete_user').prop('checked', $(this).prop('checked'))
     })
 
-    $('.toggle_admin_bar').on('click', function() {
-        $('header .manage').toggle()
+    const $adminPanel = $('.admin_layout .manage')
+    if (window.localStorage.getItem("adminPanelVis") === "hidden") {
+        $adminPanel.hide()
+    }
+
+    $('.toggle_admin_panel').on('click', function(e) {
+        if ($adminPanel.is(':visible')) {
+            $adminPanel.hide()
+            window.localStorage.setItem("adminPanelVis", "hidden")
+        } else {
+            $adminPanel.show()
+            window.localStorage.setItem("adminPanelVis", "visible")
+        }
     })
 }
 
