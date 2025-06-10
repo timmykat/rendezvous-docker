@@ -20,7 +20,7 @@ module Voting
       ballots = Ballot.where(year: year).where.not(status: "deciding")
   
       ballots.find_each do |ballot|
-        ballot.vehicles.each do |vehicle|
+        ballot.selections.each do |vehicle|
           category = VehicleTaxonomy.get_category(vehicle)
           next unless category
   

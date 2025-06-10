@@ -41,7 +41,7 @@ export const initScrollLinks = () => {
 export const initAutocomplete = () => {
     const donationPage = document.querySelector('body.c_donations');
     const newRegistrationPage = document.querySelector('body.c_event_registrations .new_registration');
-  
+    const newVehiclePage = document.querySelector('body.c_vehicles #new_vehicle');
     if (donationPage || newRegistrationPage) {
       const autoComplete = document.querySelector('[data-autocomplete]');
       const fieldName = autoComplete.getAttribute('data-autocomplete');

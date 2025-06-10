@@ -14,11 +14,11 @@
       %table#user-table.table.tablesorter.striped
         %thead
           %tr
-            %th.tablesorter-header.filter-false User Roles
+            %th.tablesorter-header.filter-false Actions
+            %th.email.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Email
             %th.last-name.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Last Name 
             %th.first-name.tablesorter-header.filter-false First Name
-            %th.email.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Email
-            %th.recaptcha-whitelisted.filter-false Recaptcha
+            %th.vehicles.tablesorter-header.filter-false Vehicles
           %tbody
             %tr{role: 'search', class: 'tablesorter-filter-row tablesorter-ignoreRow'}
               %td
@@ -29,14 +29,14 @@
             - @users.each do |user|
               %tr
                 %td
-                  - [:tester, :vendor, :admin].each do |role|
-                    = check_box_tag role, '1', user.has_role?(role), "data-nobs-toggle" => ajax_toggle_role_path(user, role: role)
-                    = label_tag role.to_s.titleize
-                    %br                        
-
-                %td= link_to user.last_name, user_path(user)
-                %td= user.first_name
+                  = link_to 'Edit', edit_user_path(user)
+                  %br
+                  = link_to 'View', user_path(user)
+                                    
                 %td= user.email
+                %td= user.last_name
+                %td= user.first_name
                 %td
-                  = check_box_tag :recaptcha_whitelisted,'1', user.recaptcha_whitelisted?, "data-nobs-toggle" => ajax_toggle_whitelist_path(user)
-                  Whitelisted?
+                  %ul
+                    - user.vehicles.each do |v|
+                      %li #{v.year_marque_model}

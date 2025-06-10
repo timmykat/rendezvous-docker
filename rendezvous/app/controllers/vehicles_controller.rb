@@ -8,6 +8,7 @@ class VehiclesController < ApplicationController
   
   def new
     @vehicle = Vehicle.new
+    @available_qr_codes = QrCode.unassigned
   end
 
   def show
@@ -16,6 +17,7 @@ class VehiclesController < ApplicationController
 
   def edit
     @vehicle = Vehicle.find(params[:id])
+    @available_qr_codes = QrCode.unassigned
   end
 
   def update
@@ -24,7 +26,7 @@ class VehiclesController < ApplicationController
       flash_notice 'Updated'
       redirect_to vehicle_path(@vehicle.id)
     else
-      flash_alert @vehicle.errors.full_messages
+      flash_alert @vehicle.errors.full_messages.to_sentence
       render :edit
     end
   end
@@ -35,7 +37,8 @@ class VehiclesController < ApplicationController
       flash_notice 'The vehicle was successfully created'
       redirect_to vehicle_path(@vehicle)
     else
-      flash_alert @vehicle.errors.full_messages
+      flash_alert @vehicle.errors.full_messages.to_sentence
+      render :edit
     end
   end
 

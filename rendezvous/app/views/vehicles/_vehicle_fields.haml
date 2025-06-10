@@ -52,22 +52,23 @@
         .row 
           .col-md-12 
             .form-group
-              - if !vehicle.qr_code.present?
-                - if @available_qr_codes.blank?
-                  %p Please generate unattached QR codes.
-                - else 
-                  = f.input :qr_code, collection: @available_qr_codes.map { |q| [q.code, q.id] }, as: :select, label: 'Voting code for Peoples Choice Award', include_blank: '--- Select a code ---'
-              - else
+              - if vehicle.qr_code.present?
                 %label Voting code for Peoples Choice Award
                 = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control', disabled: true
+              
+            .form-group
+              %p Add or replace a voting code
+              - if @available_qr_codes.blank?
+                %p Please generate unattached QR codes.
+              - else 
+                = f.input :qr_code_id, collection: @available_qr_codes.map { |q| [q.code, q.id] }, as: :select, label: 'New code', 
+                  include_blank: '--- Select a code ---', selected: vehicle.qr_code&.id
       
             .form-group
               - if vehicle.user.present?
                 %p Owner: #{vehicle.user.full_name}
               - else
-                %label Email lookup to attach owner
-                = text_field_tag :email_lookup, '', class: 'form-control'
-                = f.input :user_id, as: :hidden, input_html: {'data-autocomplete-target' => ''}
+                %p No owner!
 
       - if nested
         %br

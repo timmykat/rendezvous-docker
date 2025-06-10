@@ -49,7 +49,7 @@
     :javascript
       var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
-  %body{ class: controller_classes + " outfit-regular", 'data-site-key' => get_recaptcha_key }
+  %body{ class: controller_classes + " outfit-regular application_layout", 'data-site-key' => get_recaptcha_key }
     = render partial: 'common/active_users'
     = render partial: 'layouts/flash'
 
@@ -67,7 +67,10 @@
                         %h1
                           = link_to "Citroen Rendezvous #{Date.current.year}", root_path
 
-      = render partial: 'common/site_nav_bar'
+      - if user_is_admin?
+        = render partial: 'common/onsite_navbar'
+      - else
+        = render partial: 'common/site_nav_bar'
 
       - if registration_is_open && !current_registration
         .container-fluid.px-0

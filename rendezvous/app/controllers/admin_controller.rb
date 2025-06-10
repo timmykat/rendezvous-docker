@@ -238,14 +238,14 @@ class AdminController < ApplicationController
   def print
     item = params[:item]
     case item
+    when 'blank_placards'
+      @qr_codes = QrCode.unassigned.limit(30)
+      render :blank_placards
+      return
     when 'placards'
       @vehicles = Vehicle.joins(user: :registrations)
        .where(registrations: { year: 2025 })
        .distinct
-      render :placards
-      return
-    when 'blank_placards'
-      @qr_codes = QrCode.where("votable IS NULL").limit(30)
       render :placards
       return
     when 'labels'

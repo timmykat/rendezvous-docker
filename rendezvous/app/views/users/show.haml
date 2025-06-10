@@ -10,10 +10,10 @@
               %h1.h2 Bienvenue, #{current_user.first_name}
 
           .card-text
-            %p If you're here to register, or to finish a registration: 
+            %p To register or finish a registration: 
             %ul 
               - if current_registration
-                %li= link_to 'Continue my registration', existing_event_registration_path
+                %li= link_to 'Continue to current registration', existing_event_registration_path
               - else
                 %li= link_to 'Create a registration',  new_event_registration_path 
 

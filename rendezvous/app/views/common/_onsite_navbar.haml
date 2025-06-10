@@ -6,8 +6,19 @@
           .col-12
             %nav.nav.navbar.navbar-dark.navbar-expand-lg.bg-nav
               %ul.nav.navbar-nav
-                %li.nav-item= link_to 'Create User', new_user_by_admin_path, class: 'btn btn-primary'
-                %li.nav-item= link_to 'Create Registration', new_by_admin_path, class: 'btn btn-primary'
-                %li.nav-item= link_to 'Create Vehicle', vehicle_path, class: 'btn btn-info'
-                %li.nav-item= link_to 'User List', users_path, class: 'btn btn-info'
-                %li.nav-item= link_to 'Take Donation', new_donation_path, class: 'btn btn-warn'
+                %li.nav-item= link_to 'Create User', new_user_by_admin_path, class: 'btn btn-primary mr-2'
+                %li.nav-item= link_to 'Create Registration', event_registration_by_admin_path, class: 'btn btn-primary mr-2'
+                %li.nav-item= link_to 'User List', users_path, class: 'btn btn-info mr-2'
+                %li.nav-item= link_to 'Take Donation', new_donation_path, class: 'btn btn-warning mr-2'
+            
+              %ul.nav.navbar-nav.ml-auto
+                %li.nav-item.dropdown
+                  %a.nav-link.dropdown-toggle#adminDropdown{role: 'button', 'data-toggle' => "dropdown", 'aria-haspopup' => "true", 'aria-expanded' => "false"}
+                    Admin
+                  .dropdown-menu.dropdown-menu-right{'aria-labelledby' => 'adminDropdown'}
+                    %span.dropdown-item
+                      %strong Admin Menu
+                    .dropdown-divider
+                    = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
+                    = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
+                    = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_bar'
