@@ -3,7 +3,11 @@ namespace :votable do
   task migrate_codes: :environment do
     Rails.application.eager_load!
 
-    
+    QrCode.destroy_all
+
+    Dir.glob(Rails.root.join('public', 'qr_codes', '*')).each do |file|
+      File.delete(file) if File.file?(file)
+    end
 
     include Rails.application.routes.url_helpers
     Rails.application.routes.default_url_options[:host] ||= Rails.application.config.action_mailer.default_url_options[:host]
@@ -22,7 +26,8 @@ namespace :votable do
         puts votable_code
         qr = QrCode.create(code: votable_code, votable: record)
         if qr.persisted?
-          puts "Record saved with QR code"
+          QrCode.generate_image(qr.code)
+          puts "Record saved with QR code and image created"
         else
           puts "Save failure on #{qr.code}"
           exit 0

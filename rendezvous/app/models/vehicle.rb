@@ -8,7 +8,6 @@ class Vehicle < ApplicationRecord
   has_many :registrations, class_name: 'Event::Registration', through: :registrations_vehicles
 
   has_many :ballot_selections, as: :votable, class_name: 'Voting::BallotSelection', dependent: :destroy
-  has_many :ballots, through: :ballot_selection
 
   has_one :qr_code, as: :votable, inverse_of: :votable
   accepts_nested_attributes_for :qr_code, allow_destroy: true
@@ -29,7 +28,7 @@ class Vehicle < ApplicationRecord
 
   def self.find_by_code(code)
     qr_code = QrCode.where("UPPER(code) = ?", code.upcase).first
-    Vehicle.where(qr_code: qr_code)
+    Vehicle.where(qr_code: qr_code).first
   end
   
   def full_spec
