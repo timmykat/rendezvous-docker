@@ -5,6 +5,11 @@
   --funRed: #d02a2a;
 }
 
+@page {
+  size: 8.5in 11in;
+  margin: 0;
+}
+
 @font-face {
   font-family: 'Citroen';
   src:
@@ -111,30 +116,34 @@ html, body {
 /* label styling */
 .wrapper {
   width: 8.5in;
+  height: 11in;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
   justify-content: flex-start;
-  column-gap: 0.2037in;
+  padding: 0.5in 0.156in; // Top and side margins
+  box-sizing: border-box;
+  gap: 0in 0.2037in; // 0in vertical, 0.2037in horizontal
 
   .label-wrapper {
-    &:nth-child(6n+1),
-    &:nth-child(6n+2) {
-      padding-top: 0.4808in;
-    }
+    width: 3.98in;
+    height: 3.333in; // Height of each label
+    box-sizing: border-box;
+    position: relative;
+    page-break-inside: avoid;
+
+    // Optional border for debugging
+    // border: 1px dashed red;
 
     .label {
-      position: relative;
+      width: 100%;
+      height: 100%;
       box-sizing: border-box;
-      padding: 30px 20px 20px 30px;
-      width: 4in;
-      height: 3.344in;
+      padding: 20px 15px;
+      border: solid 1px #eee;
       font-family: var(--mainFont);
-      margin: 0;
-
-      &:nth-child(6) {
-        page-break-after: always;
-      }
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 
       .content {
         display: flex;
@@ -166,8 +175,8 @@ html, body {
 
       .ident {
         position: absolute;
-        left: 30px;
-        bottom: 0;
+        left: 15px;
+        bottom: 15px;
         display: flex;
         align-items: center;
 
@@ -183,7 +192,7 @@ html, body {
         }
 
         .logo {
-          padding: 2em;
+          padding: 1em;
           img {
             width: 100%;
           }
