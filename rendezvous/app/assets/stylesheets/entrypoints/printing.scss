@@ -114,15 +114,22 @@ html, body {
 }
 
 /* label styling */
-.wrapper {
+.wrapper-page {
   width: 8.5in;
   height: 11in;
+  padding: 0.5in 0.156in;
+  box-sizing: border-box;
+  page-break-after: always;
+}
+
+.wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0.5in 0.156in; // Top and side margins
+  align-content: flex-start;
+  gap: 0in 0.2037in;
+  height: 10in; // full page minus top/bottom padding
   box-sizing: border-box;
-  gap: 0in 0.2037in; // 0in vertical, 0.2037in horizontal
 
   .label-wrapper {
     width: 3.98in;
@@ -130,6 +137,7 @@ html, body {
     box-sizing: border-box;
     position: relative;
     page-break-inside: avoid;
+    flex: 0 0 auto;
 
     // Optional border for debugging
     // border: 1px dashed red;

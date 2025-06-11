@@ -1,37 +1,32 @@
-.wrapper 
-  - @registrations.each do |r|
-    .label-wrapper 
-      .label
+- @registrations.each_slice(6) do |page_regs|
+  .wrapper-page
+    .wrapper
+      - page_regs.each do |r|
+        .label-wrapper
+          .label
+            .content 
+              .info
+                .name #{r.user.last_name}
+                .people 
+                  Citronistas: #{r.number_of_people}
+                  %ul{style: 'list-style: none;'}
+                    - r.attendees.each do |a|
+                      %li 
+                        #{a.name}
+                        - if a.volunteer?
+                          (volunteer)
+                .fee
+                  - if r.balance > 0.0
+                    Due: #{number_to_currency(r.balance)}
+                  - else
+                    Paid - thank you!
 
-        .content 
-          .info
-            .name #{r.user.last_name}
-            .people 
-              Citronistas: #{r.number_of_people}
-              %ul{style: 'list-style: none;'}
-                - r.attendees.each do |a|
-                  %li 
-                    #{a.name}
-                    - if a.volunteer?
-                      (volunteer)
-            .fee
-              - if r.balance > 0.0
-                Due: #{number_to_currency(r.balance)}
-              - else
-                Paid - thank you!
-                
-            - if r.donation > 0
-              .thank-you.donation You donated - thank you!
-            
-        .ident
-          .info
-            .title Citroën Rendezvous 2025
-            .loc Saratoga Springs, NY
-          .logo
-            = image_tag 'R25_iconique.png', :alt => 'Citroen Rendezvous' 
- 
-   
+                - if r.donation > 0
+                  .thank-you.donation You donated - thank you!
 
-    
-
-
+            .ident
+              .info
+                .title Citroën Rendezvous 2025
+                .loc Saratoga Springs, NY
+              .logo
+                = image_tag 'R25_iconique.png', :alt => 'Citroen Rendezvous'
