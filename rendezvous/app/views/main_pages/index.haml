@@ -6,15 +6,20 @@
       %img{src: image_url("Deesse-70.svg")}
 %section#welcome
   .container-fluid
-    .row.justify-content-center 
-      .col-md-8.col-12 
+    .row.justify-content-center
+      .col-md-12.col-12 
         .card 
           .card-body 
             .card-title 
               %h1.h2 Citroen Rendezvous 2025
             .card-text
-              = keyed_content("main_welcome")
-
+              .row.justify-content-center
+                .col-md-7.col-12
+                  = keyed_content("main_welcome")
+                .col-md-5.col-12.text-center
+                  %h2.h5 A message from Henri-Jacques Citroën
+                  %video{ src: 'Henri-Citroen-message-2025.mp4', controls: true, width: '320px' }
+                    Your browser does not support the video tag
 %section#acommodations
   .container-fluid
     .row.justify-content-center
