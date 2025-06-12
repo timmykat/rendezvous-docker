@@ -1,6 +1,6 @@
 class QrCode < ApplicationRecord
 
-  belongs_to :votable, polymorphic: true, optional: true
+  belongs_to :votable, polymorphic: true, inverse_of: :qr_code, optional: true
 
   has_one_attached :image
 
