@@ -32,6 +32,9 @@
                   = link_to 'Edit', edit_user_path(user)
                   %br
                   = link_to 'View', user_path(user)
+                  - if user.current_registration.nil?
+                    %br
+                    = link_to 'Create registration', event_registration_by_admin_path(user_id: user.id)
                   - if has_registration_and_vehicle(user)
                     %br
                     = link_to 'Update Vehicles', update_user_vehicles_path(user)

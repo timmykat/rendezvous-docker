@@ -60,7 +60,7 @@ Rails.application.routes.draw do
   resources :venues, { except: [:index, :show] }
 
   resources :vehicles
-  get 'vehicles/for_sale', to: 'vehicles#for_sale'
+  get 'on_site_vehicles/for_sale', to: 'vehicles#for_sale', as: :vehicles_for_sale
 
   resources :event_hotels, { except: [:new, :index, :show] }
 
@@ -144,6 +144,7 @@ Rails.application.routes.draw do
   get '/ajax/find_user_by_email',         to: 'users#find_by_email'
   get '/ajax/delete_users',               to: 'users#delete_users'
   get '/ajax/user/autocomplete',          to: 'users#autocomplete'
+  get '/ajax/code/search',                to: 'qr_codes#autocomplete'
 
   namespace :event do
     post '/ajax/update_fees',               to: 'registrations#update_fees'

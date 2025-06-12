@@ -55,7 +55,7 @@
                   .col-md-6.col-12
                     .form-group
                       %ul.list-unstyled
-                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
+                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'cash or check', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
 
                 %section#payment-online
                   %h3.h4 Pay online with Square

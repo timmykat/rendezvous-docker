@@ -30,20 +30,23 @@ module Voting
     def ballot
       ballot_id = params[:ballot_id] || session[:ballot_id]
       @code = params[:code]
-      @vehicle = @code.nil? ? nil : Vehicle.find_by_code(@code)
+      if @code.present?
+        @vehicle = Vehicle.find_by_code(@code)
+      end
 
-      unless ballot_id.nil?
+      if !ballot_id.nil?
         @ballot = Voting::Ballot.find(ballot_id)
         @ballot.get_status
         @ballot.save
-        @selections = @ballot.categorized_selections
-        @category = @vehicle.nil? ? "" : @vehicle.judging_category
-        @already_selected = already_selected?(@vehicle)
-        @limit_reached = @vehicle.nil? ? false : limit_reached?(@vehicle)
-      else
+      elsif @code.present?
         @ballot = Ballot.create(year: Date.current.year, status: 'voting')
-        session[:ballot_id] = @ballot.id
-        @selections = @ballot.categorized_selections
+      end
+      @selections = @ballot.categorized_selections
+
+      if @vehicle.present?
+        @category = @vehicle.judging_category
+        @already_selected = already_selected?(@vehicle)
+        @limit_reached = limit_reached?(@vehicle)
       end
     end
 
@@ -60,7 +63,7 @@ module Voting
       vehicle.vote_by(@ballot)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, anchor: 'tabbed-2'})
+      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2'})
     end
 
     def delete_selection
@@ -69,7 +72,7 @@ module Voting
       @ballot.selections.delete(vehicle_id)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, anchor: 'tabbed-2'})
+      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2'})
     end
 
     private

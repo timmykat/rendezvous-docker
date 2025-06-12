@@ -368,6 +368,22 @@ input[type=checkbox] {
 	border-bottom: solid 1px var(--jet);
 }
 
+rendezvous-vehicle {
+	.code-handling {
+		display: flex;
+		align-items: center;
+
+		input[data-code-autocomplete] {
+			text-transform: uppercase;
+			width: 200px;
+		}
+
+		.badge.hide {
+			display: none;
+		}
+	}
+}
+
 
 /* rows hidden by filtering (needed for child rows) */
 .tablesorter .filtered {

@@ -1,6 +1,6 @@
 - config = Rails.configuration.rendezvous
 - vehicle = f.object
-%rendezvous-vehicle{ class: "card#{" nested-fields" if nested}"}
+%rendezvous-vehicle{ class: ["card", ("nested-fields" if nested)] }
   .card-body{'data-autocomplete' => "email_lookup"}
     .card-title 
       Vehicle
@@ -50,19 +50,23 @@
 
       - if user_is_admin?
         .row 
-          .col-md-12 
-            .form-group
-              - if vehicle.qr_code.present?
-                %label Voting code for Peoples Choice Award
-                = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control', disabled: true
-              
-            .form-group
-              %p Add or replace a voting code
-              - if @available_qr_codes.blank?
-                %p Please generate unattached QR codes.
-              - else 
-                = f.input :qr_code_id, collection: @available_qr_codes.map { |q| [q.code, q.id] }, as: :select, label: 'New code', 
-                  include_blank: '--- Select a code ---', selected: vehicle.qr_code&.id
+          .col-md-12
+            %fieldset
+              .form-group
+                - if vehicle.qr_code.present?
+                  %label Voting code for Peoples Choice Award
+                  = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control', disabled: true
+                
+              .form-group
+                %label Add or replace a voting code
+                - if @available_qr_codes.blank?
+                  %p Please generate unattached QR codes.
+                - else
+                  .code-handling
+                    = text_field_tag :code, nil, class: 'form-control mr-2', data: { 'code-autocomplete': ''}
+                    .badge.badge-success.hide 
+                      OK
+                    = f.input :qr_code_id, as: :hidden, input_html: { data: { 'qr-id-field': ''} }
       
             .form-group
               - if vehicle.user.present?

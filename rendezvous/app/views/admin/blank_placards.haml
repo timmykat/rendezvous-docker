@@ -19,6 +19,6 @@
       %span.value
         
     .qr-code-id 
-      = image_tag get_voting_ballot_url({code: qr_code.code})
+      = image_tag QrCode.get_image_path(qr_code.code)
       %span.code #{qr_code.code} 
       %span (People's Choice ID)

@@ -8,6 +8,13 @@ namespace :votable do
       puts get_voting_ballot_url(code: "TEST")
     end
 
+    desc "List unassigned codes"
+    task list: :environment do
+      QrCode.unassigned.each do |qr|
+        puts qr.code
+      end
+    end
+
     desc "Return number of unassigned codes"
     task count: :environment do
       puts "There are #{QrCode.unassigned.count} unassigned QR codes"

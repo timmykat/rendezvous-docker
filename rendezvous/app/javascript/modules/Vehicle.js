@@ -1,3 +1,4 @@
+import { debounce } from 'throttle-debounce';
 const OTHER_FRENCH = ['Panhard', 'Peugeot', 'Renault']
 
 export class Vehicle extends HTMLElement {
@@ -13,7 +14,12 @@ export class Vehicle extends HTMLElement {
     this.otherModelText = this.querySelector('input.model.text')
     this.marqueDataField = this.querySelector('input.marque.data')
     this.modelDataField = this.querySelector('input.model.data')
+    this.codeField = this.querySelector('[data-code-autocomplete]')
+    this.qrIdField = this.querySelector('[data-qr-id-field]')
+    this.codeFieldBadge = this.querySelector('.badge')
+    this.codeAutocompleteDebounce = debounce(500, this.codeAutocomplete.bind(this));
     this.setEventListeners()
+    this.setInitialControls()
   }
 
   setEventListeners () {
@@ -33,16 +39,35 @@ export class Vehicle extends HTMLElement {
       this.setInputFieldStates()
       this.updateFormValues()
     })
-    document.addEventListener('DOMContentLoaded', () => {
-      this.setInitialControls()
+    console.log('Setting debounced autocomplete')
+    this.codeField.addEventListener('keyup', this.codeAutocompleteDebounce)
+  }
+
+  codeAutocomplete (e) {
+    console.log('Fetching')
+    const field = e.target
+    const code = field.value.toUpperCase()
+    console.log(field, code)
+    if (code === null || code === '' || !/^[1-9a-z]{4,4}$/i.test(code)) {
+      return
+    }
+
+    fetch(`/ajax/code/search?code=${code}`, { headers: this.getCsrfHeaders() })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Fetch data:', data)
+      if (data.status === 'OK') {
+        this.qrIdField.value = data.id
+        this.codeFieldBadge.classList.remove('hide')
+      } else {
+        this.codeFieldBadge.classList.add('hide')
+      }
     })
   }
 
   setInitialControls () {
     const marque = this.marqueDataField?.value
     const model = this.modelDataField?.value
-    console.log("Marque: ", marque)
-    console.log("Model: ", model)
     if (!marque) {
       console.log('No initial data')
       return
@@ -104,4 +129,12 @@ export class Vehicle extends HTMLElement {
     this.marqueDataField.value = this.querySelector('.marque[data-active]').value
     this.modelDataField.value = this.querySelector('.model[data-active]').value
   }
+
+  getCsrfHeaders = () => {
+    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    return {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": token
+    };
+  };
 }

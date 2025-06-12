@@ -59,7 +59,8 @@ module RegistrationsHelper
   end
   
   def payment_options
-    [[' Credit Card', 'credit card'], [' Cash or Check', 'cash or check']]
+    # [[' Credit Card (on line)', 'credit card'], [' Cash or Check', 'cash or check'], [' Square (on site)', 'square on site']]
+    [[' Cash or Check', 'cash or check'], [' Square (on site)', 'square on site']]
   end
 
   def attended_rendezvous_years(user)

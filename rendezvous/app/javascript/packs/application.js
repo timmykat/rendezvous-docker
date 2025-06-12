@@ -24,7 +24,6 @@ document.addEventListener('turbo:load', () => initCustom())
 window.setButtonSpinner = setButtonSpinner
 
 import '../modules/jquery_tabs'
-console.log('Tabs loaded')
 import '../modules/main_pages';
 import '../modules/registration';
 import '../modules/user'; 

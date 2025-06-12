@@ -39,11 +39,11 @@
                   %tr
                     %td #{v.user.full_name}
                     %td #{v.year_marque_model}
-                    %td #{v.code}
+                    %td #{v.qr_code.code}
                     %td
                       - if v.server_qr_file_path
                         %div{style: 'padding: 5px 20px'}
-                          = image_tag v.server_qr_file_path, {style: 'width: 60px; height: 60px;'}
+                          = image_tag qr_code_url(v.qr_code.code), {style: 'width: 60px; height: 60px;'}
                       - else 
                         (no image yet)
 

@@ -67,10 +67,18 @@ module Event
       session[:admin_created] = true
       @title = "Registration by admin"
       @step = 'create'
-      @annual_question = AnnualQuestion.where(year: Date.current.year).first
+      @annual_question = AnnualQuestion.find_by(year: Date.current.year)
+    
+      user = User.find_by(id: params[:user_id])
       @event_registration = Registration.new(created_by_admin: true)
       @event_registration.attendees.build
-      @event_registration.build_user
+    
+      if user
+        @event_registration.user = user
+      else
+        @event_registration.build_user
+      end
+    
       @event_registration.user.vehicles.build
     end
 
