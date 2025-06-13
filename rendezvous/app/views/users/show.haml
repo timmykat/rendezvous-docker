@@ -5,7 +5,7 @@
         .card-body 
           .card-title
             - if user_is_admin?
-              %h1.h2 Profile for #{@user.full_name}"
+              %h1.h2 Profile for #{@user.full_name}
             - else
               %h1.h2 Bienvenue, #{current_user.first_name}
 
@@ -52,11 +52,11 @@
                     %tbody
                     - @user.vehicles.each do |v|
                       %tr
-                        %td{cols: 2} #{v.year_marque_model}
+                        %td{colspan: 2} #{v.year_marque_model}
                       %tr
-                        %td{cols: 2} #{v.judging_category}
+                        %td{colspan: 2} #{v.judging_category}
                       %tr
-                        - if %v.qr_code.present?
+                        - if v.qr_code.present?
                           %td #{v.qr_code.code}
                           %td
                             %div{style: 'padding: 5px 20px'}
