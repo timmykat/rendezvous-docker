@@ -22,4 +22,9 @@
                     .dropdown-divider
                     = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
                     = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
-                    = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_panel'
+                    = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_panel', data: { turbo: false }
+                    = button_to "Sign Out",
+                      destroy_user_session_path,
+                      method: :delete,
+                      class: "dropdown-item toggle_admin_panel btn btn-link",
+                      form: { data: { turbo: false } }
