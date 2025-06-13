@@ -241,6 +241,12 @@ class AdminController < ApplicationController
     redirect_to admin_manage_qr_codes_path
   end
 
+  def clear_ballots
+    Voting::Ballot.destroy_all
+    flash_notice 'All ballots have been deleted'
+    redirect_to :admin_dashboard
+  end
+
   def print
     item = params[:item]
     case item

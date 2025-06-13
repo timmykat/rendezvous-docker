@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :get_app_data
   before_action :flash_array
   before_action :update_active_user
+  before_action :set_ballot_count
 
   CONFIG = Rails.configuration.rendezvous
 
@@ -14,6 +15,10 @@ class ApplicationController < ActionController::Base
   def render(*args)
     Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
     super(*args)  # Call the original render method
+  end
+
+  def set_ballot_count
+    @ballot_count = Voting::Ballot.count
   end
 
   # Need this for other gems that might set flash

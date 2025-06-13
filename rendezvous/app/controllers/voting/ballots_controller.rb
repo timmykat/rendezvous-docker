@@ -4,8 +4,16 @@ module Voting
     layout 'ballot_layout', only: [:ballot, :hand_ballot]
 
     before_action :require_admin, only: [:hand_ballot, :hand_count]
+    before_action :voting_on?, only: [:ballot, :vote]
 
     PER_CATEGORY_LIMIT = 3
+
+    def voting_on?
+      return if Config::SiteSetting.instance.voting_on
+
+      flash_alert "People's Choice voting has not begun yet!"
+      redirect_to :root
+    end
 
     def hand_ballot
       @ballot = Ballot.new
@@ -33,6 +41,11 @@ module Voting
       if @code.present?
         @vehicle = Vehicle.find_by_code(@code)
       end
+
+      if @vehicle.nil?
+        redirect_to @ballot, alert: 'Invalid ballot or vehicle.'
+        return
+      end        
 
       if !ballot_id.nil?
         @ballot = Voting::Ballot.find(ballot_id)

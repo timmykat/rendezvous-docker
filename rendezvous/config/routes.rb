@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   get '/admin/manage_qr_codes',   to: 'admin#manage_qr_codes'
   get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
   get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'
+  get '/admin/ballots/clear',     to: 'admin#clear_ballots', as: :admin_clear_ballots
 
   get '/admin/update_user_vehicles/:id', to: 'admin#update_user_vehicles', as: :update_user_vehicles
 
