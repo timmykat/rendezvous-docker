@@ -52,6 +52,9 @@
                     %tbody
                     - @user.vehicles.each do |v|
                       %tr
+                        %td{colspan: 2}
+                          %hr
+                      %tr
                         %td{colspan: 2} #{v.year_marque_model}
                       %tr
                         %td{colspan: 2} #{v.judging_category}
