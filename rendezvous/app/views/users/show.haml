@@ -56,10 +56,13 @@
                       %tr
                         %td{cols: 2} #{v.judging_category}
                       %tr
-                        %td #{v.qr_code.code}
-                        %td
-                          %div{style: 'padding: 5px 20px'}
-                            = image_tag qr_code_url(v.qr_code.code), {style: 'width: 60px; height: 60px;'}
+                        - if %v.qr_code.present?
+                          %td #{v.qr_code.code}
+                          %td
+                            %div{style: 'padding: 5px 20px'}
+                              = image_tag qr_code_url(v.qr_code.code), {style: 'width: 60px; height: 60px;'}
+                        - else
+                          %td.text-warn This vehicle will need a QR code assigned to be eligible for voting.
 
             =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning" 
       
