@@ -37,8 +37,12 @@ module Voting
 
     def ballot
       ballot_id = params[:ballot_id] || session[:ballot_id]
-      if ballot_id.nil?
+
+      if !ballot_id.nil?
+        @ballot = Voting::Ballot.find(ballot_id)
+      else
         @ballot = Ballot.create(year: Date.current.year, status: 'voting')
+        session[:ballot_id] = @ballot.id
       end
 
       @ballot = Voting::Ballot.find(ballot_id)
