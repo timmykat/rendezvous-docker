@@ -45,7 +45,6 @@ module Voting
         session[:ballot_id] = @ballot.id
       end
 
-      @ballot = Voting::Ballot.find(ballot_id)
       @code = params[:code]
       if @code.present?
         @vehicle = Vehicle.find_by_code(@code)
