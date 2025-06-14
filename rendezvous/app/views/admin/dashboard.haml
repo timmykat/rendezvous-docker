@@ -59,7 +59,11 @@
                           
                   %td.text-center
                     = registration.status
-                  %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
+                  %td.text-left
+                    - if registration.user.present?
+                      = link_to registration.user.last_name_first, user_path(registration.user)
+                    - else 
+                      *** No user for registration #{registration.id}
                   %td.text-center #{registration.number_of_adults}, #{registration.number_of_children}
                   %td.text-right= number_to_currency(registration.registration_fee)
                   %td.text-right= number_to_currency(registration.donation)
