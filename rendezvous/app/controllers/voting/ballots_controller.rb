@@ -37,6 +37,10 @@ module Voting
 
     def ballot
       ballot_id = params[:ballot_id] || session[:ballot_id]
+      if ballot_id.nil?
+        @ballot = Ballot.create(year: Date.current.year, status: 'voting')
+      end
+
       @ballot = Voting::Ballot.find(ballot_id)
       @code = params[:code]
       if @code.present?
@@ -44,17 +48,10 @@ module Voting
       end
 
       if @vehicle.nil?
-        redirect_to @ballot, alert: 'Invalid ballot or vehicle.'
+        redirect_to get_voting_ballot_url, alert: 'Invalid ballot or vehicle.'
         return
       end        
-
-      if !@ballot.nil?
-        
-        @ballot.get_status
-        @ballot.save
-      elsif @code.present?
-        @ballot = Ballot.create(year: Date.current.year, status: 'voting')
-      end
+    
       @selections = @ballot.categorized_selections
 
       if @vehicle.present?
