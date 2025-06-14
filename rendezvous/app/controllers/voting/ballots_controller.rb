@@ -48,12 +48,7 @@ module Voting
       @code = params[:code]
       if @code.present?
         @vehicle = Vehicle.find_by_code(@code)
-      end
-
-      if @vehicle.nil?
-        redirect_to get_voting_ballot_url, alert: 'Invalid ballot or vehicle.'
-        return
-      end        
+      end       
     
       @selections = @ballot.categorized_selections
 
