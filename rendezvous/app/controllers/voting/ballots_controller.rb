@@ -37,6 +37,7 @@ module Voting
 
     def ballot
       ballot_id = params[:ballot_id] || session[:ballot_id]
+      @ballot = Voting::Ballot.find(ballot_id)
       @code = params[:code]
       if @code.present?
         @vehicle = Vehicle.find_by_code(@code)
@@ -47,8 +48,8 @@ module Voting
         return
       end        
 
-      if !ballot_id.nil?
-        @ballot = Voting::Ballot.find(ballot_id)
+      if !@ballot.nil?
+        
         @ballot.get_status
         @ballot.save
       elsif @code.present?
