@@ -1,6 +1,6 @@
 module Voting
   class WinnerCalculationService
-    attr_reader :year, :tallies, :results
+    attr_reader :year, :tallies, :results, :favorite_of_show
   
     def initialize(year = Date.current.year)
       @year = year
@@ -46,6 +46,26 @@ module Voting
           place: Vehicle.where(id: place_ids),
           show:  Vehicle.where(id: show_ids)
         }
+      end
+
+      # Calculate favorate of show (most votes across all categories)
+      overall_votes = Hash.new(0) # vehicle_id => total_votes
+
+      @tallies.each do |category, vehicle_counts|
+        vehicle_counts.each do |vehicle_id, count|
+          overall_votes[vehicle_id] += count
+        end
+      end
+
+      # Find the maximum number of votes received
+      max_votes = overall_votes.values.max
+
+      # Select all vehicles that received the maximum number of votes
+      favorites = overall_votes.select { |_, count| count == max_votes }.keys
+
+      # Store the overall winner(s) as a separate instance variable
+      if favorites.any?
+        @favorite_of_show = Vehicle.where(id: favorites)
       end
     end
   end

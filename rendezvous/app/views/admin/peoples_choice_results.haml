@@ -17,3 +17,8 @@
                           #{vehicle[0].year_marque_model} &mdash; #{vehicle[0].user.full_name}
                           %br
                           Votes: #{vehicle[1]}
+
+            %h3.h4 Favorite of show
+            - @favorite_of_show.each do |vehicle|
+              %p #{vehicle.year_make_model} &mdash; #{vehicle.user.full_name}
+
