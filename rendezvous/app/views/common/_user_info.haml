@@ -4,10 +4,8 @@
       .row
         .col-md-12
           .form-group
-            - if (@user == current_user)
-              = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', disabled:  true
-              = f.input :id, as:  :hidden, input_html:  { value:  current_user.id }
-        
+            = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *'
+              
       .row
         .col-md-12
           %h3 Personal Information
