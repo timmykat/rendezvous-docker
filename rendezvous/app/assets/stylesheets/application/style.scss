@@ -66,11 +66,7 @@ body, p, li, ol, td {
 }
 
 section.banner {
-  background-image: url('DS-50th-b+w.jpg');
-  background-size: cover;
-  background-position: 20% 10%;
-  background-repeat: no-repeat;
-  min-height: 600px;
+	background-color: #CD1616;
 
 	img {
 		display: inline-block;
@@ -159,7 +155,10 @@ a, a:visited {
 }
 
 main {
-	margin-top: 30px;
+	.banner img {
+		max-width: 90%;
+		width: 600px;
+	}
 }
 
 footer {

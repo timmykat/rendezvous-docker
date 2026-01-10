@@ -1,8 +1,8 @@
 %ul.nav.navbar-nav
   %li.nav-item.dropdown
-    - if !registration_is_open
-      %li.nav-item
-        .span.badge.badge-danger Registration Is Now Closed!
+    -# - if !registration_is_open
+    -#   %li.nav-item
+    -#     .span.badge.badge-danger Registration Is Now Closed!
     - if registration_is_open && current_user.nil?
       %li.nav-item
       = link_to 'Sign In', new_user_session_path, class: 'nav-link'

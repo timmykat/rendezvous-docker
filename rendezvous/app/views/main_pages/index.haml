@@ -3,7 +3,10 @@
 %section.banner
   .container 
     .row.justify-content-center
-      %img{src: image_url("Deesse-70.svg")}
+      = image_tag '2026-rendezvous-splash.png', alt: '50th Citroen Rendezvous', class: 'splash'
+      %p.credit 
+        Image courtesy of Josh Sweeney, 
+        = link_to 'Shoot for Details', 'https://www.shootfordetails.com/'
 %section#welcome
   .container-fluid
     .row.justify-content-center
@@ -11,7 +14,7 @@
         .card 
           .card-body 
             .card-title 
-              %h1.h2 Citroen Rendezvous 2025
+              %h1.h2 Citroen Rendezvous 2026
             .card-text
               .row.justify-content-center
                 .col-md-7.col-12

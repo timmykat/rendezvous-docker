@@ -3,9 +3,9 @@ dates:
   day_one: June 13, 2025
   duration: 3
 registration_window:
-  open: 2025-04-01
-  close: 2025-06-06
-  after_rendezvous: 2025-06-16
+  open: 2026-04-01
+  close: 2026-06-05
+  after_rendezvous: 2025-06-15
   test: true
 fees:
   adult: 80
@@ -29,12 +29,13 @@ chauffeurs:
  - Jon Chomitz
  - Michaela Hellman
  - Tim Kinnel
+ - Andy Pickett
 
 # The following should rarely change
 front_page_message:
   pre_registration: Stay tuned.
   during_registration: Registration is open.
-  closed_registration: Online registration is now closed, but the Rendezvous is ON!
+  closed_registration: Online registration is now closed, the Rendezvous is ON!
   post_rendezvous: See you next year!
 info_pages:
   - faq
