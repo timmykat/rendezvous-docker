@@ -22,7 +22,7 @@
                 %ul.nav.navbar-nav.ml-auto
                   - if !registration_is_open
                     %li.nav-item
-                      %span.badge.badge-danger.mt-2 Registration Is Now Closed!
+                      %span.badge.badge-danger.mt-2 Registration TBD
                   - elsif registration_is_open && current_user.nil?
                     %li.nav-item= link_to 'Sign In', new_user_session_path, class: 'nav-link'
 
