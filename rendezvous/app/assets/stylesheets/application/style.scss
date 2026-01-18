@@ -154,10 +154,22 @@ a, a:visited {
 	}
 }
 
+p > a, p > a:visited {
+	color: var(--warm-maroon);
+	text-decoration: underline;
+	@include transition;	
+
+	&:hover {
+		color: var(--medium-gray);
+		text-decoration: none;
+	}
+}
+
+
 main {
 	.banner img {
 		max-width: 90%;
-		width: 600px;
+		width: 600pxfa;
 	}
 }
 
