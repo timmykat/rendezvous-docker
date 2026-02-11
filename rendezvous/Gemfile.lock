@@ -296,7 +296,7 @@ GEM
       date
       stringio
     public_suffix (6.0.1)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.12)
@@ -451,7 +451,7 @@ DEPENDENCIES
   newrelic_rpm
   propshaft
   pry
-  puma (= 6.4.2)
+  puma (= 6.4.3)
   racksh
   rails (= 7.1.3.2)
   rails_sortable
