@@ -11,14 +11,6 @@
         %section
           .card 
             .card-body
-              - if @event_registration.user.has_role? :vendor
-                .card-title
-                  %h2.h3 Vendor Fee
-                .card.text
-                  - if @event_registration.user&.vendor
-                    %p Vendor: #{@event_registration.user&.vendor.name}
-                  .form-group.vendor-fee
-                    = f.input :vendor_fee, input_html: { readonly: true, value: vendor_fee } 
               .card-title
                 %h2.h3 Donation
               .card.text

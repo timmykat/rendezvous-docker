@@ -30,6 +30,7 @@
             %thead
               %tr
 
+<<<<<<< Updated upstream
                 %th.text-center Actions
                 %th.text-center Status
                 %th Name
@@ -40,6 +41,17 @@
                 %th.text-center Total
                 %th.text-center Paid
                 %th.text-center Balance
+=======
+                %th.tablesorter-header.filter-false.text-center Actions
+                %th.tablesorter-header.filter-false.text-center Status
+                %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'}  Name
+                %th.tablesorter-header.filter-false.text-center Adults, Youths, Children
+                %th.tablesorter-header.filter-false.text-center Fee
+                %th.tablesorter-header.filter-false.text-center Donation
+                %th.tablesorter-header.filter-false.text-center Total
+                %th.tablesorter-header.filter-false.text-center Paid
+                %th.tablesorter-header.filter-false.text-center Balance
+>>>>>>> Stashed changes
             %tbody
               - @event_registrations.each do |registration|
                 %tr{class:  'text-center' }
@@ -61,11 +73,20 @@
                           
                   %td.text-center
                     = registration.status
+<<<<<<< Updated upstream
                     .status-icon
                       %i{ class: get_status_icon(registration.status) } 
                   %td.text-left= link_to registration.user.last_name_first, user_path(registration.user)
                   %td.text-center= registration.number_of_adults
                   %td.text-center= registration.number_of_children
+=======
+                  %td.text-left
+                    - if registration.user.present?
+                      = link_to registration.user.last_name_first, user_path(registration.user)
+                    - else 
+                      *** No user for registration #{registration.id}
+                  %td.text-center #{registration.number_of_adults}, #{registration.number_of_youths}, #{registration.number_of_children}
+>>>>>>> Stashed changes
                   %td.text-right= number_to_currency(registration.registration_fee)
                   %td.text-right= number_to_currency(registration.donation)
                   %td.text-right= number_to_currency(registration.total)
@@ -192,6 +213,8 @@
                                 %em  Attendees
                               %td.text-right
                                 Adults: #{@data[:adult]}
+                                %br
+                                  Youths:   #{@data[:youth]}
                                 %br
                                   Kids:   #{@data[:child]}
                             %tr

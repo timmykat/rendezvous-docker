@@ -73,9 +73,12 @@ module Event
       if !donation.blank?
         total += donation
       end
+<<<<<<< Updated upstream
       if !vendor_fee.blank?
         total += vendor_fee
       end
+=======
+>>>>>>> Stashed changes
     end
     
     def self.invoice_number

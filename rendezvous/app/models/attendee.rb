@@ -6,7 +6,7 @@ class Attendee < ApplicationRecord
   before_validation :normalize_age
   
   validates :name, presence: true
-  validates :attendee_age, inclusion: { in: ['adult', 'senior', 'child'] } 
+  validates :attendee_age, inclusion: { in: ['adult', 'youth', 'child'] } 
   
   def self.sunday_dinner_count
     Attendee.where(sunday_dinner: true).count
@@ -18,6 +18,10 @@ class Attendee < ApplicationRecord
   
   def self.adult_count
     Attendee.where(attendee_age: 'adult').count
+  end
+
+  def self.youth_count
+    Attendee.where(attendee_age: 'youth').count
   end
   
   def self.child_count

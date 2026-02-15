@@ -25,10 +25,6 @@ module RegistrationsHelper
     next_step = (index - 1 < steps.length) ? steps[index + 1] : nil
   end
 
-  def vendor_fee
-    Config::SiteSetting.instance.vendor_fee
-  end
-
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
     case status

@@ -12,7 +12,7 @@ class AdminController < ApplicationController
         'Registration number',
         'Registrant',
         'Attendee name',
-        'Adult or child',
+        'Adult, youth, or child',
         'Volunteer?',
         'Donation?',
         'Date registration paid',
@@ -201,6 +201,7 @@ class AdminController < ApplicationController
       attendees: query.joins(:attendees).count,
       newbies: [],
       adult: query.joins(:attendees).where(attendees: { attendee_age: 'adult'}).count,
+      youth: query.joins(:attendees).where(attendees: { attendee_age: 'youth'}).count,
       child: query.joins(:attendees).where(attendees: { attendee_age: 'child'}).count,
       volunteers: {
         number: volunteers.length,

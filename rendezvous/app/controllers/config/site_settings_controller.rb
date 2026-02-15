@@ -22,10 +22,8 @@ class Config::SiteSettingsController < ApplicationController
 
   private
     def set_defaults
-      @instance.registration_fee ||= 80.0
       @instance.days_duration ||= 3
       @instance.square_environment ||= 'SANDBOX'
-      @instance.vendor_fee ||= 300.0
     end
 
     def site_settings_params
@@ -39,7 +37,6 @@ class Config::SiteSettingsController < ApplicationController
         :registration_close_date,
         :square_environment,
         :user_testing,
-        :vendor_fee,
         :voting_on     
       )
     end

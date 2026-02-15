@@ -1,0 +1,178 @@
+:root {
+  --citroenFont: "Citroen", sans-serif;
+  --displayFont: "Poller One", serif;
+  --mainFont: "Josefin Sans", sans-serif;
+  --funRed: #d02a2a;
+}
+
+@page {
+  size: 8.5in 11in;
+  margin: 0;
+}
+@font-face {
+  font-family: "Citroen";
+  src: local("Citroen"), url("/fonts/Citroen Regular.otf") format("opentype");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Citroen";
+  src: local("Citroen"), url("/fonts/Citroen-Bold.otf") format("opentype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "Citroen";
+  src: local("Citroen"), url("/fonts/Citroen Black.otf") format("opentype");
+  font-weight: 800;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+
+/* placard styling */
+.placard {
+  font-family: var(--mainFont);
+  position: relative;
+  width: 8.5in;
+  height: 5.4in;
+  box-sizing: border-box;
+  padding: 0.25in 0.5in;
+  margin: 0;
+}
+
+@media print {
+  .placard:nth-child(even) {
+    page-break-after: always;
+  }
+}
+.placard header {
+  text-align: center;
+}
+.placard header img {
+  height: 1in;
+  padding: 20px;
+}
+.placard header .text {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-style: normal;
+}
+.placard .datum {
+  font-family: var(--mainFont);
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-size: 1.5rem;
+  display: flex;
+  padding: 1.8rem 0 0.2rem;
+  border-bottom: solid 2px #666;
+  line-height: 1.4;
+}
+.placard .datum .label {
+  width: 50%;
+}
+.placard .datum .value {
+  font-weight: 400;
+}
+.placard .qr-code-id {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left: 0.45in;
+  bottom: 0.2in;
+}
+.placard .qr-code-id img {
+  width: 1in;
+  height: 1in;
+}
+.placard .qr-code-id .code {
+  font-size: 1.8rem;
+  font-weight: normal;
+}
+
+/* label styling */
+.wrapper-page {
+  width: 8.5in;
+  height: 11in;
+  padding: 0.5in 0.156in;
+  box-sizing: border-box;
+  page-break-after: always;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  gap: 0in 0.2037in;
+  height: 10in;
+  box-sizing: border-box;
+}
+.wrapper .label-wrapper {
+  width: 3.98in;
+  height: 3.333in;
+  box-sizing: border-box;
+  position: relative;
+  page-break-inside: avoid;
+  flex: 0 0 auto;
+}
+.wrapper .label-wrapper .label {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 20px 15px;
+  border: solid 1px #eee;
+  font-family: var(--mainFont);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wrapper .label-wrapper .label .content {
+  display: flex;
+}
+.wrapper .label-wrapper .label .info {
+  font-size: 1rem;
+  flex-grow: 2;
+}
+.wrapper .label-wrapper .label .info .people {
+  font-size: 0.8rem;
+  line-height: 1.3;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  border-left: solid 2px var(--funRed);
+}
+.wrapper .label-wrapper .label .info > * {
+  margin-bottom: 10px;
+}
+.wrapper .label-wrapper .label .name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.wrapper .label-wrapper .label .ident {
+  position: absolute;
+  left: 15px;
+  bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+.wrapper .label-wrapper .label .ident .info .title {
+  font-family: var(--displayFont);
+  font-size: 1rem;
+}
+.wrapper .label-wrapper .label .ident .info .loc {
+  font-size: 0.8rem;
+}
+.wrapper .label-wrapper .label .ident .logo {
+  padding: 1em;
+}
+.wrapper .label-wrapper .label .ident .logo img {
+  width: 100%;
+}
+.wrapper .label-wrapper .label .pep {
+  margin-top: 20px;
+  font-size: 1.25rem;
+  color: var(--funRed);
+}
