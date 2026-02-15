@@ -1,0 +1,18 @@
+chauffeurs:
+ - Bill Blaufuss
+ - Dave & Jamie Burnham
+ - Jon Chomitz
+ - Michaela Hellman
+ - Tim Kinnel
+ - Andy Pickett
+
+official_contact:
+  mailing_address_array:
+    - "Citroen Rendezvous, LLC"
+    - "28 11th Street"
+    - "Providence, RI 02906"
+    - "United States"
+  chief_officer: Timothy S Kinnel
+  email: rendezvousLLC@kinnel.warpmail.net
+  facebook: https://www.facebook.com/groups/1796592930566951/
+

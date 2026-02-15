@@ -133,8 +133,8 @@ class User < ApplicationRecord
   end
 
   def country_name
-    if Rails.configuration.rendezvous[:countries].map{ |code, name| code.to_s }.include? country
-      Rails.configuration.rendezvous[:countries][country.to_sym]
+    if Rails.configuration.geodata[:countries].map{ |code, name| code.to_s }.include? country
+      Rails.configuration.geodata[:countries][country.to_sym]
     else
       ''
     end

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :flash_array
   before_action :update_active_user
 
-  CONFIG = Rails.configuration.rendezvous
+  GEO_CONFIG = Rails.configuration.geodata
 
   RECAPTCHA_MINIMUM_SCORE = 0.5
 
@@ -38,8 +38,8 @@ class ApplicationController < ActionController::Base
         event_fee: Config::SiteSetting.instance.registration_fee,
         marques: VehicleTaxonomy.get_marques,
         models: VehicleTaxonomy.get_citroen_models,
-        provinces: CONFIG[:provinces],
-        countries: CONFIG[:countries]
+        provinces: GEO_CONFIG[:provinces],
+        countries: GEO_CONFIG[:countries]
       }
   end
 

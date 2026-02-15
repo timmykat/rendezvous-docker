@@ -189,11 +189,11 @@ module ApplicationHelper
   def les_chauffeurs(output = "html")
     if output == "html"
       value = "<ul class='list-unstyled'>\n"
-      Rails.configuration.rendezvous[:chauffeurs].each do |c|
+      Rails.configuration.people[:chauffeurs].each do |c|
         value += "  <li>#{c}</li>"
       end
     else
-      value = Rails.configuration.rendezvous[:chauffeurs].join(', ')
+      value = Rails.configuration.people[:chauffeurs].join(', ')
     end
     return value.html_safe
   end
@@ -210,7 +210,7 @@ module ApplicationHelper
   end
 
   def mailing_address(delimiter = "<br />\n")
-    Rails.configuration.rendezvous[:official_contact][:mailing_address_array].join(delimiter).html_safe
+    Rails.configuration.people[:official_contact][:mailing_address_array].join(delimiter).html_safe
   end
 
 
@@ -218,8 +218,8 @@ module ApplicationHelper
     config = Rails.configuration.rendezvous
     output = '<p><em>Mailing address: </em><br />'
     output +=  mailing_address
-    output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
-    output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
+    output += '<p><em>Chief officer:</em> ' + Rails.configuration.people[:official_contact][:chief_officer] + "</p>\n"
+    output += '<p><em>Official email:</em> ' + Rails.configuration.people[:official_contact][:email] + "</p>\n"
     output.html_safe
   end
 
@@ -292,7 +292,7 @@ module ApplicationHelper
   end
 
   def country_list
-    Rails.configuration.rendezvous[:countries].map{|code, name| [name, code] }
+    Rails.configuration.geodata[:countries].map{|code, name| [name, code] }
   end
 
   def state_province_list

@@ -73,16 +73,10 @@ module Event
       if !donation.blank?
         total += donation
       end
-<<<<<<< Updated upstream
-      if !vendor_fee.blank?
-        total += vendor_fee
-      end
-=======
->>>>>>> Stashed changes
     end
     
     def self.invoice_number
-      prefix = "CR#{Rails.configuration.rendezvous[:dates][:year]}"
+      prefix = "CR#{Rails.configuration.site[:dates][:year]}"
       previous_code = Registration.pluck(:invoice_number).last
       if previous_code.blank?
         next_number = 101

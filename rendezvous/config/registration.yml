@@ -1,0 +1,43 @@
+registration_window:
+  open: 2025-04-01
+  close: 2025-06-06
+  after_rendezvous: 2025-06-16
+  test: true
+fees:
+  early:
+    start_date: 2026-01-01
+    end_date: 2026-04-30
+    adult: 100
+    youth: 50
+    child: 0
+  late:
+    start_date: 2026-05-01
+    end_date: 2026-06-05
+    adult: 120
+    youth: 60
+    child: 0
+suggested_donations:
+    - 10
+    - 25
+    - 50
+    - 75
+    - 100
+payment_methods:
+  - credit card
+  - check
+  - cash
+  - cash or check
+  - no payment
+registration_statuses:
+  - initiated
+  - in review
+  - payment due
+  - complete
+  - updated
+  - updating
+  - "cancelled - settled"
+  - "cancelled - needs refund"
+transaction_types:
+  - payment
+  - refund
+

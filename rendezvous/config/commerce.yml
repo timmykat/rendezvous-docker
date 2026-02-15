@@ -1,0 +1,9 @@
+merchandise:
+  sizes:
+    - S
+    - M
+    - L
+    - XL
+    - XXL
+    - XXXL
+    - no size

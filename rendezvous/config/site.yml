@@ -1,0 +1,39 @@
+# The following will most likely change from year to year
+dates:
+  day_one: June 13, 2025
+  duration: 3
+
+hotel:
+  name: Hyatt Place Saratoga Malta
+  address: 20 State Farm Place, Ballston Spa, NY, 12020
+  website: https://www.marriott.com/en-us/hotels/albss-courtyard-saratoga-springs/overview/
+  event_rate: $189/night
+  event_registration_link: https://www.hyatt.com/en-US/group-booking/ALBZS/G-CRDV
+  event_registration_last_day: May 30
+venue:
+  name: Lakeside Farms
+  address: 336 Schauber Road, Ballston Lake
+  website: https://www.lakesidefarmscidermill.com/
+
+# The following should rarely change
+front_page_message:
+  pre_registration: Stay tuned.
+  during_registration: Registration is open.
+  closed_registration: Online registration is now closed, but the Rendezvous is ON!
+  post_rendezvous: See you next year!
+info_pages:
+  - faq
+  - history
+  - legal_information
+  - vendors
+
+print_token: "bLsa1e0Kq04hinHnX7ENvE2X389rhrLy"
+mailchimp:
+  api_key: <%= ENV['RENDEZVOUS_MAILCHIMP_API_KEY'] %>
+  list:
+    name: Citroen Rendezvous
+    list_id: 9e696fe93f
+    
+test:
+  mailer:
+    delivery_method: test
