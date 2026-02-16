@@ -184,16 +184,6 @@ module Event
       @title = 'Review Registration Information'
       @step = 'review'
       @event_registration = Registration.find(params[:id])
-<<<<<<< Updated upstream
-      # If user is a vendor, add the registration fee
-      if (@event_registration.user.has_role? :vendor)
-        vendor_fee = Config::SiteSetting.instance.vendor_fee
-        @event_registration.vendor_fee = vendor_fee
-        @event_registration.ensure_total
-        @event_registration.save!
-      end 
-=======
->>>>>>> Stashed changes
       @event_registration.status = 'in review'
       @event_registration.save!
     end

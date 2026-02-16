@@ -1,4 +1,4 @@
-FROM ruby:3.2.2 as main
+FROM ruby:3.4.2 as main
 
 RUN apt-get update -qq && \
     apt-get install -y curl xz-utils

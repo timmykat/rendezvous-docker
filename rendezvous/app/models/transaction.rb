@@ -5,7 +5,7 @@ class Transaction < ApplicationRecord
   attribute :amount, :decimal, default: 0.0
   
   validates :transaction_type, inclusion: { in: ['payment', 'refund', 'none'] }
-  validates :transaction_method, inclusion: { in: Rails.configuration.rendezvous[:payment_methods] }
+  validates :transaction_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }
 
   validate :validate_amount_and_type
   

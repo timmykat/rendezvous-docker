@@ -25,12 +25,12 @@ module Event
     
     validate :validate_minimum_number_of_adults, unless: -> { status.nil? || status.match(/^cancelled/) }
     validate :validate_payment, unless: -> { status.nil? || status.match(/^cancelled/) }
-    validates :paid_method, inclusion: { in: Rails.configuration.rendezvous[:payment_methods] }, allow_blank: true
+    validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
     # validates :invoice_number, uniqueness: true, format: { with: /\ARR20\d{2}-\d{3,4}\z/, on: :new }, allow_blank: true
     
-    validates :status, inclusion: { in: Rails.configuration.rendezvous[:registration_statuses] }
+    validates :status, inclusion: { in: Rails.configuration.registration[:registration_statuses] }
     
-    serialize :events, JSON
+    serialize :events
 
     before_save :ensure_total
     

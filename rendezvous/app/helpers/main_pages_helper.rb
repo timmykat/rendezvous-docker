@@ -1,6 +1,6 @@
 module MainPagesHelper
 
-  config = Rails.configuration.rendezvous
+  config = Rails.configuration.site
   
   DAYS_OF_THE_WEEK = [
     "Sunday",

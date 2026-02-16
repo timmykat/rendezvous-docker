@@ -75,7 +75,7 @@
                 %p
                   %label Registration fee:
                   #{number_to_currency(@event_registration.registration_fee)} (US)
-                  - if @event_registration.status != Rails.configuration.rendezvous[:registration_statuses][0]
+                  - if @event_registration.status != Rails.configuration.registration[:registration_statuses][0]
                     %br
                     %label Donation:
                     - if @event_registration.donation.blank?

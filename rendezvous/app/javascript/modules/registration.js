@@ -5,37 +5,21 @@ $(document).ready(function() {
   
   var setRegistrationFee = function() {
     if (typeof appData != 'undefined') {
-<<<<<<< Updated upstream
-      var total = $('input#event_registration_number_of_adults').val() * appData.event_fee;
-        // + $('input#event_registration_number_of_children').val() * appData.fees.child;  # Registration for kids is free
-=======
       let total = $('input#event_registration_number_of_adults').val() * appData.event_fee
         + $('input#event_registration_number_of_youths').val() * appData.fees.youth;  
->>>>>>> Stashed changes
       $('input#event_registration_registration_fee').val((total).toFixed(2));
     }
   };
   var getAttendeeTotals = function() {
     var adults = $('#attendees input[value="adult"]:visible:checked').length;
     $('input#event_registration_number_of_adults').val(adults); 
-<<<<<<< Updated upstream
-    var children = $('#attendees input[value="child"]:visible:checked').length;
-=======
     let youths = $('#attendees input[value="youth"]:visible:checked').length;
     $('input#event_registration_number_of_youths').val(youths);  
     let children = $('#attendees input[value="child"]:visible:checked').length;
->>>>>>> Stashed changes
     $('input#event_registration_number_of_children').val(children);  
     setRegistrationFee();  
   }
       
-<<<<<<< Updated upstream
-  // Remove the remove button from the first attendee and lock and hide the child selection
-  $('#attendees .remove_association_action:first').remove();
-  $('#attendees input[value="child"]:first').attr('disabled', true);
-  $('#attendees input[value="child"]:first').parent().hide();
-  $('#attendees .event_registration_attendees_name input:first').attr('placeholder', 'Your name *');
-=======
   // Remove the remove button from the first attendee and lock and hide the youth and child selections
   $('#attendees').find('.remove_association_action').first().remove();
   $('#attendees').find('input[value="youth"]').first().attr('disabled', true);
@@ -43,7 +27,6 @@ $(document).ready(function() {
   $('#attendees').find('input[value="child"]').first().attr('disabled', true);
   $('#attendees').find('input[value="child"]').first().parent().hide();
   $('#attendees').find('.event_registration_attendees_name input').first().attr('placeholder', 'Your name *');
->>>>>>> Stashed changes
   
   // Initialize - set the first attendee info and get totals
   // $('#attendees input[value="adult"]:first').attr('checked', 'checked');
@@ -82,12 +65,7 @@ $(document).ready(function() {
       } else {
         donation = 0.
       }
-<<<<<<< Updated upstream
-      var total = parseFloat(appData.event_registration_fee) + donation + parseFloat(vendorFee);
-      console.log('Total')
-=======
       let total = parseFloat(appData.event_registration_fee) + donation;
->>>>>>> Stashed changes
       $('input#event_registration_total').val(total.toFixed(2));
 
       // Update donation and total in the DB

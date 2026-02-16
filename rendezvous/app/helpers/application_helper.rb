@@ -113,7 +113,7 @@ module ApplicationHelper
   end
 
   def after_rendezvous?
-    Time.now > Rails.configuration.rendezvous[:registration_window][:after_rendezvous]
+    Time.now > Rails.configuration.registration[:registration_window][:after_rendezvous]
   end
 
   def user_can_test
@@ -215,11 +215,11 @@ module ApplicationHelper
 
 
   def official_contact
-    config = Rails.configuration.rendezvous
+    config = Rails.configuration.people
     output = '<p><em>Mailing address: </em><br />'
     output +=  mailing_address
-    output += '<p><em>Chief officer:</em> ' + Rails.configuration.people[:official_contact][:chief_officer] + "</p>\n"
-    output += '<p><em>Official email:</em> ' + Rails.configuration.people[:official_contact][:email] + "</p>\n"
+    output += '<p><em>Chief officer:</em> ' + config[:official_contact][:chief_officer] + "</p>\n"
+    output += '<p><em>Official email:</em> ' + config[:official_contact][:email] + "</p>\n"
     output.html_safe
   end
 

@@ -64,7 +64,7 @@
                     .row
                       .col-12
                         - if user_is_admin?
-                          = f.input :status, as: :select, collection: Rails.configuration.rendezvous[:registration_statuses]
+                          = f.input :status, as: :select, collection: Rails.configuration.registration[:registration_statuses]
                     = f.input_field :status, as:  :hidden
 
 

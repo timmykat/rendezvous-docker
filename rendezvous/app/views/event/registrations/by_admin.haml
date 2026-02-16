@@ -47,7 +47,7 @@
                           Registration fee (USD):
                           = f.input_field :registration_fee, disabled:  true, class:  'calculated'
                   = f.input_field :year, as:  :hidden, value:  Time.new.year
-                  = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+                  = f.input_field :status, as:  :hidden, value:  Rails.configuration.registration[:registration_statuses][0]
 
                   .row 
                     .col-12

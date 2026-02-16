@@ -83,7 +83,7 @@ class User < ApplicationRecord
   end
 
   def postal_code_by_country
-    if Rails.configuration.rendezvous[:provinces].include? (state_or_province)
+    if Rails.configuration.geodata[:provinces].include? (state_or_province)
       country_format = 'Canadian'
       valid = /\A(\w\d\w\s?\d\w\d)\z/.match(postal_code)
     elsif !state_or_province.blank?
@@ -97,7 +97,7 @@ class User < ApplicationRecord
   end
 
   def set_country
-    if Rails.configuration.rendezvous[:provinces].include? (state_or_province)
+    if Rails.configuration.geodata[:provinces].include? (state_or_province)
       country = 'CA'
     elsif !state_or_province.blank?
       country = 'US'
