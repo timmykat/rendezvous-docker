@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: donations
+#
+#  id               :bigint           not null, primary key
+#  amount           :decimal(6, 2)
+#  created_by_admin :boolean          default(FALSE), not null
+#  date             :date
+#  first_name       :string(255)
+#  last_name        :string(255)
+#  status           :string(255)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  registration_id  :integer
+#  user_id          :integer
+#
+# Indexes
+#
+#  index_donations_on_date             (date)
+#  index_donations_on_registration_id  (registration_id)
+#  index_donations_on_user_id          (user_id)
+#
 class Donation < ApplicationRecord
 
 include AdminCreatable

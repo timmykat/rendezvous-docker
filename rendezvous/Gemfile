@@ -53,6 +53,9 @@ gem 'dkim'
 gem 'simple_form', '~>5'
 gem 'redcarpet'
 
+# Model annotation
+gem 'annotaterb'
+
 # Monitoring
 gem 'newrelic_rpm'
 

@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: ballots
+#
+#  id         :bigint           not null, primary key
+#  status     :string(255)
+#  year       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  voter_id   :string(36)
+#
+# Indexes
+#
+#  index_ballots_on_voter_id  (voter_id)
+#  index_ballots_on_year      (year)
+#
 module Voting
   class Ballot < ApplicationRecord
     

@@ -17,12 +17,13 @@
 
             %h3.h4 Event Pricing
             - config.fees.each do |category, values|
+              - categore.each do |values|
               %h2.h5= category.titleize
-              %p Before #{values.end_date}
-              %ul
-                %li Adult: #{values.adult}
-                %li Youth: #{values.youth}
-                %li Child: free
+                %p Before #{values.end_date}
+                %ul
+                  %li Adult: #{values.adult}
+                  %li Youth: #{values.youth}
+                  %li Child: free
               
 
             %h3.h4 Refund Policy
