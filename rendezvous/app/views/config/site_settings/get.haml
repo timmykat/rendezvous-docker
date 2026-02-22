@@ -10,17 +10,12 @@
                 = f.input :voting_on
               .form-group
                 = f.input :registration_is_open, as: :boolean
+              %fieldset
+                .form-group 
+                  = f.input :debug_dates, as: :boolean
+                .form-group 
+                  = f.input :debug_test_date, as: :date_select
               .form-group
-                = f.input :opening_day, as: :date
-              .form-group
-                = f.input :days_duration
-              .form-group
-                = f.input :refund_date, as: :date
-              .form-group
-                = f.input :registration_close_date, as: :date    
-              .form-group
-                = f.input :user_testing, as: :boolean
-              .form_group 
                 = f.input :square_environment, as: :select, collection: ['SANDBOX', 'PROD'], label: 'Select Square Environment', include_blank: '-- Default is SANDBOX --'               
               .form-group 
                 = f.submit 'Save Settings'

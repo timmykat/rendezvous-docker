@@ -5,13 +5,13 @@ $(document).ready(function() {
   
   var setRegistrationFee = function() {
     if (typeof appData != 'undefined') {
-      let total = $('input#event_registration_number_of_adults').val() * appData.event_fee
+      let total = $('input#event_registration_number_of_adults').val() * appData.fees.adult
         + $('input#event_registration_number_of_youths').val() * appData.fees.youth;  
       $('input#event_registration_registration_fee').val((total).toFixed(2));
     }
   };
   var getAttendeeTotals = function() {
-    var adults = $('#attendees input[value="adult"]:visible:checked').length;
+    let adults = $('#attendees input[value="adult"]:visible:checked').length;
     $('input#event_registration_number_of_adults').val(adults); 
     let youths = $('#attendees input[value="youth"]:visible:checked').length;
     $('input#event_registration_number_of_youths').val(youths);  

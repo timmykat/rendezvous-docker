@@ -80,12 +80,8 @@ module ApplicationHelper
     classes
   end
 
-  def event_fee
-    Config::SiteSetting.instance.registration_fee
-  end
-
   def refund_date
-    Config::SiteSetting.instance.refund_date || Time.now
+    Rails.configuration.registration[:refund_date].to_time || current_time
   end
 
   def logged_in_user(user)
@@ -109,11 +105,11 @@ module ApplicationHelper
   end
 
   def before_cutoff_date?
-    Time.now <= Config::SiteSetting.instance.registration_close_date
+    current_time <= Rails.configuration.registration[:registration_window][:close].to_time
   end
 
   def after_rendezvous?
-    Time.now > Rails.configuration.registration[:registration_window][:after_rendezvous]
+    current_time > Rails.configuration.registration[:registration_window][:after_rendezvous]
   end
 
   def user_can_test

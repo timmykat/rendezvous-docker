@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
   before_action :flash_array
   before_action :update_active_user
 
+  helper_method :current_time
+  helper_method :fee_period
+  helper_method :event_fees
+
   GEO_CONFIG = Rails.configuration.geodata
 
   RECAPTCHA_MINIMUM_SCORE = 0.5
@@ -14,6 +18,22 @@ class ApplicationController < ActionController::Base
   def render(*args)
     Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
     super(*args)  # Call the original render method
+  end
+
+  def current_time
+    if Config::SiteSetting.instance.debug_dates
+      Config::SiteSetting.instance.debug_test_date.to_time
+    else
+      Time.current
+    end
+  end
+
+  def event_fees_for_period
+    Rails.configuration.registration[:fees][fee_period]
+  end
+
+  def fee_period
+    (current_time <= Rails.configuration.registration[:fees][:early][:end_date].to_time) ? :early : :late
   end
 
   # Need this for other gems that might set flash
@@ -35,7 +55,7 @@ class ApplicationController < ActionController::Base
   def get_app_data
     @app_data =
       {
-        event_fee: Config::SiteSetting.instance.registration_fee,
+        fees: event_fees_for_period,
         marques: VehicleTaxonomy.get_marques,
         models: VehicleTaxonomy.get_citroen_models,
         provinces: GEO_CONFIG[:provinces],

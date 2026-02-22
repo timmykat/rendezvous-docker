@@ -1,21 +1,22 @@
 registration_window:
-  open: 2025-04-01
-  close: 2025-06-06
-  after_rendezvous: 2025-06-16
+  open: 2026-03-01
+  close: 2026-06-06
+  after_rendezvous: 2026-06-16
   test: true
 fees:
   early:
-    start_date: 2026-01-01
-    end_date: 2026-04-30
     adult: 100
     youth: 50
     child: 0
+    start_date: 2026-01-01
+    end_date: 2026-04-30
   late:
-    start_date: 2026-05-01
-    end_date: 2026-06-05
     adult: 120
     youth: 60
     child: 0
+    start_date: 2026-05-01
+    end_date: 2026-06-05
+refund_date: 2026-06-06
 suggested_donations:
     - 10
     - 25

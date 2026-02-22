@@ -1,8 +1,9 @@
+- fees = event_fees_for_period 
 .nested-fields
   .row
     .col-md-12
       .card
-        .card-body
+        .card-body{ data: { fee: fees[fee_period][:adult] } }
           .card-title
             .registrant.attendee-type
               You
@@ -12,9 +13,10 @@
             .form-group
               = f.input :name, label:  'Name (for name tag)', input_html:  { placeholder:  'Name *' }
             .form-group
-              = f.input :attendee_age, label:  '', collection:  [['Adult, 16+', 'adult'], ['Youth, 5-15', 'child'], ['Child, 0-5 (free)', 'child']], as:  :radio_buttons, item_label_class:  'form-check-label ms-2', item_wrapper_tag:  false
+              = f.input :attendee_age, label:  '', collection:  [['Adult, 16+', 'adult'], ['Youth, 5-15', 'youth'], ['Child, 0-5 (free)', 'child']], as:  :radio_buttons, item_label_class:  'form-check-label ms-2', item_wrapper_tag:  false
             .form-group
               = f.input :volunteer, inline_label:  "Would like to volunteer (<a href='#' data-toggle='modal', data-target='#volunteer-info'>What volunteer tasks are there?</a>)".html_safe
+            .form-group 
                 
             .row
               .col-md-12

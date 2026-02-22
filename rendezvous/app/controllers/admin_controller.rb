@@ -16,7 +16,7 @@ class AdminController < ApplicationController
         'Volunteer?',
         'Donation?',
         'Date registration paid',
-        ('As of: ' + Time.now.strftime('%Y%m%d'))
+        ('As of: ' + Time.current.strftime('%Y%m%d'))
       ]
     },
     dash_placards: {

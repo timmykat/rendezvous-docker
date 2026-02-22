@@ -24,7 +24,7 @@
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
 
     :javascript
-      var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
+      const appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
       function loadChartJs(callback) {
         const script = document.createElement('script');

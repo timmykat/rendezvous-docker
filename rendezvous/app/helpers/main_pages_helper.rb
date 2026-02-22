@@ -22,6 +22,11 @@ module MainPagesHelper
     return START_DATE.year
   end
 
+  def format_short_date(date_input)
+    date = date_input.is_a?(String) ? Date.parse(date_input) : date_input
+    date.strftime(SHORT_FORMAT)
+  end
+
   def event_dates
     output = START_DATE.strftime(SHORT_FORMAT) + "&ndash;" +  END_DATE.strftime(SHORT_FORMAT) + ", " + START_DATE.year.to_s
 
