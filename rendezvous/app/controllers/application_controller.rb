@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_time
   helper_method :fee_period
   helper_method :event_fees
+  helper_method :event_fees_for_period
 
   GEO_CONFIG = Rails.configuration.geodata
 

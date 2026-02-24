@@ -1,128 +1,117 @@
-import $ from 'jquery';
-
 $(document).ready(function() {
-  const registrationId = $('[data-registration_id]').data('registration_id')
-  
-  var setRegistrationFee = function() {
-    if (typeof appData != 'undefined') {
-      let total = $('input#event_registration_number_of_adults').val() * appData.fees.adult
-        + $('input#event_registration_number_of_youths').val() * appData.fees.youth;  
-      $('input#event_registration_registration_fee').val((total).toFixed(2));
-    }
+  const registrationId = $('[data-registration_id]').data('registration_id');
+
+  // 1. SET INDIVIDUAL FEE
+  let setAttendeeFee = function(type, target) {
+    let $card = $(target).closest('.card');
+    // Safety check: default to 0 if the type isn't found in appData
+    let fee = (appData.fees && appData.fees[type]) ? appData.fees[type] : 0;
+    console.log('Setting fee data on attendee card')
+    $card.data('fee', fee);
   };
-  var getAttendeeTotals = function() {
-    let adults = $('#attendees input[value="adult"]:visible:checked').length;
-    $('input#event_registration_number_of_adults').val(adults); 
-    let youths = $('#attendees input[value="youth"]:visible:checked').length;
-    $('input#event_registration_number_of_youths').val(youths);  
-    let children = $('#attendees input[value="child"]:visible:checked').length;
-    $('input#event_registration_number_of_children').val(children);  
-    setRegistrationFee();  
-  }
-      
-  // Remove the remove button from the first attendee and lock and hide the youth and child selections
-  $('#attendees').find('.remove_association_action').first().remove();
-  $('#attendees').find('input[value="youth"]').first().attr('disabled', true);
-  $('#attendees').find('input[value="youth"]').first().parent().hide();
-  $('#attendees').find('input[value="child"]').first().attr('disabled', true);
-  $('#attendees').find('input[value="child"]').first().parent().hide();
-  $('#attendees').find('.event_registration_attendees_name input').first().attr('placeholder', 'Your name *');
-  
-  // Initialize - set the first attendee info and get totals
-  // $('#attendees input[value="adult"]:first').attr('checked', 'checked');
-  getAttendeeTotals(); 
-  
-  if ($('input#event_registration_user_attributes_last_name').length > 0) {
-    var firstName = $('input#event_registration_user_attributes_first_name').val();
-    var lastName = $('input#event_registration_user_attributes_last_name').val();
-    $('#attendees input[placeholder="Your name *"]:first').val(firstName + ' ' + lastName);
-  }
-  
 
-  // Get adult and kid totals
-  $('#attendees').on('click', 'input[type=radio]', function(e) { 
-    getAttendeeTotals(); 
-  });
-  $('#attendees').on('cocoon:after-insert cocoon:after-remove', function(e) {
-    getAttendeeTotals();
-  });
+  // 2. SUM ALL FEES
+  let getAttendeeTotals = function() {
+    console.log('Calculating fee total')
+    let attendeeTotal = 0;
   
-
-  // Update registration fee
-  $('.fee-calculation').on('change click keyup', function(e) {
-    setRegistrationFee();  
-  });
+    // Sum data-fee from all visible attendee cards
+    $('.card.attendee:visible').each(function() {
+      let cardFee = parseFloat($(this).data('fee')) || 0;
+      attendeeTotal += cardFee;
+    });
   
-  // Get final total on payment page
-  var setTotal = function() {
-    if (typeof appData != 'undefined') {
-      let donation = $('input[name="event_registration[donation]"]').val()
-      console.log('Donation', donation)
+    // Update registration fee input
+    console.log('Setting attendee total')
+    $('input#event_registration_registration_fee').val(attendeeTotal.toFixed(2));
+  
+    // Update counts for backend processing
+    $('input#event_registration_number_of_adults').val($('#attendees input[value="adult"]:visible:checked').length);
+    $('input#event_registration_number_of_youths').val($('#attendees input[value="youth"]:visible:checked').length);
+    $('input#event_registration_number_of_children').val($('#attendees input[value="child"]:visible:checked').length);
+  
+    // Recalculate grand total (fee + donation)
+    setTotal(); 
+  };
 
-      if ($.isNumeric(donation)) {
-        console.log('Is numeric')
-        donation = parseFloat(donation);
-      } else {
-        donation = 0.
-      }
-      let total = parseFloat(appData.event_registration_fee) + donation;
+  // 3. GRAND TOTAL (Fee + Donation)
+  let setTotal = function() {
+    console.log('Setting total')
+    if (typeof appData !== 'undefined') {
+      let regFee = parseFloat($('input#event_registration_registration_fee').val()) || 0;
+      let donation = parseFloat($('input[name="event_registration[donation]"]').val()) || 0;
+
+      let total = regFee + donation;
       $('input#event_registration_total').val(total.toFixed(2));
 
-      // Update donation and total in the DB
-      const registrationId = $('[data-registration_id]').data('registration_id')
-      $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total})
+      // Async update DB
+      const registrationId = $('[data-registration_id]').data('registration_id');
+      $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total });
     }
   };
-  
-  // Update total
-  $(document).on('load', setTotal)
-  $('.total-calculation').on('click blur', function(e) {
+
+  // --- Initialization & Event Listeners ---
+
+  // Handle first attendee UI logic
+  let $firstAttendee = $('#attendees .nested-fields').first();
+  $firstAttendee.find('.remove_association_action').remove();
+  $firstAttendee.find('input[value="youth"], input[value="child"]').prop('disabled', true).parent().hide();
+  $firstAttendee.find('.event_registration_attendees_name input').attr('placeholder', 'Your name *');
+
+  // Populate first name if available
+  if ($('input#event_registration_user_attributes_last_name').length > 0) {
+    let fullName = `${$('input#event_registration_user_attributes_first_name').val()} ${$('input#event_registration_user_attributes_last_name').val()}`;
+    $firstAttendee.find('input[placeholder="Your name *"]').val(fullName);
+  }
+
+  // Initial calculation
+  getAttendeeTotals();
+
+  // Radio button changes
+  $('#attendees').on('change', 'input[type=radio]', function(e) {
+    setAttendeeFee(this.value, this);
+    getAttendeeTotals(); 
+  });
+
+  // Cocoon Hooks
+  $('#attendees').on('cocoon:after-insert', function(e, insertedItem) {
+    console.log('Cocoon insert')
+    let $radio = $(insertedItem).find('input[type=radio]:checked');
+    setAttendeeFee($radio.val(), $radio);
+    getAttendeeTotals();
+  });
+
+  $('#attendees').on('cocoon:after-remove',function() {
+    console.log('Cocoon insert')
+    getAttendeeTotals();
+  });
+
+  // Donation logic
+  $('.total-calculation').on('click blur change', function() {
+    let $this = $(this);
+    if ($this.is(':radio')) {
+      let val = $this.val() === 'other' ? 0 : parseFloat($this.val());
+      $('input#event_registration_donation').val(val.toFixed(2));
+    }
     setTotal();
   });
 
-  // Toggle access to donation other amount field
-  $('input[type=radio].total-calculation').on('click', function(e) {
-    let val = $(this).val()
-    if (val == 'other') {
-      $('input#event_registration_donation').val(parseFloat(0.0).toFixed(2))
-    } else {
-      val = parseFloat(val).toFixed(2)
-      $('input#event_registration_donation').val(val);
-    }
-    setTotal()
+  // Payment Method Switching
+  const showPaymentMethod = function(value) {
+    const isOnline = (value === 'credit card');
+    $('#payment-online, #payment-paid').toggle(isOnline);
+    $('#payment-cash').toggle(!isOnline);
+    
+    $.get('/event/ajax/update_paid_method', { id: registrationId, paid_method: value });
+  };
+
+  $('input.payment-method').on('change', function() {
+    showPaymentMethod($(this).val());
   });
-  
-  
-  // Enable the email, amount and adult- and child-count fields upon form submission
-  $('form').bind('submit', function() {
+
+  // Form Submission safety
+  $('form').on('submit', function() {
     $('input.calculated, input[type=email]').prop('disabled', false);
-  });
-
-  const showChecked = function(value) {
-    if (value == 'credit card') {
-      $('#payment-online').show();
-      $('#payment-cash').hide();
-      $('#payment-paid').show()
-    } else {
-      $('#payment-online').hide();
-      $('#payment-cash').show();
-      $('#payment-paid').hide()        
-    }
-    const registrationId = $('[data-registration_id]').data('registration_id')
-    $.get('/event/ajax/update_paid_method', { id: registrationId, paid_method: value})
-  }
-  
-  // Set payment method
-  $('input.payment-method:checked').each(function() {
-      showChecked($(this).val())
-  })
-
-  $('input.payment-method').on('click', function() {
-    showChecked($(this).val())
-  });  
-
-  // Spinner
-  $('.go-to-payment').click(function(e) {
     $('.review-loader').show();
-  })
+  });
 });

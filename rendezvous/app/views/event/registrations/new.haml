@@ -1,3 +1,4 @@
+- all_fees = Rails.configuration.registration[:fees]
 - unless registration_is_open
   = render partial: 'common/too_soon' 
 - else
@@ -11,11 +12,37 @@
               %h2= @title
             .card-text
               %p
-                Lakeside have informed us that our expenses with them are up by %10 over last year, so this years registration fee is $#{event_fee}.
-              %p 
-                Thank you for your understanding.
+                This year we are adopting an early-late fee structure, and adding a youth category. We're hoping that this will encourage people to register early so we are better able to plan.
+                Although we've raised the fees, we thing the Rendezvous still represents a great value. Thank you for your understanding.
+              .card 
+                .card-body 
+                  .card-title
+                    %h3.h6 Pricing
+                  .card-text
+                    %table.table       
+                      %thead
+                        %tr
+                          %th
+                            Dates
+                          %th
+                            Adult (16+)
+                          %th 
+                            Youth (5-15)
+                          %th
+                            Child (Under 5)
+                      %tbody
+                        %tr
+                          %td Early: up to #{format_short_date(all_fees[:early][:end_date])}
+                          %td $#{all_fees[:early][:adult]}
+                          %td $#{all_fees[:early][:youth]}
+                          %td Free
+                        %tr
+                          %td Late: starting #{format_short_date(all_fees[:late][:start_date])}
+                          %td $#{all_fees[:late][:adult]}
+                          %td $#{all_fees[:late][:youth]}
+                          %td Free
               %p
-                If you've previously registered, we've already filled in your basic information. We are now using Square to process credit cards, so address is no longer required.
+                If you've previously registered, we've already filled in your basic information. We continue to use Square to process credit cards, so address is no longer required.
               %p 
                 Let us know who you're bringing, if anyone. Then we'll give you a chance to review, followed by payment. 
             #registration-form.new_registration

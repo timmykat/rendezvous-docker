@@ -2,8 +2,13 @@ import Rails from "@rails/ujs"
 import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 
+// 1. Import jQuery
+import $ from 'jquery';
+// 2. Make it global immediately
+window.jQuery = $;
+window.$ = $;
+
 import { debounce } from 'throttle-debounce';
-import 'jquery/dist/jquery.min'; 
 import 'html5shiv/dist/html5shiv.min';
 import 'popper.js';
 import 'bootstrap/dist/js/bootstrap';
