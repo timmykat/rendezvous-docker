@@ -5,17 +5,18 @@
         .card-body 
           .card-title
             - if user_is_admin?
-              %h1.h2 Profile for #{@user.full_name}"
+              %h1.h2 Profile for #{@user.full_name}
             - else
               %h1.h2 Bienvenue, #{current_user.first_name}
 
-          .card-text
-            %p If you're here to register, or to finish a registration: 
-            %ul 
-              - if current_registration
-                %li= link_to 'Continue my registration', existing_event_registration_path
-              - else
-                %li= link_to 'Create a registration',  new_event_registration_path 
+          - unless user_is_admin?
+            .card-text
+              %p To register or finish a registration: 
+              %ul 
+                - if current_registration
+                  %li= link_to 'Continue to current registration', existing_event_registration_path
+                - else
+                  %li= link_to 'Create a registration',  new_event_registration_path 
 
       .card
         .card-body
@@ -45,11 +46,26 @@
                 - if @user.vehicles.blank?
                   %p Currently no vehicles registered.
                   %p
-                    = link_to 'Add a vehicle', edit_user_path(@user)
+                    = link_to 'Add a vehicle', edit_user_path(@user), class: 'btn btn-primary'
                 - else
-                  %ul
+                  %table
+                    %tbody
                     - @user.vehicles.each do |v|
-                      %li= v.full_spec
+                      %tr
+                        %td{colspan: 2}
+                          %hr
+                      %tr
+                        %td{colspan: 2} #{v.year_marque_model}
+                      %tr
+                        %td{colspan: 2} #{v.judging_category}
+                      %tr
+                        - if v.qr_code.present?
+                          %td #{v.qr_code.code}
+                          %td
+                            %div{style: 'padding: 5px 20px'}
+                              = image_tag qr_code_url(v.qr_code.code), {style: 'width: 60px; height: 60px;'}
+                        - else
+                          %td.text-warn This vehicle will need a QR code assigned to be eligible for voting.
 
             =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning" 
       

@@ -17,12 +17,11 @@
 module Voting
   class Ballot < ApplicationRecord
     
-    STATUSES = ["voting", "submissible:some", "submissible:all", "submitted"]
+    STATUSES = ["voting", "hand_tally", "submissible:some", "submissible:all", "submitted"]
 
     validates :status, presence: true, inclusion: STATUSES
     default_scope { where(year: Date.current.year) }
 
-    belongs_to :user
     has_many :ballot_selections, class_name: 'Voting::BallotSelection', dependent: :destroy
     has_many :selections, through: :ballot_selections, source: :votable, source_type: 'Vehicle'
 

@@ -5,10 +5,8 @@ module.exports = {
   mode: "production",
   devtool: "source-map",
   entry: {
-    admin: "./app/javascript/packs/admin.js",
     application: "./app/javascript/packs/application.js",
-    registration: "./app/javascript/packs/registration.js",
-    voting: "./app/javascript/packs/voting.js"
+    admin: "./app/javascript/packs/admin.js"
   },
   output: {
     filename: "[name].js",
@@ -30,6 +28,11 @@ module.exports = {
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
     })
   ]
 }

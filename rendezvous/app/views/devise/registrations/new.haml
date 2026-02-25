@@ -1,6 +1,6 @@
 .container
-  .row
-    .col-md-offset-3.col-md-6
+  .row.justify-content-center
+    .col-md-6
       %hr
       .card
         .card-body
@@ -13,7 +13,7 @@
               If you already have an account, please
               %a{ href: new_user_session_path } sign in here.
 
-            = form_for(resource, url: user_registration_path, method: :post, id: 'user_registration_form') do |f|
+            = form_for(resource, url: user_registration_path, method: :post) do |f|
               .form-group
                 = f.label :email, nil, class: 'required'
                 %br/
@@ -29,12 +29,14 @@
                 = f.hidden_field :password, class: 'form-control primary', value: @password, required: true
                 = f.hidden_field :password_confirmation, class: 'form-control confirm', value: @password, hidden: true, required: true  
 
-              .actions
-                = f.submit "Create", class: "btn  btn-info"
+              .actions.button-with-spinner
+                = f.submit "Sign Up", class: "btn  btn-info", data: { 'button-spinner' => 'Creating link...', turbo: false }
 
 :javascript
-  document.addEventListener('turbolinks:load', () => {
-    const recaptcha = new RecaptchaHandler('user_registration_form', 'register_user');
+  document.addEventListener('DOMContentLoaded', () => {
+    const recaptcha = new RecaptchaHandler('new_user', 'register_user');
     recaptcha.prepare();
     recaptcha.execute();
+
+    setButtonSpinner()
   })

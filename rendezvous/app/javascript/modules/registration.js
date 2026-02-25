@@ -114,4 +114,37 @@ $(document).ready(function() {
     $('input.calculated, input[type=email]').prop('disabled', false);
     $('.review-loader').show();
   });
+
+  const showChecked = function(value) {
+    if (value == 'credit card') {
+      $('#payment-online').show();
+      $('#payment-cash').hide();
+      $('#payment-paid').show()
+    } else {
+      $('#payment-online').hide();
+      $('#payment-cash').show();
+      $('#payment-paid').hide()        
+    }
+    const registrationId = $('[data-registration_id]').data('registration_id')
+    $.get({
+      url: '/event/ajax/update_paid_method', 
+      method: 'GET',
+      data: { id: registrationId, paid_method: value},
+      headers: {
+        "X-CSRF-Token": CSRF_TOKEN
+      }
+    })
+  }
+  
+  // Set payment method
+  $('input.payment-method:checked').each(function() {
+      showChecked($(this).val())
+  })
+
+  $('input.payment-method').on('click', function() {
+    showChecked($(this).val())
+  });  
+
+  // Spinner
+  setPaymentSpinner()
 });

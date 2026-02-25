@@ -7,11 +7,10 @@
     .col-12
       #tabbed
         %ul
-          %li= link_to '<i class="fa fa-registered"></i> Registrations <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-1'
-          %li= link_to '<i class="fa fa-car"></i> Vehicles'.html_safe, '#tabbed-2'
-          %li= link_to '<i class="fa fa-bullhorn"></i> Volunteer List'.html_safe, '#tabbed-3'
-          %li= link_to '<i class="fa fa-table"></i> Summary <i class="fa fa-sheet"></i>'.html_safe, '#tabbed-5'
-          %li= link_to "<i class=\"fa fa-female\"></i><i class=\"fa fa-male\"></i> Site Users #{@type}".html_safe, '#tabbed-6'
+          %li= link_to 'Registrations', '#tabbed-1'
+          %li= link_to 'Vehicles', '#tabbed-2'
+          %li= link_to 'Volunteer List', '#tabbed-3'
+          %li= link_to 'Summary'.html_safe, '#tabbed-5'
         #tabbed-1
           .row 
             .col-md-4
@@ -26,7 +25,7 @@
           %h2= "Registrations for #{@year}"
           %p Number of registrations: #{@event_registrations.size}
 
-          %table.table.striped
+          %table#registration-table.table.tablesorter.striped
             %thead
               %tr
 
@@ -56,7 +55,7 @@
                       %li
                         = link_to 'Cancel', event_cancel_registration_path(registration.id), data: { confirm: "Are you sure?" }
                       %li   
-                        = link_to 'DELETE', event_delete_registration_path(registration.id), data: { confirm: "Are you sure?" }
+                        = link_to 'DELETE', event_destroy_registration_path(registration.id), data: { confirm: "Are you sure?" }
                           
                   %td.text-center
                     = registration.status
@@ -90,6 +89,7 @@
                   %p Total: #{@vehicles.count}
                 - else
                   %p No vehicles yet
+
           %table.table
             %thead
               %tr
@@ -118,8 +118,8 @@
               .card-title
                 %h2 Volunteer List
               .card-text
-                - if @data
-                  %p Total volunteers: #{@data[:volunteers][:number]}
+                - if @volunteers
+                  %p Total volunteers: #{@volunteers.size}
 
           %table.table
             %thead
@@ -128,7 +128,7 @@
                 %th Email (of registered user)
               %tbody
                 - if @data
-                  - @data[:volunteers][:list].each do |volunteer|
+                  - @volunteers.each do |volunteer|
                     %tr
                       %td= volunteer[:name]
                       %td= volunteer[:email]
@@ -140,6 +140,21 @@
               .card-text
                 .row
                   .col-md-12
+            
+
+            .row.justify-content-center
+              .col-md-8.col-12
+                .card
+                  .card-body
+                    .card-title
+                      %h3 Annual Question Responses 
+                    .card-body 
+                      %p
+                        %strong #{@annual_question.question}
+                      %p Responses:
+                      %ul
+                        - @annual_responses.each do |answer, number|
+                          %li #{number} | #{answer}
             .row
               .col-md-6.col-12
                 .card
@@ -199,7 +214,7 @@
                             %tr
                               %td
                                 %em  Volunteers
-                              %td.text-right= @data[:volunteers][:number]
+                              %td.text-right= @volunteers.length
                             %tr
                               %td
                                 %em  Vehicles
@@ -212,40 +227,6 @@
                                   - @data[:newbies].each do |newbie|
                                     = newbie.full_name
                                     %br
-        - if @users
-          #tabbed-6
-            %h2 Site Users #{@type}
-            %p Number of users: #{@user_count}
-            -# - if current_user.has_role? :superuser
-            -#   %button{class: 'btn btn-danger delete_users'} DELETE checked users
-            %table#user-table.table.tablesorter.striped
-              %thead
-                %tr
-                  %th.tablesorter-header.filter-false User Roles
-                  %th.last-name.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Last Name 
-                  %th.first-name.tablesorter-header.filter-false First Name
-                  %th.email.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Email
-                  %th.recaptcha-whitelisted.filter-false Recaptcha
-                %tbody
-                  %tr{role: 'search', class: 'tablesorter-filter-row tablesorter-ignoreRow'}
-                    %td
-                    %td{'data-column' => '0' }
-                    %td
-                    %td
-                    %td
-                  - @users.each do |user|
-                    %tr
-                      %td
-                        - [:tester, :vendor, :admin].each do |role|
-                          = check_box_tag role, '1', user.has_role?(role), "data-toggle" => ajax_toggle_role_path(user, role: role)
-                          = label_tag role.to_s.titleize
-                          %br                        
 
-                      %td= link_to user.last_name, user_path(user)
-                      %td= user.first_name
-                      %td= user.email
-                      %td
-                        = check_box_tag :recaptcha_whitelisted,'1', user.recaptcha_whitelisted?, "data-toggle" => ajax_toggle_whitelist_path(user)
-                        Whitelisted?
 
                           

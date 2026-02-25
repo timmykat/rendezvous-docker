@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :get_app_data
   before_action :flash_array
   before_action :update_active_user
+  before_action :set_ballot_count
 
   helper_method :current_time
   helper_method :fee_period
@@ -35,6 +36,10 @@ class ApplicationController < ActionController::Base
 
   def fee_period
     (current_time <= Rails.configuration.registration[:fees][:early][:end_date].to_time) ? :early : :late
+  end
+  
+  def set_ballot_count
+    @ballot_count = Voting::Ballot.count
   end
 
   # Need this for other gems that might set flash

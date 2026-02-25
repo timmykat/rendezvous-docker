@@ -3,7 +3,7 @@ module Event
     layout "registrations_layout"
 
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
-    before_action :require_admin, only: [:index]
+    before_action :require_admin, only: [:index, :register_by_admin]
     before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
@@ -63,9 +63,29 @@ module Event
       @event_registration.user.vehicles.build
     end
 
+    def by_admin
+      session[:admin_created] = true
+      @title = "Registration by admin"
+      @step = 'create'
+      @annual_question = AnnualQuestion.find_by(year: Date.current.year)
+    
+      user = User.find_by(id: params[:user_id])
+      @event_registration = Registration.new(created_by_admin: true)
+      @event_registration.attendees.build
+    
+      if user
+        @event_registration.user = user
+      else
+        @event_registration.build_user
+      end
+    
+      @event_registration.user.vehicles.build
+    end
+
     # Create or update the user
     def create
       email = params[:event_registration][:user_attributes][:email]
+      user_id = params[:event_registration][:user_attributes][:id] || params[:event_registration][:user_id]
 
       failure_message = verify_recaptcha?(params[:recaptcha_token], 'register_event', email)
       if failure_message
@@ -74,8 +94,8 @@ module Event
         return
       end
 
-      if current_user && !current_user.admin?
-        user = User.find(current_user.id)
+      if !user_id.nil?
+        user = User.find(user_id)
         if !user.update(event_registration_user_params)
           flash_alert 'There was a problem saving the user.'
           flash_alert user.errors.full_messages.to_sentence
@@ -114,9 +134,43 @@ module Event
       if !@event_registration.save
         flash_alert_now('There was a problem creating your registration.')
         flash_alert_now @event_registration.errors.full_messages.to_sentence
-        render 'registration_form' and return
+        render :new and return
       else
         sign_in(@event_registration.user) unless (session[:user_admin] || user_signed_in?)
+        redirect_to review_event_registration_path(@event_registration)
+      end
+    end
+
+    def create_by_admin
+      user_id = params[:event_registration][:user_attributes][:id]
+      email = params[:event_registration][:user_attributes][:email]
+      if !user_id.nil?
+        user = User.find(user_id)
+      end
+      if !user.present?
+        user = User.find_by_email(email)
+      end
+      if !user.present?
+        user = create_new_user
+      end
+
+      failure_message = verify_recaptcha?(params[:recaptcha_token], 'register_event', email)
+      if failure_message
+        Rails.logger.warn "Event registration: recaptcha failed for #{email}"
+        redirect_to root_path, notice: failure_message
+        return
+      end
+
+      # Remove user attributes now that we have user
+      params[:event_registration][:user_attributes] = nil
+      @event_registration = Registration.new(event_registration_params)
+      @event_registration.user = user
+
+      if !@event_registration.save
+        flash_alert_now('There was a problem creating the registration.')
+        flash_alert_now @event_registration.errors.full_messages.to_sentence
+        render :by_admin and return
+      else
         redirect_to review_event_registration_path(@event_registration)
       end
     end
@@ -195,6 +249,7 @@ module Event
       @event_registration.status = 'payment due'
       @app_data[:event_registration_fee] = @event_registration.registration_fee
 
+      # Set up square env
       square_env = RendezvousSquare::Base.get_environment
       @square_app_id = ENV.fetch "#{square_env}_SQUARE_APP_ID"
       @square_sdk_url = ENV.fetch "#{square_env}_SQUARE_SDK_URL"
@@ -209,17 +264,30 @@ module Event
       end
 
       user = @event_registration.user
-      customer_id = ::RendezvousSquare::Customer.find_customer(user.email)
+      customer_id = ::RendezvousSquare::Base.with_error_handling do
+        ::RendezvousSquare::Customer.find_customer(user.email)
+      end
 
-      if !customer_id
-        customer_id = ::RendezvousSquare::Customer.create_customer(user)
+      if customer_id.nil?
+        customer_id = ::RendezvousSquare::Base.with_error_handling do
+          ::RendezvousSquare::Customer.create_customer(user)
+        end
       else
         Rails.logger.info("Square customer found: " + customer_id)
       end
 
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
-      square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(@event_registration, customer_id, redirect_url)
-      redirect_to square_payment_link, allow_other_host: true
+
+      square_payment_link = ::RendezvousSquare::Base.with_error_handling do
+        RendezvousSquare::Checkout.create_square_payment_link(@event_registration, customer_id, redirect_url)
+      end
+
+      unless square_payment_link.nil?
+        redirect_to square_payment_link, allow_other_host: true
+      else 
+        flash_alert "Square was unable to generate a payment link."
+        redirect_to payment_event_registration_path(@event_registration)
+      end
     end
 
     def complete_after_online_payment
@@ -246,7 +314,11 @@ module Event
       if @event_registration.save
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to update_vehicles_event_registration_path(@event_registration)
+        if current_user.admin?
+          redirect_to user_path(@event_registration.user)
+        else
+          redirect_to update_vehicles_event_registration_path(@event_registration)
+        end
         return 
       else 
         flash_alert 'There was a problem completing your registration.'
@@ -261,6 +333,21 @@ module Event
       @event_registration = Registration.find(params[:id])
 
       # Set the paid amounts
+      if current_user.admin?
+        if !@event_registration.update(cash_payment_params)
+          flash_alert 'Something went wrong with the completion attempt'
+          render :payment
+        else
+          if @event_registration.status == 'complete'
+            @event_registration.paid_date = Time.new
+            @event_registration.save
+          end
+          flash_notice 'The registration was successfully updated.'
+          redirect_to user_path(@event_registration.user)
+        end
+        return
+      end
+
       @event_registration.paid_amount = 0.0
       @event_registration.paid_method = "cash or check"
 
@@ -274,6 +361,12 @@ module Event
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         redirect_to update_vehicles_event_registration_path(@event_registration)
       end
+    end
+
+    def post_reg_update_vehicles
+      @event_registration = Registration.find(params[:id])
+      @user = @event_registration.user
+      @vehicles = @user.vehicles
     end
 
     def update_vehicles
@@ -331,6 +424,21 @@ module Event
     end
 
     private
+      def create_new_user
+        password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
+        params[:event_registration][:user_attributes][:password] = password
+        params[:event_registration][:user_attributes][:password_confirmation] = password
+        user = User.new(event_registration_user_params)
+        if !user.save
+          flash_alert_now 'There was a problem saving that user information.'
+          flash_alert_now user.errors.full_messages.to_sentence
+          render :by_admin
+          return
+        else
+          return user
+        end
+      end
+
       # Only allows admins and owners to see registration
       def owner_or_admin
         unless (current_user.id == Registration.find(params[:id]).user_id) || (current_user.has_role? :admin)
@@ -383,6 +491,10 @@ module Event
 
       def update_fees_params
         params.permit(:id, :donation, :total)
+      end
+
+      def cash_payment_params
+        params.require(:event_registration).permit(:donation, :total, :paid_method, :paid_amount, :status)
       end
 
       def payment_method_params

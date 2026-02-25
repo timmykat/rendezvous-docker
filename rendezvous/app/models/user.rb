@@ -70,12 +70,11 @@ class User < ApplicationRecord
 
   has_many :pictures, dependent: :destroy
   has_many :vehicles, dependent: :destroy
-  has_many :registrations, class_name: 'Event::Registration'
+  has_many :registrations, class_name: 'Event::Registration', inverse_of: :user
   has_many :authorizations
   has_one  :vendor, foreign_key: :owner_id
   has_many :donations
   has_many :square_transactions
-  has_many :ballots, class_name: 'Voting::Ballot'
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -198,4 +197,21 @@ class User < ApplicationRecord
     mask = User.mask_for role
     User.where('roles_mask & ? > 0', mask)
   end
+
+  def generate_email_address
+    tag = generate_tag
+    if last_name
+      username = "#{last_name}_#{tag}"
+    else
+      username = "user_#{tag}"
+    end
+
+    self.email = "#{username}@citroenrendezvous.org"
+  end
+
+  private
+    def generate_tag(length = 4)
+      chars = %w[A C D E F G H J K L M N P Q R T U V W X Y Z 1 2 3 4 5 6 7 8 9] # User friendly characters
+      Array.new(length) { chars.sample }.join
+    end
 end

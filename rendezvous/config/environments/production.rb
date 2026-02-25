@@ -74,9 +74,9 @@ Rails.application.configure do
     protocol: 'https', 
     host: 'citroenrendezvous.org'
   }
-
   config.action_mailer.smtp_settings = mail_config[:smtp_settings].clone
 
+  routes.default_url_options[:host] = 'https://citroenrendezvous.org'
 
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
 

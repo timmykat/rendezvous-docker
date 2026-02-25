@@ -33,7 +33,7 @@
         document.head.appendChild(script);
       }
 
-  %body{ class: controller_classes + " outfit-regular", 'data-site-key' => get_recaptcha_key }
+  %body{ class: controller_classes + " outfit-regular admin_layout", 'data-site-key' => get_recaptcha_key }
     = render partial: 'layouts/flash'
 
     %header
@@ -46,7 +46,10 @@
                   Admin
                   = link_to "Back to main site", root_path, class: 'btn btn-sm btn-primary'
 
-      = render partial: 'common/site_nav_bar'
+      - if user_is_admin?
+        = render partial: 'common/onsite_navbar'
+      - else
+        = render partial: 'common/site_nav_bar'
 
       = render partial: 'common/admin_manage'
 
@@ -80,7 +83,7 @@
       }
 
       if (!window.SimpleMDE) {
-        document.addListener(DOMContentLoaded, () => {
+        document.addEventListener("DOMContentLoaded", () => {
           addMde();
         })
       } else {

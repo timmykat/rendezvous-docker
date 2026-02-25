@@ -10,6 +10,10 @@ gem 'rails', '7.2.3'
 # Security updates
 gem "actionpack", "7.2.3"
 gem "actiontext", "7.2.3"
+gem "activestorage", "7.2.3"
+
+# For QR code generation
+gem 'delayed_job_active_record'
 
 gem 'jsbundling-rails'
 gem 'cssbundling-rails'
@@ -36,7 +40,6 @@ gem 'haml-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'font-awesome-sass', '~> 6.4.0'
 gem 'rails_sortable'
 
 # Use ActiveModel has_secure_password
@@ -44,7 +47,6 @@ gem 'bcrypt', '~> 3.1'
 
 gem 'devise', '~> 4.9'
 gem 'carrierwave'
-gem 'mini_magick'
 gem 'cocoon'
 gem 'role_model'
 gem 'daemons'

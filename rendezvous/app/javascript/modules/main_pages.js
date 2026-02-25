@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-$(document).ready(function() {
+document.addEventListener('turbo:load', function(){
   $('#register').on('click', function() {
     window.location.assign('/register');
   });
@@ -32,8 +32,9 @@ $(document).ready(function() {
   // Fade out the flash wrapper when it appears
   // Let the user dismiss the flash
   // $('.flash-wrapper').delay(5000).fadeOut(400);
-  $('body').on('click', '.flash .close-flash', function(e) {
-    $(e.target).closest('.flash').fadeOut(200);
+  $('.close-flash').on('click', function() {
+    console.log('close clicked')
+    $(this).closest('.flash').fadeOut(200);
   });
-});
+})
 

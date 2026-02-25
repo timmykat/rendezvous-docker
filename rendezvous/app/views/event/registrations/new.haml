@@ -49,7 +49,7 @@
               - if !user_signed_in?
                 .cover
 
-              = simple_form_for @event_registration, id:  'registration_form' do |f|
+              = simple_form_for @event_registration do |f|
                 %section
                   %p * = required
                   - if current_user.admin?
@@ -67,7 +67,7 @@
                   %p.hint (Adults are 16+, youths are 5-15, and children are under 5)
                   .row
                     .col-12
-                      #attendees
+                      #attendees{ 'data-cocoon': true }
                         = f.simple_fields_for :attendees do |a|
                           = render partial:  'attendee_fields', locals:  { f:  a }
                         .links
@@ -130,11 +130,11 @@
                   .row
                     .col-12
                       .form-group
-                        = f.button :submit, input_html:  { value:  "Continue to payment #{icon(:right_arrow)}".html_safe }, class:  "btn  btn-primary"
+                        = f.submit 'Create registration', class:  "btn  btn-primary"
                         
 :javascript
-  document.addEventListener('turbolinks:load', () => {
-    const recaptcha = new RecaptchaHandler('registration_form', 'register_event');
+  document.addEventListener('turbo:load', () => {
+    const recaptcha = new RecaptchaHandler('new_event_registration', 'register_event');
     recaptcha.prepare();
     recaptcha.execute();
   })

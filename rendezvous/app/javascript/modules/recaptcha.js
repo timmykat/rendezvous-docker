@@ -2,11 +2,13 @@ export class RecaptchaHandler {
   constructor (formId, action) {
     this.formId = formId
     this.action = action
+    console.log(this.formId)
+    console.log(this.action)
   }
 
   prepare () {
     this.siteKey = document.querySelector('body').dataset.siteKey
-    this.formSubmit = document.querySelector(`#${this.formId} :is(input[type="submit"], button[type="submit"])`)
+    this.formSubmit = document.querySelector(`#${this.formId} input[type="submit"], #${this.formId} button[type="submit"]`)
     if (!this.formSubmit) {
       console.error('Submit button not found for', this.formId);
       return;

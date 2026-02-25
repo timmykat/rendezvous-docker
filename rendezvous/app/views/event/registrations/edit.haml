@@ -1,4 +1,4 @@
-- unless registration_is_open
+- unless registration_is_open || user_is_admin?
   = render partial: 'common/too_soon' 
 - else
   .container
@@ -30,7 +30,7 @@
                     %p.hint (Adults are 16+, and children are 15 and under)
                     .row
                       .col-md-12
-                        #attendees
+                        #attendees{ 'data-cocoon': true }
                           = f.simple_fields_for :attendees do |a|
                             = render partial:  'attendee_fields', locals:  { f:  a }
                           .links

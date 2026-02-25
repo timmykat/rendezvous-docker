@@ -46,11 +46,11 @@ module Event
     
     belongs_to :user
     has_many :attendees, dependent: :destroy
-    has_many :transactions, dependent: :destroy
+    has_many :transactions, class_name: 'SquareTransaction', dependent: :destroy
     has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :registration_id, dependent: :destroy
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
-    has_many :square_transactions
+    has_many :square_transactions, dependent: :destroy
     
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
@@ -81,19 +81,27 @@ module Event
     end
     
     def validate_payment
-      if !paid_amount.nil?
-        if (paid_amount.to_f > total.to_f)
+      if !self.paid_amount.nil?
+        if (self.paid_amount.to_f > self.total.to_f)
           errors[:base] << "The paid amount is more than the owed amount."
         end
       end
     end
+
+    def number_of_people
+      self.attendees.count
+    end
+
+    def number_of_volunteers
+      self.attendees.where(volunteer: true).count
+    end
       
     def balance
-      total.to_f - paid_amount.to_f
+      self.total.to_f - self.paid_amount.to_f
     end
     
     def outstanding_balance?
-      balance > 0.0
+      self.balance > 0.0
     end
 
     def owed_a_refund?
@@ -101,17 +109,17 @@ module Event
     end
 
     def complete?
-      status == 'complete'
+      self.status == 'complete'
     end
 
     def cancelled?
-      status =~ /cancelled/
+      self.status =~ /cancelled/
     end
 
     def ensure_total
-      total = registration_fee || 0.0
-      if !donation.blank?
-        total += donation
+      self.total = self.registration_fee || 0.0
+      if !self.donation.blank?
+        self.total += self.donation
       end
     end
     

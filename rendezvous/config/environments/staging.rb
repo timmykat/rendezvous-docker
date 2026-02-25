@@ -79,6 +79,8 @@ Rails.application.configure do
   }
   config.action_mailer.smtp_settings = mail_config[:smtp_settings].clone
 
+  routes.default_url_options[:host] = 'https://rendezvous.local.wordsareimages.com'
+
   config.url_prefix = "#{config.action_mailer.default_url_options[:protocol]}://#{config.action_mailer.default_url_options[:host]}"
 
   config.url_prefix += ":#{config.action_mailer.default_url_options[:port]}" if config.action_mailer.default_url_options[:port]

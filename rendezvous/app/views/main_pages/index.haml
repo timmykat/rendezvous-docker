@@ -2,18 +2,26 @@
 %section.banner
   .container 
     .row.justify-content-center
-      %img{src: image_url("Deesse-70.svg")}
+      = image_tag '2026-rendezvous-splash.png', alt: '50th Citroen Rendezvous', class: 'splash'
+      %p.credit 
+        Image courtesy of Josh Sweeney, 
+        = link_to 'Shoot for Details', 'https://www.shootfordetails.com/'
 %section#welcome
   .container-fluid
-    .row.justify-content-center 
-      .col-md-8.col-12 
+    .row.justify-content-center
+      .col-md-12.col-12 
         .card 
           .card-body 
             .card-title 
-              %h1.h2 Citroen Rendezvous 2025
+              %h1.h2 Citroen Rendezvous 2026
             .card-text
-              = keyed_content("main_welcome")
-
+              .row.justify-content-center
+                .col-md-7.col-12
+                  = keyed_content("main_welcome")
+                .col-md-5.col-12.text-center
+                  %h2.h5 A message from Henri-Jacques Citroën
+                  %video{ src: 'Henri-Citroen-message-2025.mp4', controls: true, width: '320px' }
+                    Your browser does not support the video tag
 %section#acommodations
   .container-fluid
     .row.justify-content-center
@@ -103,33 +111,34 @@
               %h2.h3.no-card Schedule Overview
             .card-text
               %p
-                %strong 
-                  = link_to 'See here', scheduled_events_path
-                  for a full listing of Rendezvous events.
-              .card-group
-                .row.justify-content-center
-                  - @events_by_day.each do |day, events|
-                    .col-12.col-lg-4
-                      .card
-                        .card-body
-                          .card-title.text-center
-                            %h3 #{day}
-                            %i.fa-solid.fa-route
-                          .card-text
-                            %ul.list-group
-                              - events.each do |event|
-                                %li.list-group-item
-                                  %p
-                                    %strong 
-                                      #{event.time}
-                                      %br 
-                                      %em #{event.name}
-                                  - if event&.venue.nil?
-                                    %p Location TBD 
-                                  - else 
-                                    %p= event&.venue&.name
-                                  .description
-                                    = event.short_description_as_html
+                %strong
+                  Event listings TBD 
+                  -# = link_to 'See here', scheduled_events_path
+                  -# for a full listing of Rendezvous events.
+              -# .card-group
+              -#   .row.justify-content-center
+              -#     - @events_by_day.each do |day, events|
+              -#       .col-12.col-lg-4
+              -#         .card
+              -#           .card-body
+              -#             .card-title.text-center
+              -#               %h3 #{day}
+              -#               %i.fa-solid.fa-route
+              -#             .card-text
+              -#               %ul.list-group
+              -#                 - events.each do |event|
+              -#                   %li.list-group-item
+              -#                     %p
+              -#                       %strong 
+              -#                         #{event.time}
+              -#                         %br 
+              -#                         %em #{event.name}
+              -#                     - if event&.venue.nil?
+              -#                       %p Location TBD 
+              -#                     - else 
+              -#                       %p= event&.venue&.name
+              -#                     .description
+              -#                       = event.short_description_as_html
 
 
               

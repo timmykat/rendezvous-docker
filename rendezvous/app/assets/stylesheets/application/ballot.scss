@@ -10,6 +10,13 @@
       margin-top: 0;
     }
   }
+  .card {
+    background: white;
+  }
+}
+
+svg.bi.delete {
+  padding: 0;
 }
 
 #voting-instructions Ul > li {
@@ -21,6 +28,19 @@
   input[name='code'] {
     text-transform: uppercase;
     font-size: 2.5rem;
+  }
+
+  .selections .btn {
+    display: inline-block;
+    margin-right: 10px;
+    background: white;
+    border-radius: 7px; 
+    color: red;
+    border: solid 1px var(--indigo-dye);
+
+    svg.bi.delete {
+      padding: 0;
+    }
   }
 
   .tab-content > .tab-pane {
@@ -37,30 +57,19 @@
   }
 
   #vote-action-container {
-    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    visibility: hidden;
-    background: transparent;
 
     .selection-wrapper, .error-wrapper {
-      width: 100%;
       max-width: var(--appWidth);
-      height: 100vw;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       background: #eee;
       color: var(--darkblue);
-      border: solid 2px var(--citroen-red);
       padding: 10px;
       line-height: 1.4;
     }

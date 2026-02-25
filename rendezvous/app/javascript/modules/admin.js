@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
-$(document).ready(function() {
+function adminFunctions() {
+
     const getCsrfHeaders = function() {
         let token = $('meta[name="csrf-token"]').attr('content')
         return {
@@ -9,9 +10,7 @@ $(document).ready(function() {
         }
     }
 
-    $('#tabbed').tabs();
-
-    $('#user-table').tablesorter({
+    $('#user-table, #registration-table').tablesorter({
         theme: 'blue',
         widthFixed: true,
         widgets: ["zebra", "filter"],
@@ -20,21 +19,39 @@ $(document).ready(function() {
         filter_saveFilters : true,
     });
 
-    $('[data-toggle]').on('click', function(e) {
-        let path = $(this).data('toggle')
+    $('[data-nobs-toggle]').on('click', function() {
+        const $el = $(this)
+        const $checkbox = $el.find('input[type="checkbox"]')
+        let path = $(this).data('nobs-toggle')
         $.ajax({
             url: path,
             method: 'GET',
-            headers: getCsrfHeaders()
+            headers: getCsrfHeaders(),
+            success: function() {
+                $checkbox.toggle()
+            }
         })
     })
-
 
     $('#select_all').on('change', function(e) {
         $('.delete_user').prop('checked', $(this).prop('checked'))
     })
 
-    $('.toggle_admin_bar').on('click', function() {
-        $('header .manage').toggle()
+    const $adminPanel = $('.admin_layout .manage')
+    if (window.localStorage.getItem("adminPanelVis") === "hidden") {
+        $adminPanel.hide()
+    }
+
+    $('.toggle_admin_panel').on('click', function(e) {
+        if ($adminPanel.is(':visible')) {
+            $adminPanel.hide()
+            window.localStorage.setItem("adminPanelVis", "hidden")
+        } else {
+            $adminPanel.show()
+            window.localStorage.setItem("adminPanelVis", "visible")
+        }
     })
-});
+}
+
+document.addEventListener('turbo:load', adminFunctions)
+document.addEventListener('DOMContentLoaded', adminFunctions)

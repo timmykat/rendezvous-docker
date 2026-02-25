@@ -1,8 +1,9 @@
 require 'csv'
+require 'fileutils'
 
 class AdminController < ApplicationController
 
-  layout "admin_layout"
+  layout :select_layout
 
   NO_USER_ID = 999999
 
@@ -64,16 +65,15 @@ class AdminController < ApplicationController
   before_action :require_admin
   before_action :calculate_annual_question
 
+  def select_layout
+    action_name == 'print' ? "print_layout" : "admin_layout"
+  end
+
   def calculate_annual_question
     # @annual_question_data = {
     #   number: Event::Registration.current.group(:annual_answer).reverse.count,
     #   options: AnnualQuestion::RESPONSES.reverse
     # }
-
-    @annual_question_data = {
-      number: [15, 26, 43],
-      options: AnnualQuestion::RESPONSES.reverse
-    }
   end
 
   def dedupe
@@ -139,6 +139,12 @@ class AdminController < ApplicationController
     end
   end
 
+  def update_user_vehicles
+    @user = User.find(params[:id])
+    @event_registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
+    @vehicles = @user.vehicles
+  end
+
   def dashboard(csv = false)
     @title = 'Admin'
     @year = params[:year] || Date.current.year
@@ -151,6 +157,7 @@ class AdminController < ApplicationController
     end
 
     @annual_question = AnnualQuestion.where(year: Date.current.year).first
+    @annual_responses = Event::Registration.where.not(annual_answer: nil).group(:annual_answer).count
     if !@annual_question
       @annual_question = AnnualQuestion.new
     end
@@ -191,7 +198,7 @@ class AdminController < ApplicationController
     @user_count = @users.nil? ? 0 : @users.pluck(:id, :last_name).count
 
     @vehicles = Vehicle.joins(:registrations).where(registrations: { year: @year })
-    volunteers = query.joins(:attendees).select(:name).where(attendees: { volunteer: true })
+    @volunteers = Attendee.joins(registration: :user).where(registrations: { year: 2025 }, volunteer: true).select('attendees.name AS name, users.email AS email')
     total_amount = query.sum(:total)
     paid_amount = query.sum(:paid_amount)
     @data = {
@@ -203,10 +210,6 @@ class AdminController < ApplicationController
       adult: query.joins(:attendees).where(attendees: { attendee_age: 'adult'}).count,
       youth: query.joins(:attendees).where(attendees: { attendee_age: 'youth'}).count,
       child: query.joins(:attendees).where(attendees: { attendee_age: 'child'}).count,
-      volunteers: {
-        number: volunteers.length,
-        list: volunteers,
-      },
       financials: {
         registration_fees: query.sum(:registration_fee),
         donations: query.sum(:donation),
@@ -217,10 +220,45 @@ class AdminController < ApplicationController
     }
   end
 
-  def print(item)
+  def peoples_choice_results
+    @results = Vehicle.top_3_by_category
+  end
+
+  def manage_qr_codes
+    @vehicles = Vehicle.all
+    @last_generated = "Not implemented"
+  end
+
+  def generate_qr_codes
+    regenerate = params[:regenerate] == "true"
+    if regenerate
+      Rails.logger.debug "Removing old QR codes"
+      FileUtils.rm_rf(Dir.glob(Rails.root.join('public', 'qr_codes', '*')))
+    end
+    Rails.logger.debug "Kicking off job"
+    QrGenerationJob.perform_later(regenerate)
+    flash_notice 'QR generation job started'
+    @vehicles = nil
+    redirect_to admin_manage_qr_codes_path
+  end
+
+  def clear_ballots
+    Voting::Ballot.destroy_all
+    flash_notice 'All ballots have been deleted'
+    redirect_to :admin_dashboard
+  end
+
+  def print
+    item = params[:item]
     case item
+    when 'blank_placards'
+      @qr_codes = QrCode.unassigned.limit(30)
+      render :blank_placards
+      return
     when 'placards'
-      @vehicles = Event::Registration.current.flat_map(&:vehicles)
+      @vehicles = Vehicle.joins(user: :registrations)
+       .where(registrations: { year: 2025 })
+       .distinct
       render :placards
       return
     when 'labels'

@@ -4,12 +4,8 @@
       .row
         .col-md-12
           .form-group
-            = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *', disabled:  !user_is_admin?
-            - if user_signed_in? && !user_is_admin?
-              = f.input :id, as:  :hidden, input_html:  { value:  current_user.id }
-            - elsif user_is_admin?
-              = f.input :id, as: :hidden, input_html: {'data-autocomplete-target' => ''}
-        
+            = f.input :email, label_html:  { class:  'sr-only' }, class:  'primary', placeholder:  'E-mail *'
+              
       .row
         .col-md-12
           %h3 Personal Information
@@ -79,10 +75,13 @@
           .card-body
             .card-text
               = field_set_tag 'Vehicles', class: 'legend-sm' do
-                #vehicles
+                #vehicles{ 'data-cocoon': true }
                   = f.simple_fields_for :vehicles do |v|
-                    = render 'common/vehicle_fields', f:  v
+                    = render partial: 'vehicle_fields', locals: { f: v, nested: true }
                   .card-footer
                     .links
-                      = link_to_add_association "#{icon(:plus)}#{icon(:car)}".html_safe, f, :vehicles, partial:  'common/vehicle_fields'
+                      = link_to_add_association "#{icon(:plus)}#{icon(:car)}".html_safe, 
+                        f, 
+                        :vehicles, 
+                        { render_options: { partial:  'vehicle_fields', locals: { nested: true }}}
                       Add a vehicle

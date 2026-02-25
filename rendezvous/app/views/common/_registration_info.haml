@@ -38,7 +38,7 @@
         .card
           .card-body
             .card-title
-              %h3.h4 Vehicle(s) I'm Bringing
+              %h3.h4 Vehicle(s) To Be Displayed
             .card-text
               - if registration_complete
                 %p
@@ -86,6 +86,11 @@
                     %br
                       %label Total:
                       #{number_to_currency(@event_registration.total)} (US)
+                    
+                    - if (@event_registration.paid_amount > 0.0)
+                      %br
+                        %label Paid:
+                        #{number_to_currency(@event_registration.paid_amount)} (US)
 
                     %strong
                       %label Balance:

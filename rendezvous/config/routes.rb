@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   end
 
   resources :users
+  get :index, to: 'users#index'
+  get :new_user_by_admin, to: 'users#new_user_by_admin'
+  post :create_user_by_admin, to: 'users#create_user_by_admin'
 
   resources :annual_questions, { only: [:create, :update, :destroy] }
 
@@ -56,7 +59,8 @@ Rails.application.routes.draw do
   delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
   resources :venues, { except: [:index, :show] }
 
-  get 'vehicles/for_sale', to: 'vehicles#for_sale'
+  resources :vehicles
+  get 'on_site_vehicles/for_sale', to: 'vehicles#for_sale', as: :vehicles_for_sale
 
   resources :event_hotels, { except: [:new, :index, :show] }
 
@@ -72,12 +76,15 @@ Rails.application.routes.draw do
         get :send_to_square
         get :vehicles
         get :send_email_confirmation
+        get :post_reg_update_vehicles
         get :update_vehicles
         patch :save_updated_vehicles
       end
     end
     resources :registrations, except: [:index]
     get '/welcome', to: 'registrations#welcome'
+    get '/registration/by_admin', to: 'registrations#by_admin'
+    post '/registration/create_by_admin', to: 'registrations#create_by_admin'
   end
 
 
@@ -87,6 +94,13 @@ Rails.application.routes.draw do
   get '/admin/graphs',            to: 'admin#registration_graphs'
   get '/admin/cleanup',           to: 'users#cleanup'
   post '/admin/cleanup',          to: 'users#cleanup'
+  get '/admin/print',              to: 'admin#print'
+  get '/admin/manage_qr_codes',   to: 'admin#manage_qr_codes'
+  get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
+  get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'
+  get '/admin/ballots/clear',     to: 'admin#clear_ballots', as: :admin_clear_ballots
+
+  get '/admin/update_user_vehicles/:id', to: 'admin#update_user_vehicles', as: :update_user_vehicles
 
   namespace :event do
   #     resources  :registrations, { only: [ :create, :show, :edit, :update ] }
@@ -94,14 +108,16 @@ Rails.application.routes.draw do
   #     get 'registrations/new/withemail', to: 'registrations#new_with_email'
   #     post 'registrations/create/withemail', to: 'registrations#create_with_email'
     get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
-    get 'registrations/:id/delete', to: 'registrations#delete', as: 'delete_registration'
+    get 'registrations/:id/destroy', to: 'registrations#destroy', as: 'destroy_registration'
   #     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
   end
 
-  get '/voting/ballot(/:id)',                   to: 'voting/ballots#ballot', as: :get_voting_ballot
-  post '/turbo/voting/ballots/vote',            to: 'voting/ballots#vote', as: :turbo_vote
-  post '/turbo/voting/ballots/vehicle/delete',  to: 'voting/ballots#delete_selection', as: :turbo_delete_vehicle
-  get '/_ajax/voting/vehicle/:code',            to: 'vehicles#ajax_info'
+  get     '/voting/ballot',                     to: 'voting/ballots#ballot', as: :get_voting_ballot
+  get     '/voting/hand_ballot',               to: 'voting/ballots#hand_ballot'
+  post     '/voting/hand_count',               to: 'voting/ballots#hand_count'
+  post    '/voting/ballots/vote',              to: 'voting/ballots#vote', as: :vote
+  delete  '/voting/ballots/vehicle/delete',    to: 'voting/ballots#delete_selection', as: :delete_vehicle_selection
+  get     '/_ajax/voting/vehicle/:code',        to: 'vehicles#ajax_info'
 
 
   resources :donations, { only: [ :new, :create, :index ] }
@@ -129,6 +145,7 @@ Rails.application.routes.draw do
   get '/ajax/find_user_by_email',         to: 'users#find_by_email'
   get '/ajax/delete_users',               to: 'users#delete_users'
   get '/ajax/user/autocomplete',          to: 'users#autocomplete'
+  get '/ajax/code/search',                to: 'qr_codes#autocomplete'
 
   namespace :event do
     post '/ajax/update_fees',               to: 'registrations#update_fees'

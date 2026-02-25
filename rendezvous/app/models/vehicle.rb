@@ -36,16 +36,27 @@ class Vehicle < ApplicationRecord
   has_many :registrations, class_name: 'Event::Registration', through: :registrations_vehicles
 
   has_many :ballot_selections, as: :votable, class_name: 'Voting::BallotSelection', dependent: :destroy
-  has_many :ballots, through: :ballot_selection
+
+  has_one :qr_code, as: :votable, inverse_of: :votable
+  accepts_nested_attributes_for :qr_code, allow_destroy: true
+  attr_accessor :qr_code_id
 
   scope :for_sale, -> { where(for_sale: true) }
   
   validates :year, inclusion: { in: (1919..2025).map{ |int| int.to_s }, message: "%{value} is not a valid year" }
   validates :marque, presence: true
-  validates :code, presence: true, uniqueness: true
 
-  def self.find_by_qr_code(code)
-    Vehicle.where("UPPER(code) = ?", code.upcase).first
+  def qr_code_id
+    qr_code&.id
+  end
+  
+  def qr_code_id=(id)
+    @qr_code_id = id
+  end
+
+  def self.find_by_code(code)
+    qr_code = QrCode.where("UPPER(code) = ?", code.upcase).first
+    Vehicle.where(qr_code: qr_code).first
   end
   
   def full_spec
@@ -85,36 +96,34 @@ class Vehicle < ApplicationRecord
     return false
   end
 
-  def create_qr_code
-    qr = RQRCode::QRCode.new(self.code) 
-    qr_png = qr.as_png(border_modules: 4, size: 300)
-    qr_image = MiniMagick::Image.read(qr_png.to_s)
-    qr_dir = Rails.root.join('public', 'qr_codes')
-    FileUtils.mkdir_p(qr_dir) unless Dir.exist?(qr_dir)
-    qr_path = Rails.root.join(qr_dir, "qr_#{code}.png")
+  def self.top_3_by_category
+    current_year = Date.current.year
 
-    logo_path = Rails.root.join('app', 'assets', 'images', 'oval-citroen-logo.png')
+    # Subquery: vote counts for current year's ballots
+    vote_counts = Voting::BallotSelection
+      .joins(:ballot)
+      .where(
+        votable_type: 'Vehicle',
+        ballots: { year: current_year }
+      )
+      .group(:votable_id)
+      .select(:votable_id, 'COUNT(*) AS vote_count')
 
-    # Check if the logo image exists
-    if File.exist?(logo_path)
-      # Open the logo image
-      logo = MiniMagick::Image.open(logo_path)
-  
-      # Resize the logo
-      logo.resize("100x100")
+    # Join Vehicles with vote counts
+    vehicles_with_votes = Vehicle
+      .joins("JOIN (#{vote_counts.to_sql}) AS votes ON votes.votable_id = vehicles.id")
+      .select('vehicles.*, votes.vote_count')
+      .index_by(&:id)
 
-      qr_width = qr_image.width
-      qr_height = qr_image.height
+    # Group by judging category
+    grouped = vehicles_with_votes.values.group_by(&:judging_category)
 
-      qr_image = qr_image.composite(logo) do |c|
-        c.compose "Over"  # Set the composite mode to "Over"
-        c.gravity "Center"  # Center the logo in the QR code
-      end
-
-      qr_image.write(qr_path)
-      puts "QR code with image generated successfully and saved to #{qr_path}!"
-    else
-      puts "⚠️ Image not found at #{logo_path}"
+    # Sort and return top 3 per category
+    grouped.transform_values do |vehicles|
+      vehicles
+        .sort_by { |v| -v.vote_count.to_i }
+        .first(3)
+        .map { |v| [v, v.vote_count.to_i] }
     end
   end
 end

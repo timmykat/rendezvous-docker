@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    %link{ href: "https://fonts.googleapis.com", rel: "preconnect"}/
+    %link{ crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
+    
+    :plain
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Poller+One&display=swap" rel="stylesheet">
+    = stylesheet_link_tag 'printing', "data-turbo-track": "reload"
+  %body
+    = yield

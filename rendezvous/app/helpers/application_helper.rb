@@ -27,8 +27,8 @@ module ApplicationHelper
     return SecureRandom.hex(5)
   end
 
-  def icon(icon, args = {})
-    bootstrap_icon(bootstrap_icon_map[icon], args)
+  def icon(key, args = {})
+    bootstrap_icon(key, bootstrap_icon_map[key], args)
   end
 
   def bootstrap_icon_map
@@ -63,11 +63,11 @@ module ApplicationHelper
     }
   end
 
-  def bootstrap_icon(icon, args)
+  def bootstrap_icon(key, icon, args)
     size = args.fetch(:size, '32')
     data = args[:data]
     href = image_url("bootstrap-icons/bootstrap-icons.svg")
-    content_tag(:svg, width: size, height: size, fill: "currentColor", class: "bi", data: data) do
+    content_tag(:svg, width: size, height: size, fill: "currentColor", class: "bi #{key.to_s}", data: data) do
       content_tag(:use, nil, href: "#{href}##{icon}")
     end
   end
@@ -228,6 +228,7 @@ module ApplicationHelper
   end
 
   def selected_marque(vehicle)
+    return nil if vehicle.nil?
     if marques.include? vehicle.marque
       vehicle.marque
     elsif vehicle.marque.blank?
@@ -238,12 +239,14 @@ module ApplicationHelper
   end
 
   def other_marque(vehicle)
+    return nil if vehicle.nil?
     if !marques.include? vehicle.marque
       vehicle.marque
     end
   end
 
   def selected_model(vehicle)
+    return nil if vehicle.nil?
     if citroen_models.include? vehicle.model
       vehicle.model
     else
