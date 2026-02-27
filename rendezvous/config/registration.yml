@@ -3,26 +3,7 @@ registration_window:
   close: 2026-06-06
   after_rendezvous: 2026-06-16
   test: true
-fees:
-  early:
-    adult: 100
-    youth: 50
-    child: 0
-    start_date: 2026-01-01
-    end_date: 2026-04-30
-  late:
-    adult: 120
-    youth: 60
-    child: 0
-    start_date: 2026-05-01
-    end_date: 2026-06-05
 refund_date: 2026-06-06
-suggested_donations:
-    - 10
-    - 25
-    - 50
-    - 75
-    - 100
 payment_methods:
   - credit card
   - check

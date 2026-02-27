@@ -31,11 +31,11 @@ class ApplicationController < ActionController::Base
   end
 
   def event_fees_for_period
-    Rails.configuration.registration[:fees][fee_period]
+    Rails.configuration.pricing[:fees][fee_period]
   end
 
   def fee_period
-    (current_time <= Rails.configuration.registration[:fees][:early][:end_date].to_time) ? :early : :late
+    (current_time <= Rails.configuration.pricing[:fees][:early][:end_date].to_time) ? :early : :late
   end
   
   def set_ballot_count

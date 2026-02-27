@@ -1,4 +1,5 @@
-- config = Rails.configuration.registration
+- pricing_config = Rails.configuration.pricing 
+- reg_config = Rails.configuration.registration 
 :javascript
   const applicationId = "#{@square_app_id}"
   const locationId = "#{@square_location_id}"
@@ -16,7 +17,7 @@
               .card.text
                 %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
                 .form-group
-                  - donation_list(config[:suggested_donations], @event_registration.total.to_f).each do |rb|
+                  - donation_list(pricing_config[:suggested_donations], @event_registration.total.to_f).each do |rb|
                     %input.radio-inline.total-calculation{type: 'radio', name: :suggested_donation, value: rb[1]}
                     %span.mr-2= rb[0]
                 .row
@@ -70,7 +71,7 @@
                           = f.input :paid_amount
 
                         .form-group 
-                          = f.input :status, as: :select, collection: config[:registration_statuses]
+                          = f.input :status, as: :select, collection: reg_config[:registration_statuses]
 
                       - else
                         %p

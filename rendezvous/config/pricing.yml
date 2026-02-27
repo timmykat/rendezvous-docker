@@ -1,0 +1,27 @@
+# config/registration.yml
+fees:
+  early:
+    start_date: 2026-01-01
+    end_date: 2026-04-30
+    adult: 100
+    youth: 50
+    child: 0
+    adult_id: "3GMMZYDU36QAGVVCLVX4RCFS"
+    youth_id: "KQIRK6WTO5KEUKG5QVAJPRLM"
+    child_id: "RARJ7TDBMFX7ZNPDAFWXRI6G"
+  late:
+    start_date: 2026-05-01
+    end_date: 2026-06-05
+    adult: 120
+    youth: 60
+    child: 0
+    adult_id: "HUGAQG23M5DQDBAKTVCI6YC6"
+    youth_id: "KN7YC4MCRAI5XL6U3QM737OJ"
+    child_id: "ZNHUDHZ37BTCLGS42H7N53VL"
+
+suggested_donations:
+    - 10
+    - 25
+    - 50
+    - 75
+    - 100

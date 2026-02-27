@@ -4,7 +4,7 @@ module RendezvousSquare
     
     extend self
 
-    FEES = Rendezvous.configuration.registration.fees
+    FEES = Rendezvous.configuration.pricing.fees
 
     def api
       client = get_square_client
@@ -60,14 +60,14 @@ module RendezvousSquare
 
     def create_line_items(registration)
       line_items = []
-      period = fee_period.to_s.titlecase
+      period = fee_period.to_sym
       
-      line_items << create_attendee_line_item(registration.number_of_adults, period, 'Adult')
+      line_items << create_attendee_line_item(registration.number_of_adults, period, 'adult')
       if registration.number_of_youths.to_i.positive?
-        line_items << create_attendee_line_item(registration.number_of_youths, period, 'Youth')
+        line_items << create_attendee_line_item(registration.number_of_youths, period, 'youth')
       end
       if registration.number_of_children.to_i.positive?
-        line_items << create_attendee_line_item(registration.number_of_children, period, 'Child')
+        line_items << create_attendee_line_item(registration.number_of_children, period, 'child')
       end
       if registration.donation.positive?
         line_items << create_donation_line_item(registration.donation)
@@ -78,7 +78,7 @@ module RendezvousSquare
     def create_attendee_line_item(number, period, age)
       {
         quantity: number.to_s,
-        catalog_object_id: RendezvousSquare::Catalog::REG_ITEM_LOOKUP[period][age],
+        catalog_object_id: FEES[period]["#{age}_id".to_sym],
         note: "Period: #{period} | Age: #{age}"
       }
     end
