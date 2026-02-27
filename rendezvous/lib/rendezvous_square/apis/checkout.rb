@@ -4,6 +4,8 @@ module RendezvousSquare
     
     extend self
 
+    FEES = Rendezvous.configuration.registration.fees
+
     def api
       client = get_square_client
       return client.checkout
@@ -52,18 +54,44 @@ module RendezvousSquare
           },
           location_id: Base.get_location_id,
           customer_id: customer_id,
-          line_items: [
-            {
-              name: Date.current.year.to_s + " Citroen Rendezvous registration",
-              quantity: "1",
-              base_price_money: {
-                amount: integerize(registration.total),
-                currency: "USD"
-              },
-              note: "Registration ID: " + registration.id.to_s
-            }
-          ]
+          line_items: create_line_items(registration)
         }
+    end
+
+    def create_line_items(registration)
+      line_items = []
+      period = fee_period.to_s.titlecase
+      
+      line_items << create_attendee_line_item(registration.number_of_adults, period, 'Adult')
+      if registration.number_of_youths.to_i.positive?
+        line_items << create_attendee_line_item(registration.number_of_youths, period, 'Youth')
+      end
+      if registration.number_of_children.to_i.positive?
+        line_items << create_attendee_line_item(registration.number_of_children, period, 'Child')
+      end
+      if registration.donation.positive?
+        line_items << create_donation_line_item(registration.donation)
+      end
+      line_items
+    end
+
+    def create_attendee_line_item(number, period, age)
+      {
+        quantity: number.to_s,
+        catalog_object_id: RendezvousSquare::Catalog::REG_ITEM_LOOKUP[period][age],
+        note: "Period: #{period} | Age: #{age}"
+      }
+    end
+
+    def create_donation_line_item(amount)
+      {
+        name: "#{Date.current.year.to_s} Citroen Rendezvous donation",
+        quantity: "1",
+        base_price_money: {
+          amount: integerize(amount.to_f),
+          currency: "USD"
+        }
+      }
     end
     
     def create_order_donation_object(donation, customer_id)
