@@ -1,6 +1,13 @@
 $(document).ready(function() {
   const registrationId = $('[data-registration_id]').data('registration_id');
 
+  let setPaymentSpinner = function() {
+    $('.btn-square-pay').on('click', function() {
+      let spinnerHtml = '<div class="spinner-grow text-primary" role="status"></div>'
+      $(this).html("Connecting...").after(spinnerHtml).removeClass('btn-square-pay')
+    })
+  }
+
   // 1. SET INDIVIDUAL FEE
   let setAttendeeFee = function(type, target) {
     let $card = $(target).closest('.card');
