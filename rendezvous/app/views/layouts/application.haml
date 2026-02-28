@@ -80,7 +80,7 @@
                   .col-12
                     Registration is open!
                     =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
-                    =link_to "Prefer paper? #{icon(:pdf)}".html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf", class: 'ml-3'
+                    =link_to "Prefer paper? #{icon(:pdf)}".html_safe, written_reg_form_link(), class: 'ml-3'
 
       - if current_user && voting_on?
         .container-fluid.px-0

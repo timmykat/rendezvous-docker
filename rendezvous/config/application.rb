@@ -61,8 +61,9 @@ module Rendezvous
    
     config.commerce = YAML::load(ERB.new(File.read("#{Rails.root}/config/commerce.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.geodata = YAML::load(ERB.new(File.read("#{Rails.root}/config/geodata.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
-    config.registration = YAML::load(ERB.new(File.read("#{Rails.root}/config/registration.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.people = YAML::load(ERB.new(File.read("#{Rails.root}/config/people.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+    config.pricing = YAML::load(ERB.new(File.read("#{Rails.root}/config/pricing.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+    config.registration = YAML::load(ERB.new(File.read("#{Rails.root}/config/registration.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.site = YAML::load(ERB.new(File.read("#{Rails.root}/config/site.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
 
     

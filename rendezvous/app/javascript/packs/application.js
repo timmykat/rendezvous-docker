@@ -2,12 +2,6 @@ import $ from 'jquery';
 window.$ = $;
 window.jQuery = $;
 
-// 1. Import jQuery
-import $ from 'jquery';
-// 2. Make it global immediately
-window.jQuery = $;
-window.$ = $;
-
 import "@hotwired/turbo-rails"
 import { Application } from '@hotwired/stimulus'
 import { debounce } from 'throttle-debounce';

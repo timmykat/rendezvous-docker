@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   helper_method :fee_period
   helper_method :event_fees
   helper_method :event_fees_for_period
+  helper_method :written_reg_form_link
 
   GEO_CONFIG = Rails.configuration.geodata
 
@@ -36,6 +37,10 @@ class ApplicationController < ActionController::Base
 
   def fee_period
     (current_time <= Rails.configuration.pricing[:fees][:early][:end_date].to_time) ? :early : :late
+  end
+
+  def written_reg_form_link
+    "/#{Date.current.year}-Rendezvous-registration-#{fee_period}.pdf"
   end
   
   def set_ballot_count
