@@ -100,16 +100,16 @@ module ApplicationHelper
     Config::SiteSetting.instance.voting_on
   end
 
-  def user_is_admin?
-    current_user && (current_user != @user)
-  end
-
   def before_cutoff_date?
     current_time <= Rails.configuration.registration[:registration_window][:close].to_time
   end
 
   def after_rendezvous?
     current_time > Rails.configuration.registration[:registration_window][:after_rendezvous]
+  end
+
+  def user_is_admin?
+    current_user && (current_user.has_role? :admin)
   end
 
   def user_can_test
@@ -121,7 +121,7 @@ module ApplicationHelper
   end
 
   def registration_is_open
-    (Config::SiteSetting.instance.registration_is_open && before_cutoff_date?)
+    Config::SiteSetting.instance.registration_is_open
   end
 
   def static_file(file_path)

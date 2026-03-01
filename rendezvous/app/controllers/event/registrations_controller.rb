@@ -282,7 +282,12 @@ module Event
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
 
       square_payment_link = ::RendezvousSquare::Base.with_error_handling do
-        RendezvousSquare::Checkout.create_square_payment_link(@event_registration, customer_id, redirect_url)
+        RendezvousSquare::Checkout.create_square_payment_link({
+          registration: @event_registration, 
+          customer_id: customer_id, 
+          redirect: redirect_url, 
+          fee_period: fee_period
+        })
       end
 
       unless square_payment_link.nil?
@@ -444,7 +449,7 @@ module Event
 
       # Only allows admins and owners to see registration
       def owner_or_admin
-        unless (current_user.id == Registration.find(params[:id]).user_id) || (current_user.has_role? :admin)
+        unless (current_user.id == Registration.find(params[:id]).user_id) || require_admin
           flash_alert 'Sorry, you must be an admin to see that.'
           redirect_to :root
         end

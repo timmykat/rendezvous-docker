@@ -52,6 +52,9 @@
     = render partial: 'common/active_users'
     = render partial: 'layouts/flash'
 
+    - if is_debug
+      = render partial: 'layouts/debug'
+
     %header
       .container-fluid.px-0
         .row

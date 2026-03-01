@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
   helper_method :event_fees
   helper_method :event_fees_for_period
   helper_method :written_reg_form_link
+  helper_method :is_debug
+  helper_method :debug_date
 
   GEO_CONFIG = Rails.configuration.geodata
 
@@ -23,9 +25,17 @@ class ApplicationController < ActionController::Base
     super(*args)  # Call the original render method
   end
 
+  def is_debug
+    Config::SiteSetting.instance.debug_dates
+  end
+
+  def debug_date
+    Config::SiteSetting.instance.debug_test_date.to_time
+  end
+
   def current_time
-    if Config::SiteSetting.instance.debug_dates
-      Config::SiteSetting.instance.debug_test_date.to_time
+    if is_debug
+      debug_date
     else
       Time.current
     end

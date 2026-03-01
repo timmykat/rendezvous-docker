@@ -276,6 +276,15 @@ header {
 		border: solid 2px var(--citroen-red);
 		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 
+		a, a:visited {
+			text-decoration: underline;
+
+			&:hover {
+				text-decoration: none;
+				font-weight: bold;
+			}
+		}
+
 		.close-flash {
 			cursor: pointer;
 			position: absolute;

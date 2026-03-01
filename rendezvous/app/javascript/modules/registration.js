@@ -65,6 +65,8 @@ document.addEventListener('turbo:load',  function(){
       console.log('Donation:', donation)
       console.log('Total:', total)
 
+      if (!regFee || !total) return;
+
       $('input#event_registration_total').val(total.toFixed(2));
 
       const requestBody = JSON.stringify({ 

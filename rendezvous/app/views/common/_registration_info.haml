@@ -101,7 +101,7 @@
                 Please print this invoice or the one you received via email and send with a check for the amount due to:
                 %br= mailing_address
 
-      - if current_user.has_role? :admin   
+      - if user_is_admin?  
         .card
           .card-body
             .card-title

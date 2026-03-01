@@ -6,18 +6,40 @@ fees:
     adult: 100
     youth: 50
     child: 0
-    adult_id: "3GMMZYDU36QAGVVCLVX4RCFS"
-    youth_id: "KQIRK6WTO5KEUKG5QVAJPRLM"
-    child_id: "RARJ7TDBMFX7ZNPDAFWXRI6G"
+    adult_id:
+      production: "3GMMZYDU36QAGVVCLVX4RCFS"
+      sandbox: "VLTRMDE7V3GS64EYCZCZ7EAN"
+    youth_id:
+      production: "KQIRK6WTO5KEUKG5QVAJPRLM"
+      sandbox: "7QUHBISEJXTQLA7NPU7YCNMA"
+    child_id:
+      production: "RARJ7TDBMFX7ZNPDAFWXRI6G"
+      sandbox: "NHXTPJTV6WSQDSCSRPEVBWGW"
   late:
     start_date: 2026-05-01
     end_date: 2026-06-05
     adult: 120
     youth: 60
     child: 0
-    adult_id: "HUGAQG23M5DQDBAKTVCI6YC6"
-    youth_id: "KN7YC4MCRAI5XL6U3QM737OJ"
-    child_id: "ZNHUDHZ37BTCLGS42H7N53VL"
+    adult_id:
+      production: "HUGAQG23M5DQDBAKTVCI6YC6"
+      sandbox: "SNOELG6UJNCWBV7KO7BVUKEO"
+    youth_id:
+      production: "KN7YC4MCRAI5XL6U3QM737OJ"
+      sandbox: "UNH3HQ66RX3CTAURCKVHQPUF"
+    child_id:
+      production: "ZNHUDHZ37BTCLGS42H7N53VL"
+      sandbox: "IGVEZ3PK5SSIMZOEGMFW4QOS"
+  on_site:
+    adult_id:
+      production: "574JG7IKCODJU4PC6MTST7JE"
+      sandbox: "RIYDFHFRDPFWWPTBHYP6ASFM"
+    youth_id:
+      production: "FXYF45EHDGG74ZXDO5ZKVYHB"
+      sandbox: "GRPZ5765H5CT2AWQUUGVGUFI"
+    child_id:
+      production: "ZTX3UQTPQHEUDOCSOE3W5ZIX"
+      sandbox: "NJD66LV7QYXXVUEZW45IXVF6"
 
 suggested_donations:
     - 10
