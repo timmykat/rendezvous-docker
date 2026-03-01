@@ -247,7 +247,10 @@ module Event
       @step = 'payment'
       @event_registration = Registration.find(params[:id])
       @event_registration.status = 'payment due'
-      @app_data[:event_registration_fee] = @event_registration.registration_fee
+      @app_data.merge!({
+        event_registration_fee: @event_registration.registration_fee,
+        registration_id: @event_registration.id
+      })
 
       # Set up square env
       square_env = RendezvousSquare::Base.get_environment

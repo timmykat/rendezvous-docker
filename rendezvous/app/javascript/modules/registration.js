@@ -1,5 +1,10 @@
-$(document).ready(function() {
-  const registrationId = $('[data-registration_id]').data('registration_id');
+import $ from 'jquery'
+
+document.addEventListener('turbo:load',  function(){
+  let regId = $('[data-registration_id]').data('registration_id')
+  let csrfToken = $('meta[name="csrf-token"]')?.attr('content')
+  console.log(regId)
+  console.log(csrfToken)
 
   let setPaymentSpinner = function() {
     $('.btn-square-pay').on('click', function() {
@@ -43,17 +48,48 @@ $(document).ready(function() {
 
   // 3. GRAND TOTAL (Fee + Donation)
   let setTotal = function() {
-    console.log('Setting total')
-    if (typeof appData !== 'undefined') {
-      let regFee = parseFloat($('input#event_registration_registration_fee').val()) || 0;
-      let donation = parseFloat($('input[name="event_registration[donation]"]').val()) || 0;
+    // 1. Don't run if the page is literally changing
+    if (document.documentElement.hasAttribute("data-turbo-visit_control")) return;
 
+    const idElement = document.querySelector('[data-registration_id]');
+    if (!idElement) return; // 2. Don't run if we aren't on a registration page
+
+    let regId = idElement.dataset.registration_id;
+    console.log('Setting total for ', regId)
+    if (typeof appData !== 'undefined') {
+      let regFee = parseFloat($('input#event_registration_registration_fee').val()) || parseFloat(appData.event_registration_fee);
+      let donation = parseFloat($('input[name="event_registration[donation]"]').val()) || 0;
       let total = regFee + donation;
+
+      console.log('Reg fee:', regFee)
+      console.log('Donation:', donation)
+      console.log('Total:', total)
+
       $('input#event_registration_total').val(total.toFixed(2));
 
-      // Async update DB
-      const registrationId = $('[data-registration_id]').data('registration_id');
-      $.post('/event/ajax/update_fees', { id: registrationId, donation: donation, total: total });
+      const requestBody = JSON.stringify({ 
+        id: regId, 
+        donation: donation, 
+        total: total 
+      })
+
+      console.log('requestBody', requestBody)
+
+      fetch('/event/ajax/update_fees', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+          'Accept': 'application/json'
+        },
+        body: requestBody
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+      })
+      .then(data => console.log('Update successful:', data))
+      .catch(error => console.error('Error updating fees:', error));
     }
   };
 
@@ -75,26 +111,26 @@ $(document).ready(function() {
   getAttendeeTotals();
 
   // Radio button changes
-  $('#attendees').on('change', 'input[type=radio]', function(e) {
+  $('#attendees').off().on('change', 'input[type=radio]', function(e) {
     setAttendeeFee(this.value, this);
     getAttendeeTotals(); 
   });
 
   // Cocoon Hooks
-  $('#attendees').on('cocoon:after-insert', function(e, insertedItem) {
+  $('#attendees').off().on('cocoon:after-insert', function(e, insertedItem) {
     console.log('Cocoon insert')
     let $radio = $(insertedItem).find('input[type=radio]:checked');
     setAttendeeFee($radio.val(), $radio);
     getAttendeeTotals();
   });
 
-  $('#attendees').on('cocoon:after-remove',function() {
+  $('#attendees').off().on('cocoon:after-remove',function() {
     console.log('Cocoon insert')
     getAttendeeTotals();
   });
 
   // Donation logic
-  $('.total-calculation').on('click blur change', function() {
+  $('.total-calculation').off().on('click blur change', function() {
     let $this = $(this);
     if ($this.is(':radio')) {
       let val = $this.val() === 'other' ? 0 : parseFloat($this.val());
@@ -105,14 +141,17 @@ $(document).ready(function() {
 
   // Payment Method Switching
   const showPaymentMethod = function(value) {
+    console.log('Method value', value)
     const isOnline = (value === 'credit card');
+    console.log('isOnline', isOnline)
     $('#payment-online, #payment-paid').toggle(isOnline);
     $('#payment-cash').toggle(!isOnline);
     
-    $.get('/event/ajax/update_paid_method', { id: registrationId, paid_method: value });
+    $.get('/event/ajax/update_paid_method', { id: regId, paid_method: value });
   };
 
   $('input.payment-method').on('change', function() {
+    console.log('Payment method changed')
     showPaymentMethod($(this).val());
   });
 
@@ -132,13 +171,13 @@ $(document).ready(function() {
       $('#payment-cash').show();
       $('#payment-paid').hide()        
     }
-    const registrationId = $('[data-registration_id]').data('registration_id')
+    const regId = $('[data-registration_id]').data('registration_id')
     $.get({
       url: '/event/ajax/update_paid_method', 
       method: 'GET',
-      data: { id: registrationId, paid_method: value},
+      data: { id: regId, paid_method: value},
       headers: {
-        "X-CSRF-Token": CSRF_TOKEN
+        "X-CSRF-Token": csrfToken
       }
     })
   }

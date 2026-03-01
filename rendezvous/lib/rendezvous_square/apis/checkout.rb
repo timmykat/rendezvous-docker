@@ -4,7 +4,7 @@ module RendezvousSquare
     
     extend self
 
-    FEES = Rendezvous.configuration.pricing.fees
+    FEES = Rails.configuration.pricing[:fees]
 
     def api
       client = get_square_client

@@ -48,7 +48,7 @@
                   .col-md-6.col-12
                     .form-group
                       %ul.list-unstyled
-                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'cash or check', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
+                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
 
                 %section#payment-online
                   %h3.h4 Pay online with Square
@@ -62,7 +62,7 @@
                   #payment-link.button-with-spinner     
                     = link_to "Make Payment", send_to_square_event_registration_path(@event_registration), type: "button", class:  'btn btn-primary btn-square-pay' 
 
-                %section#payment-cash.hidden
+                %section#payment-cash
                   %h3.h4 Pay by mail or in person
                   .row
                     .col-md-6.col-12

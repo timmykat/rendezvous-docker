@@ -24,10 +24,8 @@
 
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
-
     :javascript
-      const appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
-
+      window.appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
   %body{ class: controller_classes + " outfit-regular registrations_layout", 'data-site-key' => get_recaptcha_key }
     = render partial: 'common/active_users'
     = render partial: 'layouts/flash'
