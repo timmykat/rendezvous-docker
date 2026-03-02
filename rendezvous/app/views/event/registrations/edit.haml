@@ -7,7 +7,6 @@
         .card
           .card-body
             .card-text
-              The registration fee is $#{event_fee} for adults and free for children. 
               #registration-form
                 - if !user_signed_in?
                   .cover
@@ -47,7 +46,8 @@
                       .col-md-4
                         .form-group
                           %label Total youths:
-                          = f.input_field :number_of_youths, disabled:  true, class:  'calculated fee-calculation'                    .row
+                          = f.input_field :number_of_youths, disabled:  true, class:  'calculated fee-calculation'
+                    .row
                       .col-md-4
                         .form-group
                           %label Total children:

@@ -20,6 +20,17 @@ module RegistrationsHelper
     prev_step = (index > 0) ? steps[index - 1] : nil
   end
 
+  def step_url(step, reg_id)
+    case step
+    when "welcome"
+      nil
+    when "create"
+      edit_event_registration_path(reg_id)
+    else
+      send("#{step}_event_registration_path", reg_id)
+    end
+  end
+
   def next_step(current_step)
     index = steps.index(current_step)
     next_step = (index - 1 < steps.length) ? steps[index + 1] : nil

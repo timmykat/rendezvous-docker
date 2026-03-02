@@ -63,7 +63,11 @@ class DonationsController < ApplicationController
       redirect_url = thank_you_url(@donation, type: 'standard')
     end
 
-    square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link(@donation, customer_id, redirect_url)
+    square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link({
+      donation: @donation, 
+      customer_id: customer_id, 
+      redirect: redirect_url
+    })
     redirect_to square_payment_link, allow_other_host: true
   end
 

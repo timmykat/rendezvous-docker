@@ -285,7 +285,7 @@ module Event
         RendezvousSquare::Checkout.create_square_payment_link({
           registration: @event_registration, 
           customer_id: customer_id, 
-          redirect: redirect_url, 
+          redirect_url: redirect_url, 
           fee_period: fee_period
         })
       end
