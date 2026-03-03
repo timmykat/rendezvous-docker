@@ -5,6 +5,10 @@ window.jQuery = $;
 import "@hotwired/turbo-rails"
 import { Application } from '@hotwired/stimulus'
 import { debounce } from 'throttle-debounce';
+import { Vehicle } from '../modules/Vehicle';
+if (!customElements.get('rendezvous-vehicle')) {
+  window.customElements.define('rendezvous-vehicle', Vehicle);
+}
 import 'html5shiv/dist/html5shiv.min';
 import 'popper.js';
 import 'bootstrap/dist/js/bootstrap';
@@ -27,8 +31,7 @@ import '../modules/jquery_tabs'
 import '../modules/main_pages';
 import '../modules/registration';
 import '../modules/user'; 
-import { Vehicle } from '../modules/Vehicle';
-window.customElements.define('rendezvous-vehicle', Vehicle)
+
 
 import { Cookies } from "js-cookie"
 window.Cookies = Cookies
