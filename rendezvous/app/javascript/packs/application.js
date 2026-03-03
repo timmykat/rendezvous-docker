@@ -34,12 +34,13 @@ import { Cookies } from "js-cookie"
 window.Cookies = Cookies
 
 import { registerCocoonHandlers } from '../modules/cocoon_vanilla_js'
-window.registerCocoonHandlers = registerCocoonHandlers
-registerCocoonHandlers()
 
 document.addEventListener('turbo:load', () => {
-  registerCocoonHandlers()
-})
+  // Check if it's already defined to avoid double-binding if your script re-runs
+  if (typeof registerCocoonHandlers === 'function') {
+    registerCocoonHandlers();
+  }
+});
 
 Turbo.start()
 

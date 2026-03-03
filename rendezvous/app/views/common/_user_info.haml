@@ -77,11 +77,16 @@
               = field_set_tag 'Vehicles', class: 'legend-sm' do
                 #vehicles{ 'data-cocoon': true }
                   = f.simple_fields_for :vehicles do |v|
-                    = render partial: 'vehicle_fields', locals: { f: v, nested: true }
-                  .card-footer
+                    = render partial: 'common/vehicle_fields', locals: { f: v, nested: true }
+                  .card-footer.mt-3
                     .links
-                      = link_to_add_association "#{icon(:plus)}#{icon(:car)}".html_safe, 
-                        f, 
-                        :vehicles, 
-                        { render_options: { partial:  'vehicle_fields', locals: { nested: true }}}
-                      Add a vehicle
+                      -# Combined the icons and text into the link itself
+                      = link_to_add_association f, :vehicles, |
+                        partial: 'common/vehicle_fields', |
+                        render_options: { locals: { nested: true } }, |
+                        'data-association-insertion-node' => '#vehicles', |
+                        'data-association-insertion-method' => 'append', |
+                        class: 'btn btn-outline-primary btn-sm' do
+                        = icon(:plus)
+                        = icon(:car)
+                        Add a vehicle

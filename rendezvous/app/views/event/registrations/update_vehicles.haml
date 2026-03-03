@@ -21,10 +21,13 @@
             %p
               We've improved the way we handle vehicles. You now can add as many vehicles as you want, and then indicate which one(s) you're bringing to the Rendezvous.
 
-            %button.btn.btn-primary{ type: 'button', 'data-toggle' => 'modal', 'data-target' => '#vehicle-modal'}
-
-            = render partial: 'common/update_registration_vehicles_form'
-
-= render partial: 'common/user_vehicles_modal', locals: { redirect_url: update_vehicles_event_registration_path(@event_registration) }
+            - if @event_registration.user.vehicles.present?
+              = render partial: 'common/update_registration_vehicles_form'
+            - else 
+              %p 
+                You don't seem to have any vehicles.
+                = simple_form_for @event_registration.user do |f|
+                  = render partial: 'common/user_info', locals: { f: f, vehicles: true }
+              
 
 
