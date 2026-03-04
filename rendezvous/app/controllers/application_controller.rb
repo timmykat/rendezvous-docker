@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   helper_method :written_reg_form_link
   helper_method :is_debug
   helper_method :debug_date
+  helper_method :get_reg_id
 
   GEO_CONFIG = Rails.configuration.geodata
 

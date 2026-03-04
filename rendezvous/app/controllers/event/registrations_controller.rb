@@ -325,7 +325,7 @@ module Event
         if current_user.admin?
           redirect_to user_path(@event_registration.user)
         else
-          redirect_to update_vehicles_event_registration_path(@event_registration)
+          redirect_to edit_user_vehicles(@event_registration.user)
         end
         return 
       else 
@@ -367,22 +367,8 @@ module Event
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to update_vehicles_event_registration_path(@event_registration)
+        redirect_to edit_user_vehicles(@event_registration.user)
       end
-    end
-
-    def post_reg_update_vehicles
-      @event_registration = Registration.find(params[:id])
-      @user = @event_registration.user
-      @vehicles = @user.vehicles
-    end
-
-    def update_vehicles
-      @title = 'Vehicle Information'
-      @step = 'vehicles'
-      @event_registration = Registration.find(params[:id])
-      @user = @event_registration.user
-      @vehicles = @user.vehicles
     end
 
     def save_updated_vehicles

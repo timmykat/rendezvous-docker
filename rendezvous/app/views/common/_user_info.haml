@@ -1,4 +1,6 @@
 .user_info{'data-autocomplete' => "email"}
+  - reg_id = @event_registration&.id || @user&.current_registration&.id
+  = f.hidden_field :current_registration_id, value: reg_id
   - if defined?(user_fields) && user_fields
     .user_fields
       .row

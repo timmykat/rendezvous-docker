@@ -59,6 +59,7 @@ class User < ApplicationRecord
   before_save :set_country
 
   attr_accessor :role
+  attr_accessor :current_registration_id
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable

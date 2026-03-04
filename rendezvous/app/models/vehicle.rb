@@ -40,6 +40,9 @@ class Vehicle < ApplicationRecord
   has_one :qr_code, as: :votable, inverse_of: :votable
   accepts_nested_attributes_for :qr_code, allow_destroy: true
   attr_accessor :qr_code_id
+  attr_accessor :bringing # for the RegistrationVehicle join table
+
+  after_save :sync_join_table
 
   scope :for_sale, -> { where(for_sale: true) }
   
@@ -86,14 +89,11 @@ class Vehicle < ApplicationRecord
 
     info.html_safe
   end
-  
-  def at_event?(registration)
-    registrations.each do |r|
-      if r == registration
-        return true
-      end
-    end
-    return false
+
+  # Ensure the checkbox is checked if it is being brought
+  def bringing
+    @bringing ||= registrations_vehicles.joins(:registration)
+                      .exists?(registrations: { year: Date.current.year })
   end
 
   def self.top_3_by_category
@@ -125,5 +125,20 @@ class Vehicle < ApplicationRecord
         .first(3)
         .map { |v| [v, v.vote_count.to_i] }
     end
+  end
+
+  private 
+
+  def sync_join_table
+    current_reg = user.registrations.find_by(year: Date.current.year)
+    return unless current_reg
+
+    is_bringing = ActiveModel::Type::Boolean.new.cast(bringing)
+
+    if is_bringing
+      registrations_vehicles.find_or_create_by(registration: current_reg)
+    else
+      registrations_vehicles.where(registration: current_reg).destroy_all
+    end    
   end
 end
