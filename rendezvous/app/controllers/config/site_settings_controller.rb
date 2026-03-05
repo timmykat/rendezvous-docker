@@ -22,21 +22,15 @@ class Config::SiteSettingsController < ApplicationController
 
   private
     def set_defaults
-      @instance.days_duration ||= 3
       @instance.square_environment ||= 'SANDBOX'
-    end
+    end     
 
     def site_settings_params
       params.require(:config_site_setting).permit(
-        :registration_fee,
-        :opening_day,
-        :days_duration,
-        :refund_date,
-        :show_registration_override,
+        :debug_test_date,
+        :debug_dates,
         :registration_is_open,
-        :registration_close_date,
         :square_environment,
-        :user_testing,
         :voting_on     
       )
     end

@@ -15,9 +15,11 @@ document.addEventListener('turbo:load',  function(){
 
   // 1. SET INDIVIDUAL FEE
   let setAttendeeFee = function(type, target) {
+    console.log('Setting attendee fee', type, target)
     let $card = $(target).closest('.card');
     // Safety check: default to 0 if the type isn't found in appData
     let fee = (appData.fees && appData.fees[type]) ? appData.fees[type] : 0;
+    console.log('Fee:', fee)
     console.log('Setting fee data on attendee card')
     $card.data('fee', fee);
   };
@@ -113,26 +115,24 @@ document.addEventListener('turbo:load',  function(){
   getAttendeeTotals();
 
   // Radio button changes
-  $('#attendees').off().on('change', 'input[type=radio]', function(e) {
+  $(document).on('change', '#attendees input[type=radio]', function(e) {
     setAttendeeFee(this.value, this);
     getAttendeeTotals(); 
   });
 
   // Cocoon Hooks
-  $('#attendees').off().on('cocoon:after-insert', function(e, insertedItem) {
-    console.log('Cocoon insert')
+  $('#attendees').on('cocoon:after-insert', function(e, insertedItem) {
     let $radio = $(insertedItem).find('input[type=radio]:checked');
     setAttendeeFee($radio.val(), $radio);
     getAttendeeTotals();
   });
 
-  $('#attendees').off().on('cocoon:after-remove',function() {
-    console.log('Cocoon insert')
+  $('#attendees').on('cocoon:after-remove',function() {
     getAttendeeTotals();
   });
 
   // Donation logic
-  $('.total-calculation').off().on('click blur change', function() {
+  $(document).on('click blur change', '.total-calculation', function() {
     let $this = $(this);
     if ($this.is(':radio')) {
       let val = $this.val() === 'other' ? 0 : parseFloat($this.val());
@@ -152,8 +152,8 @@ document.addEventListener('turbo:load',  function(){
     $.get('/event/ajax/update_paid_method', { id: regId, paid_method: value });
   };
 
-  $('input.payment-method').on('change', function() {
-    console.log('Payment method changed')
+  $(document).on('change', 'input.payment-method', function() {
+    console.log('Payment method changed:', $(this).val());
     showPaymentMethod($(this).val());
   });
 

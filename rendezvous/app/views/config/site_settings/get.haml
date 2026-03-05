@@ -14,7 +14,7 @@
                 .form-group 
                   = f.input :debug_dates, as: :boolean
                 .form-group 
-                  = f.input :debug_test_date, as: :date_select
+                  = f.input :debug_test_date, as: :date
               .form-group
                 = f.input :square_environment, as: :select, collection: ['SANDBOX', 'PROD'], label: 'Select Square Environment', include_blank: '-- Default is SANDBOX --'               
               .form-group 

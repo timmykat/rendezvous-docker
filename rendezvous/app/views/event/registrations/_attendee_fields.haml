@@ -13,7 +13,7 @@
             .form-group
               = f.input :name, label:  'Name (for name tag)', input_html:  { placeholder:  'Name *' }
             .form-group
-              = f.input :attendee_age, label:  '', collection:  [["Adult (16+): $#{fees[:adult]}", 'adult'], ["Youth (5-15): $#{fees[:youth]}", 'youth'], ['Child, 0-5 (free)', 'child']], as:  :radio_buttons, item_label_class:  'form-check-label ms-2', item_wrapper_tag:  false
+              = f.input :attendee_age, label:  '', collection:  [[" Adult (16+): $#{fees[:adult]}", 'adult'], [" Youth (5-15): $#{fees[:youth]}", 'youth'], [' Child, 0-5 (free)', 'child']], as:  :radio_buttons, item_label_class:  'form-check-label ps-2'
             .form-group
               = f.input :volunteer, inline_label:  "Would like to volunteer (<a href='#' data-toggle='modal', data-target='#volunteer-info'>What volunteer tasks are there?</a>)".html_safe
             .form-group 
