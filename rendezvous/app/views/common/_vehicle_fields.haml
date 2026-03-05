@@ -18,23 +18,25 @@
                 %th
                   %label Model
             %tbody
-              %tr.selects
-                %td
-                  .form-group.marque-select
+              %tr
+                %td.position11
+                  .form-group.marque-select.selects
+                    %label Select Marque
                     = select_tag :select_marque, options_for_select(marques, selected:  selected_marque(vehicle)), class:  'form-control select-sm marque'
-                %td
-                  .form-group.model-select
+                %td.position-12
+                  .form-group.model-select.selects
+                    %label Citroen Model
                     = select_tag :select_model, options_for_select(citroen_models, selected:  selected_model(vehicle)), include_blank:  '-- Select Citroën model --', class:  'form-control select-sm model'
-              %tr.fill-in
-                %td
-                  .form-group.other-marque-text
+              %tr
+                %td.position-21
+                  .form-group.other-marque-text.fill-in
                     %label Non-French Marque
-                    = text_field_tag :other_marque, nil, class:  'form-control  input-sm marque text'
+                    = text_field_tag :other_marque, nil, class:  'form-control  input-sm marque text', disabled: true
                     
-                %td
-                  .form-group.other-model-field
+                %td.position-22
+                  .form-group.other-model-field.fill-in
                     %label Non-Citroen Model
-                    = text_field_tag :other_model, nil, class:  'form-control input-sm model text'
+                    = text_field_tag :other_model, nil, class:  'form-control input-sm model text', disabled: true
               %tr.form-values
                 %td{ colspan: 2}
                   = f.input :marque, as: :hidden, value:  vehicle.marque, input_html: { class: 'marque data' }
