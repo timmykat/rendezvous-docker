@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :users
   get :index, to: 'users#index'
+  get 'edit_user_vehicles/:id', to: 'users#edit_user_vehicles', as: :edit_user_vehicles
   get :new_user_by_admin, to: 'users#new_user_by_admin'
   post :create_user_by_admin, to: 'users#create_user_by_admin'
 
@@ -76,9 +77,6 @@ Rails.application.routes.draw do
         get :send_to_square
         get :vehicles
         get :send_email_confirmation
-        get :post_reg_update_vehicles
-        get :update_vehicles
-        patch :save_updated_vehicles
       end
     end
     resources :registrations, except: [:index]

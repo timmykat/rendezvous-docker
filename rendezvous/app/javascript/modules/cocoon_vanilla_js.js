@@ -31,7 +31,7 @@ const getInsertionNodeElem = (insertionNode, insertionTraversal, btn) => {
         console.warn('Unsupported insertion traversal method:', insertionTraversal);
       }
     } else {
-      return insertionNode === 'this' ? btn : cocoon?.querySelector(insertionNode);
+      return insertionNode === 'this' ? btn : document.querySelector(insertionNode);
     }
   }
 
@@ -127,27 +127,22 @@ export const hideDestroyedFields = () => {
 };
 
 export const registerCocoonHandlers = () => {
-  const cocoon = document.querySelector('[data-cocoon]')
-  cocoon?.addEventListener('click', (e) => {
+  // Listen on the document so it survives Turbo page refreshes
+  document.addEventListener('click', (e) => {
     const addBtn = e.target.closest('.add_fields');
     if (addBtn) {
       e.preventDefault();
-      e.stopPropagation();
       addFieldsHandler(addBtn);
     }
 
-    const removeBtn =
-      e.target.closest('.remove_fields.dynamic') ||
-      e.target.closest('.remove_fields.existing');
-
+    const removeBtn = e.target.closest('.remove_fields.dynamic, .remove_fields.existing');
     if (removeBtn) {
       e.preventDefault();
-      e.stopPropagation();
       removeFieldsHandler(removeBtn);
     }
   });
 
-  document.addEventListener('DOMContentLoaded', hideDestroyedFields);
-  document.addEventListener('turbo:load', hideDestroyedFields);
-  document.addEventListener('turbo:load', hideDestroyedFields);
+  // Run once on load
+  hideDestroyedFields();
 };
+

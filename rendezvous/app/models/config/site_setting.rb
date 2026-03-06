@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: site_settings
+#
+#  id                   :bigint           not null, primary key
+#  debug_dates          :boolean
+#  debug_test_date      :date
+#  registration_is_open :boolean
+#  square_environment   :string(255)
+#  voting_on            :boolean          default(FALSE)
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#
 class Config::SiteSetting < ApplicationRecord
 
   private_class_method :new

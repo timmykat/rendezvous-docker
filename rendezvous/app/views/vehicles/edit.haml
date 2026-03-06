@@ -6,6 +6,18 @@
           .card-text
             %h1.h3 Edit Vehicle
             = simple_form_for @vehicle do |f|
-              = render partial: 'vehicle_fields', locals: { f: f, nested: false }
+              = render partial: 'common/vehicle_fields', locals: { f: f, nested: false }
+              .card-footer.mt-3
+                .links
+                  -# Combined the icons and text into the link itself
+                  = link_to_add_association f, :vehicles, |
+                    partial: 'common/vehicle_fields', |
+                    render_options: { locals: { nested: true } }, |
+                    'data-association-insertion-node' => '#vehicles', |
+                    'data-association-insertion-method' => 'append', |
+                    class: 'btn btn-outline-primary btn-sm' do
+                    = icon(:plus)
+                    = icon(:car)
+                    Add a vehicle
               .form-group
                 = f.button :submit, input_html:  { value:  'Save vehicle' }, class:  "btn  btn-primary"

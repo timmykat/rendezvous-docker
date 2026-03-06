@@ -1,4 +1,5 @@
-- unless registration_is_open || user_is_admin?
+- all_fees = Rails.configuration.pricing[:fees]
+- unless registration_is_open
   = render partial: 'common/too_soon' 
 - else
   = render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
@@ -11,11 +12,37 @@
               %h2= @title
             .card-text
               %p
-                Lakeside have informed us that our expenses with them are up by %10 over last year, so this years registration fee is $#{event_fee}.
-              %p 
-                Thank you for your understanding.
+                This year we are adopting an early-late fee structure, and adding a youth category. We're hoping that this will encourage people to register early so we are better able to plan.
+                Although we've raised the fees, we thing the Rendezvous still represents a great value. Thank you for your understanding.
+              .card 
+                .card-body 
+                  .card-title
+                    %h3.h6 Pricing
+                  .card-text
+                    %table.table       
+                      %thead
+                        %tr
+                          %th
+                            Dates
+                          %th
+                            Adult (16+)
+                          %th 
+                            Youth (5-15)
+                          %th
+                            Child (Under 5)
+                      %tbody
+                        %tr
+                          %td Early: up to #{format_short_date(all_fees[:early][:end_date])}
+                          %td $#{all_fees[:early][:adult]}
+                          %td $#{all_fees[:early][:youth]}
+                          %td Free
+                        %tr
+                          %td Late: starting #{format_short_date(all_fees[:late][:start_date])}
+                          %td $#{all_fees[:late][:adult]}
+                          %td $#{all_fees[:late][:youth]}
+                          %td Free
               %p
-                If you've previously registered, we've already filled in your basic information. We are now using Square to process credit cards, so address is no longer required.
+                If you've previously registered, we've already filled in your basic information. We continue to use Square to process credit cards, so address is no longer required.
               %p 
                 Let us know who you're bringing, if anyone. Then we'll give you a chance to review, followed by payment. 
             #registration-form.new_registration
@@ -37,7 +64,7 @@
                 %section
                   %h2.h3 Registration Information
                   %h3.h4 Attendees
-                  %p.hint (Adults are 16+ and children are 15 and under)
+                  %p.hint (Adults are 16+, youths are 5-15, and children are under 5)
                   .row
                     .col-12
                       #attendees{ 'data-cocoon': true }
@@ -56,7 +83,12 @@
                   .row
                     .col-md-4
                       .form-group
-                        %label Total kids:
+                        %label Total youths:
+                        = f.input_field :number_of_youths, disabled:  true, class:  'calculated fee-calculation'                  
+                  .row
+                    .col-md-4
+                      .form-group
+                        %label Total children:
                         = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
 
                   .row
@@ -66,7 +98,7 @@
                           Registration fee (USD):
                           = f.input_field :registration_fee, disabled:  true, class:  'calculated'
                   = f.input_field :year, as:  :hidden, value:  Time.new.year
-                  = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+                  = f.input_field :status, as:  :hidden, value:  Rails.configuration.registration[:registration_statuses][0]
 
                   .row 
                     .col-12
@@ -76,16 +108,25 @@
                             Post-Rendezvous Route Lunch
                           .card-text 
                             %p 
-                              This year, Patrick Jehanno, owner of 
+                              Last year's Sunday lunch at 
                               = link_to "Shadow 66 restaurant", "https://www.instagram.com/shadow66restaurant"
                               in 
                               = link_to "Ghent, NY", "https://www.google.com/maps/dir/Saratoga+Springs,+New+York/Ghent,+New+York/@42.7013769,-74.0428778,10z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x89de384ec75bd439:0x641d456a1b94a2a8!2m2!1d-73.7849756!2d43.0833706!1m5!1m1!1s0x89ddf2aa4ad0bd27:0x5d2c524b9bd267f!2m2!1d-73.6300729!2d42.320699!3e0?entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoASAFQAw%3D%3D" 
-                              (approximately an hour from Saratoga Springs) has invited homeward-bound Citroenistas to stop there for lunch at approximately 1pm.
-                              This is not an official Rendezvous event, so lunch is on you. If you think you might join in, please let us know below.
-                            .form-group 
-                              %label= @annual_question.question
-                              = f.input :annual_answer, collection: annual_question_responses, as: :select, include_blank: false, label: false
-                               
+                              (approximately an hour from Saratoga Springs) was a huge success.
+                            %p
+                              Owners Patrick and Astrid Jehanno would again like to welcome homeward-bound Citroenistas to stop there for lunch at approximately 1pm.                           
+                            %p
+                              This is not an official Rendezvous event, so lunch is on you. 
+                            %p  
+                              As a courtesy to Patrick and Astrid, please check whether you intend to go and how many would be in your party. 
+                            .form-group
+                              %label
+                                = f.input_field :sunday_lunch, as: :boolean
+                                I'm attending Sunday lunch at Shadow 66
+                            .form-group
+                              %label 
+                                Number of people
+                                = f.input_field :sunday_lunch_number
                   .row
                     .col-12
                       .form-group

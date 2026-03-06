@@ -8,7 +8,16 @@ class ApplicationController < ActionController::Base
   before_action :update_active_user
   before_action :set_ballot_count
 
-  CONFIG = Rails.configuration.rendezvous
+  helper_method :current_time
+  helper_method :fee_period
+  helper_method :event_fees
+  helper_method :event_fees_for_period
+  helper_method :written_reg_form_link
+  helper_method :is_debug_date
+  helper_method :debug_date
+  helper_method :get_reg_id
+
+  GEO_CONFIG = Rails.configuration.geodata
 
   RECAPTCHA_MINIMUM_SCORE = 0.5
 
@@ -17,6 +26,34 @@ class ApplicationController < ActionController::Base
     super(*args)  # Call the original render method
   end
 
+  def is_debug_date
+    Config::SiteSetting.instance.debug_dates
+  end
+
+  def debug_date
+    Config::SiteSetting.instance.debug_test_date.to_time.strftime("%B %d")
+  end
+
+  def current_time
+    if is_debug_date
+      debug_date
+    else
+      Time.current
+    end
+  end
+
+  def event_fees_for_period
+    Rails.configuration.pricing[:fees][fee_period]
+  end
+
+  def fee_period
+    (current_time <= Rails.configuration.pricing[:fees][:early][:end_date].to_time) ? :early : :late
+  end
+
+  def written_reg_form_link
+    "/#{Date.current.year}-Rendezvous-registration-#{fee_period}.pdf"
+  end
+  
   def set_ballot_count
     @ballot_count = Voting::Ballot.count
   end
@@ -40,11 +77,11 @@ class ApplicationController < ActionController::Base
   def get_app_data
     @app_data =
       {
-        event_fee: Config::SiteSetting.instance.registration_fee,
+        fees: event_fees_for_period,
         marques: VehicleTaxonomy.get_marques,
         models: VehicleTaxonomy.get_citroen_models,
-        provinces: CONFIG[:provinces],
-        countries: CONFIG[:countries]
+        provinces: GEO_CONFIG[:provinces],
+        countries: GEO_CONFIG[:countries]
       }
   end
 

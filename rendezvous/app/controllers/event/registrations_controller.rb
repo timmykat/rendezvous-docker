@@ -11,7 +11,7 @@ module Event
     skip_before_action :verify_authenticity_token, only: [:show]
 
     def check_cutoff
-      if !current_user&.admin? && Time.now > Config::SiteSetting.instance.registration_close_date
+      if current_time > Rails.configuration.registration[:registration_window][:close].to_time
         flash_alert("Online registration is now closed. You may register on arrival at the Rendezvous.")
         redirect_to :root
       end
@@ -238,13 +238,6 @@ module Event
       @title = 'Review Registration Information'
       @step = 'review'
       @event_registration = Registration.find(params[:id])
-      # If user is a vendor, add the registration fee
-      if (@event_registration.user.has_role? :vendor)
-        vendor_fee = Config::SiteSetting.instance.vendor_fee
-        @event_registration.vendor_fee = vendor_fee
-        # @event_registration.ensure_total
-        @event_registration.save!
-      end 
       @event_registration.status = 'in review'
       @event_registration.save!
     end
@@ -254,7 +247,10 @@ module Event
       @step = 'payment'
       @event_registration = Registration.find(params[:id])
       @event_registration.status = 'payment due'
-      @app_data[:event_registration_fee] = @event_registration.registration_fee
+      @app_data.merge!({
+        event_registration_fee: @event_registration.registration_fee,
+        registration_id: @event_registration.id
+      })
 
       # Set up square env
       square_env = RendezvousSquare::Base.get_environment
@@ -286,7 +282,12 @@ module Event
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
 
       square_payment_link = ::RendezvousSquare::Base.with_error_handling do
-        RendezvousSquare::Checkout.create_square_payment_link(@event_registration, customer_id, redirect_url)
+        RendezvousSquare::Checkout.create_square_payment_link({
+          registration: @event_registration, 
+          customer_id: customer_id, 
+          redirect_url: redirect_url, 
+          fee_period: fee_period
+        })
       end
 
       unless square_payment_link.nil?
@@ -324,7 +325,7 @@ module Event
         if current_user.admin?
           redirect_to user_path(@event_registration.user)
         else
-          redirect_to update_vehicles_event_registration_path(@event_registration)
+          redirect_to edit_user_vehicles(@event_registration.user)
         end
         return 
       else 
@@ -366,22 +367,8 @@ module Event
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to update_vehicles_event_registration_path(@event_registration)
+        redirect_to edit_user_vehicles(@event_registration.user)
       end
-    end
-
-    def post_reg_update_vehicles
-      @event_registration = Registration.find(params[:id])
-      @user = @event_registration.user
-      @vehicles = @user.vehicles
-    end
-
-    def update_vehicles
-      @title = 'Vehicle Information'
-      @step = 'vehicles'
-      @event_registration = Registration.find(params[:id])
-      @user = @event_registration.user
-      @vehicles = @user.vehicles
     end
 
     def save_updated_vehicles
@@ -448,7 +435,7 @@ module Event
 
       # Only allows admins and owners to see registration
       def owner_or_admin
-        unless (current_user.id == Registration.find(params[:id]).user_id) || (current_user.has_role? :admin)
+        unless (current_user.id == Registration.find(params[:id]).user_id) || require_admin
           flash_alert 'Sorry, you must be an admin to see that.'
           redirect_to :root
         end
@@ -458,7 +445,6 @@ module Event
         params.permit(
           :id,
           :registration_fee,
-          :vendor_fee,
           :donation,
           :total,
           :paid_amount,
@@ -471,9 +457,9 @@ module Event
         params.require(:event_registration).permit(
           :annual_answer,
           :number_of_adults,
+          :number_of_youths,
           :number_of_children,
           :registration_fee,
-          :vendor_fee,
           :donation,
           :total,
           :year,

@@ -20,13 +20,20 @@ module RegistrationsHelper
     prev_step = (index > 0) ? steps[index - 1] : nil
   end
 
+  def step_url(step, reg_id)
+    case step
+    when "welcome"
+      nil
+    when "create"
+      edit_event_registration_path(reg_id)
+    else
+      send("#{step}_event_registration_path", reg_id)
+    end
+  end
+
   def next_step(current_step)
     index = steps.index(current_step)
     next_step = (index - 1 < steps.length) ? steps[index + 1] : nil
-  end
-
-  def vendor_fee
-    Config::SiteSetting.instance.vendor_fee
   end
 
   def get_status_icon(status)
@@ -60,7 +67,7 @@ module RegistrationsHelper
   
   def payment_options
     # [[' Credit Card (on line)', 'credit card'], [' Cash or Check', 'cash or check'], [' Square (on site)', 'square on site']]
-    [[' Cash or Check', 'cash or check'], [' Square (on site)', 'square on site']]
+    [[' Credit card (Square)', 'credit card'], [' Cash or Check', 'cash or check']]
   end
 
   def attended_rendezvous_years(user)

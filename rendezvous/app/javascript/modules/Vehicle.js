@@ -4,10 +4,14 @@ const OTHER_FRENCH = ['Panhard', 'Peugeot', 'Renault']
 export class Vehicle extends HTMLElement {
   connectedCallback () {
     console.log('Vehicle connected')
-    this.init()
+    requestAnimationFrame(() => {
+      console.log('Vehicle connected')
+      this.init()
+    })
   }
 
   init () {
+    console.log('Initing')
     this.marqueSelect = this.querySelector('select.marque')
     this.modelSelect = this.querySelector('select.model')
     this.otherMarqueText = this.querySelector('input.marque.text')
@@ -18,6 +22,11 @@ export class Vehicle extends HTMLElement {
     this.qrIdField = this.querySelector('[data-qr-id-field]')
     this.codeFieldBadge = this.querySelector('.badge')
     this.codeAutocompleteDebounce = debounce(500, this.codeAutocomplete.bind(this));
+    if (!this.marqueSelect || !this.modelSelect) {
+      console.warn('RendezvousVehicle: Required select fields not found in DOM.');
+      return;
+    }
+    console.log(this.marqueSelect, this.modelDataField)
     this.setEventListeners()
     this.setInitialControls()
   }
@@ -88,6 +97,7 @@ export class Vehicle extends HTMLElement {
   }
 
   setInputFieldStates () {
+    console.log('Setting fields states')
     if (this.marqueSelect.value === 'Citroen') {
       this.enableField(this.marqueSelect);
       this.enableField(this.modelSelect);

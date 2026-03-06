@@ -1,12 +1,11 @@
 delivery_method: :smtp
 use_letter_opener: false    # Overrides production delivery method
 smtp_settings:
-  service:                 <%= ENV["MAIL_SERVICE"] %>
-  address:               <%= ENV[ENV["MAIL_SERVICE"] + "_SMTP_DOMAIN"] %>
-  domain:                <%= ENV[ENV["MAIL_SERVICE"] + "_APP_DOMAIN"] %>
-  user_name:             <%= ENV[ENV["MAIL_SERVICE"] + "_SMTP_USER"] %>
-  password:              <%= ENV[ENV["MAIL_SERVICE"] + "_SMTP_PASSWORD"] %>
-  port:                  <%= ENV[ENV["MAIL_SERVICE"] + "_SMTP_PORT"] %>
+  address:               <%= ENV["SMTP_DOMAIN"] %>
+  domain:                <%= ENV["APP_DOMAIN"] %>
+  user_name:             <%= ENV["SMTP_USER"] %>
+  password:              <%= ENV["SMTP_PASSWORD"] %>
+  port:                  <%= ENV["SMTP_PORT"] %>
   authentication:        :plain
   enable_starttls_auto:  true
   ssl:                   false

@@ -18,7 +18,7 @@
                 %section
                   %h2.h3 Registration Information
                   %h3.h4 Attendees
-                  %p.hint (Adults are 16+ and children are 15 and under)
+                  %p.hint (Adults are 16+, youths are 5-15 and children are under 5)
                   .row
                     .col-12
                       #attendees{ 'data-cocoon': true }
@@ -47,7 +47,7 @@
                           Registration fee (USD):
                           = f.input_field :registration_fee, disabled:  true, class:  'calculated'
                   = f.input_field :year, as:  :hidden, value:  Time.new.year
-                  = f.input_field :status, as:  :hidden, value:  Rails.configuration.rendezvous[:registration_statuses][0]
+                  = f.input_field :status, as:  :hidden, value:  Rails.configuration.registration[:registration_statuses][0]
 
                   .row 
                     .col-12

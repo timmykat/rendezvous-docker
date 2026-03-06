@@ -48,6 +48,11 @@ class UsersController < ApplicationController
     @available_qr_codes = QrCode.unassigned
   end
 
+  def edit_user_vehicles
+    @user = User.find(params[:id])
+    @current_user_id = @user.registrations.current.last.id
+  end
+
   def update
     @user = User.find(params[:id])
     if !@user.update(user_params)
@@ -154,11 +159,12 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(
-        :email, :password, :password_confirmation, 
+        :email, :password, :password_confirmation,
+        :current_user_id, 
         :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :is_admin_created, 
         :citroenvie,
         vehicles_attributes:
-            [:id, :year, :marque, :model, :other_info, :for_sale, :qr_code_id, :_destroy]
+            [:id, :year, :marque, :model, :other_info, :bringing, :for_sale, :qr_code_id, :_destroy]
       )
     end
 

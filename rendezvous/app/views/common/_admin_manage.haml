@@ -1,4 +1,4 @@
-- if user_signed_in? && (current_user.has_role? :admin)
+- if user_signed_in? && user_is_admin?
   .manage
     .container-fluid  
       .row.justify-content-center

@@ -1,4 +1,5 @@
-- config = Rails.configuration.rendezvous
+- pricing_config = Rails.configuration.pricing 
+- reg_config = Rails.configuration.registration 
 :javascript
   const applicationId = "#{@square_app_id}"
   const locationId = "#{@square_location_id}"
@@ -11,20 +12,12 @@
         %section
           .card 
             .card-body
-              - if @event_registration.user.has_role? :vendor
-                .card-title
-                  %h2.h3 Vendor Fee
-                .card.text
-                  - if @event_registration.user&.vendor
-                    %p Vendor: #{@event_registration.user&.vendor.name}
-                  .form-group.vendor-fee
-                    = f.input :vendor_fee, input_html: { readonly: true, value: vendor_fee } 
               .card-title
                 %h2.h3 Donation
               .card.text
                 %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
                 .form-group
-                  - donation_list(config[:suggested_donations], @event_registration.total.to_f).each do |rb|
+                  - donation_list(pricing_config[:suggested_donations], @event_registration.total.to_f).each do |rb|
                     %input.radio-inline.total-calculation{type: 'radio', name: :suggested_donation, value: rb[1]}
                     %span.mr-2= rb[0]
                 .row
@@ -55,7 +48,7 @@
                   .col-md-6.col-12
                     .form-group
                       %ul.list-unstyled
-                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'cash or check', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
+                        = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
 
                 %section#payment-online
                   %h3.h4 Pay online with Square
@@ -69,7 +62,7 @@
                   #payment-link.button-with-spinner     
                     = link_to "Make Payment", send_to_square_event_registration_path(@event_registration), type: "button", class:  'btn btn-primary btn-square-pay' 
 
-                %section#payment-cash.hidden
+                %section#payment-cash
                   %h3.h4 Pay by mail or in person
                   .row
                     .col-md-6.col-12
@@ -78,7 +71,7 @@
                           = f.input :paid_amount
 
                         .form-group 
-                          = f.input :status, as: :select, collection: config[:registration_statuses]
+                          = f.input :status, as: :select, collection: reg_config[:registration_statuses]
 
                       - else
                         %p

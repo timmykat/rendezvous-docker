@@ -1,6 +1,6 @@
 module MainPagesHelper
 
-  config = Rails.configuration.rendezvous
+  config = Rails.configuration.site
   
   DAYS_OF_THE_WEEK = [
     "Sunday",
@@ -20,6 +20,11 @@ module MainPagesHelper
 
   def event_year
     return START_DATE.year
+  end
+
+  def format_short_date(date_input)
+    date = date_input.is_a?(String) ? Date.parse(date_input) : date_input
+    date.strftime(SHORT_FORMAT)
   end
 
   def event_dates

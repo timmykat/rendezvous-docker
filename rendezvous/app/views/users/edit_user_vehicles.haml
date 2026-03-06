@@ -1,0 +1,36 @@
+.container
+  .row.justify-content-center
+    .col-md-10.col-12
+      .card 
+        .card-body 
+          .card-title
+            %h1.h2= (@user == current_user) ? 'My Vehicles' : "Vehicles for #{@user.full_name}"
+
+          .card-text
+            = simple_form_for @user do |f|
+              = f.hidden_field :current_registration_id, value: @user.current_registration.id
+              .row
+                .col-md-12
+                  .card 
+                    .card-body
+                      .card-text
+                        = field_set_tag 'Vehicles', class: 'legend-sm' do
+                          #vehicles{ 'data-cocoon': true }
+                            = f.simple_fields_for :vehicles do |v|
+                              = render partial: 'common/vehicle_fields', locals: { f: v, nested: true }
+                            .card-footer.mt-3
+                              .links
+                                -# Combined the icons and text into the link itself
+                                = link_to_add_association f, :vehicles, |
+                                  partial: 'common/vehicle_fields', |
+                                  render_options: { locals: { nested: true } }, |
+                                  'data-association-insertion-node' => '#vehicles', |
+                                  'data-association-insertion-method' => 'append', |
+                                  class: 'btn btn-outline-primary btn-sm' do
+                                  = icon(:plus)
+                                  = icon(:car)
+                                  Add a vehicle
+              %br
+              .form-group
+                = f.button :submit, input_html:  { value:  'Update Vehicles' }, class:  "btn  btn-primary"
+                           

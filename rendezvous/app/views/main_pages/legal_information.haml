@@ -1,3 +1,4 @@
+- config = Rails.configuration.pricing
 .content
   .row.justify-content-center
     .col-md-8.col-12
@@ -15,7 +16,15 @@
             %h2.h3 Policies
 
             %h3.h4 Event Pricing
-            %p The cost for attending the event is $#{event_fee} per adult, free children under the age of 15.
+            - config.fees.each do |category, values|
+              - categore.each do |values|
+              %h2.h5= category.titleize
+                %p Before #{values.end_date}
+                %ul
+                  %li Adult: #{values.adult}
+                  %li Youth: #{values.youth}
+                  %li Child: free
+              
 
             %h3.h4 Refund Policy
             %p In case of cancellation, Citroen Rendezvous LLC will refund up to the full registration fee for the event until one (1) week before the event; the last day to request a refund is #{refund_date}.

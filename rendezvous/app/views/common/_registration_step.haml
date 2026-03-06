@@ -1,13 +1,17 @@
 .container-fluid.px-0.sticky-top
   .row.no-gutters.justify-content-center
-    - unless registration.nil? 
+    - unless registration.nil?
+      - previous_step = previous_step(step)
+      - next_step = next_step(step)
       .registration-id{ "data-registration_id" => registration.id}
     .registration-step.vw-100
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
         %li.list-group-item.step.prev
-          = previous_step(step)
+          - if (previous_step && !registration.id.nil?)
+            = link_to "&larr; #{previous_step}".html_safe, step_url(previous_step, registration.id)
         %li.list-group-item.step.current
           = step
         %li.list-group-item.step.next
-          = next_step(step)
+          - if (next_step  && !registration.id.nil?)
+            = link_to "#{next_step} &rarr;".html_safe, step_url(next_step, registration.id)
 

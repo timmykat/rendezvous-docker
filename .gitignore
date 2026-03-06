@@ -8,6 +8,7 @@
 .ephemeral
 .sass-cache
 .data
+.code-workspace
 
 # Ignore .env files
 .env*
@@ -16,6 +17,9 @@ config/production_env_vars
 
 # New Relic mysql config
 mysql-config.yml
+
+# Ignore encryption key
+master.key
 
 # Ignore ssl certs
 certs

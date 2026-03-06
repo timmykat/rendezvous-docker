@@ -21,6 +21,10 @@
 
 
 #attendees {
+  .form-check-label {
+    display: block;
+    line-height: 1.4;
+  }
   .nested-fields:first-child .guest {
     display: none;
   }

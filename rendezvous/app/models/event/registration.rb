@@ -1,4 +1,44 @@
 
+# == Schema Information
+#
+# Table name: registrations
+#
+#  id                  :integer          not null, primary key
+#  annual_answer       :string(255)
+#  created_by_admin    :boolean          default(FALSE), not null
+#  donation            :decimal(6, 2)
+#  events              :text(65535)
+#  invoice_number      :string(255)
+#  is_admin_created    :boolean          default(FALSE), not null
+#  number_of_adults    :integer
+#  number_of_children  :integer
+#  number_of_seniors   :integer
+#  number_of_youths    :integer
+#  paid_amount         :decimal(6, 2)
+#  paid_date           :datetime
+#  paid_method         :string(255)
+#  registration_fee    :decimal(6, 2)
+#  status              :string(255)
+#  sunday_lunch        :boolean          default(FALSE), not null
+#  sunday_lunch_number :integer          default(0), not null
+#  total               :float(24)
+#  vendor_fee          :decimal(6, 2)
+#  year                :string(255)
+#  created_at          :datetime
+#  updated_at          :datetime
+#  cc_transaction_id   :string(255)
+#  user_id             :integer
+#
+# Indexes
+#
+#  index_registrations_on_cc_transaction_id  (cc_transaction_id)
+#  index_registrations_on_invoice_number     (invoice_number)
+#  index_registrations_on_paid_amount        (paid_amount)
+#  index_registrations_on_paid_date          (paid_date)
+#  index_registrations_on_paid_method        (paid_method)
+#  index_registrations_on_status             (status)
+#  index_registrations_on_year               (year)
+#
 module Event
   class Registration < ApplicationRecord
 
@@ -25,12 +65,12 @@ module Event
     
     validate :validate_minimum_number_of_adults, unless: -> { status.nil? || status.match(/^cancelled/) }
     validate :validate_payment, unless: -> { status.nil? || status.match(/^cancelled/) }
-    validates :paid_method, inclusion: { in: Rails.configuration.rendezvous[:payment_methods] }, allow_blank: true
+    validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
     # validates :invoice_number, uniqueness: true, format: { with: /\ARR20\d{2}-\d{3,4}\z/, on: :new }, allow_blank: true
     
-    validates :status, inclusion: { in: Rails.configuration.rendezvous[:registration_statuses] }
+    validates :status, inclusion: { in: Rails.configuration.registration[:registration_statuses] }
     
-    serialize :events, JSON
+    serialize :events
 
     before_save :ensure_total
     
@@ -81,13 +121,10 @@ module Event
       if !self.donation.blank?
         self.total += self.donation
       end
-      if !self.vendor_fee.blank?
-        self.total += self.vendor_fee
-      end
     end
     
     def self.invoice_number
-      prefix = "CR#{Rails.configuration.rendezvous[:dates][:year]}"
+      prefix = "CR#{Rails.configuration.site[:dates][:year]}"
       previous_code = Registration.pluck(:invoice_number).last
       if previous_code.blank?
         next_number = 101

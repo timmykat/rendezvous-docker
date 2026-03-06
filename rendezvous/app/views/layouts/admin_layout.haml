@@ -1,4 +1,3 @@
-- config = Rails.configuration.rendezvous
 !!!
 %html{:lang => "en"}
   %head
@@ -25,7 +24,7 @@
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
 
     :javascript
-      var appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
+      const appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
 
       function loadChartJs(callback) {
         const script = document.createElement('script');
@@ -35,8 +34,9 @@
       }
 
   %body{ class: controller_classes + " outfit-regular admin_layout", 'data-site-key' => get_recaptcha_key }
+    - if is_debug_date
+      = render partial: 'layouts/debug'
     = render partial: 'layouts/flash'
-
     %header
       .container
         .row.banner

@@ -22,7 +22,7 @@
                 %ul.nav.navbar-nav.ml-auto
                   - if !registration_is_open
                     %li.nav-item
-                      %span.badge.badge-danger.mt-2 Registration TBD
+                      %span.badge.badge-danger.mt-2 Registration opens soon
                   - elsif registration_is_open && current_user.nil?
                     %li.nav-item= link_to 'Sign In', new_user_session_path, class: 'nav-link'
 
@@ -33,12 +33,14 @@
                       .dropdown-menu.dropdown-menu-right{'aria-labelledby' => 'navbarDropdown'}
                         %span.dropdown-item
                           %em= current_user.full_name
+                          %br
+                          Registration status:  #{current_registration.nil? ? 'none' : current_registration.status}
                         .dropdown-divider
                         - if !current_registration
                           = link_to "Register", new_event_registration_path, class: 'dropdown-item'
                         - elsif registration_complete
                           = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
-                          = link_to 'View/edit my vehicle(s)', update_vehicles_event_registration_path(current_registration), class: 'dropdown-item'
+                          = link_to 'View/edit my vehicle(s)', edit_user_vehicles_path(current_user), class: 'dropdown-item'
                         - else
                           = link_to 'Review my registration', review_event_registration_path(current_registration), class: 'dropdown-item'
                           = link_to 'Pay for my registration', payment_event_registration_path(current_registration), class: 'dropdown-item'

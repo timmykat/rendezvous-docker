@@ -14,11 +14,11 @@ class Users::SessionsController < Devise::SessionsController
     end
 
     @user = User.find_by_email(params[:email])
-
-    flash_notice "Please check your inbox at #{params[:email]} for your sign-in link"
-    
     if @user
+      flash_notice "Please check your inbox at #{params[:email]} for your sign-in link"
       @user.send_login_link
+    else
+      flash_notice "We don't have an account for that email.  Please <a href='#{new_user_registration_url}'>sign up</a>"
     end
 
     redirect_to root_path

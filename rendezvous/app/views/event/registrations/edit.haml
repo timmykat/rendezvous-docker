@@ -7,7 +7,6 @@
         .card
           .card-body
             .card-text
-              The registration fee is $#{event_fee} for adults and free for children. 
               #registration-form
                 - if !user_signed_in?
                   .cover
@@ -46,7 +45,12 @@
                     .row
                       .col-md-4
                         .form-group
-                          %label Total kids:
+                          %label Total youths:
+                          = f.input_field :number_of_youths, disabled:  true, class:  'calculated fee-calculation'
+                    .row
+                      .col-md-4
+                        .form-group
+                          %label Total children:
                           = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
 
                     .row
@@ -60,7 +64,7 @@
                     .row
                       .col-12
                         - if user_is_admin?
-                          = f.input :status, as: :select, collection: Rails.configuration.rendezvous[:registration_statuses]
+                          = f.input :status, as: :select, collection: Rails.configuration.registration[:registration_statuses]
                     = f.input_field :status, as:  :hidden
 
 

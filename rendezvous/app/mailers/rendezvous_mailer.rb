@@ -12,7 +12,7 @@ class RendezvousMailer < ApplicationMailer
     @name = name
     @email = email
     @message = message
-    recipients = Rails.configuration.rendezvous[Rails.env.to_sym][:inquiry_recipients]
+    recipients = Rails.configuration.people[Rails.env.to_sym][:inquiry_recipients]
     mail(to: recipients, from: @email, subject: "New Rendezvous query from #{@name}")
   end
   

@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: keyed_contents
+#
+#  id         :bigint           not null, primary key
+#  content    :text(65535)
+#  key        :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_keyed_contents_on_key  (key) UNIQUE
+#
 class KeyedContent < ApplicationRecord
   include MarkdownConcern
 

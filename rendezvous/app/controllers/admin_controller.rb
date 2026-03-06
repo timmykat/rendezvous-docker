@@ -13,11 +13,11 @@ class AdminController < ApplicationController
         'Registration number',
         'Registrant',
         'Attendee name',
-        'Adult or child',
+        'Adult, youth, or child',
         'Volunteer?',
         'Donation?',
         'Date registration paid',
-        ('As of: ' + Time.now.strftime('%Y%m%d'))
+        ('As of: ' + Time.current.strftime('%Y%m%d'))
       ]
     },
     dash_placards: {
@@ -208,6 +208,7 @@ class AdminController < ApplicationController
       attendees: query.joins(:attendees).count,
       newbies: [],
       adult: query.joins(:attendees).where(attendees: { attendee_age: 'adult'}).count,
+      youth: query.joins(:attendees).where(attendees: { attendee_age: 'youth'}).count,
       child: query.joins(:attendees).where(attendees: { attendee_age: 'child'}).count,
       financials: {
         registration_fees: query.sum(:registration_fee),

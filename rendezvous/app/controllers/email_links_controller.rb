@@ -26,7 +26,7 @@ class EmailLinksController < ApplicationController
   end
 
   def validate
-    email_link = EmailLink.where(token: params[:token]).where("expires_at > ?", DateTime.now).first
+    email_link = EmailLink.where(token: params[:token]).where("expires_at > ?", Time.current).first
 
     unless email_link
       flash_alert "Invalid or expired token!"

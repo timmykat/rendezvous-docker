@@ -1,0 +1,25 @@
+registration_window:
+  open: 2026-03-01
+  close: 2026-06-06
+  after_rendezvous: 2026-06-16
+  test: true
+refund_date: 2026-06-06
+payment_methods:
+  - credit card
+  - check
+  - cash
+  - cash or check
+  - no payment
+registration_statuses:
+  - initiated
+  - in review
+  - payment due
+  - complete
+  - updated
+  - updating
+  - "cancelled - settled"
+  - "cancelled - needs refund"
+transaction_types:
+  - payment
+  - refund
+

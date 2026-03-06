@@ -54,22 +54,12 @@ services:
       - PROD_SQUARE_ACCESS_TOKEN
       - PROD_SQUARE_SDK_URL
 
-      ## Mail service
-      - MAIL_SERVICE  
-
-      # Mailsender mailer info 
-      - MAILSENDER_SMTP_PASSWORD
-      - MAILSENDER_SMTP_DOMAIN
-      - MAILSENDER_SMTP_PORT
-      - MAILSENDER_SMTP_USER
-      - MAILSENDER_API_KEY
-
-      # Brevo mailer info
-      - BREVO_SMTP_PASSWORD
-      - BREVO_SMTP_DOMAIN
-      - BREVO_SMTP_PORT
-      - BREVO_SMTP_USER
-      - BREVO_API_KEY
+      # Mailsender Mailer info 
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_USER
+      - API_KEY
 
       # Mail addresses
       - SITE_ADMIN_SENDING_ADDRESS
@@ -112,19 +102,12 @@ services:
       ## Mail service
       - MAIL_SERVICE  
 
-      # Mailsender mailer info 
-      - MAILSENDER_SMTP_PASSWORD
-      - MAILSENDER_SMTP_DOMAIN
-      - MAILSENDER_SMTP_PORT
-      - MAILSENDER_SMTP_USER
-      - MAILSENDER_API_KEY
-
-      # Brevo mailer info
-      - BREVO_SMTP_PASSWORD
-      - BREVO_SMTP_DOMAIN
-      - BREVO_SMTP_PORT
-      - BREVO_SMTP_USER
-      - BREVO_API_KEY
+      # Mailer info 
+      - SMTP_PASSWORD
+      - SMTP_DOMAIN
+      - SMTP_PORT
+      - SMTP_USER
+      - API_KEY
 
       # Mail addresses
       - SITE_ADMIN_SENDING_ADDRESS

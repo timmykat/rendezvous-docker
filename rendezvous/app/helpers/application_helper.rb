@@ -80,12 +80,8 @@ module ApplicationHelper
     classes
   end
 
-  def event_fee
-    Config::SiteSetting.instance.registration_fee
-  end
-
   def refund_date
-    Config::SiteSetting.instance.refund_date || Time.now
+    Rails.configuration.registration[:refund_date].to_time || current_time
   end
 
   def logged_in_user(user)
@@ -104,16 +100,16 @@ module ApplicationHelper
     Config::SiteSetting.instance.voting_on
   end
 
-  def user_is_admin?
-    current_user && (current_user != @user)
-  end
-
   def before_cutoff_date?
-    Time.now <= Config::SiteSetting.instance.registration_close_date
+    current_time <= Rails.configuration.registration[:registration_window][:close].to_time
   end
 
   def after_rendezvous?
-    Time.now > Rails.configuration.rendezvous[:registration_window][:after_rendezvous]
+    current_time > Rails.configuration.registration[:registration_window][:after_rendezvous]
+  end
+
+  def user_is_admin?
+    current_user && (current_user.has_role? :admin)
   end
 
   def user_can_test
@@ -125,7 +121,7 @@ module ApplicationHelper
   end
 
   def registration_is_open
-    (Config::SiteSetting.instance.registration_is_open && before_cutoff_date?)
+    Config::SiteSetting.instance.registration_is_open
   end
 
   def static_file(file_path)
@@ -189,11 +185,11 @@ module ApplicationHelper
   def les_chauffeurs(output = "html")
     if output == "html"
       value = "<ul class='list-unstyled'>\n"
-      Rails.configuration.rendezvous[:chauffeurs].each do |c|
+      Rails.configuration.people[:chauffeurs].each do |c|
         value += "  <li>#{c}</li>"
       end
     else
-      value = Rails.configuration.rendezvous[:chauffeurs].join(', ')
+      value = Rails.configuration.people[:chauffeurs].join(', ')
     end
     return value.html_safe
   end
@@ -210,16 +206,16 @@ module ApplicationHelper
   end
 
   def mailing_address(delimiter = "<br />\n")
-    Rails.configuration.rendezvous[:official_contact][:mailing_address_array].join(delimiter).html_safe
+    Rails.configuration.people[:official_contact][:mailing_address_array].join(delimiter).html_safe
   end
 
 
   def official_contact
-    config = Rails.configuration.rendezvous
+    config = Rails.configuration.people
     output = '<p><em>Mailing address: </em><br />'
     output +=  mailing_address
-    output += '<p><em>Chief officer:</em> ' + Rails.configuration.rendezvous[:official_contact][:chief_officer] + "</p>\n"
-    output += '<p><em>Official email:</em> ' + Rails.configuration.rendezvous[:official_contact][:email] + "</p>\n"
+    output += '<p><em>Chief officer:</em> ' + config[:official_contact][:chief_officer] + "</p>\n"
+    output += '<p><em>Official email:</em> ' + config[:official_contact][:email] + "</p>\n"
     output.html_safe
   end
 
@@ -295,7 +291,7 @@ module ApplicationHelper
   end
 
   def country_list
-    Rails.configuration.rendezvous[:countries].map{|code, name| [name, code] }
+    Rails.configuration.geodata[:countries].map{|code, name| [name, code] }
   end
 
   def state_province_list

@@ -1,4 +1,4 @@
-- config = Rails.configuration.rendezvous
+- all_fees = Rails.configuration.pricing[:fees]
 = render partial:  'common/registration_step', locals:  { step:  'welcome', registration: nil }
 .container
   .row.justify-content-center
@@ -10,12 +10,42 @@
             %h2.h6.mt-1 #{event_dates}, Saratoga Springs, New York
           .card-text
             %p
-              It's that time again! This year's registration fee is $#{event_fee} per adult (16+). As usual, kids 15 and under are free. You may pay by credit card on line, send or bring a check.
-              Just as a reminder, the fee includes ice cream at the ice cream social, the Saturday banquet, and the Sunday morning breakfast. 
-              It does not include accommodations.
+              It's that time again!
+              %em Formidable! 
             %p
-              
-              This year's Rendezvous hotel is:
+              We've introduced an early/late fee structure this year, as well as a youth fee. We apologize for raising the fees, but
+              we've compared to similar events and we think the Rendezvous still represents a great value: included are ice cream at the ice cream social on Thursday, 
+              pizza on Friday night, the Saturday banquet, and the Sunday morning breakfast. And of course, all the Citroëns and other
+              French cars your eyes can devour.
+            
+            .card 
+              .card-body 
+                .card-title
+                  %h3.h6 Pricing
+                .card-text
+                  %table.table       
+                    %thead
+                      %tr
+                        %th
+                          Dates
+                        %th
+                          Adult (16+)
+                        %th 
+                          Youth (5-15)
+                        %th
+                          Child (Under 5)
+                    %tbody
+                      %tr
+                        %td Early: up to #{format_short_date(all_fees[:early][:end_date])}
+                        %td $#{all_fees[:early][:adult]}
+                        %td $#{all_fees[:early][:youth]}
+                        %td Free
+                      %tr
+                        %td Late: starting #{format_short_date(all_fees[:late][:start_date])}
+                        %td $#{all_fees[:late][:adult]}
+                        %td $#{all_fees[:late][:youth]}
+                        %td Free
+                
             .card 
               .card-body 
                 .card-text
@@ -52,4 +82,4 @@
             %h3.text-center.text-info OR
             %p.printed-form
               If you prefer not to register on line, or are having problems registering, please print this registration form and send it in with your registration fee payment:
-              = link_to "#{icon(:pdf)}".html_safe, "/Rendezvous-registration-#{Date.current.year}.pdf"
+              = link_to "#{icon(:pdf)}".html_safe, written_reg_form_link()

@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: merchandise
+#
+#  id          :bigint           not null, primary key
+#  description :string(255)
+#  sale_price  :decimal(6, 2)
+#  sku         :string(255)
+#  unit_cost   :decimal(6, 2)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
+# Indexes
+#
+#  index_merchandise_on_sku  (sku)
+#
 module Commerce
   class Merchandise < ApplicationRecord
     

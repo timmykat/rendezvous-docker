@@ -47,7 +47,7 @@ module Devise
       end
 
       def expired_token?(resource)
-        (Time.now.to_i - resource.login_token_sent_at.to_i) > 600
+        (Time.current.to_i - resource.login_token_sent_at.to_i) > 600
       end
     end
   end
