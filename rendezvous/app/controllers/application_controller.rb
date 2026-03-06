@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   helper_method :event_fees
   helper_method :event_fees_for_period
   helper_method :written_reg_form_link
-  helper_method :is_debug
+  helper_method :is_debug_date
   helper_method :debug_date
   helper_method :get_reg_id
 
@@ -26,16 +26,16 @@ class ApplicationController < ActionController::Base
     super(*args)  # Call the original render method
   end
 
-  def is_debug
+  def is_debug_date
     Config::SiteSetting.instance.debug_dates
   end
 
   def debug_date
-    Config::SiteSetting.instance.debug_test_date.to_time
+    Config::SiteSetting.instance.debug_test_date.to_time.strftime("%B %d")
   end
 
   def current_time
-    if is_debug
+    if is_debug_date
       debug_date
     else
       Time.current

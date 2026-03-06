@@ -34,11 +34,9 @@
       }
 
   %body{ class: controller_classes + " outfit-regular admin_layout", 'data-site-key' => get_recaptcha_key }
-    = render partial: 'layouts/flash'
-
-    - if is_debug
+    - if is_debug_date
       = render partial: 'layouts/debug'
-
+    = render partial: 'layouts/flash'
     %header
       .container
         .row.banner
