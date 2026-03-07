@@ -37,9 +37,22 @@
       %hr  
       .row.justify-content-center.mt-2
         .col-md-10
-          .button-group
-            = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning" 
-            = link_to 'De-dupe content', admin_dedupe_path, class: 'btn  btn-warning' 
+          .card 
+            .card-body
+              .card-text
+                .button-group
+                  = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning" 
+                  = link_to 'De-dupe content', admin_dedupe_path, class: 'btn  btn-warning' 
+      %hr
+      .row.justify-content-center
+        .col-md-10
+          .card
+            .card-title
+              %h3 Sunday Lunch Count
+            .card-body.text-primary 
+              .card-text
+                %p Number of Sunday lunch participants: #{sunday_lunch_count}   
+     
       - if @annual_question
         %hr
         .row.justify-content-center

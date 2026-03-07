@@ -39,6 +39,10 @@ $admin-card-background: var(--medium-gray);
 $card-title-background: var(--indigo-dye);
 $secondary-color: var(--indigo-dye);
 
+.text-primary {
+	color: var(--jet);
+}
+
 html {
 	scroll-behavior: smooth;
 }
