@@ -325,7 +325,7 @@ module Event
         if current_user.admin?
           redirect_to user_path(@event_registration.user)
         else
-          redirect_to edit_user_vehicles_path(@event_registration.user)
+          redirect_to edit_user_vehicles_path(@event_registration.user, after_complete: true)
         end
         return 
       else 

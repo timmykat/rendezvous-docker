@@ -81,7 +81,7 @@ module ApplicationHelper
   end
 
   def refund_date
-    Rails.configuration.registration[:refund_date].to_time || current_time
+    Rails.configuration.registration[:refund_date].to_time.strftime("%B %-d, %Y")
   end
 
   def logged_in_user(user)

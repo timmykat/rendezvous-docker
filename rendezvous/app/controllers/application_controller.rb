@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   helper_method :fee_period
   helper_method :get_reg_id
   helper_method :is_debug_date
+  helper_method :registration_status
   helper_method :sunday_lunch_max
   helper_method :written_reg_form_link
 
@@ -25,6 +26,10 @@ class ApplicationController < ActionController::Base
   def render(*args)
     Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
     super(*args)  # Call the original render method
+  end
+
+  def registration_status
+    current_user&.current_registration.present? ? current_user.current_registration.status.titlecase : 'Not Registered' 
   end
 
   def is_debug_date

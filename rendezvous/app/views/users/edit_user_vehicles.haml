@@ -1,6 +1,26 @@
+- contact = Rails.configuration.people[:technical_contact]
 .container
   .row.justify-content-center
     .col-md-10.col-12
+      - if @after_complete.present?
+        .card 
+          .card-body 
+            .card-title 
+              %h2.h2 Your Registration is Complete
+            .card-text 
+              %p
+                Thank you for your registration! 
+              %p
+                If you need to cancel, please email #{contact[:name]} at #{contact[:email]}.
+              %p
+                The last date for a refund is #{refund_date}.
+
+              %p 
+                If you're not bringing a vehicle to the Rendezvous, this is optional, but if you are, please enter it here and
+                %b please make sure to check that you are bringing it.
+              %p  
+                This helps with our planning, and will enter you for the judging!
+
       .card 
         .card-body 
           .card-title

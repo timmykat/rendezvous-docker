@@ -8,7 +8,7 @@
           .card-text 
             %h3.h5.mt-3 What would you like to do?
 
-            %p Registration status:  #{@registration.nil? ? 'none' : current_registration.status}
+            %p Registration status:  #{registration_status}
             
             %ul.list-group
               - if !@registration
