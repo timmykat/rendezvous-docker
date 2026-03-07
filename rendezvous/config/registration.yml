@@ -4,6 +4,7 @@ registration_window:
   after_rendezvous: 2026-06-16
   test: true
 refund_date: 2026-06-06
+sunday_lunch_max: 6      # This currently has an absolute max in the DB of 8
 payment_methods:
   - credit card
   - check

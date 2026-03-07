@@ -120,13 +120,9 @@
                             %p  
                               As a courtesy to Patrick and Astrid, please check whether you intend to go and how many would be in your party. 
                             .form-group
-                              %label
-                                = f.input_field :sunday_lunch, as: :boolean
-                                I'm attending Sunday lunch at Shadow 66
-                            .form-group
                               %label 
-                                Number of people
-                                = f.input_field :sunday_lunch_number
+                                Number of people for Sunday lunch at Shadow 66
+                                = f.input :sunday_lunch_number, as: :select, collection: (0..sunday_lunch_max)
                   .row
                     .col-12
                       .form-group

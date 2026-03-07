@@ -47,10 +47,10 @@
                   Admin
                   = link_to "Back to main site", root_path, class: 'btn btn-sm btn-primary'
 
-      - if user_is_admin?
-        = render partial: 'common/onsite_navbar'
+      - if current_user.nil?
+        = render partial: 'common/logged_out_nav_bar'
       - else
-        = render partial: 'common/site_nav_bar'
+        = render partial: 'common/logged_in_nav_bar'
 
       = render partial: 'common/admin_manage'
 

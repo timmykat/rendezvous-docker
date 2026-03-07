@@ -3,19 +3,20 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :get_app_data
   before_action :flash_array
-  before_action :update_active_user
+  before_action :get_app_data
   before_action :set_ballot_count
+  before_action :update_active_user
 
   helper_method :current_time
-  helper_method :fee_period
+  helper_method :debug_date
   helper_method :event_fees
   helper_method :event_fees_for_period
-  helper_method :written_reg_form_link
-  helper_method :is_debug_date
-  helper_method :debug_date
+  helper_method :fee_period
   helper_method :get_reg_id
+  helper_method :is_debug_date
+  helper_method :sunday_lunch_max
+  helper_method :written_reg_form_link
 
   GEO_CONFIG = Rails.configuration.geodata
 
@@ -56,6 +57,11 @@ class ApplicationController < ActionController::Base
   
   def set_ballot_count
     @ballot_count = Voting::Ballot.count
+  end
+
+  # This currently has an absolute max in the DB of 8
+  def sunday_lunch_max
+    Rails.configuration.registration[:sunday_lunch_max]
   end
 
   # Need this for other gems that might set flash

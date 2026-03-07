@@ -1,3 +1,8 @@
+# Generating an SSL certificate
+## LetsEncrypt
+- Go to the root account of the hosting server
+
+## Namecheap
 https://www.namecheap.com/support/knowledgebase/article.aspx/9592/2290/generating-a-csr-on-amazon-web-services-aws/
 
 Generate private key and certificate signing request (CSR):

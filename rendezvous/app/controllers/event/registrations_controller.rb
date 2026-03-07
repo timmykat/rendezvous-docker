@@ -325,7 +325,7 @@ module Event
         if current_user.admin?
           redirect_to user_path(@event_registration.user)
         else
-          redirect_to edit_user_vehicles(@event_registration.user)
+          redirect_to edit_user_vehicles_path(@event_registration.user)
         end
         return 
       else 
@@ -367,7 +367,7 @@ module Event
       else
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to edit_user_vehicles(@event_registration.user)
+        redirect_to edit_user_vehicles_path(@event_registration.user)
       end
     end
 
@@ -376,10 +376,24 @@ module Event
       if (@event_registration.update(vehicle_update_params))
         flash_notice "You are bringing #{@event_registration.vehicles.count} vehicles"
       else
-        flash_alert "There was a problem saving your vehicle for this event."
+        flash_alert "There was a problem saving your vehicles"
       end
       redirect_to event_registration_path(@event_registration)
-    end  
+    end
+
+    def edit_sunday_lunch
+      @event_registration = Registration.find(params[:id])
+    end
+    
+    def update_sunday_lunch
+      @event_registration = Registration.find(params[:id])
+      if (@event_registration.update(sunday_lunch_params))
+        flash_notice @event_registration.sunday_lunch_number == 0 ? "You're not attending Sunday lunch." : "You've updated your Sunday lunch guests to #{@event_registration.sunday_lunch_number}"
+      else
+        flash_alert "There was a problem saving your Sunday lunch info"
+      end
+      redirect_to landing_page_path
+    end
 
     def index
       @title = 'All Registrations'
@@ -468,6 +482,7 @@ module Event
           :paid_date,
           :payment_token,
           :status,
+          :sunday_lunch_number,
           :invoice_number,
           :user_id,
           { attendees_attributes:
@@ -493,6 +508,10 @@ module Event
 
       def payment_method_params
         params.permit(:id, :paid_method) 
+      end
+
+      def sunday_lunch_params
+        params.require(:event_registration).permit(:sunday_lunch_number)
       end
 
       def vehicle_update_params

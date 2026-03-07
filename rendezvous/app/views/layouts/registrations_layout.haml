@@ -42,10 +42,10 @@
                 %h1
                   = link_to "Citroen Rendezvous #{Date.current.year}", root_path
 
-      - if user_is_admin?
-        = render partial: 'common/onsite_navbar'
+      - if current_user.nil?
+        = render partial: 'common/logged_out_nav_bar'
       - else
-        = render partial: 'common/site_nav_bar'
+        = render partial: 'common/logged_in_nav_bar'        
 
       - if user_is_admin?
         = render partial: 'common/admin_manage'

@@ -69,6 +69,13 @@ module Event
     # validates :invoice_number, uniqueness: true, format: { with: /\ARR20\d{2}-\d{3,4}\z/, on: :new }, allow_blank: true
     
     validates :status, inclusion: { in: Rails.configuration.registration[:registration_statuses] }
+
+    validates :sunday_lunch_number, 
+    numericality: { 
+      only_integer: true, 
+      greater_than_or_equal_to: 0, 
+      less_than_or_equal_to: Rails.configuration.registration[:sunday_lunch_max]
+    }
     
     serialize :events
 
