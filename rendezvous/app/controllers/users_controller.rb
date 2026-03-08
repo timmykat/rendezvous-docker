@@ -69,6 +69,9 @@ class UsersController < ApplicationController
         vehicle = @user.vehicles.find_or_initialize_by(id: vehicle_params[:id])
         filtered_params = vehicle_params.except(:_destroy)
         vehicle.assign_attributes(filtered_params)
+        unless vehicle.save
+          Rails.logger.error "Vehicle failed to save: #{vehicle.errors.full_messages}"
+        end
       
         if qr_code_id.present?
           old_qr = vehicle.qr_code

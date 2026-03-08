@@ -92,6 +92,8 @@ class Vehicle < ApplicationRecord
 
   # Ensure the checkbox is checked if it is being brought
   def bringing
+    return @bringing unless @bringing.nil?
+
     current_reg_id = user.current_registration&.id
     return false unless current_reg_id
 
@@ -132,15 +134,12 @@ class Vehicle < ApplicationRecord
   private 
 
   def update_reg_join_table
-    # 1. If @bringing is nil, the field wasn't in the form. Do nothing.
-    return if @bringing.nil?
-
     # 2. If there's no registration, we can't link anything.
     current_reg = user.current_registration
     return unless current_reg
 
-    # 3. Cast and Sync
-    if ActiveModel::Type::Boolean.new.cast(@bringing)
+    is_bringing = ActiveModel::Type::Boolean.new.cast(@bringing)
+    if is_bringing
       # use find_or_create to avoid duplicates
       registrations_vehicles.find_or_create_by(registration_id: current_reg.id)
     else

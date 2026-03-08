@@ -16,7 +16,7 @@
               %h2 Profile Information for #{@user.last_name_first}
             .profile-info
               .user-info
-                %h3 The Basics
+                %h3.h4 The Basics
                 %table
                   %tr
                     %td
@@ -33,8 +33,9 @@
                       %blockquote
                         = address_of(@user)
             .card-text
-              %h3 Registration Status
-              = registration_status
+              %h3.h4 Registration Status
+              %p
+                Status: #{registration_status}
 
               - if registration_status != 'Complete'
                 %p To register or finish a registration: 
@@ -44,29 +45,38 @@
                   - else
                     %li= link_to 'Create a registration',  new_event_registration_path 
 
-              .vehicle-info
-                %h3 Vehicles
+              .vehicle-info.mt-6
+                %h3.h4 Vehicles
                 - if @user.vehicles.blank?
                   %p Currently no vehicles registered.
                   %p
                     = link_to 'Add a vehicle', edit_user_path(@user), class: 'btn btn-primary'
                 - else
-                  %table
+                  %table.table
                     %tbody
                     - @user.vehicles.each do |v|
                       %tr
                         %td{colspan: 2}
                           %hr
                       %tr
-                        %td{colspan: 2} #{v.year_marque_model}
+                        %td 
+                          %em Year, marque & model:
+                        %td= v.year_marque_model
                       %tr
-                        %td{colspan: 2} #{v.judging_category}
+                        %td 
+                          %em Judging category:
+                        %td= v.judging_category
                       %tr
-                        %td Bringing to the Rendezvous?
-                        %td= @current_registration.vehicles.present? ? 'Yes' : 'No'
+                        %td.mr-3 
+                          %em Bringing to the Rendezvous?
+                        %td= v.bringing ? 'Yes' : 'No'
+                      %tr
+                        %td 
+                          %em For sale?
+                        %td= v.for_sale ? 'Yes' : 'No'
 
 
-            =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning" 
+            =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning mt-3" 
       
       .card
         .card-body
