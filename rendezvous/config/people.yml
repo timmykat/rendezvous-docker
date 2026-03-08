@@ -6,6 +6,10 @@ chauffeurs:
  - Tim Kinnel
  - Andy Pickett
 
+technical_contact: 
+  name: Tim
+  email: tim@wordsareimages.com
+
 official_contact:
   mailing_address_array:
     - "Citroen Rendezvous, LLC"

@@ -33,7 +33,7 @@
           = link_to  "Register", new_event_registration_path, class: 'dropdown-item'
         - elsif registration_complete
           = link_to 'View my registration', event_registration_path(current_registration), class: 'dropdown-item'
-          = link_to 'View/edit my vehicle(s)', edit_user_vehicles(current_user), class: 'dropdown-item'
+          = link_to 'View/edit my vehicle(s)', edit_user_vehicles_path(current_user), class: 'dropdown-item'
         - else
           = link_to 'Review my registration', review_event_registration_path(current_registration), class: 'dropdown-item'
           = link_to 'Pay for my registration', payment_event_registration_path(current_registration), class: 'dropdown-item'    

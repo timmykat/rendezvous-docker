@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_action :authenticate_user!, only: [:welcome, :edit, :update, :new_by_admin, :create_by_admin]
+  before_action :authenticate_user!, only: [:welcome, :edit, :edit_user_vehicles, :update, :new_by_admin, :create_by_admin]
   before_action :require_admin, only: [:new_by_admin, :create_by_admin, :index]
   layout :select_layout
 
@@ -40,6 +40,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @current_registration = @user.registrations.current.first
   end
 
   def edit
@@ -50,7 +51,7 @@ class UsersController < ApplicationController
 
   def edit_user_vehicles
     @user = User.find(params[:id])
-    @current_user_id = @user.registrations.current.last.id
+    @after_complete = params[:after_complete]
   end
 
   def update
@@ -68,6 +69,9 @@ class UsersController < ApplicationController
         vehicle = @user.vehicles.find_or_initialize_by(id: vehicle_params[:id])
         filtered_params = vehicle_params.except(:_destroy)
         vehicle.assign_attributes(filtered_params)
+        unless vehicle.save
+          Rails.logger.error "Vehicle failed to save: #{vehicle.errors.full_messages}"
+        end
       
         if qr_code_id.present?
           old_qr = vehicle.qr_code
@@ -159,8 +163,7 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(
-        :email, :password, :password_confirmation,
-        :current_user_id, 
+        :email, :password, :password_confirmation, 
         :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :is_admin_created, 
         :citroenvie,
         vehicles_attributes:

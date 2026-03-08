@@ -25,14 +25,12 @@
               %thead
                 %th Name
                 %th Adult, Youth, or Child
-                -# %th Sunday Dinner
                 %th Volunteer
               %tbody
                 -@event_registration.attendees.each do |a|
                   %tr
                     %td= a.name
                     %td= a.attendee_age
-                    -# %td #{a.sunday_dinner? ? 'yes' : 'no'}
                     %td #{a.volunteer? ? 'yes' : 'no'}
 
         .card

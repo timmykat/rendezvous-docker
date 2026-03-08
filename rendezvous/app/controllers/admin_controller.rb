@@ -289,7 +289,7 @@ class AdminController < ApplicationController
   def get_csv_data(type)
     csv = CSV.generate(headers: true) do |csv_data|
       csv_data << CSV_TYPES[type.to_sym][:headers]
-      Event::Registration.where(year: Date.current.year).all.each do |r|
+      Event::Registration.current.each do |r|
         case type
           when 'attendees'
             r.attendees do |a|

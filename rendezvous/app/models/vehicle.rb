@@ -40,9 +40,9 @@ class Vehicle < ApplicationRecord
   has_one :qr_code, as: :votable, inverse_of: :votable
   accepts_nested_attributes_for :qr_code, allow_destroy: true
   attr_accessor :qr_code_id
-  attr_accessor :bringing # for the RegistrationVehicle join table
+  attr_writer :bringing
 
-  after_save :sync_join_table
+  after_save :update_reg_join_table
 
   scope :for_sale, -> { where(for_sale: true) }
   
@@ -92,8 +92,12 @@ class Vehicle < ApplicationRecord
 
   # Ensure the checkbox is checked if it is being brought
   def bringing
-    @bringing ||= registrations_vehicles.joins(:registration)
-                      .exists?(registrations: { year: Date.current.year })
+    return @bringing unless @bringing.nil?
+
+    current_reg_id = user.current_registration&.id
+    return false unless current_reg_id
+
+    @bringing = registrations_vehicles.exists?(registration_id: current_reg_id)
   end
 
   def self.top_3_by_category
@@ -129,16 +133,18 @@ class Vehicle < ApplicationRecord
 
   private 
 
-  def sync_join_table
-    current_reg = user.registrations.find_by(year: Date.current.year)
+  def update_reg_join_table
+    # 2. If there's no registration, we can't link anything.
+    current_reg = user.current_registration
     return unless current_reg
 
-    is_bringing = ActiveModel::Type::Boolean.new.cast(bringing)
-
+    is_bringing = ActiveModel::Type::Boolean.new.cast(@bringing)
     if is_bringing
-      registrations_vehicles.find_or_create_by(registration: current_reg)
+      # use find_or_create to avoid duplicates
+      registrations_vehicles.find_or_create_by(registration_id: current_reg.id)
     else
-      registrations_vehicles.where(registration: current_reg).destroy_all
-    end    
+      # remove the link if they unchecked the box
+      registrations_vehicles.where(registration_id: current_reg.id).destroy_all
+    end   
   end
 end

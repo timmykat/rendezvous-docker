@@ -46,12 +46,14 @@
             .form-group
               = f.input :other_info, input_html:  { class: 'input-sm', placeholder:  'Unusual Citroen model, distinguishing features, historical notes, etc.' }
 
-          - if @current_user_id
+          - if @user.current_registration.present?
             .col-md-12
-              = f.input :bringing, as: :boolean, label: "I am bringing this vehicle to this year's Rendezvous"
+              .form-group
+                = f.input :bringing, as: :boolean, label: "I am bringing this vehicle to this year's Rendezvous"
 
           .col-md-12
-            = f.input :for_sale, as: :boolean, label: "This vehicle will be for sale"
+            .form-group
+              = f.input :for_sale, as: :boolean, label: "This vehicle will be for sale"
 
       - if user_is_admin?
         .row 

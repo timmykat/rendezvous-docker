@@ -7,16 +7,7 @@
             - if user_is_admin?
               %h1.h2 Profile for #{@user.full_name}
             - else
-              %h1.h2 Bienvenue, #{current_user.first_name}
-
-          - unless user_is_admin?
-            .card-text
-              %p To register or finish a registration: 
-              %ul 
-                - if current_registration
-                  %li= link_to 'Continue to current registration', existing_event_registration_path
-                - else
-                  %li= link_to 'Create a registration',  new_event_registration_path 
+              %h1.h2 Your Info
 
       .card
         .card-body
@@ -25,7 +16,7 @@
               %h2 Profile Information for #{@user.last_name_first}
             .profile-info
               .user-info
-                %h3 Info
+                %h3.h4 The Basics
                 %table
                   %tr
                     %td
@@ -41,33 +32,51 @@
                       %br
                       %blockquote
                         = address_of(@user)
-              .vehicle-info
-                %h3 Vehicles
+            .card-text
+              %h3.h4 Registration Status
+              %p
+                Status: #{registration_status}
+
+              - if registration_status != 'Complete'
+                %p To register or finish a registration: 
+                %ul 
+                  - if @current_registration
+                    %li= link_to 'Continue to current registration', review_event_registration_path(@current_registration)
+                  - else
+                    %li= link_to 'Create a registration',  new_event_registration_path 
+
+              .vehicle-info.mt-6
+                %h3.h4 Vehicles
                 - if @user.vehicles.blank?
                   %p Currently no vehicles registered.
                   %p
                     = link_to 'Add a vehicle', edit_user_path(@user), class: 'btn btn-primary'
                 - else
-                  %table
+                  %table.table
                     %tbody
                     - @user.vehicles.each do |v|
                       %tr
                         %td{colspan: 2}
                           %hr
                       %tr
-                        %td{colspan: 2} #{v.year_marque_model}
+                        %td 
+                          %em Year, marque & model:
+                        %td= v.year_marque_model
                       %tr
-                        %td{colspan: 2} #{v.judging_category}
+                        %td 
+                          %em Judging category:
+                        %td= v.judging_category
                       %tr
-                        - if v.qr_code.present?
-                          %td #{v.qr_code.code}
-                          %td
-                            %div{style: 'padding: 5px 20px'}
-                              = image_tag qr_code_url(v.qr_code.code), {style: 'width: 60px; height: 60px;'}
-                        - else
-                          %td.text-warn This vehicle will need a QR code assigned to be eligible for voting.
+                        %td.mr-3 
+                          %em Bringing to the Rendezvous?
+                        %td= v.bringing ? 'Yes' : 'No'
+                      %tr
+                        %td 
+                          %em For sale?
+                        %td= v.for_sale ? 'Yes' : 'No'
 
-            =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning" 
+
+            =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning mt-3" 
       
       .card
         .card-body

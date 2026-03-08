@@ -174,7 +174,7 @@ class User < ApplicationRecord
   end
 
   def current_registration
-    self.registrations.where(year: Date.current.year).first
+    self.registrations.current.first
   end
 
   def attending
