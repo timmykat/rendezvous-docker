@@ -1,0 +1,23 @@
+# RDV env & aliases
+export RDV="$HOME/My_Projects/Citroen-Rendezvous/Website/rendezvous-docker"
+export RDV_LOG_ENV="staging"
+export RDV_COMPOSE_ENV="dev"
+export RDV_RAILS_SERVICE="rais_app"
+export RDV_DB_SERVICE="db"
+export RDV_APP="rendezvous-docker-$RDV_RAILS_APP-1"
+export RDV_DB="rendezvous-docker-$RDV_DB_SERVICE-1"
+export RDVLOG="$RDV/rendezvous/log/$RDV_LOG_ENV.log"
+alias rdvcompose="docker compose -f $RDV_COMPOSE_ENV-compose.yml"
+alias rdvexec="docker exec -it $RDV_APP"
+alias rdvdbexec="docker exec -it $RDV_DB"
+alias upsite='echo "\n*** RDV last started: $(date +'%H:%M:%S') ***\n"; docker compose -f dev-compose.yml up'
+alias downsite="docker compose -f $RDV_COMPOSE_ENV-compose.yml down; cleanrdv"
+alias precompile="docker exec -it $RDV_APP bundle exec rake assets:precompile"
+alias clobber="docker exec -it $RDV_APP bundle exec rake assets:clobber"
+alias restart="downsite; upsite"
+alias rconsole="docker exec -it $RDV_APP bundle exec rails console"
+alias d_rake="docker exec -it $RDV_APP bundle exec rake"
+alias d_rails="docker exec -it $RDV_APP bundle exec rails"
+alias d_routes="docker exec -it $RDV_APP bundle exec rails routes"
+alias rdvlog="tail -f \$RDVLOG | grep --line-buffered -v 'delayed_job'"
+alias cleanrdv='find . -name *.pid -exec rm {} \; ; find . -name *.sock -exec rm {} \;'

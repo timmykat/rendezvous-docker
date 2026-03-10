@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
   helper_method :registration_status
   helper_method :sunday_lunch_max
   helper_method :written_reg_form_link
+  helper_method :login_on
 
   GEO_CONFIG = Rails.configuration.geodata
 
@@ -34,6 +35,10 @@ class ApplicationController < ActionController::Base
 
   def is_debug_date
     Config::SiteSetting.instance.debug_dates
+  end
+
+  def login_on
+    Config::SiteSetting.instance.login_on
   end
 
   def debug_date

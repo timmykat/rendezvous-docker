@@ -29,6 +29,7 @@ class Config::SiteSettingsController < ApplicationController
       params.require(:config_site_setting).permit(
         :debug_test_date,
         :debug_dates,
+        :login_on,
         :registration_is_open,
         :square_environment,
         :voting_on     

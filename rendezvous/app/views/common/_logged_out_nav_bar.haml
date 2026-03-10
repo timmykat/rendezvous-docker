@@ -23,5 +23,5 @@
                   - if !registration_is_open
                     %li.nav-item
                       %span.badge.badge-danger.mt-2 Registration opens soon
-                  - else registration_is_open
+                  - if public_registration
                     %li.nav-item= link_to 'Sign In', new_user_session_path, class: 'nav-link'
