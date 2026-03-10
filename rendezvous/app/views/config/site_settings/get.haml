@@ -7,9 +7,11 @@
             %h1.h3 Manage Site Settings
             = simple_form_for @instance, url: config_site_settings_update_path, method: :post do |f|
               .form-group
-                = f.input :voting_on
+                = f.input :login_on, as: :boolean
               .form-group
                 = f.input :registration_is_open, as: :boolean
+              .form-group
+                = f.input :voting_on
               %fieldset
                 .form-group 
                   = f.input :debug_dates, as: :boolean
