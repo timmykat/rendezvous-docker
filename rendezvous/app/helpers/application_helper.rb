@@ -124,6 +124,10 @@ module ApplicationHelper
     Config::SiteSetting.instance.registration_is_open
   end
 
+  def public_registration
+    registration_is_open && login_on
+  end
+
   def static_file(file_path)
     "/files/#{file_path}"
   end

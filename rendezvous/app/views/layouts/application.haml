@@ -75,7 +75,7 @@
         - else
           = render partial: 'common/logged_in_nav_bar'  
 
-      - if registration_is_open && !current_registration
+      - if public_registration && !current_registration
         .container-fluid.px-0
           .row.no-gutters.registration-open.py-3
             .col-12
