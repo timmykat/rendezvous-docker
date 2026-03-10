@@ -11,7 +11,7 @@ module RendezvousSquare
     end
 
     def get_square_client
-      base_url = get_environment == 'PRODUCTION' ? Square::Environment::PRODUCTION :  Square::Environment::SANDBOX
+      base_url = get_environment == 'PROD' ? Square::Environment::PRODUCTION :  Square::Environment::SANDBOX
       access_token = ENV.fetch("#{get_environment}_SQUARE_ACCESS_TOKEN")
       return ::Square::Client.new(
         token: access_token,
