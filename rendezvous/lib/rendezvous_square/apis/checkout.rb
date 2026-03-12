@@ -84,6 +84,10 @@ module RendezvousSquare
       if registration.number_of_children.to_i.positive?
         line_items << create_attendee_line_item(registration.number_of_children, period, 'child')
       end
+
+      if !registration.lake_cruise_number.to_i.positive?
+        line_items << create_cruise_line_item(registration.lake_cruise_number)
+      end
       
       if registration.donation.to_f.positive?
         line_items << create_donation_line_item(registration.donation)
@@ -97,6 +101,13 @@ module RendezvousSquare
         quantity: number.to_s,
         catalog_object_id: FEES[period]["#{age}_id".to_sym][Base.get_environment.downcase.to_sym],
         note: "Period: #{period} | Age: #{age}"
+      }
+    end
+
+    def create_cruise_line_item(number)
+      {
+        quantity: number.to_s,
+        catalog_object_id: FEES[:lake_cruise][:catalog_id][Base.get_environment.downcase.to_sym]
       }
     end
 

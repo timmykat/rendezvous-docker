@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
   end
 
   def lake_cruise_price
-    Rails.configuration.pricing[:fees][:lake_cruise_price]
+    Rails.configuration.pricing[:fees][:lake_cruise][:price]
   end
 
   # Need this for other gems that might set flash
