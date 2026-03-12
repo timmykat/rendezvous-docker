@@ -542,7 +542,8 @@ module Event
         params.require(:event_registration).permit(
           :lake_cruise_number,
           :lake_cruise_fee,
-          :sunday_lunch_number
+          :sunday_lunch_number,
+          :registration_fee
         )
       end
 
