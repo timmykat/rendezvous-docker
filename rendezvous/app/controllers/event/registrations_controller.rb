@@ -137,7 +137,7 @@ module Event
         render :new and return
       else
         sign_in(@event_registration.user) unless (session[:user_admin] || user_signed_in?)
-        redirect_to review_event_registration_path(@event_registration)
+        redirect_to special_events_event_registration_path(@event_registration)
       end
     end
 
@@ -171,7 +171,7 @@ module Event
         flash_alert_now @event_registration.errors.full_messages.to_sentence
         render :by_admin and return
       else
-        redirect_to review_event_registration_path(@event_registration)
+        redirect_to special_events_event_registration_path(@event_registration)
       end
     end
 
@@ -197,11 +197,11 @@ module Event
 
       if @event_registration.update(event_registration_params)
         flash_notice 'The registration was updated.'
-        redirect_to review_event_registration_path(@event_registration)
+        redirect_to special_events_event_registration_path(@event_registration)
       else
         flash_alert 'There was a problem updating the registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
-        redirect_to edit_event_registration_path(@event_registration)
+        render :edit and return
       end
     end
 
@@ -257,6 +257,23 @@ module Event
       @square_app_id = ENV.fetch "#{square_env}_SQUARE_APP_ID"
       @square_sdk_url = ENV.fetch "#{square_env}_SQUARE_SDK_URL"
       @square_location_id = ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
+    end
+
+    def special_events
+      @title = 'Registration - Special Events'
+      @step = 'special events'
+      @event_registration = Registration.find(params[:id])
+    end
+
+    def update_special_events
+      @event_registration = Registration.find(params[:id])
+      if @event_registration.update(special_events_params)
+        flash_notice 'Special events were updated.'
+        redirect_to review_event_registration_path(@event_registration)
+      else
+        flash_alert "There was a problem saving your special events info."
+        render :special_events
+      end
     end
 
     def send_to_square
@@ -331,7 +348,7 @@ module Event
       else 
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
-        render payment_event_registration_path(@event_registration)
+        render :payment
       end
     end        
 
@@ -391,6 +408,7 @@ module Event
         flash_notice @event_registration.sunday_lunch_number == 0 ? "You're not attending Sunday lunch." : "You've updated your Sunday lunch guests to #{@event_registration.sunday_lunch_number}"
       else
         flash_alert "There was a problem saving your Sunday lunch info"
+        render :edit_sunday_lunch and return
       end
       redirect_to landing_page_path
     end
@@ -518,6 +536,14 @@ module Event
         params.fetch(:event_registration, {}).permit(vehicle_ids: []).tap do |whitelisted|
           whitelisted[:vehicle_ids] ||= []  # Ensure it's an array even if nothing is checked
         end
+      end
+
+      def special_events_params
+        params.require(:event_registration).permit(
+          :lake_cruise_number,
+          :lake_cruise_fee,
+          :sunday_lunch_number
+        )
       end
 
       def event_registration_user_params

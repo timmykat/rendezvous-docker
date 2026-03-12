@@ -76,6 +76,12 @@ module Event
       greater_than_or_equal_to: 0, 
       less_than_or_equal_to: Rails.configuration.registration[:sunday_lunch_max]
     }
+    validates :lake_cruise_number, 
+    numericality: { 
+      only_integer: true, 
+      greater_than_or_equal_to: 0, 
+      less_than_or_equal_to: Rails.configuration.registration[:lake_cruise_max]
+    }
     
     serialize :events
 

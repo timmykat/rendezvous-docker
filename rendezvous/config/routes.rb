@@ -79,6 +79,8 @@ Rails.application.routes.draw do
         get :send_email_confirmation
         get :edit_sunday_lunch
         patch :update_sunday_lunch
+        get :special_events
+        patch :update_special_events
       end
     end
     resources :registrations, except: [:index]

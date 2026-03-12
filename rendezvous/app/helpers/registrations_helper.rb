@@ -4,6 +4,7 @@ module RegistrationsHelper
     [ 
       'welcome',
       'create',
+      'special events',
       'review',
       'payment',
       'complete',
@@ -41,7 +42,7 @@ module RegistrationsHelper
     case status
     when 'complete'
       klass += ' fa fa-star'
-    when 'initiated'
+    when 'in progress'
       klass += ' fa fa-step-forward'
     when 'payment due'
       klass += ' fa fa-money'

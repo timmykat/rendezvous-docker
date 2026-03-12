@@ -1,5 +1,6 @@
 # config/registration.yml
 fees:
+  lake_cruise_price: 65
   early:
     start_date: 2026-01-01
     end_date: 2026-04-30

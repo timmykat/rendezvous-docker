@@ -17,6 +17,8 @@ class ApplicationController < ActionController::Base
   helper_method :is_debug_date
   helper_method :registration_status
   helper_method :sunday_lunch_max
+  helper_method :lake_cruise_max
+  helper_method :lake_cruise_price
   helper_method :written_reg_form_link
   helper_method :login_on
 
@@ -72,6 +74,14 @@ class ApplicationController < ActionController::Base
   # This currently has an absolute max in the DB of 8
   def sunday_lunch_max
     Rails.configuration.registration[:sunday_lunch_max]
+  end
+
+  def lake_cruise_max
+    Rails.configuration.registration[:lake_cruise_max]
+  end
+
+  def lake_cruise_price
+    Rails.configuration.pricing[:fees][:lake_cruise_price]
   end
 
   # Need this for other gems that might set flash
@@ -161,7 +171,7 @@ class ApplicationController < ActionController::Base
   helper ApplicationHelper
 
   def require_admin
-    return if current_user && (current_user.has_role? :admin)
+    return true if current_user and (current_user.has_role? :admin)
 
     flash_alert("You must be a site admin to do that.")
     redirect_to :root

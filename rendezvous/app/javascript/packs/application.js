@@ -9,6 +9,10 @@ import { Vehicle } from '../modules/Vehicle';
 if (!customElements.get('rendezvous-vehicle')) {
   window.customElements.define('rendezvous-vehicle', Vehicle);
 }
+import { SpecialEvents } from '../modules/SpecialEvents';
+if (!customElements.get('special-events')) {
+  window.customElements.define('special-events', SpecialEvents);
+}
 import 'html5shiv/dist/html5shiv.min';
 import 'popper.js';
 import 'bootstrap/dist/js/bootstrap';
