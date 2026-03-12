@@ -33,7 +33,7 @@
                     %td= a.attendee_age
                     %td #{a.volunteer? ? 'yes' : 'no'}
  
-       .card
+      .card
         .card-body
           .card-title
             %h3.h4 Special Events
@@ -43,10 +43,10 @@
                 %h4.h5 Lake George Excursion
                 - if @event_registration.lake_cruise_number > 0
                   %p Number going: #{@event_registration.lake_cruise_number}
-                  %p Total fee: #{@event_registration.lake_cruise_fee}
+                  %p Total fee: #{number_to_currency(@event_registration.lake_cruise_fee)} (US)
                 - else
                   %p Not going
-                          %ul
+            %ul
               %li
                 %h4.h5 Post-Rendezvous Lunch at Shadow 66
                 - if @event_registration.sunday_lunch_number > 0

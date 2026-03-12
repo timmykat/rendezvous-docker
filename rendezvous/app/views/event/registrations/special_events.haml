@@ -10,7 +10,7 @@
             .card-text
               %p
                 We have two optional events which are outside of the usual Rendezvous experience.
-              = simple_form_for @event_registration, url:  update_special_events_event_registration_path, method: :post do |f|
+              = simple_form_for @event_registration, url:  update_special_events_event_registration_path, method: :patch do |f|
                 .card{ data: { event: 'cruise', price: lake_cruise_price } } 
                   .card-body
                     .card-title

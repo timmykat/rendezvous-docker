@@ -28,6 +28,7 @@ module RegistrationsHelper
     when "create"
       edit_event_registration_path(reg_id)
     else
+      step = step.gsub(' ', '_')
       send("#{step}_event_registration_path", reg_id)
     end
   end
