@@ -42,3 +42,4 @@ export class SpecialEvents extends HTMLElement {
     };
   };
 }
+window.customElements.define('special-events', SpecialEvents);

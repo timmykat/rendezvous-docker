@@ -59,6 +59,9 @@ module Event
         @event_registration.user = current_user
       else
         @event_registration.build_user
+        registrant_attendee = Attendee.new
+        registrant_attendee.name = current_user.full_name
+        @event_registration.attendees < registrant_attendee
       end
       @event_registration.user.vehicles.build
     end

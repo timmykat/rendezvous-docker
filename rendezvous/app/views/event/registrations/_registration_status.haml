@@ -1,0 +1,4 @@
+- if user_is_admin?
+  = f.input :status, as: :select, collection: Rails.configuration.registration[:registration_statuses]
+- else
+  = f.input_field :status, as:  :hidden

@@ -21,7 +21,7 @@
                   %p.hint (Adults are 16+, youths are 5-15 and children are under 5)
                   .row
                     .col-12
-                      #attendees{ 'data-cocoon': true }
+                      #attendees.items
                         = f.simple_fields_for :attendees do |a|
                           = render partial:  'attendee_fields', locals:  { f:  a }
                         .links
@@ -33,19 +33,19 @@
                     .col-md-4
                       .form-group
                         %label Total adults:
-                        = f.input_field :number_of_adults, disabled:  true, class:  'calculated fee-calculation'
+                        = f.input_field :number_of_adults, readonly:  true, class:  'calculated fee-calculation'
                   .row
                     .col-md-4
                       .form-group
                         %label Total kids:
-                        = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
+                        = f.input_field :number_of_children, readonly:  true, class:  'calculated fee-calculation'
 
                   .row
                     .col-12
                       %p.amount.form-group
                         %label 
                           Registration fee (USD):
-                          = f.input_field :registration_fee, disabled:  true, class:  'calculated'
+                          = f.input_field :registration_fee, readonly:  true, class:  'calculated'
                   = f.input_field :year, as:  :hidden, value:  Time.new.year
                   = f.input_field :status, as:  :hidden, value:  Rails.configuration.registration[:registration_statuses][0]
 
