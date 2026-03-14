@@ -4,6 +4,7 @@ Dear #{@event_registration.user.first_name}
 Here is your registration info (all fees in USD): 
 
 \-- Number of people: #{@event_registration.attendees.size}
+\-- Number of people for the Friday lake cruise: #{@event_registration.lake_cruise_number}
 \-- Total registration amount: #{number_to_currency(@event_registration.total)}
 - if (@event_registration.donation? && !@event_registration.cancelled?)
     \-- Donation (thank you!): #{number_to_currency(@event_registration.donation)}
@@ -19,3 +20,6 @@ Here is your registration info (all fees in USD):
 
 - unless @event_registration.cancelled?   
     We look forward to seeing you at the Rendezvous!
+
+
+If you need to cancel before #{Rails.configuration.registration[:refund_date]}, please email Tim at rendezvousLLC@kinnel.warpmail.net.

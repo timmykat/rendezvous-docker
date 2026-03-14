@@ -26,7 +26,7 @@
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
     :javascript
       window.appData = #{ActiveSupport::JSON.encode(@app_data).html_safe};
-  %body{ class: controller_classes + " outfit-regular registrations_layout", 'data-site-key' => get_recaptcha_key }
+  %body{ class: controller_classes + " outfit-regular registrations_layout" }
     - if is_debug_date
       = render partial: 'layouts/debug'
     = render partial: 'common/active_users'

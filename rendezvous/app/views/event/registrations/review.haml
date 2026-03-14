@@ -13,13 +13,14 @@
               %p
                 %strong You will be able to add or change vehicles after you complete your payment.
 = render partial:  'common/registration_info', locals: { send_email: false }
-.container
-  .row.justify-content-center
-    .col-md-8.col-12.text-center
-      .card 
-        .card-body 
-          .card-text         
-            .form-group
-              = link_to "#{icon(:left_arrow)} Go back ".html_safe, edit_event_registration_path(@event_registration), class:  "btn  btn-primary"
-              = link_to "Go to payment #{icon(:right_arrow)}".html_safe, payment_event_registration_path(@event_registration), class:  'btn btn-primary go-to-payment'
-              %img{ src: image_url('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
+- unless no_fee_related_changes
+  .container
+    .row.justify-content-center
+      .col-md-8.col-12.text-center
+        .card 
+          .card-body 
+            .card-text         
+              .form-group
+                = link_to "#{icon(:left_arrow)} Go back ".html_safe, edit_event_registration_path(@event_registration), class:  "btn  btn-primary"
+                = link_to "Go to payment #{icon(:right_arrow)}".html_safe, payment_event_registration_path(@event_registration), class:  'btn btn-primary go-to-payment'
+                %img{ src: image_url('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}

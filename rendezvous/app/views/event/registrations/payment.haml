@@ -10,6 +10,9 @@
     .col-md-8.col-12
       %payment-manager
         = simple_form_for @event_registration, url:  complete_event_registration_path(@event_registration), html:  { id:  'event_registration_form' } do |f|
+          .form-group 
+            - reg_fee = @event_registration.registration_fee
+            = hidden_field_tag :incoming_registration_fee, reg_fee
           %section
             .card 
               .card-body
@@ -25,7 +28,7 @@
                     .col-md-3
                       .form-group
                         %label Donation Amount
-                        = f.input :donation, label:  false, input_html:  { class:  'total-calculation'}
+                        = f.input :donation, label: false, readonly: true, input_html:  { class:  'total-calculation'}
 
             .card 
               .card-body 

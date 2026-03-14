@@ -5,38 +5,47 @@ export class PaymentManager extends HTMLElement {
     this.handleDonationChange = this.handleDonationChange.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.setTotal = this.setTotal.bind(this)
   }
 
   connectedCallback() {
-    this.render();
     this.setupEventListeners();
-    this.initializeState();
     this.setPaymentSpinner();
   }
 
   setupEventListeners() {
-    // Donation calculation delegation
-    this.addEventListener('click', (e) => this.delegateDonation(e));
-    this.addEventListener('blur', (e) => this.delegateDonation(e), true);
+    this.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const target = e.target;
+        
+        // 1. Check if it's the "Make Payment" link (link_to becomes an <a> tag)
+        const isPaymentLink = target.tagName === 'A' && target.classList.contains('btn-square-pay');
+        
+        // 2. Check if it's the Submit button
+        const isSubmitButton = target.type === 'submit';
+  
+        // If it's neither, kill the Enter key behavior
+        if (!isPaymentLink && !isSubmitButton) {
+          e.preventDefault();
+        }
+      }
+    });
+
     this.addEventListener('change', (e) => {
       if (e.target.classList.contains('total-calculation')) this.handleDonationChange(e.target);
       if (e.target.classList.contains('payment-method')) this.handlePaymentChange(e.target.value);
     });
 
-    // Form submission safety
+    // Handle manual typing in the donation field
+    const donationInput = document.getElementById('event_registration_donation');
+    if (donationInput) {
+      donationInput.addEventListener('input', (e) => {
+        this.setTotal(parseFloat(e.target.value) || 0);
+      });
+    }
+
     const form = this.querySelector('form');
     if (form) form.addEventListener('submit', this.handleFormSubmit);
-  }
-
-  initializeState() {
-    // Set initial payment method state based on checked radio
-    const checkedPayment = this.querySelector('input.payment-method:checked');
-    if (checkedPayment) {
-      this.updatePaymentUI(checkedPayment.value);
-    }
-    
-    // External function call from your original snippet
-    if (typeof setPaymentSpinner === 'function') setPaymentSpinner();
   }
 
   delegateDonation(e) {
@@ -46,16 +55,27 @@ export class PaymentManager extends HTMLElement {
   }
 
   handleDonationChange(target) {
-    if (target.type === 'radio') {
-      const val = target.value === 'other' ? 0 : parseFloat(target.value);
-      const donationInput = document.getElementById('event_registration_donation');
-      if (donationInput) {
-        donationInput.value = val.toFixed(2);
-      }
-    }
+    const donationInput = document.getElementById('event_registration_donation');
+    if (!donationInput || target.type !== 'radio') return;
+
+    // Fixed Capitalization: readOnly
+    const isOther = target.value === 'other';
+    donationInput.readOnly = !isOther;
+
+    const val = isOther ? 0 : parseFloat(target.value);
+    donationInput.value = val.toFixed(2);
+    this.setTotal(val);
+  }
+
+  setTotal(donationValue) {
+    const feeEl = document.getElementById('incoming_registration_fee');
+    const totalInput = document.getElementById('event_registration_total');
     
-    // Logic for setTotal (assumed global or accessible)
-    if (typeof setTotal === 'function') setTotal();
+    if (feeEl && totalInput) {
+      const incomingFee = parseFloat(feeEl.value) || 0;
+      const total = incomingFee + donationValue;
+      totalInput.value = total.toFixed(2);
+    }
   }
 
   setPaymentSpinner() {
@@ -72,14 +92,13 @@ export class PaymentManager extends HTMLElement {
     });
   }
 
-  async updatePaymentUI(value) {
+  async updatePaymentMethod(value) {
     const isOnline = value === 'credit card';
     const regId = this.dataset.registration_id;
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
     // Toggle Elements
     this.toggleDisplay('#payment-online', isOnline);
-    this.toggleDisplay('#payment-paid', isOnline);
     this.toggleDisplay('#payment-cash', !isOnline);
 
     // Ajax Replacement (Fetch API)
@@ -98,15 +117,16 @@ export class PaymentManager extends HTMLElement {
   }
 
   handlePaymentChange(value) {
-    this.updatePaymentUI(value);
+    this.updatePaymentMethod(value);
   }
 
-  handleFormSubmit() {
-    const inputs = this.querySelectorAll('input.calculated, input[type=email]');
-    inputs.forEach(input => input.disabled = false);
-
+  handleFormSubmit(e) {
+    e.preventDefault(); // Now 'e' is defined!
+    
     const loader = this.querySelector('.review-loader');
     if (loader) loader.style.display = 'block';
+
+    e.target.submit(); // Form actually moves forward now
   }
 
   // Helper to replicate jQuery .toggle() / .show() / .hide()

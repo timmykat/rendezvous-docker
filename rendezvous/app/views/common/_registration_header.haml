@@ -5,6 +5,6 @@
       %h1  #{Date.current.year} Citroen Rendezvous Registration
       %h2  Saratoga Springs, New York
 
-      = render partial: 'common/registration_step', locals: { current_step: current_step, registration: registration }
+      = render partial: 'common/registration_step', locals: { step: @step, registration: registration }
 
 

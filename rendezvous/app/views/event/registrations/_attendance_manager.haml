@@ -7,6 +7,8 @@
       #attendees.items
         = f.simple_fields_for :attendees do |a|
           = render partial:  'attendee_fields', locals:  { f:  a }
+
+      - unless no_fee_related_changes   
         .links
           = link_to_add_association "#{icon(:add_person)}".html_safe, f, :attendees, class:  'btn btn-primary '
           Add a guest

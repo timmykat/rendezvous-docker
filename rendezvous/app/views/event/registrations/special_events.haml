@@ -19,13 +19,25 @@
                       %figure
                         = image_tag 'lake-george-steamboat.jpg', class: 'contained'
                         %figcaption Lake George steamboat the Lac du Saint Sacrement
-                      %p After a leisurely 40-minute drive, participants will board the Lac du Saint Sacrement steamboat for a two-hour lunch cruise.
+                      %p 
+                        After a leisurely 40-minute drive, participants will board the Lac du Saint Sacrement steamboat for a two-hour lunch cruise. See the events schedule for more information.
                       %p Price is $#{lake_cruise_price} per person and will be added to your registration fee. Parking is extra, paid on site.
-                      .form-group 
-                        = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
-                           label: "Number of people for Lake George cruise",
-                           input_html: { class: 'lake-cruise form-control short-field' }
-                        = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee short-field' }
+                      %p Sign-up for this event closes #{lake_cruise_close_date}.
+                      - if lake_cruise_closed
+                        %p We're sorry but sign-up for this event is closed.
+                        - if @event_registration.lake_cruise_number&.positive?                 
+                          .form-group 
+                            = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
+                              label: "Number of people for Lake George cruise",
+                              input_html: { disabled: true, class: 'lake-cruise form-control short-field' }
+                            = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee short-field' }
+                      - else
+                        .form-group 
+                          = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
+                            label: "Number of people for Lake George cruise",
+                            input_html: { disabled: no_fee_related_changes, class: 'lake-cruise form-control short-field' }
+                          = f.input :lake_cruise_fee, input_html: { readonly: no_fee_related_changes, class: 'lake-cruise-fee short-field' }
+
                 .card{ data: { event: 'post-rendezvous-lunch' } } 
                   .card-body
                     .card-title

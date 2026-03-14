@@ -2,13 +2,62 @@ module Event
   class RegistrationsController < ApplicationController
     layout "registrations_layout"
 
+    before_action :get_registration, except: [:index, :welcome, :new, :create, :new_by_admin, :create_by_admin, :send_confirmation_email]
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
     before_action :require_admin, only: [:index, :register_by_admin]
     before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
+    before_action :filter_params_by_status, only: [:update, :update_special_events]
 
     skip_before_action :verify_authenticity_token, only: [:show]
+
+    helper_method :previous_step
+    helper_method :next_step
+    helper_method :step_path
+    helper_method :no_fee_related_changes
+
+    STEPS = [ 
+      'welcome',
+      'create',
+      'special events',
+      'review',
+      'payment',
+      'complete',
+      'vehicles',
+    ]
+
+    NO_CHANGE_STATUSES = [
+      'complete', 
+      'payment due',
+      'cancelled - settled',
+      'cancelled - needs refund',
+    ]
+
+    def get_registration
+      @event_registration = Registration.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash_alert "Registration not found."
+      redirect_to root_path
+    end
+
+    def no_fee_related_changes
+      NO_CHANGE_STATUSES.include?(@event_registration.status) && !current_user.admin?
+    end
+
+    def step_path(step)
+      "#{step.gsub(' ', '_')}_event_registration_path"
+    end
+
+    def previous_step(current_step)
+      index = STEPS.index(current_step)
+      prev_step = (index > 1) ? STEPS[index - 1] : nil
+    end
+    
+    def next_step(current_step)
+      index = STEPS.index(current_step)
+      next_step = (current_step != 'vehicles') ? STEPS[index + 1] : nil
+    end
 
     def check_cutoff
       if current_time > Rails.configuration.registration[:registration_window][:close].to_time
@@ -53,6 +102,8 @@ module Event
         @event_registration = Registration.new
       end
 
+      @event_registration.status = 'new'
+
       @event_registration.attendees.build
 
       if current_user && !current_user.admin?
@@ -66,7 +117,7 @@ module Event
       @event_registration.user.vehicles.build
     end
 
-    def by_admin
+    def new_by_admin
       session[:admin_created] = true
       @title = "Registration by admin"
       @step = 'create'
@@ -87,15 +138,9 @@ module Event
 
     # Create or update the user
     def create
+      @step = 'create'
       email = params[:event_registration][:user_attributes][:email]
       user_id = params[:event_registration][:user_attributes][:id] || params[:event_registration][:user_id]
-
-      failure_message = verify_recaptcha?(params[:recaptcha_token], 'register_event', email)
-      if failure_message
-        Rails.logger.warn "Event registration: recaptcha failed for #{email}"
-        redirect_to root_path, notice: failure_message
-        return
-      end
 
       if !user_id.nil?
         user = User.find(user_id)
@@ -132,6 +177,7 @@ module Event
       if current_user.admin?
         @event_registration.created_by_admin = params[:event_registration][:created_by_admin]
       end
+      @event_registration.status = 'in progress'
       @event_registration.invoice_number = Registration.invoice_number
 
       if !@event_registration.save
@@ -139,6 +185,7 @@ module Event
         flash_alert_now @event_registration.errors.full_messages.to_sentence
         render :new and return
       else
+        @step = 'special events'
         sign_in(@event_registration.user) unless (session[:user_admin] || user_signed_in?)
         redirect_to special_events_event_registration_path(@event_registration)
       end
@@ -157,13 +204,6 @@ module Event
         user = create_new_user
       end
 
-      failure_message = verify_recaptcha?(params[:recaptcha_token], 'register_event', email)
-      if failure_message
-        Rails.logger.warn "Event registration: recaptcha failed for #{email}"
-        redirect_to root_path, notice: failure_message
-        return
-      end
-
       # Remove user attributes now that we have user
       params[:event_registration][:user_attributes] = nil
       @event_registration = Registration.new(event_registration_params)
@@ -172,22 +212,25 @@ module Event
       if !@event_registration.save
         flash_alert_now('There was a problem creating the registration.')
         flash_alert_now @event_registration.errors.full_messages.to_sentence
-        render :by_admin and return
+        render :new_by_admin and return
       else
         redirect_to special_events_event_registration_path(@event_registration)
       end
     end
 
     def edit
+      if no_fee_related_changes
+        flash_alert "No changes can be made to the registration now."
+        redirect_to show_event_registration_path(@event_registration)
+      end
+
       @title = 'Edit Registration'
       @step = 'edit'
 
-      @event_registration = Registration.find(params[:id])
+      
     end
 
     def update
-
-      @event_registration = Registration.find(params[:id])
       user = @event_registration.user
 
       user.update(event_registration_user_params)
@@ -199,8 +242,15 @@ module Event
       params[:event_registration][:total] = params[:event_registration][:registration_fee]
 
       if @event_registration.update(event_registration_params)
-        flash_notice 'The registration was updated.'
-        redirect_to special_events_event_registration_path(@event_registration)
+        if no_fee_related_changes
+          flash_alert 'Now that your registration is complete you may only change vehicles or Sunday lunch.'
+        else
+          flash_notice 'The registration was updated.'
+        end
+        previous_step = params[:step]
+        step = next_step(previous_step)
+
+        redirect_to send(step_path(step), @event_registration)
       else
         flash_alert 'There was a problem updating the registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
@@ -240,15 +290,11 @@ module Event
     def review
       @title = 'Review Registration Information'
       @step = 'review'
-      @event_registration = Registration.find(params[:id])
-      @event_registration.status = 'in review'
-      @event_registration.save!
     end
 
     def payment
       @title = 'Registration - Payment'
       @step = 'payment'
-      @event_registration = Registration.find(params[:id])
       @event_registration.status = 'payment due'
       @app_data.merge!({
         event_registration_fee: @event_registration.registration_fee,
@@ -265,21 +311,25 @@ module Event
     def special_events
       @title = 'Registration - Special Events'
       @step = 'special events'
-      @event_registration = Registration.find(params[:id])
     end
 
     def update_special_events
-      @event_registration = Registration.find(params[:id])
-      if @event_registration.update(special_events_params)
-        flash_notice 'Special events were updated.'
+      @step = 'special_events'
+      if no_fee_related_changes
         redirect_to review_event_registration_path(@event_registration)
       else
-        flash_alert "There was a problem saving your special events info."
-        render :special_events
+        if @event_registration.update(special_events_params)
+          flash_notice 'Special events were updated.'
+          redirect_to review_event_registration_path(@event_registration)
+        else
+          flash_alert "There was a problem saving your special events info."
+          render :special_events
+        end
       end
     end
 
     def send_to_square
+      @step = 'payment'
       @event_registration = Registration.find(params[:id]) 
       if !@event_registration.update(update_payment_params)
         flash_alert "There was a problem making your payment update; no payment submitted"
@@ -321,7 +371,6 @@ module Event
     def complete_after_online_payment
       @title = 'Complete Registration'
       @step = 'complete'
-      @event_registration = Registration.find(params[:id])
 
       transaction_id = params[:transactionId]
       order_id = params[:orderId]
@@ -358,7 +407,6 @@ module Event
     def complete
       @title = 'Complete Registration'
       @step = 'complete'
-      @event_registration = Registration.find(params[:id])
 
       # Set the paid amounts
       if current_user.admin?
@@ -392,7 +440,6 @@ module Event
     end
 
     def save_updated_vehicles
-      @event_registration = Registration.find(params[:id])
       if (@event_registration.update(vehicle_update_params))
         flash_notice "You are bringing #{@event_registration.vehicles.count} vehicles"
       else
@@ -406,7 +453,6 @@ module Event
     end
     
     def update_sunday_lunch
-      @event_registration = Registration.find(params[:id])
       if (@event_registration.update(sunday_lunch_params))
         flash_notice @event_registration.sunday_lunch_number == 0 ? "You're not attending Sunday lunch." : "You've updated your Sunday lunch guests to #{@event_registration.sunday_lunch_number}"
       else
@@ -453,6 +499,30 @@ module Event
     end
 
     private
+
+      def filter_params_by_status
+        @event_registration = Registration.find(params[:id])
+        
+        # Check if the registration is "locked"
+        if no_fee_related_changes
+          # Strip out cost-affecting params if they exist in the request
+          params[:event_registration].delete(:number_of_adults)
+          params[:event_registration].delete(:number_of_youths)
+          params[:event_registration].delete(:number_of_children)
+          params[:event_registration].delete(:lake_cruise_number)
+          params[:event_registration].delete(:attendees_attributes)
+          params[:event_registration].delete(:total)
+          params[:event_registration].delete(:paid_amount)
+          params[:event_registration].delete(:paid_method)
+          params[:event_registration].delete(:paid_date)
+          params[:event_registration].delete(:payment_token)
+          params[:event_registration].delete(:status)
+          
+          # Optional: Log a warning or set a flash message
+          Rails.logger.warn "Locked registration update attempt: ID #{@event_registration.id}"
+        end
+      end
+
       def create_new_user
         password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
         params[:event_registration][:user_attributes][:password] = password

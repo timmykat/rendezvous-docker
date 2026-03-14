@@ -1,24 +1,11 @@
 module RegistrationsHelper
 
-  def steps
-    [ 
-      'welcome',
-      'create',
-      'special events',
-      'review',
-      'payment',
-      'complete',
-      'vehicles',
-    ]
-  end
-
+  SHORT_FORMAT = "%B %-d"
+  FULL_FORMAT = "%A, %B %-d"
+  DAY_ONLY_FORMAT = "%A"
+  
   def annual_question_responses
     AnnualQuestion::RESPONSES
-  end
-
-  def previous_step(current_step)
-    index = steps.index(current_step)
-    prev_step = (index > 0) ? steps[index - 1] : nil
   end
 
   def step_url(step, reg_id)
@@ -26,16 +13,10 @@ module RegistrationsHelper
     when "welcome"
       nil
     when "create"
-      edit_event_registration_path(reg_id)
+      new_event_registration_path(reg_id)
     else
-      step = step.gsub(' ', '_')
-      send("#{step}_event_registration_path", reg_id)
+      send(step_path(step), reg_id)
     end
-  end
-
-  def next_step(current_step)
-    index = steps.index(current_step)
-    next_step = (index - 1 < steps.length) ? steps[index + 1] : nil
   end
 
   def get_status_icon(status)
@@ -52,6 +33,10 @@ module RegistrationsHelper
     when 'cancelled'
       klass += ' fa fa-ban'
     end
+  end
+
+  def lake_cruise_close_date
+    Rails.configuration.registration[:lake_cruise_close_date].to_time.strftime(SHORT_FORMAT)
   end
     
   def donation_list(raw_values, registration_fees)
