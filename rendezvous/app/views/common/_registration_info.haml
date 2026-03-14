@@ -32,72 +32,96 @@
                     %td= a.name
                     %td= a.attendee_age
                     %td #{a.volunteer? ? 'yes' : 'no'}
-
-        .card
-          .card-body
-            .card-title
-              %h3.h4 Vehicle(s) To Be Displayed
-            .card-text
-              - if registration_complete
-                %p
-                  You can update this by selecting from the dropdown in the nav bar.
-              - else
-                %p 
-                  You can update this after completing payment.
-
-
-              %table.table
-                %thead
-                  %th Marque
-                  %th Model
-                  %th Year
-                  %th Other info
-                  %th Judging category
-                  %th For sale?
-                %tbody
-                  - @event_registration.vehicles.each do |v|
-                    %tr
-                      %td= v.marque
-                      %td= v.model
-                      %td= v.year
-                      %td= v.other_info
-                      %td= v.judging_category
-                      %td= v.for_sale? ? 'Yes' : 'No'
+ 
       .card
         .card-body
           .card-title
-            %h3.h4 Fees
+            %h3.h4 Special Events
+          .card-text
+            %ul
+              %li
+                %h4.h5 Lake George Excursion
+                - if @event_registration.lake_cruise_number > 0
+                  %p Number going: #{@event_registration.lake_cruise_number}
+                  %p Total fee: #{number_to_currency(@event_registration.lake_cruise_fee)}
+                - else
+                  %p Not going
+            %ul
+              %li
+                %h4.h5 Post-Rendezvous Lunch at Shadow 66
+                - if @event_registration.sunday_lunch_number > 0
+                  %p Number going: #{@event_registration.sunday_lunch_number}
+                - else
+                  %p Not going
+
+      .card
+        .card-body
+          .card-title
+            %h3.h4 Fees (USD)
           .card-text
             .row
               .col-md-12
                 %p
                   %label Registration fee:
-                  #{number_to_currency(@event_registration.registration_fee)} (US)
+                  #{number_to_currency(@event_registration.registration_fee)}
+                  %br
+                  %label Lake George Excursion:
+                  #{number_to_currency(@event_registration.lake_cruise_fee)}
                   - if @event_registration.status != Rails.configuration.registration[:registration_statuses][0]
                     %br
                     %label Donation:
                     - if @event_registration.donation.blank?
                       (no donation)
                     - else
-                      #{number_to_currency(@event_registration.donation)} (US)
+                      #{number_to_currency(@event_registration.donation)}
                     %br
                     %br
                       %label Total:
-                      #{number_to_currency(@event_registration.total)} (US)
+                      #{number_to_currency(@event_registration.total)}
                     
                     - if (@event_registration.paid_amount > 0.0)
                       %br
                         %label Paid:
-                        #{number_to_currency(@event_registration.paid_amount)} (US)
+                        #{number_to_currency(@event_registration.paid_amount)}
 
                     %strong
                       %label Balance:
-                      #{number_to_currency(@event_registration.balance)} (US)
+                      #{number_to_currency(@event_registration.balance)}
           - if (@event_registration.status == 'payment due')
             .col-md-6.col-12
               %p
                 Please print this invoice or the one you received via email and send with a check for the amount due to:
                 %br= mailing_address
+
+      .card
+        .card-body
+          .card-title
+            %h3.h4 Vehicle(s) To Be Displayed
+          .card-text
+            - if registration_complete
+              %p
+                You can update this by selecting from your name dropdown in the top nav bar.
+            - else
+              %p 
+                You can update this after completing payment.
+
+            %table.table
+              %thead
+                %th Marque
+                %th Model
+                %th Year
+                %th Other info
+                %th Judging category
+                %th For sale?
+              %tbody
+                - @event_registration.vehicles.each do |v|
+                  %tr
+                    %td= v.marque
+                    %td= v.model
+                    %td= v.year
+                    %td= v.other_info
+                    %td= v.judging_category
+                    %td= v.for_sale? ? 'Yes' : 'No'  
 
       - if user_is_admin?  
         .card

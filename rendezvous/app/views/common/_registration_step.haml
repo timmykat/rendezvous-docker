@@ -1,17 +1,26 @@
+- previous_step = previous_step(step)
+- next_step = next_step(step)
 .container-fluid.px-0.sticky-top
   .row.no-gutters.justify-content-center
     - unless registration.nil?
-      - previous_step = previous_step(step)
-      - next_step = next_step(step)
       .registration-id{ "data-registration_id" => registration.id}
     .registration-step.vw-100
+      - if no_fee_related_changes
+        .justify-content-center.bg-warning.text-dark.py-3.fw-bold 
+          Now that your registration is complete, you may only change vehicles or Sunday lunch attendance
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
         %li.list-group-item.step.prev
-          - if (previous_step && !registration.id.nil?)
-            = link_to "&larr; #{previous_step}".html_safe, step_url(previous_step, registration.id)
+          - if (previous_step)
+            - if registration&.id.nil?
+              = previous_step
+            - else 
+              = link_to "&larr; #{previous_step}".html_safe, step_url(previous_step, registration.id)
         %li.list-group-item.step.current
           = step
         %li.list-group-item.step.next
-          - if (next_step  && !registration.id.nil?)
-            = link_to "#{next_step} &rarr;".html_safe, step_url(next_step, registration.id)
+          - if (next_step)
+            - if registration&.id.nil?
+              = next_step
+            - else
+              = link_to "#{next_step} &rarr;".html_safe, step_url(next_step, registration.id)
 

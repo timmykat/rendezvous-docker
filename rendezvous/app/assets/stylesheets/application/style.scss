@@ -78,6 +78,18 @@ section.banner {
 	}
 }
 
+figure {
+	img {
+		display: block;
+		width: 100%;
+	}
+	figcaption {
+		font-size: 0.8em;
+		margin: 10px 0;
+	}
+	margin-bottom: 20px;
+}
+
 .btn {
 	font-weight: bold;
 }
@@ -303,8 +315,13 @@ header {
 	}
 }
 
-.form-group .simple_mde > *:not(label){
-	background-color: white;
+.form-group {
+	.short-field {
+		width: 100px;
+	}
+	.simple_mde > *:not(label){
+		background-color: white;
+	}
 }
 
 .CodeMirror,
@@ -424,7 +441,7 @@ rendezvous-vehicle {
 	.complete {
 		color: green;
 	}
-	.initiated {
+	.in-progress {
 		color: slateblue;
 	}
 	.in-review {

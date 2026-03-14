@@ -1,10 +1,11 @@
 registration_window:
   open: 2026-03-01
-  close: 2026-06-06
+  close: 2026-05-28
   after_rendezvous: 2026-06-16
-  test: true
 refund_date: 2026-06-06
 sunday_lunch_max: 6      # This currently has an absolute max in the DB of 8
+lake_cruise_max: 6
+lake_cruise_close_date: 2026-05-27
 payment_methods:
   - credit card
   - check
@@ -12,12 +13,11 @@ payment_methods:
   - cash or check
   - no payment
 registration_statuses:
-  - initiated
+  - new
+  - in progress
   - in review
   - payment due
   - complete
-  - updated
-  - updating
   - "cancelled - settled"
   - "cancelled - needs refund"
 transaction_types:

@@ -1,4 +1,5 @@
 import { debounce } from 'throttle-debounce';
+
 const OTHER_FRENCH = ['Panhard', 'Peugeot', 'Renault']
 
 export class Vehicle extends HTMLElement {
@@ -148,3 +149,4 @@ export class Vehicle extends HTMLElement {
     };
   };
 }
+window.customElements.define('rendezvous-vehicle', Vehicle);

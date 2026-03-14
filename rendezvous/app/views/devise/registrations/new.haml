@@ -31,12 +31,3 @@
 
               .actions.button-with-spinner
                 = f.submit "Sign Up", class: "btn  btn-info", data: { 'button-spinner' => 'Creating link...', turbo: false }
-
-:javascript
-  document.addEventListener('DOMContentLoaded', () => {
-    const recaptcha = new RecaptchaHandler('new_user', 'register_user');
-    recaptcha.prepare();
-    recaptcha.execute();
-
-    setButtonSpinner()
-  })

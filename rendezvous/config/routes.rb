@@ -58,7 +58,7 @@ Rails.application.routes.draw do
   get 'venues/import', to: 'venues#import'
   get 'venues/manage', to: 'venues#manage'
   delete 'venues/destroy_all', to: 'venues#destroy_all', as: :destroy_all_venues
-  resources :venues, { except: [:index, :show] }
+  resources :venues, { except: [:index] }
 
   resources :vehicles
   get 'on_site_vehicles/for_sale', to: 'vehicles#for_sale', as: :vehicles_for_sale
@@ -79,11 +79,13 @@ Rails.application.routes.draw do
         get :send_email_confirmation
         get :edit_sunday_lunch
         patch :update_sunday_lunch
+        get :special_events
+        patch :update_special_events
       end
     end
     resources :registrations, except: [:index]
     get '/welcome', to: 'registrations#welcome'
-    get '/registration/by_admin', to: 'registrations#by_admin'
+    get '/registration/new_by_admin', to: 'registrations#new_by_admin'
     post '/registration/create_by_admin', to: 'registrations#create_by_admin'
   end
 

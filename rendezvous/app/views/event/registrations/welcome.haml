@@ -1,5 +1,5 @@
 - all_fees = Rails.configuration.pricing[:fees]
-= render partial:  'common/registration_step', locals:  { step:  'welcome', registration: nil }
+= render partial:  'common/registration_step', locals:  { step:  @step, registration: nil }
 .container
   .row.justify-content-center
     .col-md-8.col-12

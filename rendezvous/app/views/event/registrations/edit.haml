@@ -17,55 +17,14 @@
                     - if current_user.admin?
                       .alert.alert-warning 
                         You are editing a registration for another user.
-                        = f.input :created_by_admin, as: :boolean, disabled: true
+                        = f.input :created_by_admin, as: :boolean, readonly: true
                     - else
                       .alert.alert-info You are signed in with your user account.
                     = f.simple_fields_for :user do |u|
                       = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
 
-                  %section
-                    %h2 Registration Information
-                    %h3 Attendees
-                    %p.hint (Adults are 16+, and children are 15 and under)
-                    .row
-                      .col-md-12
-                        #attendees{ 'data-cocoon': true }
-                          = f.simple_fields_for :attendees do |a|
-                            = render partial:  'attendee_fields', locals:  { f:  a }
-                          .links
-                            = link_to_add_association "#{icon(:add_person)}".html_safe, f, :attendees, class:  'btn btn-primary '
-                            Add a guest
-                        %br
-                        %br
-                    .row
-                      .col-md-4
-                        .form-group
-                          %label Total adults:
-                          = f.input_field :number_of_adults, disabled:  true, class:  'calculated fee-calculation'
-                    .row
-                      .col-md-4
-                        .form-group
-                          %label Total youths:
-                          = f.input_field :number_of_youths, disabled:  true, class:  'calculated fee-calculation'
-                    .row
-                      .col-md-4
-                        .form-group
-                          %label Total children:
-                          = f.input_field :number_of_children, disabled:  true, class:  'calculated fee-calculation'
-
-                    .row
-                      .col-12
-                        %p.amount.form-group
-                          %label 
-                            Registration fee (USD):
-                            = f.input_field :registration_fee, disabled:  true, class:  'calculated'
-                    = f.input_field :year, as:  :hidden, value:  Time.new.year
-                    
-                    .row
-                      .col-12
-                        - if user_is_admin?
-                          = f.input :status, as: :select, collection: Rails.configuration.registration[:registration_statuses]
-                    = f.input_field :status, as:  :hidden
+                    = render partial: 'attendance_manager', locals: { f: f }
+                    = render partial: 'registration_status', locals: { f: f }
 
 
                   .row

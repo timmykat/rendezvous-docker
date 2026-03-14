@@ -62,7 +62,7 @@
               .form-group
                 - if vehicle.qr_code.present?
                   %label Voting code for Peoples Choice Award
-                  = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control', disabled: true
+                  = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control'
                 
               .form-group
                 %label Add or replace a voting code

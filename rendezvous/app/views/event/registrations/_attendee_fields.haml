@@ -17,7 +17,8 @@
             .form-group
               = f.input :volunteer, inline_label:  "Would like to volunteer (<a href='#' data-toggle='modal', data-target='#volunteer-info'>What volunteer tasks are there?</a>)".html_safe
             .form-group 
-                
+
+            - unless no_fee_related_changes    
             .row
               .col-md-12
                 .remove_association_action

@@ -17,12 +17,14 @@ class ApplicationController < ActionController::Base
   helper_method :is_debug_date
   helper_method :registration_status
   helper_method :sunday_lunch_max
+  helper_method :lake_cruise_max
+  helper_method :lake_cruise_price
+  helper_method :lake_cruise_closed
+  helper_method :lake_cruise_venue_link
   helper_method :written_reg_form_link
   helper_method :login_on
 
   GEO_CONFIG = Rails.configuration.geodata
-
-  RECAPTCHA_MINIMUM_SCORE = 0.5
 
   def render(*args)
     Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
@@ -72,6 +74,23 @@ class ApplicationController < ActionController::Base
   # This currently has an absolute max in the DB of 8
   def sunday_lunch_max
     Rails.configuration.registration[:sunday_lunch_max]
+  end
+
+  def lake_cruise_max
+    Rails.configuration.registration[:lake_cruise_max]
+  end
+
+  def lake_cruise_price
+    Rails.configuration.pricing[:fees][:lake_cruise][:price]
+  end
+
+  def lake_cruise_closed
+    current_time > Rails.configuration.registration[:lake_cruise_close_date].to_time
+  end
+
+  def lake_cruise_venue_link
+    venue_id = Venue.where("name LIKE ?", "%Cruise%").pick(:id)
+    venue_path(venue_id) unless venue_id.nil?
   end
 
   # Need this for other gems that might set flash
@@ -129,39 +148,10 @@ class ApplicationController < ActionController::Base
     return objects
   end
 
-  ## Recaptcha v3 -----------
-
-  def verify_recaptcha?(token, recaptcha_action, email)
-    
-    # Check if user is whitelisted
-    if !email.nil?
-      user = User.find_by_email(email)
-      if user && user.recaptcha_whitelisted?
-        Rails.logger.warn "Skipping recaptcha for #{user.email}"
-        return nil
-      end
-    end
-
-    Rails.logger.debug "Recaptcha action: #{recaptcha_action}"
-    # Continue normal recaptcha
-    secret_key = Rails.configuration.recaptcha[:secret_key]
-    uri = URI.parse("https://www.google.com/recaptcha/api/siteverify?secret=#{secret_key}&response=#{token}")
-    response = Net::HTTP.get_response(uri)
-    json = JSON.parse(response.body)
-    Rails.logger.debug "Recaptcha response: #{json}"
-    if json['success'] && (json['score'] > RECAPTCHA_MINIMUM_SCORE) && (json['action'] == recaptcha_action)
-      return nil
-    else
-      "We're sorry, you seem to be a bot"
-    end
-  end
-
-  ## Recaptcha v3 -----------
-
   helper ApplicationHelper
 
   def require_admin
-    return if current_user && (current_user.has_role? :admin)
+    return true if current_user and (current_user.has_role? :admin)
 
     flash_alert("You must be a site admin to do that.")
     redirect_to :root

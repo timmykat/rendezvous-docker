@@ -1,6 +1,7 @@
 import $ from 'jquery'
 
 document.addEventListener('turbo:load',  function(){
+  if ($('special-events').length > 0) return
   let regId = $('[data-registration_id]').data('registration_id')
   let csrfToken = $('meta[name="csrf-token"]')?.attr('content')
   console.log(regId)
