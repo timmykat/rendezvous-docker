@@ -152,7 +152,12 @@ class ApplicationController < ActionController::Base
   RECAPTCHA_MINIMUM_SCORE = 0.5
   
   def verify_recaptcha?(token, recaptcha_action, email)
-  
+
+    if (!Rails.env.production?)
+      Rails.logger.debug "Skipping recaptcha in non-production environment"
+      return nil
+    end
+
     # Check if user is whitelisted
     if !email.nil?
       user = User.find_by_email(email)

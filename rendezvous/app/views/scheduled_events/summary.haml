@@ -1,0 +1,25 @@
+.container 
+  .row.justify-content-center
+    .col-md-8
+      .card
+        .card-body
+          .card-title 
+            %h1.h3 Schedule Summary  
+          .card-text                   
+            - unless @events
+              %p No scheduled events yet.
+            - else
+              %ul.list-unstyled
+                - @events.each do |event|
+                  %li
+                    - if event.is_sub_event?
+                      %p > #{event.time} - #{event.name}
+                    - else
+                      %dl
+                        %dt 
+                          #{event.day}: #{event.time}
+                          #{event.name}
+                          - if event.extra_cost?
+                            .badge.badge-pill.badge-info.small Extra Cost
+                        - if event.venue.present?
+                          %dd #{format_for_schedule(event.venue).html_safe}

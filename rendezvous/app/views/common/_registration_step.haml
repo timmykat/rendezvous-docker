@@ -1,13 +1,14 @@
 - previous_step = previous_step(step)
 - next_step = next_step(step)
+- reg_status = registration.nil? ? 'Unregistered' : registration.status
 .container-fluid.px-0.sticky-top
   .row.no-gutters.justify-content-center
     - unless registration.nil?
       .registration-id{ "data-registration_id" => registration.id}
     .registration-step.vw-100
-      .justify-content-center.bg-warning.text-dark.py-3.fw-bold
-        = "Registration status: #{registration.status.titlecase}"
-        - if no_fee_related_changes 
+      %div{ class: "justify-content-center py-3 #{registration_status_classes(reg_status)}" }
+        = "Registration status: #{reg_status}"
+        - if !registration.nil? and no_fee_related_changes 
           &ndash; ou may only change vehicles or Sunday lunch attendance
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
         %li.list-group-item.step.prev

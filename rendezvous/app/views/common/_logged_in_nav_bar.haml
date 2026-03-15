@@ -12,6 +12,7 @@
                 %ul.nav.navbar-nav
                   %li.nav-item= link_to 'Home', root_path, class: 'nav-link'
                   %li.nav-item= link_to 'Schedule Overview', root_path + '#schedule-overview', class: 'nav-link'
+                  %li.nav-item= link_to 'Schedule Summary', schedule_summary_path, class: 'nav-link'
                   %li.nav-item= link_to 'Vendors', vendors_path, class: 'nav-link'
                   %li.nav-item= link_to 'Volunteering', volunteering_path, class: 'nav-link'
                   -# %li.nav-item= link_to 'Donate', new_donation_path, class: 'nav-link'
@@ -56,7 +57,7 @@
                           %strong Admin Menu
                         .dropdown-divider
                         = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
-                        = link_to 'Create a registration', event_registration_by_admin_path, class: 'dropdown-item'
+                        = link_to 'Create a registration', event_registration_new_by_admin_path, class: 'dropdown-item'
                         = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
                         = link_to 'Active Users', admin_dashboard_path({user_type: 'active'}), class: 'dropdown-item'
                         = link_to 'Vendors', admin_dashboard_path({user_type: 'vendors'}), class: 'dropdown-item'

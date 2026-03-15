@@ -8,6 +8,10 @@ class ScheduledEventsController < ApplicationController
     @events_by_day = ScheduledEvent.all.group_by(&:day)
   end
 
+  def summary
+    @events = ScheduledEvent.sorted
+  end
+
   def create
     @scheduled_event = ScheduledEvent.new(scheduled_event_params)
     if !@scheduled_event.save
@@ -64,6 +68,7 @@ class ScheduledEventsController < ApplicationController
         :day,
         :has_subevents,
         :time,
+        :extra_cost,
         :short_description,
         :long_description,
         :order,

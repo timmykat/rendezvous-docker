@@ -4,6 +4,8 @@
   = f.input :day, collection: day_options, selected: f.object.day, include_blank: '-- Select day --'
 .form-group
   = f.input :time, placeholder: 'Hour range or string'
+.form-group 
+  = f.input :extra_cost, as: :boolean
 .form-group
   - if !venue_options.empty?
     = f.input :venue_id, collection: venue_options, include_blank: '-- Select venue --', selected: f.object.venue_id, class: 'form-select'
@@ -13,5 +15,7 @@
   = f.input :short_description, as: :simple_mde
 .form-group
   = f.input :long_description, as: :simple_mde
+.form-group 
+  = f.input :order
 %br
 

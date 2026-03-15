@@ -21,9 +21,12 @@
                             .card-body 
                               .card-title 
                                 #{event.time} | #{event.name}
+                                - if event.extra_cost?
+                                  .badge.badge-pill.badge-info.small Extra Cost
                               .card-text
                                 - if event.venue
-                                  .location= format_for_schedule(event.venue).html_safe
+                                  .location 
+                                    %strong #{format_for_schedule(event.venue).html_safe}
                                 .description
                                   #{event.long_description_as_html}
 

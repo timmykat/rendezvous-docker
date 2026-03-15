@@ -54,6 +54,7 @@ Rails.application.routes.draw do
   get 'scheduled_events/manage', to: 'scheduled_events#manage'
   delete 'scheduled_events/destroy_all', to: 'scheduled_events#destroy_all', as: :destroy_all_scheduled_events
   resources :scheduled_events, { except: [:show] }
+  get '/schedule_summary',       to: 'scheduled_events#summary', as: :schedule_summary
 
   get 'venues/import', to: 'venues#import'
   get 'venues/manage', to: 'venues#manage'

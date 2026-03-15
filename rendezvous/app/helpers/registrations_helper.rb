@@ -8,6 +8,18 @@ module RegistrationsHelper
     AnnualQuestion::RESPONSES
   end
 
+  def registration_status_classes(status)
+    case status
+    when 'complete' 
+      'bg-success'
+    when 'in progress', 'payment due'
+      'bg-warning text-dark'
+    when /^cancelled/  
+      'bg-danger'
+    else 'bg-secondary'
+    end
+  end
+
   def step_url(step, reg_id)
     case step
     when "welcome"
@@ -28,8 +40,6 @@ module RegistrationsHelper
       klass += ' fa fa-step-forward'
     when 'payment due'
       klass += ' fa fa-money'
-    when 'in review'
-      klass += ' fa fa-spinner'
     when 'cancelled'
       klass += ' fa fa-ban'
     end

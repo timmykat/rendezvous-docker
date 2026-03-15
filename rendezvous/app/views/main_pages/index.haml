@@ -55,15 +55,6 @@
                 %li= link_to 'Expedia', 'https://www.expedia.com/', { target: '_blank' }
                 %li= link_to 'Saratoga Springs Convention & Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', { target: '_blank' }
 
-%section#mailing-list-signup
-  .container 
-    .row.justify-content-center
-      .col-10.col-12
-        .card 
-          .card-body 
-            .card-text.d-flex.justify-content-center
-              = render partial: 'common/mailchimp_signup'
-
 %section#info
   .container-fluid 
     .row.justify-content-center
@@ -112,34 +103,38 @@
             .card-text
               %p
                 %strong
-                  Event listings TBD 
-                  -# = link_to 'See here', scheduled_events_path
-                  -# for a full listing of Rendezvous events.
-              -# .card-group
-              -#   .row.justify-content-center
-              -#     - @events_by_day.each do |day, events|
-              -#       .col-12.col-lg-4
-              -#         .card
-              -#           .card-body
-              -#             .card-title.text-center
-              -#               %h3 #{day}
-              -#               %i.fa-solid.fa-route
-              -#             .card-text
-              -#               %ul.list-group
-              -#                 - events.each do |event|
-              -#                   %li.list-group-item
-              -#                     %p
-              -#                       %strong 
-              -#                         #{event.time}
-              -#                         %br 
-              -#                         %em #{event.name}
-              -#                     - if event&.venue.nil?
-              -#                       %p Location TBD 
-              -#                     - else 
-              -#                       %p= event&.venue&.name
-              -#                     .description
-              -#                       = event.short_description_as_html
-
-
-              
-  / about section ends
+                  = link_to 'See here', scheduled_events_path
+                  for a full listing of Rendezvous events.
+              .card-group
+                .row.justify-content-center
+                  - @events_by_day.each do |day, events|
+                    .col-12.col-lg-4
+                      .card
+                        .card-body
+                          .card-title.text-center
+                            %h3 #{day}
+                            %i.fa-solid.fa-route
+                          .card-text
+                            %ul.list-group
+                              - events.each do |event|
+                                %li.list-group-item
+                                  %p
+                                    %strong 
+                                      #{event.time}
+                                      %br 
+                                      %em #{event.name}
+                                  - if event&.venue.nil?
+                                    %p Location TBD 
+                                  - else 
+                                    %p= event&.venue&.name
+                                  .description
+                                    = event.short_description_as_html
+             
+%section#mailing-list-signup
+.container 
+  .row.justify-content-center
+    .col-10.col-12
+      .card 
+        .card-body 
+          .card-text.d-flex.justify-content-center
+            = render partial: 'common/mailchimp_signup'

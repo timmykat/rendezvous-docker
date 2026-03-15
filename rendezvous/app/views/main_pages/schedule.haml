@@ -23,7 +23,10 @@
         - else
           .event
             .time= event.time
-            .title= event.name
+            .title
+              = event.name
+                - if event.extra_cost?
+                  .badge.badge-pill.badge-info.small Extra Cost  
             .location= format_for_schedule(event.venue)
             .details
               = event.long_description

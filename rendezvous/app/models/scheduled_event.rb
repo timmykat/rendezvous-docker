@@ -42,6 +42,10 @@ class ScheduledEvent < ApplicationRecord
   belongs_to :main_event, class_name: 'ScheduledEvent', optional: true
   has_many :sub_events, class_name: 'ScheduledEvent', foreign_key: 'main_event_id', dependent: :nullify
 
+  def is_sub_event?
+    main_event.present?
+  end
+
   validates :name, presence: true
   validates :time, presence: true
 end

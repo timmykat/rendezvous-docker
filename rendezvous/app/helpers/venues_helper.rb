@@ -4,7 +4,7 @@ module VenuesHelper
   end
 
   def format_for_schedule(venue)
-    "<strong>#{venue.name}, #{short_address(venue.address)}</strong>"
+    "#{venue.name}, #{short_address(venue.address)}"
   end
 
   def short_address address
