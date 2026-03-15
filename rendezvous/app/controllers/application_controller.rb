@@ -148,6 +148,36 @@ class ApplicationController < ActionController::Base
     return objects
   end
 
+  ## Recaptcha v3 -----------
+  RECAPTCHA_MINIMUM_SCORE = 0.5
+  
+  def verify_recaptcha?(token, recaptcha_action, email)
+  
+    # Check if user is whitelisted
+    if !email.nil?
+      user = User.find_by_email(email)
+      if user && user.recaptcha_whitelisted?
+        Rails.logger.warn "Skipping recaptcha for #{user.email}"
+        return nil
+      end
+    end
+
+    Rails.logger.debug "Recaptcha action: #{recaptcha_action}"
+    # Continue normal recaptcha
+    secret_key = Rails.configuration.recaptcha[:secret_key]
+    uri = URI.parse("https://www.google.com/recaptcha/api/siteverify?secret=#{secret_key}&response=#{token}")
+    response = Net::HTTP.get_response(uri)
+    json = JSON.parse(response.body)
+    Rails.logger.debug "Recaptcha response: #{json}"
+    if json['success'] && (json['score'] > RECAPTCHA_MINIMUM_SCORE) && (json['action'] == recaptcha_action)
+      return nil
+    else
+      "We're sorry, you seem to be a bot"
+    end
+  end
+
+  ## Recaptcha v3 -----------
+
   helper ApplicationHelper
 
   def require_admin
