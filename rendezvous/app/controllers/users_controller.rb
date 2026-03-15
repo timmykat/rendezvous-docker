@@ -4,6 +4,10 @@ class UsersController < ApplicationController
   before_action :require_admin, only: [:new_by_admin, :create_by_admin, :index]
   layout :select_layout
 
+  def select_layout
+    ['index', 'new_by_admin', 'create_by_admin'].include?(action_name) ? "admin_layout" : "application"
+  end
+
   def new_user_by_admin
     @user = User.new
     @user.is_admin_created = true
@@ -153,9 +157,4 @@ class UsersController < ApplicationController
             [:id, :year, :marque, :model, :other_info, :bringing, :for_sale, :qr_code_id, :_destroy]
       )
     end
-
-    def select_layout
-      ['index', 'new_by_admin', 'create_by_admin'].include?(action_name) ? "admin_layout" : "application"
-    end
-
 end

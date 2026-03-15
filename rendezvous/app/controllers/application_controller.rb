@@ -26,6 +26,12 @@ class ApplicationController < ActionController::Base
 
   GEO_CONFIG = Rails.configuration.geodata
 
+  layout :select_layout
+
+  def select_layout
+    ['manage'].include?(action_name) ? "admin_layout" : "application"
+  end
+
   def render(*args)
     Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
     super(*args)  # Call the original render method

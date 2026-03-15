@@ -64,31 +64,6 @@
         .row.justify-content-center
           = render partial: 'common/footer'
 
-    :javascript
-      function addMde() {
-        function adjustEditorHeight(editor) {
-          var cm = editor.codemirror;
-          var scrollHeight = cm.getScrollInfo().height;
-          cm.getWrapperElement().style.height = Math.max(150, scrollHeight) + "px";
-        }
-        
-        const textareas = document.querySelectorAll('textarea[id$="_simple_mde"]');
-        textareas.forEach((textarea) => {
-          simpleMDE = new SimpleMDE({
-            element: textarea,
-            spellChecker: false, // Optional, disable spellchecker if you don't want it
-          });
-          simpleMDE.codemirror.on("change", adjustEditorHeight);
-          adjustEditorHeight(simpleMDE);
-        });
-      }
 
-      if (!window.SimpleMDE) {
-        document.addEventListener("DOMContentLoaded", () => {
-          addMde();
-        })
-      } else {
-        addMde();
-      }
 
 

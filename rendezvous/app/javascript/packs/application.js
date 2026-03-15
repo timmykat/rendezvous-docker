@@ -1,6 +1,5 @@
 import $ from 'jquery'
-window.$ = $
-window.jQuery = $
+window.$ = window.jQuery = $
 
 import "@hotwired/turbo-rails"
 import '@hotwired/stimulus'
@@ -26,7 +25,7 @@ import { RecaptchaHandler } from '../modules/recaptcha'
 window.RecaptchaHandler = RecaptchaHandler
 
 import { initCustom, setButtonSpinner } from '../modules/custom'
-document.addEventListener('DOMContentLoaded', () => initCustom())
+document.addEventListener('turbo:load', () => initCustom())
 document.addEventListener('turbo:load', () => initCustom())
 
 window.setButtonSpinner = setButtonSpinner
@@ -36,7 +35,7 @@ import '../modules/main_pages'
 import '../modules/user' 
 
 
-import { Cookies } from "js-cookie"
+import Cookies from "js-cookie"
 window.Cookies = Cookies
 
 // import { registerCocoonHandlers } from '../modules/cocoon_vanilla_js'
