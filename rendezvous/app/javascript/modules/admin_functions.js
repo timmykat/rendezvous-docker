@@ -1,4 +1,10 @@
 function adminFunctions() {
+    $.ajaxSetup({
+        headers: {
+          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     // --- 1. SimpleMDE Logic ---
     function adjustEditorHeight(editor) {
         var cm = editor.codemirror;
@@ -6,12 +12,9 @@ function adminFunctions() {
         cm.getWrapperElement().style.height = Math.max(150, scrollHeight) + "px";
     }
 
-    console.log("%c SimpleMDE initializing...", "color: yellow; background: black;");
-    console.trace(); // This prints the "path" to this function call
     const textareas = document.querySelectorAll('textarea[id$="_simple_mde"]');
     textareas.forEach((textarea) => {
         if (!textarea.dataset.mdeInitialized) {
-            console.log('Initializing element', textarea.innerHTML)
             const simpleMDE = new SimpleMDE({
                 element: textarea,
                 spellChecker: false,
