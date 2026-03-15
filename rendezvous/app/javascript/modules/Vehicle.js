@@ -4,15 +4,12 @@ const OTHER_FRENCH = ['Panhard', 'Peugeot', 'Renault']
 
 export class Vehicle extends HTMLElement {
   connectedCallback () {
-    console.log('Vehicle connected')
     requestAnimationFrame(() => {
-      console.log('Vehicle connected')
       this.init()
     })
   }
 
   init () {
-    console.log('Initing')
     this.marqueSelect = this.querySelector('select.marque')
     this.modelSelect = this.querySelector('select.model')
     this.otherMarqueText = this.querySelector('input.marque.text')
@@ -27,7 +24,6 @@ export class Vehicle extends HTMLElement {
       console.warn('RendezvousVehicle: Required select fields not found in DOM.');
       return;
     }
-    console.log(this.marqueSelect, this.modelDataField)
     this.setEventListeners()
     this.setInitialControls()
   }
@@ -49,15 +45,12 @@ export class Vehicle extends HTMLElement {
       this.setInputFieldStates()
       this.updateFormValues()
     })
-    console.log('Setting debounced autocomplete')
-    this.codeField.addEventListener('keyup', this.codeAutocompleteDebounce)
+    this.codeField?.addEventListener('keyup', this.codeAutocompleteDebounce)
   }
 
   codeAutocomplete (e) {
-    console.log('Fetching')
     const field = e.target
     const code = field.value.toUpperCase()
-    console.log(field, code)
     if (code === null || code === '' || !/^[1-9a-z]{4,4}$/i.test(code)) {
       return
     }
@@ -65,7 +58,6 @@ export class Vehicle extends HTMLElement {
     fetch(`/ajax/code/search?code=${code}`, { headers: this.getCsrfHeaders() })
     .then(response => response.json())
     .then(data => {
-      console.log('Fetch data:', data)
       if (data.status === 'OK') {
         this.qrIdField.value = data.id
         this.codeFieldBadge.classList.remove('hide')
@@ -79,7 +71,6 @@ export class Vehicle extends HTMLElement {
     const marque = this.marqueDataField?.value
     const model = this.modelDataField?.value
     if (!marque) {
-      console.log('No initial data')
       return
     }
 
@@ -98,7 +89,6 @@ export class Vehicle extends HTMLElement {
   }
 
   setInputFieldStates () {
-    console.log('Setting fields states')
     if (this.marqueSelect.value === 'Citroen') {
       this.enableField(this.marqueSelect);
       this.enableField(this.modelSelect);

@@ -56,44 +56,35 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if !@user.update(user_params)
-      flash_alert_now 'We had a problem saving your updated information'
-      flash_alert_now  @user.errors.full_messages.to_sentence
-      render action: :edit
-    else  
-      user_params[:vehicles_attributes].each do |_, vehicle_params|
-        qr_code_id = vehicle_params.delete(:qr_code_id)
-
-        Rails.logger.debug vehicle_params.inspect
+    
+    # 1. Let Rails handle the standard attributes (including deletion of vehicles)
+    if @user.update(user_params)
       
-        vehicle = @user.vehicles.find_or_initialize_by(id: vehicle_params[:id])
-        filtered_params = vehicle_params.except(:_destroy)
-        vehicle.assign_attributes(filtered_params)
-        unless vehicle.save
-          Rails.logger.error "Vehicle failed to save: #{vehicle.errors.full_messages}"
-        end
-      
+      # 2. Only loop to handle the custom QR code logic
+      user_params[:vehicles_attributes]&.each do |_, v_params|
+        next if v_params[:_destroy] == "1" || v_params[:_destroy] == true # Skip deleted ones
+        
+        # Find the vehicle that was just updated/created by the update call above
+        vehicle = @user.vehicles.find_by(id: v_params[:id])
+        next unless vehicle # Safety check
+        
+        qr_code_id = v_params[:qr_code_id]
         if qr_code_id.present?
-          old_qr = vehicle.qr_code
           new_qr = QrCode.find_by(id: qr_code_id)
-          Rails.logger.debug "Old: #{old_qr.inspect}"
-          Rails.logger.debug "New: #{new_qr.inspect}"
-
-          if old_qr && old_qr != new_qr
-            old_qr.update!(votable: nil)
-          end
-      
+          # Only update if it's actually changing to avoid unnecessary DB hits
           if new_qr && new_qr.votable != vehicle
+            # Clear old QR if necessary (depending on your business logic)
+            vehicle.qr_code.update(votable: nil) if vehicle.qr_code && vehicle.qr_code != new_qr
             new_qr.update!(votable: vehicle)
           end
         end
       end
-
-      if params[:redirect_url]
-        redirect_to params[:redirect_url]
-      else
-        redirect_to user_path(@user)
-      end
+  
+      redirect_to (params[:redirect_url] || user_path(@user))
+    else
+      flash_alert_now 'We had a problem saving your updated information'
+      flash_alert_now @user.errors.full_messages.to_sentence
+      render action: :edit
     end
   end
 

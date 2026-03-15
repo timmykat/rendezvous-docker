@@ -33,7 +33,6 @@ window.setButtonSpinner = setButtonSpinner
 
 import '../modules/jquery_tabs'
 import '../modules/main_pages'
-// import '../modules/registration'
 import '../modules/user' 
 
 

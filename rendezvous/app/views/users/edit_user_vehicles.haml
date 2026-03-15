@@ -35,7 +35,7 @@
                     .card-body
                       .card-text
                         = field_set_tag 'Vehicles', class: 'legend-sm' do
-                          #vehicles{ 'data-cocoon': true }
+                          #vehicles.items
                             = f.simple_fields_for :vehicles do |v|
                               = render partial: 'common/vehicle_fields', locals: { f: v, nested: true }
                             .card-footer.mt-3
