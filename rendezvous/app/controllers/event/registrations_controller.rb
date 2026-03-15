@@ -28,8 +28,7 @@ module Event
     ]
 
     NO_CHANGE_STATUSES = [
-      'complete', 
-      'payment due',
+      'complete',
       'cancelled - settled',
       'cancelled - needs refund',
     ]
