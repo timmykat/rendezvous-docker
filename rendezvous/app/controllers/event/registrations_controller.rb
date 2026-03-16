@@ -50,12 +50,12 @@ module Event
 
     def previous_step(current_step)
       index = STEPS.index(current_step)
-      prev_step = (index > 1) ? STEPS[index - 1] : nil
+      prev_step = (!index.nil? and index > 1) ? STEPS[index - 1] : nil
     end
     
     def next_step(current_step)
       index = STEPS.index(current_step)
-      next_step = (current_step != 'vehicles' && !index.nil?) ? STEPS[index + 1] : nil
+      next_step = (current_step != 'vehicles' and !index.nil?) ? STEPS[index + 1] : nil
     end
 
     def check_cutoff
