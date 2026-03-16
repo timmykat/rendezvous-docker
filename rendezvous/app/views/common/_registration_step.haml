@@ -9,7 +9,7 @@
       %div{ class: "justify-content-center py-3 #{registration_status_classes(reg_status)}" }
         = "Registration status: #{reg_status}"
         - if !registration.nil? and no_fee_related_changes 
-          &ndash; ou may only change vehicles or Sunday lunch attendance
+          &ndash; you may only change vehicles or Sunday lunch attendance
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
         %li.list-group-item.step.prev
           - if (previous_step)

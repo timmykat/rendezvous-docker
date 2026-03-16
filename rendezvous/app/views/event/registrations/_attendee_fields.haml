@@ -19,8 +19,8 @@
             .form-group 
 
             - unless no_fee_related_changes    
-            .row
-              .col-md-12
-                .remove_association_action
-                  = link_to_remove_association "#{icon(:remove_person)}".html_safe, f, class:  'btn btn-danger '
-                  Remove this person
+              .row
+                .col-md-12
+                  .remove_association_action
+                    = link_to_remove_association "#{icon(:remove_person)}".html_safe, f, class:  'btn btn-danger '
+                    Remove this person
