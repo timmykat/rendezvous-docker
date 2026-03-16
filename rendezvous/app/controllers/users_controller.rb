@@ -127,6 +127,8 @@ class UsersController < ApplicationController
             :id,
             :first_name,
             :last_name,
+            :address1,
+            :address2,
             :city,
             :state_or_province,
             :postal_code,

@@ -32,7 +32,12 @@
       .form-group
         %label City
         = f.input_field :city, class:  'form-control', placeholder:  'City *', 'data-autocomplete-target' => ''
-    .col-md-4.col-12
+      .form-group
+        %label Address 1
+        = f.input_field :address1, class:  'form-control', placeholder:  'Address 1 *', 'data-autocomplete-target' => ''
+      .form-group
+        %label Address 2
+        = f.input_field :address2, class:  'form-control', placeholder:  'Address 2 *', 'data-autocomplete-target' => ''    .col-md-4.col-12
       .form-group
         %label Zip/Postal Code
         = f.input_field :postal_code, class:  'form-control', placeholder:  'Zip/Postal Code *', 'data-autocomplete-target' => ''

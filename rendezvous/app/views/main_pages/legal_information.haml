@@ -1,4 +1,4 @@
-- config = Rails.configuration.pricing
+- fees = Rails.configuration.pricing[:fees]
 .content
   .row.justify-content-center
     .col-md-8.col-12
@@ -16,9 +16,9 @@
             %h2.h3 Policies
 
             %h3.h4 Event Pricing
-            - config.fees.each do |category, values|
-              - categore.each do |values|
-              %h2.h5= category.titleize
+            - [:early, :late].each do |category, values|
+              - fees[category].each do |values|
+                %h2.h5= category.titleize
                 %p Before #{values.end_date}
                 %ul
                   %li Adult: #{values.adult}
