@@ -42,7 +42,9 @@ export class AttendanceManager extends HTMLElement {
     });
 
     this.addEventListener('cocoon:after-remove', () => {
+      console.log('After remove')
       this.updateHeaders()
+      console.log('Updating totals')
       this.getAttendeeTotals();
     });
   }
@@ -71,9 +73,13 @@ export class AttendanceManager extends HTMLElement {
 
     let attendeeFeeTotal = 0;
     // We filter for cards that are NOT hidden (cocoon hides removed items if they are persisted)
-    const visibleCards = this.querySelectorAll('.card.attendee:not([style*="display: none"])');
+    const nestedFields = this.querySelectorAll('.nested-fields:not([style*="display: none"])');
 
-    visibleCards.forEach(card => {
+    console.log('Visible cards length', nestedFields.length)
+
+    nestedFields.forEach(field => {
+      const card = field.querySelector('.card.attendee')
+      console.log('Fee', card.dataset.fee)
       attendeeFeeTotal += parseFloat(card.dataset.fee) || 0;
     });
 

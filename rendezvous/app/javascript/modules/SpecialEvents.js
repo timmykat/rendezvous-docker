@@ -8,10 +8,10 @@ export class SpecialEvents extends HTMLElement {
   }
 
   init () {
-    this.incomingFee = parseFloat(this.querySelector('input[name="incoming_registration_fee"]').value)
+    this.displayTotal = this.querySelector('input.display-total')
+    this.registrationFee = parseFloat(this.querySelector('input#event_registration_registration_fee').value)
     this.cruiseSelect = this.querySelector('select.lake-cruise')
     this.cruiseFee = this.querySelector('input.lake-cruise-fee')
-    this.registrationFee = this.querySelector('input.registration-fee')
     const card = document.querySelector('.card[data-event="cruise"]')
     this.price = card?.dataset.price;
     this.setEventListeners()
@@ -31,7 +31,7 @@ export class SpecialEvents extends HTMLElement {
     } else {
       this.cruiseFee.value = ''
     }
-    this.registrationFee.value = (this.incomingFee + cruiseFee).toFixed(2)
+    this.displayTotal.value = (this.registrationFee + cruiseFee).toFixed(2)
   }
 
   getCsrfHeaders = () => {
