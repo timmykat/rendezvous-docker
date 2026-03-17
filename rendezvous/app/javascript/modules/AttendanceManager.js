@@ -124,6 +124,7 @@ export class AttendanceManager extends HTMLElement {
     if (activeRadio) {
       this.setAttendeeFee(activeRadio.value, activeRadio);
     }
+    this.updateHeaders()
   }
 }
 
