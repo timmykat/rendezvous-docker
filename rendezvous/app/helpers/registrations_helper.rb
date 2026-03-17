@@ -20,17 +20,6 @@ module RegistrationsHelper
     end
   end
 
-  def step_url(step, reg_id)
-    case step
-    when "welcome"
-      nil
-    when "create"
-      new_event_registration_path(reg_id)
-    else
-      send(step_path(step), reg_id)
-    end
-  end
-
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
     case status

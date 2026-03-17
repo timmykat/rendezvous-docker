@@ -1,34 +1,34 @@
-- unless registration_is_open || user_is_admin?
+- all_fees = Rails.configuration.pricing[:fees]
+- unless registration_is_open
   = render partial: 'common/too_soon' 
 - else
+  = render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
   .container
-    .row.justify-content-center
+    .row.justify-content-center  
       .col-md-8.col-12
         .card
           .card-body
+            .card-title
+              %h2= @title
             .card-text
-              #registration-form
-                - if !user_signed_in?
-                  .cover
-                = simple_form_for @event_registration, id:  'registration_form' do |f|
+              #registration-form.new_registration
+                = simple_form_for @event_registration do |f|
                   %section
-                    %h2 Rendezvous Registration
                     %p * = required
                     - if current_user.admin?
                       .alert.alert-warning 
                         You are editing a registration for another user.
-                        = f.input :created_by_admin, as: :boolean, readonly: true
-                    - else
-                      .alert.alert-info You are signed in with your user account.
+                        = f.input :created_by_admin, as: :boolean
                     = f.simple_fields_for :user do |u|
-                      = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true  }
+                      = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true }
+  
+                  = render partial: 'attendance_manager', locals: { f: f }
+                  = render partial: 'registration_status', locals: { f: f }
 
-                    = render partial: 'attendance_manager', locals: { f: f }
-                    = render partial: 'registration_status', locals: { f: f }
-
-
-                  .row
-                    .col-md-12
-                      .form-group
-                        = f.button :submit, input_html:  { value:  "Continue to payment #{icon(:right_arrow)}".html_safe }, class:  "btn  btn-primary"
-
+                  %section
+                    .row
+                      .col-12
+                        .form-group  
+                          = f.button :button, class: 'btn btn-primary go-to-review' do
+                            Update and re-review
+                            = icon(:right_arrow)

@@ -1,6 +1,6 @@
-- previous_step = previous_step(step)
-- next_step = next_step(step)
 - reg_status = registration.nil? ? 'Unregistered' : registration.status
+- previous_step = previous_step(step)
+- next_step = next_step(step, reg_status)
 .container-fluid.px-0.sticky-top
   .row.no-gutters.justify-content-center
     - unless registration.nil?
@@ -12,19 +12,12 @@
           &ndash; you may only change vehicles or Sunday lunch attendance
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
         %li.list-group-item.step.prev
-          - if (previous_step)
-            - if registration&.id.nil?
-              = previous_step
-            - else
-              -if !previous_step.nil? 
-                = link_to "&larr; #{previous_step}".html_safe, step_url(previous_step, registration.id)
+          - unless previous_step.nil?
+            = "&larr; #{previous_step}".html_safe
         %li.list-group-item.step.current
           = step
         %li.list-group-item.step.next
-          - if (next_step)
-            - if registration&.id.nil?
-              = next_step
-            - else
-              -if !next_step.nil? 
-                = link_to "#{next_step} &rarr;".html_safe, step_url(next_step, registration.id)
+          - unless next_step.nil?
+            = "#{next_step} &rarr;".html_safe
+
 

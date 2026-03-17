@@ -14,18 +14,66 @@ module Event
 
     helper_method :previous_step
     helper_method :next_step
-    helper_method :step_path
     helper_method :no_fee_related_changes
 
-    STEPS = [ 
-      'welcome',
-      'create',
-      'special events',
-      'review',
-      'payment',
-      'complete',
-      'vehicles',
-    ]
+    STEPS = {
+      welcome: {
+        path: 'event_welcome',
+        prev: nil,
+        next: 'create'
+      },
+      create: {
+        path: 'new',
+        prev: nil,
+        next: 'special events'
+      },
+      special_events: {
+        path: 'special events',
+        prev: 'update',
+        next: 'review'
+      },
+      review: {
+        path: 'review',
+        prev: 'special events',
+        next: 'payment'
+      },
+      payment: {
+        path: 'payment',
+        prev: 'review',
+        next: nil
+      },
+      complete: {
+        path: 'complete_after_payment',
+        prev: 'review',
+        next: 'vehicles'
+      },
+      vehicles: {
+        path: 'edit_user_vehicles',
+        prev: 'review',
+        next: 'nil'
+      },
+      update: {
+        path: 'edit',
+        prev: nil,
+        next: ->(status) { status == 'complete' ? :review : :special_events }
+      }
+    }
+
+    def previous_step(current_step)
+      return nil if current_step.nil?
+      STEPS.dig(current_step.to_sym, :prev)
+    end
+    
+    def next_step(current_step, status)
+      step_config = STEPS[current_step&.to_sym]
+      return nil unless step_config
+    
+      next_val = step_config[:next]
+      
+      # If it's a Proc (the lambda above), call it with the status
+      # Otherwise, just return the value
+      next_val.respond_to?(:call) ? next_val.call(status) : next_val
+    end
 
     NO_CHANGE_STATUSES = [
       'complete',
@@ -42,20 +90,6 @@ module Event
 
     def no_fee_related_changes
       NO_CHANGE_STATUSES.include?(@event_registration.status) && !current_user.admin?
-    end
-
-    def step_path(step)
-      "#{step.gsub(' ', '_')}_event_registration_path"
-    end
-
-    def previous_step(current_step)
-      index = STEPS.index(current_step)
-      prev_step = (!index.nil? and index > 1) ? STEPS[index - 1] : nil
-    end
-    
-    def next_step(current_step)
-      index = STEPS.index(current_step)
-      next_step = (current_step != 'vehicles' and !index.nil?) ? STEPS[index + 1] : nil
     end
 
     def check_cutoff
@@ -223,10 +257,8 @@ module Event
         redirect_to show_event_registration_path(@event_registration)
       end
 
-      @title = 'Edit Registration'
-      @step = 'edit'
-
-      
+      @title = 'Update Registration'
+      @step = 'update'
     end
 
     def update
@@ -246,10 +278,11 @@ module Event
         else
           flash_notice 'The registration was updated.'
         end
-        previous_step = params[:step]
-        step = next_step(previous_step)
-
-        redirect_to send(step_path(step), @event_registration)
+        if @event_registration.status != 'complete'
+          redirect_to special_events_event_registration_path(@event_registration)
+        else
+          redirect_to review_event_registration_path(@event_registration)
+        end
       else
         flash_alert 'There was a problem updating the registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
