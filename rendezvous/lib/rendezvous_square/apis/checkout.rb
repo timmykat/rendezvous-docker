@@ -85,7 +85,7 @@ module RendezvousSquare
         line_items << create_attendee_line_item(registration.number_of_children, period, 'child')
       end
 
-      if !registration.lake_cruise_number.to_i.positive?
+      if registration.lake_cruise_number.to_i.positive?
         line_items << create_cruise_line_item(registration.lake_cruise_number)
       end
       
@@ -114,6 +114,7 @@ module RendezvousSquare
     def create_donation_line_item(amount)
       {
         name: "#{Date.current.year} Citroen Rendezvous donation",
+        item_type: "ITEM",
         quantity: "1",
         base_price_money: {
           amount: integerize(amount),

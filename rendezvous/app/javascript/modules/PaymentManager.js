@@ -2,6 +2,7 @@ export class PaymentManager extends HTMLElement {
   constructor() {
     super();
     // Bind methods to ensure 'this' refers to the class instance
+    this.updateFees = this.updateFees.bind(this)
     this.handleDonationChange = this.handleDonationChange.bind(this);
     this.handlePaymentChange = this.handlePaymentChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -75,6 +76,7 @@ export class PaymentManager extends HTMLElement {
       const incomingFee = parseFloat(feeEl.value) || 0;
       const total = incomingFee + donationValue;
       totalInput.value = total.toFixed(2);
+      this.updateFees({donation: donationValue, total: total});
     }
   }
 
@@ -92,6 +94,30 @@ export class PaymentManager extends HTMLElement {
     });
   }
 
+  async updateFees(params) {
+    const regId = this.dataset.registrationId;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    try {
+      const response = await fetch(`/event/ajax/update_fees/${regId}`, {
+        method: 'PATCH',
+        headers: {
+          'X-CSRF-Token': csrfToken,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+          donation: params.donation,
+          total: params.total
+        })
+      });
+      if (!response.ok) throw new Error('Network response was not ok');
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
+  }
+
   async updatePaymentMethod(value) {
     const isOnline = value === 'credit card';
     const regId = this.dataset.registration_id;
@@ -103,7 +129,7 @@ export class PaymentManager extends HTMLElement {
 
     // Ajax Replacement (Fetch API)
     try {
-      const response = await fetch(`/event/ajax/update_paid_method?id=${regId}&paid_method=${value}`, {
+      const response = await fetch(`/event/ajax/update_pad_method/${regId}?paid_method=${value}`, {
         method: 'GET',
         headers: {
           'X-CSRF-Token': csrfToken,

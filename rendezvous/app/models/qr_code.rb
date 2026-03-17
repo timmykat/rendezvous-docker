@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: qr_codes
+#
+#  id           :bigint           not null, primary key
+#  code         :string(255)      not null
+#  votable_type :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  votable_id   :bigint
+#
+# Indexes
+#
+#  index_qr_codes_on_code     (code) UNIQUE
+#  index_qr_codes_on_votable  (votable_type,votable_id)
+#
 class QrCode < ApplicationRecord
 
   belongs_to :votable, polymorphic: true, inverse_of: :qr_code, optional: true

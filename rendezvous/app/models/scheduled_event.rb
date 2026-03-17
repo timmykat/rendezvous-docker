@@ -4,6 +4,7 @@
 #
 #  id                :bigint           not null, primary key
 #  day               :string(255)
+#  extra_cost        :boolean          default(FALSE)
 #  has_subevents     :boolean
 #  long_description  :text(65535)
 #  name              :string(255)

@@ -260,18 +260,24 @@ module Event
     # AJAX methods
     def update_fees
       @event_registration = Registration.find(params[:id])
-      respond_to do |format|
-        if !@event_registration.update(update_fees_params)
-          format.json { render json: { status: "error", data: { 
-              donation:  @event_registration.donation,
-              total: @event_registration.total 
-            }}}
-        else
-          format.json { render json: { status: "ok", data: { 
-            donation:  @event_registration.donation,
+      
+      if @event_registration.update(update_fees_params)
+        render json: { 
+          status: "ok", 
+          data: { 
+            donation: @event_registration.donation,
             total: @event_registration.total 
-          }}}
-        end
+          }
+        }, status: :ok
+      else
+        render json: { 
+          status: "error", 
+          errors: @event_registration.errors.full_messages,
+          data: { 
+            donation: @event_registration.donation_was, # Send back the old value
+            total: @event_registration.total_was 
+          }
+        }, status: :unprocessable_entity
       end
     end
 
@@ -589,7 +595,7 @@ module Event
       end
 
       def update_fees_params
-        params.permit(:id, :donation, :total)
+        params.permit(:id, :donation)
       end
 
       def cash_payment_params

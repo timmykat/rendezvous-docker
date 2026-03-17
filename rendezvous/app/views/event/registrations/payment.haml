@@ -8,8 +8,8 @@
 .container
   .row.justify-content-center
     .col-md-8.col-12
-      %payment-manager
-        = simple_form_for @event_registration, url:  complete_event_registration_path(@event_registration), html:  { id:  'event_registration_form' } do |f|
+      %payment-manager{ data: { "registration-id": @event_registration.id} }
+        = simple_form_for @event_registration, url:  complete_event_registration_path(@event_registration), html:  { id:  'event_registration_form', data: { turbo: false } } do |f|
           .form-group 
             - reg_fee = @event_registration.registration_fee
             = hidden_field_tag :incoming_registration_fee, reg_fee

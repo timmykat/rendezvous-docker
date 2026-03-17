@@ -10,6 +10,8 @@
 #  events              :text(65535)
 #  invoice_number      :string(255)
 #  is_admin_created    :boolean          default(FALSE), not null
+#  lake_cruise_fee     :decimal(6, 2)
+#  lake_cruise_number  :integer          default(0), not null
 #  number_of_adults    :integer
 #  number_of_children  :integer
 #  number_of_seniors   :integer
@@ -19,7 +21,6 @@
 #  paid_method         :string(255)
 #  registration_fee    :decimal(6, 2)
 #  status              :string(255)
-#  sunday_lunch        :boolean          default(FALSE), not null
 #  sunday_lunch_number :integer          default(0), not null
 #  total               :float(24)
 #  vendor_fee          :decimal(6, 2)
@@ -130,10 +131,9 @@ module Event
     end
 
     def ensure_total
-      self.total = self.registration_fee || 0.0
-      if !self.donation.blank?
-        self.total += self.donation
-      end
+      self.total =  registration_fee.to_f + 
+                    donation.to_f + 
+                    lake_cruise_fee.to_f
     end
     
     def self.invoice_number

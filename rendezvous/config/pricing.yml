@@ -1,4 +1,4 @@
-# config/registration.yml
+# config/pricing.yml
 fees:
   lake_cruise: 
     price: 65

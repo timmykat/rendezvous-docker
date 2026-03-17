@@ -151,8 +151,8 @@ Rails.application.routes.draw do
   get '/ajax/code/search',                to: 'qr_codes#autocomplete'
 
   namespace :event do
-    post '/ajax/update_fees',               to: 'registrations#update_fees'
-    get '/ajax/update_paid_method',         to: 'registrations#update_paid_method'
+    patch '/ajax/update_fees/:id',               to: 'registrations#update_fees'
+    get '/ajax/update_paid_method/:id',         to: 'registrations#update_paid_method'
   end
 
   get '/ajax/toggle/role/:id',               to: 'users#toggle_role',      as: :ajax_toggle_role
