@@ -21,30 +21,30 @@ export class AttendanceManager extends HTMLElement {
     });
       
     this.addEventListener('cocoon:after-insert', (e) => {
-      this.updateHeaders()
-      // In vanilla JS, the inserted item is in e.detail[0] or e.detail.node
-      let insertedNode
-      if (e.detail.node instanceof Node) {
-        insertedNode = e.detail.node;
-      } else if (typeof e.detail.node === 'string') {
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = e.detail.node.trim();
-        insertedNode = tempDiv.firstChild;
-      }
-      
-      const checkedRadio = insertedNode?.querySelector('input[type="radio"]:checked');
-      
-      if (checkedRadio) {
-        this.setAttendeeFee(checkedRadio.value, checkedRadio);
-      }
-  
-      this.getAttendeeTotals();
+      setTimeout(() => {
+        this.updateHeaders()
+        // In vanilla JS, the inserted item is in e.detail[0] or e.detail.node
+        let insertedNode
+        if (e.detail.node instanceof Node) {
+          insertedNode = e.detail.node;
+        } else if (typeof e.detail.node === 'string') {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = e.detail.node.trim();
+          insertedNode = tempDiv.firstChild;
+        }
+        
+        const checkedRadio = insertedNode?.querySelector('input[type="radio"]:checked');
+        
+        if (checkedRadio) {
+          this.setAttendeeFee(checkedRadio.value, checkedRadio);
+        }
+    
+        this.getAttendeeTotals();
+      }, 0)
     });
 
     this.addEventListener('cocoon:after-remove', () => {
-      console.log('After remove')
       this.updateHeaders()
-      console.log('Updating totals')
       this.getAttendeeTotals();
     });
   }
@@ -66,35 +66,42 @@ export class AttendanceManager extends HTMLElement {
   }
 
   getAttendeeTotals = () => {
-    
-    this.updateCount('adult');
-    this.updateCount('youth');
-    this.updateCount('child');
-
+    // 1. Identify valid, visible nested fields once
+    const nestedFields = Array.from(
+      this.querySelectorAll('.nested-fields:not([style*="display: none"])')
+    );
+  
+    // 2. Pass those fields to updateCount for each type
+    this.updateCount('adult', nestedFields);
+    this.updateCount('youth', nestedFields);
+    this.updateCount('child', nestedFields);
+  
+    // 3. Calculate financial total using the same array
     let attendeeFeeTotal = 0;
-    // We filter for cards that are NOT hidden (cocoon hides removed items if they are persisted)
-    const nestedFields = this.querySelectorAll('.nested-fields:not([style*="display: none"])');
-
-    console.log('Visible cards length', nestedFields.length)
-
     nestedFields.forEach(field => {
-      const card = field.querySelector('.card.attendee')
-      console.log('Fee', card.dataset.fee)
-      attendeeFeeTotal += parseFloat(card.dataset.fee) || 0;
+      const card = field.querySelector('.card.attendee');
+      if (card) {
+        attendeeFeeTotal += parseFloat(card.dataset.fee) || 0;
+      }
     });
-
+  
     const feeInput = document.getElementById('event_registration_registration_fee');
     if (feeInput) feeInput.value = attendeeFeeTotal.toFixed(2);
   }
-
-  updateCount = (type) => {
-    // Ensure we only count checked radios in visible attendee rows
-    const count = Array.from(this.querySelectorAll(`#attendees input[value="${type}"]:checked`))
-      .filter(el => el.closest('.nested-fields').style.display !== 'none').length;
-
+  
+  updateCount = (type, activeFields) => {
+    // Count checked radios of 'type' only within the already-filtered activeFields
+    const count = activeFields.reduce((acc, field) => {
+      const radio = field.querySelector(`input[value="${type}"]:checked`);
+      return radio ? acc + 1 : acc;
+    }, 0);
+  
     const input = document.getElementById(`event_registration_number_of_${type}s`);
-    if (input) input.value = count;
-    return count
+    if (input) {
+      input.value = count;
+    }
+    
+    return count;
   }
 
   initializeFirstAttendee = () => {
