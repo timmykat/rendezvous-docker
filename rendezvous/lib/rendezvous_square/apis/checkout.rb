@@ -11,7 +11,7 @@ module RendezvousSquare
     end
 
     def integerize(currency_amount)
-      (currency_amount.to_f * 100).round
+      (currency_amount.to_d * 100).round
     end
 
     def create_square_payment_link(params)
@@ -89,7 +89,7 @@ module RendezvousSquare
         line_items << create_cruise_line_item(registration.lake_cruise_number)
       end
       
-      if registration.donation.to_f.positive?
+      if registration.donation.to_d.positive?
         line_items << create_donation_line_item(registration.donation)
       end
       

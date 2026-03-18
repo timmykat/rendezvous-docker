@@ -48,11 +48,53 @@
         .col-md-10
           .card
             .card-title
+              %h3 Overall Totals
+            .card-body.text-primary 
+              .card-text
+                %table.table
+                  %tr
+                    %td Number registered:
+                    %td #{@reg_count}
+                  %tr
+                    %td Number of attendees:
+                    %td #{@attendee_count}                  
+                  %tr
+                    %td Total fees assessed: 
+                    %td #{number_to_currency(@total_fees_assessed)}
+                  %tr
+                    %td Total fees received:
+                    %td #{number_to_currency(@total_fees_received)}
+                  %tr
+                    %td Total fees outstanding:
+                    %td #{number_to_currency(@total_fees_outstanding)}          
+      %hr
+      .row.justify-content-center
+        .col-md-10
+          .card
+            .card-title
+              %h3 Lake George Excursion Summary
+            .card-body.text-primary 
+              .card-text
+                %table.table
+                  %tr
+                    %td Number registered:
+                    %td #{@lake_cruise_count}
+                  %tr
+                    %td Total fees assessed: 
+                    %td #{number_to_currency(@lake_cruise_fees_assessed)}
+                  %tr
+                    %td Total fees received:
+                    %td #{number_to_currency(@lake_cruise_fees_received)}   
+      %hr
+      .row.justify-content-center
+        .col-md-10
+          .card
+            .card-title
               %h3 Sunday Lunch Count
             .card-body.text-primary 
               .card-text
-                %p Number of Sunday lunch participants: #{sunday_lunch_count}   
-     
+                %p Number of Sunday lunch participants: #{sunday_lunch_count}  
+
       - if @annual_question
         %hr
         .row.justify-content-center

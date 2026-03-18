@@ -6,23 +6,23 @@
 #  id                  :integer          not null, primary key
 #  annual_answer       :string(255)
 #  created_by_admin    :boolean          default(FALSE), not null
-#  donation            :decimal(6, 2)
+#  donation            :decimal(8, 2)
 #  events              :text(65535)
 #  invoice_number      :string(255)
 #  is_admin_created    :boolean          default(FALSE), not null
-#  lake_cruise_fee     :decimal(6, 2)
+#  lake_cruise_fee     :decimal(8, 2)
 #  lake_cruise_number  :integer          default(0), not null
 #  number_of_adults    :integer
 #  number_of_children  :integer
 #  number_of_seniors   :integer
 #  number_of_youths    :integer
-#  paid_amount         :decimal(6, 2)
+#  paid_amount         :decimal(8, 2)
 #  paid_date           :datetime
 #  paid_method         :string(255)
-#  registration_fee    :decimal(6, 2)
+#  registration_fee    :decimal(8, 2)
 #  status              :string(255)
 #  sunday_lunch_number :integer          default(0), not null
-#  total               :float(24)
+#  total               :decimal(8, 2)
 #  vendor_fee          :decimal(6, 2)
 #  year                :string(255)
 #  created_at          :datetime
@@ -86,7 +86,7 @@ module Event
     
     serialize :events
 
-    before_save :ensure_total
+    before_save :ensure_financials
     
     def validate_minimum_number_of_adults
       if number_of_adults < 1
@@ -95,27 +95,23 @@ module Event
     end
     
     def validate_payment
-      if !self.paid_amount.nil?
-        if (self.paid_amount.to_f > self.total.to_f)
+      if !paid_amount.nil?
+        if (paid_amount.to_d > total.to_d)
           errors[:base] << "The paid amount is more than the owed amount."
         end
       end
     end
 
     def number_of_people
-      self.attendees.count
+      attendees.count
     end
 
     def number_of_volunteers
-      self.attendees.where(volunteer: true).count
-    end
-      
-    def balance
-      self.total.to_f - self.paid_amount.to_f
+      attendees.where(volunteer: true).count
     end
     
     def outstanding_balance?
-      self.balance > 0.0
+      balance > 0.0
     end
 
     def owed_a_refund?
@@ -123,17 +119,19 @@ module Event
     end
 
     def complete?
-      self.status == 'complete'
+      status == 'complete'
     end
 
     def cancelled?
-      self.status =~ /cancelled/
+      status =~ /cancelled/
     end
 
-    def ensure_total
-      self.total =  registration_fee.to_f + 
-                    donation.to_f + 
-                    lake_cruise_fee.to_f
+    def ensure_financials
+      self.total = registration_fee.to_d + 
+                    donation.to_d + 
+                    lake_cruise_fee.to_d
+    
+      self.balance = self.total - paid_amount.to_d
     end
     
     def self.invoice_number

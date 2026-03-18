@@ -50,7 +50,7 @@ module RegistrationsHelper
     list = raw_values.map{ |v| ["$#{v.to_s}", v]  }
     unless registration_fees.nil?
       cc_fee = '%.2f' % credit_card_fee(registration_fees)
-      list.unshift ["Credit card fee ($#{ cc_fee})", cc_fee.to_f]
+      list.unshift ["Credit card fee ($#{ cc_fee})", cc_fee.to_d]
     end
     list << ['Other', 'other']
   end

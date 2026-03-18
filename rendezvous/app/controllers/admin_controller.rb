@@ -162,6 +162,11 @@ class AdminController < ApplicationController
       @annual_question = AnnualQuestion.new
     end
 
+    @lake_cruise_reg = Event::Registration.where("lake_cruise_number > 0")
+    @lake_cruise_count = @lake_cruise_reg.sum(:lake_cruise_number)
+    @lake_cruise_fees_assessed = @lake_cruise_reg.sum(:lake_cruise_fee)
+    @lake_cruise_fees_received = @lake_cruise_reg.where("balance > 0").sum(:lake_cruise_fee)
+
     create_table_data
   end
 
@@ -174,50 +179,74 @@ class AdminController < ApplicationController
   end
 
   def create_table_data
-    query = Event::Registration.where(year: @year)
-    @event_registrations = query.all
-    case (params[:user_type])
-    when 'all_users'
-      @users = User.all
-      @type = 'All users'
-    when 'active'
-      @users = User.where('last_active > ?', 10.minutes.ago)
-    when 'registrant'
-      @users = User.with_registrations
-      @type = 'Any Registrant'
-    when 'testers'
-      @users = User.with_role :tester
-      @type = 'Site Testers'
-    when 'vendors'
-      @users = User.with_role :vendor
-      @type = 'Vendors'
-    else 
-      @users = User.with_current_registration
-      @type = 'Currently registered'
-    end
-    @user_count = @users.nil? ? 0 : @users.pluck(:id, :last_name).count
+    @year ||= Time.now.year # Ensure @year is set
+    query = Event::Registration.current
+    @event_registrations = query.includes(:user)
+      .select(:id, :status, :user_id, :registration_fee, :donation, 
+              :total, :paid_amount, :balance, :number_of_adults, 
+              :number_of_youths, :number_of_children)
+  
+    # 1. Fetch Users based on type (1 Query)
+    @users = case params[:user_type]
+             when 'all_users' then User.all
+             when 'active'    then User.where('last_active > ?', 10.minutes.ago)
+             when 'registrant' then User.with_registrations
+             when 'testers'    then User.with_role(:tester)
+             when 'vendors'    then User.with_role(:vendor)
+             else User.with_current_registration
+             end
+    
+    # Use size for a cached count if records are loaded, or a simple COUNT query
+    reg_users = User.joins(:registrations).where(registrations: { year: @year })
+    @reg_count = reg_users.count
+    @type = params[:user_type]&.humanize || 'Currently registered'
+  
+    # 2. Optimized Volunteers Fetch (1 Query)
+    # Updated to use @year variable instead of hardcoded 2025
+    @volunteers = Attendee.joins(registration: :user)
+                          .where(registrations: { year: @year }, volunteer: true)
+                          .select('attendees.name AS name, users.email AS email')
+  
+    # 3. The "Big Kahuna" - All stats in ONE Query (1 Query)
+    # We use left_joins to ensure we don't lose registrations that have no cars/attendees yet
+    stats = query.left_joins(:vehicles, :attendees).select(
+      "COUNT(DISTINCT attendees.id) as total_attendees",
+      "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'adult' THEN attendees.id END) as adult_count",
+      "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'youth' THEN attendees.id END) as youth_count",
+      "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'child' THEN attendees.id END) as child_count",
+      "COUNT(DISTINCT CASE WHEN vehicles.marque = 'Citroen' THEN vehicles.id END) as citroen_count",
+      "COUNT(DISTINCT CASE WHEN vehicles.marque != 'Citroen' THEN vehicles.id END) as non_citroen_count",
+      "SUM(DISTINCT registrations.registration_fee) as reg_sum",
+      "SUM(DISTINCT registrations.donation) as donation_sum",
+      "SUM(DISTINCT registrations.total) as total_sum",
+      "SUM(DISTINCT registrations.paid_amount) as paid_sum"
+    ).take
 
-    @vehicles = Vehicle.joins(:registrations).where(registrations: { year: @year })
-    @volunteers = Attendee.joins(registration: :user).where(registrations: { year: 2025 }, volunteer: true).select('attendees.name AS name, users.email AS email')
-    total_amount = query.sum(:total)
-    paid_amount = query.sum(:paid_amount)
+    @attendee_count  = stats.total_attendees.to_i
+  
+    # 4. Final Data Assembly
     @data = {
-      registrants: User.joins(:registrations).where(registrations: { year: @year }),
-      citroens: query.joins(:vehicles).where(vehicles: { marque: "Citroen" }),
-      non_citroens: query.joins(:vehicles).where.not(vehicles: { marque: "Citroen" }),
-      attendees: query.joins(:attendees).count,
-      newbies: [],
-      adult: query.joins(:attendees).where(attendees: { attendee_age: 'adult'}).count,
-      youth: query.joins(:attendees).where(attendees: { attendee_age: 'youth'}).count,
-      child: query.joins(:attendees).where(attendees: { attendee_age: 'child'}).count,
+      registrants: reg_users,
+      citroens: stats.citroen_count.to_i,
+      non_citroens: stats.non_citroen_count.to_i,
+      attendees: stats.total_attendees.to_i,
+      newbies: [], # Still a placeholder
+      adult: stats.adult_count.to_i,
+      youth: stats.youth_count.to_i,
+      child: stats.child_count.to_i,
       financials: {
-        registration_fees: query.sum(:registration_fee),
-        donations: query.sum(:donation),
-        total: total_amount,
-        paid: paid_amount,
-        due: total_amount - paid_amount
+        registration_fees: stats.reg_sum.to_d,
+        donations: stats.donation_sum.to_d,
+        total: stats.total_sum.to_d,
+        paid: stats.paid_sum.to_d,
+        due: stats.total_sum.to_d - stats.paid_sum.to_d
       }
     }
+
+    @total_fees_assessed = stats.total_sum.to_d
+    @total_fees_received = stats.paid_sum.to_d
+    @total_donations = stats.donation_sum.to_d
+    @total_fees_outstanding = stats.total_sum.to_d - stats.paid_sum.to_d
   end
 
   def peoples_choice_results
@@ -300,7 +329,7 @@ class AdminController < ApplicationController
                 a.attendee_age.titlecase,
                 (a.volunteer? ? 'Yes' : 'No'),
                 # (a.sunday_dinner? ? 'Yes' : 'No'),
-                (!r.donation.blank? && (r.donation.to_f > 0.0)) ? 'Yes' : 'No',
+                (!r.donation.blank? && (r.donation.to_d > 0.0)) ? 'Yes' : 'No',
                 r.paid_date
               ]
             end

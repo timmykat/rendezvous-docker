@@ -23,7 +23,7 @@
                   = f.submit 'Go', class:  "btn  btn-primary"
           
           %h2= "Registrations for #{@year}"
-          %p Number of registrations: #{@event_registrations.size}
+          %p Number of registrations: #{@reg_count}
 
           %table#registration-table.table.tablesorter.striped
             %thead
@@ -36,60 +36,52 @@
                 %th.tablesorter-header.filter-false.text-center Fee
                 %th.tablesorter-header.filter-false.text-center Donation
                 %th.tablesorter-header.filter-false.text-center Total
-                %th.tablesorter-header.filter-false.text-center Payment Link
                 %th.tablesorter-header.filter-false.text-center Paid
                 %th.tablesorter-header.filter-false.text-center Balance
             %tbody
-              - @event_registrations.each do |registration|
-                %tr{class:  'text-center' }
+              - @event_registrations.each do |reg|
+                %tr.text-center
                   %td.text-left
                     %ul.list-unstyled
-                      %li
-                        = link_to 'View', event_registration_path(registration.id)
-                      %li  
-                        = link_to 'Edit', edit_event_registration_path(registration.id)
-                      - if registration.status != 'complete'
-                        %li
-                          = link_to 'Review', review_event_registration_path(registration.id)
-                        %li
-                          = link_to 'Payment', payment_event_registration_path(registration.id)
-                      %li
-                        = link_to 'Cancel', event_cancel_registration_path(registration.id), data: { confirm: "Are you sure?" }
-                      %li   
-                        = link_to 'DELETE', event_destroy_registration_path(registration.id), data: { confirm: "Are you sure?" }
+                      %li= link_to 'View', event_registration_path(reg)
+                      %li= link_to 'Edit', edit_event_registration_path(reg)
+                      - if reg.status != 'complete'
+                        %li= link_to 'Review', review_event_registration_path(reg)
+                        %li= link_to 'Payment', payment_event_registration_path(reg)
+                      %li= link_to 'Cancel', event_cancel_registration_path(reg), data: { confirm: "Sure?" }
+                      %li= link_to 'DELETE', event_destroy_registration_path(reg), method: :delete, data: { confirm: "Permanent?" }
                           
-                  %td.text-center
-                    = registration.status
+                  %td= reg.status
                   %td.text-left
-                    - if registration.user.present?
-                      = link_to registration.user.last_name_first, user_path(registration.user)
+                    - if reg.user
+                      = link_to reg.user.last_name_first, user_path(reg.user)
                     - else 
-                      *** No user for registration #{registration.id}
-                  %td.text-center #{registration.number_of_adults}, #{registration.number_of_youths}, #{registration.number_of_children}
-                  %td.text-right= number_to_currency(registration.registration_fee)
-                  %td.text-right= number_to_currency(registration.donation)
-                  %td.text-right= number_to_currency(registration.total)
-                  %td.text-right= number_to_currency(registration.paid_amount)
-                  - if registration.outstanding_balance?
-                    %td.text-center.has-balance #{number_to_currency(registration.balance)}
-                  - elsif registration.owed_a_refund?
-                    %td.text-center.owed (#{number_to_currency(-registration.balance)})
+                      *** Missing User (ID: #{reg.id})
+                  
+                  %td.text-left= format_attendee_counts(reg)
+                  %td.text-right= number_to_currency(reg.registration_fee)
+                  %td.text-right= number_to_currency(reg.donation)
+                  %td.text-right= number_to_currency(reg.total)
+                  %td.text-right= number_to_currency(reg.paid_amount)
+                  
+                  -# Use the balance column directly
+                  - if reg.balance > 0
+                    %td.text-center.has-balance= number_to_currency(reg.balance)
+                  - elsif reg.balance < 0
+                    %td.text-center.owed (#{number_to_currency(reg.balance.abs)})
                   - else 
-                    %td.text-center #{number_to_currency(-registration.balance)}
+                    %td.text-center $0.00
         #tabbed-2
-          %h2 Vehicles
-          .card
-            .card-body
-              .card-title
-                %h2 Summary
-              .card-text
-                - if @data
-                  %p Number of Citroens: #{@data[:citroens].count}
-                  %p Number of non-Citroens: #{@data[:non_citroens].count}
-                - if @vehicles
-                  %p Total: #{@vehicles.count}
-                - else
-                  %p No vehicles yet
+          %h2 Summary
+          .card-text
+            - if @data
+              -# Remove .count here because @data[:citroens] is already an Integer
+              %p Number of Citroens: #{@data[:citroens]}
+              %p Number of non-Citroens: #{@data[:non_citroens]}
+            
+            - if @vehicles
+              -# Keep .count here because @vehicles is a Collection
+              %p Total Vehicles: #{@vehicles.count}
 
           %table.table
             %thead
@@ -137,25 +129,25 @@
           .card
             .card-body
               .card-title
-                %h2 Summary for #{Date.current.year}
+                %h2 Summary for #{@year}
               .card-text
                 .row
                   .col-md-12
             
 
-            .row.justify-content-center
-              .col-md-8.col-12
-                .card
-                  .card-body
-                    .card-title
-                      %h3 Annual Question Responses 
-                    .card-body 
-                      %p
-                        %strong #{@annual_question.question}
-                      %p Responses:
-                      %ul
-                        - @annual_responses.each do |answer, number|
-                          %li #{number} | #{answer}
+            -# .row.justify-content-center
+            -#   .col-md-8.col-12
+            -#     .card
+            -#       .card-body
+            -#         .card-title
+            -#           %h3 Annual Question Responses 
+            -#         .card-body 
+            -#           %p
+            -#             %strong #{@annual_question.question}
+            -#           %p Responses:
+            -#           %ul
+            -#             - @annual_responses.each do |answer, number|
+            -#               %li #{number} | #{answer}
             .row
               .col-md-6.col-12
                 .card
@@ -219,7 +211,7 @@
                             %tr
                               %td
                                 %em  Vehicles
-                              %td.text-right= @vehicles.count
+                              %td.text-right= @vehicles&.count || 0
                             %tr
                               %td{ colspan:  2 }
                                 %p

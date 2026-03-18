@@ -7,23 +7,23 @@
 #  id                  :integer          not null, primary key
 #  annual_answer       :string(255)
 #  created_by_admin    :boolean          default(FALSE), not null
-#  donation            :decimal(6, 2)
+#  donation            :decimal(8, 2)
 #  events              :text(65535)
 #  invoice_number      :string(255)
 #  is_admin_created    :boolean          default(FALSE), not null
-#  lake_cruise_fee     :decimal(6, 2)
+#  lake_cruise_fee     :decimal(8, 2)
 #  lake_cruise_number  :integer          default(0), not null
 #  number_of_adults    :integer
 #  number_of_children  :integer
 #  number_of_seniors   :integer
 #  number_of_youths    :integer
-#  paid_amount         :decimal(6, 2)
+#  paid_amount         :decimal(8, 2)
 #  paid_date           :datetime
 #  paid_method         :string(255)
-#  registration_fee    :decimal(6, 2)
+#  registration_fee    :decimal(8, 2)
 #  status              :string(255)
 #  sunday_lunch_number :integer          default(0), not null
-#  total               :float(24)
+#  total               :decimal(8, 2)
 #  vendor_fee          :decimal(6, 2)
 #  year                :string(255)
 #  created_at          :datetime
