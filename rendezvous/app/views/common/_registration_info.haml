@@ -87,11 +87,14 @@
                     %strong
                       %label Balance:
                       #{number_to_currency(@event_registration.balance)}
-          - if (@event_registration.status == 'payment due')
+
+          - if payment_due? @event_registration.balance
             .col-md-6.col-12
-              %p
-                Please print this invoice or the one you received via email and send with a check for the amount due to:
-                %br= mailing_address
+              = link_to "Pay your balance".html_safe, payment_event_registration_path(@event_registration), class:  'btn btn-primary go-to-payment'
+          - elsif refund_owed? @event_registration.balance
+            .col-md-6.col-12
+              %p If you don't get a refund within a reasonable time, please contact Tim.
+
 
       .card
         .card-body

@@ -328,6 +328,8 @@ module Event
     def review
       @title = 'Review Registration Information'
       @step = 'review'
+      @event_registration.status = 'in review'
+      @event_registration.save
     end
 
     def payment

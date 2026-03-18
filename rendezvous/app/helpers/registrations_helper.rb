@@ -20,6 +20,14 @@ module RegistrationsHelper
     end
   end
 
+  def payment_due?(balance)
+    balance.positive?
+  end
+
+  def refund_owed?(balance)
+    balance.negative?
+  end
+
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
     case status
