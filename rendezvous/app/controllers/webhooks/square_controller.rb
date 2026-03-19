@@ -45,7 +45,8 @@ module Webhooks
           square_payment_id: payment_data["id"], 
           registration: reg, 
           status: payment_data["status"],
-          amount_cents: payment_data.dig("amount_money", "amount")
+          amount_cents: payment_data.dig("amount_money", "amount"),
+          currency: payment_data.dig("amount_money", "currency"),
         )
       else
         payment.update(status: payment_data["status"])

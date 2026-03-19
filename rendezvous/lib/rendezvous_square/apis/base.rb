@@ -14,6 +14,10 @@ module RendezvousSquare
       (currency_amount.to_d * 100).round
     end
 
+    def iso_time(time)
+      time.utc.iso8601
+    end
+
     def get_square_client
       base_url = get_environment == 'PROD' ? Square::Environment::PRODUCTION :  Square::Environment::SANDBOX
       access_token = ENV.fetch("#{get_environment}_SQUARE_ACCESS_TOKEN")
