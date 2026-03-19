@@ -10,10 +10,6 @@ module RendezvousSquare
       Base.get_square_client.checkout
     end
 
-    def integerize(currency_amount)
-      (currency_amount.to_d * 100).round
-    end
-
     def create_square_payment_link(params)
       post_body = create_checkout_body(params)
     
@@ -67,7 +63,8 @@ module RendezvousSquare
         location_id: Base.get_location_id,
         customer_id: params[:customer_id],
         line_items: create_line_items(params[:registration], params[:fee_period]),
-        ticket_name: "Event Registration" # Optional helper for Square dashboard
+        ticket_name: "Event Registration" # Optional helper for Square dashboard,
+        reference_id: params[:registration].id  #registration ID
       }
     end
 
@@ -117,7 +114,7 @@ module RendezvousSquare
         item_type: "ITEM",
         quantity: "1",
         base_price_money: {
-          amount: integerize(amount),
+          amount: Base.integerize(amount),
           currency: "USD"
         }
       }
@@ -132,7 +129,7 @@ module RendezvousSquare
             name: "#{Date.current.year} Citroen Rendezvous Donation",
             quantity: "1",
             base_price_money: {
-              amount: integerize(donation.amount),
+              amount: Base.integerize(donation.amount),
               currency: "USD"
             },
             note: "Non-registration donation"

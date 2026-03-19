@@ -52,6 +52,7 @@ module Event
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
     has_many :square_transactions, dependent: :destroy
+    has_many :payments, dependent: :destroy
     
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
@@ -131,7 +132,7 @@ module Event
                     donation.to_d + 
                     lake_cruise_fee.to_d
     
-      self.balance = self.total - paid_amount.to_d
+      self.balance = self.total - (paid_amount.to_d + refunded.to_d)
     end
     
     def self.invoice_number
@@ -143,6 +144,15 @@ module Event
         next_number = /-(\d+)\z/.match(previous_code)[1].to_i + 1
       end
       "#{prefix}-#{next_number}"
+    end
+    
+    def total_of_payments
+      (payments.where(status: 'COMPLETE').sum(:amount_cents) / 100.).to_d
+    end
+
+    def total_of_refunded
+      # Sums all completed refunds tied to this registration's payments
+      refunds.where(status: 'COMPLETED').sum(:amount_cents) / 100.0
     end
   end
 end

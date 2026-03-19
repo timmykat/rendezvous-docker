@@ -10,6 +10,10 @@ module RendezvousSquare
       Config::SiteSetting.instance.square_environment || 'SANDBOX'     
     end
 
+    def integerize(currency_amount)
+      (currency_amount.to_d * 100).round
+    end
+
     def get_square_client
       base_url = get_environment == 'PROD' ? Square::Environment::PRODUCTION :  Square::Environment::SANDBOX
       access_token = ENV.fetch("#{get_environment}_SQUARE_ACCESS_TOKEN")
