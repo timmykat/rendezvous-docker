@@ -6,6 +6,7 @@
 #
 #  id                  :integer          not null, primary key
 #  annual_answer       :string(255)
+#  balance             :decimal(8, 2)    default(0.0), not null
 #  created_by_admin    :boolean          default(FALSE), not null
 #  donation            :decimal(8, 2)
 #  events              :text(65535)
@@ -20,6 +21,7 @@
 #  paid_amount         :decimal(8, 2)
 #  paid_date           :datetime
 #  paid_method         :string(255)
+#  refunded            :decimal(8, 2)    default(0.0), not null
 #  registration_fee    :decimal(8, 2)
 #  status              :string(255)
 #  sunday_lunch_number :integer          default(0), not null
@@ -33,11 +35,13 @@
 #
 # Indexes
 #
+#  index_registrations_on_balance            (balance)
 #  index_registrations_on_cc_transaction_id  (cc_transaction_id)
 #  index_registrations_on_invoice_number     (invoice_number)
 #  index_registrations_on_paid_amount        (paid_amount)
 #  index_registrations_on_paid_date          (paid_date)
 #  index_registrations_on_paid_method        (paid_method)
+#  index_registrations_on_refunded           (refunded)
 #  index_registrations_on_status             (status)
 #  index_registrations_on_year               (year)
 #

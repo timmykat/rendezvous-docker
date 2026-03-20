@@ -3,8 +3,8 @@ class RecreateSquareTransactionModel < ActiveRecord::Migration[7.2]
     drop_table :square_transactions, if_exists: true
 
     create_table :square_transactions do |t|
-      t.references :registration, null: true, foreign_key: true
-      t.references :user, null: true, foreign_key: true
+      t.references :registration, null: true, foreign_key: true, type: :integer
+      t.references :user, null: true, foreign_key: true, type: :integer
       
       # The "Type" tells us if it's an order, payment, or refund
       t.string :transaction_type, null: false
