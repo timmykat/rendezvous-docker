@@ -65,6 +65,7 @@ module Rendezvous
     config.pricing = YAML::load(ERB.new(File.read("#{Rails.root}/config/pricing.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.registration = YAML::load(ERB.new(File.read("#{Rails.root}/config/registration.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.site = YAML::load(ERB.new(File.read("#{Rails.root}/config/site.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+    config.square = YAML::load(ERB.new(File.read("#{Rails.root}/config/square.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
 
     
     config.mailer = YAML::load(ERB.new(File.read("#{Rails.root}/config/mailer.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys

@@ -1,17 +1,19 @@
 module Square
   class SyncService
 
-    def self.sync_to_ledger(item, type)
+    def self.sync_to_ledger(item, type, square_id)
       # item can be a Hash (from Webhook) or Object (from SDK)
       # Using data[key] works for both if you use .with_indifferent_access or Hash logic
       item = item.with_indifferent_access if item.is_a?(Hash)
+
+      Rails.logger.debug item.to_s
 
       # 1. Primary Lookup (Fastest)
       reg_id = item[:reference_id]
       reg = Event::Registration.find_by(id: reg_id) if reg_id.present?
 
       # 2. Extract context
-      transaction_time = item.created_at
+      transaction_time = item[:created_at]
       transaction_year = Date.parse(transaction_time.to_s).year
       email = (item[:buyer_email_address] || item[:customer_email])&.downcase&.strip
 
@@ -39,13 +41,14 @@ module Square
       raw_amount = item[:amount_money]&.amount || 0
       final_amount = (type == 'refund') ? -raw_amount : raw_amount
   
-      SquareTransaction.find_or_create_by!(square_id: item.id, transaction_type: type) do |t|
+      ::Square::Transaction.find_or_create_by!(square_id: item[:id], transaction_type: type) do |t|
+        t.square_id         = square_id
         t.registration      = reg
         t.user              = user
         t.email             = email
         t.amount_cents      = final_amount
-        t.status            = item.status
-        t.square_created_at = item.created_at
+        t.status            = item[:state]
+        t.square_created_at = item[:created_at]
       end
     end
   end

@@ -63,8 +63,8 @@ module RendezvousSquare
         location_id: Base.get_location_id,
         customer_id: params[:customer_id],
         line_items: create_line_items(params[:registration], params[:fee_period]),
-        ticket_name: "Event Registration" # Optional helper for Square dashboard,
-        reference_id: params[:registration].id  #registration ID
+        ticket_name: "Event Registration",                 # Optional helper for Square dashboard,
+        reference_id: params[:registration].id              #registration ID
       }
     end
 

@@ -5,6 +5,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.hosts.clear
+  config.hosts << /[a-z0-9-]+\.ngrok-free\.dev/
 
   # Code is not reloaded between requests.
   config.cache_classes = true
