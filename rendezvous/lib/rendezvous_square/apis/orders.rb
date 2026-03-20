@@ -3,19 +3,19 @@ module RendezvousSquare
     include Base
     extend self
 
-    def api
+    def self.api
       # Ensure Base.get_square_client returns the main client
       Base.get_square_client.orders
     end
 
-    def search(params)
+    def self.search(params)
       post_body = {
         state_filter: {
           status: ['COMPLETED']
         },
         date_time_filter: {
           created_at: {
-            start_at: '2024-01-01T00:00:00Z',
+            start_at: '2023-01-01T00:00:00Z',
             end_at: '2026-12-31T23:59:59Z'
           }
         },
