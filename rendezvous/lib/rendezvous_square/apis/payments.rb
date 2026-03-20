@@ -15,7 +15,8 @@ module RendezvousSquare
       params = { begin_time: START_TIME }
       loop do
         begin
-          payments = api.list(params) || []
+          result = api.list(params) || []
+          payments = result.payments
         rescue Square::Errors::ResponseError => e
           # This replaces the 'else' block. Errors are now caught as exceptions.
           # e.errors is an array of Square::Types::Error objects

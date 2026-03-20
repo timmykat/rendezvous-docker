@@ -1,72 +1,75 @@
-namespace :square do # Changed from :rake to avoid confusion
-  desc "Add Square payment data"
-  task init: :environment do
-    payments = RendezvousSquare::Payments.get_payments
-    
-    # Return early if API call failed/returned nil
-    if payments.nil?
-      puts "Error: Could not retrieve payments."
-      next 
+namespace :square do
+  desc "Sync Orders, Payments, and Refunds"
+  task sync: :environment do
+    # Helper to clean up Square data
+    parse_data = ->(item) {
+      {
+        square_id:        item.id,
+        email:            item.try(:buyer_email_address)&.downcase&.strip || item.try(:customer_email)&.downcase&.strip,
+        registration_id:  item.try(:reference_id), # Square often puts our Reg ID here
+        amount_cents:     item.amount_money&.amount,
+        currency:         item.amount_money&.currency || 'USD',
+        status:           item.status,
+        created_at:       item.created_at
+      }
+    }
+
+    # 1. SYNC ORDERS
+    RendezvousSquare::Orders.search.each do |ord|
+      sync_to_ledger(ord, 'order')
     end
 
-    payments.each do |p|
-      begin
-        data = fetch_data(p)
+    RendezvousSquare::Payments.all.each do |pmt|
+      sync_to_ledger(pmt, 'payment')
+    end
 
-        user = nil
-        if data[:email].present?
-          user = User.find_by(email: data[:email])
-          puts "User with email #{data[:email]} found" if user
-        end
+    RendezvousSquare::Refunds.all.each do |ref|
+      sync_to_ledger(ref, 'refund')
+    end
 
-        # Fallback to last name if no email match
-        if user.nil? && data[:last_name].present?
-          user_list = User.where(last_name: data[:last_name])
-          if user_list.size > 1
-            puts "Ambiguous: Multiple users with last name #{data[:last_name]}"
-          else
-            user = user_list.first
-          end
-        end
 
-        next unless user
+    def sync_to_ledger(item, type)
+      # 1. Primary Lookup (Fastest)
+      reg_id = item.try(:reference_id)
+      reg = Event::Registration.find_by(id: reg_id) if reg_id.present?
 
-        # Update User data
-        user.update(square_customer_id: data[:customer_id])
+      # 2. Extract context
+      transaction_time = item.created_at
+      transaction_year = Date.parse(transaction_time.to_s).year
+      email = (item.try(:buyer_email_address) || item.try(:customer_email))&.downcase&.strip
 
-        # Find registration for specific year
-        # Note: .where returns a collection, use .find_by or .first
-        reg = user.registrations.find_by(year: data[:year])
+      # 3. Validation & Fallback
+      # If we found a reg by ID, make sure it actually matches the transaction year
+      if reg && reg.year != transaction_year
+        puts "Warning: Reference ID #{reg_id} belongs to #{reg.year}, but transaction is #{transaction_year}. Falling back to email."
+        reg = nil 
+      end
+
+      # 4. Email-based Lookup (if ID lookup failed or was the wrong year)
+      if email.present?
+        user ||= User.find_by(email: email)
         
-        unless reg
-          puts "No registration found for #{user.email} in #{data[:year]}"
-          next
+        # Only look for a reg by email if we don't already have a valid one from Step 1
+        if reg.nil? && user
+          reg = user.registrations.find_by(year: transaction_year)
         end
+      end
 
-        # Use find_or_create to prevent duplicate records on re-runs
-        Square::Payment.find_or_create_by!(square_payment_id: data[:payment_id]) do |sp|
-          sp.registration = reg
-          sp.amount_cents = data[:amount_cents]
-          sp.currency     = data[:currency]
-        end
-
-      rescue => e
-        puts "Skipping payment #{p.id rescue 'unknown'}: #{e.message}"
+      # 5. Final Ownership Sync
+      user ||= reg&.user
+  
+      # Calculate amount: Refunds should be negative
+      raw_amount = item.try(:amount_money)&.amount || 0
+      final_amount = (type == 'refund') ? -raw_amount : raw_amount
+  
+      SquareTransaction.find_or_create_by!(square_id: item.id, transaction_type: type) do |t|
+        t.registration      = reg
+        t.user              = user
+        t.email             = email
+        t.amount_cents      = final_amount
+        t.status            = item.status
+        t.square_created_at = item.created_at
       end
     end
-  end
-
-  # Helper method (must be outside the task block or defined as a lambda)
-  def self.fetch_data(p)
-    {
-      payment_id: p.id,
-      customer_id: p.customer_id,
-      email: p.buyer_email_address,
-      # Dig safely in case billing_address is nil
-      last_name: p.billing_address&.last_name, 
-      year: Time.parse(p.created_at).year,
-      amount_cents: p.amount_money&.amount,
-      currency: p.amount_money&.currency
-    }
   end
 end

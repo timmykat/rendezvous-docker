@@ -51,8 +51,8 @@ module Event
     has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :registration_id, dependent: :destroy
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
+    has_many :square_orders, class_name: "Square::Order", dependent: :destroy
     has_many :square_transactions, dependent: :destroy
-    has_many :payments, dependent: :destroy
     
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
@@ -88,6 +88,11 @@ module Event
     serialize :events
 
     before_save :ensure_financials
+
+    def total_paid_cents
+      # Quick way to get the sum of all completed payments across all orders
+      square_orders.joins(:payments).where(square_payments: { status: 'COMPLETED' }).sum(:amount_cents)
+    end
     
     def validate_minimum_number_of_adults
       if number_of_adults < 1
@@ -147,7 +152,7 @@ module Event
     end
     
     def total_of_payments
-      (payments.where(status: 'COMPLETE').sum(:amount_cents) / 100.).to_d
+      (payments.where(status: 'COMPLETE').sum(:amount_cents) / 100.0).to_d
     end
 
     def total_of_refunded

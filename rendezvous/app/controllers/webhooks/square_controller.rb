@@ -29,64 +29,59 @@ module Webhooks
       RendezvousSquare.is_valid_webhook_event_signature(request.raw_post, signature, key, url)
     end
 
-    def handle_payment_update(payment_data)
-      # 1. Find or Create the local Square::Payment record
-      payment = Square::Payment.find_by(square_payment_id: payment_data["id"])
-      
-      if payment.nil?
-        # Use the reference_id you passed when creating the Order/Link
-        registration_id = payment_data["reference_id"]
-        return if registration_id.blank?
-
-        reg = Event::Registration.find_by(id: registration_id)
-        return unless reg
-
-        payment = Square::Payment.create!(
-          square_payment_id: payment_data["id"], 
-          registration: reg, 
-          status: payment_data["status"],
-          amount_cents: payment_data.dig("amount_money", "amount"),
-          currency: payment_data.dig("amount_money", "currency"),
-        )
-      else
-        payment.update(status: payment_data["status"])
-        reg = payment.registration
+    def handle_payment_update(data)
+      # Only track registration payments
+      registration_id = data["reference_id"]
+      return if registration_id.blank?
+      # Square payments usually have an order_id. 
+      # We should ensure the Square::Order exists first.
+      square_order = Square::Order.find_or_create_by!(square_order_id: data["order_id"]) do |o|
+        # If this is a new order record, we need to link it to the registration
+        # via the reference_id passed during the checkout creation
+        o.registration_id = data["reference_id"] 
+        o.status = "OPEN" # Default status until we get an order.updated webhook
+        o.total_amount_cents = data.dig("amount_money", "amount")
       end
-      
-      return unless reg
-
-      # 2. Lock and Update Registration
-      reg.with_lock do
-        # Summation is safer than += to handle potential duplicate webhooks
-        total_cents = reg.payments.where(status: "COMPLETED").sum(:amount_cents)
-        reg.update!(paid_amount: (total_cents / 100.0).to_d)
-      end
+    
+      payment = Square::Payment.find_or_initialize_by(square_payment_id: data["id"])
+      payment.update!(
+        square_order: square_order,
+        status: data["status"],
+        amount_cents: data.dig("amount_money", "amount"),
+        currency: data.dig("amount_money", "currency")
+      )
+    
+      update_registration_totals(square_order.registration)
     end
-
-    def handle_refund_update(refund_data)
-      refund = Square::Refund.find_by(square_refund_id: refund_data["id"])
-      
-      if refund.nil?
-        payment = Square::Payment.find_by(square_payment_id: refund_data["payment_id"])
-        return unless payment
+    
+    def handle_refund_update(data)
+      # Find the local payment this refund belongs to
+      payment = Square::Payment.find_by(square_payment_id: data["payment_id"])
+      return unless payment
+    
+      refund = Square::Refund.find_or_initialize_by(square_refund_id: data["id"])
+      refund.update!(
+        square_payment: payment,
+        status: data["status"],
+        amount_cents: data.dig("amount_money", "amount"),
+        reason: data["reason"]
+      )
+    
+      update_registration_totals(payment.square_order.registration)
+    end
+    
+    def update_registration_totals(registration)
+      return unless registration
+    
+      registration.with_lock do
+        # Pull from your new Square tables to update the main Registration record
+        # We only count 'COMPLETED' payments and 'COMPLETED' refunds
+        net_square_cents = registration.square_net_total_cents 
         
-        refund = Square::Refund.create!(
-          payment: payment, 
-          square_refund_id: refund_data["id"], 
-          status: refund_data["status"],
-          amount_cents: refund_data.dig("amount_money", "amount")
+        # Update your legacy columns (converting cents to dollars if that's your DB format)
+        registration.update!(
+          paid_amount: (net_square_cents / 100.0).to_d
         )
-      else
-        refund.update(status: refund_data["status"])
-      end
-
-      reg = refund.registration
-      return unless reg
-
-      # 3. Lock and Update Registration Refunds
-      reg.with_lock do
-        # Use your model helper for the math
-        reg.update!(refunded: reg.total_of_refunded)
       end
     end
   end

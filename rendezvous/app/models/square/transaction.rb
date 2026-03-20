@@ -24,8 +24,10 @@
 #  fk_rails_...  (registration_id => registrations.id)
 #  fk_rails_...  (user_id => users.id)
 #
-class SquareTransaction < ApplicationRecord
-  belongs_to :registration, class_name: 'Event::Registration', optional: true
-  belongs_to :donation, optional: true
-  belongs_to :user
+module Square
+  class Transaction < ApplicationRecord
+    belongs_to :registration, class_name: 'Event::Registration', optional: true
+    belongs_to :donation, optional: true
+    belongs_to :user
+  end
 end
