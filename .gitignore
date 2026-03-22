@@ -5,10 +5,14 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 # Ignore local dev site
+.idea
 .ephemeral
 .sass-cache
 .data
 .code-workspace
+
+# mysql intialization
+*.sql
 
 # Ignore .env files
 .env*

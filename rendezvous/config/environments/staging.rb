@@ -5,7 +5,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.hosts.clear
-  config.hosts << /[a-z0-9-]+\.ngrok-free\.dev/
+  # config.hosts << /[a-z0-9-]+\.ngrok-free\.dev/
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -74,8 +74,8 @@ Rails.application.configure do
   mail_config[:smtp_settings][:openssl_verify_mode] = OpenSSL::SSL::VERIFY_NONE
 
   config.action_mailer.delivery_method = mail_config[:delivery_method].to_sym
-  config.action_mailer.default_url_options = { 
-    protocol: 'https', 
+  config.action_mailer.default_url_options = {
+    protocol: 'https',
     host: 'rendezvous.local.wordsareimages.com'
   }
   config.action_mailer.smtp_settings = mail_config[:smtp_settings].clone
