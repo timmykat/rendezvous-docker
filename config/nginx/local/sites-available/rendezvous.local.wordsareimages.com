@@ -48,7 +48,7 @@ server {
   }
 
   location / {
-    proxy_pass http://172.17.0.1:3000;
+    proxy_pass http://rails_app:3000;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
@@ -73,4 +73,3 @@ server {
 
   ssl_protocols TLSv1.3 TLSv1.2 TLSv1.1;
 }
-
