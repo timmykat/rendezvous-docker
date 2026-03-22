@@ -76,8 +76,7 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.8.8)
       public_suffix (>= 2.0.2, < 8.0)
-    airbrussh (1.6.0)
-      sshkit (>= 1.6.1, != 1.7.0)
+    amazing_print (2.0.0)
     annotaterb (4.22.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -105,18 +104,6 @@ GEM
     builder (3.3.0)
     byebug (13.0.0)
       reline (>= 0.6.0)
-    capistrano (3.18.1)
-      airbrussh (>= 1.0.0)
-      i18n
-      rake (>= 10.0.0)
-      sshkit (>= 1.9.0)
-    capistrano-bundler (2.2.0)
-      capistrano (~> 3.1)
-    capistrano-rails (1.7.0)
-      capistrano (~> 3.1)
-      capistrano-bundler (>= 1.1, < 3)
-    capistrano-yarn (2.0.2)
-      capistrano (~> 3.0)
     carrierwave (3.1.2)
       activemodel (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -277,13 +264,8 @@ GEM
       net-protocol
     net-protocol (0.2.2)
       timeout
-    net-scp (4.1.0)
-      net-ssh (>= 2.6.5, < 8.0.0)
-    net-sftp (4.0.0)
-      net-ssh (>= 5.0.0, < 8.0.0)
     net-smtp (0.5.1)
       net-protocol
-    net-ssh (7.3.0)
     newrelic_rpm (10.2.0)
       logger
     nio4r (2.7.5)
@@ -302,7 +284,6 @@ GEM
     nokogiri (1.19.1-x86_64-linux-musl)
       racc (~> 1.4)
     orm_adapter (0.5.0)
-    ostruct (0.6.3)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -315,6 +296,11 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
       reline (>= 0.6.0)
+    pry-byebug (3.12.0)
+      byebug (~> 13.0)
+      pry (>= 0.13, < 0.17)
+    pry-rails (0.3.11)
+      pry (>= 0.13.0)
     psych (5.3.1)
       date
       stringio
@@ -354,6 +340,10 @@ GEM
     rails-html-sanitizer (1.7.0)
       loofah (~> 2.25)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
+    rails_semantic_logger (4.19.0)
+      rack
+      railties (>= 5.1)
+      semantic_logger (~> 4.16)
     rails_sortable (1.6.0)
     railties (7.2.3)
       actionpack (= 7.2.3)
@@ -402,6 +392,8 @@ GEM
       ffi (~> 1.12)
       logger
     securerandom (0.4.1)
+    semantic_logger (4.17.0)
+      concurrent-ruby (~> 1.0)
     simple_form (5.4.1)
       actionpack (>= 7.0)
       activemodel (>= 7.0)
@@ -409,13 +401,6 @@ GEM
       apimatic_core (~> 0.3.11)
       apimatic_core_interfaces (~> 0.2.1)
       apimatic_faraday_client_adapter (~> 0.1.4)
-    sshkit (1.25.0)
-      base64
-      logger
-      net-scp (>= 1.1.2)
-      net-sftp (>= 2.1.2)
-      net-ssh (>= 2.8.0)
-      ostruct
     ssrf_filter (1.3.0)
     stringio (3.2.0)
     temple (0.10.4)
@@ -454,14 +439,10 @@ DEPENDENCIES
   actionpack (= 7.2.3)
   actiontext (= 7.2.3)
   activestorage (= 7.2.3)
+  amazing_print
   annotaterb
   bcrypt (~> 3.1)
   bcrypt_pbkdf (>= 1.0, < 2.0)
-  byebug
-  capistrano (= 3.18.1)
-  capistrano-bundler
-  capistrano-rails
-  capistrano-yarn
   carrierwave
   cocoon
   cssbundling-rails
@@ -485,9 +466,12 @@ DEPENDENCIES
   newrelic_rpm
   propshaft
   pry
+  pry-byebug
+  pry-rails
   puma (= 6.4.2)
   racksh
   rails (= 7.2.3)
+  rails_semantic_logger
   rails_sortable
   rake
   redcarpet

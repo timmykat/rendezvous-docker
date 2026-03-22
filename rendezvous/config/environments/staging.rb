@@ -5,7 +5,13 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.hosts.clear
-  # config.hosts << /[a-z0-9-]+\.ngrok-free\.dev/
+  # config.hosts << "rendezvous.local.wordsareimages.com"
+  # config.hosts << /.*\.ngrok.*\.dev/
+  # config.hosts << /.*\.ngrok.*\.app/
+  # config.hosts << "localhost"
+  # config.hosts << "127.0.0.1"
+  # config.hosts << /rails_app/
+  # config.hosts << /rendezvous_app/
 
   # Code is not reloaded between requests.
   config.cache_classes = true
