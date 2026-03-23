@@ -4,7 +4,7 @@ module Square
     def self.sync_to_ledger(data, type)
       # item can be a Hash (from Webhook) or Object (from SDK)
       # Using data[key] works for both if you use .with_indifferent_access or Hash logic
-      item = Util::NormalizedItem.from(data, type: type)
+      item = RendezvousSquare::NormalizedItem.from(data, type: type)
 
       square_id = item.id
 
@@ -42,6 +42,7 @@ module Square
       raw_amount = item.amount_cents || 0
       final_amount = (type == 'refund') ? -raw_amount : raw_amount
 
+      puts "#{type.titleize} #{square_id}: #{item.state}"
       ::Square::Transaction.find_or_create_by!(square_id: square_id, transaction_type: type) do |t|
         t.registration = reg
         t.user = user

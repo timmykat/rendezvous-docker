@@ -341,7 +341,7 @@ module Event
                        })
 
       # Set up square env
-      square_env = Util::Apis::Base.get_environment
+      square_env = RendezvousSquare::Apis::Base.get_environment
       @square_app_id = ENV.fetch "#{square_env}_SQUARE_APP_ID"
       @square_sdk_url = ENV.fetch "#{square_env}_SQUARE_SDK_URL"
       @square_location_id = ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
@@ -376,13 +376,13 @@ module Event
       end
 
       user = @event_registration.user
-      customer_id = ::Util::Apis::Base.with_error_handling do
-        ::Util::Apis::Customer.find_customer(user.email)
+      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
       end
 
       if customer_id.nil?
-        customer_id = ::Util::Apis::Base.with_error_handling do
-          ::Util::Apis::Customer.create_customer(user)
+        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+          ::RendezvousSquare::Apis::Customer.create_customer(user)
         end
       else
         Rails.logger.info("Square customer found: " + customer_id)
@@ -390,13 +390,13 @@ module Event
 
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
 
-      square_payment_link = ::Util::Apis::Base.with_error_handling do
-        Util::Apis::Checkout.create_square_payment_link({
-                                                          registration: @event_registration,
-                                                          customer_id: customer_id,
-                                                          redirect_url: redirect_url,
-                                                          fee_period: fee_period
-                                                        })
+      square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
+        RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                      registration: @event_registration,
+                                                                      customer_id: customer_id,
+                                                                      redirect_url: redirect_url,
+                                                                      fee_period: fee_period
+                                                                    })
       end
 
       unless square_payment_link.nil?
