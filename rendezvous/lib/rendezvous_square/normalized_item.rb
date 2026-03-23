@@ -7,7 +7,7 @@ module RendezvousSquare
       :created_at,
       :amount_cents,
       :currency,
-      :status,
+      :state,
       :transaction_type,
       :reference_id,
       :email
@@ -17,7 +17,7 @@ module RendezvousSquare
       created_at:,
       amount_cents: 0,
       currency: "USD",
-      status: nil,
+      state: nil,
       transaction_type:,
       reference_id: nil,
       email: nil
@@ -26,7 +26,7 @@ module RendezvousSquare
       @created_at = created_at
       @amount_cents = amount_cents
       @currency = currency
-      @status = status
+      @state = state
       @transaction_type = transaction_type
       @reference_id = reference_id
       @email = normalize_email(email)
@@ -43,9 +43,9 @@ module RendezvousSquare
     def self.from_object(item, type:)
       amount_cents, currency =
         if type.to_s == "order"
-          extract_order_amount(item)
+          extract_amount_from_order_object(item)
         else
-          extract_amount_money(item)
+          extract_amount_from_other_object(item)
         end
 
       new(
@@ -53,21 +53,14 @@ module RendezvousSquare
         created_at: safe(item, :created_at),
         amount_cents: amount_cents,
         currency: currency,
-        status: safe(item, :status),
+        state: safe(item, :state),
         transaction_type: type.to_s,
         reference_id: safe(item, :reference_id),
         email: extract_email_object(item)
       )
     end
 
-    def self.extract_amount_money(item)
-      money = safe(item, :amount_money)
-      return [nil, "USD"] unless money
-
-      [money.amount, money.currency || "USD"]
-    end
-
-    def self.extract_order_amount(order)
+    def self.extract_amount_from_order_object(order)
       # 1. Preferred: total_money
       total = safe(order, :total_money)
       if total
@@ -95,17 +88,64 @@ module RendezvousSquare
       [sum, currency || "USD"]
     end
 
+    def self.extract_amount_from_order_hash(order)
+      # 1. Preferred: total_money
+      total = order[:total_money]
+      if total
+        return [total[:amount], total[:currency] || "USD"]
+      end
+
+      # 2. Fallback: net_amounts.total_money
+      net = order[:net_amounts]
+      if net[:total_money].present?
+        tm = net[:total_money]
+        return [tm[:amount], tm[:currency] || "USD"] if tm
+      end
+
+      # 3. Last resort: sum line items
+      line_items = order[:line_items] || []
+      sum = line_items.sum do |li|
+        money = li[:total_money]
+        money[:amount].to_i if money[:amount].present?
+      end
+
+      currency =
+        line_items.first &&
+        line_items.first.dig[:currency]
+
+      [sum, currency || "USD"]
+    end
+
+    def self.extract_amount_from_other_object(item)
+      money = safe(item, :amount_money)
+      return [nil, "USD"] unless money
+
+      [money.amount, money.currency || "USD"]
+    end
+
+    def self.extract_amount_from_other_hash(item)
+      money = item[:amount_money]
+      return [nil, "USD"] unless money
+
+      [money[:amount], money[:currency] || "USD"]
+    end
+
     def self.from_hash(item, type:)
       data = item.with_indifferent_access
 
-      amount_money = data[:amount_money] || {}
+      amount_cents, currency =
+        if type.to_s == "order"
+          extract_amount_from_order_hash(item)
+        else
+          extract_amount_from_other_hash(item)
+        end
 
       new(
         id: data[:id],
         created_at: data[:created_at],
-        amount_cents: amount_money[:amount],
-        currency: amount_money[:currency],
-        status: data[:status],
+        amount_cents: amount,
+        currency: currency,
+        state: data[:state],
         transaction_type: type.to_s,
         reference_id: data[:reference_id],
         email: extract_email_hash(data)

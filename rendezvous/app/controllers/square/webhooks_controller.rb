@@ -11,18 +11,18 @@ module Square
         data_obj = full_payload.dig("data", "object")
 
         payload = case event_type
-          when "order.created"   then data_obj["order_created"]
-          when "order.updated"   then data_obj["order_updated"]
-          when "payment.updated" then data_obj["payment"]
-          when "refund.created"  then data_obj["refund"]
-          else data_obj # Fallback
-        end
+                  when "order.created" then data_obj["order_created"]
+                  when "order.updated" then data_obj["order_updated"]
+                  when "payment.updated" then data_obj["payment"]
+                  when "refund.created" then data_obj["refund"]
+                  else data_obj # Fallback
+                  end
 
         ledger_type = case event_type
-          when /order/   then 'order'
-          when /payment/ then 'payment'
-          when /refund/  then 'refund'
-        end
+                      when /order/ then 'order'
+                      when /payment/ then 'payment'
+                      when /refund/ then 'refund'
+                      end
 
         if payload and ledger_type
           id_label = "#{ledger_type}_id"
@@ -40,15 +40,15 @@ module Square
         render json: { error: 'Invalid signature' }, status: :unauthorized
       end
     end
-  
+
     private
 
     def is_from_square?
       signature = request.headers['x-square-hmacsha256-signature']
       key = Rails.configuration.square.dig(:signature_key)
       url = Rails.configuration.square.dig(:notification_url)
-      
-      RendezvousSquare.is_valid_webhook_event_signature(request.raw_post, signature, key, url)
+
+      RendezvousSquare::Util.is_valid_webhook_event_signature(request.raw_post, signature, key, url)
     end
   end
 end

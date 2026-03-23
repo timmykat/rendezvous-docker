@@ -27,7 +27,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Vehicle < ApplicationRecord
-  extend VehicleTaxonomy
+  extend Vehicles::VehicleTaxonomy
   include StripWhitespace
   include Votable
 
@@ -45,14 +45,14 @@ class Vehicle < ApplicationRecord
   after_save :update_reg_join_table
 
   scope :for_sale, -> { where(for_sale: true) }
-  
-  validates :year, inclusion: { in: (1919..2025).map{ |int| int.to_s }, message: "%{value} is not a valid year" }
+
+  validates :year, inclusion: { in: (1919..2025).map { |int| int.to_s }, message: "%{value} is not a valid year" }
   validates :marque, presence: true
 
   def qr_code_id
     qr_code&.id
   end
-  
+
   def qr_code_id=(id)
     @qr_code_id = id
   end
@@ -61,11 +61,11 @@ class Vehicle < ApplicationRecord
     qr_code = QrCode.where("UPPER(code) = ?", code.upcase).first
     Vehicle.where(qr_code: qr_code).first
   end
-  
+
   def full_spec
     "#{year} #{marque} #{model}  <br /><em>Judging category: #{judging_category}</em>".html_safe
   end
-  
+
   def year_marque_model
     "#{year} #{marque} #{model}"
   end
@@ -73,9 +73,9 @@ class Vehicle < ApplicationRecord
   def year_marque_model_sale
     "#{year_marque_model}#{for_sale ? ' ---- For sale' : ""}"
   end
-  
+
   def judging_category
-    VehicleTaxonomy.get_category(self)
+    Vehicles::VehicleTaxonomy.get_category(self)
   end
 
   def voting_info_format
@@ -105,19 +105,19 @@ class Vehicle < ApplicationRecord
 
     # Subquery: vote counts for current year's ballots
     vote_counts = Voting::BallotSelection
-      .joins(:ballot)
-      .where(
-        votable_type: 'Vehicle',
-        ballots: { year: current_year }
-      )
-      .group(:votable_id)
-      .select(:votable_id, 'COUNT(*) AS vote_count')
+                    .joins(:ballot)
+                    .where(
+                      votable_type: 'Vehicle',
+                      ballots: { year: current_year }
+                    )
+                    .group(:votable_id)
+                    .select(:votable_id, 'COUNT(*) AS vote_count')
 
     # Join Vehicles with vote counts
     vehicles_with_votes = Vehicle
-      .joins("JOIN (#{vote_counts.to_sql}) AS votes ON votes.votable_id = vehicles.id")
-      .select('vehicles.*, votes.vote_count')
-      .index_by(&:id)
+                            .joins("JOIN (#{vote_counts.to_sql}) AS votes ON votes.votable_id = vehicles.id")
+                            .select('vehicles.*, votes.vote_count')
+                            .index_by(&:id)
 
     # Group by judging category
     grouped = vehicles_with_votes.values.group_by(&:judging_category)
@@ -131,7 +131,7 @@ class Vehicle < ApplicationRecord
     end
   end
 
-  private 
+  private
 
   def update_reg_join_table
     # 2. If there's no registration, we can't link anything.
@@ -145,6 +145,6 @@ class Vehicle < ApplicationRecord
     else
       # remove the link if they unchecked the box
       registrations_vehicles.where(registration_id: current_reg.id).destroy_all
-    end   
+    end
   end
 end

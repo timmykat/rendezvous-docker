@@ -4,7 +4,7 @@ module Square
     def self.sync_to_ledger(data, type)
       # item can be a Hash (from Webhook) or Object (from SDK)
       # Using data[key] works for both if you use .with_indifferent_access or Hash logic
-      item = RendezvousSquare::NormalizedItem.from(data, type: type)
+      item = Util::NormalizedItem.from(data, type: type)
 
       square_id = item.id
 
@@ -39,8 +39,7 @@ module Square
       end
 
       # Calculate amount: Refunds should be negative
-      raw_amount = item.amount_money&.amount || 0
-      currency = item.amount_money&.currency
+      raw_amount = item.amount_cents || 0
       final_amount = (type == 'refund') ? -raw_amount : raw_amount
 
       ::Square::Transaction.find_or_create_by!(square_id: square_id, transaction_type: type) do |t|
@@ -48,7 +47,7 @@ module Square
         t.user = user
         t.email = email
         t.amount_cents = final_amount
-        t.currency = currency
+        t.currency = item.currency
         t.status = item.state
         t.square_created_at = item.created_at
       end

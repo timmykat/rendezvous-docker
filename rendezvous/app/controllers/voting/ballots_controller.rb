@@ -1,6 +1,6 @@
 module Voting
   class BallotsController < ApplicationController
-    
+
     layout 'ballot_layout', only: [:ballot, :hand_ballot]
 
     before_action :require_admin, only: [:hand_ballot, :hand_count]
@@ -18,7 +18,7 @@ module Voting
     def hand_ballot
       @ballot = Ballot.new
       @codes = []
-      @number_of_categories = VehicleTaxonomy::VEHICLES[:marques].values.sum { |marque_data| marque_data[:categories].keys.count }
+      @number_of_categories = Vehicles::VehicleTaxonomy::VEHICLES[:marques].values.sum { |marque_data| marque_data[:categories].keys.count }
     end
 
     def hand_count
@@ -48,8 +48,8 @@ module Voting
       @code = params[:code]
       if @code.present?
         @vehicle = Vehicle.find_by_code(@code)
-      end       
-    
+      end
+
       @selections = @ballot.categorized_selections
 
       if @vehicle.present?
@@ -72,7 +72,7 @@ module Voting
       vehicle.vote_by(@ballot)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2'})
+      redirect_to get_voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
     end
 
     def delete_selection
@@ -81,10 +81,11 @@ module Voting
       @ballot.selections.delete(vehicle_id)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2'})
+      redirect_to get_voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
     end
 
     private
+
     def already_selected?(vehicle)
       @ballot.categorized_selections.values.any? { |vehicles| vehicles.include?(vehicle) }
     end
