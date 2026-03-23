@@ -1,20 +1,31 @@
 # == Schema Information
 #
-# Table name: transactions
+# Table name: square_transactions
 #
-#  id                 :integer          not null, primary key
-#  amount_cents       :integer
-#  transaction_type   :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
-#  cc_transaction_id  :string(255)
-#  registration_id    :integer
+#  id                :bigint           not null, primary key
+#  amount_cents      :integer          default(0)
+#  currency          :string(255)      default("USD")
+#  email             :string(255)
+#  square_created_at :datetime
+#  status            :string(255)
+#  transaction_type  :string(255)      not null
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  registration_id   :integer
+#  square_id         :string(255)      not null
+#  user_id           :integer
 #
 # Indexes
 #
-#  index_transactions_on_cc_transaction_id   (cc_transaction_id)
-#  index_transactions_on_transaction_method  (transaction_method)
-#  index_transactions_on_transaction_type    (transaction_type)
+#  index_square_transactions_on_email            (email)
+#  index_square_transactions_on_registration_id  (registration_id)
+#  index_square_transactions_on_square_id        (square_id) UNIQUE
+#  index_square_transactions_on_user_id          (user_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (registration_id => registrations.id)
+#  fk_rails_...  (user_id => users.id)
 #
 module Square
   class Transaction < ApplicationRecord

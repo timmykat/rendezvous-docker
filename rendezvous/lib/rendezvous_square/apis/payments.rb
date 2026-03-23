@@ -1,45 +1,20 @@
 module RendezvousSquare
-  module Payments
-    include Base
+  module Apis
+    module Payments
+      include Apis::Base
 
-    # Ensure this is ISO8601 for the API
-    START_TIME = Time.utc(2023, 1, 1).iso8601
-
-    def self.api
-      Base.get_square_client.payments
-    end
-
-    def self.all
-      all_payments = []
-      params = { begin_time: START_TIME }
-      
-      loop do
-        begin
-          result = api.list_payments(params) # Correct method name
-          
-          if result.success?
-            batch = result.data.payments || []
-            all_payments.concat(batch)
-
-            if result.cursor
-              params[:cursor] = result.cursor
-            else
-              break
-            end
-          else
-            # Handle API-level errors (e.g., 401, 429)
-            result.errors.each do |error|
-              Rails.logger.error "Square API Error: #{error.category} - #{error.code}: #{error.detail}"
-            end
-            return nil
-          end
-          
-        rescue StandardError => e
-          Rails.logger.error "Unexpected Error calling Square: #{e.message}"
-          return nil
-        end
+      def self.api
+        Apis::Base.get_square_client.payments
       end
-      all_payments
+
+      def self.all
+        params = {
+          location_ids: [Apis::Base.get_location_id],
+          begin_time: Apis::Base::ORIGIN_DATE_ISO
+        }
+        return Apis::Base.get_all(api, 'list', **params)
+      end
     end
   end
 end
+
