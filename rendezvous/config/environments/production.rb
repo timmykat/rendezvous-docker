@@ -14,7 +14,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = false
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
@@ -59,7 +59,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # config.cache_store = ???
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -70,8 +70,8 @@ Rails.application.configure do
   mail_config = Rails.configuration.mailer
 
   config.action_mailer.delivery_method = mail_config[:delivery_method].to_sym
-  config.action_mailer.default_url_options = { 
-    protocol: 'https', 
+  config.action_mailer.default_url_options = {
+    protocol: 'https',
     host: 'citroenrendezvous.org'
   }
   config.action_mailer.smtp_settings = mail_config[:smtp_settings].clone

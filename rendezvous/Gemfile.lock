@@ -132,7 +132,7 @@ GEM
     cocoon (1.2.15)
     coderay (1.1.3)
     concurrent-ruby (1.3.6)
-    connection_pool (3.0.2)
+    connection_pool (2.4.1)
     crass (1.0.6)
     cssbundling-rails (1.4.3)
       railties (>= 6.0.0)
@@ -145,13 +145,6 @@ GEM
       database_cleaner-core (~> 2.0)
     database_cleaner-core (2.0.1)
     date (3.5.1)
-    delayed_job (4.2.0)
-      activesupport (>= 3.0, < 9.0)
-      benchmark
-      logger
-    delayed_job_active_record (4.1.11)
-      activerecord (>= 3.0, < 9.0)
-      delayed_job (>= 3.0, < 5)
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -371,6 +364,10 @@ GEM
       psych (>= 4.0.0)
       tsort
     redcarpet (3.6.1)
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
+    redis-client (0.28.0)
+      connection_pool
     reline (0.6.3)
       io-console (~> 0.5)
     responders (3.2.0)
@@ -402,6 +399,11 @@ GEM
       ffi (~> 1.12)
       logger
     securerandom (0.4.1)
+    sidekiq (7.2.3)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.19.0)
     simple_form (5.4.1)
       actionpack (>= 7.0)
       activemodel (>= 7.0)
@@ -464,11 +466,11 @@ DEPENDENCIES
   capistrano-yarn
   carrierwave
   cocoon
+  connection_pool (~> 2.4.1)
   cssbundling-rails
   csv
   daemons
   database_cleaner
-  delayed_job_active_record
   devise (~> 4.9)
   dkim
   dotenv-rails
@@ -491,9 +493,11 @@ DEPENDENCIES
   rails_sortable
   rake
   redcarpet
+  redis (= 5.4.1)
   role_model
   rqrcode
   rspec-rails
+  sidekiq (= 7.2.3)
   simple_form (~> 5)
   square.rb
   terser (~> 1.1)
