@@ -1,0 +1,124 @@
+x-app-build: &app-build
+  context: ./rendezvous
+  dockerfile: ../config/docker/Dockerfile
+
+x-app-env: &app-env
+  REDIS_URL: redis://redis:6379/0
+  APP_DOMAIN: ${APP_DOMAIN}
+  RAILS_ENV: ${RAILS_ENV}
+  RACK_ENV: ${RACK_ENV}
+  RAILS_DEVELOPMENT_HOSTS: ${RAILS_DEVELOPMENT_HOSTS}
+  SECRET_KEY_BASE: ${RAILS_SECRET_KEY_BASE}
+  RECAPTCHA_PUBLIC_KEY: ${RECAPTCHA_PUBLIC_KEY}
+  RECAPTCHA_PRIVATE_KEY: ${RECAPTCHA_PRIVATE_KEY}
+  MAILCHIMP_API_KEY: ${MAILCHIMP_API_KEY}
+  MYSQL_DATABASE: ${MYSQL_DATABASE}
+  MYSQL_USER: ${MYSQL_USER}
+  MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  ## Square ##
+  # Sandbox info
+  SANDBOX_SQUARE_LOCATION_ID: ${SANDBOX_SQUARE_LOCATION_ID}
+  SANDBOX_SQUARE_APP_ID: ${SANDBOX_SQUARE_APP_ID}
+  SANDBOX_SQUARE_ACCESS_TOKEN: ${SANDBOX_SQUARE_ACCESS_TOKEN}
+  SANDBOX_SQUARE_SDK_URL: ${SANDBOX_SQUARE_SDK_URL}
+
+  # Production info
+  PROD_SQUARE_LOCATION_ID: ${PROD_SQUARE_LOCATION_ID}
+  PROD_SQUARE_APP_ID: ${PROD_SQUARE_APP_ID}
+  PROD_SQUARE_ACCESS_TOKEN: ${PROD_SQUARE_ACCESS_TOKEN}
+  PROD_SQUARE_SDK_URL: ${PROD_SQUARE_SDK_URL}
+
+  # Mailer info
+  SMTP_PASSWORD: ${SMTP_PASSWORD}
+  SMTP_DOMAIN: ${SMTP_DOMAIN}
+  SMTP_PORT: ${SMTP_PORT}
+  SMTP_USER: ${SMTP_USER}
+  API_KEY: ${BREVO_API_KEY}
+
+  SIDEKIQ_LOG_LEVEL: debug
+
+  # Mail addresses
+  SITE_ADMIN_SENDING_ADDRESS: ${SITE_ADMIN_SENDING_ADDRESS}
+  INFO_SENDING_ADDRESS: ${INFO_SENDING_ADDRESS}
+
+  rails_app:
+    build: *app-build
+    image: rails_image
+
+    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+    # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+
+    environment: *app-env
+
+    networks:
+      - rendezvous
+
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_started
+
+    volumes:
+      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
+
+  sidekiq:
+    build: *app-build
+    image: rails_image
+
+    depends_on:
+      redis:
+        condition: service_healthy
+
+    environment: *app-env
+
+
+    restart: unless-stopped
+
+    networks:
+      - rendezvous
+
+    command: bundle exec sidekiq -C config/sidekiq.yml
+
+  db:
+    image: mysql:8.0.32
+    platform: linux/amd64
+    restart: unless-stopped
+
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+    networks:
+      - rendezvous
+
+    volumes:
+      - ./init_data/mysql:/docker-entrypoint-initdb.d
+      - ./.ephemeral/mysqld/db_data:/var/lib/mysql
+      - ./.ephemeral/tmp/mysqld:/var/run/mysqld
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    command: [ "redis-server", "--appendonly", "yes" ]
+
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+    networks:
+      - rendezvous
+
+volumes:
+  redis_data:
+
+networks:
+  rendezvous:
+    driver: bridge
