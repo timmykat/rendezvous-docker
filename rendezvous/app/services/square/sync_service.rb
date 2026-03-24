@@ -6,6 +6,10 @@ module Square
       # Using data[key] works for both if you use .with_indifferent_access or Hash logic
       item = RendezvousSquare::NormalizedItem.from(data, type: type)
 
+      unless klass::STATUSES.include?(item.state)
+        return
+      end
+
       square_id = item.id
 
       # 1. Primary Lookup (Fastest)

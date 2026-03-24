@@ -3,6 +3,8 @@ module RendezvousSquare
     module Payments
       include Apis::Base
 
+      STATUSES = %w(APPROVED PENDING COMPLETED FAILED CANCELED)
+
       def self.api
         Apis::Base.get_square_client.payments
       end

@@ -3,6 +3,8 @@ module RendezvousSquare
     module Refunds
       include Apis::Base
 
+      STATUSES = %w(PENDING COMPLETED FAILED REJECTED)
+
       def self.api
         # Note: Added 'self' if you want to call this as a module method
         Apis::Base.get_square_client.refunds

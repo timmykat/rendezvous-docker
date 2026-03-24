@@ -3,6 +3,8 @@ module RendezvousSquare
     module Orders
       include Apis::Base
 
+      STATUSES = %w[OPEN COMPLETED CANCELED]
+
       def self.api
         # Ensure Apis::Base.get_square_client returns the main client
         Apis::Base.get_square_client.orders
