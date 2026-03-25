@@ -1,9 +1,14 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   root 'main_pages#index'
 
   # health check
   get "/up", to: "rails/health#show"
 
+  # sidekiq
+  mount Sidekiq::Web => "/sidekiq"
+  
   # -- Users
   devise_for :users,
              controllers: {
@@ -156,8 +161,8 @@ Rails.application.routes.draw do
     get '/ajax/update_paid_method/:id', to: 'registrations#update_paid_method'
   end
 
-  get '/ajax/toggle/role/:id',               to: 'users#toggle_role',      as: :ajax_toggle_role
-  get '/ajax/toggle/whitelist/:id',          to: 'users#toggle_whitelist', as: :ajax_toggle_whitelist
+  get '/ajax/toggle/role/:id', to: 'users#toggle_role', as: :ajax_toggle_role
+  get '/ajax/toggle/whitelist/:id', to: 'users#toggle_whitelist', as: :ajax_toggle_whitelist
   namespace :square do
     post 'webhooks/receive', to: 'webhooks#receive'
   end
