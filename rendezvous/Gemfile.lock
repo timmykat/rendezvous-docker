@@ -391,7 +391,7 @@ GEM
     securerandom (0.4.1)
     semantic_logger (4.17.0)
       concurrent-ruby (~> 1.0)
-    sidekiq (7.2.3)
+    sidekiq (7.2.4)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
@@ -481,7 +481,7 @@ DEPENDENCIES
   role_model
   rqrcode
   rspec-rails
-  sidekiq (= 7.2.3)
+  sidekiq (= 7.2.4)
   simple_form (~> 5)
   square.rb
   terser (~> 1.1)
@@ -637,7 +637,7 @@ CHECKSUMS
   ruby-vips (2.3.0) sha256=e685ec02c13969912debbd98019e50492e12989282da5f37d05f5471442f5374
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   semantic_logger (4.17.0) sha256=c54b60d8596abe2e22bd4f20648d4f6c46e4287fba357779c7932335c8d130e9
-  sidekiq (7.2.3) sha256=b745278728805ff7b718d73abec3ace76c225acee3ea04928ec0856fe30a85db
+  sidekiq (7.2.4) sha256=810e02f486ce5e102dbe6b71a19b4bf839791e11b74942ec38f5e1a6d44a0778
   simple_form (5.4.1) sha256=58c3d229034c7e5545035c3271b6f030ef730c340b9d7d8eb730e0a385b20808
   square.rb (45.0.2.20260122) sha256=914ae9e378ab1cee53e186f5721dfdbd96c59373430afc1fb10fe1ee67247354
   ssrf_filter (1.3.0) sha256=66882d7de7d09c019098d6d7372412950ae184ebbc7c51478002058307aba6f2
