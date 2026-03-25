@@ -36,7 +36,7 @@ module Rendezvous
     # config.i18n.default_locale = :de
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
-    #NOTVALID     config.active_record.raise_in_transactional_callbacks = true
+    # NOTVALID     config.active_record.raise_in_transactional_callbacks = true
 
     # Is this a docker environment (as opposed to EC2)
 
@@ -52,21 +52,18 @@ module Rendezvous
     config.active_storage.service = :local
 
     config.assets.paths << Rails.root.join("app", "assets", "images")
-    
-    config.autoload_paths += %W(#{config.root}/lib)
-    config.autoload_paths += %W(#{config.root}/lib/rendezvous_square)
-    config.autoload_paths += %W(#{config.root}/lib/vehicles)
 
+    config.autoload_paths += %W(#{config.root}/lib)
     config.eager_load_paths += %W(#{config.root}/lib)
-   
+
     config.commerce = YAML::load(ERB.new(File.read("#{Rails.root}/config/commerce.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.geodata = YAML::load(ERB.new(File.read("#{Rails.root}/config/geodata.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.people = YAML::load(ERB.new(File.read("#{Rails.root}/config/people.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.pricing = YAML::load(ERB.new(File.read("#{Rails.root}/config/pricing.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.registration = YAML::load(ERB.new(File.read("#{Rails.root}/config/registration.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.site = YAML::load(ERB.new(File.read("#{Rails.root}/config/site.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
+    config.square = YAML::load(ERB.new(File.read("#{Rails.root}/config/square.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
 
-    
     config.mailer = YAML::load(ERB.new(File.read("#{Rails.root}/config/mailer.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
     config.recaptcha = YAML::load(ERB.new(File.read("#{Rails.root}/config/recaptcha.yml")).result, permitted_classes: [Date, Symbol]).deep_symbolize_keys
   end

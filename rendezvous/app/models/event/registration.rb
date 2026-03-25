@@ -5,6 +5,7 @@
 #
 #  id                  :integer          not null, primary key
 #  annual_answer       :string(255)
+#  balance             :decimal(8, 2)    default(0.0), not null
 #  created_by_admin    :boolean          default(FALSE), not null
 #  donation            :decimal(8, 2)
 #  events              :text(65535)
@@ -19,6 +20,7 @@
 #  paid_amount         :decimal(8, 2)
 #  paid_date           :datetime
 #  paid_method         :string(255)
+#  refunded            :decimal(8, 2)    default(0.0), not null
 #  registration_fee    :decimal(8, 2)
 #  status              :string(255)
 #  sunday_lunch_number :integer          default(0), not null
@@ -32,11 +34,13 @@
 #
 # Indexes
 #
+#  index_registrations_on_balance            (balance)
 #  index_registrations_on_cc_transaction_id  (cc_transaction_id)
 #  index_registrations_on_invoice_number     (invoice_number)
 #  index_registrations_on_paid_amount        (paid_amount)
 #  index_registrations_on_paid_date          (paid_date)
 #  index_registrations_on_paid_method        (paid_method)
+#  index_registrations_on_refunded           (refunded)
 #  index_registrations_on_status             (status)
 #  index_registrations_on_year               (year)
 #
@@ -51,6 +55,7 @@ module Event
     has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :registration_id, dependent: :destroy
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
+    has_many :square_orders, class_name: "Square::Order", dependent: :destroy
     has_many :square_transactions, dependent: :destroy
     
     accepts_nested_attributes_for :user
@@ -87,6 +92,11 @@ module Event
     serialize :events
 
     before_save :ensure_financials
+
+    def total_paid_cents
+      # Quick way to get the sum of all completed payments across all orders
+      square_orders.joins(:payments).where(square_payments: { status: 'COMPLETED' }).sum(:amount_cents)
+    end
     
     def validate_minimum_number_of_adults
       if number_of_adults < 1
@@ -131,7 +141,7 @@ module Event
                     donation.to_d + 
                     lake_cruise_fee.to_d
     
-      self.balance = self.total - paid_amount.to_d
+      self.balance = self.total - (paid_amount.to_d + refunded.to_d)
     end
     
     def self.invoice_number
@@ -143,6 +153,15 @@ module Event
         next_number = /-(\d+)\z/.match(previous_code)[1].to_i + 1
       end
       "#{prefix}-#{next_number}"
+    end
+    
+    def total_of_payments
+      (payments.where(status: 'COMPLETE').sum(:amount_cents) / 100.0).to_d
+    end
+
+    def total_of_refunded
+      # Sums all completed refunds tied to this registration's payments
+      refunds.where(status: 'COMPLETED').sum(:amount_cents) / 100.0
     end
   end
 end

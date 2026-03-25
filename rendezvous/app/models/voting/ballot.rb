@@ -16,7 +16,7 @@
 #
 module Voting
   class Ballot < ApplicationRecord
-    
+
     STATUSES = ["voting", "hand_tally", "submissible:some", "submissible:all", "submitted"]
 
     validates :status, presence: true, inclusion: STATUSES
@@ -26,7 +26,7 @@ module Voting
     has_many :selections, through: :ballot_selections, source: :votable, source_type: 'Vehicle'
 
     def categorized_selections
-      categorized_selections = VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
+      categorized_selections = Vehicles::VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
       return categorized_selections unless self.selections.present?
       self.selections.each do |vehicle|
         categorized_selections[vehicle.judging_category] << vehicle
@@ -47,8 +47,7 @@ module Voting
       end
       self.save
       return status
-    end      
-
+    end
 
     def submissible?
       get_status =~ /^submissible/

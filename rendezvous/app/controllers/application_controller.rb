@@ -34,11 +34,11 @@ class ApplicationController < ActionController::Base
 
   def render(*args)
     Rails.logger.debug "Calling render from: #{caller(1..5).join("\n")}"
-    super(*args)  # Call the original render method
+    super(*args) # Call the original render method
   end
 
   def registration_status
-    current_user&.current_registration.present? ? current_user.current_registration.status.titlecase : 'Not Registered' 
+    current_user&.current_registration.present? ? current_user.current_registration.status.titlecase : 'Not Registered'
   end
 
   def is_debug_date
@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
   def written_reg_form_link
     "/#{Date.current.year}-Rendezvous-registration-#{fee_period}.pdf"
   end
-  
+
   def set_ballot_count
     @ballot_count = Voting::Ballot.count
   end
@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
 
     unless flash.keys.blank?
       flash.keys.each do |type|
-        flash[type] = [ flash[type] ] if flash[type].is_a? String
+        flash[type] = [flash[type]] if flash[type].is_a? String
       end
     end
   end
@@ -119,8 +119,8 @@ class ApplicationController < ActionController::Base
     @app_data =
       {
         fees: event_fees_for_period,
-        marques: VehicleTaxonomy.get_marques,
-        models: VehicleTaxonomy.get_citroen_models,
+        marques: Vehicles::VehicleTaxonomy.get_marques,
+        models: Vehicles::VehicleTaxonomy.get_citroen_models,
         provinces: GEO_CONFIG[:provinces],
         countries: GEO_CONFIG[:countries]
       }
@@ -156,7 +156,7 @@ class ApplicationController < ActionController::Base
 
   ## Recaptcha v3 -----------
   RECAPTCHA_MINIMUM_SCORE = 0.5
-  
+
   def verify_recaptcha?(token, recaptcha_action, email)
 
     if (!Rails.env.production?)

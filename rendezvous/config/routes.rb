@@ -157,4 +157,7 @@ Rails.application.routes.draw do
 
   get '/ajax/toggle/role/:id',               to: 'users#toggle_role',      as: :ajax_toggle_role
   get '/ajax/toggle/whitelist/:id',          to: 'users#toggle_whitelist', as: :ajax_toggle_whitelist
+  namespace :square do
+    post 'webhooks/receive', to: 'webhooks#receive'
+  end
 end

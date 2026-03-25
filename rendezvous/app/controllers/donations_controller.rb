@@ -50,9 +50,9 @@ class DonationsController < ApplicationController
     @donation.status = 'created'
     @donation.save
 
-    customer_id = ::RendezvousSquare::Customer.find_customer(@donation.user.email)
+    customer_id = ::RendezvousSquare::Apis::Customer.find_customer(@donation.user.email)
     if !customer_id
-      customer_id = ::RendezvousSquare::Customer.create_customer(user)
+      customer_id = ::RendezvousSquare::Apis::Customer.create_customer(user)
     else
       Rails.logger.info("Square customer found: " + customer_id)
     end
@@ -63,11 +63,11 @@ class DonationsController < ApplicationController
       redirect_url = thank_you_url(@donation, type: 'standard')
     end
 
-    square_payment_link = ::RendezvousSquare::Checkout.create_square_payment_link({
-      donation: @donation, 
-      customer_id: customer_id, 
-      redirect: redirect_url
-    })
+    square_payment_link = ::RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                                          donation: @donation,
+                                                                                          customer_id: customer_id,
+                                                                                          redirect: redirect_url
+                                                                                        })
     redirect_to square_payment_link, allow_other_host: true
   end
 
@@ -111,35 +111,36 @@ class DonationsController < ApplicationController
   end
 
   private
-    def user_params
-      params.require(:user).permit(
+
+  def user_params
+    params.require(:user).permit(
+      :id,
+      :email,
+      :first_name,
+      :last_name,
+      :city,
+      :state_or_province,
+      :postal_code,
+      :country
+    )
+  end
+
+  def donation_params
+    params.require(:donation).permit(
+      :amount,
+      :first_name,
+      :last_name,
+      :status,
+      { user_attributes: [
         :id,
         :email,
         :first_name,
-        :last_name, 
+        :last_name,
         :city,
         :state_or_province,
         :postal_code,
         :country
-      )
-    end
-
-    def donation_params
-      params.require(:donation).permit(
-        :amount,
-        :first_name,
-        :last_name,
-        :status,
-        { user_attributes: [ 
-          :id,
-          :email,
-          :first_name,
-          :last_name, 
-          :city,
-          :state_or_province,
-          :postal_code,
-          :country
-        ]}
-      )
-    end
+      ] }
+    )
+  end
 end

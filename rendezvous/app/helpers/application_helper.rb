@@ -1,7 +1,7 @@
 require_dependency Rails.root.join('lib', 'vehicles', 'vehicle_taxonomy')
 
 module ApplicationHelper
-  extend VehicleTaxonomy
+  extend Vehicles::VehicleTaxonomy
 
   RECAPTCHA_SITE_KEY = Rails.configuration.recaptcha[:site_key]
 
@@ -14,7 +14,7 @@ module ApplicationHelper
     if current_user && current_user.admin?
       n = User.where('last_active > ?', 10.minutes.ago).count - 1
       if n == 0
-       "There are no other active users."
+        "There are no other active users."
       elsif n == 1
         "There is 1 active user."
       else
@@ -137,7 +137,7 @@ module ApplicationHelper
   end
 
   def current_registration
-    current_user  && current_user.registrations.where("year='#{Date.current.year.to_s}'").first
+    current_user && current_user.registrations.where("year='#{Date.current.year.to_s}'").first
   end
 
   def registration_complete
@@ -153,7 +153,7 @@ module ApplicationHelper
   end
 
   def address_of(user)
-    address  = '<div class="text-left">'
+    address = '<div class="text-left">'
     address += user.address1 + "<br />\n" if !user.address1.blank?
     address += user.address2 + "<br />\n" if !user.address2.blank?
     address += user.city if !user.city.blank?
@@ -213,22 +213,21 @@ module ApplicationHelper
     Rails.configuration.people[:official_contact][:mailing_address_array].join(delimiter).html_safe
   end
 
-
   def official_contact
     config = Rails.configuration.people
     output = '<p><em>Mailing address: </em><br />'
-    output +=  mailing_address
+    output += mailing_address
     output += '<p><em>Chief officer:</em> ' + config[:official_contact][:chief_officer] + "</p>\n"
     output += '<p><em>Official email:</em> ' + config[:official_contact][:email] + "</p>\n"
     output.html_safe
   end
 
   def marques
-    VehicleTaxonomy.get_marques
+    Vehicles::VehicleTaxonomy.get_marques
   end
 
   def citroen_models
-    VehicleTaxonomy.get_citroen_models
+    Vehicles::VehicleTaxonomy.get_citroen_models
   end
 
   def selected_marque(vehicle)
@@ -268,9 +267,9 @@ module ApplicationHelper
 
   def vehicles_for_sale
     Vehicle.joins(:registrations)
-      .merge(Event::Registration.current)
-      .where(for_sale: true)
-      .distinct.count
+           .merge(Event::Registration.current)
+           .where(for_sale: true)
+           .distinct.count
   end
 
   def month_list
@@ -295,7 +294,7 @@ module ApplicationHelper
   end
 
   def country_list
-    Rails.configuration.geodata[:countries].map{|code, name| [name, code] }
+    Rails.configuration.geodata[:countries].map { |code, name| [name, code] }
   end
 
   def state_province_list

@@ -12,6 +12,9 @@ gem "actionpack", "7.2.3"
 gem "actiontext", "7.2.3"
 gem "activestorage", "7.2.3"
 
+gem 'rails_semantic_logger'
+gem 'amazing_print'
+
 # For QR code generation
 gem 'delayed_job_active_record'
 
@@ -71,13 +74,11 @@ gem 'puma', '6.4.2'
 
 gem 'letter_opener'
 
-group :development do
-  gem 'byebug'
+group :development, :staging do
+  gem 'debug'
   gem 'pry'
-  gem 'capistrano', '3.18.1'
-  gem 'capistrano-rails'
-  gem 'capistrano-bundler'
-  gem 'capistrano-yarn'
+  gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'ed25519', '>= 1.2', '< 2.0'
   gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 end

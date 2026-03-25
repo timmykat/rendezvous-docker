@@ -63,13 +63,13 @@ module Event
       return nil if current_step.nil?
       STEPS.dig(current_step.to_sym, :prev)
     end
-    
+
     def next_step(current_step, status)
       step_config = STEPS[current_step&.to_sym]
       return nil unless step_config
-    
+
       next_val = step_config[:next]
-      
+
       # If it's a Proc (the lambda above), call it with the status
       # Otherwise, just return the value
       next_val.respond_to?(:call) ? next_val.call(status) : next_val
@@ -108,7 +108,7 @@ module Event
     def new
       if current_user && current_user.admin?
         @title = "Create new registration"
-      else 
+      else
         @title = "Let's get you registered!"
       end
 
@@ -129,7 +129,7 @@ module Event
         end
       end
 
-      if current_user.admin? 
+      if current_user.admin?
         @event_registration = Registration.new(created_by_admin: true)
       else
         @event_registration = Registration.new
@@ -155,17 +155,17 @@ module Event
       @title = "Registration by admin"
       @step = 'create'
       @annual_question = AnnualQuestion.find_by(year: Date.current.year)
-    
+
       user = User.find_by(id: params[:user_id])
       @event_registration = Registration.new(created_by_admin: true)
       @event_registration.attendees.build
-    
+
       if user
         @event_registration.user = user
       else
         @event_registration.build_user
       end
-    
+
       @event_registration.user.vehicles.build
     end
 
@@ -185,7 +185,7 @@ module Event
       else
         user = User.find_by_email(email)
         if user.blank?
-          password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
+          password = (65 + rand(26)).chr + 6.times.inject('') { |a, b| a + (97 + rand(26)).chr } + (48 + rand(10)).chr
           params[:event_registration][:user_attributes][:password] = password
           params[:event_registration][:user_attributes][:password_confirmation] = password
           user = User.new(event_registration_user_params)
@@ -201,7 +201,6 @@ module Event
       # Done updating the user so remove those parameters
       params[:event_registration][:user_id] = user.id
       params[:event_registration][:user_attributes] = nil
-
 
       # Set total to registration fee. Donation happens in payment
       params[:event_registration][:total] = params[:event_registration][:registration_fee]
@@ -293,22 +292,22 @@ module Event
     # AJAX methods
     def update_fees
       @event_registration = Registration.find(params[:id])
-      
+
       if @event_registration.update(update_fees_params)
-        render json: { 
-          status: "ok", 
-          data: { 
+        render json: {
+          status: "ok",
+          data: {
             donation: @event_registration.donation,
-            total: @event_registration.total 
+            total: @event_registration.total
           }
         }, status: :ok
       else
-        render json: { 
-          status: "error", 
+        render json: {
+          status: "error",
           errors: @event_registration.errors.full_messages,
-          data: { 
+          data: {
             donation: @event_registration.donation_was, # Send back the old value
-            total: @event_registration.total_was 
+            total: @event_registration.total_was
           }
         }, status: :unprocessable_entity
       end
@@ -318,9 +317,9 @@ module Event
       @event_registration = Registration.find(params[:id])
       respond_to do |format|
         if @event_registration.update(payment_method_params)
-          format.json {render json: { status: "ok", method: @event_registration.paid_method} }
+          format.json { render json: { status: "ok", method: @event_registration.paid_method } }
         else
-          format.json {render json: { status: "err", method: @event_registration.paid_method} }
+          format.json { render json: { status: "err", method: @event_registration.paid_method } }
         end
       end
     end
@@ -337,12 +336,12 @@ module Event
       @step = 'payment'
       @event_registration.status = 'payment due'
       @app_data.merge!({
-        event_registration_fee: @event_registration.registration_fee,
-        registration_id: @event_registration.id
-      })
+                         event_registration_fee: @event_registration.registration_fee,
+                         registration_id: @event_registration.id
+                       })
 
       # Set up square env
-      square_env = RendezvousSquare::Base.get_environment
+      square_env = RendezvousSquare::Apis::Base.get_environment
       @square_app_id = ENV.fetch "#{square_env}_SQUARE_APP_ID"
       @square_sdk_url = ENV.fetch "#{square_env}_SQUARE_SDK_URL"
       @square_location_id = ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
@@ -370,20 +369,20 @@ module Event
 
     def send_to_square
       @step = 'payment'
-      @event_registration = Registration.find(params[:id]) 
+      @event_registration = Registration.find(params[:id])
       if !@event_registration.update(update_payment_params)
         flash_alert "There was a problem making your payment update; no payment submitted"
         render :payment
       end
 
       user = @event_registration.user
-      customer_id = ::RendezvousSquare::Base.with_error_handling do
-        ::RendezvousSquare::Customer.find_customer(user.email)
+      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
       end
 
       if customer_id.nil?
-        customer_id = ::RendezvousSquare::Base.with_error_handling do
-          ::RendezvousSquare::Customer.create_customer(user)
+        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+          ::RendezvousSquare::Apis::Customer.create_customer(user)
         end
       else
         Rails.logger.info("Square customer found: " + customer_id)
@@ -391,18 +390,18 @@ module Event
 
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
 
-      square_payment_link = ::RendezvousSquare::Base.with_error_handling do
-        RendezvousSquare::Checkout.create_square_payment_link({
-          registration: @event_registration, 
-          customer_id: customer_id, 
-          redirect_url: redirect_url, 
-          fee_period: fee_period
-        })
+      square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
+        RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                      registration: @event_registration,
+                                                                      customer_id: customer_id,
+                                                                      redirect_url: redirect_url,
+                                                                      fee_period: fee_period
+                                                                    })
       end
 
       unless square_payment_link.nil?
         redirect_to square_payment_link, allow_other_host: true
-      else 
+      else
         flash_alert "Square was unable to generate a payment link."
         redirect_to payment_event_registration_path(@event_registration)
       end
@@ -436,13 +435,13 @@ module Event
         else
           redirect_to edit_user_vehicles_path(@event_registration.user, after_complete: true)
         end
-        return 
-      else 
+        return
+      else
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
         render :payment
       end
-    end        
+    end
 
     def complete
       @title = 'Complete Registration'
@@ -491,7 +490,7 @@ module Event
     def edit_sunday_lunch
       @event_registration = Registration.find(params[:id])
     end
-    
+
     def update_sunday_lunch
       if (@event_registration.update(sunday_lunch_params))
         flash_notice @event_registration.sunday_lunch_number == 0 ? "You're not attending Sunday lunch." : "You've updated your Sunday lunch guests to #{@event_registration.sunday_lunch_number}"
@@ -540,135 +539,135 @@ module Event
 
     private
 
-      def filter_params_by_status
-        @event_registration = Registration.find(params[:id])
-        
-        # Check if the registration is "locked"
-        if no_fee_related_changes
-          # Strip out cost-affecting params if they exist in the request
-          params[:event_registration].delete(:number_of_adults)
-          params[:event_registration].delete(:number_of_youths)
-          params[:event_registration].delete(:number_of_children)
-          params[:event_registration].delete(:lake_cruise_number)
-          params[:event_registration].delete(:attendees_attributes)
-          params[:event_registration].delete(:total)
-          params[:event_registration].delete(:paid_amount)
-          params[:event_registration].delete(:paid_method)
-          params[:event_registration].delete(:paid_date)
-          params[:event_registration].delete(:payment_token)
-          params[:event_registration].delete(:status)
-          
-          # Optional: Log a warning or set a flash message
-          Rails.logger.warn "Locked registration update attempt: ID #{@event_registration.id}"
-        end
-      end
+    def filter_params_by_status
+      @event_registration = Registration.find(params[:id])
 
-      def create_new_user
-        password = (65 + rand(26)).chr + 6.times.inject(''){|a, b| a + (97 + rand(26)).chr} + (48 + rand(10)).chr
-        params[:event_registration][:user_attributes][:password] = password
-        params[:event_registration][:user_attributes][:password_confirmation] = password
-        user = User.new(event_registration_user_params)
-        if !user.save
-          flash_alert_now 'There was a problem saving that user information.'
-          flash_alert_now user.errors.full_messages.to_sentence
-          render :by_admin
-          return
-        else
-          return user
-        end
-      end
+      # Check if the registration is "locked"
+      if no_fee_related_changes
+        # Strip out cost-affecting params if they exist in the request
+        params[:event_registration].delete(:number_of_adults)
+        params[:event_registration].delete(:number_of_youths)
+        params[:event_registration].delete(:number_of_children)
+        params[:event_registration].delete(:lake_cruise_number)
+        params[:event_registration].delete(:attendees_attributes)
+        params[:event_registration].delete(:total)
+        params[:event_registration].delete(:paid_amount)
+        params[:event_registration].delete(:paid_method)
+        params[:event_registration].delete(:paid_date)
+        params[:event_registration].delete(:payment_token)
+        params[:event_registration].delete(:status)
 
-      # Only allows admins and owners to see registration
-      def owner_or_admin
-        unless (current_user.id == Registration.find(params[:id]).user_id) || require_admin
-          flash_alert 'Sorry, you must be an admin to see that.'
-          redirect_to :root
-        end
+        # Optional: Log a warning or set a flash message
+        Rails.logger.warn "Locked registration update attempt: ID #{@event_registration.id}"
       end
+    end
 
-      def update_payment_params
-        params.permit(
-          :id,
-          :registration_fee,
-          :donation,
-          :total,
-          :paid_amount,
-          :paid_method,
-          :paid_date
-        )
+    def create_new_user
+      password = (65 + rand(26)).chr + 6.times.inject('') { |a, b| a + (97 + rand(26)).chr } + (48 + rand(10)).chr
+      params[:event_registration][:user_attributes][:password] = password
+      params[:event_registration][:user_attributes][:password_confirmation] = password
+      user = User.new(event_registration_user_params)
+      if !user.save
+        flash_alert_now 'There was a problem saving that user information.'
+        flash_alert_now user.errors.full_messages.to_sentence
+        render :by_admin
+        return
+      else
+        return user
       end
+    end
 
-      def event_registration_params
-        params.require(:event_registration).permit(
-          :annual_answer,
-          :number_of_adults,
-          :number_of_youths,
-          :number_of_children,
-          :registration_fee,
-          :donation,
-          :total,
-          :year,
-          :paid_amount,
-          :paid_method,
-          :paid_date,
-          :payment_token,
-          :status,
-          :sunday_lunch_number,
-          :invoice_number,
-          :user_id,
-          { attendees_attributes:
+    # Only allows admins and owners to see registration
+    def owner_or_admin
+      unless (current_user.id == Registration.find(params[:id]).user_id) || require_admin
+        flash_alert 'Sorry, you must be an admin to see that.'
+        redirect_to :root
+      end
+    end
+
+    def update_payment_params
+      params.permit(
+        :id,
+        :registration_fee,
+        :donation,
+        :total,
+        :paid_amount,
+        :paid_method,
+        :paid_date
+      )
+    end
+
+    def event_registration_params
+      params.require(:event_registration).permit(
+        :annual_answer,
+        :number_of_adults,
+        :number_of_youths,
+        :number_of_children,
+        :registration_fee,
+        :donation,
+        :total,
+        :year,
+        :paid_amount,
+        :paid_method,
+        :paid_date,
+        :payment_token,
+        :status,
+        :sunday_lunch_number,
+        :invoice_number,
+        :user_id,
+        { attendees_attributes:
             [:id, :name, :attendee_age, :volunteer, :_destroy]
-          },
-          {:user_attributes=>
+        },
+        { :user_attributes =>
             [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
-              {vehicles_attributes:
-                [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :for_sale, :_destroy]
-              }
+             { vehicles_attributes:
+                 [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :for_sale, :_destroy]
+             }
             ]
-          }
-        )
-      end
+        }
+      )
+    end
 
-      def update_fees_params
-        params.permit(:id, :donation)
-      end
+    def update_fees_params
+      params.permit(:id, :donation)
+    end
 
-      def cash_payment_params
-        params.require(:event_registration).permit(:donation, :total, :paid_method, :paid_amount, :status)
-      end
+    def cash_payment_params
+      params.require(:event_registration).permit(:donation, :total, :paid_method, :paid_amount, :status)
+    end
 
-      def payment_method_params
-        params.permit(:id, :paid_method) 
-      end
+    def payment_method_params
+      params.permit(:id, :paid_method)
+    end
 
-      def sunday_lunch_params
-        params.require(:event_registration).permit(:sunday_lunch_number)
-      end
+    def sunday_lunch_params
+      params.require(:event_registration).permit(:sunday_lunch_number)
+    end
 
-      def vehicle_update_params
-        params.fetch(:event_registration, {}).permit(vehicle_ids: []).tap do |whitelisted|
-          whitelisted[:vehicle_ids] ||= []  # Ensure it's an array even if nothing is checked
-        end
+    def vehicle_update_params
+      params.fetch(:event_registration, {}).permit(vehicle_ids: []).tap do |whitelisted|
+        whitelisted[:vehicle_ids] ||= [] # Ensure it's an array even if nothing is checked
       end
+    end
 
-      def special_events_params
-        params.require(:event_registration).permit(
-          :lake_cruise_number,
-          :lake_cruise_fee,
-          :sunday_lunch_number
-        )
-      end
+    def special_events_params
+      params.require(:event_registration).permit(
+        :lake_cruise_number,
+        :lake_cruise_fee,
+        :sunday_lunch_number
+      )
+    end
 
-      def event_registration_user_params
-        params[:user] = params[:event_registration][:user_attributes]
-        params.require(:user).permit(
-          [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
-            {vehicles_attributes:
-              [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
-            }
-          ]
-        )
-      end
+    def event_registration_user_params
+      params[:user] = params[:event_registration][:user_attributes]
+      params.require(:user).permit(
+        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
+         { vehicles_attributes:
+             [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
+         }
+        ]
+      )
+    end
   end
 end
 
