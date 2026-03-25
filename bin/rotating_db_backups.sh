@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-CONTAINER_ID=$(docker ps --filter "name=db_prod" --format "{{.ID}}")
+CONTAINER_ID=$(docker ps --filter "name=db" --format "{{.ID}}")
 if [ -z "$CONTAINER_ID" ]; then
     echo "Error: Container 'rails_app_prod' not found or not running."
     exit 1

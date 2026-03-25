@@ -42,6 +42,7 @@ x-app-env: &app-env
   SITE_ADMIN_SENDING_ADDRESS: ${SITE_ADMIN_SENDING_ADDRESS}
   INFO_SENDING_ADDRESS: ${INFO_SENDING_ADDRESS}
 
+services:
   rails_app:
     build: *app-build
     image: rails_image

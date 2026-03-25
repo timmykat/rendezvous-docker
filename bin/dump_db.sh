@@ -1,7 +1,7 @@
 HOME_DIR=/home/webuser
 source "$HOME_DIR/.backup_env"
 echo "Backup user:  $MYSQL_BACKUP_USER"
-CONTAINER_ID=$(docker ps --filter "name=db_prod" --format "{{.ID}}")
+CONTAINER_ID=$(docker ps --filter "name=db" --format "{{.ID}}")
 echo "Container ID: $CONTAINER_ID"
 TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 mkdir -p "$HOME_DIR/backup"
