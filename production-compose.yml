@@ -1,5 +1,5 @@
 services:
-  db_prod:
+  db:
     image: mysql:8.0.32
     platform: linux/amd64
     restart: unless-stopped
@@ -11,11 +11,11 @@ services:
       - MYSQL_ROOT_PASSWORD
 
     networks:
-      - rendezvous_prod_network
+      - rendezvous
 
     volumes:
       - ./config/mysql/init:/docker-entrypoint-initdb.d
-      - rendezvous_prod_data:/var/lib/mysql
+      - rendezvous_data:/var/lib/mysql
 
     ports:
       - 3306:3306
@@ -70,11 +70,11 @@ services:
       - 3000:3000
 
     networks:
-      rendezvous_prod_network:
+      rendezvous:
         ipv4_address: 192.168.1.100
 
     depends_on:
-      - db_prod
+      - db
 
     volumes:
       - ./rendezvous/:/var/www/rendezvous
@@ -116,11 +116,11 @@ services:
       - INFO_SENDING_ADDRESS
 
     networks:
-      rendezvous_prod_network:
+      rendezvous:
         ipv4_address: 192.168.1.101
 
     depends_on:
-      - db_prod
+      - db
 
     volumes:
       - ./rendezvous/:/var/www/rendezvous
@@ -144,13 +144,13 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     restart: unless-stopped
     networks:
-      - rendezvous_prod_network
+      - rendezvous
 
 volumes:
-  rendezvous_prod_data:
+  rendezvous_data:
 
 networks:
-  rendezvous_prod_network:
+  rendezvous:
     driver: bridge
     ipam:
       config:

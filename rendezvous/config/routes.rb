@@ -1,23 +1,26 @@
 Rails.application.routes.draw do
   root 'main_pages#index'
 
+  # health check
+  get "/up", to: "rails/health#show"
+
   # -- Users
   devise_for :users,
-    controllers: {
-      users: 'users',
-      sessions: 'users/sessions',
-      passwords: 'users/passwords',
-      registrations: 'users/registrations'
-    },
-    path: '',
-    path_names: {
-      sessions: '',
-      registration: 'site'
-    }
+             controllers: {
+               users: 'users',
+               sessions: 'users/sessions',
+               passwords: 'users/passwords',
+               registrations: 'users/registrations'
+             },
+             path: '',
+             path_names: {
+               sessions: '',
+               registration: 'site'
+             }
 
   devise_scope :user do
     post :request_login_link, to: 'users/sessions#request_login_link'
-    get 'u/:login_token',       to: 'users/sessions#create_with_link', as: :sign_in_with_link
+    get 'u/:login_token', to: 'users/sessions#create_with_link', as: :sign_in_with_link
   end
 
   resources :users
@@ -54,7 +57,7 @@ Rails.application.routes.draw do
   get 'scheduled_events/manage', to: 'scheduled_events#manage'
   delete 'scheduled_events/destroy_all', to: 'scheduled_events#destroy_all', as: :destroy_all_scheduled_events
   resources :scheduled_events, { except: [:show] }
-  get '/schedule_summary',       to: 'scheduled_events#summary', as: :schedule_summary
+  get '/schedule_summary', to: 'scheduled_events#summary', as: :schedule_summary
 
   get 'venues/import', to: 'venues#import'
   get 'venues/manage', to: 'venues#manage'
@@ -69,7 +72,7 @@ Rails.application.routes.draw do
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
   namespace :event do
-    resources :registrations  do 
+    resources :registrations do
       member do
         get :review
         get :payment
@@ -90,69 +93,67 @@ Rails.application.routes.draw do
     post '/registration/create_by_admin', to: 'registrations#create_by_admin'
   end
 
-
-  get '/admin/dedupe',            to: 'admin#dedupe'
-  get '/admin/dashboard',         to: 'admin#dashboard'
-  get '/admin/download_csv',      to: 'admin#download_csv', defaults: { format: 'csv' }
-  get '/admin/graphs',            to: 'admin#registration_graphs'
-  get '/admin/cleanup',           to: 'users#cleanup'
-  post '/admin/cleanup',          to: 'users#cleanup'
-  get '/admin/print',              to: 'admin#print'
-  get '/admin/manage_qr_codes',   to: 'admin#manage_qr_codes'
+  get '/admin/dedupe', to: 'admin#dedupe'
+  get '/admin/dashboard', to: 'admin#dashboard'
+  get '/admin/download_csv', to: 'admin#download_csv', defaults: { format: 'csv' }
+  get '/admin/graphs', to: 'admin#registration_graphs'
+  get '/admin/cleanup', to: 'users#cleanup'
+  post '/admin/cleanup', to: 'users#cleanup'
+  get '/admin/print', to: 'admin#print'
+  get '/admin/manage_qr_codes', to: 'admin#manage_qr_codes'
   get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
   get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'
-  get '/admin/ballots/clear',     to: 'admin#clear_ballots', as: :admin_clear_ballots
+  get '/admin/ballots/clear', to: 'admin#clear_ballots', as: :admin_clear_ballots
 
   get '/admin/update_user_vehicles/:id', to: 'admin#update_user_vehicles', as: :update_user_vehicles
 
   namespace :event do
-  #     resources  :registrations, { only: [ :create, :show, :edit, :update ] }
-  #     get 'registrations/new/user/:id', to: 'registrations#new'
-  #     get 'registrations/new/withemail', to: 'registrations#new_with_email'
-  #     post 'registrations/create/withemail', to: 'registrations#create_with_email'
+    #     resources  :registrations, { only: [ :create, :show, :edit, :update ] }
+    #     get 'registrations/new/user/:id', to: 'registrations#new'
+    #     get 'registrations/new/withemail', to: 'registrations#new_with_email'
+    #     post 'registrations/create/withemail', to: 'registrations#create_with_email'
     get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
     get 'registrations/:id/destroy', to: 'registrations#destroy', as: 'destroy_registration'
-  #     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
+    #     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
   end
 
-  get     '/voting/ballot',                     to: 'voting/ballots#ballot', as: :get_voting_ballot
-  get     '/voting/hand_ballot',               to: 'voting/ballots#hand_ballot'
-  post     '/voting/hand_count',               to: 'voting/ballots#hand_count'
-  post    '/voting/ballots/vote',              to: 'voting/ballots#vote', as: :vote
-  delete  '/voting/ballots/vehicle/delete',    to: 'voting/ballots#delete_selection', as: :delete_vehicle_selection
-  get     '/_ajax/voting/vehicle/:code',        to: 'vehicles#ajax_info'
+  get '/voting/ballot', to: 'voting/ballots#ballot', as: :get_voting_ballot
+  get '/voting/hand_ballot', to: 'voting/ballots#hand_ballot'
+  post '/voting/hand_count', to: 'voting/ballots#hand_count'
+  post '/voting/ballots/vote', to: 'voting/ballots#vote', as: :vote
+  delete '/voting/ballots/vehicle/delete', to: 'voting/ballots#delete_selection', as: :delete_vehicle_selection
+  get '/_ajax/voting/vehicle/:code', to: 'vehicles#ajax_info'
 
-
-  resources :donations, { only: [ :new, :create, :index ] }
+  resources :donations, { only: [:new, :create, :index] }
   get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
 
   # -- Content
-  get '/',                          to: 'main_pages#index'
-  get '/faq',                       to: 'main_pages#faq'
-  get '/history',                   to: 'main_pages#history'
-  get '/volunteering',              to: 'main_pages#volunteering'
-  get '/landing_page',  to: 'main_pages#landing_page'
-  get '/legal_information',         to: 'main_pages#legal_information'
-  get '/schedule',                  to: 'main_pages#schedule'
+  get '/', to: 'main_pages#index'
+  get '/faq', to: 'main_pages#faq'
+  get '/history', to: 'main_pages#history'
+  get '/volunteering', to: 'main_pages#volunteering'
+  get '/landing_page', to: 'main_pages#landing_page'
+  get '/legal_information', to: 'main_pages#legal_information'
+  get '/schedule', to: 'main_pages#schedule'
 
   resources :pictures, except: [:index]
-  get '/gallery',                    to: 'pictures#index'
-  get '/t-shirt-gallery',            to: 'pictures#t_shirt_gallery'
+  get '/gallery', to: 'pictures#index'
+  get '/t-shirt-gallery', to: 'pictures#t_shirt_gallery'
   get '/pictures_recreate_versions', to: 'pictures#recreate_versions'
 
   # -- Picture upload
   get '/my-pictures', to: 'pictures#my_pictures'
-  post '/pictures/upload(.:format)', to:'pictures#upload'
+  post '/pictures/upload(.:format)', to: 'pictures#upload'
 
   # -- AJAX routes
-  get '/ajax/find_user_by_email',         to: 'users#find_by_email'
-  get '/ajax/delete_users',               to: 'users#delete_users'
-  get '/ajax/user/autocomplete',          to: 'users#autocomplete'
-  get '/ajax/code/search',                to: 'qr_codes#autocomplete'
+  get '/ajax/find_user_by_email', to: 'users#find_by_email'
+  get '/ajax/delete_users', to: 'users#delete_users'
+  get '/ajax/user/autocomplete', to: 'users#autocomplete'
+  get '/ajax/code/search', to: 'qr_codes#autocomplete'
 
   namespace :event do
-    patch '/ajax/update_fees/:id',               to: 'registrations#update_fees'
-    get '/ajax/update_paid_method/:id',         to: 'registrations#update_paid_method'
+    patch '/ajax/update_fees/:id', to: 'registrations#update_fees'
+    get '/ajax/update_paid_method/:id', to: 'registrations#update_paid_method'
   end
 
   get '/ajax/toggle/role/:id',               to: 'users#toggle_role',      as: :ajax_toggle_role

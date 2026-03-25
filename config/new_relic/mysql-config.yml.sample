@@ -1,7 +1,7 @@
 integrations:
   - name: nri-mysql
     env:
-      HOSTNAME: db_prod
+      HOSTNAME: db
       PORT: 3306
 
       # ENABLE_TLS: false

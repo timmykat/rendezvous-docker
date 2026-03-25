@@ -1,0 +1,68 @@
+services:
+  rails_app:
+    command: >
+      sh -c "bundle exec rake db:migrate &&
+             bundle exec rails server -b 0.0.0.0"
+
+    ports: []   # no public exposure
+
+    volumes: [] # no bind mounts
+
+    environment:
+      RAILS_ENV: production
+      RACK_ENV: production
+      SIDEKIQ_LOG_LEVEL: info
+
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/up" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      rendezvous:
+        ipv4_address: 192.168.1.100
+
+  db:
+    ports: []
+    volumes:
+      - rendezvous_data:/var/lib/mysql
+
+  sidekiq:
+    environment:
+      RAILS_ENV: production
+      RACK_ENV: production
+      SIDEKIQ_LOG_LEVEL: info
+
+## New Relic services
+  newrelic-infra:
+    container_name: newrelic-infra
+    image: newrelic/infrastructure-bundle:latest
+    cap_add:
+      - SYS_PTRACE
+    pid: host
+    privileged: true
+    volumes:
+      - "/:/host:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./config/new_relic/mysql-config.yml:/etc/newrelic-infra/integrations.d/mysql-config.yml:ro"
+    environment:
+      - NRIA_LICENSE_KEY=${NRIA_LICENSE_KEY}
+      - NR_MYSQL_USER=${NR_MYSQL_USER}
+      - NR_MYSQL_PASSWORD=${NR_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    restart: unless-stopped
+
+    networks:
+      rendezvous:
+
+volumes:
+  rendezvous_data:
+
+networks:
+  rendezvous:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
