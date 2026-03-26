@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   # sidekiq
   mount Sidekiq::Web => "/sidekiq"
-  
+
   # -- Users
   devise_for :users,
              controllers: {
@@ -96,37 +96,32 @@ Rails.application.routes.draw do
     get '/welcome', to: 'registrations#welcome'
     get '/registration/new_by_admin', to: 'registrations#new_by_admin'
     post '/registration/create_by_admin', to: 'registrations#create_by_admin'
-  end
-
-  get '/admin/dedupe', to: 'admin#dedupe'
-  get '/admin/dashboard', to: 'admin#dashboard'
-  get '/admin/download_csv', to: 'admin#download_csv', defaults: { format: 'csv' }
-  get '/admin/graphs', to: 'admin#registration_graphs'
-  get '/admin/cleanup', to: 'users#cleanup'
-  post '/admin/cleanup', to: 'users#cleanup'
-  get '/admin/print', to: 'admin#print'
-  get '/admin/manage_qr_codes', to: 'admin#manage_qr_codes'
-  get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
-  get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'
-  get '/admin/ballots/clear', to: 'admin#clear_ballots', as: :admin_clear_ballots
-
-  get '/admin/update_user_vehicles/:id', to: 'admin#update_user_vehicles', as: :update_user_vehicles
-
-  namespace :event do
-    #     resources  :registrations, { only: [ :create, :show, :edit, :update ] }
-    #     get 'registrations/new/user/:id', to: 'registrations#new'
-    #     get 'registrations/new/withemail', to: 'registrations#new_with_email'
-    #     post 'registrations/create/withemail', to: 'registrations#create_with_email'
     get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
     get 'registrations/:id/destroy', to: 'registrations#destroy', as: 'destroy_registration'
-    #     get 'registrations/:id/send_confirmation_email', to: 'registrations#send_confirmation_email'
   end
 
-  get '/voting/ballot', to: 'voting/ballots#ballot', as: :get_voting_ballot
-  get '/voting/hand_ballot', to: 'voting/ballots#hand_ballot'
-  post '/voting/hand_count', to: 'voting/ballots#hand_count'
-  post '/voting/ballots/vote', to: 'voting/ballots#vote', as: :vote
-  delete '/voting/ballots/vehicle/delete', to: 'voting/ballots#delete_selection', as: :delete_vehicle_selection
+  namespace :admin do
+    get '/admin/dedupe', to: 'admin#dedupe'
+    get '/admin/dashboard', to: 'admin#dashboard'
+    get '/admin/download_csv', to: 'admin#download_csv', defaults: { format: 'csv' }
+    get '/admin/graphs', to: 'admin#registration_graphs'
+    get '/admin/cleanup', to: 'users#cleanup'
+    post '/admin/cleanup', to: 'users#cleanup'
+    get '/admin/print', to: 'admin#print'
+    get '/admin/manage_qr_codes', to: 'admin#manage_qr_codes'
+    get '/admin/generate_qr_codes', to: 'admin#generate_qr_codes'
+    get '/admin/peoples_choice_results', to: 'admin#peoples_choice_results'
+    get '/admin/ballots/clear', to: 'admin#clear_ballots', as: :admin_clear_ballots
+    get '/admin/update_user_vehicles/:id', to: 'admin#update_user_vehicles', as: :update_user_vehicles
+  end
+
+  namespace :voting do
+    get '/ballot', to: 'ballots#ballot', as: :get_voting_ballot
+    get '/hand_ballot', to: 'ballots#hand_ballot'
+    post '/hand_count', to: 'ballots#hand_count'
+    post '/ballots/vote', to: 'ballots#vote', as: :vote
+    delete '/ballots/vehicle/delete', to: 'allots#delete_selection', as: :delete_vehicle_selection
+  end
   get '/_ajax/voting/vehicle/:code', to: 'vehicles#ajax_info'
 
   resources :donations, { only: [:new, :create, :index] }
