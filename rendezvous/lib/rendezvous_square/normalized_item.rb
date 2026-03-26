@@ -97,7 +97,7 @@ module RendezvousSquare
 
       # 2. Fallback: net_amounts.total_money
       net = order[:net_amounts]
-      if net[:total_money].present?
+      if net and net[:total_money].present?
         tm = net[:total_money]
         return [tm[:amount], tm[:currency] || "USD"] if tm
       end
@@ -111,7 +111,7 @@ module RendezvousSquare
 
       currency =
         line_items.first &&
-        line_items.first.dig[:currency]
+        line_items.first.dig(:total_money, :currency)
 
       [sum, currency || "USD"]
     end
@@ -142,8 +142,8 @@ module RendezvousSquare
 
       new(
         id: data[:id],
-        created_at: data[:created_at],
-        amount_cents: amount,
+        created_at: coerce_time(data[:created_at]),
+        amount_cents: amount_cents,
         currency: currency,
         state: data[:state],
         transaction_type: type.to_s,
@@ -189,6 +189,10 @@ module RendezvousSquare
 
     def present?
       id.present?
+    end
+
+    def amount
+      (amount_cents / 100.0).to_d(2)
     end
   end
 end

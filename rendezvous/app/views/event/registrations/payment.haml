@@ -10,11 +10,11 @@
     .col-md-8.col-12
       %payment-manager{ data: { "registration-id": @event_registration.id} }
         = simple_form_for @event_registration, url:  complete_event_registration_path(@event_registration), html:  { id:  'event_registration_form', data: { turbo: false } } do |f|
-          .form-group 
+          .form-group
             - reg_fee = @event_registration.registration_fee
             = hidden_field_tag :incoming_registration_fee, reg_fee
           %section
-            .card 
+            .card
               .card-body
                 .card-title
                   %h2.h3 Donation
@@ -30,8 +30,8 @@
                         %label Donation Amount
                         = f.input :donation, label: false, readonly: true, input_html:  { class:  'total-calculation'}
 
-            .card 
-              .card-body 
+            .card
+              .card-body
                 .card-title
                   %h2.h3 Total
                 .card.text
@@ -41,13 +41,13 @@
                         %label Total (USD):
                         = f.input_field :total, value:  ("%.2f" % @event_registration.total), readonly: true, class:  'calculated'
 
-            .card 
-              .card-body 
-                .card-title 
+            .card
+              .card-body
+                .card-title
                   %h2.h3 Payment Information
                 .card-text
                   %p You may pay by credit card or by check. We process your credit card information securely but we do not save it.
-              
+
                   .row
                     .col-md-6.col-12
                       .form-group
@@ -58,12 +58,12 @@
                     %h3.h4 Pay online with Square
                     %ul
                       %li Clicking the button below will take you to Square to pay.
-                      %li 
+                      %li
                         You will then be returned to citroenrendezvous.org to complete your registration.
                         %strong It takes a several moments for Square to process your payment; please
                         don't close your browser or click away until you've been returned to our site.
-                    
-                    #payment-link.button-with-spinner     
+
+                    #payment-link.button-with-spinner
                       = link_to "Make Payment", send_to_square_event_registration_path(@event_registration), type: "button", class:  'btn btn-primary btn-square-pay' 
 
                   %section#payment-cash
@@ -74,8 +74,8 @@
                           .form-group
                             = f.input :paid_amount
 
-                          .form-group 
-                            = f.input :status, as: :select, collection: reg_config[:registration_statuses]
+                          .form-group
+                            = f.input :status, as: :select, collection: statuses
 
                         - else
                           %p

@@ -12,14 +12,6 @@ payment_methods:
   - cash
   - cash or check
   - no payment
-registration_statuses:
-  - new
-  - in progress
-  - in review
-  - payment due
-  - complete
-  - "cancelled - settled"
-  - "cancelled - needs refund"
 transaction_types:
   - payment
   - refund

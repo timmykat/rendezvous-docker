@@ -3,20 +3,25 @@ module RegistrationsHelper
   SHORT_FORMAT = "%B %-d"
   FULL_FORMAT = "%A, %B %-d"
   DAY_ONLY_FORMAT = "%A"
-  
+
   def annual_question_responses
     AnnualQuestion::RESPONSES
   end
 
+  def statuses
+    Event::Registration::STATUSES
+  end
+
   def registration_status_classes(status)
     case status
-    when 'complete' 
+    when 'complete'
       'bg-success'
     when 'in progress', 'payment due'
       'bg-warning text-dark'
-    when /^cancelled/  
+    when /^cancelled/
       'bg-danger'
-    else 'bg-secondary'
+    else
+      'bg-secondary'
     end
   end
 
@@ -45,9 +50,9 @@ module RegistrationsHelper
   def lake_cruise_close_date
     Rails.configuration.registration[:lake_cruise_close_date].to_time.strftime(SHORT_FORMAT)
   end
-    
+
   def donation_list(raw_values, registration_fees)
-    list = raw_values.map{ |v| ["$#{v.to_s}", v]  }
+    list = raw_values.map { |v| ["$#{v.to_s}", v] }
     unless registration_fees.nil?
       cc_fee = '%.2f' % credit_card_fee(registration_fees)
       list.unshift ["Credit card fee ($#{ cc_fee})", cc_fee.to_d]
@@ -56,9 +61,9 @@ module RegistrationsHelper
   end
 
   def credit_card_fee(amount)
-    0.10 + 0.026 * amount   # For Square
+    0.10 + 0.026 * amount # For Square
   end
-  
+
   def payment_options
     # [[' Credit Card (on line)', 'credit card'], [' Cash or Check', 'cash or check'], [' Square (on site)', 'square on site']]
     [[' Credit card (Square)', 'credit card'], [' Cash or Check', 'cash or check']]

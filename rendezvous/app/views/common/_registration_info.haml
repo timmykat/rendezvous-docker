@@ -1,9 +1,9 @@
-.container 
-  .row.justify-content-center 
+.container
+  .row.justify-content-center
     .col-md-8.col-12
       .card
         .card-body
-          .card-title 
+          .card-title
             %h3.h4= @event_registration.user.full_name
           .card-text
             %p
@@ -32,7 +32,7 @@
                     %td= a.name
                     %td= a.attendee_age
                     %td #{a.volunteer? ? 'yes' : 'no'}
- 
+
       .card
         .card-body
           .card-title
@@ -67,7 +67,7 @@
                   %br
                   %label Lake George Excursion:
                   #{number_to_currency(@event_registration.lake_cruise_fee)}
-                  - if @event_registration.status != Rails.configuration.registration[:registration_statuses][0]
+                  - if @event_registration.status != Event::Registration::STATUSES[0]
                     %br
                     %label Donation:
                     - if @event_registration.donation.blank?
@@ -78,7 +78,7 @@
                     %br
                       %label Total:
                       #{number_to_currency(@event_registration.total)}
-                    
+
                     - if (@event_registration.paid_amount > 0.0)
                       %br
                         %label Paid:
@@ -105,7 +105,7 @@
               %p
                 You can update this by selecting from your name dropdown in the top nav bar.
             - else
-              %p 
+              %p
                 You can update this after completing payment.
 
             %table.table

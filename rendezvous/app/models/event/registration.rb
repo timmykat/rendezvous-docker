@@ -1,4 +1,3 @@
-
 # == Schema Information
 #
 # Table name: registrations
@@ -48,7 +47,7 @@ module Event
   class Registration < ApplicationRecord
 
     include AdminCreatable
-    
+
     belongs_to :user
     has_many :attendees, dependent: :destroy
     has_many :transactions, class_name: 'SquareTransaction', dependent: :destroy
@@ -57,38 +56,48 @@ module Event
     has_one :donation_record, class_name: 'Donation'
     has_many :square_orders, class_name: "Square::Order", dependent: :destroy
     has_many :square_transactions, dependent: :destroy
-    
+
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
     accepts_nested_attributes_for :transactions, allow_destroy: true
-    
+
     scope :current, -> { where(year: Date.current.year) }
-    scope :alpha, -> { joins(:user).order( :last_name )}
+    scope :alpha, -> { joins(:user).order(:last_name) }
 
     attribute :donation, :decimal, default: 0.0
     attribute :paid_amount, :decimal, default: 0.0
     attribute :total, :decimal, default: 0.0
-    
+
     validate :validate_minimum_number_of_adults, unless: -> { status.nil? || status.match(/^cancelled/) }
     validate :validate_payment, unless: -> { status.nil? || status.match(/^cancelled/) }
     validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
     # validates :invoice_number, uniqueness: true, format: { with: /\ARR20\d{2}-\d{3,4}\z/, on: :new }, allow_blank: true
-    
-    validates :status, inclusion: { in: Rails.configuration.registration[:registration_statuses] }
 
-    validates :sunday_lunch_number, 
-    numericality: { 
-      only_integer: true, 
-      greater_than_or_equal_to: 0, 
-      less_than_or_equal_to: Rails.configuration.registration[:sunday_lunch_max]
-    }
-    validates :lake_cruise_number, 
-    numericality: { 
-      only_integer: true, 
-      greater_than_or_equal_to: 0, 
-      less_than_or_equal_to: Rails.configuration.registration[:lake_cruise_max]
-    }
-    
+    validates :status, inclusion: { in: STATUSES }
+
+    validates :sunday_lunch_number,
+              numericality: {
+                only_integer: true,
+                greater_than_or_equal_to: 0,
+                less_than_or_equal_to: Rails.configuration.registration[:sunday_lunch_max]
+              }
+    validates :lake_cruise_number,
+              numericality: {
+                only_integer: true,
+                greater_than_or_equal_to: 0,
+                less_than_or_equal_to: Rails.configuration.registration[:lake_cruise_max]
+              }
+
+    STATUSES = [
+      'new',
+      'in progress',
+      'in review',
+      'payment due',
+      'complete',
+      'cancelled - settled',
+      'cancelled - needs refund'
+    ]
+
     serialize :events
 
     before_save :ensure_financials
@@ -97,13 +106,13 @@ module Event
       # Quick way to get the sum of all completed payments across all orders
       square_orders.joins(:payments).where(square_payments: { status: 'COMPLETED' }).sum(:amount_cents)
     end
-    
+
     def validate_minimum_number_of_adults
       if number_of_adults < 1
         errors[:base] << "You must register at least one adult."
       end
     end
-    
+
     def validate_payment
       if !paid_amount.nil?
         if (paid_amount.to_d > total.to_d)
@@ -119,7 +128,7 @@ module Event
     def number_of_volunteers
       attendees.where(volunteer: true).count
     end
-    
+
     def outstanding_balance?
       balance > 0.0
     end
@@ -137,13 +146,13 @@ module Event
     end
 
     def ensure_financials
-      self.total = registration_fee.to_d + 
-                    donation.to_d + 
-                    lake_cruise_fee.to_d
-    
+      self.total = registration_fee.to_d +
+                   donation.to_d +
+                   lake_cruise_fee.to_d
+
       self.balance = self.total - (paid_amount.to_d + refunded.to_d)
     end
-    
+
     def self.invoice_number
       prefix = "CR#{Rails.configuration.site[:dates][:year]}"
       previous_code = Registration.pluck(:invoice_number).last
@@ -154,7 +163,7 @@ module Event
       end
       "#{prefix}-#{next_number}"
     end
-    
+
     def total_of_payments
       (payments.where(status: 'COMPLETE').sum(:amount_cents) / 100.0).to_d
     end
@@ -162,6 +171,13 @@ module Event
     def total_of_refunded
       # Sums all completed refunds tied to this registration's payments
       refunds.where(status: 'COMPLETED').sum(:amount_cents) / 100.0
+    end
+
+    def was_paid(amount)
+      if paid_amount == amount
+        self.status = 'complete - confirmed'
+        self.save
+      end
     end
   end
 end
