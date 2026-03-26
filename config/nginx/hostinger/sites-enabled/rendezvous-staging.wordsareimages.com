@@ -1,1 +1,0 @@
-../sites-available/rendezvous-staging.wordsareimages.com
