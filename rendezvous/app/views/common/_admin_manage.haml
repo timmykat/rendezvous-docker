@@ -1,22 +1,22 @@
 - if user_signed_in? && user_is_admin?
   .manage
-    .container-fluid  
+    .container-fluid
       .row.justify-content-center
         .col-12
           .row
-            .col-md-4.col-12  
+            .col-md-4.col-12
               %ul.list-group.text-sm
                 %li.list-group-item.bg-dark.bg-gradient
                   %h3 People's Choice
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Ballot Hand Count', voting_hand_ballot_path
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Results', admin_peoples_choice_results_path
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Manage QR Codes', admin_manage_qr_codes_path
-                %li.list-group-item.bg-light.bg-danger= link_to "Clear Ballots (#{@ballot_count}) -- careful!", admin_clear_ballots_path
-            .col-md-4.col-12  
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Results', admin_admin_peoples_choice_results_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Manage QR Codes', admin_admin_manage_qr_codes_path
+                %li.list-group-item.bg-light.bg-danger= link_to "Clear Ballots (#{@ballot_count}) -- careful!", admin_admin_clear_ballots_path
+            .col-md-4.col-12
               %ul.list-group.text-sm
                 %li.list-group-item.bg-dark.bg-gradient
                   %h3 Site Content
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Content', keyed_contents_manage_path                
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Content', keyed_contents_manage_path
                 %li.list-group-item.bg-light.bg-gradient= link_to 'FAQs', faqs_manage_path
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Scheduled Events', scheduled_events_manage_path
                 %li.list-group-item.bg-light.bg-gradient= link_to 'Venues', venues_manage_path
@@ -26,30 +26,30 @@
               %ul.list-group.text-sm
                 %li.list-group-item.bg-dark.bg-gradient
                   %h3 Utilities
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Print packet labels', admin_print_path({item: 'labels'})
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Print blank dash placards', admin_print_path({item: 'blank_placards'})
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Print dash placards', admin_print_path({item: 'placards'})
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Attendees CSV', admin_download_csv_path({type: 'attendees', format: :csv})
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Volunteers list CSV', admin_download_csv_path({type: 'volunteers', format: :csv})
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Registration Graphs', admin_graphs_path
-                %li.list-group-item.bg-light.bg-gradient= link_to 'Cleanup Page', admin_cleanup_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Print packet labels', admin_admin_print_path({item: 'labels'})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Print blank dash placards', admin_admin_print_path({item: 'blank_placards'})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Print dash placards', admin_admin_print_path({item: 'placards'})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Attendees CSV', admin_admin_download_csv_path({type: 'attendees', format: :csv})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Volunteers list CSV', admin_admin_download_csv_path({type: 'volunteers', format: :csv})
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Registration Graphs', admin_admin_graphs_path
+                %li.list-group-item.bg-light.bg-gradient= link_to 'Cleanup Page', admin_admin_cleanup_path
 
-      %hr  
+      %hr
       .row.justify-content-center.mt-2
         .col-md-10
-          .card 
+          .card
             .card-body
               .card-text
                 .button-group
-                  = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning" 
-                  = link_to 'De-dupe content', admin_dedupe_path, class: 'btn  btn-warning' 
+                  = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning"
+                  = link_to 'De-dupe content', admin_admin_dedupe_path, class: 'btn  btn-warning'
       %hr
       .row.justify-content-center
         .col-md-10
           .card
             .card-title
               %h3 Overall Totals
-            .card-body.text-primary 
+            .card-body.text-primary
               .card-text
                 %table.table
                   %tr
@@ -57,59 +57,59 @@
                     %td #{@reg_count}
                   %tr
                     %td Number of attendees:
-                    %td #{@attendee_count}                  
+                    %td #{@attendee_count}
                   %tr
-                    %td Total fees assessed: 
+                    %td Total fees assessed:
                     %td #{number_to_currency(@total_fees_assessed)}
                   %tr
                     %td Total fees received:
                     %td #{number_to_currency(@total_fees_received)}
                   %tr
                     %td Total fees outstanding:
-                    %td #{number_to_currency(@total_fees_outstanding)}          
+                    %td #{number_to_currency(@total_fees_outstanding)}
       %hr
       .row.justify-content-center
         .col-md-10
           .card
             .card-title
               %h3 Lake George Excursion Summary
-            .card-body.text-primary 
+            .card-body.text-primary
               .card-text
                 %table.table
                   %tr
                     %td Number registered:
                     %td #{@lake_cruise_count}
                   %tr
-                    %td Total fees assessed: 
+                    %td Total fees assessed:
                     %td #{number_to_currency(@lake_cruise_fees_assessed)}
                   %tr
                     %td Total fees received:
-                    %td #{number_to_currency(@lake_cruise_fees_received)}   
+                    %td #{number_to_currency(@lake_cruise_fees_received)}
       %hr
       .row.justify-content-center
         .col-md-10
           .card
             .card-title
               %h3 Sunday Lunch Count
-            .card-body.text-primary 
+            .card-body.text-primary
               .card-text
-                %p Number of Sunday lunch participants: #{sunday_lunch_count}  
+                %p Number of Sunday lunch participants: #{sunday_lunch_count}
 
       - if @annual_question
         %hr
         .row.justify-content-center
-          .col-md-10 
+          .col-md-10
             = simple_form_for @annual_question do |f|
               .row.align-items-center
-                .form-group.col-md-2.col-12 
+                .form-group.col-md-2.col-12
                   = f.input :year
-                .form-group.col-md-6.col-12 
+                .form-group.col-md-6.col-12
                   = f.input :question
                 .form-group.col-md-3.col-12
                   = f.button :submit, input_html:  { value:  'Save' }, class:  "btn  btn-primary mt-3"
         .row.justify-content-center
           .col-md-10
-            #annual_question_results 
+            #annual_question_results
 
 -# :javascript
 -#   const dataset = #{@annual_question_data.to_json}
@@ -147,4 +147,3 @@
 -#       }
 -#     })
 -#   })
-

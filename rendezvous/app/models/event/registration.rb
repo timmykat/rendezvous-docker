@@ -68,6 +68,16 @@ module Event
     attribute :paid_amount, :decimal, default: 0.0
     attribute :total, :decimal, default: 0.0
 
+    STATUSES = [
+      'new',
+      'in progress',
+      'in review',
+      'payment due',
+      'complete',
+      'cancelled - settled',
+      'cancelled - needs refund'
+    ]
+
     validate :validate_minimum_number_of_adults, unless: -> { status.nil? || status.match(/^cancelled/) }
     validate :validate_payment, unless: -> { status.nil? || status.match(/^cancelled/) }
     validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
@@ -87,16 +97,6 @@ module Event
                 greater_than_or_equal_to: 0,
                 less_than_or_equal_to: Rails.configuration.registration[:lake_cruise_max]
               }
-
-    STATUSES = [
-      'new',
-      'in progress',
-      'in review',
-      'payment due',
-      'complete',
-      'cancelled - settled',
-      'cancelled - needs refund'
-    ]
 
     serialize :events
 
@@ -181,4 +181,3 @@ module Event
     end
   end
 end
-

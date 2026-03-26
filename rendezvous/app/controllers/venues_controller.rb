@@ -1,5 +1,5 @@
-class VenuesController < AdminController
-  
+class VenuesController < Admin::AdminController
+
   def new
     @venue = Venue.new
     puts @venue
@@ -102,7 +102,7 @@ class VenuesController < AdminController
         :group_code,
         :rooms_available,
         :close_date,
-        :type     
+        :type
       )
     end
 end

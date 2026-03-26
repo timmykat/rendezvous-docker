@@ -1,5 +1,5 @@
 module Admin
-  class TransactionsController < AdminController
+  class TransactionsController < Admin::AdminController
     def create
       event_registration = Event::Registration.find(params[:registration_id])
       transaction = Transaction.new(transaction_params)

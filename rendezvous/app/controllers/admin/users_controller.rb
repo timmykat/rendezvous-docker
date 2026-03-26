@@ -1,5 +1,5 @@
 module Admin
-  class UsersController < AdminController
+  class UsersController < Admin::AdminController
     def cleanup
       @users = get_deletion_candidates
       @users_to_delete = User.where(id: params[:user_ids])

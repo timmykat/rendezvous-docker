@@ -47,8 +47,7 @@ services:
     build: *app-build
     image: rails_image
 
-    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
-    # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
 
     environment: *app-env
 
@@ -73,7 +72,6 @@ services:
         condition: service_healthy
 
     environment: *app-env
-
 
     restart: unless-stopped
 
@@ -105,11 +103,11 @@ services:
     image: redis:7-alpine
     volumes:
       - redis_data:/data
-    command: [ "redis-server", "--appendonly", "yes" ]
+    command: ["redis-server", "--appendonly", "yes"]
 
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10

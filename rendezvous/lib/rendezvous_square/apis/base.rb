@@ -75,8 +75,6 @@ module RendezvousSquare
         all_items
       end
 
-      private
-
       def extract_data(result)
         begin
           if result.respond_to?(:orders)

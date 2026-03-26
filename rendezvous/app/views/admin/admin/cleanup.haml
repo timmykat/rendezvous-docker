@@ -18,7 +18,7 @@
             .card-text
 
               %p Number of users to delete: #{@users_to_delete.size.to_s}
-              = form_with url: admin_cleanup_path, method: :post do |f|
+              = form_with url: admin_admin_cleanup_path, method: :post do |f|
                 = f.hidden_field :confirm_delete, value: "true"
                 %ul
                   - @users_to_delete.each do |user|
@@ -26,7 +26,7 @@
 
                 = f.submit 'DELETE', data: { confirm: 'Are you sure?'}, class: "btn  btn-danger"
 
-          = form_with url: admin_cleanup_path, method: :post do |f|
+          = form_with url: admin_admin_cleanup_path, method: :post do |f|
             %p
               = check_box_tag "select_all", "select_all", false, id: "select_all", class: "select_all"
               = label_tag "select_all", "&nbsp;&nbsp;Select All&nbsp;&nbsp;&nbsp;&nbsp;".html_safe, style: "font-weight: normal"
@@ -39,7 +39,7 @@
                   %th Email
                   %th Number of Vehicles
                   %th Number of Registrations
-              
+
               %tbody
                 - @users.each do |user|
                   %tr
