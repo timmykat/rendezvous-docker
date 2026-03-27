@@ -25,7 +25,7 @@ services:
   db:
     ports: []
     volumes:
-      - rendezvous_data:/var/lib/mysql
+      - rendezvous-docker-prod_rendezvous_prod_data:/var/lib/mysql
 
   sidekiq:
     environment:
@@ -58,5 +58,6 @@ services:
       rendezvous:
 
 volumes:
-  rendezvous_data:
+  rendezvous-docker-prod_rendezvous_prod_data:
+    external: true
 
