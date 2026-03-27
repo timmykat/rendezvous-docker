@@ -23,7 +23,6 @@ services:
 
     networks:
       rendezvous:
-        ipv4_address: 192.168.1.100
 
   db:
     ports: []
