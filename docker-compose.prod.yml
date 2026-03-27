@@ -4,7 +4,8 @@ services:
       sh -c "bundle exec rake db:migrate &&
              bundle exec rails server -b 0.0.0.0"
 
-    ports: []   # no public exposure
+    ports:
+      - 3000:3000   # no public exposure
 
     volumes: [] # no bind mounts
 
