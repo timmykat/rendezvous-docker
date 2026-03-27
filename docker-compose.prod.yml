@@ -35,6 +35,7 @@ services:
 
 ## New Relic services
   newrelic-infra:
+    profiles: ['disabled']
     container_name: newrelic-infra
     image: newrelic/infrastructure-bundle:latest
     cap_add:

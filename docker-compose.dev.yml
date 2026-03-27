@@ -2,8 +2,6 @@ services:
   rails_app:
     volumes:
       - ./rendezvous:/var/www/rendezvous
-    ports:
-      - "3000:3000"
 
   nginx:
     image: nginx
