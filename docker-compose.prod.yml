@@ -61,9 +61,3 @@ services:
 volumes:
   rendezvous_data:
 
-networks:
-  rendezvous:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.1.0/24
