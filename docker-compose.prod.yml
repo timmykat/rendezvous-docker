@@ -6,7 +6,7 @@ services:
       - 3000:3000
 
     volumes:
-      - ./public:/var/www/public
+      - ./public:/var/www/rendezvous/public
 
     environment:
       RAILS_ENV: production
