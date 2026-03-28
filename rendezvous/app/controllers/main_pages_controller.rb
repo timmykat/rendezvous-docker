@@ -12,18 +12,18 @@ class MainPagesController < ApplicationController
     @event_hotel = EventHotel.first
     @events_by_day = ScheduledEvent.all.group_by(&:day)
   end
-  
+
   def faq
     @title = 'FAQ'
     @faqs = Admin:Faq.sorted
     fresh_when @faqs
   end
-  
+
   def history
     @title = 'Rendezvous History'
     @content = KeyedContent.find_by_key "page_history"
   end
-    
+
   def legal_information
     @title = 'Legal Information'
     @content = KeyedContent.find_by_key "page_legal"
@@ -47,7 +47,7 @@ class MainPagesController < ApplicationController
     current_user.expire_token
     @registration = current_user.current_registration
   end
-  
+
   def method_missing(method_sym, *arguments, &block)
     if Rails.configuration.site[:info_pages].include? method_sym.to_s
       render method_sym.to_s
@@ -55,7 +55,7 @@ class MainPagesController < ApplicationController
       super
     end
   end
-  
+
   def respond_to? (method_sym, include_private = false)
     if Rails.configuration.site[:info_pages].include? method_sym.to_s
       true
@@ -63,15 +63,15 @@ class MainPagesController < ApplicationController
       super
     end
   end
-  
-  
+
+
   def contact_us
     @name = params[:name]
     @email = params[:email]
     @message = params[:message]
 
-    RendezvousMailer.send_to_us(@name, @email, @message).deliver
-    RendezvousMailer.autoresponse(@name, @email, @message).deliver
+    RendezvousMailer.send_to_us(@name, @email, @message).deliver_later
+    RendezvousMailer.autoresponse(@name, @email, @message).deliver_later
     flash_notice 'Thank you for sending us a message: you should receive a confirmation email shortly.'
     redirect_to :root
   end

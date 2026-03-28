@@ -4,7 +4,7 @@ module Event
 
     before_action :get_registration, except: [:index, :welcome, :new, :create, :new_by_admin, :create_by_admin, :send_confirmation_email]
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
-    before_action :require_admin, only: [:index, :register_by_admin]
+    before_action :require_admin, only: [:index, :new_by_admin]
     before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
@@ -72,7 +72,7 @@ module Event
       elsif params[:id].present?
         @event_registration = Event::Registration.find(params[:id])
         @registration_user = @event_registration.user
-      elsif params[:event_registration][:user_id].present?
+    elsif params.dig(:user_id).present?
         user_id = params[:event_registration][:user_id]
         @registration_user = User.find(user_id)
       end
@@ -119,67 +119,19 @@ module Event
     end
 
     def new
-      if @registration_user.nil?
-        @title = "Create new registration"
-      else
-        @title = "Let's get you registered!"
-      end
-
-      @step = 'create'
-      @annual_question = AnnualQuestion.where(year: Date.current.year).first
-
-      unless current_user&.admin?
-        @event_registration = current_user.registrations.current.first
-        unless @event_registration.blank?
-          if !['payment due', 'complete'].include?(@event_registration.status)
-            flash_notice("You've already created a registration but haven't finished")
-            redirect_to review_event_registration_path(@event_registration)
-          else
-            flash_notice("You've already registered")
-            redirect_to event_registration_path(@event_registration)
-          end
-          return
-        end
-      end
-
       if current_user&.admin?
-        @event_registration = Registration.new(created_by_admin: true)
-      else
-        @event_registration = Registration.new
+        flash_alert "Admins my not register"
+        redirect_to admin_admin_dashboard_path
+        return
       end
-
-      @event_registration.status = 'new'
-
-      @event_registration.attendees.build
-
-      if current_user&.admin?
-        @event_registration.build_user
-        registrant_attendee = Attendee.new
-        registrant_attendee.name = @registration_user.full_name
-        @event_registration.attendees < registrant_attendee
-      else
-        @event_registration.user = current_user
-      end
-      @event_registration.user.vehicles.build
+      @title = "Let's get you registered!"
+      build_registration(@registration_user)
     end
 
     def new_by_admin
-      session[:admin_created] = true
       @title = "Registration by admin"
-      @step = 'create'
-      @annual_question = AnnualQuestion.find_by(year: Date.current.year)
-
-      @registration_user = User.find_by(id: params[:user_id])
-      @event_registration = Registration.new(created_by_admin: true)
-      @event_registration.attendees.build
-
-      if @registration_user
-        @event_registration.user = @registration_user
-      else
-        @event_registration.build_user
-      end
-
-      @event_registration.user.vehicles.build
+      build_registration
+      render :new
     end
 
     # Create or update the user
@@ -359,46 +311,6 @@ module Event
       end
     end
 
-    def send_to_square
-      @step = 'payment'
-      @event_registration = Registration.find(params[:id])
-      if !@event_registration.update(update_payment_params)
-        flash_alert "There was a problem making your payment update; no payment submitted"
-        render :payment
-      end
-
-      user = @event_registration.user
-      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
-      end
-
-      if customer_id.nil?
-        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-          ::RendezvousSquare::Apis::Customer.create_customer(user)
-        end
-      else
-        Rails.logger.info("Square customer found: " + customer_id)
-      end
-
-      redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
-
-      square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
-        RendezvousSquare::Apis::Checkout.create_square_payment_link({
-                                                                      registration: @event_registration,
-                                                                      customer_id: customer_id,
-                                                                      redirect_url: redirect_url,
-                                                                      fee_period: fee_period
-                                                                    })
-      end
-
-      unless square_payment_link.nil?
-        redirect_to square_payment_link, allow_other_host: true
-      else
-        flash_alert "Square was unable to generate a payment link."
-        redirect_to payment_event_registration_path(@event_registration)
-      end
-    end
-
     def complete_after_online_payment
       @title = 'Complete Registration'
       @step = 'complete'
@@ -513,6 +425,46 @@ module Event
       @step = 'welcome'
     end
 
+
+
+    private
+
+    def build_registration
+      @step = 'create'
+      @annual_question = AnnualQuestion.where(year: Date.current.year).first
+
+      @event_registration = @registration_user&.registrations&.current&.first
+
+      unless @event_registration.blank?
+        if !['payment due', 'complete'].include?(@event_registration.status)
+          flash_notice("You've already created a registration but haven't finished")
+          redirect_to review_event_registration_path(@event_registration)
+        else
+          flash_notice("You've already registered")
+          redirect_to event_registration_path(@event_registration)
+        end
+        return
+      end
+
+      @event_registration = Registration.new
+      @event_registration.status = 'new'
+
+      @event_registration.attendees.build
+
+      if current_user&.admin?
+        @event_registration.created_by_admin = true
+        @event_registration.build_user
+        registrant_attendee = Attendee.new
+        if @registration_user.present?
+          registrant_attendee.name = @registration_user.full_name
+        end
+        @event_registration.attendees << registrant_attendee
+      else
+        @event_registration.user = current_user
+      end
+      @event_registration.user.vehicles.build
+    end
+
     def send_confirmation_email
       event_registration = @event_registration || Registration.find(params[:id])
       if event_registration
@@ -529,7 +481,45 @@ module Event
       end
     end
 
-    private
+    def send_to_square
+      @step = 'payment'
+      @event_registration = Registration.find(params[:id])
+      if !@event_registration.update(update_payment_params)
+        flash_alert "There was a problem making your payment update; no payment submitted"
+        render :payment
+      end
+
+      user = @event_registration.user
+      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
+      end
+
+      if customer_id.nil?
+        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+          ::RendezvousSquare::Apis::Customer.create_customer(user)
+        end
+      else
+        Rails.logger.info("Square customer found: " + customer_id)
+      end
+
+      redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
+
+      square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
+        RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                      registration: @event_registration,
+                                                                      customer_id: customer_id,
+                                                                      redirect_url: redirect_url,
+                                                                      fee_period: fee_period
+                                                                    })
+      end
+
+      unless square_payment_link.nil?
+        redirect_to square_payment_link, allow_other_host: true
+      else
+        flash_alert "Square was unable to generate a payment link."
+        redirect_to payment_event_registration_path(@event_registration)
+      end
+    end
 
     def filter_params_by_status
       @event_registration = Registration.find(params[:id])
@@ -662,4 +652,3 @@ module Event
     end
   end
 end
-
