@@ -106,6 +106,7 @@ Rails.application.routes.draw do
   namespace :admin do
     get '/admin/dedupe', to: 'admin#dedupe'
     get '/admin/dashboard', to: 'admin#dashboard'
+    get '/admin/manage', to: 'admin#manage'
     get '/admin/download_csv', to: 'admin#download_csv', defaults: { format: 'csv' }
     get '/admin/graphs', to: 'admin#registration_graphs'
     get '/admin/cleanup', to: 'users#cleanup'

@@ -1,0 +1,37 @@
+.tab-content{ data: { "tab-content": 'vehicles' }}
+  .card
+    .card-body
+      .card-title
+        %h2 Vehicles
+      .card-text
+        - if @data
+          -# Remove .count here because @data[:citroens] is already an Integer
+          %p Number of Citroens: #{@data[:citroens]}
+          %p Number of non-Citroens: #{@data[:non_citroens]}
+
+        - if @vehicles
+          -# Keep .count here because @vehicles is a Collection
+          %p Total Vehicles: #{@vehicles.count}
+
+      %table.table
+        %thead
+          %tr
+            %th Judging Category
+            %th Model
+            %th Year
+            %th Marque
+            %th Other Info
+            %th Registrant
+        %tbody
+          - unless @vehicles
+            %p No vehicles yet.
+          - else
+            - @vehicles.each do |vehicle|
+              %tr
+                %td= vehicle.judging_category
+                %td= vehicle.model
+                %td= vehicle.year
+                %td= vehicle.marque
+                %td
+                  %p= vehicle.other_info
+                %td= vehicle.user.full_name

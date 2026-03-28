@@ -1,0 +1,95 @@
+.manage
+  .container-fluid
+    .row.justify-content-center
+      .col-12
+        .card
+          .card-body
+            .card-title
+              %h2 Manage
+            .card-body
+              .row
+                .col-md-4.col-12
+                  .card
+                    .card-body
+                      .card.title
+                        %h3 People's Choice
+                      .card-text
+                        %ul.list-group.text-sm
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Ballot Hand Count', voting_hand_ballot_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Results', admin_admin_peoples_choice_results_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Manage QR Codes', admin_admin_manage_qr_codes_path
+                          %li.list-group-item.bg-light.bg-danger= link_to "Clear Ballots (#{@ballot_count}) -- careful!", admin_admin_clear_ballots_path
+                .col-md-4.col-12
+                  .card
+                    .card-body
+                      .card.title
+                        %h3 Site Content
+                      .card-text
+                        %ul.list-group.text-sm
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Content', keyed_contents_manage_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'FAQs', faqs_manage_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Scheduled Events', scheduled_events_manage_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Venues', venues_manage_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Vendors', vendors_manage_path
+
+                .col-md-4.col-12
+                  .card
+                    .card-body
+                      .card.title
+                        %h3 Utilities
+                      .card-text
+                        %ul.list-group.text-sm
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Print packet labels', admin_admin_print_path({item: 'labels'})
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Print blank dash placards', admin_admin_print_path({item: 'blank_placards'})
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Print dash placards', admin_admin_print_path({item: 'placards'})
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Attendees CSV', admin_admin_download_csv_path({type: 'attendees', format: :csv})
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Volunteers list CSV', admin_admin_download_csv_path({type: 'volunteers', format: :csv})
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Registration Graphs', admin_admin_graphs_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Cleanup Page', admin_admin_cleanup_path
+
+          %hr
+          .row.justify-content-center.mt-2
+            .col-md-10
+              .card
+                .card-body
+                  .card-text
+                    .button-group
+                      = link_to "Update site settings", config_site_settings_get_path, class: "btn btn-warning"
+                      = link_to 'De-dupe content', admin_admin_dedupe_path, class: 'btn  btn-warning'
+
+      -# :javascript
+      -#   const dataset = #{@annual_question_data.to_json}
+
+      -#   loadChartJs(() => {
+      -#     const graphContainer = document.getElementById('annual_question_results');
+      -#     const canvas = document.createElement('canvas');
+      -#     graphContainer.appendChild(canvas);
+      -#     const ctx = canvas.getContext('2d');
+
+      -#     new Chart(ctx, {
+      -#       type: 'bar',
+      -#       data: {
+      -#         labels: dataset.options,
+      -#         datasets: [{
+      -#           label: 'Survey Responses',
+      -#           data: dataset.number,
+      -#           barThickness: 30,
+      -#           categoryPercentage: 1.0,
+      -#           barPercentage: 0.8,
+      -#           backgroundColor: [
+      -#             'hsl(160, 30%, 60%)',
+      -#             'hsl(20, 30%, 60%)',
+      -#             'hsl(240, 30%, 60%)'
+      -#           ]
+      -#         }]
+      -#       },
+      -#       options: {
+      -#         indexAxis: 'y',
+      -#         scales: {
+      -#           x: {
+      -#             beginAtZero: true
+      -#           }
+      -#         }
+      -#       }
+      -#     })
+      -#   })

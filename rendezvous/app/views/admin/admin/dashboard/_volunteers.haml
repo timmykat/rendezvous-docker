@@ -1,0 +1,20 @@
+.tab-content{ data: { "tab-content": 'volunteers' }}
+  .card
+    .card-body
+      .card-title
+        %h2 Volunteer List
+      .card-text
+        - if @volunteers
+          %p Total volunteers: #{@volunteers.size}
+
+  %table.table
+    %thead
+      %tr
+        %th Name
+        %th Email (of registered user)
+      %tbody
+        - if @data
+          - @volunteers.each do |volunteer|
+            %tr
+              %td= volunteer[:name]
+              %td= volunteer[:email]

@@ -18,7 +18,7 @@ module Admin
           'Volunteer?',
           'Donation?',
           'Date registration paid',
-          ('As of: ' + Time.current.strftime('%Y%m%d'))
+          "(As of: #{Time.current.strftime '%Y%m%d'})"
         ]
       },
       dash_placards: {
@@ -142,6 +142,10 @@ module Admin
       @user = User.find(params[:id])
       @event_registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
       @vehicles = @user.vehicles
+    end
+
+    def manage
+      render :manage
     end
 
     def dashboard(csv = false)

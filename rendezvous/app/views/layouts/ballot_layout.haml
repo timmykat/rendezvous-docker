@@ -11,7 +11,7 @@
 
     %link{ href: "https://fonts.googleapis.com", rel: "preconnect"}/
     %link{ crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
-    
+
     :plain
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
@@ -19,7 +19,7 @@
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/theme.min.css'
 
-    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
+    = stylesheet_link_tag 'application', "data-turbo-track": "reload"
 
     = csrf_meta_tags
 
@@ -27,7 +27,7 @@
 
   %body{ class: controller_classes + " outfit-regular ballot_layout" }
     .container
-      .row.justify-content-center 
+      .row.justify-content-center
         .col-12
           = render partial: 'layouts/flash'
 
@@ -40,18 +40,13 @@
                       %h1.h2 Citroen Rendezvous
                       %h2.h4 People's Choice
 
-            = render partial: 'common/simple_nav_bar' 
+            = render partial: 'common/simple_nav_bar'
 
-          %main 
+          %main
             .content
               = yield
 
           %footer.footer
-            .container 
+            .container
               .row.justify-content-center
                 = render partial: 'common/footer'
-    
-
-
-
-

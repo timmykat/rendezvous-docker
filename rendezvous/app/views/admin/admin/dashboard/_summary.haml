@@ -1,0 +1,89 @@
+.tab-content{ data: { "tab-content": 'summary' } }
+  .card
+    .card-body
+      .card-title
+        %h2 Summary for #{@year}
+      .card-text
+        .row
+          .col-md-12
+
+            .row
+              .col-md-6.col-12
+                .card
+                  .card-body
+                    .card-title
+                      %h3 Financials
+                    .card-text
+                      - if @data
+                        %table.table
+                          %tbody
+                            %tr
+                              %td
+                                %em Registration fees
+                              %td.text-right= number_to_currency(@data[:financials][:registration_fees])
+                            %tr
+                              %td
+                                %em Donations
+                              %td.text-right= number_to_currency(@data[:financials][:donations])
+                            %tr
+                              %td
+                                %em Lake Cruise Fees
+                              %td.text-right= number_to_currency(@lake_cruise_fees_assessed)
+                            %tr
+                              %td
+                                %em Paid
+                              %td.text-right= number_to_currency(@data[:financials][:paid])
+                            %tr
+                              %td
+                                %em Due
+                              %td.text-right= number_to_currency(@data[:financials][:due])
+                            %tr
+                              %td
+                                %em Total
+                              %td.text-right= number_to_currency(@data[:financials][:total])
+                      %p
+                        Square account:
+                        = link_to '<i class="fa fa-bank"></i>'.html_safe, "https://app.squareup.com", target: '_blank'
+
+              .col-md-6.col-12
+                .card
+                  .card-body
+                    .card-title
+                      %h3 The Numbers
+                    .card-text
+                      - if @data
+                        %table.table
+                          %tbody
+                            %tr
+                              %td
+                                %em Registrations
+                              %td.text-right= @data[:registrants].count
+                            %tr
+                              %td
+                                %em Attendees
+                              %td.text-right
+                                Adults: #{@data[:adult]}
+                                %br
+                                Youths: #{@data[:youth]}
+                                %br
+                                Kids: #{@data[:child]}
+                            %tr
+                              %td
+                                %em Lake Cruise Participants
+                              %td.text-right= @lake_cruise_count
+                            %tr
+                              %td
+                                %em Volunteers
+                              %td.text-right= @volunteers.length
+                            %tr
+                              %td
+                                %em Vehicles
+                              %td.text-right= @vehicles&.count || 0
+                            %tr
+                              %td{ colspan: 2 }
+                                %p
+                                  %em Newbies
+                                %p
+                                  - @data[:newbies].each do |newbie|
+                                    = newbie.full_name
+                                    %br

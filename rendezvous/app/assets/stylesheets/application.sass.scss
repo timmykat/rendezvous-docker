@@ -1,0 +1,15 @@
+@use "./application/fonts" as *;
+@use "./application/registrations";
+@use "./application/ballot";
+@use "./application/labels";
+@use "./application/scaffolds";
+@use "./application/printing";
+@use "./application/tab_display";
+
+@import "jquery-ui/themes/base/tabs";
+@import "bootstrap/dist/css/bootstrap";
+@import "tablesorter/dist/css/theme.bootstrap_4.min";
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap");
+@import "simplemde/dist/simplemde.min";
+
+@import "./application/overrides";

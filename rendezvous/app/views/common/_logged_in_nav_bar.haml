@@ -30,7 +30,7 @@
                     }
                       = current_user.full_name
 
-                    .dropdown-menu.dropdown-menu-right{ 'aria-labelledby' => 'userDropdown' }
+                    .dropdown-menu.dropdown-menu-right{ 'aria-labelledby' => 'userDropdown', style: 'z-index: 10000' }
 
                       - unless user_is_admin?
                         - if registration_is_open

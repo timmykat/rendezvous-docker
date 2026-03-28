@@ -1,0 +1,62 @@
+.tab-content{ data: { "tab-content": 'registrations' } }
+  .row
+    .col-12
+      .card
+        .card-body
+          .card-title
+            %h2= "Registrations for #{@year} (#{@reg_count})"
+          .card-text
+            = form_with url: admin_admin_dashboard_path, method: :get do |f|
+              - options = options_for_select((Event::Registration.distinct.pluck(:year) + [Date.current.year.to_s]).uniq.sort.reverse, @year)
+              .form-group
+                = f.label :year
+                = f.select :year, options, {}, { class: 'form-select' }
+              .form-group
+                = f.submit 'Go', class: 'btn btn-primary'
+
+      %table#registration-table.table.tablesorter.striped
+        %thead
+          %tr
+            %th.tablesorter-header.filter-false.text-center Actions
+            %th.tablesorter-header.filter-false.text-center Status
+            %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Name
+            %th.tablesorter-header.filter-false.text-center Adults, Youths, Children
+            %th.tablesorter-header.filter-false.text-center Fee
+            %th.tablesorter-header.filter-false.text-center Donation
+            %th.tablesorter-header.filter-false.text-center Total
+            %th.tablesorter-header.filter-false.text-center Paid
+            %th.tablesorter-header.filter-false.text-center Balance
+        %tbody
+          - @event_registrations.each do |reg|
+            %tr.text-center
+              %td.text-left
+                %ul.list-unstyled
+                  %li= link_to 'View', event_registration_path(reg)
+                  %li= link_to 'Edit', edit_event_registration_path(reg)
+                  - if reg.status != 'complete'
+                    %li= link_to 'Review', review_event_registration_path(reg)
+                    %li= link_to 'Payment', payment_event_registration_path(reg)
+                  %li= link_to 'Cancel', event_cancel_registration_path(reg), data: { confirm: "Sure?" }
+                  %li= link_to 'DELETE', event_destroy_registration_path(reg), method: :delete, data: { confirm: "Permanent?" }
+
+              %td= reg.status
+
+              %td.text-left
+                - if reg.user
+                  = link_to reg.user.last_name_first, user_path(reg.user)
+                - else
+                  *** Missing User (ID: #{reg.id})
+
+              %td.text-left= format_attendee_counts(reg)
+              %td.text-right= number_to_currency(reg.registration_fee)
+              %td.text-right= number_to_currency(reg.donation)
+              %td.text-right= number_to_currency(reg.total)
+              %td.text-right= number_to_currency(reg.paid_amount)
+
+              -# Use the balance column directly
+              - if reg.balance > 0
+                %td.text-center.has-balance= number_to_currency(reg.balance)
+              - elsif reg.balance < 0
+                %td.text-center.owed= "(#{number_to_currency(reg.balance.abs)})"
+              - else
+                %td.text-center $0.00

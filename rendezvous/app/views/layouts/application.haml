@@ -36,7 +36,7 @@
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
 
-    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
+    = stylesheet_link_tag 'application', "data-turbo-track": "reload"
 
     = csrf_meta_tags
 
@@ -73,7 +73,7 @@
         - if current_user.nil?
           = render partial: 'common/logged_out_nav_bar'
         - else
-          = render partial: 'common/logged_in_nav_bar'  
+          = render partial: 'common/logged_in_nav_bar'
 
       - if public_registration && !current_registration
         .container-fluid.px-0
@@ -102,5 +102,3 @@
 
     %footer.footer.text-center
       = render partial: 'common/footer'
-
-

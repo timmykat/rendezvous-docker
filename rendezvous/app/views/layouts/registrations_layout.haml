@@ -11,12 +11,12 @@
 
     %link{ href: "https://fonts.googleapis.com", rel: "preconnect"}/
     %link{ crossorigin: "", href: "https://fonts.gstatic.com", rel: "preconnect"}
-    
+
     :plain
       <link rel="preload" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" as: "style" />
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prompt:wght@600&display=swap" media="print" onload="this.media='all'" />
 
-    = stylesheet_link_tag 'vendor', 'application', "data-turbo-track": "reload"
+    = stylesheet_link_tag 'application', "data-turbo-track": "reload"
 
     = csrf_meta_tags
 
@@ -45,23 +45,18 @@
       - if current_user.nil?
         = render partial: 'common/logged_out_nav_bar'
       - else
-        = render partial: 'common/logged_in_nav_bar'        
+        = render partial: 'common/logged_in_nav_bar'
 
       - if user_is_admin?
         = render partial: 'common/admin_manage'
 
-    %main 
+    %main
       .content
         = yield
       .push
 
     %footer.footer
-      .container 
+      .container
         .row.justify-content-center
           = render partial: 'common/footer'
       = render partial:'common/volunteers_info_modal'
-
-
-
-
-

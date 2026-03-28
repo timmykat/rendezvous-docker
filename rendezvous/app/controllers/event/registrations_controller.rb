@@ -425,7 +425,45 @@ module Event
       @step = 'welcome'
     end
 
+    def send_to_square
+      @step = 'payment'
+      @event_registration = Registration.find(params[:id])
+      if !@event_registration.update(update_payment_params)
+        flash_alert "There was a problem making your payment update; no payment submitted"
+        render :payment
+      end
 
+      user = @event_registration.user
+      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
+      end
+
+      if customer_id.nil?
+        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+          ::RendezvousSquare::Apis::Customer.create_customer(user)
+        end
+      else
+        Rails.logger.info("Square customer found: " + customer_id)
+      end
+
+      redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
+
+      square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
+        RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                      registration: @event_registration,
+                                                                      customer_id: customer_id,
+                                                                      redirect_url: redirect_url,
+                                                                      fee_period: fee_period
+                                                                    })
+      end
+
+      unless square_payment_link.nil?
+        redirect_to square_payment_link, allow_other_host: true
+      else
+        flash_alert "Square was unable to generate a payment link."
+        redirect_to payment_event_registration_path(@event_registration)
+      end
+    end
 
     private
 
@@ -478,46 +516,6 @@ module Event
         else
           redirect_to :root
         end
-      end
-    end
-
-    def send_to_square
-      @step = 'payment'
-      @event_registration = Registration.find(params[:id])
-      if !@event_registration.update(update_payment_params)
-        flash_alert "There was a problem making your payment update; no payment submitted"
-        render :payment
-      end
-
-      user = @event_registration.user
-      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
-      end
-
-      if customer_id.nil?
-        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-          ::RendezvousSquare::Apis::Customer.create_customer(user)
-        end
-      else
-        Rails.logger.info("Square customer found: " + customer_id)
-      end
-
-      redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
-
-      square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
-        RendezvousSquare::Apis::Checkout.create_square_payment_link({
-                                                                      registration: @event_registration,
-                                                                      customer_id: customer_id,
-                                                                      redirect_url: redirect_url,
-                                                                      fee_period: fee_period
-                                                                    })
-      end
-
-      unless square_payment_link.nil?
-        redirect_to square_payment_link, allow_other_host: true
-      else
-        flash_alert "Square was unable to generate a payment link."
-        redirect_to payment_event_registration_path(@event_registration)
       end
     end
 
