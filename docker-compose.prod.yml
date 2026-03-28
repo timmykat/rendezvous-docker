@@ -5,7 +5,8 @@ services:
     ports:
       - 3000:3000
 
-    volumes: [] # no bind mounts
+    volumes:
+      - ./public:/var/www/public
 
     environment:
       RAILS_ENV: production
@@ -13,7 +14,7 @@ services:
       SIDEKIQ_LOG_LEVEL: info
 
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000/up" ]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
       interval: 5s
       timeout: 3s
       retries: 5
@@ -33,9 +34,9 @@ services:
       RACK_ENV: production
       SIDEKIQ_LOG_LEVEL: info
 
-## New Relic services
+  ## New Relic services
   newrelic-infra:
-    profiles: ['disabled']
+    profiles: ["disabled"]
     container_name: newrelic-infra
     image: newrelic/infrastructure-bundle:latest
     cap_add:
@@ -60,4 +61,3 @@ services:
 volumes:
   rendezvous-docker-prod_rendezvous_prod_data:
     external: true
-
