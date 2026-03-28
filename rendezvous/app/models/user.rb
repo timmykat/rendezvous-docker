@@ -210,6 +210,11 @@ class User < ApplicationRecord
     self.email = "#{username}@citroenrendezvous.org"
   end
 
+  # Override of Devise method to use sidekiq
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
+  end
+
   private
     def generate_tag(length = 4)
       chars = %w[A C D E F G H J K L M N P Q R T U V W X Y Z 1 2 3 4 5 6 7 8 9] # User friendly characters

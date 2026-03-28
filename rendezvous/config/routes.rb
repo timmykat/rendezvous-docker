@@ -1,15 +1,16 @@
 require "sidekiq/web"
 
 Rails.application.routes.draw do
-  root 'main_pages#index'
 
   # health check
   get "/up", to: "rails/health#show"
 
   # sidekiq
-  authenticate :user, ->(user) { user.admin? } do
+  authenticate :user, lambda { |user| user.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
+
+  root 'main_pages#index'
 
   # -- Users
   devise_for :users,
