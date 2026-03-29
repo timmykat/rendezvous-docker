@@ -11,7 +11,7 @@ ENV REDIS_URL=redis://redis:6379/0
 
 RUN mkdir -p $RAILS_ROOT
 
-WORKDIR $RAILS_ROOT
+WORKDIR /var/www/rendezvous
 
 # Install bundler + gems first (better caching)
 RUN gem install bundler
