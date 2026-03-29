@@ -38,9 +38,13 @@ class Users::SessionsController < Devise::SessionsController
     end
   end
 
+  def destroy
+    current_user&.update_column(:last_active, nil)
+    super
+  end
 
   private
-  
+
     def permitted_user_params
       user_params = ActionController::Parameters.new(user: params)
       user_params.require(:user).permit(

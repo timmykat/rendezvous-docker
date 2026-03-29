@@ -23,13 +23,29 @@ class ApplicationController < ActionController::Base
   helper_method :lake_cruise_venue_link
   helper_method :written_reg_form_link
   helper_method :login_on
+  helper_method :get_active_users
 
   GEO_CONFIG = Rails.configuration.geodata
+
+  ACTIVITY_WINDOW = 15.minutes
 
   layout :select_layout
 
   def select_layout
     ['manage'].include?(action_name) ? "admin_layout" : "application"
+  end
+
+  def active_users
+    return unless current_user&.admin?
+
+    n = User.where('last_active > ?', ACTIVITY_WINDOW.ago).count
+    if n == 0
+      "There are no other active users."
+    elsif n == 1
+      "There is 1 active user."
+    else
+      "There are #{n} active users."
+    end
   end
 
   def render(*args)
@@ -127,9 +143,11 @@ class ApplicationController < ActionController::Base
   end
 
   def update_active_user
-    if current_user
-      current_user.update_column(:last_active, Time.current)
-    end
+    return unless current_user ||
+                  current_user.last_active.nil? ||
+                  current_user.last_active < ACTIVITY_WINDOW.ago
+
+    current_user.update_column(:last_active, Time.current)
   end
 
   def import_data(filename, klass_name)
