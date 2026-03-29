@@ -1,14 +1,17 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ["Build and Push Image"]
-    types:
-      - completed
+  workflow_dispatch: # 👈 manual button
+  # workflow_run:        # 👈 automatic trigger
+  #   workflows: ["Build and Push To Registry"]
+  #   types:
+  #     - completed
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
 
     runs-on: ubuntu-latest
 
@@ -22,7 +25,14 @@ jobs:
           script: |
             set -e
 
-            IMAGE="ghcr.io/${{ github.repository }}:${{ github.sha }}"
+            # Determine correct SHA depending on trigger
+            if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+              SHA="${{ github.sha }}"
+            else
+              SHA="${{ github.event.workflow_run.head_sha }}"
+            fi
+
+            IMAGE="ghcr.io/${{ github.repository }}:$SHA"
 
             cd /var/www/rendezvous-docker-prod
 
@@ -37,7 +47,7 @@ jobs:
             docker rm temp
 
             echo "-- Restart app --"
-            export IMAGE_TAG=${{ github.sha }}
+            export IMAGE_TAG=$SHA
             docker compose up -d --force-recreate
 
             echo "-- Health check --"
@@ -51,8 +61,6 @@ jobs:
             fi
 
             echo "-- Find container --"
-            CONTAINER_ID=$(docker ps --filter "name=rails_app_pro" --format="{{.ID}}")
-
             if [ -z "$CONTAINER_ID" ]; then
               echo "Container not running!"
               exit 1
@@ -63,13 +71,13 @@ jobs:
               echo "Pending migrations found. Running db:migrate..."
               docker run --rm \
                 -e RAILS_ENV=production \
-                ghcr.io/your/repo:$SHA \
+                $IMAGE \
                 bundle exec rails db:migrate
             else
               echo "No pending migrations."
             fi
 
             echo "-- Save deployed version --"
-            echo "${{ github.sha }}" > .current_version
+            echo "$SHA" > .current_version
 
             echo "-- DONE --"
