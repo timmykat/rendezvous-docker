@@ -41,6 +41,7 @@ module Rendezvous
     # Is this a docker environment (as opposed to EC2)
 
     config.load_defaults 7.0
+    config.active_record.schema_format = :sql
     config.active_record.yaml_column_permitted_classes = [Date, Symbol]
     config.action_dispatch.default_headers = {
       'Cache-Control' => 'no-cache, no-store, must-revalidate',

@@ -1,12 +1,14 @@
-FROM ruby:3.4.2 as main
+FROM ruby:3.4.2 AS main
 
 RUN apt-get update -qq && \
-    apt-get install -y curl xz-utils nodejs npm
+    apt-get install -y curl xz-utils nodejs npm default-mysql-client
 
 # Install yarn (no nvm needed)
 RUN npm install -g yarn
 
 ENV RAILS_ROOT=/var/www/rendezvous
+ENV REDIS_URL=redis://redis:6379/0
+
 RUN mkdir -p $RAILS_ROOT
 
 WORKDIR $RAILS_ROOT

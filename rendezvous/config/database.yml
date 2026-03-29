@@ -8,11 +8,11 @@ default: &default
   database: <%= ENV['MYSQL_DATABASE'] %>
   host: db
 
+development:
+  <<: *default
+
 staging:
   <<: *default
 
-
-
 production:
   <<: *default
-

@@ -3,7 +3,6 @@ x-app-build: &app-build
   dockerfile: ../config/docker/Dockerfile
 
 x-app-env: &app-env
-  REDIS_URL: redis://redis:6379/0
   APP_DOMAIN: ${APP_DOMAIN}
   RAILS_ENV: ${RAILS_ENV}
   RACK_ENV: ${RACK_ENV}
