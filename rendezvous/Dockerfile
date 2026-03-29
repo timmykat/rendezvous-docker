@@ -6,24 +6,34 @@ RUN apt-get update -qq && \
 # Install yarn (no nvm needed)
 RUN npm install -g yarn
 
+ARG RAILS_ENV=production
+ARG NODE_ENV=production
+
+ENV RAILS_ENV=$RAILS_ENV
+ENV NODE_ENV=$NODE_ENV
+
 ENV RAILS_ROOT=/var/www/rendezvous
 ENV REDIS_URL=redis://redis:6379/0
 
+RUN echo "RAILS_ENV=$RAILS_ENV NODE_ENV=$NODE_ENV"
+
 RUN mkdir -p $RAILS_ROOT
 
-WORKDIR /var/www/rendezvous
+WORKDIR $RAILS_ROOT
 
 # Install bundler + gems first (better caching)
 RUN gem install bundler
 
+# ---- Ruby deps layer ----
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-# Add project files
-COPY . .
-
-# Install JS deps
+# ---- JS deps layer ----
+COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
+
+# ---- App code ----
+COPY . .
 
 # 🔥 THIS is what you’re missing
 RUN bundle exec rake assets:precompile
