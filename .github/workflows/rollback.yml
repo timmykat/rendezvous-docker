@@ -1,0 +1,35 @@
+name: Rollback Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "Commit SHA to deploy"
+        required: true
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy rollback
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOSTINGER_IP }}
+          username: ${{ vars.HOSTINGER_USER }}
+          key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
+          script: |
+            IMAGE="ghcr.io/${{ github.repository }}:${{ inputs.sha }}"
+
+            echo "Rolling back to $IMAGE"
+
+            docker pull $IMAGE
+
+            docker create --name temp $IMAGE
+            docker cp temp:/var/www/rendezvous/public ./rendezvous/public
+            docker rm temp
+
+            docker compose down
+            docker compose up -d
+
+            echo "Rollback complete"

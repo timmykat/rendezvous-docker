@@ -1,38 +1,29 @@
 FROM ruby:3.4.2 as main
 
 RUN apt-get update -qq && \
-    apt-get install -y curl xz-utils
+    apt-get install -y curl xz-utils nodejs npm
 
-# Install nvm and Node.js
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-ENV NVM_DIR=/root/.nvm
-ENV NODE_VERSION=22.15.0
-RUN bash -c "source $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm use $NODE_VERSION"
-
-# Add nvm and node binaries to PATH
-ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-
-# Verify Node installation
-RUN node -v && npm -v
-
+# Install yarn (no nvm needed)
 RUN npm install -g yarn
 
 ENV RAILS_ROOT=/var/www/rendezvous
-RUN mkdir -p $RAILS_ROOT 
+RUN mkdir -p $RAILS_ROOT
 
 WORKDIR $RAILS_ROOT
 
-# Add gem setup
+# Install bundler + gems first (better caching)
 RUN gem install bundler
 
 COPY Gemfile Gemfile.lock ./
-
 RUN bundle install
 
-# Add project files and precompile assets
+# Add project files
 COPY . .
 
-RUN yarn install
+# Install JS deps
+RUN yarn install --frozen-lockfile
 
-EXPOSE 3000 
+# 🔥 THIS is what you’re missing
+RUN bundle exec rake assets:precompile
 
+EXPOSE 3000
