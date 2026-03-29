@@ -11,8 +11,10 @@
 .data
 .code-workspace
 
-# mysql intialization
+# Ignore mysql intialization but keep rails schema
 *.sql
+!rendezvous/*.sql
+!rendezvous/**/*.sql
 
 # Ignore .env files
 .env*
