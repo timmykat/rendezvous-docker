@@ -2,10 +2,10 @@ name: Deploy
 
 on:
   workflow_dispatch: # 👈 manual button
-  # workflow_run:        # 👈 automatic trigger
-  #   workflows: ["Build and Push To Registry"]
-  #   types:
-  #     - completed
+  workflow_run: # 👈 automatic trigger
+    workflows: ["Build and Push To Registry"]
+    types:
+      - completed
 
 jobs:
   deploy:
@@ -24,6 +24,17 @@ jobs:
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           script: |
             set -e
+
+            if [ "${{ github.event_name }}" = "workflow_run" ]; then
+              echo "Automatic workflow runs are disabled. Please trigger manually."
+              exit 1
+            fi
+
+            exec 9>/tmp/deploy.lock
+            flock -n 9 || {
+              echo "Another deployment is in progress"
+              exit 1
+            }
 
             # Determine correct SHA depending on trigger
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
