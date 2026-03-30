@@ -38,12 +38,12 @@ jobs:
 
             # Determine correct SHA depending on trigger
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-              SHA="${{ github.sha }}:latest"
+              TAG=":latest"
             else
-              SHA="${{ github.event.workflow_run.head_sha }}"
+              TAG="${{ github.event.workflow_run.head_sha }}"
             fi
 
-            IMAGE="ghcr.io/${{ github.repository }}:$SHA"
+            IMAGE="ghcr.io/${{ github.repository }}:$TAG"
 
             echo "Deploying image: $IMAGE"
 
@@ -60,7 +60,7 @@ jobs:
             docker rm temp
 
             echo "-- Restart app --"
-            export IMAGE_TAG=$SHA
+            export IMAGE_TAG=$TAG
             docker compose up -d --force-recreate
 
             echo "-- Health check --"
