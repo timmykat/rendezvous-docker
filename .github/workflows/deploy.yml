@@ -52,10 +52,13 @@ jobs:
             echo "-- Pull image --"
             docker pull $IMAGE
 
-            echo "-- Extract assets --"
+            echo "-- Clean assets and replace --"
             docker create --name temp $IMAGE
-            docker cp temp:/var/www/rendezvous/public/assets ./rendezvous/public/assets
-            docker cp temp:/var/www/rendezvous/public/packs ./rendezvous/public/packs || true
+            rm -rf ./rendezvous/public/assets
+            rm -rf ./rendezvous/public/packs
+            rm -f ./rendezvous/public/manifest.json
+            docker cp temp:/var/www/rendezvous/public/assets ./rendezvous/public/
+            docker cp temp:/var/www/rendezvous/public/packs ./rendezvous/public/ || true
             docker cp temp:/var/www/rendezvous/public/manifest.json ./rendezvous/public/manifest.json || true
             docker rm temp
 
