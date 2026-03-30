@@ -69,15 +69,25 @@ jobs:
             export IMAGE_TAG=$TAG
             docker compose up -d --force-recreate
 
-            echo "-- Health check --"
+            CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}")
+            echo "-- Health check -- container $CONTAINER_ID"
+
             sleep 3
 
-            CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}")
+            for i in {1..10}; do
+              echo "Attempt $i..."
 
-            echo "Checking container $CONTAINER_ID"
+              if docker exec "$CONTAINER_ID" curl -f http://localhost:3000/up; then
+                echo "Health check passed!"
+                break
+              fi
 
-            if ! docker exec "$CONTAINER_ID" curl -f http://localhost:3000; then
+              sleep 3
+            done
+
+            if [ $? -ne 0 ]; then
               echo "Health check failed! Rolling back..."
+              docker logs "$CONTAINER_ID" || true
               exit 1
             fi
 
