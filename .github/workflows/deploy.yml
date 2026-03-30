@@ -25,11 +25,6 @@ jobs:
           script: |
             set -e
 
-            if [ "${{ github.event_name }}" = "workflow_run" ]; then
-              echo "Automatic workflow runs are disabled. Please trigger manually."
-              exit 1
-            fi
-
             exec 9>/tmp/deploy.lock
             flock -n 9 || {
               echo "Another deployment is in progress"
