@@ -16,3 +16,12 @@ staging:
 
 production:
   <<: *default
+
+test:
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: 5
+  timeout: 5000
+  username: test_user
+  password: test_password
+  database: rendezvous_test

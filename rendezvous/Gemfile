@@ -1,96 +1,69 @@
 source 'https://rubygems.org'
 ruby '3.4.2'
 
-gem 'rake'
-gem 'csv'
-
-gem 'connection_pool', '~> 2.4.1'
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '7.2.3'
+gem 'rake'
 
-# Security updates
-gem "actionpack", "7.2.3"
-gem "actiontext", "7.2.3"
-gem "activestorage", "7.2.3"
+# Action packages
+gem 'actionpack', '7.2.3'
+gem 'actiontext', '7.2.3'
+gem 'activestorage', '7.2.3'
 
-gem 'rails_semantic_logger'
-gem 'amazing_print'
-
-# For QR code generation
-gem 'sidekiq', '7.2.3'
-gem 'redis', '5.4.1'
-
-gem 'jsbundling-rails'
-gem 'cssbundling-rails'
-gem 'propshaft'
-
-# Load environment variables in development
-gem 'dotenv-rails'
-
-gem 'turbo-rails'
-gem 'importmap-rails'
-
-# The database for Active Record
+# Services
+gem 'connection_pool', '~> 2.4.1'
 gem 'mysql2', '0.5.6'
-# gem 'pg', '1.5.6'
+gem 'newrelic_rpm'
+gem 'puma', '6.4.2'
+gem 'redis', '5.4.1'
+gem 'sidekiq', '7.2.3'
 
-# Use haml for templates
+# Asset handling
+gem 'cssbundling-rails'
+gem 'importmap-rails'
+gem 'jsbundling-rails'
+gem 'propshaft'
+gem 'terser', '~> 1.1'
+
+# Tools & utilities
+gem 'amazing_print'
+gem 'annotaterb' # Annotates models and tests
+gem 'bcrypt', '~> 3.1'
+gem 'carrierwave'
+gem 'csv'
+gem 'daemons'
+gem 'devise', '~> 4.9'
+gem 'dkim'
+gem 'dotenv-rails'
 gem 'haml-rails'
+gem 'rails_semantic_logger'
+gem 'redcarpet' # Markdown parser for rich text fields
+gem 'role_model'
+gem 'rqrcode' # QR codes
+gem 'simple_form', '~>5'
+gem 'turbo-rails'
 
-# Use Uglifier as compressor for JavaScript assets
-
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
-# Use jquery as the JavaScript library
+# Front end tools
+gem 'cocoon'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'rails_sortable'
 
-# Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1'
-
-gem 'devise', '~> 4.9'
-gem 'carrierwave'
-gem 'cocoon'
-gem 'role_model'
-gem 'daemons'
-gem 'square.rb'
-gem 'dkim'
-gem 'simple_form', '~>5'
-gem 'redcarpet'
-
-# Model annotation
-gem 'annotaterb'
-
-# Monitoring
-gem 'newrelic_rpm'
-
-# QR codes
-gem 'rqrcode'
-
+# External libraries
 gem 'gibbon' # Mailchimp API
-
-# Application server
-gem 'puma', '6.4.2'
-
-gem 'letter_opener'
+gem 'square.rb'
 
 group :development, :staging do
-  gem 'debug'
-  gem 'pry'
-  gem 'pry-rails'
-  gem 'pry-byebug'
-  gem 'ed25519', '>= 1.2', '< 2.0'
   gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
+  gem 'debug'
+  gem 'ed25519', '>= 1.2', '< 2.0'
+  gem 'letter_opener'
+  gem 'pry'
+  gem 'pry-byebug'
+  gem 'pry-rails'
 end
 
 group :development, :test do
-  gem 'rspec-rails'
-  gem 'factory_bot_rails'
   gem 'database_cleaner'
+  gem 'factory_bot_rails'
   gem 'racksh'
 end
-
-gem "terser", "~> 1.1"
