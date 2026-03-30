@@ -30,12 +30,17 @@ services:
     ports: []
     volumes:
       - rendezvous-docker-prod_rendezvous_prod_data:/var/lib/mysql
+    networks:
+      rendezvous:
 
   sidekiq:
     environment:
       RAILS_ENV: production
       RACK_ENV: production
       SIDEKIQ_LOG_LEVEL: info
+
+    networks:
+      rendezvous:
 
   ## New Relic services
   newrelic-infra:
@@ -64,3 +69,6 @@ services:
 volumes:
   rendezvous-docker-prod_rendezvous_prod_data:
     external: true
+
+networks:
+  rendezvous:

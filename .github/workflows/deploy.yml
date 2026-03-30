@@ -97,16 +97,7 @@ jobs:
               exit 1
             fi
 
-            echo "-- Run migrations if needed --"
-            if docker exec "$CONTAINER_ID" bundle exec rails db:migrate:status | grep "down"; then
-              echo "Pending migrations found. Running db:migrate..."
-              docker run --rm \
-                -e RAILS_ENV=production \
-                $IMAGE \
-                bundle exec rails db:migrate
-            else
-              echo "No pending migrations."
-            fi
+            docker exec -e RAILS_ENV=production "$CONTAINER_ID" bundle exec rails db:migrate
 
             echo "-- Save deployed version --"
             echo "$TAG" > .current_version
