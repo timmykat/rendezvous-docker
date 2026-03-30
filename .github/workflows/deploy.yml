@@ -53,6 +53,8 @@ jobs:
             docker pull $IMAGE
 
             echo "-- Clean assets and replace --"
+            docker ps -a --filter "name=temp"
+            docker stop temp 2>/dev/null || true
             docker rm -f temp || true
             docker create --name temp $IMAGE
             rm -rf ./rendezvous/public/assets
