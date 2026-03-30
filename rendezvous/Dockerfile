@@ -21,6 +21,9 @@ RUN echo "RAILS_ENV=$RAILS_ENV NODE_ENV=$NODE_ENV"
 
 RUN mkdir -p $RAILS_ROOT
 
+RUN adduser --disabled-password --gecos '' webuser \
+  && chown -R webuser:webuser $RAILS_ROOT
+
 WORKDIR $RAILS_ROOT
 
 # Install bundler + gems first (better caching)
