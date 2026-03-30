@@ -1,5 +1,6 @@
 services:
   rails_app:
+    build: null
     image: ghcr.io/timmykat/rendezvous-docker:${IMAGE_TAG}
     user: "webuser:webuser"
     command: bundle exec rails server -b 0.0.0.0 -p 3000
