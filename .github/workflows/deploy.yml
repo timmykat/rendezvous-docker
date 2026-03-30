@@ -38,12 +38,14 @@ jobs:
 
             # Determine correct SHA depending on trigger
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-              SHA="${{ github.sha }}"
+              SHA="${{ github.sha }}:latest"
             else
               SHA="${{ github.event.workflow_run.head_sha }}"
             fi
 
             IMAGE="ghcr.io/${{ github.repository }}:$SHA"
+
+            echo "Deploying image: $IMAGE"
 
             cd /var/www/rendezvous-docker-prod
 
