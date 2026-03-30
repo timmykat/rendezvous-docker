@@ -22,7 +22,8 @@ RUN echo "RAILS_ENV=$RAILS_ENV NODE_ENV=$NODE_ENV"
 RUN mkdir -p $RAILS_ROOT
 
 RUN adduser --disabled-password --gecos '' webuser \
-  && chown -R webuser:webuser $RAILS_ROOT
+  && chown -R webuser:webuser $RAILS_ROOT/tmp \
+  && chown -R webuser:webuser $RAILS_ROOT/storage
 
 WORKDIR $RAILS_ROOT
 
