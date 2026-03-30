@@ -72,7 +72,9 @@ jobs:
             echo "-- Health check --"
             sleep 3
 
-            CONTAINER_ID=$(docker ps --filter "name=rails_app_pro" --format="{{.ID}}")
+            CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}")
+
+            echo "Checking container $CONTAINER_ID"
 
             if ! docker exec "$CONTAINER_ID" curl -f http://localhost:3000; then
               echo "Health check failed! Rolling back..."
