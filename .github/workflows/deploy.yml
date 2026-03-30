@@ -38,7 +38,7 @@ jobs:
 
             # Determine correct SHA depending on trigger
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-              TAG=":latest"
+              TAG="latest"
             else
               TAG="${{ github.event.workflow_run.head_sha }}"
             fi
