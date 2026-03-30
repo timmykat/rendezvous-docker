@@ -94,6 +94,6 @@ jobs:
             fi
 
             echo "-- Save deployed version --"
-            echo "$SHA" > .current_version
+            echo "$TAG" > .current_version
 
             echo "-- DONE --"
