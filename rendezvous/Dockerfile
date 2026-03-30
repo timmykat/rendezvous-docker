@@ -19,7 +19,8 @@ ENV REDIS_URL=redis://redis:6379/0
 
 RUN echo "RAILS_ENV=$RAILS_ENV NODE_ENV=$NODE_ENV"
 
-RUN mkdir -p $RAILS_ROOT
+RUN mkdir -p $RAILS_ROOT/tmp
+RUN mkdir -p $RAILS_ROOT/storage
 
 RUN adduser --disabled-password --gecos '' webuser \
   && chown -R webuser:webuser $RAILS_ROOT/tmp \
