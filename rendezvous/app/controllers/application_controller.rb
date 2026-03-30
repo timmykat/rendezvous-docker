@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   helper_method :lake_cruise_venue_link
   helper_method :written_reg_form_link
   helper_method :login_on
-  helper_method :get_active_users
+  helper_method :active_users
 
   GEO_CONFIG = Rails.configuration.geodata
 
