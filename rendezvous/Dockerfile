@@ -8,9 +8,11 @@ RUN npm install -g yarn
 
 ARG RAILS_ENV=production
 ARG NODE_ENV=production
+ARG SECRET_KEY_BASE
 
 ENV RAILS_ENV=$RAILS_ENV
 ENV NODE_ENV=$NODE_ENV
+ENV SECRET_KEY_BASE=$SECRET_KEY_BASE
 
 ENV RAILS_ROOT=/var/www/rendezvous
 ENV REDIS_URL=redis://redis:6379/0

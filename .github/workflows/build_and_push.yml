@@ -32,6 +32,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./rendezvous
+          build-args: |
+            SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }}
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:latest
