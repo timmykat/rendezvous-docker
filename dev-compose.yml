@@ -8,7 +8,7 @@ x-app-env: &app-env
   RAILS_ENV: ${RAILS_ENV}
   RACK_ENV: ${RACK_ENV}
   RAILS_DEVELOPMENT_HOSTS: ${RAILS_DEVELOPMENT_HOSTS}
-  SECRET_KEY_BASE: ${RAILS_SECRET_KEY_BASE}
+  SECRET_KEY_BASE: ${SECRET_KEY_BASE}
   RECAPTCHA_PUBLIC_KEY: ${RECAPTCHA_PUBLIC_KEY}
   RECAPTCHA_PRIVATE_KEY: ${RECAPTCHA_PRIVATE_KEY}
   MAILCHIMP_API_KEY: ${MAILCHIMP_API_KEY}
@@ -67,7 +67,7 @@ services:
     build: *app-build
     image: rails_image
 
-    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     environment: *app-env
@@ -97,7 +97,6 @@ services:
         condition: service_healthy
 
     environment: *app-env
-
 
     restart: unless-stopped
 
@@ -131,11 +130,11 @@ services:
     image: redis:7-alpine
     volumes:
       - redis_data:/data
-    command: [ "redis-server", "--appendonly", "yes" ]
+    command: ["redis-server", "--appendonly", "yes"]
 
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10
