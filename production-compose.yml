@@ -25,7 +25,7 @@ services:
       context: ./rendezvous
       dockerfile: ../config/docker/Dockerfile
 
-    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     environment:
@@ -33,7 +33,7 @@ services:
       - RAILS_ENV
       - RACK_ENV
       - RAILS_DEVELOPMENT_HOSTS
-      - RAILS_SECRET_KEY_BASE
+      - SECRET_KEY_BASE
       - RAILS_MASTER_KEY
       - RECAPTCHA_PUBLIC_KEY
       - RECAPTCHA_PRIVATE_KEY
@@ -55,7 +55,7 @@ services:
       - PROD_SQUARE_ACCESS_TOKEN
       - PROD_SQUARE_SDK_URL
 
-      # Mailsender Mailer info 
+      # Mailsender Mailer info
       - SMTP_PASSWORD
       - SMTP_DOMAIN
       - SMTP_PORT
@@ -84,7 +84,7 @@ services:
       context: ./rendezvous
       dockerfile: ../config/docker/Dockerfile
 
-    command: ["bundle","exec","rails","jobs:work"]
+    command: ["bundle", "exec", "rails", "jobs:work"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     environment:
@@ -92,7 +92,7 @@ services:
       - RAILS_ENV
       - RACK_ENV
       - RAILS_DEVELOPMENT_HOSTS
-      - RAILS_SECRET_KEY_BASE
+      - SECRET_KEY_BASE
       - RAILS_MASTER_KEY
       - RECAPTCHA_PUBLIC_KEY
       - RECAPTCHA_PRIVATE_KEY
@@ -102,9 +102,9 @@ services:
       - MYSQL_PASSWORD
 
       ## Mail service
-      - MAIL_SERVICE  
+      - MAIL_SERVICE
 
-      # Mailer info 
+      # Mailer info
       - SMTP_PASSWORD
       - SMTP_DOMAIN
       - SMTP_PORT
@@ -125,7 +125,7 @@ services:
     volumes:
       - ./rendezvous/:/var/www/rendezvous
 
-## New Relic services
+  ## New Relic services
   newrelic-infra:
     container_name: newrelic-infra
     image: newrelic/infrastructure-bundle:latest

@@ -182,14 +182,13 @@ module Admin
     end
 
     def create_table_data
-      @year ||= Time.now.year # Ensure @year is set
-      query = Event::Registration.current
-      @event_registrations = query.includes(:user)
-                                  .select(:id, :status, :user_id, :registration_fee, :donation,
-                                          :total, :paid_amount, :balance, :number_of_adults,
-                                          :number_of_youths, :number_of_children)
+      @year ||= Time.current.year
 
-      # 1. Fetch Users based on type (1 Query)
+      @event_registrations = base = Event::Registration.current
+
+      # -------------------------
+      # Users (unchanged)
+      # -------------------------
       @users = case params[:user_type]
                when 'all_users' then User.all
                when 'active' then User.where('last_active > ?', 10.minutes.ago)
@@ -199,57 +198,77 @@ module Admin
                else User.with_current_registration
                end
 
-      # Use size for a cached count if records are loaded, or a simple COUNT query
-      reg_users = User.joins(:registrations).where(registrations: { year: @year })
-      @reg_count = reg_users.count
       @type = params[:user_type]&.humanize || 'Currently registered'
 
-      # 2. Optimized Volunteers Fetch (1 Query)
-      # Updated to use @year variable instead of hardcoded 2025
-      @volunteers = Attendee.joins(registration: :user)
-                            .where(registrations: { year: @year }, volunteer: true)
-                            .select('attendees.name AS name, users.email AS email')
+      # -------------------------
+      # Registrations count
+      # -------------------------
+      @registration_count = base.count
 
-      # 3. The "Big Kahuna" - All stats in ONE Query (1 Query)
-      # We use left_joins to ensure we don't lose registrations that have no cars/attendees yet
-      stats = query.left_joins(:vehicles, :attendees).select(
-        "COUNT(DISTINCT attendees.id) as total_attendees",
-        "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'adult' THEN attendees.id END) as adult_count",
-        "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'youth' THEN attendees.id END) as youth_count",
-        "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'child' THEN attendees.id END) as child_count",
-        "COUNT(DISTINCT CASE WHEN vehicles.marque = 'Citroen' THEN vehicles.id END) as citroen_count",
-        "COUNT(DISTINCT CASE WHEN vehicles.marque != 'Citroen' THEN vehicles.id END) as non_citroen_count",
-        "SUM(DISTINCT registrations.registration_fee) as reg_sum",
-        "SUM(DISTINCT registrations.donation) as donation_sum",
-        "SUM(DISTINCT registrations.total) as total_sum",
-        "SUM(DISTINCT registrations.paid_amount) as paid_sum"
+      # -------------------------
+      # Volunteers (simple + fast)
+      # -------------------------
+      @volunteer_count = Attendee
+        .joins(:registration)
+        .where(registrations: { year: @year }, volunteer: true)
+        .count
+
+      # -------------------------
+      # BIG STATS QUERY
+      # -------------------------
+      stats = base
+        .left_joins(:attendees, :vehicles)
+        .select(
+          # Attendees
+          "COUNT(DISTINCT attendees.id) AS attendee_count",
+          "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'adult' THEN attendees.id END) AS adult_count",
+          "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'youth' THEN attendees.id END) AS youth_count",
+          "COUNT(DISTINCT CASE WHEN attendees.attendee_age = 'child' THEN attendees.id END) AS child_count",
+
+          # Vehicles
+          "COUNT(DISTINCT vehicles.id) AS vehicle_count",
+          "COUNT(DISTINCT CASE WHEN vehicles.marque = 'Citroen' THEN vehicles.id END) AS citroen_count",
+          "COUNT(DISTINCT CASE WHEN vehicles.marque != 'Citroen' THEN vehicles.id END) AS non_citroen_count",
+
+          # Financials
+          "SUM(DISTINCT registrations.registration_fee) AS registration_fee_sum",
+          "SUM(DISTINCT registrations.donation) AS donation_sum",
+          "SUM(DISTINCT registrations.lake_cruise_fee) AS lake_cruise_sum", # 👈 adjust column name if needed
+          "SUM(DISTINCT registrations.total) AS total_sum",
+          "SUM(DISTINCT registrations.paid_amount) AS paid_sum"
+        )
+        .take
+
+      # -------------------------
+      # Assign clean instance vars
+      # -------------------------
+
+      # Attendees
+      @attendee_count = stats.attendee_count.to_i
+      @adult_count    = stats.adult_count.to_i
+      @youth_count    = stats.youth_count.to_i
+      @child_count    = stats.child_count.to_i
+
+      # Vehicles
+      @vehicle_count     = stats.vehicle_count.to_i
+      @citroen_count     = stats.citroen_count.to_i
+      @non_citroen_count = stats.non_citroen_count.to_i
+
+      # Financials
+      financials = base.select(
+        "SUM(registration_fee) AS registration_fee_sum",
+        "SUM(donation) AS donation_sum",
+        "SUM(lake_cruise_fee) AS lake_cruise_sum",
+        "SUM(total) AS total_sum",
+        "SUM(paid_amount) AS paid_sum"
       ).take
 
-      @attendee_count = stats.total_attendees.to_i
-
-      # 4. Final Data Assembly
-      @data = {
-        registrants: reg_users,
-        citroens: stats.citroen_count.to_i,
-        non_citroens: stats.non_citroen_count.to_i,
-        attendees: stats.total_attendees.to_i,
-        newbies: [], # Still a placeholder
-        adult: stats.adult_count.to_i,
-        youth: stats.youth_count.to_i,
-        child: stats.child_count.to_i,
-        financials: {
-          registration_fees: stats.reg_sum.to_d,
-          donations: stats.donation_sum.to_d,
-          total: stats.total_sum.to_d,
-          paid: stats.paid_sum.to_d,
-          due: stats.total_sum.to_d - stats.paid_sum.to_d
-        }
-      }
-
-      @total_fees_assessed = stats.total_sum.to_d
-      @total_fees_received = stats.paid_sum.to_d
-      @total_donations = stats.donation_sum.to_d
-      @total_fees_outstanding = stats.total_sum.to_d - stats.paid_sum.to_d
+      @registration_fee_total = financials.registration_fee_sum.to_d
+      @donation_total         = financials.donation_sum.to_d
+      @lake_cruise_total      = financials.lake_cruise_sum.to_d
+      @total_amount           = financials.total_sum.to_d
+      @amount_paid            = financials.paid_sum.to_d
+      @amount_due             = @total_amount - @amount_paid
     end
 
     def peoples_choice_results

@@ -4,14 +4,13 @@
       .card-title
         %h2 Vehicles
       .card-text
-        - if @data
-          -# Remove .count here because @data[:citroens] is already an Integer
-          %p Number of Citroens: #{@data[:citroens]}
-          %p Number of non-Citroens: #{@data[:non_citroens]}
+        -# Remove .count here because @data[:citroens] is already an Integer
+        %p Number of Citroens: #{@citroen_count}
+        %p Number of non-Citroens: #{@non_citroen_count}
 
-        - if @vehicles
-          -# Keep .count here because @vehicles is a Collection
-          %p Total Vehicles: #{@vehicles.count}
+      - if @vehicles
+        -# Keep .count here because @vehicles is a Collection
+        %p Total Vehicles: #{@vehicle_count}
 
       %table.table
         %thead

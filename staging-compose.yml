@@ -1,5 +1,4 @@
 services:
-
   # The nginx container serves both the production and staging environments
   nginx:
     image: nginx
@@ -48,7 +47,7 @@ services:
     container_name: rendezvous-rails-app-staging
     image: ghcr.io/timmykat/rendezvous_rails_app
 
-    command: ["bundle","exec","rails","server", "-b", "0.0.0.0"]
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
     # command: sh -c "bundle exec rake assets:precompile && bundle exec rails server -b 0.0.0.0"
 
     ports:
@@ -59,7 +58,7 @@ services:
       - RAILS_ENV
       - RACK_ENV
       - RAILS_DEVELOPMENT_HOSTS
-      - RAILS_SECRET_KEY_BASE
+      - SECRET_KEY_BASE
       - RECAPTCHA_PUBLIC_KEY
       - RECAPTCHA_PRIVATE_KEY
       - MAILCHIMP_API_KEY
@@ -77,8 +76,8 @@ services:
       # Production info
       - PROD_SQUARE_LOCATION_ID
       - PROD_SQUARE_APP_ID
-      - PROD_SQUARE_ACCESS_TOKEN 
-      - PROD_SQUARE_SDK_URL     
+      - PROD_SQUARE_ACCESS_TOKEN
+      - PROD_SQUARE_SDK_URL
 
       # Mailer info
       - SMTP_PASSWORD
@@ -101,7 +100,6 @@ services:
       - internal_staging
 
 networks:
-
   internal_staging:
     driver: bridge
 

@@ -1,13 +1,15 @@
 x-app-build: &app-build
   context: ./rendezvous
-  dockerfile: ../config/docker/Dockerfile
+  dockerfile: Dockerfile
+  args:
+    SECRET_KEY_BASE: ${SECRET_KEY_BASE}
 
 x-app-env: &app-env
   APP_DOMAIN: ${APP_DOMAIN}
   RAILS_ENV: ${RAILS_ENV}
   RACK_ENV: ${RACK_ENV}
   RAILS_DEVELOPMENT_HOSTS: ${RAILS_DEVELOPMENT_HOSTS}
-  SECRET_KEY_BASE: ${RAILS_SECRET_KEY_BASE}
+  SECRET_KEY_BASE: ${SECRET_KEY_BASE}
   RECAPTCHA_PUBLIC_KEY: ${RECAPTCHA_PUBLIC_KEY}
   RECAPTCHA_PRIVATE_KEY: ${RECAPTCHA_PRIVATE_KEY}
   MAILCHIMP_API_KEY: ${MAILCHIMP_API_KEY}
