@@ -1,7 +1,23 @@
 {
+  "prettier": {
+    "allowed": true
+  },
+  "document_folding_ranges": "on",
+  "document_symbols": "on",
   "languages": {
+    "Ruby": {
+      "language_servers": ["ruby-lsp", "!solargraph", "!rubocop"],
+    },
     "Haml": {
-      "tab_size": 2
-    }
-  }
+      "tab_size": 2,
+    },
+  },
+  "lsp": {
+    "ruby-lsp": {
+      "initialization_options": {
+        "formatter": "standard",
+        "linters": ["standard"],
+      },
+    },
+  },
 }
