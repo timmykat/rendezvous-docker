@@ -143,9 +143,9 @@ class ApplicationController < ActionController::Base
   end
 
   def update_active_user
-    return unless current_user ||
-                  current_user.last_active.nil? ||
-                  current_user.last_active < ACTIVITY_WINDOW.ago
+    return if current_user.nil? ||
+           current_user.last_active.nil? ||
+           current_user.last_active < ACTIVITY_WINDOW.ago
 
     current_user.update_column(:last_active, Time.current)
   end
