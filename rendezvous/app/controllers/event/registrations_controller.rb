@@ -457,7 +457,8 @@ module Event
           registration: @event_registration,
           customer_id: customer_id,
           redirect_url: redirect_url,
-          fee_period: fee_period
+          fee_period: fee_period,
+          order_type: "Event Registration"
         })
       rescue StandardError => e
         flash_alert "There was a problem creating the order: #{e.message}"

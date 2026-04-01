@@ -43,96 +43,9 @@ module RendezvousSquare
       end
 
       def create_checkout_body(params)
-        # Consistent use of params for both paths
-        order_object = if params[:registration]
-                         create_order_registration_object(params)
-                       elsif params[:donation]
-                         create_order_donation_object(params[:donation], params[:customer_id])
-                       end
-
         {
           idempotency_key: Apis::Base.idempotency_key,
-          order: order_object
-        }
-      end
-
-      def create_order_registration_object(params)
-        {
-          location_id: Apis::Base.get_location_id,
-          customer_id: params[:customer_id],
-          line_items: create_line_items(params[:registration], params[:fee_period]),
-          ticket_name: "Event Registration", # Optional helper for Square dashboard,
-          reference_id: params[:registration].id # registration ID
-        }
-      end
-
-      def create_line_items(registration, fee_period)
-        line_items = []
-        period = fee_period.to_sym
-
-        line_items << create_attendee_line_item(registration.number_of_adults, period, 'adult')
-
-        if registration.number_of_youths.to_i.positive?
-          line_items << create_attendee_line_item(registration.number_of_youths, period, 'youth')
-        end
-
-        if registration.number_of_children.to_i.positive?
-          line_items << create_attendee_line_item(registration.number_of_children, period, 'child')
-        end
-
-        if registration.lake_cruise_number.to_i.positive?
-          line_items << create_cruise_line_item(registration.lake_cruise_number)
-        end
-
-        if registration.donation.to_d.positive?
-          line_items << create_donation_line_item(registration.donation)
-        end
-
-        line_items
-      end
-
-      def create_attendee_line_item(number, period, age)
-        {
-          quantity: number.to_s,
-          catalog_object_id: FEES[period]["#{age}_id".to_sym][Apis::Base.get_environment.downcase.to_sym],
-          note: "Period: #{period} | Age: #{age}"
-        }
-      end
-
-      def create_cruise_line_item(number)
-        {
-          quantity: number.to_s,
-          catalog_object_id: FEES[:lake_cruise][:catalog_id][Apis::Base.get_environment.downcase.to_sym]
-        }
-      end
-
-      def create_donation_line_item(amount)
-        {
-          name: "#{Date.current.year} Citroen Rendezvous donation",
-          item_type: "ITEM",
-          quantity: "1",
-          base_price_money: {
-            amount: Apis::Base.integerize(amount),
-            currency: "USD"
-          }
-        }
-      end
-
-      def create_order_donation_object(donation, customer_id)
-        {
-          location_id: Apis::Base.get_location_id,
-          customer_id: customer_id,
-          line_items: [
-            {
-              name: "#{Date.current.year} Citroen Rendezvous Donation",
-              quantity: "1",
-              base_price_money: {
-                amount: Apis::Base.integerize(donation.amount),
-                currency: "USD"
-              },
-              note: "Non-registration donation"
-            }
-          ]
+          order: Api::Orders.create(params)
         }
       end
     end
