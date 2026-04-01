@@ -1,0 +1,36 @@
+.container
+  .row.justify-content-center
+    .col-md-8.col-12
+      .card
+        .card-body
+          .card-title
+            %h2= @title
+          .card-text
+            #registration-form.new_registration
+              = simple_form_for @event_registration, url: event_registration_create_by_admin_path, method: :post do |f|
+                = f.input_field :year, as:  :hidden, value:  Time.new.year
+                %section
+                  %p * = required
+                  = f.simple_fields_for :user do |u|
+                    = render partial:  'common/admin_user_info', locals:  { f:  u }
+                  = f.input_field :user_id, as: :hidden
+
+                %section
+                  %h2.h3 Registration Information
+                  = render partial: 'attendance_manager', locals: { f: f }
+                  = render partial: 'registration_status', locals: { f: f }
+
+                  .row
+                    .col-12
+                      %p.amount.form-group
+                        %label
+                          Registration fee (USD):
+                          = f.input_field :registration_fee, readonly:  true, class:  'calculated'
+
+                  = f.input_field :status, as:  :hidden, value:
+
+
+                  .row
+                    .col-12
+                      .form-group
+                        = f.submit 'Save Registration', class:  "btn  btn-primary"

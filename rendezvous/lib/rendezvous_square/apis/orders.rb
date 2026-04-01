@@ -10,6 +10,10 @@ module RendezvousSquare
         Apis::Base.get_square_client.orders
       end
 
+      def self.create(params = {})
+        params[:location_id] = Apis::Base.get_location_id
+      end
+
       def self.search(params = {})
 
         if params.blank?

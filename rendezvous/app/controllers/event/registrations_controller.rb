@@ -72,7 +72,7 @@ module Event
       elsif params[:id].present?
         @event_registration = Event::Registration.find(params[:id])
         @registration_user = @event_registration.user
-    elsif params.dig(:user_id).present?
+      elsif params.dig(:user_id).present?
         user_id = params[:event_registration][:user_id]
         @registration_user = User.find(user_id)
       end
@@ -291,6 +291,17 @@ module Event
       @square_location_id = ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
     end
 
+    def pay_by_admin
+      begin
+      send_order_to_square
+        flash_notice 'The order was successfully created'
+        redirect_to admin_dashboard_path
+      rescue StandardError => e
+        flash_alert "There was a problem creating the order: #{e.message}"
+        :render edit_by_admin
+      end
+    end
+
     def special_events
       @title = 'Registration - Special Events'
       @step = 'special events'
@@ -425,6 +436,36 @@ module Event
       @step = 'welcome'
     end
 
+    def square_customer
+      user = @event_registration.user
+      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
+      end
+      if customer_id.nil?
+        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
+          ::RendezvousSquare::Apis::Customer.create_customer(user)
+        end
+      else
+        Rails.logger.info("Square customer found: #{customer_id}")
+      end
+      customer_id
+    end
+
+    def send_order_to_square
+      begin
+        order = RendezvousSquare::Apis::Order.create({
+          registration: @event_registration,
+          customer_id: customer_id,
+          redirect_url: redirect_url,
+          fee_period: fee_period
+        })
+      rescue StandardError => e
+        flash_alert "There was a problem creating the order: #{e.message}"
+        return false
+      end
+      order
+    end
+
     def send_to_square
       @step = 'payment'
       @event_registration = Registration.find(params[:id])
@@ -433,21 +474,9 @@ module Event
         render :payment
       end
 
-      user = @event_registration.user
-      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
-      end
-
-      if customer_id.nil?
-        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-          ::RendezvousSquare::Apis::Customer.create_customer(user)
-        end
-      else
-        Rails.logger.info("Square customer found: " + customer_id)
-      end
+      customer_id = square_customer
 
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
-
       square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
         RendezvousSquare::Apis::Checkout.create_square_payment_link({
                                                                       registration: @event_registration,
@@ -457,11 +486,11 @@ module Event
                                                                     })
       end
 
-      unless square_payment_link.nil?
-        redirect_to square_payment_link, allow_other_host: true
+      if square_payment_link.nil?
+        flash_alert 'Square was unable to generate a payment link.'
       else
-        flash_alert "Square was unable to generate a payment link."
         redirect_to payment_event_registration_path(@event_registration)
+        redirect_to square_payment_link, allow_other_host: true
       end
     end
 
