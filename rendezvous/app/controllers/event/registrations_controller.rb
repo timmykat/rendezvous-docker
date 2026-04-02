@@ -484,19 +484,24 @@ module Event
       customer_id = square_customer
 
       redirect_url = complete_after_online_payment_event_registration_url(@event_registration)
-      square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
-        RendezvousSquare::Apis::Checkout.create_square_payment_link({
-                                                                      registration: @event_registration,
-                                                                      customer_id: customer_id,
-                                                                      redirect_url: redirect_url,
-                                                                      fee_period: fee_period
-                                                                    })
+      begin
+        square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
+          RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                        registration: @event_registration,
+                                                                        customer_id: customer_id,
+                                                                        redirect_url: redirect_url,
+                                                                        fee_period: fee_period
+                                                                      })
+        end
+      rescue SquareApiError => e
+        flash_alert "There was a problem creating the link: #{e.message}"
+        render :payment
       end
 
       if square_payment_link.nil?
         flash_alert 'Square was unable to generate a payment link.'
+        render :payment
       else
-        redirect_to payment_event_registration_path(@event_registration)
         redirect_to square_payment_link, allow_other_host: true
       end
     end

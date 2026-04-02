@@ -4,14 +4,13 @@ module RendezvousSquare
       include Apis::Base
       extend self
 
-      FEES = Rails.configuration.pricing[:fees]
-
       def api
         # Ensure Apis::Base.get_square_client returns the main client
         Apis::Base.get_square_client.checkout
       end
 
       def create_square_payment_link(params)
+        Rails.logger.debug params
         post_body = create_checkout_body(params)
 
         # Merge the redirect_url into the checkout_options within the body
@@ -33,7 +32,7 @@ module RendezvousSquare
         rescue Square::Errors::ResponseError => e
           # This replaces the 'else' block. Errors are now caught as exceptions.
           # e.errors is an array of Square::Types::Error objects
-          Rails.logger.error e.message.message
+          Rails.logger.error e.message
           return "NO VALID LINK"
 
         rescue StandardError => e
@@ -42,10 +41,17 @@ module RendezvousSquare
         end
       end
 
+      # The Checkout API creates the order, so
+      # just need to create the order body, not the actual order
       def create_checkout_body(params)
+        if params[:donation]
+          order_object = Apis::Orders.create_donation_order_object(params)
+        else
+          order_object = Apis::Orders.create_order_object(params)
+        end
         {
           idempotency_key: Apis::Base.idempotency_key,
-          order: Api::Orders.create(params)
+          order: order_object
         }
       end
     end

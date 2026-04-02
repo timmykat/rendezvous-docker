@@ -5,38 +5,36 @@ module RendezvousSquare
 
       STATUSES = %w[OPEN COMPLETED CANCELED].freeze
 
+      FEES = Rails.configuration.pricing[:fees]
+
       def self.api
         # Ensure Apis::Base.get_square_client returns the main client
         Apis::Base.get_square_client.orders
       end
 
       def self.create(params = {})
-        post_body = create_order_body(params)
-        result = api.create(...post_body)
+        Rails.logger.debug params
+        post_body = {
+          idempotency_key: Apis::Base.idempotency_key,
+          order: create_order_object(params)
+        }
+        result = api.create(**post_body)
         result.order
       end
 
 
-      def self.create_order_body(params = {})
-        post_body = {}
-        post_body[:idempotency_key] = Apis::Base.idempotency_key
-        post_body[:location_id]  = Apis::Base.get_location_id
-        post_body[:line_items] = create_line_items(params)
-        post_body[:ticket_name]  = params[:order_type] # Optional helper for Square dashboard,
-        post_body[:reference_id] = params[:registration].id # registration ID
-      end
-
-      def create_registration_order_body(params)
+      def self.create_order_object(params = {})
         {
           location_id: Apis::Base.get_location_id,
           customer_id: params[:customer_id],
-          line_items: create_line_items(params[:registration], params[:fee_period]),
-          ticket_name: "Event Registration", # Optional helper for Square dashboard,
-          reference_id: params[:registration].id # registration ID
+          line_items: create_line_items(params),
+          ticket_name: "2026 Citroen Rendezvous Registration",
+          reference_id: params[:registration].id.to_s
         }
       end
 
-      def self.create_donation_order_body(params)
+
+      def self.create_donation_order_object(params)
         {
           location_id: Apis::Base.get_location_id,
           customer_id: params[:customer_id],
@@ -60,7 +58,7 @@ module RendezvousSquare
         line_items
       end
 
-      def self.create_registration_line_items
+      def self.create_registration_line_items(params)
         registration = params[:registration]
         period = params[:fee_period].to_sym
 
