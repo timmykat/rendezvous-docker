@@ -42,6 +42,7 @@ RUN yarn install --frozen-lockfile
 # ---- App code ----
 COPY . .
 
+RUN yarn build
 RUN yarn build:css
 RUN bundle exec rake assets:precompile
 

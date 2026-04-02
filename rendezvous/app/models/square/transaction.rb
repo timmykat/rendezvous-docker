@@ -30,19 +30,19 @@
 module Square
   class Transaction < ApplicationRecord
     self.table_name = "square_transactions"
-    
+
     belongs_to :registration, class_name: 'Event::Registration', optional: true
     belongs_to :user, optional: true
 
     validates :transaction_type, presence: true, inclusion: { in: %w[order payment refund] }
     validates :amount_cents, presence: true
 
-    validates :amount_cents, 
-              numericality: { less_than: 0 }, 
+    validates :amount_cents,
+              numericality: { less_than: 0 },
               if: :refund?
 
-    validates :amount_cents, 
-              numericality: { greater_than_or_equal_to: 0 }, 
+    validates :amount_cents,
+              numericality: { greater_than_or_equal_to: 0 },
               unless: :refund?
 
     def refund?

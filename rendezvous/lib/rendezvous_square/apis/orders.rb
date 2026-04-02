@@ -60,7 +60,7 @@ module RendezvousSquare
         line_items
       end
 
-      self.create_registration_line_items
+      def self.create_registration_line_items
         registration = params[:registration]
         period = params[:fee_period].to_sym
 
@@ -113,7 +113,6 @@ module RendezvousSquare
       end
 
       def self.search(params = {})
-
         if params.blank?
           params = {
             location_ids: [Apis::Base.get_location_id],
@@ -133,18 +132,18 @@ module RendezvousSquare
           }
           return Apis::Base.get_all(api, 'search', **params)
         end
+      end
 
-        def get(order_id)
-          begin
-            result = api.get(order_id: order_id)
-            order = result.order
-          rescue Square::Errors::ResponseError => e
-            Rails.logger.error e.message.messaged
-            return nil
-          rescue StandardError => e
-            Rails.logger.error e.message.message
-            return nil
-          end
+      def get(order_id)
+        begin
+          result = api.get(order_id: order_id)
+          order = result.order
+        rescue Square::Errors::ResponseError => e
+          Rails.logger.error e.message.messaged
+          return nil
+        rescue StandardError => e
+          Rails.logger.error e.message.message
+          return nil
         end
       end
     end

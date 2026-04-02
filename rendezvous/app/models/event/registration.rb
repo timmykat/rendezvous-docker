@@ -50,12 +50,11 @@ module Event
 
     belongs_to :user
     has_many :attendees, dependent: :destroy
-    has_many :transactions, class_name: 'SquareTransaction', dependent: :destroy
+    has_many :transactions, class_name: '::Square::Transaction', dependent: :destroy
     has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :registration_id, dependent: :destroy
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
-    has_many :square_orders, class_name: "Square::Order", dependent: :destroy
-    has_many :square_transactions, dependent: :destroy
+    has_many :square_transactions, class_name: '::Square::Transaction', dependent: :destroy
 
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
@@ -151,17 +150,6 @@ module Event
                    lake_cruise_fee.to_d
 
       self.balance = self.total - (paid_amount.to_d + refunded.to_d)
-    end
-
-    def self.invoice_number
-      prefix = "CR#{Rails.configuration.site[:dates][:year]}"
-      previous_code = Registration.pluck(:invoice_number).last
-      if previous_code.blank?
-        next_number = 101
-      else
-        next_number = /-(\d+)\z/.match(previous_code)[1].to_i + 1
-      end
-      "#{prefix}-#{next_number}"
     end
 
     def total_of_payments

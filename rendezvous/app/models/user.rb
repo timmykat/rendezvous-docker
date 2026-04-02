@@ -75,7 +75,7 @@ class User < ApplicationRecord
   has_many :authorizations
   has_one  :vendor, foreign_key: :owner_id
   has_many :donations
-  has_many :square_transactions
+  has_many :square_transactions, class_name: '::Square::Transaction', dependent: :destroy
 
   validates :first_name, presence: true
   validates :last_name, presence: true

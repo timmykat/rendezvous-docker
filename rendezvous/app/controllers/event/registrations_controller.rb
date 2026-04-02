@@ -125,7 +125,7 @@ module Event
         return
       end
       @title = "Let's get you registered!"
-      build_registration(@registration_user)
+      build_registration
     end
 
     def new_by_admin
@@ -136,6 +136,7 @@ module Event
 
     # Create or update the user
     def create
+      Rails.logger.debug params
       @step = 'create'
       email = params[:event_registration][:user_attributes][:email]
       user_id = params[:event_registration][:user_attributes][:id] || params[:event_registration][:user_id]
@@ -150,18 +151,19 @@ module Event
       end
 
       # Done updating the user so remove those parameters
-      params[:event_registration][:user_id] = user.id
+      params[:event_registration][:user_id] = @registration_user.id
       params[:event_registration][:user_attributes] = nil
 
       # Set total to registration fee. Donation happens in payment
       params[:event_registration][:total] = params[:event_registration][:registration_fee]
 
       @event_registration = Registration.new(event_registration_params)
+      Rails.logger.debug @event_registration
       if current_user.admin?
         @event_registration.created_by_admin = params[:event_registration][:created_by_admin]
       end
       @event_registration.status = 'in progress'
-      @event_registration.invoice_number = Registration.invoice_number
+      @event_registration.invoice_number = "CR-#{Date.current.year}-#{@event_registration.id}"
 
       if !@event_registration.save
         flash_alert_now('There was a problem creating your registration.')
@@ -293,12 +295,13 @@ module Event
 
     def pay_by_admin
       begin
-      send_order_to_square
+        send_order_to_square
         flash_notice 'The order was successfully created'
         redirect_to admin_dashboard_path
-      rescue StandardError => e
+      rescue SquareApiError => e
         flash_alert "There was a problem creating the order: #{e.message}"
-        :render edit_by_admin
+        Rails.logger.error("Square order failed: #{e.message}")
+        render :edit_by_admin
       end
     end
 
@@ -329,7 +332,7 @@ module Event
       transaction_id = params[:transactionId]
       order_id = params[:orderId]
       if transaction_id && order_id
-        transaction = SquareTransaction.new
+        transaction = ::Square::Transaction.new
         transaction.user = @event_registration.user
         transaction.amount = @event_registration.total
         transaction.transaction_id = transaction_id
@@ -362,35 +365,32 @@ module Event
       @title = 'Complete Registration'
       @step = 'complete'
 
-      # Set the paid amounts
-      if current_user.admin?
-        if !@event_registration.update(cash_payment_params)
-          flash_alert 'Something went wrong with the completion attempt'
-          render :payment
-        else
-          if @event_registration.status == 'complete'
-            @event_registration.paid_date = Time.new
-            @event_registration.save
-          end
-          flash_notice 'The registration was successfully updated.'
-          redirect_to user_path(@registration_user)
-        end
-        return
-      end
-
       @event_registration.paid_amount = 0.0
-      @event_registration.paid_method = "cash or check"
+      @event_registration.paid_method = 'cash or check'
+      @event_registration.status = 'payment due'
 
       # Update the registration
-      if !@event_registration.save
+      unless @event_registration.save
         flash_alert 'There was a problem completing your registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
         render :show
-      else
-        send_confirmation_email
-        flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-        redirect_to edit_user_vehicles_path(@registration_user)
+        return
       end
+
+      # TBD - creation of Square order and invoice
+      # begin
+      #   order = create_square_order
+      # rescue SquareApiError => e
+      #   flash_alert 'Your registration is saved, but there was a problem creating your Square order'
+      # end
+
+      # if order
+      #   send_square_invoice(order)
+      # end
+
+      send_confirmation_email
+      flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
+      redirect_to edit_user_vehicles_path(@registration_user)
     end
 
     def save_updated_vehicles
@@ -451,21 +451,27 @@ module Event
       customer_id
     end
 
-    def send_order_to_square
-      begin
-        order = RendezvousSquare::Apis::Order.create({
-          registration: @event_registration,
-          customer_id: customer_id,
-          redirect_url: redirect_url,
-          fee_period: fee_period,
-          order_type: "Event Registration"
-        })
-      rescue StandardError => e
-        flash_alert "There was a problem creating the order: #{e.message}"
-        return false
-      end
-      order
-    end
+    # def create_square_order
+    #   begin
+    #     order = ::RendezvousSquare::Apis::Order.create({
+    #       registration: @event_registration,
+    #       customer_id: customer_id,
+    #       redirect_url: redirect_url,
+    #       fee_period: fee_period,
+    #       order_type: "Event Registration"
+    #     })
+    #   rescue SquareApiError => e
+    #     flash_alert "There was a problem creating the order: #{e.message}"
+    #     return false
+    #   end
+    #   order
+    # end
+
+    # def send_square_invoice(order)
+    #   params = {
+    #     order_id: order[:id]
+    #   }
+    # end
 
     def send_to_square
       @step = 'payment'

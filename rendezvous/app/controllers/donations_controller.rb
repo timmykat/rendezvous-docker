@@ -80,7 +80,7 @@ class DonationsController < ApplicationController
     transaction_id = params[:transactionId]
     order_id = params[:orderId]
     if transaction_id && order_id
-      transaction = SquareTransaction.new
+      transaction = ::Square::Transaction.new
       transaction.user = @donation.user
       transaction.amount = @donation.amount
       transaction.transaction_id = transaction_id
