@@ -1,0 +1,19 @@
+= f.input_field :year, as:  :hidden, value:  Time.new.year
+%section
+  %h2.h3 Registration Information #{!user.nil? ? "for #{user.full_name}" : ""}
+  = render partial: 'attendance_manager', locals: { f: f }
+  = render partial: 'special_events_fields', locals: { f: f, reg_fee: reg.registration_fee, cruise_fee: reg.lake_cruise_fee || 0 }
+
+  .row
+    .col-12
+      %p.amount.form-group
+        %label
+          Registration fee (USD):
+          = f.input_field :registration_fee, readonly:  true, class:  'calculated'
+  .row
+    .col-12
+      = f.input :status, as: :select, collection: statuses
+
+  .row
+    .col-12
+      = f.input :paid_amount

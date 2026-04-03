@@ -128,7 +128,7 @@ module ApplicationHelper
   end
 
   def registration_complete
-    current_registration && (current_registration.status == 'complete')
+    current_registration&.complete?
   end
 
   def sign_in_method(user)

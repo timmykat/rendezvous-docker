@@ -7,7 +7,7 @@
     .col-12
       %h2 All Users
       %p Number of users: #{@user_count}
-      
+
       %p
         =link_to "New user", new_user_by_admin_path, class: "btn btn-primary"
       %br
@@ -16,7 +16,7 @@
           %tr
             %th.tablesorter-header.filter-false Actions
             %th.email.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Email
-            %th.last-name.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Last Name 
+            %th.last-name.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Last Name
             %th.first-name.tablesorter-header.filter-false First Name
             %th.vehicles.tablesorter-header.filter-false Vehicles
           %tbody
@@ -34,11 +34,11 @@
                   = link_to 'View', user_path(user)
                   - if user.current_registration.nil?
                     %br
-                    = link_to 'Create registration', event_registration_new_by_admin_path(user_id: user.id)
+                    = link_to 'Create registration', new_by_admin_event_registrations_path
                   - if has_registration_and_vehicle(user)
                     %br
                     = link_to 'Update Vehicles', update_user_vehicles_path(user)
-                                    
+
                 %td= user.email
                 %td= user.last_name
                 %td= user.first_name

@@ -81,6 +81,10 @@ Rails.application.routes.draw do
   # get '/event_registration',             to: 'registrations#new'
   namespace :event do
     resources :registrations do
+      collection do
+        get :new_by_admin
+        post :create_by_admin
+      end
       member do
         get :review
         get :payment
@@ -93,12 +97,13 @@ Rails.application.routes.draw do
         patch :update_sunday_lunch
         get :special_events
         patch :update_special_events
+        get :edit_by_admin
+        patch :update_by_admin
       end
     end
     resources :registrations, except: [:index]
     get '/welcome', to: 'registrations#welcome'
-    get '/registration/new_by_admin', to: 'registrations#new_by_admin'
-    post '/registration/create_by_admin', to: 'registrations#create_by_admin'
+
     get 'registrations/:id/cancel', to: 'registrations#cancel', as: 'cancel_registration'
     get 'registrations/:id/destroy', to: 'registrations#destroy', as: 'destroy_registration'
   end

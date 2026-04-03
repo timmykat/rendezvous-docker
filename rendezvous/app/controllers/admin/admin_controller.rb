@@ -127,7 +127,7 @@ module Admin
             date = r.updated_at.strftime("%F")
             date_diff = (event_date.to_date - r.updated_at.to_date).to_i
             if date_diff == d
-              total = total + r.paid_amount if r.status == 'complete'
+              total = total + r.paid_amount if r.complete?
             end
           end
           reg_data[year.to_s] << { daysOut: d, total: total }

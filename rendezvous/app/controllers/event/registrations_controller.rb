@@ -4,7 +4,7 @@ module Event
 
     before_action :get_registration, except: [:index, :welcome, :new, :create, :new_by_admin, :create_by_admin, :send_confirmation_email]
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
-    before_action :require_admin, only: [:index, :new_by_admin]
+    before_action :require_admin, only: [:index, :new_by_admin, :edit_by_admin]
     before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
@@ -62,19 +62,18 @@ module Event
 
     NO_CHANGE_STATUSES = [
       'complete',
-      'cancelled - settled',
-      'cancelled - needs refund',
+      'cancelled'
     ]
 
     def set_registration_user
       if !current_user.admin?
-        @registration_user = current_user
+        @user = current_user
       elsif params[:id].present?
         @event_registration = Event::Registration.find(params[:id])
-        @registration_user = @event_registration.user
+        @user = @event_registration.user
       elsif params.dig(:user_id).present?
         user_id = params[:event_registration][:user_id]
-        @registration_user = User.find(user_id)
+        @user = User.find(user_id)
       end
     end
 
@@ -128,12 +127,6 @@ module Event
       build_registration
     end
 
-    def new_by_admin
-      @title = "Registration by admin"
-      build_registration
-      render :new
-    end
-
     # Create or update the user
     def create
       Rails.logger.debug params
@@ -141,9 +134,9 @@ module Event
       email = params[:event_registration][:user_attributes][:email]
       user_id = params[:event_registration][:user_attributes][:id] || params[:event_registration][:user_id]
 
-      if @registration_user.nil? and !user_id.nil?
-        @registration_user = User.find(user_id)
-        unless @registration_user.update(event_registration_user_params)
+      if @user.nil? and !user_id.nil?
+        @user = User.find(user_id)
+        unless @user.update(event_registration_user_params)
           flash_alert 'There was a problem saving the user.'
           flash_alert user.errors.full_messages.to_sentence
           redirect_to event_welcome_path and return
@@ -151,7 +144,7 @@ module Event
       end
 
       # Done updating the user so remove those parameters
-      params[:event_registration][:user_id] = @registration_user.id
+      params[:event_registration][:user_id] = @user.id
       params[:event_registration][:user_attributes] = nil
 
       # Set total to registration fee. Donation happens in payment
@@ -176,26 +169,6 @@ module Event
       end
     end
 
-    def create_by_admin
-      email = params[:event_registration][:user_attributes][:email]
-      if !@registration_user.present?
-        @registration_user = User.find_by_email(email) || create_new_user
-      end
-
-      # Remove user attributes now that we have user
-      params[:event_registration][:user_attributes] = nil
-      @event_registration = Registration.new(event_registration_params)
-      @event_registration.user = user
-
-      if !@event_registration.save
-        flash_alert_now('There was a problem creating the registration.')
-        flash_alert_now @event_registration.errors.full_messages.to_sentence
-        render :new_by_admin and return
-      else
-        redirect_to special_events_event_registration_path(@event_registration)
-      end
-    end
-
     def edit
       if no_fee_related_changes
         flash_alert "No changes can be made to the registration now."
@@ -207,8 +180,8 @@ module Event
     end
 
     def update
-      if @registration_user
-        @registration_user.update(event_registration_params)
+      if @user
+        @user.update(event_registration_params)
       end
 
       params[:event_registration][:user_id] = user.id
@@ -232,6 +205,51 @@ module Event
         flash_alert 'There was a problem updating the registration.'
         flash_alert @event_registration.errors.full_messages.to_sentence
         render :edit and return
+      end
+    end
+
+    # Admin methods
+    def new_by_admin
+      @title = "Registration by admin"
+      build_registration
+    end
+
+    def create_by_admin
+      email = params[:event_registration][:user_attributes][:email]
+      if !@user.present?
+        @user = User.find_by_email(email) || create_new_user
+      end
+
+      # Remove user attributes now that we have user
+      params[:event_registration][:user_attributes] = nil
+      @event_registration = Registration.new(event_registration_params)
+      @event_registration.user = user
+
+      if !@event_registration.save
+        flash_alert_now('There was a problem creating the registration.')
+        flash_alert_now @event_registration.errors.full_messages.to_sentence
+        render :new_by_admin and return
+      else
+        redirect_to event_registration_path(@event_registration)
+      end
+    end
+
+    def edit_by_admin
+      @title = "Admin Registration Update"
+    end
+
+    def update_by_admin
+      unless @user == @event_registration.user
+        flash_alert "There is user mismatch: #{@user.full_name} vs #{@event_registration.user.full_name}"
+        render :edit_by_admin and return
+      end
+
+      if @event_registration.update(event_registration_params)
+        flash_notice 'Registration updated'
+        redirect_to event_registration_path(@event_registration)
+      else
+        @event_registration.errors.full_messages.to_sentence
+        render :edit_by_admin
       end
     end
 
@@ -349,9 +367,9 @@ module Event
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         if current_user.admin?
-          redirect_to user_path(@registration_user)
+          redirect_to user_path(@user)
         else
-          redirect_to edit_user_vehicles_path(@registration_user, after_complete: true)
+          redirect_to edit_user_vehicles_path(@user, after_complete: true)
         end
         return
       else
@@ -390,7 +408,7 @@ module Event
 
       send_confirmation_email
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-      redirect_to edit_user_vehicles_path(@registration_user)
+      redirect_to edit_user_vehicles_path(@user)
     end
 
     def save_updated_vehicles
@@ -512,7 +530,7 @@ module Event
       @step = 'create'
       @annual_question = AnnualQuestion.where(year: Date.current.year).first
 
-      @event_registration = @registration_user&.registrations&.current&.first
+      @event_registration = @user&.registrations&.current&.first
 
       unless @event_registration.blank?
         if !['payment due', 'complete'].include?(@event_registration.status)
@@ -534,8 +552,8 @@ module Event
         @event_registration.created_by_admin = true
         @event_registration.build_user
         registrant_attendee = Attendee.new
-        if @registration_user.present?
-          registrant_attendee.name = @registration_user.full_name
+        if @user.present?
+          registrant_attendee.name = @user.full_name
         end
         @event_registration.attendees << registrant_attendee
       else

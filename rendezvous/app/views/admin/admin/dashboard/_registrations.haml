@@ -19,9 +19,10 @@
           %tr
             %th.tablesorter-header.filter-false.text-center Actions
             %th.tablesorter-header.filter-false.text-center Status
+            %th.tablesorter-header.filter-false.text-center Payment Status
             %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Name
-            %th.tablesorter-header.filter-false.text-center Adults, Youths, Children
-            %th.tablesorter-header.filter-false.text-center Fee
+            %th.tablesorter-header.filter-false.text-center Event Fee
+            %th.tablesorter-header.filter-false.text-center Cruise Fee
             %th.tablesorter-header.filter-false.text-center Donation
             %th.tablesorter-header.filter-false.text-center Total
             %th.tablesorter-header.filter-false.text-center Paid
@@ -32,14 +33,11 @@
               %td.text-left
                 %ul.list-unstyled
                   %li= link_to 'View', event_registration_path(reg)
-                  %li= link_to 'Edit', edit_event_registration_path(reg)
-                  - if reg.status != 'complete'
-                    %li= link_to 'Review', review_event_registration_path(reg)
-                    %li= link_to 'Payment', payment_event_registration_path(reg)
+                  %li= link_to 'Edit', edit_by_admin_event_registration_path(reg)
                   %li= link_to 'Cancel', event_cancel_registration_path(reg), data: { confirm: "Sure?" }
-                  %li= link_to 'DELETE', event_destroy_registration_path(reg), method: :delete, data: { confirm: "Permanent?" }
 
-              %td= reg.status
+              %td= reg.status.upcase
+              %td= reg.payment_status.upcase
 
               %td.text-left
                 - if reg.user
@@ -47,8 +45,8 @@
                 - else
                   *** Missing User (ID: #{reg.id})
 
-              %td.text-left= format_attendee_counts(reg)
               %td.text-right= number_to_currency(reg.registration_fee)
+              %td.text-right= number_to_currency(reg.lake_cruise_fee)
               %td.text-right= number_to_currency(reg.donation)
               %td.text-right= number_to_currency(reg.total)
               %td.text-right= number_to_currency(reg.paid_amount)

@@ -67,20 +67,21 @@ module Event
     attribute :paid_amount, :decimal, default: 0.0
     attribute :total, :decimal, default: 0.0
 
+    # Constants
     STATUSES = [
       'new',
       'in progress',
       'in review',
-      'payment due',
       'complete',
-      'cancelled - settled',
-      'cancelled - needs refund'
-    ]
+      'cancelled'
+    ].freeze
 
-    validate :validate_minimum_number_of_adults, unless: -> { status.nil? || status.match(/^cancelled/) }
-    validate :validate_payment, unless: -> { status.nil? || status.match(/^cancelled/) }
+    PAYMENT_STATUSES = %w[unpaid partial paid refunded].freeze
+
+    # Validations
+    validate :validate_minimum_number_of_adults, unless: -> { cancelled? }
+    validate :validate_payment, unless: -> { status.nil? || cancelled? }
     validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
-    # validates :invoice_number, uniqueness: true, format: { with: /\ARR20\d{2}-\d{3,4}\z/, on: :new }, allow_blank: true
 
     validates :status, inclusion: { in: STATUSES }
 
@@ -98,8 +99,41 @@ module Event
               }
 
     serialize :events
-
     before_save :ensure_financials
+
+    # Registration checks
+    def complete?
+      status == 'complete'
+    end
+
+    def cancelled?
+      status == 'cancelled'
+    end
+
+    # Payment checks
+    def refunded?
+      cancelled? and balance.to_d.zero?
+    end
+
+    def paid?
+      total.to_d == paid_amount.to_d
+    end
+
+    def partially_paid?
+      total.to_d > paid_amount.to_d
+    end
+
+    def refund_due?
+      cancelled? and balance.to_d.negative?
+    end
+
+    def payment_status
+      return 'refunded' if refunded?
+      return 'paid' if paid?
+      return 'partial' if partially_paid?
+
+      'unpaid'
+    end
 
     def total_paid_cents
       # Quick way to get the sum of all completed payments across all orders
@@ -130,18 +164,6 @@ module Event
 
     def outstanding_balance?
       balance > 0.0
-    end
-
-    def owed_a_refund?
-      balance < 0.0
-    end
-
-    def complete?
-      status == 'complete'
-    end
-
-    def cancelled?
-      status =~ /cancelled/
     end
 
     def ensure_financials

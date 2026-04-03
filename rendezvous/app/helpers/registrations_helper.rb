@@ -18,7 +18,7 @@ module RegistrationsHelper
       'bg-success'
     when 'in progress', 'payment due'
       'bg-warning text-dark'
-    when /^cancelled/
+    when 'cancelled'
       'bg-danger'
     else
       'bg-secondary'

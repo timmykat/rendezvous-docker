@@ -1,20 +1,20 @@
-@use '../application/fonts' as fonts;
+@use "../application/fonts" as fonts;
 
 :root {
-	--citroen-red: #E1393E;
-	--dark-medium-blue: #1E6994;
-	--dark-red: #94171B;
-	--dark-blue: #071559;
-	--ash-gray: #B7C8B5;
-	--tea-green: #C5EBC3;
-	--eggplant: #54414E;
-	--jet: #3A3335;
+    --citroen-red: #e1393e;
+    --dark-medium-blue: #1e6994;
+    --dark-red: #94171b;
+    --dark-blue: #071559;
+    --ash-gray: #b7c8b5;
+    --tea-green: #c5ebc3;
+    --eggplant: #54414e;
+    --jet: #3a3335;
 
-	--cambridge-blue: #92B4A7;
-	--indigo-dye: #0B4F6C;
-	--light-gray: #d8d8d8;
-	--medium-gray: #ccc;
-	--warm-maroon: #8B2F2F;
+    --cambridge-blue: #92b4a7;
+    --indigo-dye: #0b4f6c;
+    --light-gray: #d8d8d8;
+    --medium-gray: #ccc;
+    --warm-maroon: #8b2f2f;
 }
 
 /* Rendezvous customizations */
@@ -40,297 +40,322 @@ $card-title-background: var(--indigo-dye);
 $secondary-color: var(--indigo-dye);
 
 .text-primary {
-	color: var(--jet);
+    color: var(--jet);
 }
 
 html {
-	scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 body {
-	background-color: $body-background;
+    background-color: $body-background;
 
-	&.admin-page {
-		background-color: $admin_body_background;
+    &.admin-page {
+        background-color: $admin_body_background;
 
-		.card {
-			background-color: $admin-card-background;
-		}
-	}
+        .card {
+            background-color: $admin-card-background;
+        }
+    }
 }
 
 // Font reset
-body, p, li, ol, td {
-	@include fonts.outfit-regular;
-	font-size: 18px;
+body,
+p,
+li,
+ol,
+td {
+    @include fonts.outfit-regular;
+    font-size: 18px;
 }
 
 @mixin transition {
-	transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 section.banner {
-	background-color: #CD1616;
+    background-color: #cd1616;
 
-	img {
-		display: inline-block;
-		margin: 6vw;
-	}
+    img {
+        display: inline-block;
+        margin: 6vw;
+    }
 }
 
 figure {
-	img {
-		display: block;
-		width: 100%;
-	}
-	figcaption {
-		font-size: 0.8em;
-		margin: 10px 0;
-	}
-	margin-bottom: 20px;
+    img {
+        display: block;
+        width: 100%;
+    }
+    figcaption {
+        font-size: 0.8em;
+        margin: 10px 0;
+    }
+    margin-bottom: 20px;
 }
 
 .btn {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 /* Bootstrap icon colors */
 svg.bi {
-	padding-right: 5px;
+    padding-right: 5px;
 
-	&.add_person, &.plus {
-			color: var(--dark-medium-blue);
-			fill: var(--dark-medium-blue);
-	}
+    &.add_person,
+    &.plus {
+        color: var(--dark-medium-blue);
+        fill: var(--dark-medium-blue);
+    }
 
-	&.remove_person, &.minus {
-			color: darkred;
-			fill: darkred;
-	}
+    &.remove_person,
+    &.minus {
+        color: darkred;
+        fill: darkred;
+    }
 
-	&.car {
-			color: var(--citroen-red);
-			fill: var(--citroen-red);
-	}
+    &.car {
+        color: var(--citroen-red);
+        fill: var(--citroen-red);
+    }
 }
 
 .nested-fields {
-  transition: opacity color 0.5s ease, background-color 0.5s ease;
+    transition:
+        opacity color 0.5s ease,
+        background-color 0.5s ease;
 }
 
 .flash-success {
-  opacity: 0.5;
-	background-color: #d4edda;
+    opacity: 0.5;
+    background-color: #d4edda;
 }
 
 .button-with-spinner {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	gap: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
 }
 
 #payment-link {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	gap: 15px;
-	padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    padding-top: 20px;
 
-	.btn {
-		&.btn-square-pay {
-			position: relative;
-			display: block;
-			width: fit-content;
-		
-			padding-right: 35px;
-		
-			&::after {
-				content: url('/square-icon.png');
-				position: absolute;
-				margin-top: -2px;
-			}
-		}
-	}
+    .btn {
+        &.btn-square-pay {
+            position: relative;
+            display: block;
+            width: fit-content;
 
+            padding-right: 35px;
+
+            &::after {
+                content: url("/square-icon.png");
+                position: absolute;
+                margin-top: -2px;
+            }
+        }
+    }
 }
 
 button[data-dismiss] {
-	border: none;
-	background: none;
+    border: none;
+    background: none;
 }
 
-a, a:visited {
-	color: var(--warm-maroon);
-	@include transition;
+a,
+a:visited {
+    color: var(--warm-maroon);
+    @include transition;
 
-	&:hover {
-		color: var(--medium-gray);
-		text-decoration: underline;
-	}
+    &:hover {
+        color: var(--medium-gray);
+        text-decoration: underline;
+    }
 
-	&.btn {
-		color: white !important;
+    &.btn {
+        color: white !important;
 
-		&:hover {
-			color: #999 !important;
-			text-decoration: none;
-		}
-	}
+        &:hover {
+            color: #999 !important;
+            text-decoration: none;
+        }
+    }
 }
 
-p a, p a:visited {
-	color: var(--warm-maroon);
-	text-decoration: underline;
-	@include transition;	
+p a,
+p a:visited {
+    color: var(--warm-maroon);
+    text-decoration: underline;
+    @include transition;
 
-	&:hover {
-		color: var(--medium-gray);
-		text-decoration: none;
-	}
+    &:hover {
+        color: var(--medium-gray);
+        text-decoration: none;
+    }
 }
-
 
 main {
-	.banner img {
-		max-width: 90%;
-		width: 600pxfa;
-	}
+    .banner img {
+        max-width: 90%;
+        width: 600pxfa;
+    }
 }
 
 footer {
-	padding: 30px 0;
+    padding: 30px 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	@include fonts.prompt-bold;
-	font-weight: bold;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @include fonts.prompt-bold;
+    font-weight: bold;
 
-	&.no-card {
-		background-color: $secondary-color;
-		color: white;
-		padding: 20px 40px 10px;
-	}
+    &.no-card {
+        background-color: $secondary-color;
+        color: white;
+        padding: 20px 40px 10px;
+    }
 }
 
 table > tr:last-of-type {
-	margin-bottom: 1em;
+    margin-bottom: 1em;
+}
+
+[data-tab-content="registrations"] table {
+    th,
+    td,
+    td > input,
+    li {
+        font-size: 0.875rem;
+        max-width: 80px;
+    }
 }
 
 .page-title {
-	background-color: $card-title-background;
-	color: white;
-	padding: 20px 0 20px 20px;
-	margin-bottom: 0;
+    background-color: $card-title-background;
+    color: white;
+    padding: 20px 0 20px 20px;
+    margin-bottom: 0;
 }
 
 @mixin mixin-citroen-colors {
-	background-color: var(--citroen-red);
-	color: white;
+    background-color: var(--citroen-red);
+    color: white;
 }
 
 .row.registration-open {
-	text-align: center;
-	background-color: var(--eggplant);
-	a, a:visited {
-		color: white;
-	}
+    text-align: center;
+    background-color: var(--eggplant);
+    a,
+    a:visited {
+        color: white;
+    }
 }
 
 .btn-register {
-	font-weight: bold;
-	background-color: $brand-color;
-	color: white;
-	border-radius: 35px;
+    font-weight: bold;
+    background-color: $brand-color;
+    color: white;
+    border-radius: 35px;
 
-	&:hover {
-		background-color: var(--tea-green);
-	}
-	&:active {
-		background-color: white;
-		border: var(--jet);
-	}
+    &:hover {
+        background-color: var(--tea-green);
+    }
+    &:active {
+        background-color: white;
+        border: var(--jet);
+    }
 }
 
 header {
-	@include mixin-citroen-colors;
+    @include mixin-citroen-colors;
 
-	.banner {
-		a, a:visited {
-			color: white;
+    .banner {
+        a,
+        a:visited {
+            color: white;
 
-
-			&:hover {
-				font-size: 1.01em;
-				text-decoration: none;
-			}
-		}
-	}
+            &:hover {
+                font-size: 1.01em;
+                text-decoration: none;
+            }
+        }
+    }
 }
 
 .bg-nav {
-	background-color: var(--dark-medium-blue);
+    background-color: var(--dark-medium-blue);
 }
 
 .dropdown-menu {
-	background: whitesmoke;
-	z-index: 10000;
+    background: whitesmoke;
+    z-index: 10000;
 }
 
-.navbar-dark .navbar-nav .nav-link  {
-	color: white;
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
 
-	&:hover {
-		text-decoration: underline;
-	}
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .flash-wrapper {
-	position: fixed;
-	top: 40px;
-	left: 50%;
-	width: 600px;
-	max-width: 90%;
-	transform: translateX(-50%);
-	z-index: 200;
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    width: 600px;
+    max-width: 90%;
+    transform: translateX(-50%);
+    z-index: 200;
 
-	.flash {
-		position: relative;
-		margin: 10px auto;
-		padding: 20px;
+    .flash {
+        position: relative;
+        margin: 10px auto;
+        padding: 20px;
 
-		background-color: #ddd;
-		color: var(--jet);
-		border-radius: 5px;
-		border: solid 2px var(--citroen-red);
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+        background-color: #ddd;
+        color: var(--jet);
+        border-radius: 5px;
+        border: solid 2px var(--citroen-red);
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 
-		a, a:visited {
-			text-decoration: underline;
+        a,
+        a:visited {
+            text-decoration: underline;
 
-			&:hover {
-				text-decoration: none;
-				font-weight: bold;
-			}
-		}
+            &:hover {
+                text-decoration: none;
+                font-weight: bold;
+            }
+        }
 
-		.close-flash {
-			cursor: pointer;
-			position: absolute;
-			font-size: 0.8em;
-			right: 5px;
-			top: 5px;
-		}
-	}
+        .close-flash {
+            cursor: pointer;
+            position: absolute;
+            font-size: 0.8em;
+            right: 5px;
+            top: 5px;
+        }
+    }
 }
 
 .form-group {
-	.short-field {
-		width: 100px;
-	}
-	.simple_mde > *:not(label){
-		background-color: white;
-	}
+    .short-field {
+        width: 100px;
+    }
+    .simple_mde > *:not(label) {
+        background-color: white;
+    }
 }
 
 .CodeMirror,
@@ -339,105 +364,110 @@ header {
     min-height: 150px;
 }
 
-input[type=checkbox] {
-	display: inlin-block;
-	margin-right: 0.5em;
+input[type="checkbox"] {
+    display: inlin-block;
+    margin-right: 0.5em;
 }
 
 .ui-sortable-handle {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 /* Bootstrap customizations */
 .badge {
-	height: fit-content;
+    height: fit-content;
 }
 
 .manage {
-	background-color: palegoldenrod;
-	border-top: solid 2px var(--eggplant);
-	border-bottom: solid 2px var(--eggplant);
+    background-color: palegoldenrod;
+    border-top: solid 2px var(--eggplant);
+    border-bottom: solid 2px var(--eggplant);
 
-	label {
-		color: var(--eggplant);
-		font-weight: bold;
-	}
+    label {
+        color: var(--eggplant);
+        font-weight: bold;
+    }
 }
 
 .navbar {
-	.navbar-brand {
-		font-size: 1.2em;
-		font-weight: bold;
-	}
+    .navbar-brand {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
 
-	.nav-item.site {
-		display: inline-block;
-		margin-left: 1em;
-	}
+    .nav-item.site {
+        display: inline-block;
+        margin-left: 1em;
+    }
 
-	.navbar-rendezvous {
-		@include mixin-citroen-colors;
-	}
+    .navbar-rendezvous {
+        @include mixin-citroen-colors;
+    }
 
-	&.top-nav {
-		.navbar-brand {
-			margin: 0 40px;
-		}
-	}
+    &.top-nav {
+        .navbar-brand {
+            margin: 0 40px;
+        }
+    }
 }
 
 .card {
-	margin: 10px 0;
+    margin: 10px 0;
 
-	&:first-of-type {
-		margin-top: 0;
-	}
+    &:first-of-type {
+        margin-top: 0;
+    }
 
-	background-color: $card-background;
+    background-color: $card-background;
 
-	.card-title {
-		color: white;
-		background-color: $card-title-background;
-		padding: 15px 20px 7px;
+    .card-title {
+        color: white;
+        background-color: $card-title-background;
+        padding: 15px 20px 7px;
 
-		h1, h2, h3, h4, h5, h6 {
-			padding: 0;
-			margin: 0;
-			line-height: 1;
-		}
-	}
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+    }
 
-	.card {
-		margin: 7px 0;
-		background-color: $nested-card-background;
+    .card {
+        margin: 7px 0;
+        background-color: $nested-card-background;
 
-		.card {
-			background-color: whitesmoke;
-		}
-	}
+        .card {
+            background-color: whitesmoke;
+        }
+    }
 }
 
-.vehicles-for-sale tr, .vehicles-for-sale td {
-	border-top: solid 1px var(--jet);
-	border-bottom: solid 1px var(--jet);
+.vehicles-for-sale tr,
+.vehicles-for-sale td {
+    border-top: solid 1px var(--jet);
+    border-bottom: solid 1px var(--jet);
 }
 
 rendezvous-vehicle {
-	.code-handling {
-		display: flex;
-		align-items: center;
+    .code-handling {
+        display: flex;
+        align-items: center;
 
-		input[data-code-autocomplete] {
-			text-transform: uppercase;
-			width: 200px;
-		}
+        input[data-code-autocomplete] {
+            text-transform: uppercase;
+            width: 200px;
+        }
 
-		.badge.hide {
-			display: none;
-		}
-	}
+        .badge.hide {
+            display: none;
+        }
+    }
 }
-
 
 /* rows hidden by filtering (needed for child rows) */
 .tablesorter .filtered {
@@ -445,47 +475,49 @@ rendezvous-vehicle {
 }
 
 .status-icon {
-	padding-top: 20px;
-	font-size: 20px;
-	.complete {
-		color: green;
-	}
-	.in-progress {
-		color: slateblue;
-	}
-	.in-review {
-		color: gold;
-	}
-	.payment-due {
-		color: orange;
-	}
-	.cancelled {
-		color: darkred;
-	}
+    padding-top: 20px;
+    font-size: 20px;
+    .complete {
+        color: green;
+    }
+    .in-progress {
+        color: slateblue;
+    }
+    .in-review {
+        color: gold;
+    }
+    .payment-due {
+        color: orange;
+    }
+    .cancelled {
+        color: darkred;
+    }
 }
 
 .c_event_registrations .last-step-vehicles .user_fields {
-  display: none;
+    display: none;
 }
 .registration-status {
-  background-color: black;
-	color: #ccc;
+    background-color: black;
+    color: #ccc;
 }
 .registration-status {
-  a, a:visited {
-    color: gold;
-  }
+    a,
+    a:visited {
+        color: gold;
+    }
 
-  .fa-check-circle, .payment-due {
-    color: orange;
-  }
-  .complete {
-    color: #6f6;
-  }
+    .fa-check-circle,
+    .payment-due {
+        color: orange;
+    }
+    .complete {
+        color: #6f6;
+    }
 }
 
 .c_event_registrations .body-wrapper {
-	background: #d6e6e6;
+    background: #d6e6e6;
 }
 
 /******************************
@@ -493,86 +525,89 @@ responsive area
 ********************************/
 /* lg */
 @media (min-width: 1200px) {
-
 }
 
 /* md */
 @media (min-width: 992px) and (max-width: 1199px) {
-
-
 }
 
 /* sm */
 @media (min-width: 768px) and (max-width: 991px) {
-	.single-service{
-		margin-bottom: 30px;
-	}
-	.navbar-default .navbar-nav>li>a{
-		padding: 12px 10px;
-	}
-	input.message {
-	  width: 718px;
-	}
+    .single-service {
+        margin-bottom: 30px;
+    }
+    .navbar-default .navbar-nav > li > a {
+        padding: 12px 10px;
+    }
+    input.message {
+        width: 718px;
+    }
 }
 
 /* xs */
 @media (min-width: 480px) and (max-width: 767px) {
-	input.name {
-	  margin-top: 55px;
-	  width: 420px;
-	}
-	input.email{
-		width: 420px;
-	}
-	input.message{
-		width: 420px;
-	}
-	.about-inside{
-		padding: 10px;
-	}
+    input.name {
+        margin-top: 55px;
+        width: 420px;
+    }
+    input.email {
+        width: 420px;
+    }
+    input.message {
+        width: 420px;
+    }
+    .about-inside {
+        padding: 10px;
+    }
 }
 
 /* XS Portrait */
 @media (max-width: 479px) {
-	.logo{
-		margin-top: 10px;
-	}
-	input.name{
-		margin-top: 55px;
-		width: 275px;
-	}
-	input.email{
-		width: 275px;
-	}
-	input.message{
-		width: 275px;
-	}
-	.contact-form input.submit-btn{
-		width: 200px;
-		height: 50px;
-		border:0;
-	}
-	.navbar-header{
-		margin-top: 5px !important;
-	}
-	.about-inside{
-		padding: 0px;
-	}
+    .logo {
+        margin-top: 10px;
+    }
+    input.name {
+        margin-top: 55px;
+        width: 275px;
+    }
+    input.email {
+        width: 275px;
+    }
+    input.message {
+        width: 275px;
+    }
+    .contact-form input.submit-btn {
+        width: 200px;
+        height: 50px;
+        border: 0;
+    }
+    .navbar-header {
+        margin-top: 5px !important;
+    }
+    .about-inside {
+        padding: 0px;
+    }
 }
 @media print {
-  .manage, .flash-wrapper, .back-bar, .push, .footer, #modal, .fa-print {
-    display: none;
-  }
-  .simple .heading {
-    margin-top: 0;
-  }
+    .manage,
+    .flash-wrapper,
+    .back-bar,
+    .push,
+    .footer,
+    #modal,
+    .fa-print {
+        display: none;
+    }
+    .simple .heading {
+        margin-top: 0;
+    }
 }
 
 .debug {
-	background: white;
-	color: black;
-	font-family: 'Courier New', Courier, monospace;
-	font-size: 14px;;
-	border: solid 2px darkred;
-	padding: 20px 40px;
+    background: white;
+    color: black;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 14px;
+    border: solid 2px darkred;
+    padding: 20px 40px;
 }
