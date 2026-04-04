@@ -89,7 +89,7 @@ CREATE TABLE `attendees` (
   KEY `index_attendees_on_attendee_age` (`attendee_age`),
   KEY `index_attendees_on_volunteer` (`volunteer`),
   KEY `index_attendees_on_sunday_dinner` (`sunday_dinner`)
-) ENGINE=InnoDB AUTO_INCREMENT=1849 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1860 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -235,6 +235,31 @@ CREATE TABLE `merchitems` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `modification` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `status` varchar(255) NOT NULL DEFAULT 'new',
+  `starting_adults` int NOT NULL DEFAULT '0',
+  `starting_youths` int NOT NULL DEFAULT '0',
+  `starting_children` int NOT NULL DEFAULT '0',
+  `delta_adults` int NOT NULL DEFAULT '0',
+  `delta_youths` int NOT NULL DEFAULT '0',
+  `delta_children` int NOT NULL DEFAULT '0',
+  `starting_lake_cruise` int NOT NULL DEFAULT '0',
+  `delta_lake_cruise` int NOT NULL DEFAULT '0',
+  `new_attendee_fee` decimal(8,2) DEFAULT '0.00',
+  `new_lake_cruise_fee` decimal(8,2) DEFAULT '0.00',
+  `modification_total` decimal(8,2) DEFAULT '0.00',
+  `new_total` decimal(8,2) DEFAULT '0.00',
+  `registration_id` int NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_modification_on_registration_id` (`registration_id`),
+  CONSTRAINT `fk_rails_c5c8e2d27e` FOREIGN KEY (`registration_id`) REFERENCES `registrations` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pictures` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
@@ -316,6 +341,7 @@ CREATE TABLE `registrations` (
   `lake_cruise_fee` decimal(8,2) DEFAULT NULL,
   `balance` decimal(8,2) NOT NULL DEFAULT '0.00',
   `refunded` decimal(8,2) NOT NULL DEFAULT '0.00',
+  `step` varchar(255) DEFAULT 'create',
   PRIMARY KEY (`id`),
   KEY `index_registrations_on_paid_amount` (`paid_amount`),
   KEY `index_registrations_on_paid_method` (`paid_method`),
@@ -328,7 +354,7 @@ CREATE TABLE `registrations` (
   KEY `index_registrations_on_refunded` (`refunded`),
   CONSTRAINT `lake_cruise_limit` CHECK (((`lake_cruise_number` >= 0) and (`lake_cruise_number` <= 8))),
   CONSTRAINT `sunday_lunch_limit` CHECK (((`sunday_lunch_number` >= 0) and (`sunday_lunch_number` <= 8)))
-) ENGINE=InnoDB AUTO_INCREMENT=1026 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1030 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -557,6 +583,8 @@ CREATE TABLE `venues` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 INSERT INTO `schema_migrations` (version) VALUES
+('20260404101159'),
+('20260404091851'),
 ('20260324032035'),
 ('20260320003642'),
 ('20260319011608'),

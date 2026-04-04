@@ -24,6 +24,7 @@
 #  refunded            :decimal(8, 2)    default(0.0), not null
 #  registration_fee    :decimal(8, 2)
 #  status              :string(255)
+#  step                :string(255)      default("create")
 #  sunday_lunch_number :integer          default(0), not null
 #  total               :decimal(8, 2)
 #  vendor_fee          :decimal(6, 2)

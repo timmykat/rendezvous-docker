@@ -22,6 +22,7 @@
 #  refunded            :decimal(8, 2)    default(0.0), not null
 #  registration_fee    :decimal(8, 2)
 #  status              :string(255)
+#  step                :string(255)      default("create")
 #  sunday_lunch_number :integer          default(0), not null
 #  total               :decimal(8, 2)
 #  vendor_fee          :decimal(6, 2)
@@ -55,6 +56,7 @@ module Event
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
     has_many :square_transactions, class_name: '::Square::Transaction', dependent: :destroy
+    has_many :modifications, dependent: :destroy
 
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
@@ -71,9 +73,17 @@ module Event
     STATUSES = [
       'new',
       'in progress',
-      'in review',
       'complete',
       'cancelled'
+    ].freeze
+
+    STEPS = [
+      'create',
+      'special events',
+      'review',
+      'payment',
+      'finished',
+      'modify'
     ].freeze
 
     PAYMENT_STATUSES = %w[unpaid partial paid refunded].freeze
@@ -84,6 +94,7 @@ module Event
     validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
 
     validates :status, inclusion: { in: STATUSES }
+    validates :step, inclusion: { in: STEPS }
 
     validates :sunday_lunch_number,
               numericality: {
