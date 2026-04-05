@@ -6,7 +6,7 @@
           .card-title
             %h2= "Registrations for #{@year} (#{@reg_count})"
           .card-text
-            = form_with url: admin_admin_dashboard_path, method: :get do |f|
+            = form_with url: admin_dashboard_path, method: :get do |f|
               - options = options_for_select((Event::Registration.distinct.pluck(:year) + [Date.current.year.to_s]).uniq.sort.reverse, @year)
               .form-group
                 = f.label :year
@@ -28,7 +28,7 @@
             %th.tablesorter-header.filter-false.text-center Paid
             %th.tablesorter-header.filter-false.text-center Balance
         %tbody
-          - @event_registrations.each do |reg|
+          - @registrations.each do |reg|
             %tr.text-center
               %td.text-left
                 %ul.list-unstyled

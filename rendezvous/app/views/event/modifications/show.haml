@@ -4,109 +4,86 @@
       .card
         .card-body
           .card-title
-            %h1.h2 Pending modification for  #{@user}
+            %h1.h2 Pending update for  #{@user}
           .card-text
             %table.table.table-sm
               %thead
                 %tr
                   %th Category
-                  %th.text-end Current
-                  %th.text-end Updates
-                  %th.text-end New totals
+                  %th.text-center Adults
+                  %th.text-center Youths
+                  %th.text-center Children
+                  %th.text-center Lake Cruise
+
               %tbody
                 %tr
-                  %th Adults
-                  %td.text-end #{@registration.number_of_adults}
-                  %td.text-end
+                  %th Current
+                  %td.text-center #{@registration.number_of_adults}
+                  %td.text-center #{@registration.number_of_youths}
+                  %td.text-center #{@registration.number_of_children}
+                  %td.text-center #{@registration.lake_cruise_number}
+
+                %tr
+                  %th Updates
+                  %td.text-center
                     - if @modification.delta_adults > 0
-                      %span.text-success
-                        + #{@modification.delta_adults}
+                      %span.text-success + #{@modification.delta_adults}
                     - elsif @modification.delta_adults < 0
-                      %span.text-danger
-                        #{@modification.delta_adults}
+                      %span.text-danger #{@modification.delta_adults}
                     - else
-                      %span.text-muted 0
-                  %td.text-pending
-                    - if @modification.delta_adults > 0
-                      %span.text-success= new_total("adults")
-                    - elsif @modification.delta_adults < 0
-                      %span.text-danger= new_total("adults")
-                    - else
-                      %span.text-muted 0
+                      %span.text-muted (none)
 
-                %tr
-                  %th Youths
-                  %td.text-end #{@registration.number_of_youths}
-                  %td.text-end
+                  %td.text-center
                     - if @modification.delta_youths > 0
-                      %span.text-success
-                        + #{@modification.delta_youths}
+                      %span.text-success + #{@modification.delta_youths}
                     - elsif @modification.delta_youths < 0
-                      %span.text-danger
-                        #{@modification.delta_youths}
+                      %span.text-danger #{@modification.delta_youths}
                     - else
-                      %span.text-muted 0
-                  %td.text-pending
-                    - if @modification.delta_youths > 0
-                      %span.text-success= new_total("youths")
-                    - elsif @modification.delta_youths < 0
-                      %span.text-danger= new_total("youths")
-                    - else
-                      %span.text-muted 0
-                %tr
-                  %td Children
-                  %td.text-end #{@registration.number_of_children}
-                  %td.text-end
-                    - if @modification.delta_children > 0
-                      %span.text-success
-                        + #{@modification.delta_children}
-                    - elsif @modification.delta_children < 0
-                      %span.text-danger
-                        #{@modification.delta_children}
-                    - else
-                      %span.text-muted 0
-                  %td.text-pending
-                    - if @modification.delta_children > 0
-                      %span.text-success= new_total("children")
-                    - elsif @modification.delta_children < 0
-                      %span.text-danger= new_total("children")
-                    - else
-                      %span.text-muted 0
-                %tr
-                  %th Lake Cruise
-                  %td.text-end #{@registration.lake_cruise_number}
-                  %td.text-end
-                    - if @modification.delta_lake_cruise > 0
-                      %span.text-success
-                        + #{@modification.delta_lake_cruise}
-                    - elsif @modification.delta_lake_cruise < 0
-                      %span.text-danger
-                        #{@modification.delta_lake_cruise}
-                    - else
-                      %span.text-muted 0
+                      %span.text-muted (none)
 
-                  %td.text-pending
-                    - if @modification.delta_lake_cruise > 0
-                      %span.text-success= new_total("lake_cruise")
-                    - elsif @modification.delta_lake_cruise < 0
-                      %span.text-danger= new_total("lake_cruise")
+                  %td.text-center
+                    - if @modification.delta_children > 0
+                      %span.text-success + #{@modification.delta_children}
+                    - elsif @modification.delta_children < 0
+                      %span.text-danger #{@modification.delta_children}
                     - else
-                      %span.text-muted 0
+                      %span.text-muted (none)
 
-                %hr
+                  %td.text-center
+                    - if @modification.delta_lake_cruise > 0
+                      %span.text-success + #{@modification.delta_lake_cruise}
+                    - elsif @modification.delta_lake_cruise < 0
+                      %span.text-danger #{@modification.delta_lake_cruise}
+                    - else
+                      %span.text-muted (none)
+
+                %tr
+                  %th New totals
+                  %td.text-center= @modified_registration.number_of_adults
+                  %td.text-center= @modified_registration.number_of_youths
+                  %td.text-center= @modified_registration.number_of_children
+                  %td.text-center= @modified_registration.lake_cruise_number
+
+            %hr
 
             %table.table.table-sm
               %thead
                 %tr
-                  %th Category
-                  %th.text-end Current
-                  %th.text-end Change
-                  %th.text-end New total
+                  %th.text-left Category
+                  %th.text-center Registration Fee
+                  %th.text-center Lake cruise fee
+                  %th.text-center Rendezvous total
+
               %tbody
                 %tr
-                  %th Registration Fee
-                  %td= @registration.total
-                  %td.text-end
+                  %th.text-left Current
+                  %td.text-center= number_to_currency(@registration.registration_fee)
+                  %td.text-center= number_to_currency(@registration.lake_cruise_fee)
+                  %td.text-center= number_to_currency(@registration.total)
+
+                %tr
+                  %th.text-left Change
+                  %td.text-center
                     - if @modification.new_attendee_fee > 0
                       %span.text-success
                         + #{number_to_currency(@modification.new_attendee_fee)}
@@ -114,11 +91,9 @@
                       %span.text-danger
                         "- #{number_to_currency(@modification.new_attendee_fee.abs)}"
                     - else
-                      %span.text-muted $0.00
-                  %td
-                %tr
-                  %td Lake cruise fee
-                  %td.text-end
+                      %span.text-muted (none)
+
+                  %td.text-center
                     - if @modification.new_lake_cruise_fee > 0
                       %span.text-success
                         + #{number_to_currency(@modification.new_lake_cruise_fee)}
@@ -126,12 +101,9 @@
                       %span.text-danger
                         "- #{number_to_currency(@modification.new_lake_cruise_fee.abs)}"
                     - else
-                      %span.text-muted $0.00
+                      %span.text-muted (none)
 
-                %tr
-                  %th Rendezvous total
-                  %td.text-end= @registration.total
-                  %td.text-end
+                  %td.text-center
                     - diff_total = @modification.modification_total
                     - if diff_total > 0
                       %span.text-success
@@ -140,14 +112,19 @@
                       %span.text-danger
                         "- $#{number_to_currency(diff_total.abs)}"
                     - else
-                      %span.text-muted $0.00
-                  %td.text-pending
+                      %span.text-muted (non)
+
+                %tr
+                  %th.text-left New total
+                  %td
+                  %td
+                  %td.text-center
                     - diff_total = @modification.modification_total
                     - if diff_total > 0
                       %span.text-success
-                        + #{number_to_currency(grand_total)}
+                        + #{number_to_currency(@modified_registration.total)}
                     - elsif diff_total < 0
                       %span.text-danger
-                        "- $#{number_to_currency(grand_total)}"
+                        "- $#{number_to_currency(@modified_registration.total)}"
                     - else
-                      %span.text-muted $0.00
+                      %span.text-muted @modified_registration.total

@@ -49,7 +49,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @event_registration = @user.registrations.current.last
+    @registration = @user.registrations.current.last
     @available_qr_codes = QrCode.unassigned
   end
 

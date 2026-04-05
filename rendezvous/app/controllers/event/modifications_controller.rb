@@ -4,7 +4,8 @@ module Event
 
     def show
       @modification = Modification.find(params[:id])
-      @registration = apply_modification
+      @registration = Event::Registration.find(params[:registration_id])
+      @modified_registration = apply_modification
       @user = @registration.user.full_name
     end
 

@@ -8,8 +8,8 @@
             %h2 Create a registration
           .card-text
             #registration-form.edit_registration
-              = simple_form_for @event_registration, url: create_by_admin_event_registrations_path, method: :patch do |f|
-                = render partial: 'admin_fields', locals: { f: f, reg: @event_registration }
+              = simple_form_for @registration, url: create_by_admin_event_registrations_path, method: :patch do |f|
+                = render partial: 'admin_fields', locals: { f: f, reg: @registration }
                 .row
                   .col-12
                     .form-group

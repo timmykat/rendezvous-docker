@@ -87,12 +87,17 @@ module Event
       vehicles:       'vehicles'
     }
 
+    enum paid_method: {
+      credit_card: 'credit card',
+      cash_or_check: 'cash or check',
+      invoice: 'invoice'
+    }
+
     PAYMENT_STATUSES = %w[unpaid partial paid refunded].freeze
 
     # Validations
     validate :validate_minimum_number_of_adults, unless: -> { cancelled? }
     validate :validate_payment, unless: -> { status.nil? || cancelled? }
-    validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
 
     validates :sunday_lunch_number,
               numericality: {

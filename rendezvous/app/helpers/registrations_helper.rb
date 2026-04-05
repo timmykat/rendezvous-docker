@@ -21,7 +21,22 @@ module RegistrationsHelper
     end
   end
 
+  # Square helpers
+  def square_env
+    ::RendezvousSquare::Apis::Base.get_environment
+  end
 
+  def square_app_id
+    ENV.fetch "#{square_env}_SQUARE_APP_ID"
+  end
+
+  def square_sdk_url
+    ENV.fetch "#{square_env}_SQUARE_SDK_URL"
+  end
+
+  def square_location_id
+    ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
+  end
 
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
@@ -52,9 +67,12 @@ module RegistrationsHelper
     0.10 + 0.026 * amount # For Square
   end
 
-  def payment_options
-    # [[' Credit Card (on line)', 'credit card'], [' Cash or Check', 'cash or check'], [' Square (on site)', 'square on site']]
-    [[' Credit card (Square)', 'credit card'], [' Cash or Check', 'cash or check']]
+  def modify_button_label(reg)
+    reg.complete? ? 'Create Modification' : 'Save'
+  end
+
+  def user_payment_options
+    Event::Registration.paid_methods.except('invoice').map { |k, _| [k.humanize, k] }
   end
 
   def attended_rendezvous_years(user)

@@ -54,6 +54,6 @@ FactoryBot.define do
     number_of_adults { 2 }
     number_of_children { 0 }
     amount { 100.00 }
-    paid_method { 'credit card' }
+    paid_method { :credit_card }
   end
 end

@@ -231,7 +231,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if resource.has_role? :admin
-      admin_admin_dashboard_path
+      admin_dashboard_path
     elsif !resource.current_registration
       event_welcome_path
     else

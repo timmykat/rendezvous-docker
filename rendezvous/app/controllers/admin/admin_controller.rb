@@ -96,7 +96,7 @@ module Admin
         notice << "Number of #{klass_name} deleted: #{dupes_deleted.to_s}"
       end
       flash_notice notice.join("<br>\n")
-      redirect_to admin_admin_dashboard_path
+      redirect_to admin_dashboard_path
     end
 
     def registration_graphs
@@ -140,7 +140,7 @@ module Admin
 
     def update_user_vehicles
       @user = User.find(params[:id])
-      @event_registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
+      @registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
       @vehicles = @user.vehicles
     end
 
@@ -184,7 +184,7 @@ module Admin
     def create_table_data
       @year ||= Time.current.year
 
-      @event_registrations = base = Event::Registration.current
+      @registrations = base = Event::Registration.current
 
       # -------------------------
       # Users (unchanged)
@@ -290,7 +290,7 @@ module Admin
       QrGenerationJob.perform_later(regenerate)
       flash_notice 'QR generation job started'
       @vehicles = nil
-      redirect_to admin_admin_manage_qr_codes_path
+      redirect_to admin_manage_qr_codes_path
     end
 
     def clear_ballots

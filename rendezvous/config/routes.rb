@@ -109,7 +109,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get 'dedupe', to: 'admin#dedupe'
-    get ']dashboard', to: 'admin#dashboard'
+    get 'dashboard', to: 'admin#dashboard'
     get 'manage', to: 'admin#manage'
     get 'download_csv', to: 'admin#download_csv', defaults: { format: 'csv' }
     get 'graphs', to: 'admin#registration_graphs'
@@ -119,8 +119,8 @@ Rails.application.routes.draw do
     get 'manage_qr_codes', to: 'admin#manage_qr_codes'
     get 'generate_qr_codes', to: 'admin#generate_qr_codes'
     get 'peoples_choice_results', to: 'admin#peoples_choice_results'
-    get 'ballots/clear', to: 'admin#clear_ballots', as: :admin_clear_ballots
-    get 'update_user_vehicles/:id', to: 'admin#update_user_vehicles', as: :update_user_vehicles
+    get 'ballots/clear', to: 'admin#clear_ballots'
+    get 'update_user_vehicles/:id', to: 'admin#update_user_vehicles'
   end
 
   namespace :voting do

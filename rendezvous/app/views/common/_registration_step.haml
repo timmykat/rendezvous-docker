@@ -7,8 +7,8 @@
       .registration-id{ "data-registration_id" => registration.id}
     .registration-step.vw-100
       %div{ class: "justify-content-center py-3 #{registration_status_classes(reg_status)}" }
-        = "Registration status: #{reg_status}"
-        - if !registration.nil? and no_fee_related_changes 
+        = "Registration status: #{reg_status.humanize}"
+        - if !registration.nil? and no_fee_related_changes
           &ndash; you may only change vehicles or Sunday lunch attendance
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
         %li.list-group-item.step.prev
@@ -19,5 +19,3 @@
         %li.list-group-item.step.next
           - unless next_step.nil?
             = "#{next_step} &rarr;".html_safe
-
-

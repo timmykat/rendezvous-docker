@@ -1,18 +1,15 @@
 - pricing_config = Rails.configuration.pricing
 - reg_config = Rails.configuration.registration
-:javascript
-  window.applicationId = "#{@square_app_id}"
-  window.locationId = "#{@square_location_id}"
 
-= render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
+= render partial: 'common/registration_step', locals: { step: @step, registration: @registration }
 .container
   .row.justify-content-center
     .col-md-8.col-12
-      %payment-manager{ data: { "registration-id": @event_registration.id} }
-        = simple_form_for @event_registration, url:  complete_event_registration_path(@event_registration), html:  { id:  'event_registration_form', data: { turbo: false } } do |f|
+      %payment-manager{ data: { "registration-id": @registration.id} }
+        = simple_form_for @registration, url:  complete_event_registration_path(@registration), html:  { id:  'event_registration_form', data: { turbo: false } } do |f|
           .form-group
-            - reg_fee = @event_registration.registration_fee
-            = hidden_field_tag :lake_cruise_fee, @event_registration.lake_cruise_fee
+            - reg_fee = @registration.registration_fee
+            = hidden_field_tag :lake_cruise_fee, @registration.lake_cruise_fee
             = hidden_field_tag :incoming_registration_fee, reg_fee
           %section
             .card
@@ -22,7 +19,7 @@
                 .card.text
                   %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
                   .form-group.donation-options
-                    - donation_list(pricing_config[:suggested_donations], @event_registration.total.to_d).each do |rb|
+                    - donation_list(pricing_config[:suggested_donations], @registration.total.to_d).each do |rb|
                       %input.radio-inline.total-calculation{type: 'radio', name: :suggested_donation, value: rb[1]}
                       %span.mr-2= rb[0]
                   .row
@@ -40,7 +37,7 @@
                     .col-md-6.col-12
                       %p.amount.form-group.text-large
                         %label Total (USD):
-                        = f.input_field :total, value:  ("%.2f" % @event_registration.total), readonly: true, class:  'calculated'
+                        = f.input_field :total, value:  ("%.2f" % @registration.total), readonly: true, class:  'calculated'
 
             .card
               .card-body
@@ -53,7 +50,7 @@
                     .col-md-6.col-12
                       .form-group
                         %ul.list-unstyled
-                          = f.input :paid_method, label:  'Payment method', collection:  payment_options, as:  :radio_buttons, checked:  'credit card', item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
+                          = f.input :paid_method, label:  'Payment method', collection: user_payment_options, as:  :radio_buttons, checked:  :credit_card, item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
 
                   %section#payment-online
                     %h3.h4 Pay online with Square
@@ -65,7 +62,7 @@
                         don't close your browser or click away until you've been returned to our site.
 
                     #payment-link.button-with-spinner
-                      = link_to "Make Payment", send_to_square_event_registration_path(@event_registration), type: "button", class:  'btn btn-primary btn-square-pay'
+                      = link_to "Make Payment", send_to_square_event_registration_path(@registration), type: "button", class:  'btn btn-primary btn-square-pay'
 
                   %section#payment-cash
                     %h3.h4 Pay by mail or in person
@@ -87,5 +84,3 @@
                         .form-group
                           = f.button :submit, 'Complete registration'.html_safe, class:  'btn btn-primary complete-registration', id: "card-button"
                           %img{ src: image_url('Stopwatch.gif'), class: 'review-loader', style: 'display: none; padding-left: 20px; border: solid 1px #999; width: 30px; height: 30px;  border-radius: 5px'}
-
-= javascript_include_tag @square_sdk_url, defer: true

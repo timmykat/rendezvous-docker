@@ -17,27 +17,25 @@
   .row
     .col-md-4
       .form-group
-        %label Total adults:
-        = f.input_field :number_of_adults, readonly:  true, class:  'calculated fee-calculation'
-  .row
+        %label
+          Total adults:
+          = f.input_field :number_of_adults, readonly:  true, style: "width: 80px; text-align: right;"
     .col-md-4
       .form-group
-        %label Total youths:
-        = f.input_field :number_of_youths, readonly:  true, class:  'calculated fee-calculation'
-  .row
+        %label
+          Total youths:
+          = f.input_field :number_of_youths, readonly:  true, style: "width: 80px; text-align: right;"
     .col-md-4
       .form-group
-        %label Total children:
-        = f.input_field :number_of_children, readonly:  true, class:  'calculated fee-calculation'
+        %label
+          Total children:
+          = f.input_field :number_of_children, readonly:  true, style: "width: 80px; text-align: right;"
 
   .row
     .col-12
       %p.amount.form-group
         %label
-          Registration fee (USD) #{@no_total_update ? "(total not updated)" : ""}:
-          - if @no_total_update
-            = f.input_field :registration_fee, disabled:  true, class:  'calculated'
-          - else
-            = f.input_field :registration_fee, readonly:  true, class:  'calculated'
+          Attendee fee total:
+          = text_field_tag :display_total, 0.0, style: "width: 150px; text-align: right;"
 
   = f.input_field :year, as:  :hidden, value:  Time.new.year

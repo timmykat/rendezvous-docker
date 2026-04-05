@@ -8,6 +8,7 @@ export class AttendanceManager extends HTMLElement {
   connectedCallback() {
     this.setupEventListeners();
     this.initializeFirstAttendee();
+    this.initializeTypeFees();
     this.getAttendeeTotals();
   }
 
@@ -90,11 +91,11 @@ export class AttendanceManager extends HTMLElement {
       }
     });
 
-    const feeInput = document.getElementById(
-      "event_registration_registration_fee",
-    );
+    // We let the before_save method save the total amount
+    const totalDisplayInput = document.getElementById("display_total");
     console.log("New fee total", attendeeFeeTotal.toFixed(2));
-    if (feeInput) feeInput.value = attendeeFeeTotal.toFixed(2);
+    if (totalDisplayInput)
+      totalDisplayInput.value = attendeeFeeTotal.toFixed(2);
   };
 
   updateCount = (type, visibleNestedFields) => {
@@ -102,7 +103,6 @@ export class AttendanceManager extends HTMLElement {
 
     visibleNestedFields.forEach((fieldSet) => {
       const checked = fieldSet.querySelector('input[type="radio"]:checked');
-      console.log(checked, checked.value);
       if (checked && checked.value === type) {
         console.log("Adding", type);
         count++;
@@ -117,6 +117,21 @@ export class AttendanceManager extends HTMLElement {
     if (input) input.value = count || 0;
 
     return count;
+  };
+
+  initializeTypeFees = () => {
+    const visibleNestedFields = Array.from(
+      this.querySelectorAll('.nested-fields:not([style*="display: none"])'),
+    );
+
+    visibleNestedFields.forEach((attendee) => {
+      const ageSelection = attendee.querySelector(
+        'input[type="radio"]:checked',
+      );
+      const age = ageSelection.value;
+      const card = ageSelection.closest(".card");
+      card.dataset.fee = window.appData.fees[age];
+    });
   };
 
   initializeFirstAttendee = () => {
