@@ -6,25 +6,26 @@
 #  annual_answer       :string(255)
 #  balance             :decimal(8, 2)    default(0.0), not null
 #  created_by_admin    :boolean          default(FALSE), not null
-#  donation            :decimal(8, 2)
+#  donation            :decimal(8, 2)    default(0.0)
 #  events              :text(65535)
 #  invoice_number      :string(255)
 #  is_admin_created    :boolean          default(FALSE), not null
-#  lake_cruise_fee     :decimal(8, 2)
+#  lake_cruise_fee     :decimal(8, 2)    default(0.0)
 #  lake_cruise_number  :integer          default(0), not null
-#  number_of_adults    :integer
-#  number_of_children  :integer
-#  number_of_seniors   :integer
-#  number_of_youths    :integer
-#  paid_amount         :decimal(8, 2)
+#  late_period         :boolean          default(FALSE)
+#  number_of_adults    :integer          default(0)
+#  number_of_children  :integer          default(0)
+#  number_of_seniors   :integer          default(0)
+#  number_of_youths    :integer          default(0)
+#  paid_amount         :decimal(8, 2)    default(0.0)
 #  paid_date           :datetime
 #  paid_method         :string(255)
 #  refunded            :decimal(8, 2)    default(0.0), not null
-#  registration_fee    :decimal(8, 2)
-#  status              :string(255)
-#  step                :string(255)      default("create")
+#  registration_fee    :decimal(8, 2)    default(0.0)
+#  status              :string(255)      default("pending")
+#  step                :string(255)      default("creating")
 #  sunday_lunch_number :integer          default(0), not null
-#  total               :decimal(8, 2)
+#  total               :decimal(8, 2)    default(0.0)
 #  vendor_fee          :decimal(6, 2)
 #  year                :string(255)
 #  created_at          :datetime
@@ -70,21 +71,21 @@ module Event
     attribute :total, :decimal, default: 0.0
 
     # Constants
-    STATUSES = [
-      'new',
-      'in progress',
-      'complete',
-      'cancelled'
-    ].freeze
+    enum status: {
+      pending: 'pending',
+      in_progress: 'in progress',
+      complete: 'complete',
+      cancelled: 'cancelled'
+    }
 
-    STEPS = [
-      'create',
-      'special events',
-      'review',
-      'payment',
-      'finished',
-      'modify'
-    ].freeze
+    enum step: {
+      creating:       'creating',
+      special_events: 'special events',
+      review:         'review',
+      payment:        'payment',
+      finished:       'finished',
+      vehicles:       'vehicles'
+    }
 
     PAYMENT_STATUSES = %w[unpaid partial paid refunded].freeze
 
@@ -92,9 +93,6 @@ module Event
     validate :validate_minimum_number_of_adults, unless: -> { cancelled? }
     validate :validate_payment, unless: -> { status.nil? || cancelled? }
     validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
-
-    validates :status, inclusion: { in: STATUSES }
-    validates :step, inclusion: { in: STEPS }
 
     validates :sunday_lunch_number,
               numericality: {
@@ -112,13 +110,10 @@ module Event
     serialize :events
     before_save :ensure_financials
 
-    # Registration checks
-    def complete?
-      status == 'complete'
-    end
+
 
     def cancelled?
-      status == 'cancelled'
+      status == :cancelled
     end
 
     # Payment checks

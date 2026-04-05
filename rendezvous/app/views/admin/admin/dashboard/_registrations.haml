@@ -33,8 +33,8 @@
               %td.text-left
                 %ul.list-unstyled
                   %li= link_to 'View', event_registration_path(reg)
-                  %li= link_to 'Edit', edit_by_admin_event_registration_path(reg)
-                  %li= link_to 'Cancel', event_cancel_registration_path(reg), data: { confirm: "Sure?" }
+                  %li= link_to 'Modify', modify_by_admin_event_registration_path(reg)
+                  %li= link_to 'Cancel', cancel_event_registration_path(reg), data: { confirm: "Sure?" }
 
               %td= reg.status.upcase
               %td= reg.payment_status.upcase

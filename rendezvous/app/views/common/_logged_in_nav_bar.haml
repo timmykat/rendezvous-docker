@@ -42,7 +42,7 @@
 
                             = link_to 'Review registration', review_event_registration_path(current_registration), class: 'dropdown-item'
 
-                            - if current_registration.status != 'complete'
+                            - unless current_registration.complete?
                               = link_to 'Pay fee', payment_event_registration_path(current_registration), class: 'dropdown-item'
 
                             = link_to 'Update Sunday lunch', edit_sunday_lunch_event_registration_path(current_registration.id), class: 'dropdown-item'

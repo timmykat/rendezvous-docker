@@ -1,8 +1,8 @@
 .container
   .row.justify-content-center
     .col-md-10.col-12
-      .card 
-        .card-body 
+      .card
+        .card-body
           .card-title
             - if user_is_admin?
               %h1.h2 Profile for #{@user.full_name}
@@ -20,11 +20,11 @@
                 %table
                   %tr
                     %td
-                      %em Name: 
+                      %em Name:
                       #{@user.full_name}
                   %tr
                     %td
-                      %em Email: 
+                      %em Email:
                       #{@user.email}
                   %tr
                     %td
@@ -37,13 +37,13 @@
               %p
                 Status: #{registration_status}
 
-              - if registration_status != 'Complete'
-                %p To register or finish a registration: 
-                %ul 
+              - if registration_status != :complete
+                %p To register or finish a registration:
+                %ul
                   - if @current_registration
                     %li= link_to 'Continue to current registration', review_event_registration_path(@current_registration)
                   - else
-                    %li= link_to 'Create a registration',  new_event_registration_path 
+                    %li= link_to 'Create a registration',  new_event_registration_path
 
               .vehicle-info.mt-6
                 %h3.h4 Vehicles
@@ -59,35 +59,33 @@
                         %td{colspan: 2}
                           %hr
                       %tr
-                        %td 
+                        %td
                           %em Year, marque & model:
                         %td= v.year_marque_model
                       %tr
-                        %td 
+                        %td
                           %em Judging category:
                         %td= v.judging_category
                       %tr
-                        %td.mr-3 
+                        %td.mr-3
                           %em Bringing to the Rendezvous?
                         %td= v.bringing ? 'Yes' : 'No'
                       %tr
-                        %td 
+                        %td
                           %em For sale?
                         %td= v.for_sale ? 'Yes' : 'No'
 
 
-            =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning mt-3" 
-      
+            =link_to 'Edit my information', edit_user_path(@user), class:  "btn  btn-warning mt-3"
+
       .card
         .card-body
           .card-text
 
             %ul
-              %li 
+              %li
                 %em Recorded Rendezvous attendance: #{attended_rendezvous_years(@user)}
-              %li 
+              %li
                 %em Registered for the #{Date.current.year} Rendezvous: #{@user.attending ? 'Yes' : 'No'}
               %li
                 %em Interested in Citroenvie: #{@user.citroenvie? ? 'Yes' : 'No'}
-
-    

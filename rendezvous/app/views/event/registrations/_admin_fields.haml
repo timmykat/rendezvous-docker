@@ -12,7 +12,7 @@
           = f.input_field :registration_fee, readonly:  true, class:  'calculated'
   .row
     .col-12
-      = f.input :status, as: :select, collection: statuses
+      = f.input :status, as: :select, collection: Event::Registration.statuses
 
   .row
     .col-12

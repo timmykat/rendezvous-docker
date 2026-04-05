@@ -8,7 +8,7 @@
         = f.simple_fields_for :attendees do |a|
           = render partial:  'attendee_fields', locals:  { f:  a }
 
-      - unless no_fee_related_changes   
+      - unless no_fee_related_changes
         .links
           = link_to_add_association "#{icon(:add_person)}".html_safe, f, :attendees, class:  'btn btn-primary '
           Add a guest
@@ -23,7 +23,7 @@
     .col-md-4
       .form-group
         %label Total youths:
-        = f.input_field :number_of_youths, readonly:  true, class:  'calculated fee-calculation'                  
+        = f.input_field :number_of_youths, readonly:  true, class:  'calculated fee-calculation'
   .row
     .col-md-4
       .form-group
@@ -33,8 +33,11 @@
   .row
     .col-12
       %p.amount.form-group
-        %label 
-          Registration fee (USD):
-          = f.input_field :registration_fee, readonly:  true, class:  'calculated'
+        %label
+          Registration fee (USD) #{@no_total_update ? "(total not updated)" : ""}:
+          - if @no_total_update
+            = f.input_field :registration_fee, disabled:  true, class:  'calculated'
+          - else
+            = f.input_field :registration_fee, readonly:  true, class:  'calculated'
 
   = f.input_field :year, as:  :hidden, value:  Time.new.year

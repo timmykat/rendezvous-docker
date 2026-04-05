@@ -235,7 +235,7 @@ CREATE TABLE `merchitems` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `modification` (
+CREATE TABLE `modifications` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `status` varchar(255) NOT NULL DEFAULT 'new',
   `starting_adults` int NOT NULL DEFAULT '0',
@@ -250,12 +250,13 @@ CREATE TABLE `modification` (
   `new_lake_cruise_fee` decimal(8,2) DEFAULT '0.00',
   `modification_total` decimal(8,2) DEFAULT '0.00',
   `new_total` decimal(8,2) DEFAULT '0.00',
+  `cancellation` tinyint(1) DEFAULT '0',
   `registration_id` int NOT NULL,
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_modification_on_registration_id` (`registration_id`),
-  CONSTRAINT `fk_rails_c5c8e2d27e` FOREIGN KEY (`registration_id`) REFERENCES `registrations` (`id`)
+  KEY `index_modifications_on_registration_id` (`registration_id`),
+  CONSTRAINT `fk_rails_1e2e171fd7` FOREIGN KEY (`registration_id`) REFERENCES `registrations` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

@@ -8,41 +8,29 @@ module RegistrationsHelper
     AnnualQuestion::RESPONSES
   end
 
-  def statuses
-    Event::Registration::STATUSES
-  end
-
   def registration_status_classes(status)
-    case status
-    when 'complete'
+    case status.to_sym
+    when :complete
       'bg-success'
-    when 'in progress', 'payment due'
+    when :in_progress
       'bg-warning text-dark'
-    when 'cancelled'
+    when :cancelled
       'bg-danger'
     else
       'bg-secondary'
     end
   end
 
-  def payment_due?(balance)
-    balance.positive?
-  end
 
-  def refund_owed?(balance)
-    balance.negative?
-  end
 
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
     case status
-    when 'complete'
+    when :complete
       klass += ' fa fa-star'
-    when 'in progress'
+    when :in_progress
       klass += ' fa fa-step-forward'
-    when 'payment due'
-      klass += ' fa fa-money'
-    when 'cancelled'
+    when :cancelled
       klass += ' fa fa-ban'
     end
   end

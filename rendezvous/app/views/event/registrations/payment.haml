@@ -76,7 +76,7 @@
                             = f.input :paid_amount
 
                           .form-group
-                            = f.input :status, as: :select, collection: statuses
+                            = f.input :status, as: :select, collection: Event::Registration.statuses
 
                         - else
                           %p

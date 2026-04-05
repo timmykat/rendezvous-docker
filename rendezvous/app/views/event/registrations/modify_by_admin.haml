@@ -5,9 +5,18 @@
       .card
         .card-body
           .card-title
-            %h2 Edit registration for #{@user.full_name}
+            %h2 Modify registration for #{@user.full_name}
           .card-text
+            %p
+              Registration ID:
+              =link_to @registration.id, event_registration_path(@registration)
+            %p
+              Normal edit page:
+              =link_to @registration.id, edit_event_registration_path(@registration)
             #registration-form.edit_registration
+              - if @event_registration.complete?
+                %p
+                  %b A modification will be created
               = simple_form_for @event_registration, url: update_by_admin_event_registration_path, method: :patch do |f|
                 = render partial: 'admin_fields', locals: { f: f, reg: @event_registration, user: @user }
                 .row

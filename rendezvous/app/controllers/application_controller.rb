@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :get_app_data
   before_action :set_ballot_count
   before_action :update_active_user
+  before_action :ensure_delete_method, only: :destroy
 
   helper_method :current_time
   helper_method :debug_date
@@ -33,6 +34,14 @@ class ApplicationController < ActionController::Base
 
   def select_layout
     ['manage'].include?(action_name) ? "admin_layout" : "application"
+  end
+
+  def ensure_delete_method
+    return unless action_name == "destroy"
+    return if request.delete?
+
+    Rails.logger.error("🚨 Non-DELETE request hit destroy: #{request.method} #{request.fullpath}")
+    head :method_not_allowed
   end
 
   def active_users

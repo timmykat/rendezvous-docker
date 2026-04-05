@@ -3,6 +3,7 @@
 # Table name: modifications
 #
 #  id                   :bigint           not null, primary key
+#  cancellation         :boolean          default(FALSE)
 #  delta_adults         :integer          default(0), not null
 #  delta_children       :integer          default(0), not null
 #  delta_lake_cruise    :integer          default(0), not null
@@ -15,14 +16,14 @@
 #  starting_children    :integer          default(0), not null
 #  starting_lake_cruise :integer          default(0), not null
 #  starting_youths      :integer          default(0), not null
-#  status               :string(255)      default("new"), not null
+#  status               :string(255)      default(NULL), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  registration_id      :integer          not null
 #
 # Indexes
 #
-#  index_modification_on_registration_id  (registration_id)
+#  index_modifications_on_registration_id  (registration_id)
 #
 # Foreign Keys
 #
@@ -36,11 +37,10 @@ module Event
     belongs_to :registration
     has_many :attendees, through: :registration
 
-    STATUSES = [
-      'new',
-      'in progress',
-      'complete'
-    ].freeze
-
+    enum status: {
+      pending: 'pending',
+      in_progress: 'in progress',
+      commited: 'commited'
+    }
   end
 end

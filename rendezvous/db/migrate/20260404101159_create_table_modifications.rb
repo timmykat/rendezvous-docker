@@ -14,6 +14,7 @@ class CreateTableModifications < ActiveRecord::Migration[7.2]
       t.decimal :new_lake_cruise_fee, precision: 8, scale: 2, default: 0.0
       t.decimal :modification_total, precision: 8, scale: 2, default: 0.0
       t.decimal :new_total, precision: 8, scale: 2, default: 0.0
+      t.boolean :cancellation, default: false
       t.references :registration, null: false, foreign_key: true, type: :integer
 
       t.timestamps

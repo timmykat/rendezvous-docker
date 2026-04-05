@@ -5,7 +5,7 @@ class VehiclesController < ApplicationController
   def index
     @vehicles = Vehicle.all
   end
-  
+
   def new
     @vehicle = Vehicle.new
     @available_qr_codes = QrCode.unassigned
@@ -58,19 +58,19 @@ class VehiclesController < ApplicationController
     ballot = current_user.ballots.where(year: Date.current.year).first
 
     if vehicle.nil?
-      data = { status: 'not found'}
+      data = { status: :not_found }
     else
-      
+
       if ballot.selections.include? vehicle
         data = { errorInfo: '<div class="selection">You\'ve already voted for that one!</div>', status: 'already selected' }
       end
 
-      if data.nil? 
-        category = vehicle.judging_category 
+      if data.nil?
+        category = vehicle.judging_category
         categorized_selections = ballot.categorized_selections
         if categorized_selections[category].length == 3
           data = { errorInfo:  '<div class="selection">You\'ve reached your max in that category.</div>', status: 'maxed out'}
-        else 
+        else
           data = { vehicleInfo: vehicle.voting_info_format, status: 'found' }
         end
       end

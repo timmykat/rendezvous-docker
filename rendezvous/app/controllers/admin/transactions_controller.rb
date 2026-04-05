@@ -21,9 +21,9 @@ module Admin
       event_registration.paid_amount += transaction.amount
       if (event_registration.total - event_registration.paid_amount).abs < 0.10
         if transaction.transaction_type == 'refund'
-          event_registration.status = 'cancelled'
+          event_registration.status = :cancelled
         else
-          event_registration.status = 'complete'
+          event_registration.status = :complete
         end
       end
 

@@ -4,7 +4,7 @@ module Event
 
     before_action :get_registration, except: [:index, :welcome, :new, :create, :new_by_admin, :create_by_admin, :send_confirmation_email]
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
-    before_action :require_admin, only: [:index, :new_by_admin, :edit_by_admin]
+    before_action :require_admin, only: [:index, :new_by_admin, :modify_by_admin, :cancel, :modify, :save_modification]
     before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
@@ -21,49 +21,50 @@ module Event
       welcome: {
         path: 'event_welcome',
         prev: nil,
-        next: 'create'
+        next: :creating
       },
       create: {
         path: 'new',
         prev: nil,
-        next: 'special events'
+        next: :special_events
       },
       special_events: {
         path: 'special events',
-        prev: 'update',
-        next: 'review'
+        prev: :update,
+        next: :review
       },
       review: {
         path: 'review',
-        prev: 'special events',
-        next: 'payment'
+        prev: :special_events,
+        next: :payment
       },
       payment: {
         path: 'payment',
-        prev: 'review',
+        prev: :review,
         next: nil
       },
       complete: {
         path: 'complete_after_payment',
-        prev: 'review',
-        next: 'vehicles'
+        prev: :review,
+        next: :vehicles
       },
       vehicles: {
         path: 'edit_user_vehicles',
-        prev: 'review',
+        prev: :review,
         next: 'nil'
       },
       update: {
         path: 'edit',
         prev: nil,
-        next: ->(status) { status == 'complete' ? :review : :special_events }
+        next: ->(status) { status == :complete ? :review : :special_events }
       }
-    }
+    }.freeze
 
     NO_CHANGE_STATUSES = [
-      'complete',
-      'cancelled'
+      :complete,
+      :cancelled
     ]
+
 
     def set_registration_user
       if !current_user.admin?
@@ -130,7 +131,7 @@ module Event
     # Create or update the user
     def create
       Rails.logger.debug params
-      @step = 'create'
+      @step = :create
       email = params[:event_registration][:user_attributes][:email]
       user_id = params[:event_registration][:user_attributes][:id] || params[:event_registration][:user_id]
 
@@ -155,7 +156,7 @@ module Event
       if current_user.admin?
         @event_registration.created_by_admin = params[:event_registration][:created_by_admin]
       end
-      @event_registration.status = 'in progress'
+      @event_registration.status = :in_progress
       @event_registration.invoice_number = "CR-#{Date.current.year}-#{@event_registration.id}"
 
       if !@event_registration.save
@@ -163,7 +164,7 @@ module Event
         flash_alert_now @event_registration.errors.full_messages.to_sentence
         render :new and return
       else
-        @step = 'special events'
+        @step = :special_events
         sign_in(@event_registration.user) unless (session[:user_admin] || user_signed_in?)
         redirect_to special_events_event_registration_path(@event_registration)
       end
@@ -176,7 +177,7 @@ module Event
       end
 
       @title = 'Update Registration'
-      @step = 'update'
+      @step = :update
     end
 
     def update
@@ -196,7 +197,7 @@ module Event
         else
           flash_notice 'The registration was updated.'
         end
-        if @event_registration.status != 'complete'
+        if @event_registration.status != :complete
           redirect_to special_events_event_registration_path(@event_registration)
         else
           redirect_to review_event_registration_path(@event_registration)
@@ -234,14 +235,25 @@ module Event
       end
     end
 
-    def edit_by_admin
+    def modify_by_admin
       @title = "Admin Registration Update"
+      @no_total_update = @event_registration.complete?
     end
 
     def update_by_admin
       unless @user == @event_registration.user
-        flash_alert "There is user mismatch: #{@user.full_name} vs #{@event_registration.user.full_name}"
-        render :edit_by_admin and return
+        flash_alert "There is a user mismatch: #{@user.full_name} vs #{@event_registration.user.full_name}"
+        render :modify_by_admin and return
+      end
+
+      if @event_registration.complete?
+        @modification = modify_registration
+        if @modification.save
+          redirect_to event_modification_path(@modification) and return
+        else
+          flash_alert "Error: #{@modification.errors.full_messages}"
+          render :modify_by_admin and return
+        end
       end
 
       if @event_registration.update(event_registration_params)
@@ -249,8 +261,57 @@ module Event
         redirect_to event_registration_path(@event_registration)
       else
         @event_registration.errors.full_messages.to_sentence
-        render :edit_by_admin
+        render :modify_by_admin
       end
+    end
+
+    def modify_registration
+      existing = @event_registration.modifications.where(status: 'in progress').exists?
+      if existing
+        flash_alert 'An existing modification is in progress. Please resolve that first.'
+        redirect_to event_registration_path(@event_registration) and return
+      end
+
+      create_modification
+    end
+
+    def create_modification(cancellation: false)
+      db_reg = @event_registration.class.find(@event_registration.id)
+
+      fee_period = @event_registration.late_period? ? :late : :early
+      reg_fees = Rails.configuration.pricing[:fees][fee_period]
+      lake_cruise_fee = Rails.configuration.pricing[:fees][:lake_cruise][:price]
+
+      m = @event_registration.modifications.build
+      m.status = :in_progress
+      m.starting_adults = db_reg.number_of_adults || 0
+      m.starting_youths = db_reg.number_of_youths || 0
+      m.starting_children = db_reg.number_of_children || 0
+      m.starting_lake_cruise = db_reg.lake_cruise_number || 0
+
+      reg_params = params[:event_registration]
+      m.delta_adults = (reg_params[:number_of_adults] || 0).to_i - m.starting_adults
+      m.delta_youths = (reg_params[:number_of_youths] || 0).to_i - m.starting_youths
+      m.delta_children = (reg_params[:number_of_children] || 0).to_i - m.starting_children
+      m.delta_lake_cruise = (reg_params[:lake_cruise_number] || 0).to_i - m.starting_lake_cruise
+
+      new_attendee_fee = 0.0
+      new_attendee_fee += m.delta_adults * reg_fees[:adult] unless m.delta_adults.zero?
+      new_attendee_fee += m.delta_youths * reg_fees[:youth] unless m.delta_youths.zero?
+      new_attendee_fee += m.delta_children * reg_fees[:child] unless m.delta_children.zero?
+      m.new_attendee_fee = new_attendee_fee
+
+      m.new_lake_cruise_fee = m.delta_lake_cruise * lake_cruise_fee
+      m.modification_total = m.new_attendee_fee.to_d + m.new_lake_cruise_fee.to_d
+      m.new_total = @event_registration.total + m.modification_total
+      m.cancellation = true if cancellation
+      m
+    end
+
+    def cancel
+    end
+
+    def save_modification
     end
 
     # AJAX methods
@@ -290,15 +351,14 @@ module Event
 
     def review
       @title = 'Review Registration Information'
-      @step = 'review'
-      @event_registration.status = 'in review'
+      @step = :review
+      @event_registration.status = :in_review
       @event_registration.save
     end
 
     def payment
       @title = 'Registration - Payment'
-      @step = 'payment'
-      @event_registration.status = 'payment due'
+      @step = :payment
       @app_data.merge!({
                          event_registration_fee: @event_registration.registration_fee,
                          registration_id: @event_registration.id
@@ -319,13 +379,13 @@ module Event
       rescue SquareApiError => e
         flash_alert "There was a problem creating the order: #{e.message}"
         Rails.logger.error("Square order failed: #{e.message}")
-        render :edit_by_admin
+        render :modify_by_admin
       end
     end
 
     def special_events
       @title = 'Registration - Special Events'
-      @step = 'special events'
+      @step = :special_events
     end
 
     def update_special_events
@@ -345,7 +405,7 @@ module Event
 
     def complete_after_online_payment
       @title = 'Complete Registration'
-      @step = 'complete'
+      @step = :complete
 
       transaction_id = params[:transactionId]
       order_id = params[:orderId]
@@ -360,9 +420,9 @@ module Event
       end
 
       @event_registration.paid_amount = @event_registration.total
-      @event_registration.paid_method = 'credit card'
+      @event_registration.paid_method = :credit_card
       @event_registration.paid_date = Time.new
-      @event_registration.status = 'complete'
+      @event_registration.status = :complete
       if @event_registration.save
         send_confirmation_email
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
@@ -381,11 +441,10 @@ module Event
 
     def complete
       @title = 'Complete Registration'
-      @step = 'complete'
+      @step = :complete
 
       @event_registration.paid_amount = 0.0
-      @event_registration.paid_method = 'cash or check'
-      @event_registration.status = 'payment due'
+      @event_registration.paid_method = :cash_or_check
 
       # Update the registration
       unless @event_registration.save
@@ -451,7 +510,7 @@ module Event
     end
 
     def welcome
-      @step = 'welcome'
+      @step = :welcome
     end
 
     def square_customer
@@ -492,7 +551,7 @@ module Event
     # end
 
     def send_to_square
-      @step = 'payment'
+      @step = :payment
       @event_registration = Registration.find(params[:id])
       if !@event_registration.update(update_payment_params)
         flash_alert "There was a problem making your payment update; no payment submitted"
@@ -527,13 +586,13 @@ module Event
     private
 
     def build_registration
-      @step = 'create'
+      @step = :create
       @annual_question = AnnualQuestion.where(year: Date.current.year).first
 
       @event_registration = @user&.registrations&.current&.first
 
       unless @event_registration.blank?
-        if !['payment due', 'complete'].include?(@event_registration.status)
+        if !@event_registration.complete?
           flash_notice("You've already created a registration but haven't finished")
           redirect_to review_event_registration_path(@event_registration)
         else
@@ -544,7 +603,7 @@ module Event
       end
 
       @event_registration = Registration.new
-      @event_registration.status = 'new'
+      @event_registration.status = :pending
 
       @event_registration.attendees.build
 

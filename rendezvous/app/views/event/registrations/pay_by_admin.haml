@@ -59,7 +59,7 @@
                           = f.input :paid_amount
 
                         .form-group
-                          = f.input :status, as: :select, collection: statuses
+                          = f.input :status, as: :select, collection: Event::Registration.statuses
                           = f.hidden :created_by_admin, value: true
                         .form-group
                           = f.button :submit, 'Send Invoice'.html_safe, class:  'btn btn-primary complete-registration', id: "card-button"
