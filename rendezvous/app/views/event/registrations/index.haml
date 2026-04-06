@@ -10,9 +10,8 @@
         %thead
           %tr
             %th Name
-            %th.text-center Adults
-            %th.text-center Youths
-            %th.text-center Children
+            - Event::Registration::AGE_GROUPS.each do |age|
+              %th.text-center #{age.pluralize.titleize}
             %th.text-center Vehicles
             %th.text-center Fee
             %th.text-center Donation
@@ -25,9 +24,8 @@
             %tr
               %td
                 = link_to registration.user.last_name_first, event_registration_path(registration.id)
-              %td.text-center= registration.number_of_adults
-              %td.text-center= registration.number_of_youths
-              %td.text-center= registration.number_of_children
+              - Event::Registration::AGE_GROUPS.each do |age|
+                %td.text-center= registration.send("number_of_#{age.pluralize}")
               %td.text-center= vehicles_list(registration.user.vehicles)
               %td.text-center= number_to_currency(registration.registration_fee)
               %td.text-center= number_to_currency(registration.donation)

@@ -79,7 +79,12 @@ Rails.application.routes.draw do
   # -- Registrations
   # get '/event_registration',             to: 'registrations#new'
   namespace :event do
-    resources :modifications, only: [:show]
+    resources :modifications, only: [ :show ] do
+      member do
+        patch :apply
+        post :payment_link
+      end
+    end
     resources :registrations do
       collection do
         get :new_by_admin

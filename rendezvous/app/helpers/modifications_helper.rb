@@ -1,10 +1,15 @@
 module ModificationsHelper
 
-  def new_total(field)
-    @modification.send("starting_#{field}") + @modification.send("delta_#{field}")
+  def active_modification(reg)
+    reg.modifications.where(status: :pending).first
   end
 
-  def grand_total
-    @registration.total + @modification.modification_total
+  def modification_title(mod, name)
+    if mod.applied?
+      state = 'Applied'
+    else
+      state = 'Pending'
+    end
+    "#{state} modification for #{name}"
   end
 end

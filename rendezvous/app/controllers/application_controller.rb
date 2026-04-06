@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_action :flash_array
   before_action :get_app_data
-  before_action :set_ballot_count
   before_action :update_active_user
   before_action :ensure_delete_method, only: :destroy
 
@@ -96,10 +95,6 @@ class ApplicationController < ActionController::Base
 
   def written_reg_form_link
     "/#{Date.current.year}-Rendezvous-registration-#{fee_period}.pdf"
-  end
-
-  def set_ballot_count
-    @ballot_count = Voting::Ballot.count
   end
 
   # This currently has an absolute max in the DB of 8

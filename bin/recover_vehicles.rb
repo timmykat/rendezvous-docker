@@ -1,7 +1,8 @@
 Vehicle.destroy_all
 
 file = File.read(Rails.root.join('tmp', "vehicle_backup.json"))
-vehicle_data = JSON.parse(file, symbolize_names: true);nil
+vehicle_data = JSON.parse(
+  file, symbolize_names: true);nil
 
 vehicle_data.each do |attrs|
   puts attrs

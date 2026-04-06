@@ -39,8 +39,7 @@ module Event
 
     enum status: {
       pending: 'pending',
-      in_progress: 'in progress',
-      commited: 'commited'
+      applied: 'applied'
     }
   end
 end

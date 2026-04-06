@@ -2,6 +2,13 @@ class RendezvousMailer < ApplicationMailer
 
   helper :application
 
+  def registration_update(email, modification, payment_link)
+    @modification = modification
+    @payment_link = payment_link
+    recipients = [email, 'tim@wordsareimages.com']
+    mail(to: recipients, subject: 'Rendezvous registration update payment request')
+  end
+
   def no_email_found(email)
     Rails.logger.warn "No email found mailer: " + email
     @email = email

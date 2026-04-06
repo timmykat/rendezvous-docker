@@ -9,6 +9,11 @@ module RendezvousSquare
         Apis::Base.get_square_client.checkout
       end
 
+      def create_square_modification_payment_link(params)
+        post_body = create_modification_checkout_body(params)
+        create_link(post_body)
+      end
+
       def create_square_payment_link(params)
         Rails.logger.debug params
         post_body = create_checkout_body(params)
@@ -18,6 +23,10 @@ module RendezvousSquare
           redirect_url: params[:redirect_url]
         }
 
+        create_link(post_body)
+      end
+
+      def create_link(post_body)
         begin
           # In v45, api.payment_links.create returns a Square::Types::CreatePaymentLinkResponse object directly
           # We use the double splat (**) because the SDK expects keyword arguments
@@ -49,6 +58,14 @@ module RendezvousSquare
         else
           order_object = Apis::Orders.create_order_object(params)
         end
+        {
+          idempotency_key: Apis::Base.idempotency_key,
+          order: order_object
+        }
+      end
+
+      def create_modification_checkout_body(params)
+        order_object = Apis::Orders.create_modification_order_object(params)
         {
           idempotency_key: Apis::Base.idempotency_key,
           order: order_object

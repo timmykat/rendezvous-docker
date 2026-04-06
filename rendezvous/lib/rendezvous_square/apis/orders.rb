@@ -33,6 +33,16 @@ module RendezvousSquare
         }
       end
 
+      def self.create_modification_order_object(params = {})
+        {
+          location_id: Apis::Base.get_location_id,
+          customer_id: Apis::Customer.find_customer(params[:email]),
+          ticket_name: "2026 Citroen Rendezvous Registration - Update",
+          reference_id: params[:reference_id].to_s,
+          line_items: create_line_items(params)
+        }
+      end
+
 
       def self.create_donation_order_object(params)
         {
@@ -51,6 +61,10 @@ module RendezvousSquare
           line_items = create_registration_line_items(params)
         end
 
+        if params[:modification]
+          line_items = create_modification_line_items(params)
+        end
+
         if params[:donation]
           line_items = create_donation_line_item
         end
@@ -63,14 +77,10 @@ module RendezvousSquare
         period = params[:fee_period].to_sym
 
         line_items = []
-        line_items << create_attendee_line_item(registration.number_of_adults, period, 'adult')
-
-        if registration.number_of_youths.to_i.positive?
-          line_items << create_attendee_line_item(registration.number_of_youths, period, 'youth')
-        end
-
-        if registration.number_of_children.to_i.positive?
-          line_items << create_attendee_line_item(registration.number_of_children, period, 'child')
+        Event::Registration::AGE_GROUPS.each do |age|
+          if registration.send("number_of_#{age.pluralize}").to_i.positive?
+            line_items << create_attendee_line_item(registration.send("number_of_#{age.pluralize}"), period, age)
+          end
         end
 
         if registration.lake_cruise_number.to_i.positive?
@@ -79,6 +89,23 @@ module RendezvousSquare
 
         if registration.donation.to_d.positive?
           line_items << create_donation_line_item(registration.donation)
+        end
+        line_items
+      end
+
+      def self.create_modification_line_items(params)
+        modification = params[:modification]
+        period = params[:fee_period].to_sym
+
+        line_items = []
+        Event::Registration::AGE_GROUPS.each do |age|
+          if modification.send("delta_#{age.pluralize}").to_i.positive?
+            line_items << create_attendee_line_item(modification.send("delta_#{age.pluralize}"), period, age)
+          end
+        end
+
+        if modification.delta_lake_cruise.to_i.positive?
+          line_items << create_cruise_line_item(modification.delta_lake_cruise)
         end
         line_items
       end

@@ -126,12 +126,13 @@ module Event
       end
       @title = "Let's get you registered!"
       build_registration
+      @step = :creating
     end
 
     # Create or update the user
     def create
       Rails.logger.debug params
-      @step = :create
+      @step = :creating
       email = params[:event_registration][:user_attributes][:email]
       user_id = params[:event_registration][:user_attributes][:id] || params[:event_registration][:user_id]
 
@@ -284,23 +285,38 @@ module Event
       lake_cruise_fee = Rails.configuration.pricing[:fees][:lake_cruise][:price]
 
       m = db_reg.modifications.build
-      m.status = :in_progress
-      m.starting_adults = db_reg.number_of_adults || 0
-      m.starting_youths = db_reg.number_of_youths || 0
-      m.starting_children = db_reg.number_of_children || 0
+      m.status = :pending
+
+      AGE_GROUPS.each do |age|
+        plural = age.pluralize
+        number = "number_of_#{plural}"
+        starting = "starting_#{plural}"
+        delta = "delta_#{plural}"
+
+        starting_value = db_reg.send(number) || 0
+        m.send("#{starting}=", starting_value)
+
+        new_val = (reg_params[number.to_sym] || 0).to_i
+        m.send("#{delta}=", new_val - starting_value)
+      end
       m.starting_lake_cruise = db_reg.lake_cruise_number || 0
 
+
+
       reg_params = params[:event_registration]
-      m.delta_adults = (reg_params[:number_of_adults] || 0).to_i - m.starting_adults
-      m.delta_youths = (reg_params[:number_of_youths] || 0).to_i - m.starting_youths
-      m.delta_children = (reg_params[:number_of_children] || 0).to_i - m.starting_children
+      AGE_GROUPS.each do |age|
+        plural = age.pluralize
+        number = "number_of_#{plural}"
+        starting = "starting_#{plural}"
+        delta = "delta_#{plural}"
+        m.send("#{delta}=", (reg_params.send(number) || 0).to_i - m.send(starting))
+      end
       m.delta_lake_cruise = (reg_params[:lake_cruise_number] || 0).to_i - m.starting_lake_cruise
 
-      new_attendee_fee = 0.0
-      new_attendee_fee += m.delta_adults * reg_fees[:adult] unless m.delta_adults.zero?
-      new_attendee_fee += m.delta_youths * reg_fees[:youth] unless m.delta_youths.zero?
-      new_attendee_fee += m.delta_children * reg_fees[:child] unless m.delta_children.zero?
-      m.new_attendee_fee = new_attendee_fee
+      new_attendee_fee = AGE_GROUPS.sum do |age|
+        delta = m.send("delta_#{age.pluralize}")
+        delta.zero? ? 0 : delta * reg_fees[age.to_sym]
+      end
 
       m.new_lake_cruise_fee = m.delta_lake_cruise * lake_cruise_fee
       m.modification_total = m.new_attendee_fee.to_d + m.new_lake_cruise_fee.to_d
@@ -351,14 +367,14 @@ module Event
     end
 
     def review
-      @title = 'Review Registration Information'
       @step = :review
+      @title = 'Review Registration Information'
       @registration.save
     end
 
     def payment
-      @title = 'Registration - Payment'
       @step = :payment
+      @title = 'Registration - Payment'
       @app_data.merge!({
                          event_registration_fee: @registration.registration_fee,
                          registration_id: @registration.id
@@ -378,12 +394,11 @@ module Event
     end
 
     def special_events
-      @title = 'Registration - Special Events'
       @step = :special_events
+      @title = 'Registration - Special Events'
     end
 
     def update_special_events
-      @step = 'special_events'
       if no_fee_related_changes
         redirect_to review_event_registration_path(@registration)
       else
@@ -399,7 +414,7 @@ module Event
 
     def complete_after_online_payment
       @title = 'Complete Registration'
-      @step = :complete
+      @step = :finished
 
       transaction_id = params[:transactionId]
       order_id = params[:orderId]
@@ -434,8 +449,8 @@ module Event
     end
 
     def complete
+      @step = :finished
       @title = 'Complete Registration'
-      @step = :complete
 
       @registration.paid_amount = 0.0
       @registration.paid_method = :cash_or_check

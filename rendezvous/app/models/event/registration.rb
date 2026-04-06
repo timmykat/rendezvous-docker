@@ -83,8 +83,7 @@ module Event
       special_events: 'special events',
       review:         'review',
       payment:        'payment',
-      finished:       'finished',
-      vehicles:       'vehicles'
+      finished:       'finished'
     }
 
     enum paid_method: {
@@ -92,6 +91,8 @@ module Event
       cash_or_check: 'cash or check',
       invoice: 'invoice'
     }
+
+    AGE_GROUPS = %w[adult youth child].freeze
 
     PAYMENT_STATUSES = %w[unpaid partial paid refunded].freeze
 
