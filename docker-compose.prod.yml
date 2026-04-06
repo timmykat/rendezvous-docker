@@ -37,6 +37,7 @@ services:
     environment:
       RAILS_ENV: production
       RACK_ENV: production
+      REDIS_URL: redis://redis:6379/0
       SIDEKIQ_LOG_LEVEL: info
 
     networks:
