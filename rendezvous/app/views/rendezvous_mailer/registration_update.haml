@@ -2,7 +2,7 @@
 %html{lang:  "en"}
   %body
     %div{ style:  "width: 600px;" }
-      %p Dear #{@registration.user.first_name},
+      %p Dear #{@first_name},
       %p As requested, I have updated your registration. Below are the updates:
       %ul
         - if @modification.delta_adults.positive?

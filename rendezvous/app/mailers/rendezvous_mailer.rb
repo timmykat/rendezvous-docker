@@ -4,6 +4,7 @@ class RendezvousMailer < ApplicationMailer
 
   def registration_update(email, modification, payment_link)
     @modification = modification
+    @first_name = modification.registration.user.first_name
     @payment_link = payment_link
     recipients = [email, 'tim@wordsareimages.com']
     mail(to: recipients, subject: 'Rendezvous registration update payment request')
