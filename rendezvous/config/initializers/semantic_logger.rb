@@ -1,6 +1,6 @@
 require 'semantic_logger'
 
-SemanticLogger.default_level = Rails.env.production? ? :info : :debug
+SemanticLogger.default_level = :debug # Rails.env.production? ? :info : :debug
 
 # Remove existing appenders
 SemanticLogger.appenders.each do |appender|
