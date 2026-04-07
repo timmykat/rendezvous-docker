@@ -14,6 +14,7 @@ services:
     environment:
       RAILS_ENV: production
       RACK_ENV: production
+      REDIS_URL: redis://redis:6379/0
       SIDEKIQ_LOG_LEVEL: info
 
     healthcheck:
@@ -24,23 +25,45 @@ services:
       start_period: 10s
 
     networks:
-      rendezvous:
+      - rendezvous
 
   db:
     ports: []
     volumes:
       - rendezvous-docker-prod_rendezvous_prod_data:/var/lib/mysql
     networks:
-      rendezvous:
+      - rendezvous
 
   sidekiq:
+    image: ghcr.io/timmykat/rendezvous-docker:${IMAGE_TAG}
+    command: bundle exec sidekiq
     environment:
       RAILS_ENV: production
       RACK_ENV: production
+      REDIS_URL: redis://redis:6379/0
       SIDEKIQ_LOG_LEVEL: info
+    depends_on:
+      redis:
+        condition: service_healthy
 
     networks:
-      rendezvous:
+      - rendezvous
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+    networks:
+      - rendezvous
 
   ## New Relic services
   newrelic-infra:
@@ -64,11 +87,12 @@ services:
     restart: unless-stopped
 
     networks:
-      rendezvous:
+      - rendezvous
 
 volumes:
   rendezvous-docker-prod_rendezvous_prod_data:
     external: true
+  redis_data:
 
 networks:
   rendezvous:

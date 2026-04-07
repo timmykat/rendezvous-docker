@@ -67,14 +67,17 @@ module Event
 
 
     def set_registration_user
-      if !current_user.admin?
-        @user = current_user
-      elsif params[:id].present?
-        @registration = Event::Registration.find(params[:id])
-        @user = @registration.user
-      elsif params.dig(:user_id).present?
-        user_id = params[:event_registration][:user_id]
-        @user = User.find(user_id)
+      unless current_user&.admin?
+        @registration_user = current_user
+        return
+      end
+
+      @registration_user =
+        @event_registration&.user ||
+        User.find_by(id: params.dig(:event_registration, :user_id))
+
+      unless @registration_user
+        Rails.logger.warn('No registration user could be determined')
       end
     end
 

@@ -44,6 +44,10 @@ jobs:
 
             cd /var/www/rendezvous-docker-prod
 
+            echo "-- Update repo --"
+            git fetch origin main
+            git reset --hard origin/main
+
             echo "-- Pull image --"
             docker pull $IMAGE
 
@@ -61,6 +65,9 @@ jobs:
             docker rm temp
 
             echo "-- Restart app --"
+            export SECRET_KEY_BASE="${{ secrets.SECRET_KEY_BASE }}"
+            export RAILS_ENV=production
+            export REDIS_URL=redis://redis:6379/0
             export IMAGE_TAG=$TAG
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate
 
