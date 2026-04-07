@@ -35,6 +35,8 @@ services:
       - rendezvous
 
   sidekiq:
+    build: null
+    image: ghcr.io/timmykat/rendezvous-docker:${IMAGE_TAG}
     environment:
       RAILS_ENV: production
       RACK_ENV: production
