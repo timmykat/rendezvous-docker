@@ -44,6 +44,10 @@ jobs:
 
             cd /var/www/rendezvous-docker-prod
 
+            echo "-- Update repo --"
+            git fetch origin main
+            git reset --hard origin/main
+
             echo "-- Pull image --"
             docker pull $IMAGE
 
