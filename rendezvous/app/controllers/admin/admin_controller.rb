@@ -184,7 +184,7 @@ module Admin
     def create_table_data
       @year ||= Time.current.year
 
-      @event_registrations = base = Event::Registration.current
+      @event_registrations = base = Event::Registration.where(year: @year)
 
       # -------------------------
       # Users (unchanged)
