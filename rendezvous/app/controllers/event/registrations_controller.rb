@@ -210,12 +210,6 @@ module Event
     end
 
     def update
-      if @registration_user
-        @registration_user.update(event_registration_params)
-      end
-
-      params[:event_registration][:user_id] = user.id
-      params[:event_registration][:user_attributes] = nil
 
       # Set total to registration fee. Donation happens in payment
       params[:event_registration][:total] = params[:event_registration][:registration_fee]
@@ -683,14 +677,19 @@ module Event
     end
 
     def event_registration_user_params
-      params[:user] = params[:event_registration][:user_attributes]
-      params.require(:user).permit(
-        [:id, :email, :password, :password_confirmation, :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :citroenvie,
-         { vehicles_attributes:
-             [:id, :year, :marque, :other_marque, :model, :other_model, :other_info, :_destroy]
-         }
-        ]
-      )
+      params
+        .require(:event_registration)
+        .require(:user_attributes)
+        .permit(
+          :id, :email, :password, :password_confirmation,
+          :first_name, :last_name,
+          :address1, :address2, :city, :state_or_province,
+          :postal_code, :country, :citroenvie,
+          vehicles_attributes: [
+            :id, :year, :marque, :other_marque,
+            :model, :other_model, :other_info, :_destroy
+          ]
+        )
     end
   end
 end
