@@ -1,10 +1,10 @@
 - all_fees = Rails.configuration.pricing[:fees]
 - unless registration_is_open
-  = render partial: 'common/too_soon' 
+  = render partial: 'common/too_soon'
 - else
-  = render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
+  = render partial: 'common/registration_step', locals: { step: @step, registration: @registration }
   .container
-    .row.justify-content-center  
+    .row.justify-content-center
       .col-md-8.col-12
         .card
           .card-body
@@ -14,19 +14,19 @@
               %p
                 This year we are adopting an early-late fee structure, and adding a youth category. We're hoping that this will encourage people to register early so we are better able to plan.
                 Although we've raised the fees, we thing the Rendezvous still represents a great value. Thank you for your understanding.
-              .card 
-                .card-body 
+              .card
+                .card-body
                   .card-title
                     %h3.h6 Online Registration Pricing
                   .card-text
-                    %table.table       
+                    %table.table
                       %thead
                         %tr
                           %th
                             Dates
                           %th
                             Adult (16+)
-                          %th 
+                          %th
                             Youth (5-15)
                           %th
                             Child (Under 5)
@@ -43,24 +43,24 @@
                           %td Free
               %p
                 If you've previously registered, we've already filled in your basic information. We continue to use Square to process credit cards, so address is no longer required.
-              %p 
-                Let us know who you're bringing, if anyone. Then we'll give you a chance to review, followed by payment. 
+              %p
+                Let us know who you're bringing, if anyone. Then we'll give you a chance to review, followed by payment.
             #registration-form.new_registration
               - if !user_signed_in?
                 .cover
 
-              = simple_form_for @event_registration do |f|
+              = simple_form_for @registration do |f|
                 %section
                   %p * = required
                   - if current_user.admin?
-                    .alert.alert-warning 
+                    .alert.alert-warning
                       You are creating a registration for another user.
                       = f.input :created_by_admin, as: :boolean
                   - else
                     .alert.alert-info You are signed in with your user account.
                   = f.simple_fields_for :user do |u|
                     = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true }
- 
+
                 = render partial: 'attendance_manager', locals: { f: f }
                 = render partial: 'registration_status', locals: { f: f }
 
@@ -69,4 +69,3 @@
                     .col-12
                       .form-group
                         = f.submit 'Create registration', class:  "btn  btn-primary"
-                        

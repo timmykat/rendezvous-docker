@@ -15,17 +15,17 @@ class RendezvousMailer < ApplicationMailer
     recipients = Rails.configuration.people[Rails.env.to_sym][:inquiry_recipients]
     mail(to: recipients, from: @email, subject: "New Rendezvous query from #{@name}")
   end
-  
+
   def autoresponse(name, email, message)
     @name = name
     @email = email
     @message = message
     mail(to: @email, subject: 'Thanks for your inquiry about the Citroen Rendezvous')
   end
-  
+
   def registration_confirmation(event_registration)
     @email = event_registration.user.email
-    @event_registration = event_registration
+    @registration = event_registration
     mail(to: @email, subject: "Thanks for registering for the #{Date.current.year} Rendezvous!")
   end
 

@@ -1,24 +1,24 @@
 
-Dear #{@event_registration.user.first_name}
+Dear #{@registration.user.first_name}
 
-Here is your registration info (all fees in USD): 
+Here is your registration info (all fees in USD):
 
-\-- Number of people: #{@event_registration.attendees.size}
-\-- Number of people for the Friday lake cruise: #{@event_registration.lake_cruise_number}
-\-- Total registration amount: #{number_to_currency(@event_registration.total)}
-- if (@event_registration.donation? && !@event_registration.cancelled?)
-    \-- Donation (thank you!): #{number_to_currency(@event_registration.donation)}
-\-- Registration status: #{@event_registration.status}
+\-- Number of people: #{@registration.attendees.size}
+\-- Number of people for the Friday lake cruise: #{@registration.lake_cruise_number}
+\-- Total registration amount: #{number_to_currency(@registration.total)}
+- if (@registration.donation? && !@registration.cancelled?)
+    \-- Donation (thank you!): #{number_to_currency(@registration.donation)}
+\-- Registration status: #{@registration.status}
 
-- if !@event_registration.outstanding_balance?
-    You have an outstanding balance of #{number_to_currency(@event_registration.balance)}
+- if !@registration.outstanding_balance?
+    You have an outstanding balance of #{number_to_currency(@registration.balance)}
     Please send a check for that amount to:
     #{mailing_address "\n"}
-- elsif @event_registration.owed_a_refund?
-    You are owed a refund of #{number_to_currency(-@event_registration.balance)}
-    We will get in touch with you to discuss how you'd like to be refunded.     
+- elsif @registration.owed_a_refund?
+    You are owed a refund of #{number_to_currency(-@registration.balance)}
+    We will get in touch with you to discuss how you'd like to be refunded.
 
-- unless @event_registration.cancelled?   
+- unless @registration.cancelled?
     We look forward to seeing you at the Rendezvous!
 
 

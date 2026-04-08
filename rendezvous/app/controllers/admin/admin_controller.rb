@@ -140,7 +140,7 @@ module Admin
 
     def update_user_vehicles
       @user = User.find(params[:id])
-      @event_registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
+      @registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
       @vehicles = @user.vehicles
     end
 
@@ -184,7 +184,7 @@ module Admin
     def create_table_data
       @year ||= Time.current.year
 
-      @event_registrations = base = Event::Registration.where(year: @year)
+      @registrations = base = Event::Registration.where(year: @year)
 
       # -------------------------
       # Users (unchanged)

@@ -7,7 +7,7 @@
             %h2= @title
           .card-text
             #registration-form.new_registration
-              = simple_form_for @event_registration, url: event_registration_create_by_admin_path, method: :post do |f|
+              = simple_form_for @registration, url: event_registration_create_by_admin_path, method: :post do |f|
                 = f.input_field :year, as:  :hidden, value:  Time.new.year
                 %section
                   %p * = required

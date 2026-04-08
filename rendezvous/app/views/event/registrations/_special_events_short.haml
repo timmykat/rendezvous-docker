@@ -6,7 +6,7 @@
             .card-text
               %p
                 We have two optional events which are outside of the usual Rendezvous experience.
-              = simple_form_for @event_registration, url:  update_special_events_event_registration_path, method: :patch do |f|
+              = simple_form_for @registration, url:  update_special_events_event_registration_path, method: :patch do |f|
                 .card{ data: { event: 'cruise', price: lake_cruise_price } }
                   .card-body
                     .card-title
@@ -29,8 +29,8 @@
                                   label: "Number of people for Sunday lunch",
                                   input_html: { class: 'form-control short-field' }
                 .form-group
-                  - reg_fee = @event_registration.registration_fee
-                  - cruise_fee = @event_registration.lake_cruise_fee || 0.0
+                  - reg_fee = @registration.registration_fee
+                  - cruise_fee = @registration.lake_cruise_fee || 0.0
                   = f.input :registration_fee, as: :hidden
                   %label Total fee including cruise
                   = text_field_tag :display_total, number_with_precision(reg_fee + cruise_fee, precision: 2), readonly: true, class: 'form-control display-total short-field'

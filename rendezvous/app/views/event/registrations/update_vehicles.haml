@@ -1,33 +1,30 @@
-= render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
+= render partial: 'common/registration_step', locals: { step: @step, registration: @registration }
 .container.last-step-vehicles
   .row.justify-content-center
     .col-md-8.col-12
-      .card 
-        .card-body 
+      .card
+        .card-body
           .card-title
             %h2.h3 You're Registered!
           .card-text
-            %p 
+            %p
               %strong Congratulations, you have completed your registration for the Rendezvous! We look forward to seeing you there!
 
-      .card 
-        .card-body 
+      .card
+        .card-body
           .card-title
             %h3.h4 What vehicle(s) are you bringing to the Rendezvous?
           .card-text
-            %p 
-              %em 
-                If you're bringing any displayable vehicles (Citroen, other French marque, something eye-catching), please indicate here -- it helps us to plan. If you need to update your vehicle(s), click below. 
+            %p
+              %em
+                If you're bringing any displayable vehicles (Citroen, other French marque, something eye-catching), please indicate here -- it helps us to plan. If you need to update your vehicle(s), click below.
             %p
               We've improved the way we handle vehicles. You now can add as many vehicles as you want, and then indicate which one(s) you're bringing to the Rendezvous.
 
-            - if @event_registration.user.vehicles.present?
+            - if @registration.user.vehicles.present?
               = render partial: 'common/update_registration_vehicles_form'
-            - else 
-              %p 
+            - else
+              %p
                 You don't seem to have any vehicles.
-                = simple_form_for @event_registration.user do |f|
+                = simple_form_for @registration.user do |f|
                   = render partial: 'common/user_info', locals: { f: f, vehicles: true }
-              
-
-

@@ -4,17 +4,17 @@
       .card
         .card-body
           .card-title
-            %h3.h4= @event_registration.user.full_name
+            %h3.h4= @registration.user.full_name
           .card-text
             %p
-              %label Registration Status - #{@event_registration.status}
-            %p= @event_registration.user.email
+              %label Registration Status - #{@registration.status}
+            %p= @registration.user.email
             %p
-              #{@event_registration.user.address1}
-              - unless @event_registration.user.address2.blank?
-                %br #{@event_registration.user.address2}
-              %br #{@event_registration.user.city}, #{@event_registration.user.state_or_province} #{@event_registration.user.postal_code}
-              #{@event_registration.user.country_name.upcase}
+              #{@registration.user.address1}
+              - unless @registration.user.address2.blank?
+                %br #{@registration.user.address2}
+              %br #{@registration.user.city}, #{@registration.user.state_or_province} #{@registration.user.postal_code}
+              #{@registration.user.country_name.upcase}
 
       .card
         .card-body
@@ -27,7 +27,7 @@
                 %th Adult, Youth, or Child
                 %th Volunteer
               %tbody
-                -@event_registration.attendees.each do |a|
+                -@registration.attendees.each do |a|
                   %tr
                     %td= a.name
                     %td= a.attendee_age
@@ -41,16 +41,16 @@
             %ul
               %li
                 %h4.h5 Lake George Excursion
-                - if @event_registration.lake_cruise_number > 0
-                  %p Number going: #{@event_registration.lake_cruise_number}
-                  %p Total fee: #{number_to_currency(@event_registration.lake_cruise_fee)}
+                - if @registration.lake_cruise_number > 0
+                  %p Number going: #{@registration.lake_cruise_number}
+                  %p Total fee: #{number_to_currency(@registration.lake_cruise_fee)}
                 - else
                   %p Not going
             %ul
               %li
                 %h4.h5 Post-Rendezvous Lunch at Shadow 66
-                - if @event_registration.sunday_lunch_number > 0
-                  %p Number going: #{@event_registration.sunday_lunch_number}
+                - if @registration.sunday_lunch_number > 0
+                  %p Number going: #{@registration.sunday_lunch_number}
                 - else
                   %p Not going
 
@@ -63,30 +63,30 @@
               .col-md-12
                 %p
                   %label Registration fee:
-                  #{number_to_currency(@event_registration.registration_fee)}
+                  #{number_to_currency(@registration.registration_fee)}
                   %br
                   %label Lake George Excursion:
-                  #{number_to_currency(@event_registration.lake_cruise_fee)}
-                  - if @event_registration.status != Event::Registration::STATUSES[0]
+                  #{number_to_currency(@registration.lake_cruise_fee)}
+                  - if @registration.status != Event::Registration::STATUSES[0]
                     %br
                     %label Donation:
-                    - if @event_registration.donation.blank?
+                    - if @registration.donation.blank?
                       (no donation)
                     - else
-                      #{number_to_currency(@event_registration.donation)}
+                      #{number_to_currency(@registration.donation)}
                     %br
                     %br
                       %label Total:
-                      #{number_to_currency(@event_registration.total)}
+                      #{number_to_currency(@registration.total)}
 
-                    - if (@event_registration.paid_amount > 0.0)
+                    - if (@registration.paid_amount > 0.0)
                       %br
                         %label Paid:
-                        #{number_to_currency(@event_registration.paid_amount)}
+                        #{number_to_currency(@registration.paid_amount)}
 
                     %strong
                       %label Balance:
-                      #{number_to_currency(@event_registration.balance)}
+                      #{number_to_currency(@registration.balance)}
 
       .card
         .card-body
@@ -109,7 +109,7 @@
                 %th Judging category
                 %th For sale?
               %tbody
-                - @event_registration.vehicles.each do |v|
+                - @registration.vehicles.each do |v|
                   %tr
                     %td= v.marque
                     %td= v.model
@@ -124,4 +124,4 @@
             .card-title
               %h3.h4 Email me my registration info
             .card-text
-              = link_to "Send Email", "/admin/event/registrations/#{@event_registration.id}/send_confirmation_email", class: "btn  btn-info"
+              = link_to "Send Email", "/admin/event/registrations/#{@registration.id}/send_confirmation_email", class: "btn  btn-info"
