@@ -1,0 +1,18 @@
+.container.invoice
+  .row.justify-content-center
+    .col-md-8.col-12.heading
+      .card
+        .card-body
+          .card-title
+            %h2.h3 Send us a message
+          .card-text
+            %p This will in include your name, email, and a link to your registration automatically
+            = simple_form_for :message_request, url: email_send_message_path, html: { method: :post, data: { turbo: false }} do |f|
+              = f.input :subject, input_html: { value: "A question from #{@name}" }
+              = f.input :name, as: :hidden, input_html: { value: @name }
+              = f.input :email, as: :hidden, input_html: { value: @email }
+              = f.input :registration_link, as: :hidden, input_html: { value: @reg_link }
+              = f.input :change_request, as: :boolean
+              = f.input :message, as: :text, input_html: { rows: 5 }
+
+              = f.submit 'Send', class: 'btn btn-primary'

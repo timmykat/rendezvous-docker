@@ -14,6 +14,9 @@
               .form-group
                 = f.submit 'Go', class: 'btn btn-primary'
 
+      - if @registrations.nil?
+        %p No registrations yet!
+        - return
       %table#registration-table.table.tablesorter.striped
         %thead
           %tr
@@ -29,6 +32,7 @@
             %th.tablesorter-header.filter-false.text-center Balance
         %tbody
           - @registrations.each do |reg|
+            - Rails.logger.debug reg
             %tr.text-center
               %td.text-left
                 %ul.list-unstyled
@@ -39,17 +43,15 @@
                     - else
                       %li= link_to 'Modify', modify_by_admin_event_registration_path(reg)
                     %li= link_to 'Cancel', cancel_event_registration_path(reg), data: { confirm: "Sure?" }
-                  - else
-                    %li= link_to 'Edit', edit_by_admin_event_registration_path(reg)
 
               %td
-                = reg.status.upcase
+                = reg.status.humanize
                 - if reg.modifications
                   %p.text-small Modifications
                   %ul.list-unstyled
                     - reg.modifications.each do |m|
                       %li.text-small= link_to "#{m.id} (#{m.status})", event_modification_path(m.id, registration_id: reg.id)
-              %td= reg.payment_status.upcase
+              %td= reg.payment_status.humanize
 
               %td.text-left
                 - if reg.user

@@ -112,6 +112,11 @@ Rails.application.routes.draw do
     get '/welcome', to: 'registrations#welcome'
   end
 
+  namespace :email do
+    get :create_message
+    post :send_message
+  end
+
   namespace :admin do
     get 'dedupe', to: 'admin#dedupe'
     get 'dashboard', to: 'admin#dashboard'

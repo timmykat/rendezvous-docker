@@ -65,3 +65,6 @@
 
                       .dropdown-divider
                       = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item', data: { turbo: false }
+        .row
+          - if @regstration&.complete?
+            = render partial: 'common/post_register_toolbar', locals: { reg: @registration, user: @registration&.user }

@@ -1,6 +1,13 @@
 class RendezvousMailer < ApplicationMailer
 
-  helper :application
+  def send_user_message
+    @subject = "#{params[:change_request] ? 'Change request: ' : ''} #{params[:subject]}"
+    @name = params[:name]
+    @reg_link = params[:registration_link]
+    @message = params[:message]
+
+    mail(to: 'tim@wordsareimages.com', subject: @subject)
+  end
 
   def registration_update(email, modification, payment_link)
     @modification = modification

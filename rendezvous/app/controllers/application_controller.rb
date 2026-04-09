@@ -226,12 +226,15 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if resource.has_role? :admin
-      admin_dashboard_path
-    elsif !resource.current_registration
-      event_welcome_path
-    else
-      landing_page_path
+      return admin_dashboard_path
     end
+
+    reg = resource.current_registration
+    unless reg
+      return event_welcome_path
+    end
+
+    event_registration_path(reg.id)
   end
 
   def after_sign_out_path_for(resource_or_scope)

@@ -1,5 +1,7 @@
 services:
   rails_app:
+    stdin_open: true
+    tty: true
     command: bash -c "
       bundle exec rails assets:clobber &&
       yarn build &&

@@ -186,6 +186,12 @@ module Admin
 
       @registrations = base = Event::Registration.where(year: @year)
 
+      if @registrations.nil?
+        @registrations = []
+        @users = []
+        return
+      end
+
       # -------------------------
       # Users (unchanged)
       # -------------------------
