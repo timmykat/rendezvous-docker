@@ -519,21 +519,6 @@ module Event
       @step = :welcome
     end
 
-    def square_customer
-      user = @registration.user
-      customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-        ::RendezvousSquare::Apis::Customer.find_customer(user.email)
-      end
-      if customer_id.nil?
-        customer_id = ::RendezvousSquare::Apis::Base.with_error_handling do
-          ::RendezvousSquare::Apis::Customer.create_customer(user)
-        end
-      else
-        Rails.logger.info("Square customer found: #{customer_id}")
-      end
-      customer_id
-    end
-
     # def create_square_order
     #   begin
     #     order = ::RendezvousSquare::Apis::Order.create({
@@ -564,7 +549,9 @@ module Event
         render :payment
       end
 
-      customer_id = square_customer
+      user = @registration.user
+
+      customer_id = user.ensure_square_customer_id!
 
       redirect_url = complete_after_online_payment_event_registration_url(@registration)
       begin

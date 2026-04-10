@@ -50,18 +50,9 @@ class DonationsController < ApplicationController
     @donation.status = :created
     @donation.save
 
-    customer_id = ::RendezvousSquare::Apis::Customer.find_customer(@donation.user.email)
-    if !customer_id
-      customer_id = ::RendezvousSquare::Apis::Customer.create_customer(user)
-    else
-      Rails.logger.info("Square customer found: " + customer_id)
-    end
+    customer_id = user.ensure_square_customer_id!
 
-    if user.vendor
-      redirect_url = thank_you_url(@donation, type: 'vendor')
-    else
-      redirect_url = thank_you_url(@donation, type: 'standard')
-    end
+    redirect_url = thank_you_url(@donation, type: 'standard')
 
     square_payment_link = ::RendezvousSquare::Apis::Checkout.create_square_payment_link({
                                                                                           donation: @donation,

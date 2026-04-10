@@ -7,19 +7,14 @@ module RendezvousSquare
 
       FEES = Rails.configuration.pricing[:fees]
 
-      def self.api
-        # Ensure Apis::Base.get_square_client returns the main client
-        Apis::Base.get_square_client.orders
-      end
-
       def self.create(params = {})
         Rails.logger.debug params
         post_body = {
           idempotency_key: Apis::Base.idempotency_key,
           order: create_order_object(params)
         }
-        result = api.create(**post_body)
-        result.order
+        response = Base::CLIENT.orders.create(**post_body)
+        response.order
       end
 
 
@@ -36,7 +31,7 @@ module RendezvousSquare
       def self.create_modification_order_object(params = {})
         {
           location_id: Apis::Base.get_location_id,
-          customer_id: Apis::Customer.find_customer(params[:email]),
+          customer_id: Api::Customers.find_customer(params[:email]),
           ticket_name: "2026 Citroen Rendezvous Registration - Update",
           reference_id: params[:reference_id].to_s,
           line_items: create_line_items(params)
@@ -155,14 +150,14 @@ module RendezvousSquare
               sort_order: 'DESC'
             }
           }
-          return Apis::Base.get_all(api, 'search', **params)
+          return Apis::Base.fetch_paginated(:orders, 'search', **params)
         end
       end
 
       def get(order_id)
         begin
-          result = api.get(order_id: order_id)
-          order = result.order
+          response = Base::CLIENT.orders.get(order_id: order_id)
+          order = response.order
         rescue Square::Errors::ResponseError => e
           Rails.logger.error e.message.messaged
           return nil

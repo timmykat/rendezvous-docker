@@ -4,11 +4,6 @@ module RendezvousSquare
       include Apis::Base
       extend self
 
-      def api
-        # Ensure Apis::Base.get_square_client returns the main client
-        Apis::Base.get_square_client.checkout
-      end
-
       def create_square_modification_payment_link(params)
         post_body = create_modification_checkout_body(params)
         create_link(post_body)
@@ -30,13 +25,13 @@ module RendezvousSquare
         begin
           # In v45, api.payment_links.create returns a Square::Types::CreatePaymentLinkResponse object directly
           # We use the double splat (**) because the SDK expects keyword arguments
-          result = api.payment_links.create(**post_body)
+          response = Base::CLIENT.checkout.payment_links.create(**post_body)
 
           # ACCESS CHANGE:
-          # 1. No 'if result.success?' (if we are here, it succeeded)
-          # 2. No '.data' wrapper (the result is the response object)
+          # 1. No 'if response.success?' (if we are here, it succeeded)
+          # 2. No '.data' wrapper (the response is the response object)
           # 3. Use '.payment_link.url' or '.payment_link.long_url'
-          return result.payment_link.url
+          return response.payment_link.url
 
         rescue Square::Errors::ResponseError => e
           # This replaces the 'else' block. Errors are now caught as exceptions.

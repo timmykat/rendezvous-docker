@@ -215,6 +215,32 @@ class User < ApplicationRecord
     devise_mailer.send(notification, self, *args).deliver_later
   end
 
+  def square_customer_id_from_square
+    ::RendezvousSquare::Apis::Base.with_error_handling do
+      ::RendezvousSquare::Apis::Customers.find_customer(email)
+    end
+  end
+
+  def ensure_square_customer_id!
+    return square_customer_id if square_customer_id.present?
+
+    with_lock do
+      return square_customer_id if square_customer_id.present?
+
+      customer_id = square_customer_id_from_square
+
+      unless customer_id.present?
+        customer_id = ::RendezvousSquare::Apis::Customers.create_customer(self)
+      end
+
+      return nil unless customer_id.present?
+
+      update!(square_customer_id: customer_id) if customer_id.present?
+
+      customer_id
+    end
+  end
+
   private
     def generate_tag(length = 4)
       chars = %w[A C D E F G H J K L M N P Q R T U V W X Y Z 1 2 3 4 5 6 7 8 9] # User friendly characters

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :flash_array
+  before_action :set_incoming_destination
   before_action :get_app_data
   before_action :update_active_user
   before_action :ensure_delete_method, only: :destroy
@@ -212,6 +213,35 @@ class ApplicationController < ActionController::Base
   ## Recaptcha v3 -----------
 
   helper ApplicationHelper
+
+  def set_incoming_destination
+    return unless current_user
+    return if current_user.admin?
+
+    referrer = request.referer
+    return if referrer.present? && same_origin?(referrer)
+
+    reg = current_user.current_registration
+
+    unless reg
+      redirect_to new_event_registration_path and return
+    end
+
+    if reg.in_progress?
+      redirect_to review_event_registration_path(reg.id) and return
+    end
+
+    redirect_to event_registration_path(reg.id)
+  end
+
+  def same_origin?(referrer)
+    uri = URI.parse(referrer)
+    uri.host == request.host &&
+      uri.scheme == request.scheme &&
+      uri.port == request.port
+  rescue URI::InvalidURIError
+    false
+  end
 
   def require_admin
     return true if current_user and (current_user.has_role? :admin)
