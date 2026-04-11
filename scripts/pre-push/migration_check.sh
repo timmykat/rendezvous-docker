@@ -37,7 +37,9 @@ nmig=$(git diff --name-only origin/main...HEAD | grep -c "db/migrate/" || true)
 if [[ "$nmig" -gt 0 ]]; then
   echo "⚠️  This push includes $nmig migration(s):"
   git diff --name-only origin/main...HEAD | grep "db/migrate/" || true
-  read -p "Continue? (y/n): " query
+  echo "Continue? (y/n): "
+  read query
+  echo
 
   if [[ ! "$query" =~ ^[yY]$ ]]; then
     echo "🚫 Cancelling push"
