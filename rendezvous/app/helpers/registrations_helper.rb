@@ -8,6 +8,19 @@ module RegistrationsHelper
     AnnualQuestion::RESPONSES
   end
 
+  def registration_status_classes(status)
+    case status.to_sym
+    when :complete
+      'bg-success'
+    when :in_progress
+      'bg-warning text-dark'
+    when :cancelled
+      'bg-danger'
+    else
+      'bg-secondary'
+    end
+  end
+
   # Square helpers
   def square_env
     ::RendezvousSquare::Apis::Base.get_environment
