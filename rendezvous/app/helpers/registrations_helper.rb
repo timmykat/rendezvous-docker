@@ -9,7 +9,8 @@ module RegistrationsHelper
   end
 
   def registration_status_classes(status)
-    case status.to_sym
+    status = status&.to_sym
+    case status
     when :complete
       'bg-success'
     when :in_progress
