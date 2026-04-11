@@ -195,14 +195,15 @@ module Admin
       # -------------------------
       # Users (unchanged)
       # -------------------------
-      @users = case params[:user_type]
-               when 'all_users' then User.all
-               when 'active' then User.where('last_active > ?', 10.minutes.ago)
-               when 'registrant' then User.with_registrations
-               when 'testers' then User.with_role(:tester)
-               when 'vendors' then User.with_role(:vendor)
-               else User.with_current_registration
-               end
+      # @users = case params[:user_type]
+      #          when 'all_users' then User.all
+      #          when 'active' then User.where('last_active > ?', 10.minutes.ago)
+      #          when 'registrant' then User.with_registrations
+      #          when 'testers' then User.with_role(:tester)
+      #          when 'vendors' then User.with_role(:vendor)
+      #          else User.with_current_registration
+      #          end
+      @users = User.with_registrations
 
       @type = params[:user_type]&.humanize || 'Currently registered'
 

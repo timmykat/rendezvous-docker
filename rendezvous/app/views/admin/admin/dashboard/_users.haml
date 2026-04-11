@@ -1,0 +1,43 @@
+.tab-content{ data: { "tab-content": 'registrations' } }
+  .row
+    .col-12
+      .card
+        .card-body
+          .card-title
+            %h2= "Users"
+          .card-text
+            - unless @users.present?
+              %p There are no users for that query.
+            - else
+              %table#registration-table.table.tablesorter.striped
+                %thead
+                  %tr
+                    %th.tablesorter-header.filter-false.text-center Actions
+                    %th.tablesorter-header.filter-false.text-center Registration
+                    %th.tablesorter-header.filter-false.text-center Status
+                    %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Name
+                    %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} E-mail
+                %tbody
+                  - @users.each do |user|
+                    - reg = user.current_registration
+                    - status = reg&.status || :unknown
+                    %tr.text-center
+                      %td.text-left
+                        %ul.list-unstyled
+                          - if reg
+                            %li= link_to 'View', event_registration_path(reg.id)
+                            - if reg.complete?
+                              - if mod_id = active_modification(reg)
+                                %li= link_to 'Modification', event_modification_path(mod_id, registration_id: reg.id)
+                              - else
+                                %li= link_to 'Modify', modify_by_admin_event_registration_path(reg)
+                      %td
+                        - if reg&.modifications
+                          %p.text-small Modifications
+                          %ul.list-unstyled
+                            - reg.modifications.each do |m|
+                              %li.text-small= link_to "#{m.id} (#{m.status})", event_modification_path(m.id, registration_id: reg.id)
+                      %td
+                        = status
+                      %td.text-left= user.full_name
+                      %td.text-right= user.email
