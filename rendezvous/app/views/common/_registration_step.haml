@@ -6,7 +6,7 @@
     - unless registration.nil?
       .registration-id{ "data-registration_id" => registration.id}
     .registration-step.vw-100
-      %div{ class: "justify-content-center py-3 #{registration_status_classes(reg_status)}" }
+      %div{ class: "justify-content-center py-3" }
         = "Registration status: #{reg_status.humanize}"
         - if !registration.nil? and no_fee_related_changes
           &ndash; you may only change vehicles or Sunday lunch attendance
