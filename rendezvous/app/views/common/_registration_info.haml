@@ -23,6 +23,9 @@
               %br #{@registration.user.city}, #{@registration.user.state_or_province} #{@registration.user.postal_code}
               #{@registration.user.country_name.upcase}
 
+            %p
+              = link_to 'Help!', email_create_message_path(r_id: @registration.id, topic: :help), class: 'btn btn-sm btn-danger'
+
       .card
         .card-body
           .card-title

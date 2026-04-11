@@ -7,17 +7,18 @@ class EmailController < ApplicationController
     @name = reg.user.full_name
     @email = reg.user.email
     @reg_link = event_registration_url(reg.id)
+    @topic = params[:topic].to_sym
   end
 
   def send_message
     RendezvousMailer.with(
-        subject: email_params[:subject],
-        name: email_params[:name],
-        email: email_params[:email],
-        registration_link: email_params[:registration_link],
-        topic: email_params[:topic],
-        message: email_params[:message]
-      ).send_user_message.deliver_later
+      subject: email_params[:subject],
+      name: email_params[:name],
+      email: email_params[:email],
+      registration_link: email_params[:registration_link],
+      topic: email_params[:topic],
+      message: email_params[:message]
+    ).send_user_message.deliver_later
     flash_notice 'Your message has been sent.'
     redirect_to email_params[:registration_link]
   end

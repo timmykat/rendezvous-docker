@@ -9,7 +9,7 @@
             %p Hi, Tim Kinnel, here. Send me a message if you have any questions, comments, or change requests.
             %p This will in include your name, email, and a link to your registration automatically.
             = simple_form_for :message_request, url: email_send_message_path, html: { method: :post, data: { turbo: false }} do |f|
-              = f.input :topic, collection: Email::MessageTopics.options_for_select, as:  :select, prompt: '-- Choose one, please --'
+              = f.input :topic, collection: Email::MessageTopics.options_for_select, as:  :select, prompt: '-- Choose one, please --', selected: @topic, input_html: { class: 'form-select w-auto' }
               = f.input :subject
               = f.input :name, as: :hidden, input_html: { value: @name }
               = f.input :email, as: :hidden, input_html: { value: @email }
