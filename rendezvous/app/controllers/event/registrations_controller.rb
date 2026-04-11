@@ -565,6 +565,8 @@ module Event
         render :payment
       end
 
+      @registration.update(status: :complete)
+
       user = @registration.user
 
       customer_id = user.ensure_square_customer_id!
