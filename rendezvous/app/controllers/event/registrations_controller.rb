@@ -99,7 +99,7 @@ module Event
       STEPS.dig(current_step.to_sym, :prev)
     end
 
-    def next_step(current_step, status)
+    def next_step(current_step)
       step_config = STEPS[current_step&.to_sym]
       return nil unless step_config
 

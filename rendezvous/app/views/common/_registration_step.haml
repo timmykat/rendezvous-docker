@@ -1,13 +1,13 @@
 - status = registration.status
 - previous_step = previous_step(step)
-- next_step = next_step(step, reg_status)
+- next_step = next_step(step)
 .container-fluid.px-0.sticky-top
   .row.no-gutters.justify-content-center
     - unless registration.nil?
       .registration-id{ "data-registration_id" => registration.id}
     .registration-step.vw-100
       %div{ class: "justify-content-center py-3 #{registration_status_classes(status)}" }
-        = "Registration status: #{reg_status.humanize}"
+        = "Registration status: #{status.humanize}"
         - if !registration.nil? and no_fee_related_changes
           &ndash; you may only change vehicles or Sunday lunch attendance
       %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center
