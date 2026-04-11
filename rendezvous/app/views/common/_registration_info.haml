@@ -91,39 +91,36 @@
                 %th Outstanding Balance:
                 %td.text-right #{number_to_currency(@registration.balance)}
 
-            - if @registration.outstanding_balance?
+            - if @registration.complete? and @registration.outstanding_balance?
               %p
                 =link_to 'Go To Payment', payment_event_registration_path(@registration), class: "btn btn-primary"
 
-      .card
-        .card-body
-          .card-title
-            %h3.h4 Vehicle(s) You Are Bringing
-          .card-text
-            - if registration_complete
+      - if @registration.complete?
+        .card
+          .card-body
+            .card-title
+              %h3.h4 Vehicle(s) You Are Bringing
+            .card-text
               %p
                 You can update this by selecting from your name dropdown in the top nav bar.
-            - else
-              %p
-                You can update this any time, but please do it so we can plan.
 
-            %table.table
-              %thead
-                %th Marque
-                %th Model
-                %th Year
-                %th Other info
-                %th Judging category
-                %th For sale?
-              %tbody
-                - @registration.vehicles.each do |v|
-                  %tr
-                    %td= v.marque
-                    %td= v.model
-                    %td= v.year
-                    %td= v.other_info
-                    %td= v.judging_category
-                    %td= v.for_sale? ? 'Yes' : 'No'
+              %table.table
+                %thead
+                  %th Marque
+                  %th Model
+                  %th Year
+                  %th Other info
+                  %th Judging category
+                  %th For sale?
+                %tbody
+                  - @registration.vehicles.each do |v|
+                    %tr
+                      %td= v.marque
+                      %td= v.model
+                      %td= v.year
+                      %td= v.other_info
+                      %td= v.judging_category
+                      %td= v.for_sale? ? 'Yes' : 'No'
 
       - if user_is_admin?
         .card

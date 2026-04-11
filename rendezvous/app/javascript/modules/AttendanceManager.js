@@ -92,7 +92,7 @@ export class AttendanceManager extends HTMLElement {
     });
 
     // We let the before_save method save the total amount
-    const totalDisplayInput = document.getElementById("display_total");
+    const totalDisplayInput = this.querySelector(".attendee-total");
     console.log("New fee total", attendeeFeeTotal.toFixed(2));
     if (totalDisplayInput)
       totalDisplayInput.value = attendeeFeeTotal.toFixed(2);

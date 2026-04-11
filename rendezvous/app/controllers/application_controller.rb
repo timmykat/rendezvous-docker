@@ -219,19 +219,24 @@ class ApplicationController < ActionController::Base
     return if current_user.admin?
 
     referrer = request.referer
-    return if referrer.present? && same_origin?(referrer)
+
+    external_request = referrer.blank? || !same_origin?(referrer)
+    return unless external_request
 
     reg = current_user.current_registration
 
-    unless reg
-      redirect_to new_event_registration_path and return
-    end
+    target_path =
+        if reg.nil?
+          new_event_registration_path
+        elsif reg.in_progress?
+          review_event_registration_path(reg.id)
+        else
+          event_registration_path(reg.id)
+        end
 
-    if reg.in_progress?
-      redirect_to review_event_registration_path(reg.id) and return
-    end
+    return if request.path == target_path
 
-    redirect_to event_registration_path(reg.id)
+    redirect_to target_path
   end
 
   def same_origin?(referrer)

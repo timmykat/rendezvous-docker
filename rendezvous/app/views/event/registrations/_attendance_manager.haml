@@ -34,8 +34,6 @@
   .row
     .col-12
       %p.amount.form-group
-        %label
-          Attendee fee total:
-          = text_field_tag :display_total, 0.0, style: "width: 150px; text-align: right;"
+        = f.input :registration_fee, input_html: { label: ' Attendee fee total:', class: 'attendee-total', style: "width: 150px; text-align: right;" }
 
   = f.input_field :year, as:  :hidden, value:  Time.new.year

@@ -3,13 +3,14 @@ module Event
     layout "registrations_layout"
 
     before_action :get_registration, except: [:index, :welcome, :new, :create, :new_by_admin, :create_by_admin, :send_confirmation_email]
+    before_action :set_registration_user
     before_action :check_cutoff, only: [:new, :create, :complete, :edit]
     before_action :require_admin, only: [:index, :new_by_admin, :modify_by_admin, :cancel, :modify, :save_modification]
     before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
     before_action :filter_params_by_status, only: [:update, :update_special_events]
-    before_action :set_registration_user
+    before_action :check_complete_destination, only: %i[new special_events review]
 
     skip_before_action :verify_authenticity_token, only: [:show]
 
@@ -65,24 +66,36 @@ module Event
       :cancelled
     ]
 
+    def get_registration
+      @registration = Registration.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      flash_alert "Registration not found."
+      redirect_to root_path
+    end
 
     def set_registration_user
-      unless current_user&.admin?
-        @registration_user = current_user
+      if @registration
+        @registration_user = @registration.user
         return
       end
 
-      @registration_user =
-        @registration&.user ||
-        User.find_by(id: params.dig(:event_registration, :user_id))
+      @registration_user = User.find_by(id: params.dig(:event_registration, :user_id))
 
       unless @registration_user
         Rails.logger.warn('No registration user could be determined')
+        flash_alert "Hmmm, couldn't find a user for this registration"
+      end
+    end
+
+    def check_complete_destination
+      if @registration
+        redirect_to event_registration_path(@registration) if @registration.complete?
       end
     end
 
     def previous_step(current_step)
       return nil if current_step.nil?
+
       STEPS.dig(current_step.to_sym, :prev)
     end
 
@@ -95,13 +108,6 @@ module Event
       # If it's a Proc (the lambda above), call it with the status
       # Otherwise, just return the value
       next_val.respond_to?(:call) ? next_val.call(status) : next_val
-    end
-
-    def get_registration
-      @registration = Registration.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash_alert "Registration not found."
-      redirect_to root_path
     end
 
     def no_fee_related_changes
@@ -396,12 +402,21 @@ module Event
     end
 
     def update_special_events
+      go_back = params[:go_back]
       if no_fee_related_changes
-        redirect_to review_event_registration_path(@registration)
+        if go_back
+          redirect_to edit_event_registration_path(@registration)
+        else
+          redirect_to review_event_registration_path(@registration)
+        end
       else
         if @registration.update(special_events_params)
           flash_notice 'Special events were updated.'
-          redirect_to review_event_registration_path(@registration)
+          if go_back
+            redirect_to edit_event_registration_path(@registration)
+          else
+            redirect_to review_event_registration_path(@registration)
+          end
         else
           flash_alert "There was a problem saving your special events info."
           render :special_events
@@ -449,6 +464,7 @@ module Event
       @step = :finished
       @title = 'Complete Registration'
 
+      @registration.status = :complete
       @registration.paid_amount = 0.0
       @registration.paid_method = :cash_or_check
 
@@ -473,7 +489,7 @@ module Event
 
       send_confirmation_email
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-      redirect_to edit_user_vehicles_path(@user)
+      redirect_to edit_user_vehicles_path(@registration_user)
     end
 
     def save_updated_vehicles
