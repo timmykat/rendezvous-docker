@@ -69,6 +69,12 @@ td {
     font-size: 18px;
 }
 
+p,
+li,
+ol {
+    line-height: 1.3;
+}
+
 @mixin transition {
     transition: all 0.3s ease-in-out;
 }
@@ -187,8 +193,8 @@ a:visited {
     }
 }
 
-p a,
-p a:visited {
+p a:not(.btn),
+p a:not(.btn):visited {
     color: var(--warm-maroon);
     text-decoration: underline;
     @include transition;

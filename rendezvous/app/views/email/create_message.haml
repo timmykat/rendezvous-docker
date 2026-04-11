@@ -6,15 +6,14 @@
           .card-title
             %h2.h3 Send Tim a message
           .card-text
-            %p Hi, Tim Kinnel, here. Send me a message iff you have any questions or comments.
-            %p Also if you need to make a change that results in a payment adjustment, please check 'change request'.
+            %p Hi, Tim Kinnel, here. Send me a message if you have any questions, comments, or change requests.
             %p This will in include your name, email, and a link to your registration automatically.
             = simple_form_for :message_request, url: email_send_message_path, html: { method: :post, data: { turbo: false }} do |f|
-              = f.input :subject, input_html: { value: "A question from #{@name}" }
+              = f.input :topic, collection: Email::MessageTopics.options_for_select, as:  :select, prompt: '-- Choose one, please --'
+              = f.input :subject
               = f.input :name, as: :hidden, input_html: { value: @name }
               = f.input :email, as: :hidden, input_html: { value: @email }
               = f.input :registration_link, as: :hidden, input_html: { value: @reg_link }
-              = f.input :change_request, as: :boolean
               = f.input :message, as: :text, input_html: { rows: 5 }
 
               = f.submit 'Send', class: 'btn btn-primary'

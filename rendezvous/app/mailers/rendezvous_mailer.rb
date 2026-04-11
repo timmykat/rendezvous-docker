@@ -1,15 +1,21 @@
 class RendezvousMailer < ApplicationMailer
 
   def send_user_message
-    @subject = "#{params[:change_request] ? 'Change request: ' : ''} #{params[:subject]}"
+    topic = Email::MessageTopics.label(params[:topic]) || 'General'
+    subject = params[:subject].to_s.gsub(/[\r\n]/, '')
+    @admin = true
+    @subject = "#{topic} | #{subject}"
     @name = params[:name]
+    @email = params[:email]
+    @topic = topic
     @reg_link = params[:registration_link]
     @message = params[:message]
 
-    mail(to: 'tim@wordsareimages.com', subject: @subject)
+    mail(to: 'tim@wordsareimages.com', reply_to: @email, subject: @subject)
   end
 
   def registration_update(email, modification, payment_link)
+    @admin = true
     @modification = modification
     @first_name = modification.registration.user.first_name
     @payment_link = payment_link
@@ -24,6 +30,7 @@ class RendezvousMailer < ApplicationMailer
   end
 
   def send_to_us(name, email, message)
+    @admin = true
     @name = name
     @email = email
     @message = message

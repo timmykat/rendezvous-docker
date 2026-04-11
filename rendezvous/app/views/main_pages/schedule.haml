@@ -8,26 +8,22 @@
     %p #{tbd_message}
   .row.justify-content-center
     .col-md-10.col-12
-      - current_day = ""
-      - index = -1
-      = @scheduled_events.each do |event|
-        - if event.day != current_day
-          - current_day = day 
-          - index += 1
-          .card
-            .card-body
-              .card-title
-                %h2 #{relative_date(index)}
-              .card-text
-        
-        - else
-          .event
-            .time= event.time
-            .title
-              = event.name
-                - if event.extra_cost?
-                  .badge.badge-pill.badge-info.small Extra Cost  
-            .location= format_for_schedule(event.venue)
-            .details
-              = event.long_description
+      - @scheduled_events.group_by(&:day).each_with_index do |(day, events), index|
+        .card
+          .card-body
+            .card-title
+              %h2= relative_date(index)
 
+            .card-text
+              - events.each do |event|
+                .event
+                  %h2.h4.time= event.time
+                  .title
+                    %h3.h5= event.name
+                    - if event.extra_cost?
+                      .badge.badge-pill.badge-info.small Extra Cost
+                  - if event.venue
+                    .location= format_for_schedule(event.venue)
+                  .details= event&.long_description
+                  %hr
+                  .mb-2

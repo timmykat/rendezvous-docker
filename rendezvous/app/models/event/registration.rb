@@ -94,7 +94,7 @@ module Event
 
     AGE_GROUPS = %w[adult youth child].freeze
 
-    PAYMENT_STATUSES = %w[unpaid partial paid refunded].freeze
+    PAYMENT_STATUSES = %w[paid partial 'payment due' refunded].freeze
 
     # Validations
     validate :validate_minimum_number_of_adults, unless: -> { cancelled? }
@@ -116,8 +116,6 @@ module Event
     serialize :events
     before_save :ensure_financials
 
-
-
     def cancelled?
       status == :cancelled
     end
@@ -129,6 +127,10 @@ module Event
 
     def paid?
       total.to_d == paid_amount.to_d
+    end
+
+    def show_payment_button?
+      !(partially_paid? || paid?)
     end
 
     def partially_paid?
@@ -144,7 +146,7 @@ module Event
       return 'paid' if paid?
       return 'partial' if partially_paid?
 
-      'unpaid'
+      'payment due'
     end
 
     def total_paid_cents
