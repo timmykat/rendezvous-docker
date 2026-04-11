@@ -5,8 +5,8 @@
         .card-body
           .card-title.heading
             %h1.h2 R#{Time.new.year} Registration
-          .card-text
-            - if @registration.complete?
-              = render partial: 'common/post_register_toolbar', locals: { reg: @registration, user: @registration.user }
+
+        - if @registration.complete?
+          = render partial: 'common/post_register_toolbar', locals: { reg: @registration, user: @registration.user }
 
 = render partial:  'common/registration_info'
