@@ -38,8 +38,9 @@
                       %p.amount.form-group.text-large
                         %label Total (USD):
                         = f.input_field :total, value:  ("%.2f" % @registration.total), readonly: true, class:  'calculated'
-                      %p
-                        = link_to "#{icon(:left_arrow)} Go back ".html_safe, review_event_registration_path(@registration), class:  "btn  btn-primary"
+                  - unless @registration.complete?
+                    %p
+                      = link_to "#{icon(:left_arrow)} Go back ".html_safe, review_event_registration_path(@registration), class:  "btn  btn-primary"
 
             .card
               .card-body
