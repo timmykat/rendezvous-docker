@@ -8,7 +8,11 @@ namespace :square do
 
     email_map = {}
     customer_list.each do |c|
-      email_map[c.email_address.downcase] = c.id
+      if c.email
+        email_map[c.email_address.downcase] = c.id
+      else
+        puts "No email for customer: #{c.id}"
+      end
     end
 
     processed = 0
