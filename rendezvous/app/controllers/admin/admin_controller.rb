@@ -203,7 +203,7 @@ module Admin
       #          when 'vendors' then User.with_role(:vendor)
       #          else User.with_current_registration
       #          end
-      @users = User.with_registrations
+      @users = User.ordered_by_current_year_registration
 
       @type = params[:user_type]&.humanize || 'Currently registered'
 

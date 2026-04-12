@@ -72,7 +72,7 @@ module Event
 
     # Constants
     enum status: {
-      unknown: 'unknown',
+      n_a: 'N/A',
       pending: 'pending',
       in_progress: 'in progress',
       complete: 'complete',

@@ -105,6 +105,23 @@ class User < ApplicationRecord
       .select('users.*')
   }
 
+  def self.ordered_by_current_year_registration
+    year = Date.current.year
+
+    current = joins(:registrations)
+      .where(registrations: { year: year })
+      .distinct
+      .order(:last_name)
+
+    others = where.not(
+      id: joins(:registrations)
+        .where(registrations: { year: year })
+        .select(:id)
+    ).order(:last_name)
+
+    current + others
+  end
+
   accepts_nested_attributes_for :pictures, allow_destroy: true
   accepts_nested_attributes_for :vehicles, allow_destroy: true, reject_if: lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
 
