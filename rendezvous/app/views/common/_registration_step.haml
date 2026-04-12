@@ -1,5 +1,5 @@
-- status = registration&.status || :unknown
-- status_display = status&.humanize
+- status = registration&.status || 'unknown'
+- status_display = status&.to_s.humanize
 - previous_step = previous_step(step)
 - next_step = next_step(step)
 .container-fluid.px-0.sticky-top

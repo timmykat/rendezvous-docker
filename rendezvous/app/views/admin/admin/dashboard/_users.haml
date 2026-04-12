@@ -20,7 +20,7 @@
                 %tbody
                   - @users.each do |user|
                     - reg = user.current_registration
-                    - status = reg&.status || :unknown
+                    - status = reg&.status || 'unknown'
                     %tr.text-center
                       %td.text-left
                         %ul.list-unstyled
