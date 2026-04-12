@@ -16,7 +16,7 @@
         %p You have an outstanding balance of #{number_to_currency(@registration.balance)}
         %p Please send a check for that amount to:
         %p #{mailing_address}
-      - elsif @registration.owed_a_refund?
+      - elsif @registration.refund_due?
         %p You are owed a refund of #{number_to_currency(-@registration.balance)}
         %p We will get in touch with you to discuss how you'd like to be refunded.
 

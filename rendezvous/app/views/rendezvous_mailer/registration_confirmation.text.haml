@@ -14,7 +14,7 @@ Here is your registration info (all fees in USD):
     You have an outstanding balance of #{number_to_currency(@registration.balance)}
     Please send a check for that amount to:
     #{mailing_address "\n"}
-- elsif @registration.owed_a_refund?
+- elsif @registration.refund_due?
     You are owed a refund of #{number_to_currency(-@registration.balance)}
     We will get in touch with you to discuss how you'd like to be refunded.
 

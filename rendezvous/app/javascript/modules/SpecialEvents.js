@@ -1,19 +1,18 @@
-import { debounce } from "throttle-debounce";
-
 export class SpecialEvents extends HTMLElement {
   connectedCallback() {
-    requestAnimationFrame(() => {
-      this.init();
-    });
+    this.init();
   }
 
   init() {
     this.total = this.querySelector("input.display-total");
-    this.registrationFee = parseFloat(
-      this.querySelector("input#event_registration_registration_fee").value,
-    );
+    this.attendeeFeeInput = this.querySelector("input#attendee-fee-reference");
+    if (!this.attendeeFeeInput) {
+      console.log("No registration fee input!");
+    }
+    this.attendeeFee = parseFloat(this.attendeeFeeInput.value);
     this.cruiseSelect = this.querySelector("select.lake-cruise");
-    this.cruiseFee = this.querySelector("input.lake-cruise-fee");
+    this.cruiseFeeInput = this.querySelector("input.lake-cruise-fee");
+    console.log(this.cruiseFeeInput);
     const card = document.querySelector('.card[data-event="cruise"]');
     this.price = card?.dataset.price;
     this.setEventListeners();
@@ -28,12 +27,14 @@ export class SpecialEvents extends HTMLElement {
 
   updateFormValues(cruiseNumber) {
     const cruiseFee = parseFloat(cruiseNumber * this.price);
+    console.log(cruiseFee);
     if (cruiseFee > 0) {
-      this.cruiseFee.value = cruiseFee.toFixed(2);
+      this.cruiseFeeInput.value = cruiseFee.toFixed(2);
+      console.log("Should be set");
     } else {
-      this.cruiseFee.value = "";
+      this.cruiseFeeInput.value = "";
     }
-    this.total.value = (this.registrationFee + cruiseFee).toFixed(2);
+    this.total.value = (this.attendeeFee + cruiseFee).toFixed(2);
   }
 
   getCsrfHeaders = () => {

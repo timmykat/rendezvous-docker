@@ -33,7 +33,7 @@
               %td.text-center= number_to_currency(registration.paid_amount)
               - if registration.outstanding_balance?
                 %td.text-center.has-balance= number_to_currency(registration.balance)
-              - elsif registration.owed_a_refund?
+              - elsif registration.refund_due?
                 %td.text-center.owed (#{number_to_currency(-registration.balance)})
               - else
                 %td.text-center #{number_to_currency(-registration.balance)}

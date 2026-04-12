@@ -14,6 +14,7 @@
                   label: "Number of people for Lake George cruise",
                   input_html: { class: 'lake-cruise form-control short-field' }
                 = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee short-field' }
+                = hidden_field_tag :attendee_fee, @registration.registration_fee, id: 'attendee-fee-reference'
 
         .card{ data: { event: 'post-rendezvous-lunch' } }
           .card-body

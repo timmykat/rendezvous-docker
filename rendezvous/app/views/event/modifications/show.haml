@@ -131,7 +131,7 @@
                 - reg_id = @current_registration.id
                 - mod_id = @modification.id
                 %li.mb-3
-                  = form_with url: payment_link_event_modification_path(@modification), method: :post, data: { turbo: false } do
+                  = form_with url: send_payment_link_event_modification_path(@modification), method: :post, data: { turbo: false } do
                     = hidden_field_tag :email, email
                     = hidden_field_tag :registration_id, reg_id
                     = hidden_field_tag :modification_id, mod_id

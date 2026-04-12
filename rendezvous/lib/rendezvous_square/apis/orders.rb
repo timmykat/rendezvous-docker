@@ -31,7 +31,7 @@ module RendezvousSquare
       def self.create_modification_order_object(params = {})
         {
           location_id: Apis::Base.get_location_id,
-          customer_id: Api::Customers.find_customer(params[:email]),
+          customer_id: Apis::Customers.find_customer(params[:email]),
           ticket_name: "2026 Citroen Rendezvous Registration - Update",
           reference_id: params[:reference_id].to_s,
           line_items: create_line_items(params)

@@ -290,7 +290,8 @@ module Event
       m = db_reg.modifications.build
       m.status = :pending
 
-      AGE_GROUPS.each do |age|
+      reg_params = params[:event_registration]
+      Event::Registration::AGE_GROUPS.each do |age|
         plural = age.pluralize
         number = "number_of_#{plural}"
         starting = "starting_#{plural}"
@@ -304,19 +305,16 @@ module Event
       end
       m.starting_lake_cruise = db_reg.lake_cruise_number || 0
 
-
-
-      reg_params = params[:event_registration]
-      AGE_GROUPS.each do |age|
+      Event::Registration::AGE_GROUPS.each do |age|
         plural = age.pluralize
-        number = "number_of_#{plural}"
+        number = "number_of_#{plural}".to_sym
         starting = "starting_#{plural}"
         delta = "delta_#{plural}"
-        m.send("#{delta}=", (reg_params.send(number) || 0).to_i - m.send(starting))
+        m.send("#{delta}=", (reg_params[number] || 0).to_i - m.send(starting))
       end
       m.delta_lake_cruise = (reg_params[:lake_cruise_number] || 0).to_i - m.starting_lake_cruise
 
-      new_attendee_fee = AGE_GROUPS.sum do |age|
+      m.new_attendee_fee = Event::Registration::AGE_GROUPS.sum do |age|
         delta = m.send("delta_#{age.pluralize}")
         delta.zero? ? 0 : delta * reg_fees[age.to_sym]
       end
@@ -389,7 +387,7 @@ module Event
         send_order_to_square
         flash_notice 'The order was successfully created'
         redirect_to admin_dashboard_path
-      rescue SquareApiError => e
+      rescue Square::Errors::ApiError => e
         flash_alert "There was a problem creating the order: #{e.message}"
         Rails.logger.error("Square order failed: #{e.message}")
         render :modify_by_admin
@@ -479,7 +477,7 @@ module Event
       # TBD - creation of Square order and invoice
       # begin
       #   order = create_square_order
-      # rescue SquareApiError => e
+      # rescue Square::Errors::ApiError => e
       #   flash_alert 'Your registration is saved, but there was a problem creating your Square order'
       # end
 
@@ -544,7 +542,7 @@ module Event
     #       fee_period: fee_period,
     #       order_type: "Event Registration"
     #     })
-    #   rescue SquareApiError => e
+    #   rescue Square::Errors::ApiError => e
     #     flash_alert "There was a problem creating the order: #{e.message}"
     #     return false
     #   end
@@ -581,7 +579,7 @@ module Event
                                                                         fee_period: fee_period
                                                                       })
         end
-      rescue SquareApiError => e
+      rescue Square::Errors::ApiError => e
         flash_alert "There was a problem creating the link: #{e.message}"
         render :payment
       end

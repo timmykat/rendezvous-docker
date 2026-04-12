@@ -1,5 +1,7 @@
 class RendezvousMailer < ApplicationMailer
 
+  helper ApplicationHelper
+
   def send_user_message
     topic = Email::MessageTopics.label(params[:topic]) || 'General'
     subject = params[:subject].to_s.gsub(/[\r\n]/, '')
@@ -14,7 +16,7 @@ class RendezvousMailer < ApplicationMailer
     mail(to: 'tim@wordsareimages.com', reply_to: @email, subject: @subject)
   end
 
-  def registration_update(email, modification, payment_link)
+  def send_modification_payment_link(email, modification, payment_link)
     @admin = true
     @modification = modification
     @first_name = modification.registration.user.first_name

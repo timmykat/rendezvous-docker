@@ -52,7 +52,7 @@ module Event
       redirect_to admin_dashboard_path
     end
 
-    def payment_link
+    def send_payment_link
       create_payment_link(params)
       redirect_to admin_dashboard_path
     end
@@ -62,8 +62,8 @@ module Event
       email = params[:email]
       reg_id = params[:registration_id]
       mod_id = params[:modification_id]
-      reg = Event::Registration.find_by_id(reg_id)
-      mod = Event::Modification.find_by_id(mod_id)
+      reg = Event::Registration.find_by(id: reg_id)
+      mod = Event::Modification.find_by(id: mod_id)
 
       unless reg && mod
           Rails.logger.error("Missing reg or mod")
@@ -82,9 +82,9 @@ module Event
         payment_link = ::RendezvousSquare::Apis::Checkout
             .create_square_modification_payment_link(square_params)
 
-        RendezvousMailer.registration_update(email, mod, payment_link).deliver_later
+        RendezvousMailer.send_modification_payment_link(email, mod, payment_link).deliver_later
         payment_link
-      rescue SquareApiError => e
+      rescue Square::Errors::ApiError => e
         Rails.logger.error("Square error: #{e.message}")
       rescue => e
         Rails.logger.error("Unexpected error: #{e.class} - #{e.message}")
