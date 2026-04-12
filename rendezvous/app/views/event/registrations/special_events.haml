@@ -1,17 +1,17 @@
-= render partial: 'common/registration_step', locals: { step: @step, registration: @event_registration }
+= render partial: 'common/registration_step', locals: { step: @step, registration: @registration }
 .container
   .row.justify-content-center
     .col-md-8.col-12
       %special-events
-        .card 
+        .card
           .card-body
-            .card-title 
+            .card-title
               %h1.h2 Special Events
             .card-text
               %p
                 We have two optional events which are outside of the usual Rendezvous experience.
-              = simple_form_for @event_registration, url:  update_special_events_event_registration_path, method: :patch do |f|
-                .card{ data: { event: 'cruise', price: lake_cruise_price } } 
+              = simple_form_for @registration, url:  update_special_events_event_registration_path, method: :patch do |f|
+                .card{ data: { event: 'cruise', price: lake_cruise_price } }
                   .card-body
                     .card-title
                       %h2.h3 Friday, June 12 - Lake George Steamboat Cruise and Lunch
@@ -19,56 +19,60 @@
                       %figure
                         = image_tag 'lake-george-steamboat.jpg', class: 'contained'
                         %figcaption Lake George steamboat the Lac du Saint Sacrement
-                      %p 
+                      %p
                         After a leisurely 40-minute drive, participants will board the Lac du Saint Sacrement steamboat for a two-hour lunch cruise. See the events schedule for more information.
                       %p Price is $#{lake_cruise_price} per person and will be added to your registration fee. Parking is extra, paid on site.
                       %p Sign-up for this event closes #{lake_cruise_close_date}.
                       - if lake_cruise_closed
                         %p We're sorry but sign-up for this event is closed.
-                        - if @event_registration.lake_cruise_number&.positive?                 
-                          .form-group 
+                        - if @registration.lake_cruise_number&.positive?
+                          .form-group
                             = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
                               label: "Number of people for Lake George cruise",
                               input_html: { disabled: true, class: 'lake-cruise form-control short-field' }
                             = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee short-field' }
                       - else
-                        .form-group 
+                        .form-group
                           = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
                             label: "Number of people for Lake George cruise",
                             input_html: { disabled: no_fee_related_changes, class: 'lake-cruise form-control short-field' }
                           = f.input :lake_cruise_fee, input_html: { readonly: no_fee_related_changes, class: 'lake-cruise-fee short-field' }
+                          = hidden_field_tag :attendee_fee, @registration.registration_fee, id: 'attendee-fee-reference'
 
-                .card{ data: { event: 'post-rendezvous-lunch' } } 
+                .card{ data: { event: 'post-rendezvous-lunch' } }
                   .card-body
                     .card-title
                       %h2.h3 Sunday, June 14 - Post-Rendezvous Lunch
                     .card-text
-                      %figure 
+                      %figure
                         = image_tag 'Shadow-66.jpg', class: 'contained'
                         %figcaption Two of the Shadow 66 Citroëns
                       %p
-                        Participants will have a leisurely drive to 
+                        Participants will have a leisurely drive to
                         = link_to "Shadow 66 restaurant", "https://www.instagram.com/shadow66restaurant"
-                        in 
+                        in
                         = link_to "Ghent, NY", "https://www.google.com/maps/dir/Saratoga+Springs,+New+York/Ghent,+New+York/@42.7013769,-74.0428778,10z/data=!3m1!4b1!4m14!4m13!1m5!1m1!1s0x89de384ec75bd439:0x641d456a1b94a2a8!2m2!1d-73.7849756!2d43.0833706!1m5!1m1!1s0x89ddf2aa4ad0bd27:0x5d2c524b9bd267f!2m2!1d-73.6300729!2d42.320699!3e0?entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoASAFQAw%3D%3D"
-                        about an hour from Malta, and then enjoy a delicious French meal service by proprietors and Citroën enthusiasts Patrick and Astrid Jehanno. Yes, there are Citroëns in the dining room! 
+                        about an hour from Malta, and then enjoy a delicious French meal service by proprietors and Citroën enthusiasts Patrick and Astrid Jehanno. Yes, there are Citroëns in the dining room!
                         Last year's lunch was a huge success!
                       %p
                         %em
-                          %b N.B. 
+                          %b N.B.
                           Lunch will be approximately $70/person and will be collected by the restaurant at the time of service.
                       .form-group
                         / Use Simple Form's built-in label for better accessibility and alignment
                         = f.input :sunday_lunch_number, as: :select, collection: (0..sunday_lunch_max),
-                                  label: "Number of people for Sunday lunch", 
+                                  label: "Number of people for Sunday lunch",
                                   input_html: { class: 'form-control short-field' }
-                .form-group 
-                  - reg_fee = @event_registration.registration_fee
-                  - cruise_fee = @event_registration.lake_cruise_fee || 0.0
-                  = f.input :registration_fee, as: :hidden 
-                  %label Total fee including cruise            
-                  = text_field_tag :display_total, number_with_precision(reg_fee + cruise_fee, precision: 2), readonly: true, class: 'form-control display-total short-field'
                 .form-group
+                  - reg_fee = @registration.registration_fee
+                  - cruise_fee = @registration.lake_cruise_fee || 0.0
+                  = f.input :registration_fee, as: :hidden
+                  %label Total fee including cruise
+                  = f.input :total, input_html: { value: number_with_precision(reg_fee + cruise_fee, precision: 2), readonly: true, class: 'form-control display-total short-field' }
+                .form-group
+                  = f.button :button, name: 'go_back', value: true, class: 'btn btn-primary back-to-attendees mr-2' do
+                    = icon(:left_arrow)
+                    Back to attendees
                   = f.button :button, class: 'btn btn-primary go-to-review' do
                     Go to review
                     = icon(:right_arrow)

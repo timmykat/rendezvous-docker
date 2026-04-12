@@ -49,7 +49,7 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-    @event_registration = @user.registrations.current.last
+    @registration = @user.registrations.current.last
     @available_qr_codes = QrCode.unassigned
   end
 
@@ -60,18 +60,18 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    
+
     # 1. Let Rails handle the standard attributes (including deletion of vehicles)
     if @user.update(user_params)
-      
+
       # 2. Only loop to handle the custom QR code logic
       user_params[:vehicles_attributes]&.each do |_, v_params|
         next if v_params[:_destroy] == "1" || v_params[:_destroy] == true # Skip deleted ones
-        
+
         # Find the vehicle that was just updated/created by the update call above
         vehicle = @user.vehicles.find_by(id: v_params[:id])
         next unless vehicle # Safety check
-        
+
         qr_code_id = v_params[:qr_code_id]
         if qr_code_id.present?
           new_qr = QrCode.find_by(id: qr_code_id)
@@ -83,7 +83,7 @@ class UsersController < ApplicationController
           end
         end
       end
-  
+
       redirect_to (params[:redirect_url] || user_path(@user))
     else
       flash_alert_now 'We had a problem saving your updated information'
@@ -97,7 +97,7 @@ class UsersController < ApplicationController
     role = params[:role].to_sym
     if user.has_role? role
       user.roles.delete role
-    else 
+    else
       user.roles << role
     end
     user.save!
@@ -109,7 +109,7 @@ class UsersController < ApplicationController
     if (params[:reg_page])
       if user.present? && user.current_registration
         respond_to do |format|
-          format.json do 
+          format.json do
             render json: {
               existing_registration: edit_event_registration_path(user.current_registration)
             }
@@ -119,9 +119,9 @@ class UsersController < ApplicationController
       end
     end
     respond_to do |format|
-      format.json do 
+      format.json do
         if !user
-          render json: { status: 'not found' }
+          render json: { status: :not_found }
         else
           render json: user.as_json(only: [
             :id,
@@ -152,8 +152,8 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(
-        :email, :password, :password_confirmation, 
-        :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :is_admin_created, 
+        :email, :password, :password_confirmation,
+        :first_name, :last_name, :address1, :address2, :city, :state_or_province, :postal_code, :country, :is_admin_created,
         :citroenvie,
         vehicles_attributes:
             [:id, :year, :marque, :model, :other_info, :bringing, :for_sale, :qr_code_id, :_destroy]

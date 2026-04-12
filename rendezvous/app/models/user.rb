@@ -30,6 +30,7 @@
 #  uid                    :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  square_customer_id     :string(255)
 #
 # Indexes
 #
@@ -44,6 +45,7 @@
 #  index_users_on_receive_mailings      (receive_mailings)
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_roles_mask            (roles_mask)
+#  index_users_on_square_customer_id    (square_customer_id)
 #  index_users_on_state_or_province     (state_or_province)
 #  index_users_on_uid                   (uid)
 #
@@ -75,7 +77,7 @@ class User < ApplicationRecord
   has_many :authorizations
   has_one  :vendor, foreign_key: :owner_id
   has_many :donations
-  has_many :square_transactions
+  has_many :square_transactions, class_name: '::Square::Transaction', dependent: :destroy
 
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -104,6 +106,23 @@ class User < ApplicationRecord
       .having('COUNT(registrations.id) > 0')
       .select('users.*')
   }
+
+  def self.ordered_by_current_year_registration
+    year = Date.current.year
+
+    current = joins(:registrations)
+      .where(registrations: { year: year })
+      .distinct
+      .order(:last_name)
+
+    others = where.not(
+      id: joins(:registrations)
+        .where(registrations: { year: year })
+        .select(:id)
+    ).order(:last_name)
+
+    current + others
+  end
 
   accepts_nested_attributes_for :pictures, allow_destroy: true
   accepts_nested_attributes_for :vehicles, allow_destroy: true, reject_if: lambda { |v| ( v[:marque].blank? || v[:model].blank? || v[:year].blank? ) }
@@ -213,6 +232,32 @@ class User < ApplicationRecord
   # Override of Devise method to use sidekiq
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
+  end
+
+  def square_customer_id_from_square
+    ::RendezvousSquare::Apis::Base.with_error_handling do
+      ::RendezvousSquare::Apis::Customers.find_customer(email)
+    end
+  end
+
+  def ensure_square_customer_id!
+    return square_customer_id if square_customer_id.present?
+
+    with_lock do
+      return square_customer_id if square_customer_id.present?
+
+      customer_id = square_customer_id_from_square
+
+      unless customer_id.present?
+        customer_id = ::RendezvousSquare::Apis::Customers.create_customer(self)
+      end
+
+      return nil unless customer_id.present?
+
+      update!(square_customer_id: customer_id) if customer_id.present?
+
+      customer_id
+    end
   end
 
   private

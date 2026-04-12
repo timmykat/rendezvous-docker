@@ -55,22 +55,25 @@
     %main
       .content
         .navbar.nav.justify-content-start
-          .nav-item.ml-5=link_to 'Dashboard', admin_admin_dashboard_path, class: 'btn btn-primary'
-          .nav-item.ml-5=link_to 'Manage', admin_admin_manage_path, class: 'btn btn-primary'
-        .row
-          .col-sm-8.ml-3
-            %h3.h4 Update Times
-            %ul.list-group.list-group-horizontal
-              - public_asset_info.each do |asset, time|
-                %li.list-group-item
-                  = asset.to_s.gsub('_', '.') + ':'
-                  = time&.in_time_zone&.strftime('%l:%M%P | %b %-d')
-            %p= active_users
-
+          .nav-item.ml-5=link_to 'Dashboard', admin_dashboard_path, class: 'btn btn-primary'
+          .nav-item.ml-5=link_to 'Manage', admin_manage_path, class: 'btn btn-primary'
         = yield
       .push
 
     %footer.footer
       .container
+        .row.justify-content-center
+          .col-sm-8.ml-3
+            .card
+              .card-body
+                %p= active_users
+                %p
+                  %b Update Times
+                %ul.list-group.list-group-horizontal
+                  - public_asset_info.each do |asset, time|
+                    %li.list-group-item
+                      = asset.to_s.gsub('_', '.') + ':'
+                      = time&.in_time_zone&.strftime('%l:%M%P | %b %-d')
+
         .row.justify-content-center
           = render partial: 'common/footer'

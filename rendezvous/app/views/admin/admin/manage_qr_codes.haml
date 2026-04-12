@@ -10,9 +10,9 @@
               %strong Last generated: #{@last_generated}
 
             %p.button-with-spinner
-              = link_to 'Generate New Codes', admin_admin_generate_qr_codes_path, class: 'btn btn-info button', data: { 'button-spinner' => 'Generating...', turbo: false }
+              = link_to 'Generate New Codes', admin_generate_qr_codes_path, class: 'btn btn-info button', data: { 'button-spinner' => 'Generating...', turbo: false }
             %p.button-with-spinner
-              = link_to 'Regenerate All Codes', admin_admin_generate_qr_codes_path({regenerate: true}), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+              = link_to 'Regenerate All Codes', admin_generate_qr_codes_path({regenerate: true}), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
 
             %p
               %strong Sample 1:

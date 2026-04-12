@@ -32,6 +32,7 @@
 #  uid                    :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  square_customer_id     :string(255)
 #
 # Indexes
 #
@@ -46,6 +47,7 @@
 #  index_users_on_receive_mailings      (receive_mailings)
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #  index_users_on_roles_mask            (roles_mask)
+#  index_users_on_square_customer_id    (square_customer_id)
 #  index_users_on_state_or_province     (state_or_province)
 #  index_users_on_uid                   (uid)
 #

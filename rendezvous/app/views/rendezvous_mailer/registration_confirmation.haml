@@ -2,28 +2,27 @@
 %html{lang:  "en"}
   %body
     %div{ style:  "width: 600px;" }
-      %p Dear #{@event_registration.user.first_name},
-      %p Here is your registration info (all fees in USD): 
+      %p Dear #{@registration.user.first_name},
+      %p Here is your registration info (all fees in USD):
       %ul
-        %li Number of people: #{@event_registration.attendees.size}
-        %li Number of people for the Friday lake cruise: #{@event_registration.lake_cruise_number}
-        %li Total registration amount: #{number_to_currency(@event_registration.total)}
-        - if (@event_registration.donation? && !@event_registration.cancelled?)
-          %li Donation (thank you!): #{number_to_currency(@event_registration.donation)}
-        %li Registration status: #{@event_registration.status}
+        %li Number of people: #{@registration.attendees.size}
+        %li Number of people for the Friday lake cruise: #{@registration.lake_cruise_number}
+        %li Total registration amount: #{number_to_currency(@registration.total)}
+        - if (@registration.donation? && !@registration.cancelled?)
+          %li Donation (thank you!): #{number_to_currency(@registration.donation)}
+        %li Registration status: #{@registration.status.humanize}
 
-      - if @event_registration.outstanding_balance?
-        %p You have an outstanding balance of #{number_to_currency(@event_registration.balance)}
+      - if @registration.outstanding_balance?
+        %p You have an outstanding balance of #{number_to_currency(@registration.balance)}
         %p Please send a check for that amount to:
         %p #{mailing_address}
-      - elsif @event_registration.owed_a_refund?
-        %p You are owed a refund of #{number_to_currency(-@event_registration.balance)}
+      - elsif @registration.refund_due?
+        %p You are owed a refund of #{number_to_currency(-@registration.balance)}
         %p We will get in touch with you to discuss how you'd like to be refunded.
-      
-      - unless @event_registration.cancelled?
+
+      - unless @registration.cancelled?
         %p We look forward to seeing you at the Rendezvous!
 
       %p If you need to cancel before #{Rails.configuration.registration[:refund_date]}, please email Tim at rendezvousLLC@kinnel.warpmail.net.
 
     %div{ style:  "width: 600px; margin-top: 20px;border-top: solid 2px #ccc; padding-top: 20px;" }
-      

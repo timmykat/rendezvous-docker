@@ -1,15 +1,15 @@
-.container 
-  .row.justify-content-center 
-    .col-md-6.col-12 
-      .card 
-        .card-body 
-          .card-title 
+.container
+  .row.justify-content-center
+    .col-md-6.col-12
+      .card
+        .card-body
+          .card-title
             %h2.h3 Welcome/Bienvenue
-          .card-text 
+          .card-text
             %h3.h5.mt-3 What would you like to do?
 
-            %p Registration status:  #{registration_status}
-            
+            %p Registration status:  #{registration_status.humanize}
+
             %ul.list-group
               - if !@registration
                 %li.list-group-item= link_to 'Register for the Rendezvous', new_event_registration_path
@@ -20,4 +20,3 @@
               %li.list-group-item= link_to 'Update my vehicles', edit_user_vehicles_path(current_user)
               %li.list-group-item= link_to 'Change my Sunday lunch info',  update_sunday_lunch_event_registration_path(@registration)
               %li.list-group-item= link_to 'Check the schedule', schedule_path
-              

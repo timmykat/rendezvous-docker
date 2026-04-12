@@ -1,0 +1,33 @@
+!!!
+%html{lang:  "en"}
+  %body
+    %div{ style:  "width: 600px;" }
+      %p Dear #{@first_name},
+      %p As requested, I have updated your registration. Below are the updates:
+      %ul
+        - if @modification.delta_adults.positive?
+          %li Added adults: #{@modification.delta_adults}
+        - if @modification.delta_youths.positive?
+          %li Added youths: #{@modification.delta_youths}
+        - if @modification.delta_children.positive?
+          %li Added children: #{@modification.delta_children} (no charge)
+        - if @modification.delta_lake_cruise.positive?
+          %li Added lake cruisers: #{@modification.delta_lake_cruise}
+
+      %p
+        %b Amount due: #{number_to_currency(@modification.modification_total)}
+
+      %p
+        Please go to the link below, verify your order, and either pay online or send me a check for the amount.
+
+      %p
+        %em Payment link:
+        =link_to @payment_link, @payment_link
+      %p Mailing address:
+      %p #{mailing_address}
+
+      %p
+        Thank you!
+        %br Tim (Kinnel)
+
+    %div{ style:  "width: 600px; margin-top: 20px;border-top: solid 2px #ccc; padding-top: 20px;" }

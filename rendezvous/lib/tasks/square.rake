@@ -4,7 +4,7 @@ namespace :square do
 
     puts "Starting Square Sync: #{Time.current}"
 
-    puts "Current transactions: #{Square::Transaction.count}"
+    puts "Current transactions: #{::Square::Transaction.count}"
 
     total = 0
 
@@ -48,13 +48,13 @@ namespace :square do
     total += count
     puts "Refund updates processed: #{count} | complete: #{complete}"
     puts "Total records synced: #{total}"
-    puts "Final transactions: #{Square::Transaction.count}"
+    puts "Final transactions: #{::Square::Transaction.count}"
   end
 
   desc "Sync Orders, Payments, and Refunds"
   task clean: :environment do
     begin
-      Square::Transaction.destroy_all
+      ::Square::Transaction.destroy_all
     rescue => e
       puts "  [Error] Clean #{e.message}"
     end

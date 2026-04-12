@@ -1,4 +1,6 @@
-# Tips and Tricks
+# Rendezvous Registration App
+Oh boy there's a lot to updated here, but most important:
+_If you updated anything outside the app, you must do a git pull on prod> main._
 ## Building the Gemfile.lock
 ```
 docker compose run rails_app bundle

@@ -3,10 +3,14 @@ module RendezvousSquare
     module Payments
       include Apis::Base
 
-      STATUSES = %w(APPROVED PENDING COMPLETED FAILED CANCELED)
+      STATUSES = %w[APPROVED PENDING COMPLETED FAILED CANCELED].freeze
 
-      def self.api
-        Apis::Base.get_square_client.payments
+      def self.list(params)
+        params = params.merge(
+          location_ids: [Apis::Base.get_location_id],
+          begin_time: Apis::Base::CURRENT_YEAR
+        )
+        Apis::Base.fetch_paginated(:payments, 'list', **params)
       end
 
       def self.all
@@ -14,9 +18,8 @@ module RendezvousSquare
           location_ids: [Apis::Base.get_location_id],
           begin_time: Apis::Base::ORIGIN_DATE_ISO
         }
-        return Apis::Base.get_all(api, 'list', **params)
+        Apis::Base.fetch_paginated(:payments, 'list', **params)
       end
     end
   end
 end
-

@@ -6,24 +6,26 @@
 #  annual_answer       :string(255)
 #  balance             :decimal(8, 2)    default(0.0), not null
 #  created_by_admin    :boolean          default(FALSE), not null
-#  donation            :decimal(8, 2)
+#  donation            :decimal(8, 2)    default(0.0)
 #  events              :text(65535)
 #  invoice_number      :string(255)
 #  is_admin_created    :boolean          default(FALSE), not null
-#  lake_cruise_fee     :decimal(8, 2)
+#  lake_cruise_fee     :decimal(8, 2)    default(0.0)
 #  lake_cruise_number  :integer          default(0), not null
-#  number_of_adults    :integer
-#  number_of_children  :integer
-#  number_of_seniors   :integer
-#  number_of_youths    :integer
-#  paid_amount         :decimal(8, 2)
+#  late_period         :boolean          default(FALSE)
+#  number_of_adults    :integer          default(0)
+#  number_of_children  :integer          default(0)
+#  number_of_seniors   :integer          default(0)
+#  number_of_youths    :integer          default(0)
+#  paid_amount         :decimal(8, 2)    default(0.0)
 #  paid_date           :datetime
 #  paid_method         :string(255)
 #  refunded            :decimal(8, 2)    default(0.0), not null
-#  registration_fee    :decimal(8, 2)
-#  status              :string(255)
+#  registration_fee    :decimal(8, 2)    default(0.0)
+#  status              :string(255)      default("pending")
+#  step                :string(255)      default("creating")
 #  sunday_lunch_number :integer          default(0), not null
-#  total               :decimal(8, 2)
+#  total               :decimal(8, 2)    default(0.0)
 #  vendor_fee          :decimal(6, 2)
 #  year                :string(255)
 #  created_at          :datetime
@@ -50,12 +52,12 @@ module Event
 
     belongs_to :user
     has_many :attendees, dependent: :destroy
-    has_many :transactions, class_name: 'SquareTransaction', dependent: :destroy
+    has_many :transactions, class_name: '::Square::Transaction', dependent: :destroy
     has_many :registrations_vehicles, class_name: 'RegistrationsVehicles', foreign_key: :registration_id, dependent: :destroy
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
-    has_many :square_orders, class_name: "Square::Order", dependent: :destroy
-    has_many :square_transactions, dependent: :destroy
+    has_many :square_transactions, class_name: '::Square::Transaction', dependent: :destroy
+    has_many :modifications, dependent: :destroy
 
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
@@ -68,22 +70,36 @@ module Event
     attribute :paid_amount, :decimal, default: 0.0
     attribute :total, :decimal, default: 0.0
 
-    STATUSES = [
-      'new',
-      'in progress',
-      'in review',
-      'payment due',
-      'complete',
-      'cancelled - settled',
-      'cancelled - needs refund'
-    ]
+    # Constants
+    enum status: {
+      n_a: 'N/A',
+      pending: 'pending',
+      in_progress: 'in progress',
+      complete: 'complete',
+      cancelled: 'cancelled'
+    }
 
-    validate :validate_minimum_number_of_adults, unless: -> { status.nil? || status.match(/^cancelled/) }
-    validate :validate_payment, unless: -> { status.nil? || status.match(/^cancelled/) }
-    validates :paid_method, inclusion: { in: Rails.configuration.registration[:payment_methods] }, allow_blank: true
-    # validates :invoice_number, uniqueness: true, format: { with: /\ARR20\d{2}-\d{3,4}\z/, on: :new }, allow_blank: true
+    enum step: {
+      creating:       'creating',
+      special_events: 'special events',
+      review:         'review',
+      payment:        'payment',
+      finished:       'finished'
+    }
 
-    validates :status, inclusion: { in: STATUSES }
+    enum paid_method: {
+      credit_card: 'credit card',
+      cash_or_check: 'cash or check',
+      invoice: 'invoice'
+    }
+
+    AGE_GROUPS = %w[adult youth child].freeze
+
+    PAYMENT_STATUSES = %w[paid partial 'payment due' refunded].freeze
+
+    # Validations
+    validate :validate_minimum_number_of_adults, unless: -> { cancelled? }
+    validate :validate_payment, unless: -> { status.nil? || cancelled? }
 
     validates :sunday_lunch_number,
               numericality: {
@@ -99,8 +115,40 @@ module Event
               }
 
     serialize :events
-
     before_save :ensure_financials
+
+    def cancelled?
+      status == :cancelled
+    end
+
+    # Payment checks
+    def refunded?
+      cancelled? and balance.to_d.zero?
+    end
+
+    def paid?
+      total.to_d == paid_amount.to_d
+    end
+
+    def show_payment_button?
+      !(partially_paid? || paid?)
+    end
+
+    def partially_paid?
+      total.to_d > paid_amount.to_d
+    end
+
+    def refund_due?
+      cancelled? and balance.to_d.negative?
+    end
+
+    def payment_status
+      return 'refunded' if refunded?
+      return 'paid' if paid?
+      return 'partial' if partially_paid?
+
+      'payment due'
+    end
 
     def total_paid_cents
       # Quick way to get the sum of all completed payments across all orders
@@ -133,35 +181,12 @@ module Event
       balance > 0.0
     end
 
-    def owed_a_refund?
-      balance < 0.0
-    end
-
-    def complete?
-      status == 'complete'
-    end
-
-    def cancelled?
-      status =~ /cancelled/
-    end
-
     def ensure_financials
       self.total = registration_fee.to_d +
                    donation.to_d +
                    lake_cruise_fee.to_d
 
       self.balance = self.total - (paid_amount.to_d + refunded.to_d)
-    end
-
-    def self.invoice_number
-      prefix = "CR#{Rails.configuration.site[:dates][:year]}"
-      previous_code = Registration.pluck(:invoice_number).last
-      if previous_code.blank?
-        next_number = 101
-      else
-        next_number = /-(\d+)\z/.match(previous_code)[1].to_i + 1
-      end
-      "#{prefix}-#{next_number}"
     end
 
     def total_of_payments

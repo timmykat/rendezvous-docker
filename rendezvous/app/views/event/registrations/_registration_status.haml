@@ -1,4 +1,4 @@
 - if user_is_admin?
-  = f.input :status, as: :select, collection: statuses
+  = f.input :status, as: :select, collection: Event::Registration.statuses
 - else
   = f.input_field :status, as:  :hidden

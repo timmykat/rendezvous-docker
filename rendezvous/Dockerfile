@@ -9,6 +9,7 @@ RUN npm install -g yarn
 ARG RAILS_ENV=production
 ARG NODE_ENV=production
 ARG SECRET_KEY_BASE
+ARG SKIP_ASSETS=false
 
 ENV RAILS_ENV=$RAILS_ENV
 ENV NODE_ENV=$NODE_ENV
@@ -19,12 +20,11 @@ ENV REDIS_URL=redis://redis:6379/0
 
 RUN echo "RAILS_ENV=$RAILS_ENV NODE_ENV=$NODE_ENV"
 
-RUN mkdir -p $RAILS_ROOT/tmp
-RUN mkdir -p $RAILS_ROOT/storage
+RUN adduser --disabled-password --gecos '' webuser
 
-RUN adduser --disabled-password --gecos '' webuser \
-  && chown -R webuser:webuser $RAILS_ROOT/tmp \
-  && chown -R webuser:webuser $RAILS_ROOT/storage
+RUN mkdir -p $RAILS_ROOT/tmp $RAILS_ROOT/storage \
+    && chown -R webuser:webuser $RAILS_ROOT/tmp \
+    && chown -R webuser:webuser $RAILS_ROOT/storage
 
 WORKDIR $RAILS_ROOT
 
@@ -42,7 +42,10 @@ RUN yarn install --frozen-lockfile
 # ---- App code ----
 COPY . .
 
-RUN yarn build:css
-RUN bundle exec rake assets:precompile
+RUN if [ "${SKIP_ASSETS}" != "true" ]; then \
+      yarn build && yarn build:css && bundle exec rake assets:precompile; \
+    else \
+      echo "Skipping asset build"; \
+    fi
 
 EXPOSE 3000

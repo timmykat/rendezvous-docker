@@ -6,6 +6,7 @@ module RendezvousSquare
     module Base
 
       ORIGIN_DATE_ISO = Time.utc(2023, 1, 1).iso8601
+      CURRENT_YEAR = Time.utc(Time.new.year, 1, 1).iso8601
       RETRY_LIMIT = 2
       SLOW_REQUEST_THRESHOLD = 2.0
 
@@ -28,6 +29,8 @@ module RendezvousSquare
         )
       end
 
+      CLIENT = get_square_client
+
       def get_location_id
         ENV.fetch "#{get_environment}_SQUARE_LOCATION_ID"
       end
@@ -36,7 +39,7 @@ module RendezvousSquare
         return SecureRandom.uuid
       end
 
-      def get_all(api, method, **params)
+      def fetch_paginated(api_type, method, **params)
         all_items = []
 
         query_params = {
@@ -49,15 +52,12 @@ module RendezvousSquare
 
         loop do
           begin
-            result = api.public_send(method, **query_params)
+            api = CLIENT.send(api_type.to_s)
+            response = api.public_send(method, **query_params)
 
-            items = extract_data(result)
+            response.each { |item| all_items << item }
 
-            if items.present?
-              all_items.concat(items)
-            end
-
-            cursor = result.respond_to?(:cursor) ? result.cursor : nil
+            cursor = response.respond_to?(:cursor) ? response.cursor : nil
             break unless cursor
 
             query_params[:cursor] = cursor
@@ -75,14 +75,22 @@ module RendezvousSquare
         all_items
       end
 
-      def extract_data(result)
+      def extract_data(response)
         begin
-          if result.respond_to?(:orders)
-            return result.orders
-          elsif result.respond_to?(:payments)
-            return result.payments
-            elseif result.respond_to?(:refunds)
-            return result.refunds
+          if response.respond_to?(:orders)
+            return response.orders
+          end
+
+          if response.respond_to?(:payments)
+            return response.payments
+          end
+
+          if response.respond_to?(:refunds)
+            return response.refunds
+          end
+
+          if response.respond_to?(:customers)
+            return response.customers
           end
         rescue StandardError => e
           Rails.logger.error(e.message)
@@ -94,13 +102,13 @@ module RendezvousSquare
 
         begin
           start_time = Time.now
-          result = yield
+          response = yield
           duration = Time.now - start_time
 
           if duration > SLOW_REQUEST_THRESHOLD
             Rails.logger.warn("⚠️  Slow Square API call: #{duration.round(2)}s")
           end
-          result
+          response
 
         rescue Faraday::TimeoutError, Net::ReadTimeout, Faraday::ConnectionFailed => e
           Rails.logger.error("Square network error: #{e.class} - #{e.message}")
@@ -145,7 +153,3 @@ module RendezvousSquare
     end
   end
 end
-
-
-
-

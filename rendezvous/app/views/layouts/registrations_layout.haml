@@ -45,10 +45,6 @@
         = render partial: 'common/logged_out_nav_bar'
       - else
         = render partial: 'common/logged_in_nav_bar'
-
-      - if user_is_admin?
-        = render partial: 'common/admin_manage'
-
     %main
       .content
         = yield

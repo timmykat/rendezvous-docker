@@ -4,9 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :flash_array
+  before_action :set_incoming_destination
   before_action :get_app_data
-  before_action :set_ballot_count
   before_action :update_active_user
+  before_action :ensure_delete_method, only: :destroy
 
   helper_method :current_time
   helper_method :debug_date
@@ -33,6 +34,14 @@ class ApplicationController < ActionController::Base
 
   def select_layout
     ['manage'].include?(action_name) ? "admin_layout" : "application"
+  end
+
+  def ensure_delete_method
+    return unless action_name == "destroy"
+    return if request.delete?
+
+    Rails.logger.error("🚨 Non-DELETE request hit destroy: #{request.method} #{request.fullpath}")
+    head :method_not_allowed
   end
 
   def active_users
@@ -89,10 +98,6 @@ class ApplicationController < ActionController::Base
     "/#{Date.current.year}-Rendezvous-registration-#{fee_period}.pdf"
   end
 
-  def set_ballot_count
-    @ballot_count = Voting::Ballot.count
-  end
-
   # This currently has an absolute max in the DB of 8
   def sunday_lunch_max
     Rails.configuration.registration[:sunday_lunch_max]
@@ -143,9 +148,9 @@ class ApplicationController < ActionController::Base
   end
 
   def update_active_user
-    return unless current_user ||
-                  current_user.last_active.nil? ||
-                  current_user.last_active < ACTIVITY_WINDOW.ago
+    return if current_user.nil? ||
+           current_user.last_active.nil? ||
+           current_user.last_active < ACTIVITY_WINDOW.ago
 
     current_user.update_column(:last_active, Time.current)
   end
@@ -209,6 +214,40 @@ class ApplicationController < ActionController::Base
 
   helper ApplicationHelper
 
+  def set_incoming_destination
+    return unless current_user
+    return if current_user.admin?
+
+    referrer = request.referer
+
+    external_request = referrer.blank? || !same_origin?(referrer)
+    return unless external_request
+
+    reg = current_user.current_registration
+
+    target_path =
+        if reg.nil?
+          new_event_registration_path
+        elsif reg.in_progress?
+          review_event_registration_path(reg.id)
+        else
+          event_registration_path(reg.id)
+        end
+
+    return if request.path == target_path
+
+    redirect_to target_path
+  end
+
+  def same_origin?(referrer)
+    uri = URI.parse(referrer)
+    uri.host == request.host &&
+      uri.scheme == request.scheme &&
+      uri.port == request.port
+  rescue URI::InvalidURIError
+    false
+  end
+
   def require_admin
     return true if current_user and (current_user.has_role? :admin)
 
@@ -222,12 +261,15 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     if resource.has_role? :admin
-      admin_admin_dashboard_path
-    elsif !resource.current_registration
-      event_welcome_path
-    else
-      landing_page_path
+      return admin_dashboard_path
     end
+
+    reg = resource.current_registration
+    unless reg
+      return event_welcome_path
+    end
+
+    event_registration_path(reg.id)
   end
 
   def after_sign_out_path_for(resource_or_scope)

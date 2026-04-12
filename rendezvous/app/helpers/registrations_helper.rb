@@ -8,41 +8,45 @@ module RegistrationsHelper
     AnnualQuestion::RESPONSES
   end
 
-  def statuses
-    Event::Registration::STATUSES
-  end
-
   def registration_status_classes(status)
+    status = status&.to_sym
     case status
-    when 'complete'
+    when :complete
       'bg-success'
-    when 'in progress', 'payment due'
+    when :in_progress
       'bg-warning text-dark'
-    when /^cancelled/
+    when :cancelled
       'bg-danger'
     else
       'bg-secondary'
     end
   end
 
-  def payment_due?(balance)
-    balance.positive?
+  # Square helpers
+  def square_env
+    ::RendezvousSquare::Apis::Base.get_environment
   end
 
-  def refund_owed?(balance)
-    balance.negative?
+  def square_app_id
+    ENV.fetch "#{square_env}_SQUARE_APP_ID"
+  end
+
+  def square_sdk_url
+    ENV.fetch "#{square_env}_SQUARE_SDK_URL"
+  end
+
+  def square_location_id
+    ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
   end
 
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
     case status
-    when 'complete'
+    when :complete
       klass += ' fa fa-star'
-    when 'in progress'
+    when :in_progress
       klass += ' fa fa-step-forward'
-    when 'payment due'
-      klass += ' fa fa-money'
-    when 'cancelled'
+    when :cancelled
       klass += ' fa fa-ban'
     end
   end
@@ -64,9 +68,12 @@ module RegistrationsHelper
     0.10 + 0.026 * amount # For Square
   end
 
-  def payment_options
-    # [[' Credit Card (on line)', 'credit card'], [' Cash or Check', 'cash or check'], [' Square (on site)', 'square on site']]
-    [[' Credit card (Square)', 'credit card'], [' Cash or Check', 'cash or check']]
+  def modify_button_label(reg)
+    reg.complete? ? 'Create Modification' : 'Save'
+  end
+
+  def user_payment_options
+    Event::Registration.paid_methods.except('invoice').map { |k, _| [k.humanize, k] }
   end
 
   def attended_rendezvous_years(user)

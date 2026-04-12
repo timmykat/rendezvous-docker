@@ -4,6 +4,8 @@ module VenuesHelper
   end
 
   def format_for_schedule(venue)
+    return if venue.nil?
+
     "#{venue.name}, #{short_address(venue.address)}"
   end
 

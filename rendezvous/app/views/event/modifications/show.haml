@@ -1,0 +1,144 @@
+- applied = @modification.applied?
+.container
+  .row.justify-content-center
+    .col-md-8.col-12.heading
+      .card
+        .card-body
+          .card-title
+            %h1.h4 #{modification_title(@modification, @user_name)}
+          .card-text
+            %table.table.table-sm
+              %thead
+                %tr
+                  %th Category
+                  - ::Event::Registration::AGE_GROUPS.each do |age|
+                    - label = age.pluralize.titleize
+                    %th.text-center= label
+                  %th.text-center Lake Cruise
+
+              %tbody
+                - unless applied
+                  %tr
+                    %th Current
+                    - ::Event::Registration::AGE_GROUPS.each do |age|
+                      - number = "number_of_#{age.pluralize}"
+                      %td.text-center #{@current_registration.send(number)}
+                    %td.text-center #{@current_registration.lake_cruise_number}
+
+                %tr
+                  %th Changes
+                  - ::Event::Registration::AGE_GROUPS.each do |age|
+                    - delta = @modification.send("delta_#{age.pluralize}")
+                    %td.text-center
+                      - if delta > 0
+                        %span.text-success + #{delta}
+                      - elsif delta < 0
+                        %span.text-danger - #{delta}
+                      - else
+                        %span.text-muted
+
+                  %td.text-center
+                    - if @modification.delta_lake_cruise > 0
+                      %span.text-success + #{@modification.delta_lake_cruise}
+                    - elsif @modification.delta_lake_cruise < 0
+                      %span.text-danger - #{@modification.delta_lake_cruise}
+                    - else
+                      %span.text-muted (none)
+
+                - reg = applied ? @current_registration : @modified_registration
+                %tr
+                  %th #{applied ? 'New Totals' : 'Pending Totals'}
+                  - Event::Registration::AGE_GROUPS.each do |age|
+                    - plural = age.pluralize
+                    %td.text-center= reg.send("number_of_#{plural}")
+                  %td.text-center= reg.lake_cruise_number
+
+            %hr
+
+            %table.table.table-sm
+              %thead
+                %tr
+                  %th.text-left Category
+                  %th.text-center Registration Fee
+                  %th.text-center Lake cruise fee
+                  %th.text-center Rendezvous total
+
+              %tbody
+                - unless applied
+                  %tr
+                    %th.text-left Current Fees
+                    %td.text-center= number_to_currency(@modified_registration.registration_fee)
+                    %td.text-center= number_to_currency(@modified_registration.lake_cruise_fee)
+                    %td.text-center= number_to_currency(@modified_registration.total)
+
+                %tr
+                  %th.text-left Changes
+                  %td.text-center
+                    - if @modification.new_attendee_fee > 0
+                      %span.text-success
+                        + #{number_to_currency(@modification.new_attendee_fee)}
+                    - elsif @modification.new_attendee_fee < 0
+                      %span.text-danger
+                        "- #{number_to_currency(@modification.new_attendee_fee.abs)}"
+                    - else
+                      %span.text-muted (none)
+
+                  %td.text-center
+                    - if @modification.new_lake_cruise_fee > 0
+                      %span.text-success
+                        + #{number_to_currency(@modification.new_lake_cruise_fee)}
+                    - elsif @modification.new_lake_cruise_fee < 0
+                      %span.text-danger
+                        "- #{number_to_currency(@modification.new_lake_cruise_fee.abs)}"
+                    - else
+                      %span.text-muted (none)
+
+                  %td.text-center
+                    - diff_total = @modification.modification_total
+                    - if diff_total > 0
+                      %span.text-success
+                        + #{number_to_currency(diff_total)}
+                    - elsif diff_total < 0
+                      %span.text-danger
+                        "- $#{number_to_currency(diff_total.abs)}"
+                    - else
+                      %span.text-muted (non)
+
+                %tr
+                  %th.text-left #{applied ? 'Updated Total' : 'Pending Total'}
+                  %td
+                  %td
+                  %td.text-center
+                    - if applied
+                      = number_to_currency(@current_registration.total)
+                    - else
+                      = number_to_currency(@modified_registration.total)
+
+      .card
+        .card-body
+          .card-title
+            %h2.h5 Apply and Send Payment Link
+          .card-text
+            - if applied
+              %p If everything looks ok, clicking 'Apply' will modify the registration and send a payment link.
+            - else
+              %p This modification been applied. You can resend the payment link.
+            %ul.list-unstyled
+              - unless applied
+                %li.mb-3= button_to 'Apply', apply_event_modification_path(@modification, registration_id: @current_registration.id), method: :patch, class: 'btn btn-success'
+              - else
+                - email = @current_registration.user.email
+                - reg_id = @current_registration.id
+                - mod_id = @modification.id
+                %li.mb-3
+                  = form_with url: send_payment_link_event_modification_path(@modification), method: :post, data: { turbo: false } do
+                    = hidden_field_tag :email, email
+                    = hidden_field_tag :registration_id, reg_id
+                    = hidden_field_tag :modification_id, mod_id
+                    = submit_tag 'Send Payment Link', class: 'btn btn-primary'
+              %li= link_to 'Admin Dashboard', admin_dashboard_path, class: 'btn btn-primary'
+
+:javascript
+  document.addEventListener('turbo:load', () => {
+    setButtonSpinner()
+  })

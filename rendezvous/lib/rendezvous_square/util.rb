@@ -5,7 +5,7 @@ require 'square'
 
 require_relative 'apis/base'
 require_relative 'apis/checkout'
-require_relative 'apis/customer'
+require_relative 'apis/customers'
 require_relative 'apis/orders'
 require_relative 'apis/payments'
 require_relative 'apis/refunds'

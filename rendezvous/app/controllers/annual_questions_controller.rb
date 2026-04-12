@@ -8,7 +8,7 @@ class AnnualQuestionsController < ApplicationController
     if !@annual_question.update(annual_question_params)
       flash_alert "There was a problem creating the question"
     end
-    redirect_to admin_admin_dashboard_path
+    redirect_to admin_dashboard_path
   end
 
   def update
@@ -16,13 +16,13 @@ class AnnualQuestionsController < ApplicationController
     if !@annual_question.update(annual_question_params)
       flash_alert "There was a problem updating the question"
     end
-    redirect_to admin_admin_dashboard_path
+    redirect_to admin_dashboard_path
   end
 
   def destroy
     @annual_question = AnnualQuestion.find(params[:id])
     @annual_question.destroy
-    redirect_to admin_admin_dashboard_path
+    redirect_to admin_dashboard_path
   end
 
   private

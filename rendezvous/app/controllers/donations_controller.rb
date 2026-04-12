@@ -7,12 +7,12 @@ class DonationsController < ApplicationController
 
   def new
     if current_user && current_user.admin?
-      @donation = Donation.new(created_by_admin: true, status: 'initialized')
+      @donation = Donation.new(created_by_admin: true, status: :initialized)
       @donation.build_user
     elsif current_user
-      @donation = Donation.new(user: current_user, status: 'initialized')
+      @donation = Donation.new(user: current_user, status: :initialized)
     else
-      @donation = Donation.new(status: 'initialized')
+      @donation = Donation.new(status: :initialized)
       @donation.build_user
     end
   end
@@ -47,21 +47,12 @@ class DonationsController < ApplicationController
       return
     end
 
-    @donation.status = 'created'
+    @donation.status = :created
     @donation.save
 
-    customer_id = ::RendezvousSquare::Apis::Customer.find_customer(@donation.user.email)
-    if !customer_id
-      customer_id = ::RendezvousSquare::Apis::Customer.create_customer(user)
-    else
-      Rails.logger.info("Square customer found: " + customer_id)
-    end
+    customer_id = user.ensure_square_customer_id!
 
-    if user.vendor
-      redirect_url = thank_you_url(@donation, type: 'vendor')
-    else
-      redirect_url = thank_you_url(@donation, type: 'standard')
-    end
+    redirect_url = thank_you_url(@donation, type: 'standard')
 
     square_payment_link = ::RendezvousSquare::Apis::Checkout.create_square_payment_link({
                                                                                           donation: @donation,
@@ -74,13 +65,13 @@ class DonationsController < ApplicationController
   def thank_you
     @donation = Donation.find(params[:id])
     @type = params[:type]
-    @donation.status = 'complete'
+    @donation.status = :complete
     @donation.save
 
     transaction_id = params[:transactionId]
     order_id = params[:orderId]
     if transaction_id && order_id
-      transaction = SquareTransaction.new
+      transaction = ::Square::Transaction.new
       transaction.user = @donation.user
       transaction.amount = @donation.amount
       transaction.transaction_id = transaction_id
@@ -95,13 +86,13 @@ class DonationsController < ApplicationController
     existing_records = Donation.where.not(registration_id: nil).all
     existing_records.destroy_all
 
-    Event::Registration.where(donation > 0.0).where(status: 'complete').all.each do |r|
+    Event::Registration.where(donation > 0.0).where(status: :complete).all.each do |r|
       d = Donation.new
       d.amount = r.donation
       d.registration_id = r.id
       d.user_id = r.user.id
       e.email = r.user.email
-      d.status = 'complete'
+      d.status = :complete
       d.save
     end
     redirect_to :index

@@ -1,0 +1,25 @@
+- all_fees = Rails.configuration.pricing[:fees]
+.container
+  .row.justify-content-center
+    .col-md-8.col-12
+      .card
+        .card-body
+          .card-title
+            %h2 Modify registration for #{@user.full_name}
+          .card-text
+            %p
+              Registration ID:
+              =link_to @registration.id, event_registration_path(@registration)
+            %p
+              Normal edit page:
+              =link_to @registration.id, edit_event_registration_path(@registration)
+            #registration-form.edit_registration
+              - if @registration.complete?
+                %p
+                  %b A modification will be created
+              = simple_form_for @registration, url: update_by_admin_event_registration_path, method: :patch do |f|
+                = render partial: 'admin_fields', locals: { f: f, reg: @registration, user: @user }
+                .row
+                  .col-12
+                    .form-group
+                      = f.submit modify_button_label(@registration), class:  "btn  btn-primary"

@@ -1,0 +1,24 @@
+Dear #{@first_name},
+
+As requested, I have updated your registration. Below are the updates:
+
+- if @modification.delta_adults.positive?
+  "   - Added adults: #{@modification.delta_adults}"
+- if @modification.delta_youths.positive?
+  "   - Added youths: #{@modification.delta_youths}"
+- if @modification.delta_children.positive?
+  "   - Added children: #{@modification.delta_children} (no charge)"
+- if @modification.delta_lake_cruise.positive?
+  "   - Added lake cruisers: #{@modification.delta_lake_cruise}"
+
+Amount due: #{number_to_currency(@modification.modification_total)}
+
+Please go to the link below, verify your order, and either pay online or send me a check for the amount.
+
+Payment link: #{@payment_link}
+
+Mailing address:
+{mailing_address}
+
+Thank you!
+Tim (Kinnel)

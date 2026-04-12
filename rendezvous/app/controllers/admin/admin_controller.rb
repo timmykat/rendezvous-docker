@@ -96,7 +96,7 @@ module Admin
         notice << "Number of #{klass_name} deleted: #{dupes_deleted.to_s}"
       end
       flash_notice notice.join("<br>\n")
-      redirect_to admin_admin_dashboard_path
+      redirect_to admin_dashboard_path
     end
 
     def registration_graphs
@@ -127,7 +127,7 @@ module Admin
             date = r.updated_at.strftime("%F")
             date_diff = (event_date.to_date - r.updated_at.to_date).to_i
             if date_diff == d
-              total = total + r.paid_amount if r.status == 'complete'
+              total = total + r.paid_amount if r.complete?
             end
           end
           reg_data[year.to_s] << { daysOut: d, total: total }
@@ -140,7 +140,7 @@ module Admin
 
     def update_user_vehicles
       @user = User.find(params[:id])
-      @event_registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
+      @registration = Event::Registration.where(year: Date.current.year).where(user: @user).first
       @vehicles = @user.vehicles
     end
 
@@ -184,19 +184,26 @@ module Admin
     def create_table_data
       @year ||= Time.current.year
 
-      @event_registrations = base = Event::Registration.current
+      @registrations = base = Event::Registration.where(year: @year)
+
+      if @registrations.nil?
+        @registrations = []
+        @users = []
+        return
+      end
 
       # -------------------------
       # Users (unchanged)
       # -------------------------
-      @users = case params[:user_type]
-               when 'all_users' then User.all
-               when 'active' then User.where('last_active > ?', 10.minutes.ago)
-               when 'registrant' then User.with_registrations
-               when 'testers' then User.with_role(:tester)
-               when 'vendors' then User.with_role(:vendor)
-               else User.with_current_registration
-               end
+      # @users = case params[:user_type]
+      #          when 'all_users' then User.all
+      #          when 'active' then User.where('last_active > ?', 10.minutes.ago)
+      #          when 'registrant' then User.with_registrations
+      #          when 'testers' then User.with_role(:tester)
+      #          when 'vendors' then User.with_role(:vendor)
+      #          else User.with_current_registration
+      #          end
+      @users = User.ordered_by_current_year_registration
 
       @type = params[:user_type]&.humanize || 'Currently registered'
 
@@ -290,7 +297,7 @@ module Admin
       QrGenerationJob.perform_later(regenerate)
       flash_notice 'QR generation job started'
       @vehicles = nil
-      redirect_to admin_admin_manage_qr_codes_path
+      redirect_to admin_manage_qr_codes_path
     end
 
     def clear_ballots

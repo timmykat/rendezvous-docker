@@ -6,7 +6,13 @@ module Voting
     before_action :require_admin, only: [:hand_ballot, :hand_count]
     before_action :voting_on?, only: [:ballot, :vote]
 
+    before_action :set_ballot_count
+
     PER_CATEGORY_LIMIT = 3
+
+    def set_ballot_count
+      @ballot_count = Voting::Ballot.count
+    end
 
     def voting_on?
       return if Config::SiteSetting.instance.voting_on

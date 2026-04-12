@@ -42,7 +42,7 @@
 
                             = link_to 'Review registration', review_event_registration_path(current_registration), class: 'dropdown-item'
 
-                            - if current_registration.status != 'complete'
+                            - unless current_registration.complete?
                               = link_to 'Pay fee', payment_event_registration_path(current_registration), class: 'dropdown-item'
 
                             = link_to 'Update Sunday lunch', edit_sunday_lunch_event_registration_path(current_registration.id), class: 'dropdown-item'
@@ -53,15 +53,19 @@
                         %span.dropdown-item
                           %strong Admin Menu
                         .dropdown-divider
-                        = link_to "Admin Dashboard", admin_admin_dashboard_path, class: 'dropdown-item'
-                        = link_to 'Create a registration', event_registration_new_by_admin_path, class: 'dropdown-item'
-                        = link_to 'Current Registrants (default)', admin_admin_dashboard_path, class: 'dropdown-item'
-                        = link_to 'Active Users', admin_admin_dashboard_path(user_type: 'active'), class: 'dropdown-item'
-                        = link_to 'Vendors', admin_admin_dashboard_path(user_type: 'vendors'), class: 'dropdown-item'
-                        = link_to 'Any Registrants', admin_admin_dashboard_path(user_type: 'registrant'), class: 'dropdown-item'
-                        = link_to 'All Users', admin_admin_dashboard_path(user_type: 'all_users'), class: 'dropdown-item'
-                        = link_to 'Site Testers', admin_admin_dashboard_path(user_type: 'testers'), class: 'dropdown-item'
+                        = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
+                        = link_to "Sidekiq", sidekiq_web_path, class: 'dropdown-item'
+                        = link_to 'Create a registration', new_by_admin_event_registrations_path, class: 'dropdown-item'
+                        = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
+                        = link_to 'Active Users', admin_dashboard_path(user_type: 'active'), class: 'dropdown-item'
+                        = link_to 'Vendors', admin_dashboard_path(user_type: 'vendors'), class: 'dropdown-item'
+                        = link_to 'Any Registrants', admin_dashboard_path(user_type: 'registrant'), class: 'dropdown-item'
+                        = link_to 'All Users', admin_dashboard_path(user_type: 'all_users'), class: 'dropdown-item'
+                        = link_to 'Site Testers', admin_dashboard_path(user_type: 'testers'), class: 'dropdown-item'
                         = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_panel'
 
                       .dropdown-divider
                       = button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'dropdown-item', data: { turbo: false }
+        .row
+          - if @regstration&.complete?
+            = render partial: 'common/post_register_toolbar', locals: { reg: @registration, user: @registration&.user }

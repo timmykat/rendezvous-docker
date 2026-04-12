@@ -8,7 +8,7 @@
               %ul.nav.navbar-nav
                 %li.nav-item= link_to 'Registered User List', users_path({registered: true}), class: 'btn btn-info mr-2'
                 %li.nav-item= link_to 'Create User', new_user_by_admin_path, class: 'btn btn-primary mr-2'
-                %li.nav-item= link_to 'Create Registration', event_registration_new_by_admin_path, class: 'btn btn-primary mr-2'
+                %li.nav-item= link_to 'Create Registration', new_by_admin_event_registrations_path, class: 'btn btn-primary mr-2'
                 %li.nav-item= link_to 'All Users List', users_path, class: 'btn btn-info mr-2'
                 %li.nav-item= link_to 'Take Donation', new_donation_path, class: 'btn btn-warning mr-2'
 
@@ -20,8 +20,8 @@
                     %span.dropdown-item
                       %strong Admin Menu
                     .dropdown-divider
-                    = link_to "Admin Dashboard", admin_admin_dashboard_path, class: 'dropdown-item'
-                    = link_to 'Current Registrants (default)', admin_admin_dashboard_path, class: 'dropdown-item'
+                    = link_to "Admin Dashboard", admin_dashboard_path, class: 'dropdown-item'
+                    = link_to 'Current Registrants (default)', admin_dashboard_path, class: 'dropdown-item'
                     = link_to "Toggle Admin Bar", '#', class: 'dropdown-item toggle_admin_panel', data: { turbo: false }
                     = button_to "Sign Out",
                       destroy_user_session_path,
