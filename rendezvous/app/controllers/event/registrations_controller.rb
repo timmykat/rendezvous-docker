@@ -75,13 +75,13 @@ module Event
 
     def set_registration_user
       if @registration
-        @registration_user = @registration.user
+        @user = @registration.user
         return
       end
 
-      @registration_user = User.find_by(id: params.dig(:event_registration, :user_id))
+      @user = User.find_by(id: params.dig(:event_registration, :user_id))
 
-      unless @registration_user
+      unless @user
         Rails.logger.warn('No registration user could be determined')
         flash_alert "Hmmm, couldn't find a user for this registration"
       end
@@ -489,7 +489,7 @@ module Event
 
       send_confirmation_email
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
-      redirect_to edit_user_vehicles_path(@registration_user)
+      redirect_to edit_user_vehicles_path(@user)
     end
 
     def save_updated_vehicles
