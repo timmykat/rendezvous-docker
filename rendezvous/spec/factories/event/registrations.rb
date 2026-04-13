@@ -48,7 +48,7 @@
 #  index_registrations_on_year               (year)
 #
 FactoryBot.define do
-  factory :registration do
+  factory :registration, class: Event::Registration do
     registrant
     attendee
     number_of_adults { 2 }
