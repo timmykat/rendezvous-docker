@@ -61,12 +61,12 @@ jobs:
           DATABASE_URL: mysql2://root:test_password@127.0.0.1:3306/rendezvous_test
         run: bundle exec rake db:create db:schema:load
 
-      - name: Run RSpec tests
+      - name: Run Minitests
         working-directory: rendezvous
         env:
           RAILS_ENV: test
           DATABASE_URL: mysql2://root:test_password@127.0.0.1:3306/rendezvous_test
-        run: bundle exec rspec
+        run: bundle exec test
 
       - name: Run Brakeman security scan (optional)
         working-directory: rendezvous
