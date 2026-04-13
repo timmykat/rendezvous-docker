@@ -54,12 +54,12 @@
 FactoryBot.define do
   factory :user, aliases: [:admin, :registrant] do
     sequence(:email) { |i| "user-#{i}@example.com" }
+    password: 'Abcdefghij9'
     first_name { 'Benoit'  }
-    last_name { 'DuToit'  }
-    password { 'password'}
-    address1 { '43 Rue Goncourt'  }
-    state_or_province { 'QC'  }
+    last_name { 'DuToit' }
+    address1 { '43 Rue Goncourt' }
+    state_or_province { 'QC' }
     postal_code { 'A7U 4D9'  }
-    country { 'Canada'  }
+    country { 'Canada' }
   end
 end
