@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Event::RegistrationController, type: :controller do
+RSpec.describe Event::RegistrationsController, type: :controller do
 
   before(:each) do
     DatabaseCleaner.start
