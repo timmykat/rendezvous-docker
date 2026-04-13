@@ -21,6 +21,7 @@
 #
 FactoryBot.define do
   factory :attendee do
+    registration
     name { 'Andre Citroen' }
     attendee_age { 'adult' }
     volunteer  { false }
