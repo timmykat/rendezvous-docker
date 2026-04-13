@@ -48,12 +48,14 @@
 #  index_registrations_on_year               (year)
 #
 FactoryBot.define do
-  factory :event_registration do
+  factory :registration do
     registrant
     attendee
     number_of_adults { 2 }
+    number_of_youths { 1 }
     number_of_children { 0 }
-    amount { 100.00 }
+    lake_cruise_number { 3 }
+    paid_amount { 250.00 }
     paid_method { :credit_card }
   end
 end

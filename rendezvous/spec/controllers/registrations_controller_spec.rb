@@ -44,5 +44,4 @@ RSpec.describe Event::RegistrationsController, type: :controller do
       expect(@user.first_name).to be_equal("Jacques")
     end
   end
-
 end

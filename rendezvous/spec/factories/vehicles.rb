@@ -31,8 +31,8 @@
 FactoryBot.define do
   factory :vehicle do
     registrant
-    marque { 'Citroen'  }
-    model { 'D (early)'  }
+    marque { 'Citroen' }
+    model { 'D (early)' }
     year { 1963 }
   end
 end
