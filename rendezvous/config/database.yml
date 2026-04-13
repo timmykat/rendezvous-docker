@@ -22,3 +22,4 @@ test:
   username: test_user
   password: test_password
   database: rendezvous_test
+  host: 127.0.0.1
