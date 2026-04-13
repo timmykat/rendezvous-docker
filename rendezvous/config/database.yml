@@ -16,3 +16,9 @@ staging:
 
 production:
   <<: *default
+
+test:
+  <<: *default
+  username: root
+  password: root
+  database: rendezvous_test
