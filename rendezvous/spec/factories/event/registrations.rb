@@ -49,7 +49,7 @@
 #
 FactoryBot.define do
   factory :registration, class: Event::Registration do
-    registrant
+    user
     attendee
     number_of_adults { 2 }
     number_of_youths { 1 }

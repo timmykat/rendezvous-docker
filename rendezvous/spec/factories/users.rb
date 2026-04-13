@@ -52,7 +52,7 @@
 #  index_users_on_uid                   (uid)
 #
 FactoryBot.define do
-  factory :user, aliases: [:admin, :registrant] do
+  factory :user do
     sequence(:email) { |i| "user-#{i}@example.com" }
     password { 'Abcdefghij9' }
     first_name { 'Benoit'  }
