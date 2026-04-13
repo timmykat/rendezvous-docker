@@ -15,8 +15,8 @@ jobs:
         image: mysql:8.0.32
         env:
           RAILS_ENV: test
-          MYSQL_USER: root
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_USER: test_user
+          MYSQL_ROOT_PASSWORD: test_password
           MYSQL_DATABASE: rendezvous_test
         options: >-
           --health-cmd="mysqladmin ping"
