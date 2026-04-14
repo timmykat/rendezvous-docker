@@ -16,6 +16,16 @@ class RendezvousMailer < ApplicationMailer
     mail(to: 'tim@wordsareimages.com', reply_to: @email, subject: @subject)
   end
 
+  def send_registration_payment_link(registration, payment_link)
+    subject = '2026 Citroën Rendzvous registration payment information'
+    @registration = registration
+    @payment_link = payment_link
+    @user = @registration.user
+    user_email = @user.email
+    recipients = [user_email, 'tim@wordsareimages.com']
+    mail(to: recipients, reply_to: 'tim@wordsareimages.com', subject: subject)
+  end
+
   def send_modification_payment_link(email, modification, payment_link)
     @admin = true
     @modification = modification

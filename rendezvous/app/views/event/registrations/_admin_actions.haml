@@ -1,0 +1,28 @@
+.card.admin
+  .card-body
+    %h3.h4.card-title Admin Actions
+    .card-text
+      .form
+        = simple_form_for registration do |f|
+          .form-group
+            = f.input :paid_method, as: :select, collection: Event::Registration.paid_method_options
+
+          .form-group
+            = f.input :total, readonly: true
+
+          .form-group
+            = f.input :paid_amount
+
+          .form-group
+            = f.input :balance, readonly: true
+
+          .form-group
+            = f.input :status, as: :select, collection: Event::Registration.status_options
+
+          .form-group
+            = f.submit value: 'Update', class: 'btn btn-primary'
+
+      - if registration.complete?
+        %h4.h5 Send Payment Link E-mail
+        .form-group
+          = button_to 'Send E-mail', payment_request_event_registration_path(registration.id), data: { turbo: false }, class: 'btn btn-primary'

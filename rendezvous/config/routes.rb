@@ -107,6 +107,7 @@ Rails.application.routes.draw do
         patch :update_special_events
         patch :update_sunday_lunch
         post :save_modification
+        post :payment_request
       end
     end
     get '/welcome', to: 'registrations#welcome'

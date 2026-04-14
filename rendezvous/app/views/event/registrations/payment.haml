@@ -53,7 +53,7 @@
                     .col-md-6.col-12
                       .form-group
                         %ul.list-unstyled
-                          = f.input :paid_method, label:  'Payment method', collection: user_payment_options, as:  :radio_buttons, checked:  :credit_card, item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
+                          = f.input :paid_method, label:  'Payment method', collection: Event::Registrations.paid_method_options, as:  :radio_buttons, checked:  :credit_card, item_wrapper_tag: :li, input_html:  { class:  'payment-method  mr-2' }
 
                   %section#payment-online
                     %h3.h4 Pay online with Square

@@ -117,6 +117,14 @@ module Event
     serialize :events
     before_save :ensure_financials
 
+    def self.status_options
+      statuses.keys.map { |k| [k.humanize, k] }
+    end
+
+    def self.paid_method_options
+      paid_methods.keys.map { |k| [k.humanize, k] }
+    end
+
     def cancelled?
       status == :cancelled
     end

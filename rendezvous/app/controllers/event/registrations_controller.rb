@@ -554,6 +554,31 @@ module Event
     #     order_id: order[:id]
     #   }
     # end
+    def payment_request
+      user = @registration.user
+      customer_id = user.ensure_square_customer_id!
+      begin
+        square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
+          RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                        registration: @registration,
+                                                                        customer_id: customer_id,
+                                                                        fee_period: fee_period
+                                                                      })
+        end
+      rescue Square::Errors::ApiError => e
+        flash_alert "There was a problem creating the link: #{e.message}"
+        render :show
+      end
+
+      unless square_payment_link
+        flash_alert "There was an unknown problem creating the payment link."
+        render :show and return
+      end
+
+      RendezvousMailer.send_registration_payment_link(@registration, square_payment_link).deliver_later
+      flash_notice 'The payment link has been queued to send'
+      redirect_to admin_dashboard_path
+    end
 
     def send_to_square
       @step = :payment
