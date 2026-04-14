@@ -575,7 +575,7 @@ module Event
         render :show and return
       end
 
-      RendezvousMailer.send_registration_payment_link(@registration, square_payment_link).deliver_later
+      RendezvousMailer.send_registration_payment_link(@registration.id, square_payment_link).deliver_later
       flash_notice 'The payment link has been queued to send'
       redirect_to admin_dashboard_path
     end
@@ -656,13 +656,13 @@ module Event
     end
 
     def send_confirmation_email
-      event_registration = @registration || Registration.find(params[:id])
-      if event_registration
-        RendezvousMailer.registration_confirmation(event_registration).deliver_later
+      registration = @registration || Registration.find(params[:id])
+      if registration
+        RendezvousMailer.registration_confirmation(registration.id).deliver_later
       else
         flash_notice('No registration found')
       end
-      unless @registration
+      unless registration
         if current_user.admin?
           redirect_to admin_dashboard_path
         else

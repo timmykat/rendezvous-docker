@@ -82,7 +82,7 @@ module Event
         payment_link = ::RendezvousSquare::Apis::Checkout
             .create_square_modification_payment_link(square_params)
 
-        RendezvousMailer.send_modification_payment_link(email, mod, payment_link).deliver_later
+        RendezvousMailer.send_modification_payment_link(email, mod.id, payment_link).deliver_later
         payment_link
       rescue Square::Errors::ApiError => e
         Rails.logger.error("Square error: #{e.message}")

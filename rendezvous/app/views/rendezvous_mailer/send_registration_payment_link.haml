@@ -5,7 +5,8 @@
 = render partial: 'basic_registration_info', locals: { reg: @registration }
 
 %p
-  Payment link (this will take you to Square): #{@payment_link)
+  Payment link (this will take you to Square):
+  = link_to @payment_link, @payment_link
 
 Thanks, and looking forward to seeing you at the Rendezvous!
 

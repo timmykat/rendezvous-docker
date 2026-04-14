@@ -2,6 +2,8 @@ class RendezvousMailer < ApplicationMailer
 
   helper ApplicationHelper
 
+  layout 'rendezvous_mailer'
+
   def send_user_message
     topic = Email::MessageTopics.label(params[:topic]) || 'General'
     subject = params[:subject].to_s.gsub(/[\r\n]/, '')
@@ -16,9 +18,9 @@ class RendezvousMailer < ApplicationMailer
     mail(to: 'tim@wordsareimages.com', reply_to: @email, subject: @subject)
   end
 
-  def send_registration_payment_link(registration, payment_link)
+  def send_registration_payment_link(reg_id, payment_link)
     subject = '2026 Citroën Rendzvous registration payment information'
-    @registration = registration
+    @registration = Event::Registration.find_by(id: reg_id)
     @payment_link = payment_link
     @user = @registration.user
     user_email = @user.email
@@ -26,9 +28,9 @@ class RendezvousMailer < ApplicationMailer
     mail(to: recipients, reply_to: 'tim@wordsareimages.com', subject: subject)
   end
 
-  def send_modification_payment_link(email, modification, payment_link)
+  def send_modification_payment_link(email, mod_id, payment_link)
     @admin = true
-    @modification = modification
+    @modification = Event::Modification.find_by(id: mod_id)
     @first_name = modification.registration.user.first_name
     @payment_link = payment_link
     recipients = [email, 'tim@wordsareimages.com']
@@ -57,9 +59,9 @@ class RendezvousMailer < ApplicationMailer
     mail(to: @email, subject: 'Thanks for your inquiry about the Citroen Rendezvous')
   end
 
-  def registration_confirmation(event_registration)
-    @email = event_registration.user.email
-    @registration = event_registration
+  def registration_confirmation(reg_id)
+    @registration = Event::Registration.find_by(id: reg_id)
+    @email = @registration.user.email
     mail(to: @email, subject: "Thanks for registering for the #{Date.current.year} Rendezvous!")
   end
 
