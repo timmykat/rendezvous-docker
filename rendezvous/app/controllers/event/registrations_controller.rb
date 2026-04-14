@@ -284,8 +284,9 @@ module Event
       db_reg = @registration.class.find(@registration.id)
 
       fee_period = db_reg.late_period? ? :late : :early
-      reg_fees = Rails.configuration.pricing[:fees][fee_period]
-      lake_cruise_fee = Rails.configuration.pricing[:fees][:lake_cruise][:price]
+      env = RendezvousSquare::Apis::Base.env_key
+      reg_fees = Rails.configuration.orders[env][fee_period]
+      lake_cruise_fee = Rails.configuration.orders[env][:lake_cruise][:price]
 
       m = db_reg.modifications.build
       m.status = :pending

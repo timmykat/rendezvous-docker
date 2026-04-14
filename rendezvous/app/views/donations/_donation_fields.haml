@@ -1,20 +1,18 @@
-- config = Rails.configuration.pricing
-.card 
-  .card-body 
+.card
+  .card-body
     .card-title Personal Information
     .card-text
       = f.simple_fields_for :user do |u|
         = render partial:  'user_donation_info', locals:  { f:  u }
-.card 
-  .card-body 
+.card
+  .card-body
     .card-title Amount
     .card-text
       .form-group.donation-amount
-        - donation_list(config[:suggested_donations], nil).each do |rb|
+        - donation_list(donation_options, nil).each do |rb|
           %input.radio-inline{type: 'radio', name: :suggested_donation, value: rb[1]}
           %span.mr-2= rb[0]
-        .row 
-          .col-md-3    
+        .row
+          .col-md-3
             = f.input :amount, label: false
             =f.input :status, as: :hidden
-            

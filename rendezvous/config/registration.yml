@@ -16,3 +16,10 @@ payment_methods:
 transaction_types:
   - payment
   - refund
+
+suggested_donations:
+  - 10
+  - 25
+  - 50
+  - 75
+  - 100

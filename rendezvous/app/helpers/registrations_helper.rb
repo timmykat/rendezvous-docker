@@ -76,6 +76,10 @@ module RegistrationsHelper
     Event::Registration.paid_methods.except('invoice').map { |k, _| [k.humanize, k] }
   end
 
+  def donation_options
+    Rails.configuration.registration[:suggested_donations]
+  end
+
   def attended_rendezvous_years(user)
     reg = user.registrations.pluck(:year).sort.join(',')
     reg.blank? ? '(none)' : reg

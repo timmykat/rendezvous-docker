@@ -5,7 +5,7 @@ module RendezvousSquare
 
       STATUSES = %w[OPEN COMPLETED CANCELED].freeze
 
-      FEES = Rails.configuration.pricing[:fees]
+      FEES = Rails.configuration.orders[Base.env_key]
 
       def self.create(params = {})
         Rails.logger.debug params
@@ -88,6 +88,18 @@ module RendezvousSquare
         line_items
       end
 
+      def self.create_donation_line_item(amount)
+        {
+          "name": 'Donation - thank you!',
+          "quantity": '1',
+          "base_price_money": {
+            "amount": Base.integerize(amount),
+            "currency": 'USD'
+          },
+          "location_id": Base.get_location_id
+        }
+      end
+
       def self.create_modification_line_items(params)
         modification = params[:modification]
         period = params[:fee_period].to_sym
@@ -105,30 +117,21 @@ module RendezvousSquare
         line_items
       end
 
-      def self.create_attendee_line_item(number, period, age)
+      def self.create_cruise_line_item(count)
+        catalog_id = FEES[:lake_cruise][:catalog_id]
         {
-          quantity: number.to_s,
-          catalog_object_id: FEES[period]["#{age}_id".to_sym][Apis::Base.get_environment.downcase.to_sym],
-          note: "Period: #{period} | Age: #{age}"
+          name: 'Lake George Cruise',
+          quantity: count.to_s,
+          catalog_object_id: catalog_id
         }
       end
 
-      def self.create_cruise_line_item(number)
+      def self.create_attendee_line_item(count, period, age)
+        catalog_id = FEES[period]["#{age}_id".to_sym]
         {
-          quantity: number.to_s,
-          catalog_object_id: FEES[:lake_cruise][:catalog_id][Apis::Base.get_environment.downcase.to_sym]
-        }
-      end
-
-      def self.create_donation_line_item(amount)
-        {
-          name: "#{Date.current.year} Citroen Rendezvous donation",
-          item_type: 'ITEM',
-          quantity: '1',
-          base_price_money: {
-            amount: Apis::Base.integerize(amount),
-            currency: 'USD'
-          }
+          name: "#{age.titleize} Registration",
+          quantity: count.to_s,
+          catalog_object_id: catalog_id
         }
       end
 

@@ -1,7 +1,7 @@
 module MainPagesHelper
 
   config = Rails.configuration.site
-  
+
   DAYS_OF_THE_WEEK = [
     "Sunday",
     "Monday",
@@ -31,7 +31,7 @@ module MainPagesHelper
     output = START_DATE.strftime(SHORT_FORMAT) + "&ndash;" +  END_DATE.strftime(SHORT_FORMAT) + ", " + START_DATE.year.to_s
 
     mo = output.match(/^[a-zA-Z]+/)
- 
+
     nth = 2
     i = 0
     output = output.gsub(/#{mo} /) do |month|
@@ -56,5 +56,9 @@ module MainPagesHelper
   def formatted_date(the_date)
     d_of_w = DAYS_OF_THE_WEEK[the_date.wday]
     return "#{d_of_w}, #{the_date.strftime("%B %e")}"
+  end
+
+  def fee_timing(period)
+    Rails.configuration.orders[period]
   end
 end

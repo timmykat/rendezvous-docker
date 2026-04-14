@@ -1,0 +1,62 @@
+early:
+  start_date: 2026-01-01
+  end_date: 2026-04-30
+  adult: 100
+  youth: 50
+  child: 0
+late:
+  start_date: 2026-05-01
+  end_date: 2026-06-05
+  adult: 120
+  youth: 60
+  child: 0
+
+prod:
+  lake_cruise:
+    price: 65
+    catalog_id: "NELNDSLAV3BRW4VPI7A5CD4N"
+  early:
+    adult: 100
+    youth: 50
+    child: 0
+    adult_id: "3GMMZYDU36QAGVVCLVX4RCFS"
+    youth_id: "KQIRK6WTO5KEUKG5QVAJPRLM"
+    child_id: "RARJ7TDBMFX7ZNPDAFWXRI6G"
+  late:
+    adult: 120
+    youth: 60
+    child: 0
+    adult_id: "HUGAQG23M5DQDBAKTVCI6YC6"
+    youth_id: "KN7YC4MCRAI5XL6U3QM737OJ"
+    child_id: "ZNHUDHZ37BTCLGS42H7N53VL"
+  on_site:
+    adult_id: "574JG7IKCODJU4PC6MTST7JE"
+    youth_id: "FXYF45EHDGG74ZXDO5ZKVYHB"
+    child_id: "ZTX3UQTPQHEUDOCSOE3W5ZIX"
+
+sandbox:
+  lake_cruise:
+    price: 65
+    catalog_id: "GI43JC2B5ZBFUY5JD5O7JTHE"
+  early:
+    start_date: 2026-01-01
+    end_date: 2026-04-30
+    adult: 100
+    youth: 50
+    child: 0
+    adult_id: "VLTRMDE7V3GS64EYCZCZ7EAN"
+    youth_id: "7QUHBISEJXTQLA7NPU7YCNMA"
+    child_id: "NHXTPJTV6WSQDSCSRPEVBWGW"
+  late:
+    start_date: 2026-05-01
+    end_date: 2026-06-05
+    adult: 120
+    youth: 60
+    child: 0
+    adult_id: "SNOELG6UJNCWBV7KO7BVUKEO"
+    youth_id: "UNH3HQ66RX3CTAURCKVHQPUF"
+    child_id: "IGVEZ3PK5SSIMZOEGMFW4QOS"
+  on_site:
+    adult_id: "RIYDFHFRDPFWWPTBHYP6ASFM"
+    youth_id: "GRPZ5765H5CT2AWQUUGVGUFI"
+    child_id: "NJD66LV7QYXXVUEZW45IXVF6"
