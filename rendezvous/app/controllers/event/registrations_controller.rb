@@ -84,7 +84,11 @@ module Event
         return
       end
 
-      @user = User.find_by(id: params.dig(:event_registration, :user_id))
+      if params[:event_registration]
+        @user = User.find_by(id: params.dig(:event_registration, :user_id))
+      end
+
+      @user = current_user unless current_user.admin?
 
       unless @user
         Rails.logger.warn('No registration user could be determined')
@@ -668,8 +672,8 @@ module Event
         registrant_attendee = Attendee.new
         registrant_attendee.name = @user.full_name
         @registration.attendees << registrant_attendee
+        @registration.user.vehicles.build
       end
-      @registration.user.vehicles.build
     end
 
     def filter_params_by_status

@@ -1,4 +1,4 @@
-- env = RendezvousSquare::Apis::Base.get_env_key
+- env = RendezvousSquare::Apis::Base.env_key
 - all_fees = Rails.configuration.orders[env]
 - unless registration_is_open
   = render partial: 'common/too_soon'
