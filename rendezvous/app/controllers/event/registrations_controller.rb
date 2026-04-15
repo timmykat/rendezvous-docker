@@ -618,6 +618,22 @@ module Event
       end
     end
 
+    def send_confirmation
+      registration = @registration || Registration.find(params[:id])
+      unless registration
+        flash_alert('No registration found')
+        if current_user.admin?
+          redirect_to admin_dashboard_path
+        else
+          return redirect_to :root
+        end
+        return
+      end
+
+      RendezvousMailer.registration_confirmation(registration.id).deliver_later
+      redirect_to event_registration_path(@registration) and return
+    end
+
     private
 
     def build_registration
@@ -654,22 +670,6 @@ module Event
         @registration.user = current_user
       end
       @registration.user.vehicles.build
-    end
-
-    def send_confirmation_email
-      registration = @registration || Registration.find(params[:id])
-      if registration
-        RendezvousMailer.registration_confirmation(registration.id).deliver_later
-      else
-        flash_notice('No registration found')
-      end
-      unless registration
-        if current_user.admin?
-          redirect_to admin_dashboard_path
-        else
-          redirect_to :root
-        end
-      end
     end
 
     def filter_params_by_status

@@ -98,7 +98,7 @@ Rails.application.routes.draw do
         get :modify_by_admin
         get :payment
         get :review
-        get :send_email_confirmation
+        get :send_confirmation
         get :send_to_square
         get :special_events
         get :vehicles

@@ -25,4 +25,4 @@
       - if registration.complete?
         %h4.h5 Send Payment Link E-mail
         .form-group
-          = button_to 'Send E-mail', payment_request_event_registration_path(registration.id), data: { turbo: false }, class: 'btn btn-primary'
+          = button_to 'Send Payment Link', payment_request_event_registration_path(registration.id), data: { turbo: false }, class: 'btn btn-primary'

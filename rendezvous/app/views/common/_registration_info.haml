@@ -145,4 +145,4 @@
             .card-title
               %h3.h4 Email me my registration info
             .card-text
-              = link_to "Send Email", "/admin/event/registrations/#{@registration.id}/send_confirmation_email", class: "btn  btn-info"
+              = link_to "Send Email", send_confirmation_event_registration_path(@registration.id), class: "btn  btn-info"
