@@ -31,6 +31,8 @@
                                 %li= link_to 'Modification', event_modification_path(mod_id, registration_id: reg.id)
                               - else
                                 %li= link_to 'Modify', modify_by_admin_event_registration_path(reg)
+                          - else
+                            %li= link_to 'Create', new_by_admin_event_registrations_path(user_id: user.id)
                       %td.text-left
                         - if reg&.modifications
                           %p.text-small Modifications

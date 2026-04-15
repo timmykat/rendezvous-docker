@@ -79,11 +79,16 @@ module Event
         return
       end
 
+      if params[:user_id]
+        @user = User.find_by(id: params[:user_id])
+        return
+      end
+
       @user = User.find_by(id: params.dig(:event_registration, :user_id))
 
       unless @user
         Rails.logger.warn('No registration user could be determined')
-        flash_alert "Hmmm, couldn't find a user for this registration"
+        flash_alert 'No registration user could be determined'
       end
     end
 
@@ -228,7 +233,7 @@ module Event
       # Remove user attributes now that we have user
       params[:event_registration][:user_attributes] = nil
       @registration = Registration.new(event_registration_params)
-      @registration.user = user
+      @registration.user = @user
 
       if !@registration.save
         flash_alert_now('There was a problem creating the registration.')
@@ -642,32 +647,27 @@ module Event
 
       @registration = @user&.registrations&.current&.first
 
-      unless @registration.blank?
-        if !@registration.complete?
-          flash_notice("You've already created a registration but haven't finished")
-          redirect_to review_event_registration_path(@registration)
-        else
-          flash_notice("You've already registered")
-          redirect_to event_registration_path(@registration)
+      if @registration.blank?
+        @registration = Registration.new(status: :in_progress, created_by_admin: current_user.admin?)
+      else
+        unless current_user.admin?
+          if @registration.in_progress?
+            flash_notice('You have a registration in progress')
+            redirect_to review_event_registration_path(@registration) and return
+          end
+
+          if @registration.complete?
+            flash_notice("You've already registered")
+            redirect_to event_registration_path(@registration) and return
+          end
         end
-        return
       end
 
-      @registration = Registration.new
-      @registration.status = :pending
-
-      @registration.attendees.build
-
-      if current_user&.admin?
-        @registration.created_by_admin = true
-        @registration.build_user
+      if @user.present?
+        @registration.user = @user
         registrant_attendee = Attendee.new
-        if @user.present?
-          registrant_attendee.name = @user.full_name
-        end
+        registrant_attendee.name = @user.full_name
         @registration.attendees << registrant_attendee
-      else
-        @registration.user = current_user
       end
       @registration.user.vehicles.build
     end

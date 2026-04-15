@@ -1,12 +1,8 @@
 %p Dear #{@registration.user.first_name},
-%p Here is your registration info (all fees in USD):
-%ul
-  %li Number of people: #{@registration.attendees.size}
-  %li Number of people for the Friday lake cruise: #{@registration.lake_cruise_number}
-  %li Total registration amount: #{number_to_currency(@registration.total)}
-  - if (@registration.donation? && !@registration.cancelled?)
-    %li Donation (thank you!): #{number_to_currency(@registration.donation)}
-  %li Registration status: #{@registration.status.humanize}
+%p Here is a summary of your registration info (all fees in USD):
+
+= render partial: 'basic_registration_info', locals: { reg: @registration }
+
 
 - if @registration.outstanding_balance?
   %p You have an outstanding balance of #{number_to_currency(@registration.balance)}

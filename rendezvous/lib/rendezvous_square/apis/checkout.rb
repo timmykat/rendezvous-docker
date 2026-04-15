@@ -4,6 +4,10 @@ module RendezvousSquare
       include Apis::Base
       extend self
 
+      def list_payment_links
+        response = Base::CLIENT.checkout.payment_links.list
+      end
+
       def create_square_modification_payment_link(params)
         post_body = create_modification_checkout_body(params)
         create_link(post_body)
