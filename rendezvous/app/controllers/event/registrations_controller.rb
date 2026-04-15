@@ -444,7 +444,7 @@ module Event
       @registration.paid_date = Time.new
       @registration.status = :complete
       if @registration.save
-        send_confirmation_email
+        send_confirmation
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         if current_user.admin?
           redirect_to user_path(@user)
@@ -486,7 +486,7 @@ module Event
       #   send_square_invoice(order)
       # end
 
-      send_confirmation_email
+      send_confirmation
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
       redirect_to edit_user_vehicles_path(@user)
     end
