@@ -356,7 +356,12 @@ header {
 }
 
 .form-group {
-    .form-control.numeric {
+    select {
+        width: auto;
+        min-width: 0;
+    }
+    input.numeric,
+    select.numeric {
         &.decimal {
             width: 150px;
             text-align: right;

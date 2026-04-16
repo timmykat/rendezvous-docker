@@ -8,11 +8,15 @@ export class AdminSummary extends HTMLElement {
   }
 
   connectedCallback() {
-    this.watchFields = this.querySelectorAll("[data-summary-source]");
+    this.sourceFields = this.querySelectorAll("[data-summary-source]");
     this.totalField = this.querySelector("[data-target-total]");
     this.balanceField = this.querySelector("[data-target-balance]");
+    this.donationField = this.querySelector("[data-donation]");
     this.paidAmountField = this.querySelector("[data-paid-amount]");
     this.currencyFields = this.querySelectorAll(".fixed-2");
+    this.recalculateTriggers = this.querySelectorAll(
+      "[data-recalculate-trigger]",
+    );
 
     this.setupEventListeners();
     this.processFields(); // Initial calculation
@@ -23,34 +27,26 @@ export class AdminSummary extends HTMLElement {
   }
 
   setupEventListeners = () => {
-    this.watchFields.forEach((field) => {
-      field.addEventListener("input", this.processFieldsDebounced);
-      field.addEventListener("change", this.processFieldsDebounced);
+    document.addEventListener("RECALCULATE", this.processFieldsDebounced);
+    this.recalculateTriggers.forEach((field) => {
+      field.addEventListener("input", this.dispatchRecalculate);
     });
-    if (this.paidAmountField) {
-      this.paidAmountField.addEventListener(
-        "input",
-        this.processFieldsDebounced,
-      );
-    }
+  };
+
+  dispatchRecalculate = () => {
+    document.dispatchEvent(new Event("RECALCULATE"));
   };
 
   removeEventListeners = () => {
-    this.watchFields.forEach((field) => {
-      field.removeEventListener("input", this.processFieldsDebounced);
-      field.removeEventListener("change", this.processFieldsDebounced);
+    document.removeEventListener("RECALCULATE", this.processFieldsDebounced);
+    this.recalculateTriggers.forEach((field) => {
+      field.removeEventListener("input", this.dispatchRecalculate);
     });
-    if (this.paidAmountField) {
-      this.paidAmountField.removeEventListener(
-        "input",
-        this.processFieldsDebounced,
-      );
-    }
   };
 
   processFields = () => {
     // Compute total from summary source fields
-    const total = Array.from(this.watchFields).reduce((sum, f) => {
+    const total = Array.from(this.sourceFields).reduce((sum, f) => {
       // only sum if value can be parsed
       const v = parseFloat(f.value);
       return sum + (isNaN(v) ? 0 : v);

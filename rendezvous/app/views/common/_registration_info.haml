@@ -109,9 +109,6 @@
                 If you wish to settle by credit card before the Rendezvous, please
                 =link_to 'send Tim a message.', email_create_message_path(r_id: @registration.id)
 
-      - if current_user.admin?
-        = render partial: 'admin_actions', locals: { registration: @registration }
-
       - if @registration.complete?
         .card
           .card-body

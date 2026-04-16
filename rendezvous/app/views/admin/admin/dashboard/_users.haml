@@ -14,6 +14,7 @@
                   %tr
                     %th.tablesorter-header.text-left.filter-false Actions
                     %th.tablesorter-header.text-left.filter-false Registration
+                    %th.tablesorter-header.text-left.filter-false Modifications
                     %th.tablesorter-header.text-left.filter-false Status
                     %th.tablesorter-header.text-left.filter-parsed{'data-placeholder' => 'Search'} Name
                     %th.tablesorter-header.text-left.filter-parsed{'data-placeholder' => 'Search'} E-mail
@@ -25,21 +26,24 @@
                       %td.text-left
                         %ul.list-unstyled
                           - if reg
+                            - mod_id = active_modification(reg)
                             %li= link_to 'View', event_registration_path(reg.id)
+                            %li= link_to 'Edit', edit_by_admin_event_registration_path(reg.id)
                             - if reg.complete?
-                              - if mod_id = active_modification(reg)
-                                %li= link_to 'Modification', event_modification_path(mod_id, registration_id: reg.id)
-                              - else
+                              - unless mod_id
                                 %li= link_to 'Modify', modify_by_admin_event_registration_path(reg)
                           - else
                             %li= link_to 'Create', new_by_admin_event_registrations_path(user_id: user.id)
+                      %td.text-center
+                        = status.humanize || 'none'
                       %td.text-left
                         - if reg&.modifications
-                          %p.text-small Modifications
                           %ul.list-unstyled
                             - reg.modifications.each do |m|
-                              %li.text-small= link_to "#{m.id} (#{m.status})", event_modification_path(m.id, registration_id: reg.id)
-                      %td
-                        = status
+                              - if m.id == mod_id
+                                %li.text-small= link_to 'Active Mod', event_modification_path(m.id, registration_id: reg.id)
+                              - else
+                                %li.text-small= link_to "Mod #{m.id} (#{m.status})", event_modification_path(m.id, registration_id: reg.id)
+
                       %td.text-left= user.last_name_first
                       %td.text-left= user.email

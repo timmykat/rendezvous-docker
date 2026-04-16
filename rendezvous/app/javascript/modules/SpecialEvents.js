@@ -3,6 +3,10 @@ export class SpecialEvents extends HTMLElement {
     this.init();
   }
 
+  disconnectedCallback() {
+    this.removeEventListeners();
+  }
+
   init() {
     this.total = this.querySelector("input.display-total");
     this.attendeeFeeInput = this.querySelector("input#attendee-fee-reference");
@@ -18,12 +22,25 @@ export class SpecialEvents extends HTMLElement {
   }
 
   setEventListeners() {
-    this.cruiseSelect.addEventListener("change", (e) => {
-      this.updateFormValues(e.target.value);
-    });
+    this.cruiseSelect.addEventListener("change", this.dispatchRecalculate);
+    document.addEventListener("RECALCULATE", this.updateFormValues);
   }
 
-  updateFormValues(cruiseNumber) {
+  removeEventListeners() {
+    this.cruiseSelect.removeEventListener("change", this.dispatchRecalculate);
+    document.removeEventListener("RECALCULATE", this.updateFormValues);
+  }
+
+  dispatchRecalculate = (e) => {
+    document.dispatchEvent(
+      new CustomEvent("RECALCULATE", { detail: { event: e } }),
+    );
+  };
+
+  updateFormValues = (e) => {
+    const evt = e?.detail?.event;
+    if (!evt) return;
+    const cruiseNumber = evt.target.value;
     const cruiseFee = parseFloat(cruiseNumber * this.price);
     if (cruiseFee > 0) {
       this.cruiseFeeInput.value = cruiseFee.toFixed(2);
@@ -32,7 +49,7 @@ export class SpecialEvents extends HTMLElement {
       this.cruiseFeeInput.value = "";
     }
     this.total.value = (this.attendeeFee + cruiseFee).toFixed(2);
-  }
+  };
 
   getCsrfHeaders = () => {
     let token = document
