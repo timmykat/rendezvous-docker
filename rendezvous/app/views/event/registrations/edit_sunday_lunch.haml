@@ -13,7 +13,7 @@
               .form-group
                 = f.input :sunday_lunch_number, as: :select, collection: (0..sunday_lunch_max),
                 label: 'Number of people for Sunday lunch at Shadow 66',
-                input_html: { class: 'form-control short-field' }
+                input_html: { class: 'form-control numeric integer' }
 
               .form-group
                 = f.submit 'Save', class:  "btn  btn-primary"

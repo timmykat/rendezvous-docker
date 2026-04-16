@@ -19,6 +19,7 @@ import "magnific-popup/dist/jquery.magnific-popup.min";
 import { initCustom, setButtonSpinner } from "./modules/custom";
 import { RecaptchaHandler } from "./modules/recaptcha";
 import "./modules/AttendanceManager";
+import "./modules/AdminSummary";
 import "./modules/PaymentManager";
 import "./modules/SpecialEvents";
 import "./modules/Vehicle";

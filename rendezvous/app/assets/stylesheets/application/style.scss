@@ -356,8 +356,15 @@ header {
 }
 
 .form-group {
-    .short-field {
-        width: 100px;
+    .form-control.numeric {
+        &.decimal {
+            width: 150px;
+            text-align: right;
+        }
+        &.integer {
+            width: 60px;
+            text-align: center;
+        }
     }
     .simple_mde > *:not(label) {
         background-color: white;

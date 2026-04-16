@@ -12,7 +12,6 @@ export class SpecialEvents extends HTMLElement {
     this.attendeeFee = parseFloat(this.attendeeFeeInput.value);
     this.cruiseSelect = this.querySelector("select.lake-cruise");
     this.cruiseFeeInput = this.querySelector("input.lake-cruise-fee");
-    console.log(this.cruiseFeeInput);
     const card = document.querySelector('.card[data-event="cruise"]');
     this.price = card?.dataset.price;
     this.setEventListeners();
@@ -20,14 +19,12 @@ export class SpecialEvents extends HTMLElement {
 
   setEventListeners() {
     this.cruiseSelect.addEventListener("change", (e) => {
-      console.log(e, this.price);
       this.updateFormValues(e.target.value);
     });
   }
 
   updateFormValues(cruiseNumber) {
     const cruiseFee = parseFloat(cruiseNumber * this.price);
-    console.log(cruiseFee);
     if (cruiseFee > 0) {
       this.cruiseFeeInput.value = cruiseFee.toFixed(2);
       console.log("Should be set");

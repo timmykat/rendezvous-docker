@@ -1,10 +1,6 @@
 import "@oddcamp/cocoon-vanilla-js";
 
 export class AttendanceManager extends HTMLElement {
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     this.setupEventListeners();
     this.initializeFirstAttendee();
@@ -86,14 +82,12 @@ export class AttendanceManager extends HTMLElement {
     visibleNestedFields.forEach((field) => {
       const card = field.querySelector(".card.attendee");
       if (card) {
-        console.log("Category fee", card.dataset.fee);
         attendeeFeeTotal += parseFloat(card.dataset.fee) || 0;
       }
     });
 
     // We let the before_save method save the total amount
     const totalDisplayInput = this.querySelector(".attendee-total");
-    console.log("New fee total", attendeeFeeTotal.toFixed(2));
     if (totalDisplayInput)
       totalDisplayInput.value = attendeeFeeTotal.toFixed(2);
   };
@@ -104,7 +98,6 @@ export class AttendanceManager extends HTMLElement {
     visibleNestedFields.forEach((fieldSet) => {
       const checked = fieldSet.querySelector('input[type="radio"]:checked');
       if (checked && checked.value === type) {
-        console.log("Adding", type);
         count++;
       }
     });

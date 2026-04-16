@@ -12,8 +12,8 @@
               .form-group
                 = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
                   label: "Number of people for Lake George cruise",
-                  input_html: { class: 'lake-cruise form-control short-field' }
-                = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee short-field' }
+                  input_html: { class: 'lake-cruise form-control numeric integer' }
+                = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee fixed-2', data: { summary_source: true } }
                 = hidden_field_tag :attendee_fee, @registration.registration_fee, id: 'attendee-fee-reference'
 
         .card{ data: { event: 'post-rendezvous-lunch' } }
@@ -25,7 +25,7 @@
                 / Use Simple Form's built-in label for better accessibility and alignment
                 = f.input :sunday_lunch_number, as: :select, collection: (0..sunday_lunch_max),
                           label: "Number of people for Sunday lunch",
-                          input_html: { class: 'form-control short-field' }
+                          input_html: { class: 'form-control numeric integer' }
         .form-group
           - reg_fee = @registration.registration_fee
           - cruise_fee = @registration.lake_cruise_fee || 0.0
