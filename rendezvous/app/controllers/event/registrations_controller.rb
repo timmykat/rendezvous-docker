@@ -75,11 +75,6 @@ module Event
     end
 
     def set_registration_user
-      if current_user
-        @user = current_user
-        return
-      end
-
       if @registration
         @user = @registration.user
         return
@@ -262,7 +257,7 @@ module Event
     def update_by_admin
       unless @user == @registration.user
         flash_alert "There is a user mismatch: #{@user.full_name} vs #{@registration.user.full_name}"
-        render :modify_by_admin and return
+        render :edit_by_admin and return
       end
 
       if @registration.complete?
@@ -274,7 +269,7 @@ module Event
       if @registration.update(event_registration_params)
         flash_message += 'Registration updated'.html_safe
         flash_notice flash_message
-        redirect_to event_registration_path(@registration)
+        redirect_to event_registration_path(@registration) and return
       else
         flash_alert @registration.errors.full_messages.to_sentence
         render :edit_by_admin
