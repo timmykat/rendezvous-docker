@@ -31,7 +31,7 @@ class RendezvousMailer < ApplicationMailer
   def send_modification_payment_link(email, mod_id, payment_link)
     @admin = true
     @modification = Event::Modification.find_by(id: mod_id)
-    @first_name = modification.registration.user.first_name
+    @first_name = @modification.registration.user.first_name
     @payment_link = payment_link
     recipients = [email, 'tim@wordsareimages.com']
     mail(to: recipients, subject: 'Rendezvous registration update payment request')

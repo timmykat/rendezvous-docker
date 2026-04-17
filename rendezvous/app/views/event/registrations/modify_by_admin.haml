@@ -15,7 +15,7 @@
                 %p
                   %b A modification will be created
               %admin-summary
-                = simple_form_for @registration, url: update_by_admin_event_registration_path, method: :patch do |f|
+                = simple_form_for @registration, url: modify_event_registration_path, method: :post, data: { turbo: false } do |f|
                   = render partial: 'admin_registration_fields', locals: { f: f, reg: @registration, user: @user }
                   .row
                     .col-12

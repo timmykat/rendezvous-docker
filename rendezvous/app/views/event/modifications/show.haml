@@ -125,7 +125,7 @@
               %p This modification been applied. You can resend the payment link.
             %ul.list-unstyled
               - unless applied
-                %li.mb-3= button_to 'Apply', apply_event_modification_path(@modification, registration_id: @current_registration.id), method: :patch, class: 'btn btn-success'
+                %li.mb-3= button_to 'Apply', apply_event_modification_path(@modification, registration_id: @current_registration.id), method: :patch, data: { turbo: false }, class: 'btn btn-success'
               - else
                 - email = @current_registration.user.email
                 - reg_id = @current_registration.id
