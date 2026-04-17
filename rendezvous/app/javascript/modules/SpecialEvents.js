@@ -44,7 +44,6 @@ export class SpecialEvents extends HTMLElement {
     const cruiseFee = parseFloat(cruiseNumber * this.price);
     if (cruiseFee > 0) {
       this.cruiseFeeInput.value = cruiseFee.toFixed(2);
-      console.log("Should be set");
     } else {
       this.cruiseFeeInput.value = "";
     }
