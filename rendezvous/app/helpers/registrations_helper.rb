@@ -8,6 +8,14 @@ module RegistrationsHelper
     AnnualQuestion::RESPONSES
   end
 
+  def button_state(path, state = 'info')
+    if current_page?(path)
+      'disabled btn btn-sm btn-success'
+    else
+      "btn btn-sm btn-#{state}"
+    end
+  end
+
   def registration_status_classes(status)
     status = status&.to_sym
     case status

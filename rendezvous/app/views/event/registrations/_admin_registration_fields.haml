@@ -38,7 +38,3 @@
     .col-12
       .form-group
         = f.input :status, as: :select, collection: Event::Registration.status_options
-  .row
-    .col-12
-      .form-group
-        = f.submit 'Create', class:  "btn btn-primary"

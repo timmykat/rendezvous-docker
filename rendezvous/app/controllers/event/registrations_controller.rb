@@ -2,17 +2,17 @@ module Event
   class RegistrationsController < ApplicationController
     layout "registrations_layout"
 
-    before_action :get_registration, except: [:index, :welcome, :new, :create, :new_by_admin, :create_by_admin, :send_confirmation_email]
-    before_action :set_registration_user
-    before_action :check_cutoff, only: [:new, :create, :complete, :edit]
-    before_action :require_admin, only: [:index, :new_by_admin, :modify_by_admin, :cancel, :modify, :save_modification]
-    before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
+    before_action :get_registration, except: %i[index welcome new create new_by_admin create_by_admin destroy send_confirmation_email]
+    before_action :set_registration_user, except: :destroy
+    before_action :check_cutoff, only: %i[new create complete edit]
+    before_action :require_admin, only: %i[index new_by_admin modify_by_admin cancel modify save_modification]
+    before_action :authenticate_user!, except: %i[welcome update_paid_method update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
-    before_action :filter_params_by_status, only: [:update, :update_special_events]
+    before_action :filter_params_by_status, only: %i[update update_special_events]
     before_action :check_complete_destination, only: %i[new special_events review]
 
-    skip_before_action :verify_authenticity_token, only: [:show]
+    skip_before_action :verify_authenticity_token, only: :show
 
     helper_method :previous_step
     helper_method :next_step
@@ -68,12 +68,18 @@ module Event
 
     def get_registration
       @registration = Registration.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash_alert "Registration not found."
-      redirect_to root_path
+      unless @registration
+        flash_alert 'Get Registration: Registration not found.'
+        redirect_to admin_dashboard_path
+      end
     end
 
     def set_registration_user
+      if current_user
+        @user = current_user
+        return
+      end
+
       if @registration
         @user = @registration.user
         return
@@ -138,7 +144,7 @@ module Event
 
     def new
       if current_user&.admin?
-        flash_alert "Admins my not register"
+        flash_alert 'Admins may not register'
         redirect_to admin_dashboard_path
         return
       end
@@ -260,22 +266,18 @@ module Event
       end
 
       if @registration.complete?
-        @modification = modify_registration
-        if @modification.save
-          @registration.reload
-          redirect_to event_modification_path(@modification, registration_id: @registration.id) and return
-        else
-          flash_alert "Error: #{@modification.errors.full_messages}"
-          render :modify_by_admin and return
-        end
+        flash_message = 'This registration is complete. Do you want to create a modification?<br>'
+      else
+        flash_message = ''
       end
 
       if @registration.update(event_registration_params)
-        flash_notice 'Registration updated'
+        flash_message += 'Registration updated'.html_safe
+        flash_notice flash_message
         redirect_to event_registration_path(@registration)
       else
-        @registration.errors.full_messages.to_sentence
-        render :modify_by_admin
+        flash_alert @registration.errors.full_messages.to_sentence
+        render :edit_by_admin
       end
     end
 
@@ -536,7 +538,9 @@ module Event
       @registration = Registration.find(params[:id])
       @registration.destroy
       flash_notice('Your registration has been deleted.')
-      redirect_to user_path(current_user)
+      redirect_to admin_dashboard_path
+    rescue ActiveRecord::RecordNotFound => e
+      redirect_to admin_dashboard_path, alert: "Event not found: #{e.full_message}"
     end
 
     def welcome
@@ -749,6 +753,8 @@ module Event
         :paid_date,
         :payment_token,
         :status,
+        :lake_cruise_number,
+        :lake_cruise_fee,
         :sunday_lunch_number,
         :invoice_number,
         :user_id,

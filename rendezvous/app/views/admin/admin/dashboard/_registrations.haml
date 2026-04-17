@@ -43,7 +43,8 @@
                       %li= link_to 'Modification', event_modification_path(mod_id, registration_id: reg.id)
                     - else
                       %li= link_to 'Modify', modify_by_admin_event_registration_path(reg)
-                    %li= link_to 'Cancel', cancel_event_registration_path(reg), data: { confirm: "Sure?" }
+                    %li= link_to 'Cancel', cancel_event_registration_path(reg), data: { turbo_confirm: "Are you sure?" }
+                    %li= button_to 'Delete', "/event/registrations/#{reg.id}", method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'text-bold text-danger'
 
               %td
                 = reg.status.humanize

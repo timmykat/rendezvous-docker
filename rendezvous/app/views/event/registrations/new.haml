@@ -53,14 +53,9 @@
               = simple_form_for @registration do |f|
                 %section
                   %p * = required
-                  - if current_user.admin?
-                    .alert.alert-warning
-                      You are creating a registration for another user.
-                      = f.input :created_by_admin, as: :boolean
-                  - else
-                    .alert.alert-info You are signed in with your user account.
+                  .alert.alert-info You are signed in with your user account.
                   = f.simple_fields_for :user do |u|
-                    = render partial:  'common/user_info', locals:  { f:  u, user_fields:  true, address:  true }
+                    = render partial: 'common/user_info', locals: { f: u, user_fields: true, address: true }
 
                 = render partial: 'attendance_manager', locals: { f: f }
                 = render partial: 'registration_status', locals: { f: f }

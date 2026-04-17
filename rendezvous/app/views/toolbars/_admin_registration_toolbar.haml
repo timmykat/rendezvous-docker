@@ -1,0 +1,18 @@
+.container-fluid.px-0
+  .row.no-gutters
+    .col-12
+      .container
+        .row.d-flex.justify-content-center
+          %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center.align-items-stretch
+            %li.list-group-item
+              - path =  event_registration_path(reg)
+              = link_to 'View registration', path, class: button_state(path)
+            %li.list-group-item
+              - path = edit_by_admin_event_registration_path(reg)
+              = link_to 'Edit registration', path, class: button_state(path)
+            %li.list-group-item
+              - path = modify_by_admin_event_registration_path(reg)
+              = link_to 'Modify registration', path, class: button_state(path)
+            %li.list-group-item
+              - path = edit_user_vehicles_path(user.id)
+              = link_to 'Update vehicles', path, class: button_state(path)

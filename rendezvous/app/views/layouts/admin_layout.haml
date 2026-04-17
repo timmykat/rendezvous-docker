@@ -48,9 +48,9 @@
                   = link_to "Back to main site", root_path, class: 'btn btn-sm btn-primary'
 
       - if current_user.nil?
-        = render partial: 'common/logged_out_nav_bar'
+        = render partial: 'toolbars/logged_out_nav_bar'
       - else
-        = render partial: 'common/logged_in_nav_bar'
+        = render partial: 'toolbars/logged_in_nav_bar'
 
     %main
       .content

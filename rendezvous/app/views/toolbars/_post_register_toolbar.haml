@@ -1,0 +1,31 @@
+.container-fluid.px-0
+  .row.no-gutters
+    .col-12
+      .container
+        .row.d-flex.justify-content-center
+          %ul.list-group.list-group-horizontal.d-flex.justify-content-center.align-items-center.align-items-stretch
+
+            %li.list-group-item
+              - path = event_registration_path(reg)
+              = link_to 'View my registration', path, class: button_state(path)
+            %li.list-group-item
+              - path = edit_user_vehicles_path(user.id)
+              = link_to 'Update vehicles', path, class: button_state(path)
+            %li.list-group-item
+              - path = email_create_message_path(r_id: reg.id)
+              = link_to 'Message Tim', path, class: button_state(path)
+            - if reg.show_payment_button?
+              %li.list-group-item
+                - path = payment_event_registration_path(reg)
+                = link_to 'Pay fees', path, class: button_state(path)
+            - else
+              %li.list-group-item
+                %span.btn.btn-sm.btn-secondary.disabled Pay fees
+        .row.d-flex.justify-content-center
+          %ul.list-group.list-group-horizontal.d-flex.align-items-stretch
+            %li.list-group-item
+              - path = schedule_path
+              = link_to 'View schedule summary', path, class: button_state(path, 'secondary')
+            %li.list-group-item
+              -path = schedule_summary_path
+              = link_to 'View full schedule', path, class: button_state(path, 'secondary')
