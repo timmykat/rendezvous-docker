@@ -276,14 +276,19 @@ module Event
       end
     end
 
-    def modify_registration
+    def modify
       existing = @registration.modifications.where(status: 'in progress').exists?
       if existing
         flash_alert 'An existing modification is in progress. Please resolve that first.'
         redirect_to event_registration_path(@registration) and return
       end
 
-      create_modification
+      @modification = create_modification
+      unless @modification.save
+        flash_alert 'The modification was not successfully created'
+        render :modify_by_admin and return
+      end
+      redirect_to event_modification_path(@modification.id) and return
     end
 
     def create_modification(cancellation: false)

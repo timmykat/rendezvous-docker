@@ -3,7 +3,6 @@ import { debounce } from "throttle-debounce";
 export class AdminSummary extends HTMLElement {
   constructor() {
     super();
-    this.processFields = this.processFields.bind(this);
     this.processFieldsDebounced = debounce(500, this.processFields);
   }
 
@@ -33,6 +32,7 @@ export class AdminSummary extends HTMLElement {
     document.addEventListener("RECALCULATE", this.processFieldsDebounced);
     this.recalculateTriggers.forEach((field) => {
       field.addEventListener("input", this.dispatchRecalculate);
+      field.addEventListener("change", this.dispatchRecalculate);
     });
   };
 
@@ -44,6 +44,7 @@ export class AdminSummary extends HTMLElement {
     document.removeEventListener("RECALCULATE", this.processFieldsDebounced);
     this.recalculateTriggers.forEach((field) => {
       field.removeEventListener("input", this.dispatchRecalculate);
+      field.removeEventListener("change", this.dispatchRecalculate);
     });
   };
 

@@ -94,7 +94,7 @@ Rails.application.routes.draw do
         get :cancel
         get :complete_after_online_payment
         get :edit_sunday_lunch
-        get :modify
+        post :modify
         get :edit_by_admin
         get :modify_by_admin
         get :payment

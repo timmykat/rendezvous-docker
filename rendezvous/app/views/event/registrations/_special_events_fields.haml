@@ -12,7 +12,7 @@
               .form-group
                 = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
                   label: "Number of people for Lake George cruise",
-                  input_html: { class: 'lake-cruise form-control numeric integer' }
+                  input_html: { class: 'lake-cruise form-control numeric integer', data: { recalculate_trigger: true }}
               .form-group
                 = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee fixed-2', data: { summary_source: true } }
                 = hidden_field_tag :attendee_fee, @registration.registration_fee, id: 'attendee-fee-reference'
