@@ -17,7 +17,7 @@
                 %p
                   %b A modification will be created
               = simple_form_for @registration, url: update_by_admin_event_registration_path, method: :patch do |f|
-                = render partial: 'admin_fields', locals: { f: f, reg: @registration, user: @user }
+                = render partial: 'admin_registration_fields', locals: { f: f, reg: @registration, user: @user }
                 .row
                   .col-12
                     .form-group
