@@ -95,7 +95,7 @@ module Event
 
     AGE_GROUPS = %w[adult youth child].freeze
 
-    PAYMENT_STATUSES = %w[paid partial 'payment due' refunded].freeze
+    PAYMENT_STATUSES = %w[paid 'outstanding balance' 'payment due' 'refund owed' refunded].freeze
 
     # Validations
     validate :validate_minimum_number_of_adults, unless: -> { cancelled? }
@@ -138,22 +138,26 @@ module Event
       total.to_d == paid_amount.to_d
     end
 
-    def show_payment_button?
-      !(partially_paid? || paid?)
+    def payment_due?
+      paid_amount.to_d.zero?
     end
 
-    def partially_paid?
-      total.to_d > paid_amount.to_d
+    def show_payment_button?
+      !(outstanding_balance? || paid?)
+    end
+
+    def outstanding_balance?
+      (total.to_d > paid_amount.to_d) && paid_amount.positive?
     end
 
     def refund_due?
-      cancelled? and balance.to_d.negative?
+      balance.to_d.negative?
     end
 
     def payment_status
       return 'refunded' if refunded?
       return 'paid' if paid?
-      return 'partial' if partially_paid?
+      return 'outstanding balance' if outstanding_balance?
 
       'payment due'
     end
@@ -183,10 +187,6 @@ module Event
 
     def number_of_volunteers
       attendees.where(volunteer: true).count
-    end
-
-    def outstanding_balance?
-      balance > 0.0
     end
 
     def ensure_financials

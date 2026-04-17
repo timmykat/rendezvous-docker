@@ -80,6 +80,26 @@ module RegistrationsHelper
     reg.complete? ? 'Create Modification' : 'Save'
   end
 
+  def payment_status_options
+    Event::Registration::PAYMENT_STATUSES.map { |s| [s.humanize, s] }
+  end
+
+  def payment_status_line_item(reg)
+    case
+    when reg.paid?
+      { label: '', info: 'Paid, thank you!'}
+    when reg.outstanding_balance?
+      { label: 'Outstanding balance:', info: number_to_currency(reg.balance) }
+    when reg.payment_due?
+      { label: 'Payment due:', info: number_to_currency(reg.balance) }
+    when reg.refund_owed?
+      { label: 'Refund owed:', info: "<span style='color: #cc0000;'>#{number_to_currency(reg.balance)}</span>".html_safe }
+    when reg.refunded?
+      { label: 'Refund:', info: "<span style='color: #660000;'>#{number_to_currency(reg.balance)}</span>".html_safe }
+    end
+  end
+
+
   def user_payment_options
     Event::Registration.paid_methods.except('invoice').map { |k, _| [k.humanize, k] }
   end

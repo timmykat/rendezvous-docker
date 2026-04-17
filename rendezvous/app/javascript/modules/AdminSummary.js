@@ -11,6 +11,9 @@ export class AdminSummary extends HTMLElement {
     this.sourceFields = this.querySelectorAll("[data-summary-source]");
     this.totalField = this.querySelector("[data-target-total]");
     this.balanceField = this.querySelector("[data-target-balance]");
+    this.paymentStatusSelect = this.querySelector(
+      "[data-target-payment-status]",
+    );
     this.donationField = this.querySelector("[data-donation]");
     this.paidAmountField = this.querySelector("[data-paid-amount]");
     this.currencyFields = this.querySelectorAll(".fixed-2");
@@ -65,6 +68,8 @@ export class AdminSummary extends HTMLElement {
     if (this.totalField) this.totalField.value = total.toFixed(2);
     if (this.balanceField) this.balanceField.value = balance.toFixed(2);
 
+    this.setPaymentStatus(balance);
+
     // Format currency fields
     this.currencyFields.forEach((field) => {
       if (!field) return;
@@ -73,6 +78,13 @@ export class AdminSummary extends HTMLElement {
         field.value = value.toFixed(2);
       }
     });
+  };
+
+  setPaymentStatus = (total, balance) => {
+    if (balance == 0.0) return "paid";
+    if (Math.abs(total - balance) < 0.01) return "payment due";
+    if (balance > 0.0) return "outstanding balance";
+    if (balance < 0.0) return "refund owed";
   };
 }
 

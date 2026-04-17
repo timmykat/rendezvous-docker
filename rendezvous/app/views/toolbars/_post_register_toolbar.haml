@@ -11,13 +11,14 @@
             %li.list-group-item
               - path = edit_user_vehicles_path(user.id)
               = link_to 'Update vehicles', path, class: button_state(path)
-            %li.list-group-item
-              - path = email_create_message_path(r_id: reg.id)
-              = link_to 'Message Tim', path, class: button_state(path)
             - if reg.show_payment_button?
               %li.list-group-item
                 - path = payment_event_registration_path(reg)
                 = link_to 'Pay fees', path, class: button_state(path)
+              %li.list-group-item
+                - path = email_create_message_path(r_id: reg.id)
+                = link_to 'Message Tim', path, class: button_state(path, 'warning')
+
             - else
               %li.list-group-item
                 %span.btn.btn-sm.btn-secondary.disabled Pay fees

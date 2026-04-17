@@ -94,12 +94,13 @@
                 %td.text-right #{number_to_currency(@registration.total)}
 
               %tr
-                %th Paid:
+                %th Amount paid:
                 %td.text-right #{number_to_currency(@registration.paid_amount)}
 
               %tr
-                %th Outstanding Balance:
-                %td.text-right #{number_to_currency(@registration.balance)}
+                - item = payment_status_line_item(@registration)
+                %th= item[:label]
+                %td.text-right= item[:info]
 
             - if @registration.show_payment_button?
               %p
@@ -115,8 +116,7 @@
             .card-title
               %h3.h4 Vehicle(s) You Are Bringing
             .card-text
-              %p
-                You can update this by selecting from your name dropdown in the top nav bar.
+              =link_to 'Update Vehicles', edit_user_vehicles_path(@user), class: 'btn btn-sm btn-primary'
 
               %table.table
                 %thead

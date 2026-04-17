@@ -34,6 +34,10 @@
                 .form-group
                   = f.input :balance, input_html: { readonly: true, class: 'fixed-2', data: { target_balance: true } }
 
+              %li.list-item-unstyled
+                .form-group
+                  = select_tag :payment_status, options_for_select(payment_status_options), data: { target_payment_status: true }
+
   .row
     .col-12
       .form-group

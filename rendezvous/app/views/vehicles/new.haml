@@ -1,12 +1,9 @@
-.container 
+.container
   .row.justify-content-center
     .col-md-8
       .card
-        .card-body 
+        .card-body
           .card-text
             %h1.h3 Create Vehicle
             #new_vehicle
-              = simple_form_for @vehicle do |f|
-                = render partial: 'common/vehicle_fields', locals: { f: f, nested: false }
-                .form-group
-                  = f.button :submit, input_html:  { value:  'Create vehicle' }, class:  "btn  btn-primary"
+              = render partial: 'common/vehicles_component', locals: { f: f }
