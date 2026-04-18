@@ -80,8 +80,12 @@ module RegistrationsHelper
     reg.complete? ? 'Create Modification' : 'Save'
   end
 
-  def payment_status_options
-    Event::Registration::PAYMENT_STATUSES.map { |s| [s.humanize, s] }
+  def payment_status_option_tags
+    option_list = ''
+    Event::Registration::PAYMENT_STATUSES.each do |s|
+      option_list << "<option value=#{s}>#{s.humanize}</option>\n"
+    end
+    option_list.html_safe
   end
 
   def payment_status_line_item(reg)
