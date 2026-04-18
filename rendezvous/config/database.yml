@@ -22,7 +22,7 @@ test:
   encoding: utf8mb4
   pool: 5
   timeout: 5000
-  username: root
-  password: test_password
+  username: <%= ENV['MYSQL_USER'] %>
+  password: <%= ENV['MYSQL_PASSWORD'] %>
   database: rendezvous_test
-  host: 127.0.0.1
+  host: db

@@ -28,7 +28,7 @@ class Donation < ApplicationRecord
   belongs_to :registration, optional: true
   has_one :square_transaction
 
-  enum status: {
+  enum :status, {
     intialized: 'initialized',
     created: 'created',
     complete: 'complete'

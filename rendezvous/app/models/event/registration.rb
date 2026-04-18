@@ -71,7 +71,7 @@ module Event
     attribute :total, :decimal, default: 0.0
 
     # Constants
-    enum status: {
+    enum :status, {
       n_a: 'N/A',
       pending: 'pending',
       in_progress: 'in progress',
@@ -79,7 +79,7 @@ module Event
       cancelled: 'cancelled'
     }
 
-    enum step: {
+    enum :step, {
       creating:       'creating',
       special_events: 'special events',
       review:         'review',
@@ -87,7 +87,7 @@ module Event
       finished:       'finished'
     }
 
-    enum paid_method: {
+    enum :paid_method, {
       credit_card: 'credit card',
       cash_or_check: 'cash or check',
       invoice: 'invoice'

@@ -37,7 +37,7 @@ module Event
     belongs_to :registration
     has_many :attendees, through: :registration
 
-    enum status: {
+    enum :status, {
       pending: 'pending',
       applied: 'applied'
     }
