@@ -89,7 +89,7 @@ CREATE TABLE `attendees` (
   KEY `index_attendees_on_attendee_age` (`attendee_age`),
   KEY `index_attendees_on_volunteer` (`volunteer`),
   KEY `index_attendees_on_sunday_dinner` (`sunday_dinner`)
-) ENGINE=InnoDB AUTO_INCREMENT=1860 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1869 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -257,7 +257,7 @@ CREATE TABLE `modifications` (
   PRIMARY KEY (`id`),
   KEY `index_modifications_on_registration_id` (`registration_id`),
   CONSTRAINT `fk_rails_1e2e171fd7` FOREIGN KEY (`registration_id`) REFERENCES `registrations` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -315,34 +315,35 @@ CREATE TABLE `qr_codes` (
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `registrations` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `number_of_adults` int DEFAULT NULL,
-  `number_of_children` int DEFAULT NULL,
-  `registration_fee` decimal(8,2) DEFAULT NULL,
+  `number_of_adults` int DEFAULT '0',
+  `number_of_children` int DEFAULT '0',
+  `registration_fee` decimal(8,2) DEFAULT '0.00',
   `events` text,
   `user_id` int DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
-  `paid_amount` decimal(8,2) DEFAULT NULL,
+  `paid_amount` decimal(8,2) DEFAULT '0.00',
   `paid_method` varchar(255) DEFAULT NULL,
   `paid_date` datetime DEFAULT NULL,
   `year` varchar(255) DEFAULT NULL,
   `invoice_number` varchar(255) DEFAULT NULL,
-  `donation` decimal(8,2) DEFAULT NULL,
+  `donation` decimal(8,2) DEFAULT '0.00',
   `cc_transaction_id` varchar(255) DEFAULT NULL,
-  `status` varchar(255) DEFAULT NULL,
-  `total` decimal(8,2) DEFAULT NULL,
-  `number_of_seniors` int DEFAULT NULL,
+  `status` varchar(255) DEFAULT 'pending',
+  `total` decimal(8,2) DEFAULT '0.00',
+  `number_of_seniors` int DEFAULT '0',
   `created_by_admin` tinyint(1) NOT NULL DEFAULT '0',
   `annual_answer` varchar(255) DEFAULT NULL,
   `vendor_fee` decimal(6,2) DEFAULT NULL,
   `is_admin_created` tinyint(1) NOT NULL DEFAULT '0',
-  `number_of_youths` int DEFAULT NULL,
+  `number_of_youths` int DEFAULT '0',
   `sunday_lunch_number` int NOT NULL DEFAULT '0',
   `lake_cruise_number` int NOT NULL DEFAULT '0',
-  `lake_cruise_fee` decimal(8,2) DEFAULT NULL,
+  `lake_cruise_fee` decimal(8,2) DEFAULT '0.00',
   `balance` decimal(8,2) NOT NULL DEFAULT '0.00',
   `refunded` decimal(8,2) NOT NULL DEFAULT '0.00',
-  `step` varchar(255) DEFAULT 'create',
+  `step` varchar(255) DEFAULT 'creating',
+  `late_period` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `index_registrations_on_paid_amount` (`paid_amount`),
   KEY `index_registrations_on_paid_method` (`paid_method`),
@@ -355,7 +356,7 @@ CREATE TABLE `registrations` (
   KEY `index_registrations_on_refunded` (`refunded`),
   CONSTRAINT `lake_cruise_limit` CHECK (((`lake_cruise_number` >= 0) and (`lake_cruise_number` <= 8))),
   CONSTRAINT `sunday_lunch_limit` CHECK (((`sunday_lunch_number` >= 0) and (`sunday_lunch_number` <= 8)))
-) ENGINE=InnoDB AUTO_INCREMENT=1030 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1034 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -492,6 +493,7 @@ CREATE TABLE `users` (
   `recaptcha_whitelisted` tinyint(1) DEFAULT NULL,
   `last_active` datetime(6) DEFAULT NULL,
   `is_admin_created` tinyint(1) DEFAULT '0',
+  `square_customer_id` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -505,8 +507,9 @@ CREATE TABLE `users` (
   KEY `index_users_on_country` (`country`),
   KEY `index_users_on_roles_mask` (`roles_mask`),
   KEY `index_users_on_citroenvie` (`citroenvie`),
-  KEY `index_users_on_last_active` (`last_active`)
-) ENGINE=InnoDB AUTO_INCREMENT=1171 DEFAULT CHARSET=latin1;
+  KEY `index_users_on_last_active` (`last_active`),
+  KEY `index_users_on_square_customer_id` (`square_customer_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1172 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -584,6 +587,9 @@ CREATE TABLE `venues` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 INSERT INTO `schema_migrations` (version) VALUES
+('20260410001310'),
+('20260404222829'),
+('20260404203116'),
 ('20260404101159'),
 ('20260404091851'),
 ('20260324032035'),

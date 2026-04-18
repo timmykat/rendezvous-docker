@@ -1,0 +1,13 @@
+| Item         Number         Fee
+| --------------------------------------
+| Attendees    #{reg.attendees.size.to_s.ljust(8)} #{number_to_currency(@registration.registration_fee).rjust(8)}
+
+| Lake Cruise  #{reg.lake_cruise_number.to_s.ljust(8)} #{number_to_currency(@registration.lake_cruise_fee).rjust(8)}
+
+- if reg.donation.positive?
+  | Donation      #{''.ljust(8)}   #{number_to_currency(reg.donation).rjust(8)}
+
+| Registration Total      #{''.ljust(8)}   #{number_to_currency(reg.donation).rjust(8)}
+
+| Link to view your registration:
+= link_to event_registration_url(reg.id), event_registration_url(reg.id)

@@ -63,6 +63,8 @@ group :development, :staging do
 end
 
 group :development, :test do
+  gem 'brakeman'
+  gem 'factory_bot_rails'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'racksh'

@@ -1,10 +1,6 @@
 import "@oddcamp/cocoon-vanilla-js";
 
 export class AttendanceManager extends HTMLElement {
-  constructor() {
-    super();
-  }
-
   connectedCallback() {
     this.setupEventListeners();
     this.initializeFirstAttendee();
@@ -12,45 +8,59 @@ export class AttendanceManager extends HTMLElement {
     this.getAttendeeTotals();
   }
 
+  disconnectedCallback() {
+    this.removeEventListeners();
+  }
+
   setupEventListeners = () => {
     // 1. Radio button changes (Event Delegation)
-    this.addEventListener("change", (e) => {
-      const radio = e.target.closest('input[type="radio"]');
-      if (!radio) return;
+    this.addEventListener("change", this.radioButtonChangeTasks);
+    this.addEventListener("cocoon:after-insert", this.insertAttendeeTasks);
+    this.addEventListener("cocoon:after-remove", this.removeAttendeeTasks);
+    document.addEventListener("RECALCULATE", this.getAttendeeTotals);
+  };
 
-      this.setAttendeeFee(e.target.value, e.target);
-      this.getAttendeeTotals();
-    });
+  removeEventListeners = () => {
+    this.removeEventListener("change", this.radioButtonChangeTasks);
+    this.removeEventListener("cocoon:after-insert", this.insertAttendeeTasks);
+    this.removeEventListener("cocoon:after-remove", this.removeAttendeeTasks);
+    document.removeEventListener("RECALCULATE", this.getAttendeeTotals);
+  };
 
-    this.addEventListener("cocoon:after-insert", (e) => {
-      setTimeout(() => {
-        this.updateHeaders();
-        // In vanilla JS, the inserted item is in e.detail[0] or e.detail.node
-        let insertedNode;
-        if (e.detail.node instanceof Node) {
-          insertedNode = e.detail.node;
-        } else if (typeof e.detail.node === "string") {
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = e.detail.node.trim();
-          insertedNode = tempDiv.firstChild;
-        }
+  radioButtonChangeTasks = (e) => {
+    const radio = e.target.closest('input[type="radio"]');
+    if (!radio) return;
+    this.setAttendeeFee(e.target.value, e.target);
+    document.dispatchEvent(new Event("RECALCULATE"));
+  };
 
-        const checkedRadio = insertedNode?.querySelector(
-          'input[type="radio"]:checked',
-        );
-
-        if (checkedRadio) {
-          this.setAttendeeFee(checkedRadio.value, checkedRadio);
-        }
-
-        this.getAttendeeTotals();
-      }, 100);
-    });
-
-    this.addEventListener("cocoon:after-remove", () => {
+  insertAttendeeTasks = (e) => {
+    setTimeout(() => {
       this.updateHeaders();
-      this.getAttendeeTotals();
-    });
+      // In vanilla JS, the inserted item is in e.detail[0] or e.detail.node
+      let insertedNode;
+      if (e.detail.node instanceof Node) {
+        insertedNode = e.detail.node;
+      } else if (typeof e.detail.node === "string") {
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = e.detail.node.trim();
+        insertedNode = tempDiv.firstChild;
+      }
+
+      const checkedRadio = insertedNode?.querySelector(
+        'input[type="radio"]:checked',
+      );
+
+      if (checkedRadio) {
+        this.setAttendeeFee(checkedRadio.value, checkedRadio);
+      }
+      document.dispatchEvent(new Event("RECALCULATE"));
+    }, 100);
+  };
+
+  removeAttendeeTasks = (e) => {
+    this.updateHeaders();
+    document.dispatchEvent(new Event("RECALCULATE"));
   };
 
   updateHeaders = () => {
@@ -86,14 +96,12 @@ export class AttendanceManager extends HTMLElement {
     visibleNestedFields.forEach((field) => {
       const card = field.querySelector(".card.attendee");
       if (card) {
-        console.log("Category fee", card.dataset.fee);
         attendeeFeeTotal += parseFloat(card.dataset.fee) || 0;
       }
     });
 
     // We let the before_save method save the total amount
     const totalDisplayInput = this.querySelector(".attendee-total");
-    console.log("New fee total", attendeeFeeTotal.toFixed(2));
     if (totalDisplayInput)
       totalDisplayInput.value = attendeeFeeTotal.toFixed(2);
   };
@@ -104,7 +112,6 @@ export class AttendanceManager extends HTMLElement {
     visibleNestedFields.forEach((fieldSet) => {
       const checked = fieldSet.querySelector('input[type="radio"]:checked');
       if (checked && checked.value === type) {
-        console.log("Adding", type);
         count++;
       }
     });

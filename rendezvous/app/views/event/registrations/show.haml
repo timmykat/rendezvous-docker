@@ -6,7 +6,9 @@
           .card-title.heading
             %h1.h2 R#{Time.new.year} Registration
 
-        - if @registration.complete?
-          = render partial: 'common/post_register_toolbar', locals: { reg: @registration, user: @registration.user }
+        - if current_user.admin? && @registration
+          = render partial: 'toolbars/admin_registration_toolbar', locals: { reg: @registration, user: @registration.user }
+        - elsif @registration&.complete?
+          = render partial: 'toolbars/post_register_toolbar', locals: { reg: @registration, user: @registration.user }
 
 = render partial:  'common/registration_info'

@@ -1,0 +1,17 @@
+%vehicles
+  -# # { data-cocoon: true }
+  #vehicles.items
+    = f.simple_fields_for :vehicles do |v|
+      = render partial: 'common/vehicle_fields', locals: { f: v, nested: true }
+    .card-footer.mt-3
+      .links
+        -# Combined the icons and text into the link itself
+        = link_to_add_association f, :vehicles, |
+          partial: 'common/vehicle_fields', |
+          render_options: { locals: { nested: true } }, |
+          'data-association-insertion-node' => '#vehicles', |
+          'data-association-insertion-method' => 'append', |
+          class: 'btn btn-outline-primary btn-sm' do
+          = icon(:plus)
+          = icon(:car)
+          Add a vehicle

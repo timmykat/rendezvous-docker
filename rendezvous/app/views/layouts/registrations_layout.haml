@@ -42,9 +42,9 @@
                   = link_to "Citroen Rendezvous #{Date.current.year}", root_path
 
       - if current_user.nil?
-        = render partial: 'common/logged_out_nav_bar'
+        = render partial: 'toolbars/logged_out_nav_bar'
       - else
-        = render partial: 'common/logged_in_nav_bar'
+        = render partial: 'toolbars/logged_in_nav_bar'
     %main
       .content
         = yield

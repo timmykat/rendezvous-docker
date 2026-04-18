@@ -1,5 +1,5 @@
 class VehiclesController < ApplicationController
-  before_action :authenticate_user!, { only: [:new, :edit, :my_vehicles] }
+  before_action :authenticate_user!, { only: %i[new edit] }
   before_action :require_admin, { only: [:index] }
 
   def index
@@ -42,9 +42,6 @@ class VehiclesController < ApplicationController
     end
   end
 
-  def my_vehicles
-    @vehicles = current_user.vehicles.all
-  end
 
   def for_sale
     @vehicles = Vehicle.joins(:registrations)

@@ -8,6 +8,14 @@ module RegistrationsHelper
     AnnualQuestion::RESPONSES
   end
 
+  def button_state(path, state = 'info')
+    if current_page?(path)
+      'disabled btn btn-sm btn-success'
+    else
+      "btn btn-sm btn-#{state}"
+    end
+  end
+
   def registration_status_classes(status)
     status = status&.to_sym
     case status
@@ -72,8 +80,36 @@ module RegistrationsHelper
     reg.complete? ? 'Create Modification' : 'Save'
   end
 
+  def payment_status_option_tags
+    option_list = ''
+    Event::Registration::PAYMENT_STATUSES.each do |s|
+      option_list << "<option value=#{s}>#{s.humanize}</option>\n"
+    end
+    option_list.html_safe
+  end
+
+  def payment_status_line_item(reg)
+    case
+    when reg.paid?
+      { label: '', info: 'Paid, thank you!'}
+    when reg.outstanding_balance?
+      { label: 'Outstanding balance:', info: number_to_currency(reg.balance) }
+    when reg.payment_due?
+      { label: 'Payment due:', info: number_to_currency(reg.balance) }
+    when reg.refund_owed?
+      { label: 'Refund owed:', info: "<span style='color: #cc0000;'>#{number_to_currency(reg.balance)}</span>".html_safe }
+    when reg.refunded?
+      { label: 'Refund:', info: "<span style='color: #660000;'>#{number_to_currency(reg.balance)}</span>".html_safe }
+    end
+  end
+
+
   def user_payment_options
     Event::Registration.paid_methods.except('invoice').map { |k, _| [k.humanize, k] }
+  end
+
+  def donation_options
+    Rails.configuration.registration[:suggested_donations]
   end
 
   def attended_rendezvous_years(user)

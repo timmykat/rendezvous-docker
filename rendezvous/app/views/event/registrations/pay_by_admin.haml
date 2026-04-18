@@ -1,6 +1,3 @@
-- pricing_config = Rails.configuration.pricing
-- reg_config = Rails.configuration.registration
-
 .container
   .row.justify-content-center
     .col-md-8.col-12
@@ -17,7 +14,7 @@
                   %h2.h3 Donation
                 .card.text
                   .form-group.donation-options
-                    - donation_list(pricing_config[:suggested_donations], @registration.total.to_d).each do |rb|
+                    - donation_list(donation_options, @registration.total.to_d).each do |rb|
                       %input.radio-inline.total-calculation{type: 'radio', name: :suggested_donation, value: rb[1]}
                       %span.mr-2= rb[0]
                   .row

@@ -1,3 +1,5 @@
+# Read about factories at https://github.com/thoughtbot/factory_bot
+
 # == Schema Information
 #
 # Table name: users
@@ -49,8 +51,15 @@
 #  index_users_on_state_or_province     (state_or_province)
 #  index_users_on_uid                   (uid)
 #
-require 'rails_helper'
-
-RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+FactoryBot.define do
+  factory :user do
+    sequence(:email) { |i| "user-#{i}@example.com" }
+    password { 'Abcdefghij9' }
+    first_name { 'Benoit'  }
+    last_name { 'DuToit' }
+    address1 { '43 Rue Goncourt' }
+    state_or_province { 'QC' }
+    postal_code { 'A7U 4D9'  }
+    country { 'Canada' }
+  end
 end

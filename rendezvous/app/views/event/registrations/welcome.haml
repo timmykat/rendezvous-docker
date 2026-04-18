@@ -1,36 +1,37 @@
-- all_fees = Rails.configuration.pricing[:fees]
+- env = RendezvousSquare::Apis::Base.env_key
+- all_fees = Rails.configuration.orders[env]
 = render partial:  'common/registration_step', locals:  { step:  @step, registration: nil }
 .container
   .row.justify-content-center
     .col-md-8.col-12
-      .card 
-        .card-body 
+      .card
+        .card-body
           .card-title
             %h1.h3 #{event_year} Citroen Rendezvous Registration
             %h2.h6.mt-1 #{event_dates}, Saratoga Springs, New York
           .card-text
             %p
               It's that time again!
-              %em Formidable! 
+              %em Formidable!
             %p
               We've introduced an early/late fee structure this year, as well as a youth fee. We apologize for raising the fees, but
-              we've compared to similar events and we think the Rendezvous still represents a great value: included are ice cream at the ice cream social on Thursday, 
+              we've compared to similar events and we think the Rendezvous still represents a great value: included are ice cream at the ice cream social on Thursday,
               pizza on Friday night, the Saturday banquet, and the Sunday morning breakfast. And of course, all the Citroëns and other
               French cars your eyes can devour.
-            
-            .card 
-              .card-body 
+
+            .card
+              .card-body
                 .card-title
                   %h3.h6 Pricing
                 .card-text
-                  %table.table       
+                  %table.table
                     %thead
                       %tr
                         %th
                           Dates
                         %th
                           Adult (16+)
-                        %th 
+                        %th
                           Youth (5-15)
                         %th
                           Child (Under 5)
@@ -45,9 +46,9 @@
                         %td $#{all_fees[:late][:adult]}
                         %td $#{all_fees[:late][:youth]}
                         %td Free
-                
-            .card 
-              .card-body 
+
+            .card
+              .card-body
                 .card-text
                   = formatted_event_hotel
                   - unless reservation_url.nil?
@@ -55,11 +56,11 @@
                     = succeed '.' do
                       = link_to 'here', reservation_url
                     by May 30.
-            %p 
-              You can also find accommodations through the normal sites, or the 
+            %p
+              You can also find accommodations through the normal sites, or the
               = succeed '.' do
                 = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging'
-            
+
             %p Registration consists of the following steps:
             %ol
               %li

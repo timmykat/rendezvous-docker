@@ -1,0 +1,29 @@
+%table
+  %thead
+    %tr
+      %th.text-left Item
+      %th.text-center Number
+      %th.text-right Fee
+  %tbody
+    %tr
+      %th.text-left Attendees
+      %td.text-center #{reg.attendees.size}
+      %td.text-right #{number_to_currency(reg.registration_fee)}
+    %tr
+      %th.text-left Lake Cruise
+      %td.text-center #{reg.lake_cruise_number}
+      %td.text-right #{number_to_currency(reg.lake_cruise_fee)}
+    - if reg.donation.positive?
+      %tr
+        %th.text-left Donation
+        %td.text-center &nbsp;
+        %td.text-right #{number_to_currency(reg.donation)}
+
+    %tr
+      %th.text-left Registration Total
+      %td.text-center &nbsp;
+      %td.text-right #{number_to_currency(reg.total)}
+
+%p
+  Link to view your registration:
+  = link_to event_registration_url(reg.id), event_registration_url(reg.id)

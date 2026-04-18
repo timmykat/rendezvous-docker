@@ -6,13 +6,13 @@
           = render partial: 'toolbars/admin_registration_toolbar', locals: { reg: @registration, user: @registration.user }
         .card-body
           .card-title
-            %h2 Create a registration#{@user.nil? ? "" : " for #{@user.full_name}"}
+            %h2 Edit registration#{@user.nil? ? "" : " for #{@user.full_name}"}
           .card-text
             %admin-summary
               #registration-form.edit_registration
-                = simple_form_for @registration, url: create_by_admin_event_registrations_path, method: :post, data: { turbo: false } do |f|
+                = simple_form_for @registration, url: update_by_admin_event_registration_path, method: :patch, data: { turbo: false } do |f|
                   = render partial: 'admin_registration_fields', locals: { f: f }
                   .row
                     .col-12
                       .form-group
-                        = f.submit 'Create', class:  "btn btn-primary"
+                        = f.submit 'Update', class:  "btn btn-primary"

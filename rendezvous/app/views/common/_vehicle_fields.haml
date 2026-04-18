@@ -1,13 +1,13 @@
 - vehicle = f.object
 %rendezvous-vehicle{ class: ["card", ("nested-fields" if nested)] }
-  .card-body{'data-autocomplete' => "email_lookup"}
-    .card-title 
-      Vehicle
+  .card-body
+    .card-title
+      %label.vehicle-label Vehicle
     .card-text
       .row
         .col-md-4.col-12
           .form-group
-            = f.input :year, collection:  [*1919..2015].reverse, selected:  (vehicle.blank? ? nil : vehicle.year), include_blank:  '-- Select year --'
+            = f.input :year, collection:  [*1919..2015].reverse, selected:  (vehicle.blank? ? nil : vehicle.year), include_blank:  '-- Select year --', input_html: { class: 'year-selector' }
       .row.marques
         .col-12
           %table.table
@@ -25,14 +25,14 @@
                     = select_tag :select_marque, options_for_select(marques, selected:  selected_marque(vehicle)), class:  'form-control select-sm marque'
                 %td.position-12
                   .form-group.model-select.selects
-                    %label Citroen Model
+                    %label Select Citroen Model
                     = select_tag :select_model, options_for_select(citroen_models, selected:  selected_model(vehicle)), include_blank:  '-- Select Citroën model --', class:  'form-control select-sm model'
               %tr
                 %td.position-21
                   .form-group.other-marque-text.fill-in
                     %label Non-French Marque
                     = text_field_tag :other_marque, nil, class:  'form-control  input-sm marque text', disabled: true
-                    
+
                 %td.position-22
                   .form-group.other-model-field.fill-in
                     %label Non-Citroen Model
@@ -56,14 +56,14 @@
               = f.input :for_sale, as: :boolean, label: "This vehicle will be for sale"
 
       - if user_is_admin?
-        .row 
+        .row
           .col-md-12
             %fieldset
               .form-group
                 - if vehicle.qr_code.present?
                   %label Voting code for Peoples Choice Award
                   = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control'
-                
+
               .form-group
                 %label Add or replace a voting code
                 - if @available_qr_codes.blank?
@@ -71,10 +71,10 @@
                 - else
                   .code-handling
                     = text_field_tag :code, nil, class: 'form-control mr-2', data: { 'code-autocomplete': ''}
-                    .badge.badge-success.hide 
+                    .badge.badge-success.hide
                       OK
                     = f.input :qr_code_id, as: :hidden, input_html: { data: { 'qr-id-field': ''} }
-      
+
             .form-group
               - if vehicle.user.present?
                 %p Owner: #{vehicle.user.full_name}
@@ -85,5 +85,3 @@
         %br
         = link_to_remove_association "#{icon(:minus)}#{icon(:car)}".html_safe, f
         Remove this vehicle
-
-

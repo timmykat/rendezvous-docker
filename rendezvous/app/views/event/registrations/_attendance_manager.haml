@@ -19,21 +19,21 @@
       .form-group
         %label
           Total adults:
-          = f.input_field :number_of_adults, readonly:  true, style: "width: 80px; text-align: right;"
+          = f.input_field :number_of_adults, readonly:  true
     .col-md-4
       .form-group
         %label
           Total youths:
-          = f.input_field :number_of_youths, readonly:  true, style: "width: 80px; text-align: right;"
+          = f.input_field :number_of_youths, readonly:  true
     .col-md-4
       .form-group
         %label
           Total children:
-          = f.input_field :number_of_children, readonly:  true, style: "width: 80px; text-align: right;"
+          = f.input_field :number_of_children, readonly:  true
 
   .row
     .col-12
       %p.amount.form-group
-        = f.input :registration_fee, input_html: { label: ' Attendee fee total:', class: 'attendee-total', style: "width: 150px; text-align: right;" }
+        = f.input :registration_fee, input_html: { label: 'Attendee fee total:', class: 'attendee-total fixed-2', data: { summary_source: true } }
 
   = f.input_field :year, as:  :hidden, value:  Time.new.year

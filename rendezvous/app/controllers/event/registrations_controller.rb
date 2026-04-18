@@ -2,17 +2,17 @@ module Event
   class RegistrationsController < ApplicationController
     layout "registrations_layout"
 
-    before_action :get_registration, except: [:index, :welcome, :new, :create, :new_by_admin, :create_by_admin, :send_confirmation_email]
-    before_action :set_registration_user
-    before_action :check_cutoff, only: [:new, :create, :complete, :edit]
-    before_action :require_admin, only: [:index, :new_by_admin, :modify_by_admin, :cancel, :modify, :save_modification]
-    before_action :authenticate_user!, except: [:welcome, :update_paid_method, :update_fees]
+    before_action :get_registration, except: %i[index welcome new create new_by_admin create_by_admin destroy send_confirmation_email]
+    before_action :set_registration_user, except: :destroy
+    before_action :check_cutoff, only: %i[new create complete edit]
+    before_action :require_admin, only: %i[index new_by_admin modify_by_admin cancel modify save_modification]
+    before_action :authenticate_user!, except: %i[welcome update_paid_method update_fees]
     before_action :owner_or_admin, only: [:show]
     before_action :set_cache_buster
-    before_action :filter_params_by_status, only: [:update, :update_special_events]
+    before_action :filter_params_by_status, only: %i[update update_special_events]
     before_action :check_complete_destination, only: %i[new special_events review]
 
-    skip_before_action :verify_authenticity_token, only: [:show]
+    skip_before_action :verify_authenticity_token, only: :show
 
     helper_method :previous_step
     helper_method :next_step
@@ -68,9 +68,10 @@ module Event
 
     def get_registration
       @registration = Registration.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      flash_alert "Registration not found."
-      redirect_to root_path
+      unless @registration
+        flash_alert 'Get Registration: Registration not found.'
+        redirect_to admin_dashboard_path
+      end
     end
 
     def set_registration_user
@@ -79,11 +80,20 @@ module Event
         return
       end
 
-      @user = User.find_by(id: params.dig(:event_registration, :user_id))
+      if params[:user_id]
+        @user = User.find_by(id: params[:user_id])
+        return
+      end
+
+      if params[:event_registration]
+        @user = User.find_by(id: params.dig(:event_registration, :user_id))
+      end
+
+      @user = current_user unless current_user.admin?
 
       unless @user
         Rails.logger.warn('No registration user could be determined')
-        flash_alert "Hmmm, couldn't find a user for this registration"
+        flash_alert 'No registration user could be determined'
       end
     end
 
@@ -129,7 +139,7 @@ module Event
 
     def new
       if current_user&.admin?
-        flash_alert "Admins my not register"
+        flash_alert 'Admins may not register'
         redirect_to admin_dashboard_path
         return
       end
@@ -228,7 +238,7 @@ module Event
       # Remove user attributes now that we have user
       params[:event_registration][:user_attributes] = nil
       @registration = Registration.new(event_registration_params)
-      @registration.user = user
+      @registration.user = @user
 
       if !@registration.save
         flash_alert_now('There was a problem creating the registration.')
@@ -247,45 +257,47 @@ module Event
     def update_by_admin
       unless @user == @registration.user
         flash_alert "There is a user mismatch: #{@user.full_name} vs #{@registration.user.full_name}"
-        render :modify_by_admin and return
+        render :edit_by_admin and return
       end
 
       if @registration.complete?
-        @modification = modify_registration
-        if @modification.save
-          @registration.reload
-          redirect_to event_modification_path(@modification, registration_id: @registration.id) and return
-        else
-          flash_alert "Error: #{@modification.errors.full_messages}"
-          render :modify_by_admin and return
-        end
+        flash_message = 'This registration is complete. Do you want to create a modification?<br>'
+      else
+        flash_message = ''
       end
 
       if @registration.update(event_registration_params)
-        flash_notice 'Registration updated'
-        redirect_to event_registration_path(@registration)
+        flash_message += 'Registration updated'.html_safe
+        flash_notice flash_message
+        redirect_to event_registration_path(@registration) and return
       else
-        @registration.errors.full_messages.to_sentence
-        render :modify_by_admin
+        flash_alert @registration.errors.full_messages.to_sentence
+        render :edit_by_admin
       end
     end
 
-    def modify_registration
+    def modify
       existing = @registration.modifications.where(status: 'in progress').exists?
       if existing
         flash_alert 'An existing modification is in progress. Please resolve that first.'
         redirect_to event_registration_path(@registration) and return
       end
 
-      create_modification
+      @modification = create_modification
+      unless @modification.save
+        flash_alert 'The modification was not successfully created'
+        render :modify_by_admin and return
+      end
+      redirect_to event_modification_path(@modification.id) and return
     end
 
     def create_modification(cancellation: false)
       db_reg = @registration.class.find(@registration.id)
 
       fee_period = db_reg.late_period? ? :late : :early
-      reg_fees = Rails.configuration.pricing[:fees][fee_period]
-      lake_cruise_fee = Rails.configuration.pricing[:fees][:lake_cruise][:price]
+      env = RendezvousSquare::Apis::Base.env_key
+      reg_fees = Rails.configuration.orders[env][fee_period]
+      lake_cruise_fee = Rails.configuration.orders[env][:lake_cruise][:price]
 
       m = db_reg.modifications.build
       m.status = :pending
@@ -443,7 +455,7 @@ module Event
       @registration.paid_date = Time.new
       @registration.status = :complete
       if @registration.save
-        send_confirmation_email
+        send_confirmation
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         if current_user.admin?
           redirect_to user_path(@user)
@@ -485,7 +497,7 @@ module Event
       #   send_square_invoice(order)
       # end
 
-      send_confirmation_email
+      send_confirmation
       flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
       redirect_to edit_user_vehicles_path(@user)
     end
@@ -526,7 +538,9 @@ module Event
       @registration = Registration.find(params[:id])
       @registration.destroy
       flash_notice('Your registration has been deleted.')
-      redirect_to user_path(current_user)
+      redirect_to admin_dashboard_path
+    rescue ActiveRecord::RecordNotFound => e
+      redirect_to admin_dashboard_path, alert: "Event not found: #{e.full_message}"
     end
 
     def welcome
@@ -554,6 +568,31 @@ module Event
     #     order_id: order[:id]
     #   }
     # end
+    def payment_request
+      user = @registration.user
+      customer_id = user.ensure_square_customer_id!
+      begin
+        square_payment_link = ::RendezvousSquare::Apis::Base.with_error_handling do
+          RendezvousSquare::Apis::Checkout.create_square_payment_link({
+                                                                        registration: @registration,
+                                                                        customer_id: customer_id,
+                                                                        fee_period: fee_period
+                                                                      })
+        end
+      rescue Square::Errors::ApiError => e
+        flash_alert "There was a problem creating the link: #{e.message}"
+        render :show
+      end
+
+      unless square_payment_link
+        flash_alert "There was an unknown problem creating the payment link."
+        render :show and return
+      end
+
+      RendezvousMailer.send_registration_payment_link(@registration.id, square_payment_link).deliver_later
+      flash_notice 'The payment link has been queued to send'
+      redirect_to admin_dashboard_path
+    end
 
     def send_to_square
       @step = :payment
@@ -592,6 +631,22 @@ module Event
       end
     end
 
+    def send_confirmation
+      registration = @registration || Registration.find(params[:id])
+      unless registration
+        flash_alert('No registration found')
+        if current_user.admin?
+          redirect_to admin_dashboard_path
+        else
+          return redirect_to :root
+        end
+        return
+      end
+
+      RendezvousMailer.registration_confirmation(registration.id).deliver_later
+      redirect_to event_registration_path(@registration) and return
+    end
+
     private
 
     def build_registration
@@ -600,49 +655,28 @@ module Event
 
       @registration = @user&.registrations&.current&.first
 
-      unless @registration.blank?
-        if !@registration.complete?
-          flash_notice("You've already created a registration but haven't finished")
-          redirect_to review_event_registration_path(@registration)
-        else
-          flash_notice("You've already registered")
-          redirect_to event_registration_path(@registration)
+      if @registration.blank?
+        @registration = Registration.new(status: :in_progress, created_by_admin: current_user.admin?)
+      else
+        unless current_user.admin?
+          if @registration.in_progress?
+            flash_notice('You have a registration in progress')
+            redirect_to review_event_registration_path(@registration) and return
+          end
+
+          if @registration.complete?
+            flash_notice("You've already registered")
+            redirect_to event_registration_path(@registration) and return
+          end
         end
-        return
       end
 
-      @registration = Registration.new
-      @registration.status = :pending
-
-      @registration.attendees.build
-
-      if current_user&.admin?
-        @registration.created_by_admin = true
-        @registration.build_user
+      if @user.present?
+        @registration.user = @user
         registrant_attendee = Attendee.new
-        if @user.present?
-          registrant_attendee.name = @user.full_name
-        end
+        registrant_attendee.name = @user.full_name
         @registration.attendees << registrant_attendee
-      else
-        @registration.user = current_user
-      end
-      @registration.user.vehicles.build
-    end
-
-    def send_confirmation_email
-      event_registration = @registration || Registration.find(params[:id])
-      if event_registration
-        RendezvousMailer.registration_confirmation(event_registration).deliver_later
-      else
-        flash_notice('No registration found')
-      end
-      unless @registration
-        if current_user.admin?
-          redirect_to admin_dashboard_path
-        else
-          redirect_to :root
-        end
+        @registration.user.vehicles.build
       end
     end
 
@@ -719,6 +753,8 @@ module Event
         :paid_date,
         :payment_token,
         :status,
+        :lake_cruise_number,
+        :lake_cruise_fee,
         :sunday_lunch_number,
         :invoice_number,
         :user_id,

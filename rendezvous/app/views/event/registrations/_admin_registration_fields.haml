@@ -1,0 +1,46 @@
+= f.input_field :year, as: :hidden, value: Time.current.year
+
+%section
+  = f.simple_fields_for :user do |u|
+    = render partial: 'common/user_info', locals: { f: u, user_fields: true, address: true }
+  = render partial: 'attendance_manager', locals: { f: f }
+  = render partial: 'special_events_fields', locals: { f: f }
+
+  .row
+    .col-12
+      .card.admin
+        .card-body
+          .card-title
+            %h3.h4 Fee Summary
+          .card-text
+            %ul.list-unstyled
+              %li.list-item-unstyled
+                .form-group
+                  = f.input :donation, input_html: { class: 'fixed-2', data: { donation: true, recalculate_trigger: true, summary_source: true } }
+
+              %li.list-item-unstyled
+                .form-group
+                  = f.input :total, input_html: { readonly: true, class: 'fixed-2', data: { target_total: true } }
+
+              %li.list-item-unstyled
+                .form-group
+                  = f.input :paid_method, as: :select, collection: Event::Registration.paid_method_options, prompt: '-- Select --'
+
+              %li.list-item-unstyled
+                .form-group
+                  = f.input :paid_amount, input_html: { class: 'fixed-2', data: { paid_amount: true, recalculate_trigger: true, summary_trigger: true } }
+
+              %li.list-item-unstyled
+                .form-group
+                  = f.input :balance, input_html: { readonly: true, class: 'fixed-2', data: { target_balance: true } }
+
+              %li.list-item-unstyled
+                .form-group
+                  .form-group.select
+                    %label.control-label.select Payment status
+                    = select_tag :payment_status, payment_status_option_tags, data: { target_payment_status: true }, class: 'form-control select'
+
+  .row
+    .col-12
+      .form-group
+        = f.input :status, as: :select, collection: Event::Registration.status_options

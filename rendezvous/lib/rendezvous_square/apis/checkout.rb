@@ -4,6 +4,10 @@ module RendezvousSquare
       include Apis::Base
       extend self
 
+      def list_payment_links
+        response = Base::CLIENT.checkout.payment_links.list
+      end
+
       def create_square_modification_payment_link(params)
         post_body = create_modification_checkout_body(params)
         create_link(post_body)
@@ -14,9 +18,11 @@ module RendezvousSquare
         post_body = create_checkout_body(params)
 
         # Merge the redirect_url into the checkout_options within the body
-        post_body[:checkout_options] = {
-          redirect_url: params[:redirect_url]
-        }
+        if params[:redirect_url]
+          post_body[:checkout_options] = {
+            redirect_url: params[:redirect_url]
+          }
+        end
 
         create_link(post_body)
       end

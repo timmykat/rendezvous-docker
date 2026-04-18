@@ -1,28 +1,18 @@
-!!!
-%html{lang:  "en"}
-  %body
-    %div{ style:  "width: 600px;" }
-      %p Dear #{@registration.user.first_name},
-      %p Here is your registration info (all fees in USD):
-      %ul
-        %li Number of people: #{@registration.attendees.size}
-        %li Number of people for the Friday lake cruise: #{@registration.lake_cruise_number}
-        %li Total registration amount: #{number_to_currency(@registration.total)}
-        - if (@registration.donation? && !@registration.cancelled?)
-          %li Donation (thank you!): #{number_to_currency(@registration.donation)}
-        %li Registration status: #{@registration.status.humanize}
+%p Dear #{@registration.user.first_name},
+%p Here is a summary of your registration info (all fees in USD):
 
-      - if @registration.outstanding_balance?
-        %p You have an outstanding balance of #{number_to_currency(@registration.balance)}
-        %p Please send a check for that amount to:
-        %p #{mailing_address}
-      - elsif @registration.refund_due?
-        %p You are owed a refund of #{number_to_currency(-@registration.balance)}
-        %p We will get in touch with you to discuss how you'd like to be refunded.
+= render partial: 'basic_registration_info', locals: { reg: @registration }
 
-      - unless @registration.cancelled?
-        %p We look forward to seeing you at the Rendezvous!
 
-      %p If you need to cancel before #{Rails.configuration.registration[:refund_date]}, please email Tim at rendezvousLLC@kinnel.warpmail.net.
+- if @registration.outstanding_balance?
+  %p You have an outstanding balance of #{number_to_currency(@registration.balance)}
+  %p Please send a check for that amount to:
+  %p #{mailing_address}
+- elsif @registration.refund_due?
+  %p You are owed a refund of #{number_to_currency(-@registration.balance)}
+  %p We will get in touch with you to discuss how you'd like to be refunded.
 
-    %div{ style:  "width: 600px; margin-top: 20px;border-top: solid 2px #ccc; padding-top: 20px;" }
+- unless @registration.cancelled?
+  %p We look forward to seeing you at the Rendezvous!
+
+%p If you need to cancel before #{refund_date}, please email Tim at rendezvousLLC@kinnel.warpmail.net.

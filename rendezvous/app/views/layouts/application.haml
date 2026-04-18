@@ -70,9 +70,9 @@
 
 
         - if current_user.nil?
-          = render partial: 'common/logged_out_nav_bar'
+          = render partial: 'toolbars/logged_out_nav_bar'
         - else
-          = render partial: 'common/logged_in_nav_bar'
+          = render partial: 'toolbars/logged_in_nav_bar'
 
       - if public_registration && !current_registration
         .container-fluid.px-0

@@ -16,6 +16,10 @@ module RendezvousSquare
         Config::SiteSetting.instance.square_environment || 'SANDBOX'
       end
 
+      def env_key
+        get_environment.downcase.to_sym
+      end
+
       def integerize(currency_amount)
         (currency_amount.to_d * 100).round
       end

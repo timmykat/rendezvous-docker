@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.32
+        env:
+          RAILS_ENV: test
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: rendezvous_test
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+
+      redis:
+        image: redis:latest
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.2
+          bundler-cache: true
+          working-directory: rendezvous
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install Yarn dependencies
+        working-directory: rendezvous
+        run: yarn install
+
+      - name: Setup test database
+        working-directory: rendezvous
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: mysql2://root:test_password@127.0.0.1:3306/rendezvous_test
+        run: bundle exec rake db:create db:schema:load
+
+      # - name: Run Minitests
+      #   working-directory: rendezvous
+      #   env:
+      #     RAILS_ENV: test
+      #     DATABASE_URL: mysql2://root:test_password@127.0.0.1:3306/rendezvous_test
+      #   run: bundle exec test
+
+      - name: Run Brakeman security scan (optional)
+        working-directory: rendezvous
+        run: bundle exec brakeman -q
+        continue-on-error: true

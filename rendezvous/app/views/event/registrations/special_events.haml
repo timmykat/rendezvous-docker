@@ -29,14 +29,14 @@
                           .form-group
                             = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
                               label: "Number of people for Lake George cruise",
-                              input_html: { disabled: true, class: 'lake-cruise form-control short-field' }
+                              input_html: { disabled: true, class: 'lake-cruise form-control numeric integer' }
                             = f.input :lake_cruise_fee, input_html: { readonly: true, class: 'lake-cruise-fee short-field' }
                       - else
                         .form-group
                           = f.input :lake_cruise_number, as: :select, collection: (0..lake_cruise_max),
                             label: "Number of people for Lake George cruise",
-                            input_html: { disabled: no_fee_related_changes, class: 'lake-cruise form-control short-field' }
-                          = f.input :lake_cruise_fee, input_html: { readonly: no_fee_related_changes, class: 'lake-cruise-fee short-field' }
+                            input_html: { disabled: no_fee_related_changes, class: 'lake-cruise form-control numeric integer' }
+                          = f.input :lake_cruise_fee, input_html: { readonly: no_fee_related_changes, class: 'lake-cruise-fee numeric decimal' }
                           = hidden_field_tag :attendee_fee, @registration.registration_fee, id: 'attendee-fee-reference'
 
                 .card{ data: { event: 'post-rendezvous-lunch' } }
@@ -62,13 +62,13 @@
                         / Use Simple Form's built-in label for better accessibility and alignment
                         = f.input :sunday_lunch_number, as: :select, collection: (0..sunday_lunch_max),
                                   label: "Number of people for Sunday lunch",
-                                  input_html: { class: 'form-control short-field' }
+                                  input_html: { class: 'form-control numeric integer' }
                 .form-group
                   - reg_fee = @registration.registration_fee
                   - cruise_fee = @registration.lake_cruise_fee || 0.0
                   = f.input :registration_fee, as: :hidden
                   %label Total fee including cruise
-                  = f.input :total, input_html: { value: number_with_precision(reg_fee + cruise_fee, precision: 2), readonly: true, class: 'form-control display-total short-field' }
+                  = f.input :total, input_html: { value: number_with_precision(reg_fee + cruise_fee, precision: 2), readonly: true, class: 'form-control display-total numeric decimal' }
                 .form-group
                   = f.button :button, name: 'go_back', value: true, class: 'btn btn-primary back-to-attendees mr-2' do
                     = icon(:left_arrow)

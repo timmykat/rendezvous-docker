@@ -7,7 +7,8 @@
             %h2= "Registrations for #{@year} (#{@reg_count})"
           .card-text
             = form_with url: admin_dashboard_path, method: :get do |f|
-              - options = options_for_select((Event::Registration.distinct.pluck(:year) + [Date.current.year.to_s]).uniq.sort.reverse, @year)
+              - last_five_years = (0..4).map { |i| (Date.current.year - i).to_s }
+              - options = options_for_select(last_five_years, @year)
               .form-group
                 = f.label :year
                 = f.select :year, options, {}, { class: 'form-select' }
@@ -42,7 +43,8 @@
                       %li= link_to 'Modification', event_modification_path(mod_id, registration_id: reg.id)
                     - else
                       %li= link_to 'Modify', modify_by_admin_event_registration_path(reg)
-                    %li= link_to 'Cancel', cancel_event_registration_path(reg), data: { confirm: "Sure?" }
+                    %li= link_to 'Cancel', cancel_event_registration_path(reg), data: { turbo_confirm: "Are you sure?" }
+                    %li= button_to 'Delete', "/event/registrations/#{reg.id}", method: :delete, data: { turbo_confirm: "Are you sure?" }, class: 'text-bold text-danger'
 
               %td
                 = reg.status.humanize

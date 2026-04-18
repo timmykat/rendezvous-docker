@@ -1,6 +1,3 @@
-- pricing_config = Rails.configuration.pricing
-- reg_config = Rails.configuration.registration
-
 = render partial: 'common/registration_step', locals: { step: @step, registration: @registration }
 .container
   .row.justify-content-center
@@ -19,7 +16,7 @@
                 .card.text
                   %p Would you like to receive the Légion d'Honneur? Well, we can't do that, but your donations are truly appreciated! Even just taking care of the credit card fee is helpful!
                   .form-group.donation-options
-                    - donation_list(pricing_config[:suggested_donations], @registration.total.to_d).each do |rb|
+                    - donation_list(donation_options, @registration.total.to_d).each do |rb|
                       %input.radio-inline.total-calculation{type: 'radio', name: :suggested_donation, value: rb[1]}
                       %span.mr-2= rb[0]
                   .row

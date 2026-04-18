@@ -94,11 +94,12 @@ Rails.application.routes.draw do
         get :cancel
         get :complete_after_online_payment
         get :edit_sunday_lunch
-        get :modify
+        post :modify
+        get :edit_by_admin
         get :modify_by_admin
         get :payment
         get :review
-        get :send_email_confirmation
+        get :send_confirmation
         get :send_to_square
         get :special_events
         get :vehicles
@@ -107,6 +108,7 @@ Rails.application.routes.draw do
         patch :update_special_events
         patch :update_sunday_lunch
         post :save_modification
+        post :payment_request
       end
     end
     get '/welcome', to: 'registrations#welcome'
@@ -142,7 +144,7 @@ Rails.application.routes.draw do
   end
   get '/_ajax/voting/vehicle/:code', to: 'vehicles#ajax_info'
 
-  resources :donations, { only: [:new, :create, :index] }
+  resources :donations, { only: %i[new create index] }
   get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
 
   # -- Content

@@ -87,11 +87,12 @@ class ApplicationController < ActionController::Base
   end
 
   def event_fees_for_period
-    Rails.configuration.pricing[:fees][fee_period]
+    env = RendezvousSquare::Apis::Base.env_key
+    Rails.configuration.orders[env][fee_period]
   end
 
   def fee_period
-    (current_time <= Rails.configuration.pricing[:fees][:early][:end_date].to_time) ? :early : :late
+    (current_time <= Rails.configuration.orders[:early][:end_date].to_time) ? :early : :late
   end
 
   def written_reg_form_link
@@ -108,7 +109,8 @@ class ApplicationController < ActionController::Base
   end
 
   def lake_cruise_price
-    Rails.configuration.pricing[:fees][:lake_cruise][:price]
+    env = RendezvousSquare::Apis::Base.env_key
+    Rails.configuration.orders[env][:lake_cruise][:price]
   end
 
   def lake_cruise_closed
