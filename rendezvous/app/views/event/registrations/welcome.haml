@@ -37,12 +37,12 @@
                           Child (Under 5)
                     %tbody
                       %tr
-                        %td Early: up to #{format_short_date(all_fees[:early][:end_date])}
+                        %td Early: up to #{format_short_date(early_end_date)}
                         %td $#{all_fees[:early][:adult]}
                         %td $#{all_fees[:early][:youth]}
                         %td Free
                       %tr
-                        %td Late: starting #{format_short_date(all_fees[:late][:start_date])}
+                        %td Late: starting #{format_short_date(late_start_date)}
                         %td $#{all_fees[:late][:adult]}
                         %td $#{all_fees[:late][:youth]}
                         %td Free
