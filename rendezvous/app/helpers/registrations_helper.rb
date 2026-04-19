@@ -63,6 +63,14 @@ module RegistrationsHelper
     Rails.configuration.registration[:lake_cruise_close_date].to_time.strftime(SHORT_FORMAT)
   end
 
+  def early_end_date
+    Rails.configuration.orders[:early][:end_date]
+  end
+
+  def late_start_date
+    Rails.configuration.orders[:late][:start_date]
+  end
+
   def donation_list(raw_values, registration_fees)
     list = raw_values.map { |v| ["$#{v.to_s}", v] }
     unless registration_fees.nil?
