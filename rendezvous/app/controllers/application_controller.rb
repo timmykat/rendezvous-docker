@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  before_action :prepare_exception_notifier
   before_action :flash_array
   before_action :set_incoming_destination
   before_action :get_app_data
@@ -276,6 +277,14 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource_or_scope)
     root_path
+  end
+
+  private
+
+  def prepare_exception_notifier
+    request.env['exception_notifier.exception_data'] = {
+      current_user: current_user
+    }
   end
 
   # Create convenience methods for flash: flash_notice, flash_alert (anything will work)

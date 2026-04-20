@@ -3,7 +3,7 @@ module Event
     layout "registrations_layout"
 
     before_action :get_registration, except: %i[index welcome new create new_by_admin create_by_admin destroy send_confirmation_email]
-    before_action :set_registration_user, except: %i[welcome :destroy]
+    before_action :set_registration_user, except: %i[destroy]
     before_action :check_cutoff, only: %i[new create complete edit]
     before_action :require_admin, only: %i[index new_by_admin modify_by_admin cancel modify save_modification]
     before_action :authenticate_user!, except: %i[welcome update_paid_method update_fees]
