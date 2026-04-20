@@ -144,8 +144,8 @@ Rails.application.routes.draw do
   end
   get '/_ajax/voting/vehicle/:code', to: 'vehicles#ajax_info'
 
-  resources :donations, { only: %i[new create index] }
-  get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
+  # resources :donations, { only: %i[new create index] }
+  # get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
 
   # -- Content
   get '/faq', to: 'main_pages#faq'

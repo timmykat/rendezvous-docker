@@ -1,12 +1,12 @@
 class DonationsController < ApplicationController
 
-  before_action :require_admin, { only: [:index, :get_registration_donations] }
+  before_action :require_admin, { only: %i[index get_registration_donations] }
 
   def index
   end
 
   def new
-    if current_user && current_user.admin?
+    if current_user&.admin?
       @donation = Donation.new(created_by_admin: true, status: :initialized)
       @donation.build_user
     elsif current_user
@@ -18,47 +18,35 @@ class DonationsController < ApplicationController
   end
 
   def create
-    @donation = Donation.new()
-
-    if !params[:donation][:user_attributes][:id].empty?
-      user = User.find(params[:donation][:user_attributes][:id])
-    end
-    if !user
-      params[:user] = params[:donation][:user_attributes]
-      user = User.create(user_params)
-      # Set a password for the user
+    user_attrs = params[:donation][:user_attributes]
+    user = User.find_by(id: user_attrs[:id].presence) || begin
+      user = User.new(user_attrs.permit(:first_name, :last_name, :email))
       user.generate_password
       user.save
+      user
     end
 
-    if current_user.admin?
-      @donation.created_by_admin = params[:donation][:created_by_admin]
-    end
-
-    @donation.first_name = user.first_name
-    @donation.last_name = user.last_name
+    @donation = Donation.new(donation_params)
     @donation.user = user
-    @donation.amount = params[:donation][:amount]
-    @donation.status = params[:donation][:status]
+    @donation.first_name ||= user.first_name
+    @donation.last_name ||= user.last_name
 
-    if !@donation.save
+    unless @donation.save
       flash_alert @donation.errors.full_messages.to_sentence
-      render :new
-      return
+      render :new and return
     end
 
-    @donation.status = :created
-    @donation.save
-
-    customer_id = user.ensure_square_customer_id!
+    @donation.update(status: :created)
 
     redirect_url = thank_you_url(@donation, type: 'standard')
+    customer_id = user.ensure_square_customer_id!
 
-    square_payment_link = ::RendezvousSquare::Apis::Checkout.create_square_payment_link({
-                                                                                          donation: @donation,
-                                                                                          customer_id: customer_id,
-                                                                                          redirect: redirect_url
-                                                                                        })
+    square_payment_link = ::RendezvousSquare::Apis::Checkout.create_square_payment_link(
+      donation: @donation,
+      customer_id: customer_id,
+      redirect: redirect_url
+    )
+
     redirect_to square_payment_link, allow_other_host: true
   end
 
@@ -70,15 +58,22 @@ class DonationsController < ApplicationController
 
     transaction_id = params[:transactionId]
     order_id = params[:orderId]
+
+
     if transaction_id && order_id
-      transaction = ::Square::Transaction.new
-      transaction.user = @donation.user
-      transaction.amount = @donation.amount
-      transaction.transaction_id = transaction_id
-      transaction.order_id = order_id
-      transaction.donation_id = @donation.id
-      transaction.save
+      create_transaction(order_id, transaction_id)
     end
+    render :thank_you and return
+  end
+
+  def create_transaction(order_id, transaction_id)
+    transaction = ::Square::Transaction.new
+    transaction.user = @donation.user
+    transaction.amount = @donation.amount
+    transaction.transaction_id = transaction_id
+    transaction.order_id = order_id
+    transaction.donation_id = @donation.id
+    transaction.save
   end
 
   def get_registration_donations
@@ -122,6 +117,7 @@ class DonationsController < ApplicationController
       :first_name,
       :last_name,
       :status,
+      :created_by_admin,
       { user_attributes: [
         :id,
         :email,
