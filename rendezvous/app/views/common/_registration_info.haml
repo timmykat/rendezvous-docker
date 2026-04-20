@@ -102,13 +102,14 @@
                 %th= item[:label]
                 %td.text-right= item[:info]
 
-            - if @registration.show_payment_button?
-              %p
-                =link_to 'Go To Payment', payment_event_registration_path(@registration), class: "btn btn-primary"
-            - else
-              %p
-                If you wish to settle by credit card before the Rendezvous, please
-                =link_to 'send Tim a message.', email_create_message_path(r_id: @registration.id)
+            -  unless action_name == 'review'
+              - if @registration.show_payment_button?
+                %p
+                  =link_to 'Go To Payment', payment_event_registration_path(@registration), class: "btn btn-primary"
+              - else
+                %p
+                  If you wish to settle by credit card before the Rendezvous, please
+                  =link_to 'send Tim a message.', email_create_message_path(r_id: @registration.id)
 
       - if @registration.complete?
         .card
@@ -142,4 +143,4 @@
             .card-title
               %h3.h4 Email me my registration info
             .card-text
-              = link_to "Send Email", send_confirmation_event_registration_path(@registration.id), class: "btn  btn-info"
+              = link_to "Send Email", send_confirmation_event_registration_path(@registration.id, self_send: true), class: "btn  btn-info"

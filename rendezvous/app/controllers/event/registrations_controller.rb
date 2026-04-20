@@ -2,7 +2,7 @@ module Event
   class RegistrationsController < ApplicationController
     layout "registrations_layout"
 
-    before_action :get_registration, except: %i[index welcome new create new_by_admin create_by_admin destroy send_confirmation_email]
+    before_action :get_registration, except: %i[index welcome new create new_by_admin create_by_admin destroy]
     before_action :set_registration_user, except: %i[welcome destroy]
     before_action :check_cutoff, only: %i[new create complete edit]
     before_action :require_admin, only: %i[index new_by_admin modify_by_admin cancel modify save_modification]
@@ -13,6 +13,7 @@ module Event
     before_action :check_complete_destination, only: %i[new special_events review]
 
     skip_before_action :verify_authenticity_token, only: :show
+    skip_before_action :set_incoming_destination, only: :complete_after_online_payment
 
     helper_method :previous_step
     helper_method :next_step
@@ -449,23 +450,25 @@ module Event
         transaction.save
       end
 
-      @registration.paid_amount = @registration.total
-      @registration.paid_method = :credit_card
-      @registration.paid_date = Time.new
-      @registration.status = :complete
-      if @registration.save
+      if @registration.update(
+        paid_amount: @registration.total,
+        balance: 0.0,
+        paid_method: :credit_card,
+        paid_date: Time.new,
+        status: :complete
+      )
+
         send_confirmation
         flash_notice 'You are now registered for the Rendezvous! You should receive a confirmation by email shortly.'
         if current_user.admin?
-          redirect_to user_path(@user)
+          redirect_to admin_dashboard_path and return
         else
-          redirect_to edit_user_vehicles_path(@user, after_complete: true)
+          redirect_to edit_user_vehicles_path(@user, after_complete: true) and return
         end
-        return
       else
         flash_alert 'There was a problem completing your registration.'
         flash_alert @registration.errors.full_messages.to_sentence
-        render :payment
+        render :payment and return
       end
     end
 
@@ -473,12 +476,11 @@ module Event
       @step = :finished
       @title = 'Complete Registration'
 
-      @registration.status = :complete
-      @registration.paid_amount = 0.0
-      @registration.paid_method = :cash_or_check
-
-      # Update the registration
-      unless @registration.save
+      unless @registration.update(
+        status: :complete,
+        paid_amount: 0.0,
+        paid_method: :cash_or_check
+      )
         flash_alert 'There was a problem completing your registration.'
         flash_alert @registration.errors.full_messages.to_sentence
         render :show
@@ -631,7 +633,7 @@ module Event
     end
 
     def send_confirmation
-      registration = @registration || Registration.find(params[:id])
+      registration = @registration || Event::Registration.find(params[:id])
       unless registration
         flash_alert('No registration found')
         if current_user.admin?
@@ -643,7 +645,9 @@ module Event
       end
 
       RendezvousMailer.registration_confirmation(registration.id).deliver_later
-      redirect_to event_registration_path(@registration) and return
+      return unless params[:self_send]
+
+      redirect_to event_registration_path(@registration)
     end
 
     private
