@@ -1,6 +1,4 @@
 - env = RendezvousSquare::Apis::Base.env_key
-- basics = Rails.configuration.orders
-- fees = Rails.configuration.orders[env]
 .content
   .row.justify-content-center
     .col-md-8.col-12
@@ -17,14 +15,7 @@
 
             %h2.h3 Policies
 
-            %h3.h4 Event Pricing
-            - [:early, :late].each do |period|
-              %h2.h5= period.to_s.titleize
-              %p Before #{basics[period][:end_date]}
-              %ul
-                %li Adult: #{basics[period][:adult]
-                %li Youth: #{basics[period][:youth]
-                %li Child: free
+            = render partial: 'common/registration_pricing'
 
             %h3.h4 Refund Policy
             %p In case of cancellation, Citroen Rendezvous LLC will refund up to the full registration fee for the event until one (1) week before the event; the last day to request a refund is #{refund_date}.

@@ -1,5 +1,3 @@
-- env = RendezvousSquare::Apis::Base.env_key
-- all_fees = Rails.configuration.orders[env]
 = render partial:  'common/registration_step', locals:  { step:  @step, registration: nil }
 .container
   .row.justify-content-center
@@ -19,33 +17,7 @@
               pizza on Friday night, the Saturday banquet, and the Sunday morning breakfast. And of course, all the Citroëns and other
               French cars your eyes can devour.
 
-            .card
-              .card-body
-                .card-title
-                  %h3.h6 Pricing
-                .card-text
-                  %table.table
-                    %thead
-                      %tr
-                        %th
-                          Dates
-                        %th
-                          Adult (16+)
-                        %th
-                          Youth (5-15)
-                        %th
-                          Child (Under 5)
-                    %tbody
-                      %tr
-                        %td Early: up to #{format_short_date(early_end_date)}
-                        %td $#{all_fees[:early][:adult]}
-                        %td $#{all_fees[:early][:youth]}
-                        %td Free
-                      %tr
-                        %td Late: starting #{format_short_date(late_start_date)}
-                        %td $#{all_fees[:late][:adult]}
-                        %td $#{all_fees[:late][:youth]}
-                        %td Free
+              = render partial: 'common/registration_pricing'
 
             .card
               .card-body

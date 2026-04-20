@@ -1,0 +1,29 @@
+.card
+  - env = RendezvousSquare::Apis::Base.env_key
+  - all_fees = Rails.configuration.orders[env]
+  .card-body
+    .card-title
+      %h3.h6 On-line Event Pricing
+    .card-text
+      %table.table
+        %thead
+          %tr
+            %th
+              Dates
+            %th
+              Adult (16+)
+            %th
+              Youth (5-15)
+            %th
+              Child (Under 5)
+        %tbody
+          %tr
+            %td Early: up to #{format_short_date(early_end_date)}
+            %td $#{all_fees[:early][:adult]}
+            %td $#{all_fees[:early][:youth]}
+            %td Free
+          %tr
+            %td Late: starting #{format_short_date(late_start_date)}
+            %td $#{all_fees[:late][:adult]}
+            %td $#{all_fees[:late][:youth]}
+            %td Free
