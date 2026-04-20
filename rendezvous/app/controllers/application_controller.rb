@@ -279,14 +279,6 @@ class ApplicationController < ActionController::Base
     root_path
   end
 
-  private
-
-  def prepare_exception_notifier
-    request.env['exception_notifier.exception_data'] = {
-      current_user: current_user
-    }
-  end
-
   # Create convenience methods for flash: flash_notice, flash_alert (anything will work)
   def method_missing(method_sym, *arguments, &block)
     if method_sym.to_s =~ /^flash_([a-z]+)(_(now))?$/
@@ -318,5 +310,13 @@ class ApplicationController < ActionController::Base
   def format_for_logging(hash)
     require 'pp'
     PP.pp(hash, '')
+  end
+
+  private
+
+  def prepare_exception_notifier
+    request.env['exception_notifier.exception_data'] = {
+      current_user: current_user
+    }
   end
 end
