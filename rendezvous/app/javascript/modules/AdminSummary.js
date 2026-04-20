@@ -34,6 +34,10 @@ export class AdminSummary extends HTMLElement {
       field.addEventListener("input", this.dispatchRecalculate);
       field.addEventListener("change", this.dispatchRecalculate);
     });
+
+    this.currencyFields.forEach((field) => {
+      field.addEventListener("blur", this.formatCurrency);
+    });
   };
 
   dispatchRecalculate = () => {
@@ -45,6 +49,10 @@ export class AdminSummary extends HTMLElement {
     this.recalculateTriggers.forEach((field) => {
       field.removeEventListener("input", this.dispatchRecalculate);
       field.removeEventListener("change", this.dispatchRecalculate);
+    });
+
+    this.currencyFields.forEach((field) => {
+      field.removeEventListener("blur", this.formatCurrency);
     });
   };
 
@@ -65,20 +73,27 @@ export class AdminSummary extends HTMLElement {
     // Calculate balance
     const balance = total - paid;
 
-    // Update output fields
-    if (this.totalField) this.totalField.value = total.toFixed(2);
-    if (this.balanceField) this.balanceField.value = balance.toFixed(2);
-
     this.setPaymentStatus(balance);
+  };
 
-    // Format currency fields
-    this.currencyFields.forEach((field) => {
-      if (!field) return;
-      let value = parseFloat(field.value);
-      if (!isNaN(value)) {
-        field.value = value.toFixed(2);
-      }
-    });
+  formatCurrency = () => {
+    // Format output fields
+    if (this.balanceField) {
+      const balance = this.balanceField.value;
+      this.balanceField.value = parseFloat(balance).toFixed(2);
+    }
+    if (this.donationField) {
+      const donation = this.donationField.value;
+      this.donationField.value = parseFloat(donation).toFixed(2);
+    }
+    if (this.paidAmountField) {
+      const paidAmount = this.paidAmountField.value;
+      this.paidAmountField.value = parseFloat(paidAmount).toFixed(2);
+    }
+    if (this.totalField) {
+      const total = this.totalField.value;
+      this.totalField.value = parseFloat(total).toFixed(2);
+    }
   };
 
   setPaymentStatus = (total, balance) => {

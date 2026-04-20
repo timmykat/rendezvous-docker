@@ -38,7 +38,7 @@
                 .form-group
                   .form-group.select
                     %label.control-label.select Payment status
-                    = select_tag :payment_status, payment_status_option_tags, data: { target_payment_status: true }, class: 'form-control select'
+                    = select_tag :payment_status, options_for_select(payment_status_options), data: { target_payment_status: true }, class: 'form-control select', value: @registration.payment_status
 
   .row
     .col-12

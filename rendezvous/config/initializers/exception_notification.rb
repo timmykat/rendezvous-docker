@@ -23,7 +23,7 @@ ExceptionNotification.configure do |config|
 
   # Email notifier sends notifications by email.
   config.add_notifier :email, {
-    email_prefix: '[ERROR] ',
+    email_prefix: "[ERROR (#{Rails.env})] ",
     sender_address: "Notifier <#{ENV['SITE_ADMIN_SENDING_ADDRESS']}>",
     exception_recipients: %w[tim@wordsareimages.com]
   }

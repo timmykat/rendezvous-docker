@@ -95,7 +95,13 @@ module Event
 
     AGE_GROUPS = %w[adult youth child].freeze
 
-    PAYMENT_STATUSES = %w[paid 'outstanding balance' 'payment due' 'refund owed' refunded].freeze
+    PAYMENT_STATUSES = {
+      paid: 'paid',
+      outstanding_balance: 'outstanding balance',
+      payment_due: 'payment due',
+      refund_owed: 'refund owed',
+      refunded: 'refunded'
+    }.freeze
 
     # Validations
     validate :validate_minimum_number_of_adults, unless: -> { cancelled? }
