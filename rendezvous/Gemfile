@@ -51,15 +51,16 @@ gem 'rails_sortable'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1'
 
-gem 'devise', '~> 4.9'
 gem 'carrierwave'
 gem 'cocoon'
-gem 'role_model'
 gem 'daemons'
-gem 'square.rb'
+gem 'devise', '~> 4.9'
 gem 'dkim'
-gem 'simple_form', '~>5'
+gem 'exception_notification'
 gem 'redcarpet'
+gem 'role_model'
+gem 'simple_form', '~>5'
+gem 'square.rb'
 
 # Model annotation
 gem 'annotaterb'
