@@ -56,13 +56,13 @@ class DonationsController < ApplicationController
     @donation.status = :complete
     @donation.save
 
-    transaction_id = params[:transactionId]
-    order_id = params[:orderId]
+    # transaction_id = params[:transactionId]
+    # order_id = params[:orderId]
 
 
-    if transaction_id && order_id
-      create_transaction(order_id, transaction_id)
-    end
+    # if transaction_id && order_id
+    #   create_transaction(order_id, transaction_id)
+    # end
     render :thank_you and return
   end
 

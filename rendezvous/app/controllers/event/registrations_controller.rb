@@ -438,17 +438,17 @@ module Event
       @title = 'Complete Registration'
       @step = :finished
 
-      transaction_id = params[:transactionId]
-      order_id = params[:orderId]
-      if transaction_id && order_id
-        transaction = ::Square::Transaction.new
-        transaction.user = @registration.user
-        transaction.amount = @registration.total
-        transaction.transaction_id = transaction_id
-        transaction.order_id = order_id
-        transaction.registration_id = @registration.id
-        transaction.save
-      end
+      # transaction_id = params[:transactionId]
+      # order_id = params[:orderId]
+      # if transaction_id && order_id
+      #   transaction = ::Square::Transaction.new
+      #   transaction.user = @registration.user
+      #   transaction.amount = @registration.total
+      #   transaction.transaction_id = transaction_id
+      #   transaction.order_id = order_id
+      #   transaction.registration_id = @registration.id
+      #   transaction.save
+      # end
 
       if @registration.update(
         paid_amount: @registration.total,
