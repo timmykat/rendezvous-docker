@@ -396,12 +396,11 @@ module Admin
             Attendee
               .joins(:registration)
               .where(registrations: { year: @year }, volunteer: true)
-            end
             break
           end
         end
       end
-      return csv
+      csv
     end
   end
 end
