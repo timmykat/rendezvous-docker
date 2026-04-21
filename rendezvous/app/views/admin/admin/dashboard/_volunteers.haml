@@ -16,8 +16,7 @@
         %th Name
         %th Email (of registered user)
       %tbody
-        - if @data
-          - @volunteers.each do |volunteer|
+        - @volunteers.each do |volunteer|
             %tr
               %td= volunteer[:name]
               %td= volunteer[:email]

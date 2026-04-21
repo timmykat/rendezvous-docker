@@ -393,13 +393,9 @@ module Admin
             break
 
           when 'volunteers'
-            r.attendees do |a|
-              if a.volunteer?
-                csv_data << [
-                  a.name,
-                  registration.user.email
-                ]
-              end
+            Attendee
+              .joins(:registration)
+              .where(registrations: { year: @year }, volunteer: true)
             end
             break
           end
