@@ -18,9 +18,15 @@
                 .form-group
                   = f.input :donation, input_html: { class: 'fixed-2', data: { donation: true, recalculate_trigger: true, summary_source: true } }
 
-              %li.list-item-unstyled
-                .form-group
-                  = f.input :total, input_html: { readonly: true, class: 'fixed-2', data: { target_total: true } }
+              %fieldset
+                %li.list-item-unstyled
+                  .form-group
+                    = f.input :total, input_html: { readonly: true, class: 'fixed-2', data: { target_total: true } }
+
+                %li.list-item-unstyled
+                  .form-group
+                    %label Modification Amount
+                    = text_field_tag :modification_amount, @registration.modification_amount, readonly: true, class: 'form-control fixed-2'
 
               %li.list-item-unstyled
                 .form-group
@@ -30,9 +36,19 @@
                 .form-group
                   = f.input :paid_amount, input_html: { class: 'fixed-2', data: { paid_amount: true, recalculate_trigger: true, summary_trigger: true } }
 
-              %li.list-item-unstyled
-                .form-group
-                  = f.input :balance, input_html: { readonly: true, class: 'fixed-2', data: { target_balance: true } }
+              - if @registration.modifications.present?
+                %fieldset{ style: "font-size: 0.7em; border: solid 1px #666; border-radius: 5px; padding: 1em;" }
+                  %h2.h5 Modifications
+                  %table.table
+                    %thead
+                      %tr
+                        %th.text-left Status
+                        %th.text-left Modification Amount
+                    %tbody
+                      = f.simple_fields_for :modifications do |m|
+                        = render partial: 'modification_fields', locals: { m: m }
+              - else
+                %p (No modifications)
 
               %li.list-item-unstyled
                 .form-group

@@ -250,7 +250,7 @@ module Event
 
     def edit_by_admin
       @title = "Edit registration#{@user.nil? ? '' : " for #{@user.full_name}"}"
-      @registration = Event::Registration.includes(:modifications).find(params[:id])
+      @registration = Registration.includes(:modifications).find(params[:id])
     end
 
     def modify_by_admin
@@ -307,7 +307,7 @@ module Event
       m.status = :pending
 
       reg_params = params[:event_registration]
-      Event::Registration::AGE_GROUPS.each do |age|
+      Registration::AGE_GROUPS.each do |age|
         plural = age.pluralize
         number = "number_of_#{plural}"
         starting = "starting_#{plural}"
@@ -321,7 +321,7 @@ module Event
       end
       m.starting_lake_cruise = db_reg.lake_cruise_number || 0
 
-      Event::Registration::AGE_GROUPS.each do |age|
+      Registration::AGE_GROUPS.each do |age|
         plural = age.pluralize
         number = "number_of_#{plural}".to_sym
         starting = "starting_#{plural}"
@@ -330,7 +330,7 @@ module Event
       end
       m.delta_lake_cruise = (reg_params[:lake_cruise_number] || 0).to_i - m.starting_lake_cruise
 
-      m.new_attendee_fee = Event::Registration::AGE_GROUPS.sum do |age|
+      m.new_attendee_fee = Registration::AGE_GROUPS.sum do |age|
         delta = m.send("delta_#{age.pluralize}")
         delta.zero? ? 0 : delta * reg_fees[age.to_sym]
       end
@@ -536,7 +536,7 @@ module Event
     end
 
     def show
-      @registration = Registration.find(params[:id])
+      @registration = Registration.includes(:modifications).find(params[:id])
     end
 
     def destroy
@@ -637,7 +637,7 @@ module Event
     end
 
     def send_confirmation
-      registration = @registration || Event::Registration.find(params[:id])
+      registration = @registration || Registration.find(params[:id])
       unless registration
         flash_alert('No registration found')
         if current_user.admin?

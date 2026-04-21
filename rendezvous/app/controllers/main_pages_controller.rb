@@ -15,7 +15,7 @@ class MainPagesController < ApplicationController
 
   def faq
     @title = 'FAQ'
-    @faqs = Admin:Faq.sorted
+    @faqs = Faq.sorted
     fresh_when @faqs
   end
 

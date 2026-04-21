@@ -137,10 +137,27 @@
                       %td= v.judging_category
                       %td= v.for_sale? ? 'Yes' : 'No'
 
-      - if user_is_admin?
+      - if current_user&.admin?
         .card
           .card-body
             .card-title
-              %h3.h4 Email me my registration info
+              %h3.h4 Email registration info
             .card-text
               = link_to "Send Email", send_confirmation_event_registration_path(@registration.id, self_send: true), class: "btn  btn-info"
+
+        - if @registration.modifications.present?
+          .card
+            .card-body
+              .card-title
+                %h3.h4 Modifications
+              .card-text
+                %table.table
+                  %thead
+                    %tr
+                      %th.text-center Status
+                      %th.text-left Modification Amount
+                  %tbody
+                    - @registration.modifications.each do |m|
+                      %tr
+                        %td.text-center= m.status
+                        %td.text-left= number_to_currency(m.modification_total)

@@ -57,11 +57,12 @@ module Event
     has_many :vehicles, through: :registrations_vehicles
     has_one :donation_record, class_name: 'Donation'
     has_many :square_transactions, class_name: '::Square::Transaction', dependent: :destroy
-    has_many :modifications, dependent: :destroy
+    has_many :modifications, inverse_of: :registration, dependent: :destroy
 
     accepts_nested_attributes_for :user
     accepts_nested_attributes_for :attendees, allow_destroy: true
     accepts_nested_attributes_for :transactions, allow_destroy: true
+    accepts_nested_attributes_for :modifications, allow_destroy: true
 
     scope :current, -> { where(year: Date.current.year) }
     scope :alpha, -> { joins(:user).order(:last_name) }
@@ -200,9 +201,11 @@ module Event
                    donation.to_d +
                    lake_cruise_fee.to_d
 
-      modifications_paid = modifications&.sum(&:modification_total) || 0.0
+      self.balance = self.total - (paid_amount.to_d + refunded.to_d)
+    end
 
-      self.balance = self.total - (paid_amount.to_d + refunded.to_d) - modifications_paid
+    def modification_amount
+      modifications&.sum(&:modification_total) || 0.0
     end
 
     def total_of_payments

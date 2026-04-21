@@ -1,9 +1,10 @@
 .container#vendors
   .row.justify-content-center
     .col-md-8.col-12
-      %h1 FAQ
       .card
         .card-body
+          .cart-title
+            %h1.h2 FAQ
           .card-text
             .question
               %p We spend a lot of money in town - does anyone give discounts?
@@ -16,26 +17,24 @@
 
       .card
         .card-body
-          .card-text
-            .question
-              %p How can I help?
-            .answer
-              %p So glad you asked!
-              %ul
-                %li You can donate stuff to the silent auction. Details about how to do this will be forthcoming.
-                %li
-                  You can make a food pantry donation in honor of Gelseigh Cannon. Non-perishable food items collected will go to the
-                  = succeed '.' do
-                    = link_to 'Franklin Community Center', 'http://www.franklincommunitycenter.org/', target:  '_blank'
-                %li You can sign up to volunteer when you register (or get in touch later).
-                %li You can make a donation to the Rendezvous when you register. Or any time, really.
+          .card-title.question
+            %p How can I help?
+          .card-text.answer
+            %p So glad you asked!
+            %ul
+              %li You can donate stuff to the silent auction. Details about how to do this will be forthcoming.
+              %li
+                You can make a food pantry donation in honor of Gelseigh Cannon. Non-perishable food items collected will go to the
+                = succeed '.' do
+                  = link_to 'Franklin Community Center', 'http://www.franklincommunitycenter.org/', target:  '_blank'
+              %li You can sign up to volunteer when you register (or get in touch later).
+              %li You can make a donation to the Rendezvous when you register. Or any time, really.
 
       .card
         .card-body
-          .card-text
-            .question
-              %p The convention hotel is full. Do you have any recommended accommodations?
-            .answer
+          .card-title.question
+            %p The convention hotel is full. Do you have any recommended accommodations?
+          .card-text.answer
               %p
                 The
                 = link_to 'Saratoga Springs Convention and Tourism Bureau', 'http://discoversaratoga.org/saratoga/lodging', { target:  '_blank' }
@@ -61,16 +60,3 @@
                   = succeed ',' do
                     = link_to 'St. Charles Motel', 'http://StFrancisStCharlesMotels.com', target:  '_blank'
                   195 Broadway, 518-584-2050
-      
-      .card
-        .card-body
-          .card-text
-            .question
-              %p How does the Sunday driving tour work? Do I need to drive a Citroen?
-            .answer
-              %p Art Harvey, a Saratoga Springs local, will be leading the driving tour.
-              %ul
-                %li You can drive anything you want - no judgment.
-                %li Starting point is the Saratoga Auto Museum at 11:30am on Sunday.
-                %li The drive will be at a leisurely pace on secondary roads.
-                %li Participants may drive any part of the route.
