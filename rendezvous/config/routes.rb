@@ -148,7 +148,7 @@ Rails.application.routes.draw do
   # get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
 
   # -- Content
-  get '/faq', to: 'main_pages#faq'
+  # get '/faq', to: 'main_pages#faq'
   get '/history', to: 'main_pages#history'
   get '/volunteering', to: 'main_pages#volunteering'
   get '/landing_page', to: 'main_pages#landing_page'

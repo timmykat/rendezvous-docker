@@ -7,7 +7,7 @@ class EmailController < ApplicationController
     @name = reg.user.full_name
     @email = reg.user.email
     @reg_link = event_registration_url(reg.id)
-    @topic = params[:topic].to_sym
+    @topic = params[:topic]&.to_sym || 'General Message'
   end
 
   def send_message

@@ -90,7 +90,7 @@ module Event
         @user = User.find_by(id: params.dig(:event_registration, :user_id))
       end
 
-      @user = current_user unless current_user.admin?
+      @user = current_user unless current_user&.admin?
 
       unless @user
         Rails.logger.warn('No registration user could be determined')
@@ -201,7 +201,6 @@ module Event
     end
 
     def update
-
       # Set total to registration fee. Donation happens in payment
       params[:event_registration][:total] = params[:event_registration][:registration_fee]
 
@@ -249,8 +248,13 @@ module Event
       end
     end
 
+    def edit_by_admin
+      @title = "Edit registration#{@user.nil? ? '' : " for #{@user.full_name}"}"
+      @registration = Event::Registration.includes(:modifications).find(params[:id])
+    end
+
     def modify_by_admin
-      @title = "Admin Registration Update"
+      @title = 'Admin Registration Update'
       @no_total_update = @registration.complete?
     end
 

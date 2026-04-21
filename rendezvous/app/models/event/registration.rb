@@ -200,7 +200,9 @@ module Event
                    donation.to_d +
                    lake_cruise_fee.to_d
 
-      self.balance = self.total - (paid_amount.to_d + refunded.to_d)
+      modifications_paid = modifications&.sum(&:modification_total) || 0.0
+
+      self.balance = self.total - (paid_amount.to_d + refunded.to_d) - modifications_paid
     end
 
     def total_of_payments
