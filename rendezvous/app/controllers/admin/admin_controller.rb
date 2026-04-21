@@ -394,7 +394,7 @@ module Admin
             break
 
           when 'volunteers'
-            @volunteers = Attendee
+            csv_data << Attendee
               .joins(registration: :user)
               .where(registrations: { year: @year }, volunteer: true)
               .select('attendees.*, users.email as user_email')
