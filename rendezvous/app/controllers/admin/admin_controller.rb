@@ -215,10 +215,11 @@ module Admin
       # -------------------------
       # Volunteers (simple + fast)
       # -------------------------
-      @volunteer_count = Attendee
+      @volunteers = Attendee
         .joins(:registration)
         .where(registrations: { year: @year }, volunteer: true)
-        .count
+
+      @volunteer_count = @volunteers.size
 
       # -------------------------
       # BIG STATS QUERY

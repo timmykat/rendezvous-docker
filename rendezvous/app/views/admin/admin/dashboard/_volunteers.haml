@@ -1,4 +1,7 @@
 .tab-content{ data: { "tab-content": 'volunteers' }}
+  %p
+    Export volunters list (csv):
+    =link_to 'export', admin_download_csv_path(type: 'volunteers')
   .card
     .card-body
       .card-title
