@@ -216,8 +216,9 @@ module Admin
       # Volunteers (simple + fast)
       # -------------------------
       @volunteers = Attendee
-        .joins(:registration)
-        .where(registrations: { year: @year }, volunteer: true)
+                    .joins(registration: :user)
+                    .where(registrations: { year: @year }, volunteer: true)
+                    .select('attendees.*, users.email as user_email')
 
       @volunteer_count = @volunteers.size
 
@@ -393,9 +394,10 @@ module Admin
             break
 
           when 'volunteers'
-            Attendee
-              .joins(:registration)
+            @volunteers = Attendee
+              .joins(registration: :user)
               .where(registrations: { year: @year }, volunteer: true)
+              .select('attendees.*, users.email as user_email')
             break
           end
         end
