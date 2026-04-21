@@ -3,7 +3,7 @@ import { debounce } from "throttle-debounce";
 export class AdminSummary extends HTMLElement {
   constructor() {
     super();
-    this.processFieldsDebounced = debounce(500, this.processFields);
+    this.recalculateDebounced = debounce(500, this.recalculate);
   }
 
   connectedCallback() {
@@ -21,7 +21,7 @@ export class AdminSummary extends HTMLElement {
     );
 
     this.setupEventListeners();
-    this.processFields(); // Initial calculation
+    this.recalculate(); // Initial calculation
   }
 
   disconnectedCallback() {
@@ -29,7 +29,7 @@ export class AdminSummary extends HTMLElement {
   }
 
   setupEventListeners = () => {
-    document.addEventListener("RECALCULATE", this.processFieldsDebounced);
+    document.addEventListener("RECALCULATE", this.recalculateDebounced);
     this.recalculateTriggers.forEach((field) => {
       field.addEventListener("input", this.dispatchRecalculate);
       field.addEventListener("change", this.dispatchRecalculate);
@@ -45,7 +45,7 @@ export class AdminSummary extends HTMLElement {
   };
 
   removeEventListeners = () => {
-    document.removeEventListener("RECALCULATE", this.processFieldsDebounced);
+    document.removeEventListener("RECALCULATE", this.recalculateDebounced);
     this.recalculateTriggers.forEach((field) => {
       field.removeEventListener("input", this.dispatchRecalculate);
       field.removeEventListener("change", this.dispatchRecalculate);
@@ -56,22 +56,25 @@ export class AdminSummary extends HTMLElement {
     });
   };
 
-  processFields = () => {
+  recalculate = () => {
     // Compute total from summary source fields
     const total = Array.from(this.sourceFields).reduce((sum, f) => {
       // only sum if value can be parsed
       const v = parseFloat(f.value);
       return sum + (isNaN(v) ? 0 : v);
     }, 0);
+    this.totalField.value = total;
 
     // Get paid amount
     const paid =
       this.paidAmountField && !isNaN(parseFloat(this.paidAmountField.value))
         ? parseFloat(this.paidAmountField.value)
         : 0;
+    this.paidAmountField.value = paid;
 
     // Calculate balance
     const balance = total - paid;
+    this.balanceField.value = balance;
 
     this.setPaymentStatus(balance);
   };
