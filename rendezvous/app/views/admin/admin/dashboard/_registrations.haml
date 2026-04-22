@@ -25,9 +25,7 @@
             %th.tablesorter-header.filter-false.text-center Status
             %th.tablesorter-header.filter-false.text-center Payment Status
             %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Name
-            %th.tablesorter-header.filter-false.text-center Event Fee
-            %th.tablesorter-header.filter-false.text-center Cruise Fee
-            %th.tablesorter-header.filter-false.text-center Donation
+            %th.tablesorter-header.filter-false.text-center Fees
             %th.tablesorter-header.filter-false.text-center Total
             %th.tablesorter-header.filter-false.text-center Paid
             %th.tablesorter-header.filter-false.text-center Balance
@@ -62,11 +60,13 @@
                 - else
                   *** Missing User (ID: #{reg.id})
 
-              %td.text-right= number_to_currency(reg.registration_fee)
-              %td.text-right= number_to_currency(reg.lake_cruise_fee)
-              %td.text-right= number_to_currency(reg.donation)
+              %td.text-right{style: 'whitespace: nowrap;' }
+                %ul.list-unstyled
+                  %li.list-unstyled.text-small Attendees: #{number_to_currency(reg.registration_fee)}
+                  %li.list-unstyled.text-small Cruise: #{number_to_currency(reg.lake_cruise_fee)}
+                  %li.list-unstyled.text-small  Donation: #{number_to_currency(reg.donation)}
               %td.text-right= number_to_currency(reg.total)
-              %td.text-right= number_to_currency(reg.paid_amount)
+              %td.text-right Paid: #{number_to_currency(reg.paid_amount)} (#{reg.paid_method})
 
               -# Use the balance column directly
               - if reg.balance > 0
