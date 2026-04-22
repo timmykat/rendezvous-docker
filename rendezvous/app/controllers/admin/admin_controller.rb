@@ -184,7 +184,11 @@ module Admin
     def create_table_data
       @year ||= Time.current.year
 
-      @registrations = base = Event::Registration.where(year: @year)
+      base = Event::Registration.where(year: @year)
+
+      @registrations = Event::Registration
+        .where(year: @year)
+        .order(Arel.sql("balance != 0 DESC, created_at DESC"))
 
       if @registrations.nil?
         @registrations = []

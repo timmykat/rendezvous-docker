@@ -8,8 +8,6 @@
       %tab-display#dashboard{ data: { tabbed: true } }
         %ul{ data: { tab_buttons: true } }
           %li
-            %button{ data: { tab: "summary" } } Summary
-          %li
             %button{ data: { tab: "registrations" } } Registrations
           %li
             %button{ data: { tab: "users" } } Users
@@ -17,9 +15,11 @@
             %button{ data: { tab: "volunteers" } } Volunteer List
           %li
             %button{ data: { tab: "vehicles" } } Vehicles
+          %li
+            %button{ data: { tab: "summary" } } Summary
 
-        = render partial: '/admin/admin/dashboard/summary'
         = render partial: '/admin/admin/dashboard/registrations'
         = render partial: '/admin/admin/dashboard/users'
         = render partial: '/admin/admin/dashboard/volunteers'
         = render partial: '/admin/admin/dashboard/vehicles'
+        = render partial: '/admin/admin/dashboard/summary'

@@ -8,7 +8,6 @@
           .card-title
             %h2= @title
           .card-text
-            = @registration.modifications
             %admin-summary
               #registration-form.edit_registration
                 = simple_form_for @registration, url: update_by_admin_event_registration_path, method: :patch, data: { turbo: false } do |f|
