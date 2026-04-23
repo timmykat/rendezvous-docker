@@ -97,7 +97,7 @@ class ApplicationController < ActionController::Base
   end
 
   def written_reg_form_link
-    "/#{Date.current.year}-Rendezvous-registration-#{fee_period}.pdf"
+    "/#{Date.current.year}-Rendezvous-registration-#{fee_period}-boat-cruise.pdf"
   end
 
   # This currently has an absolute max in the DB of 8
