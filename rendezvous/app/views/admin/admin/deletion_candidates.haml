@@ -5,7 +5,7 @@
       %user-delete
         %form{ action: admin_delete_users_path, method: 'post', data: { turbo: false } }
           = hidden_field_tag :_method, 'delete'
-          .form-check.form-control.form-checkbox
+          .form-check.form-checkbox
             = check_box_tag 'select_all', 1, false, id: 'select_all', class: 'toggle form-control-input'
             %label{ for: 'select_all', class: 'form-control-label' } Select All/None
           %table.table.striped
@@ -23,7 +23,7 @@
                 - if potential_delete?(c)
                   %tr
                     %td.text-center
-                      .form-group.form-control.form-checkbox
+                      .form-group.form-checkbox
                         = check_box_tag 'user_ids[]', c[:user].id, class: 'user-toggle form-control-input'
                         %label{ for: 'user_ids[]', class: 'form-control-label' }
                     %td.text-center= c[:user].email
