@@ -133,6 +133,7 @@ Rails.application.routes.draw do
     get 'peoples_choice_results', to: 'admin#peoples_choice_results'
     get 'ballots/clear', to: 'admin#clear_ballots'
     get 'update_user_vehicles/:id', to: 'admin#update_user_vehicles'
+    delete 'delete_users', to: 'users#delete_users'
     get 'deletion_candidates', to: 'users#deletion_candidates'
   end
 

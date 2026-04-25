@@ -2,31 +2,35 @@
   .row
     .col-md-10.col-12
       %h1 User Deletion candidates
-      %form{ action: '/bulk_delete', method: 'post' }
-        = hidden_field_tag :_method, 'delete'
-        = check_box_tag 'select_all', 1, false, id: 'select_all'
-        %label{ for: 'select_all' } Select All/None
-        %table.table.striped
-          %thead
-            %tr
-              %th Delete
-              %th Email
-              %th Invalid?
-              %th Deny Listed?
-              %th Disposable?
-              %th Invalid MX?
-              %th Subaddressed?
-          %tbody
-            - @candidates.each do |c|
-              - if potential_delete?(c)
-                %tr
-                  %td
-                    = check_box_tag 'user_ids[]', c[:user].id
-                  %td= c[:user].email
-                  %td= c[:valid] ? 'no' : 'YES'
-                  %td= c[:deny_list] ? 'YES' : 'no'
-                  %td= c[:disposable] ? 'YES' : 'no'
-                  %td= c[:valid_mx] ? 'no' : 'YES'
-                  %td= c[:subaddressed] ? 'YES' : 'no'
-        %br/
-        = submit_tag 'Delete Selected Users', class: 'btn btn-danger'
+      %user-delete
+        %form{ action: admin_delete_users_path, method: 'post', data: { turbo: false } }
+          = hidden_field_tag :_method, 'delete'
+          .form-check.form-control.form-checkbox
+            = check_box_tag 'select_all', 1, false, id: 'select_all', class: 'toggle form-control-input'
+            %label{ for: 'select_all', class: 'form-control-label' } Select All/None
+          %table.table.striped
+            %thead
+              %tr
+                %th.text-center Delete
+                %th.text-center Email
+                %th.text-center Invalid?
+                %th.text-center Deny Listed?
+                %th.text-center Disposable?
+                %th.text-center Invalid MX?
+                %th.text-center Subaddressed?
+            %tbody
+              - @candidates.each do |c|
+                - if potential_delete?(c)
+                  %tr
+                    %td.text-center
+                      .form-group.form-control.form-checkbox
+                        = check_box_tag 'user_ids[]', c[:user].id, class: 'user-toggle form-control-input'
+                        %label{ for: 'user_ids[]', class: 'form-control-label' }
+                    %td.text-center= c[:user].email
+                    %td.text-center= c[:valid] ? 'no' : 'YES'
+                    %td.text-center= c[:deny_list] ? 'YES' : 'no'
+                    %td.text-center= c[:disposable] ? 'YES' : 'no'
+                    %td.text-center= c[:valid_mx] ? 'no' : 'YES'
+                    %td.text-center= c[:subaddressed] ? 'YES' : 'no'
+          %br/
+          = submit_tag 'Delete Selected Users', class: 'btn btn-danger'

@@ -2,16 +2,15 @@ require 'valid_email2'
 
 module Admin
   class UsersController < Admin::AdminController
-    def cleanup
-      @users = deletion_candidates
-      @users_to_delete = User.where(id: params[:user_ids])
-      confirm_delete = params[:confirm_delete]
-      unless confirm_delete && !@users_to_delete.empty?
-        redirect_to admin_dashboard_path, notice: 'No deletions' and return
+    def delete_users
+      users = User.where(id: params[:user_ids])
+      number_of_users = users.size
+      unless users.destroy_all
+        flash_alert 'Something went wrong with user destruction'
+        redirect_to admin_dashboard_path and return
       end
 
-      @users_to_delete.destroy_all
-      redirect_to admin_dashboard_path, notice: 'Sus users deleted'
+      redirect_to admin_dashboard_path, notice: "#{number_of_users} user(s) were deleted"
     end
 
     def deletion_candidates

@@ -10,3 +10,4 @@ import "tablesorter/dist/js/jquery.tablesorter.widgets";
 import "./modules/admin_functions";
 import "./modules/rails_sortable";
 import "./modules/TabDisplay";
+import "./modules/UserDelete";
