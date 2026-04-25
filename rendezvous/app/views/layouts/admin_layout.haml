@@ -55,8 +55,9 @@
     %main
       .content
         .navbar.nav.justify-content-start
-          .nav-item.ml-5=link_to 'Dashboard', admin_dashboard_path, class: 'btn btn-primary'
-          .nav-item.ml-5=link_to 'Manage', admin_manage_path, class: 'btn btn-primary'
+          .nav-item.ml-3=link_to 'Dashboard', admin_dashboard_path, class: 'btn btn-primary'
+          .nav-item.ml-3=link_to 'Manage', admin_manage_path, class: 'btn btn-primary'
+          .nav-item.ml-3=link_to 'User Management', admin_deletion_candidates_path, class: 'btn btn-primary'
         = yield
       .push
 

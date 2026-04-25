@@ -35,4 +35,8 @@ module AdminHelper
       application_css: public_asset_mtime('application.css')
     }
   end
+
+  def potential_delete?(cand)
+    !cand[:valid] || cand[:deny_list] || cand[:disposable] || !cand[:valid_mx] || cand[:subaddressed]
+  end
 end

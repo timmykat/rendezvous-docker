@@ -1,0 +1,32 @@
+.container
+  .row
+    .col-md-10.col-12
+      %h1 User Deletion candidates
+      %form{ action: '/bulk_delete', method: 'post' }
+        = hidden_field_tag :_method, 'delete'
+        = check_box_tag 'select_all', 1, false, id: 'select_all'
+        %label{ for: 'select_all' } Select All/None
+        %table.table.striped
+          %thead
+            %tr
+              %th Delete
+              %th Email
+              %th Invalid?
+              %th Deny Listed?
+              %th Disposable?
+              %th Invalid MX?
+              %th Subaddressed?
+          %tbody
+            - @candidates.each do |c|
+              - if potential_delete?(c)
+                %tr
+                  %td
+                    = check_box_tag 'user_ids[]', c[:user].id
+                  %td= c[:user].email
+                  %td= c[:valid] ? 'no' : 'YES'
+                  %td= c[:deny_list] ? 'YES' : 'no'
+                  %td= c[:disposable] ? 'YES' : 'no'
+                  %td= c[:valid_mx] ? 'no' : 'YES'
+                  %td= c[:subaddressed] ? 'YES' : 'no'
+        %br/
+        = submit_tag 'Delete Selected Users', class: 'btn btn-danger'

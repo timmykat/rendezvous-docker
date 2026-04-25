@@ -61,6 +61,7 @@ gem 'redcarpet'
 gem 'role_model'
 gem 'simple_form', '~>5'
 gem 'square.rb'
+gem 'valid_email2'
 
 # Model annotation
 gem 'annotaterb'
