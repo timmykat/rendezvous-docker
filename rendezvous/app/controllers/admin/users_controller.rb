@@ -20,6 +20,8 @@ module Admin
         address = ValidEmail2::Address.new(user.email)
         record = {
           user: user,
+          registrations: user.registrations&.size || 0,
+          suspicious_name: suspicious_name?(user.last_name),
           valid: address.valid?,
           deny_list: address.deny_listed?,
           disposable: address.disposable?,
@@ -29,6 +31,21 @@ module Admin
         @candidates << record
       end
       @candidates
+    end
+
+    def suspicious_name?(name)
+
+      suspicious = false
+      # Over 10 characters, not enough vowels
+      suspicious ||= name.length > 10 && name.scan(/[aeiou]/i).size < 2
+      # Random-like uppercase/lowercase pattern (multiple uppercase letters not at start)
+      suspicious ||= !!(name =~ /[A-Z]{2,}[a-z]{2,}/)
+      # No vowels at all
+      suspicious ||= !(name =~ /[aeiou]/i)
+      # Almost all letters are the same
+      suspicious ||= name.chars.uniq.size < name.length - 2
+
+      suspicious
     end
   end
 end

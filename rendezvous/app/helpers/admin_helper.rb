@@ -37,6 +37,6 @@ module AdminHelper
   end
 
   def potential_delete?(cand)
-    !cand[:valid] || cand[:deny_list] || cand[:disposable] || !cand[:valid_mx] || cand[:subaddressed]
+    cand[:suspicious_name] || !cand[:valid] || cand[:deny_list] || cand[:disposable] || !cand[:valid_mx] || cand[:subaddressed]
   end
 end

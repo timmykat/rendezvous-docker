@@ -12,7 +12,9 @@
             %thead
               %tr
                 %th.text-center Delete
-                %th.text-center Email
+                %th.text-left Name
+                %th.text-left Email
+                %th.text-right Registrations
                 %th.text-center Invalid?
                 %th.text-center Deny Listed?
                 %th.text-center Disposable?
@@ -20,17 +22,19 @@
                 %th.text-center Subaddressed?
             %tbody
               - @candidates.each do |c|
-                - if potential_delete?(c)
-                  %tr
-                    %td.text-center
-                      .form-group.form-checkbox
-                        = check_box_tag 'user_ids[]', c[:user].id, class: 'user-toggle form-control-input'
-                        %label{ for: 'user_ids[]', class: 'form-control-label' }
-                    %td.text-center= c[:user].email
-                    %td.text-center= c[:valid] ? 'no' : 'YES'
-                    %td.text-center= c[:deny_list] ? 'YES' : 'no'
-                    %td.text-center= c[:disposable] ? 'YES' : 'no'
-                    %td.text-center= c[:valid_mx] ? 'no' : 'YES'
-                    %td.text-center= c[:subaddressed] ? 'YES' : 'no'
+                %tr{class: "#{potential_delete?(c) ? ' text-danger font-weight-bold' : ''}" }
+                  %td.text-center
+                    .form-group.form-checkbox
+                      = check_box_tag 'user_ids[]', c[:user].id, class: 'user-toggle form-control-input'
+                      %label{ for: 'user_ids[]', class: 'form-control-label' }
+
+                  %td.text-left #{c[:user].full_name}
+                  %td.text-left= c[:user].email
+                  %td.text-center= c[:registrations]
+                  %td.text-center= c[:valid] ? 'no' : 'YES'
+                  %td.text-center= c[:deny_list] ? 'YES' : 'no'
+                  %td.text-center= c[:disposable] ? 'YES' : 'no'
+                  %td.text-center= c[:valid_mx] ? 'no' : 'YES'
+                  %td.text-center= c[:subaddressed] ? 'YES' : 'no'
           %br/
           = submit_tag 'Delete Selected Users', class: 'btn btn-danger'

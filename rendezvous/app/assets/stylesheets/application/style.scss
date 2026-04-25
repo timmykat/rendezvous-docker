@@ -64,7 +64,7 @@ body,
 p,
 li,
 ol,
-td {
+tr {
     @include fonts.outfit-regular;
     font-size: 18px;
 }
