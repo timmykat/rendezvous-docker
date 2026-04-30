@@ -16,7 +16,7 @@
           - unless previous_step.nil?
             = "&larr; #{previous_step}".html_safe
         %li.list-group-item.step.current
-          = step
+          = step.to_s.humanize
         %li.list-group-item.step.next
           - unless next_step.nil?
             = "#{next_step} &rarr;".html_safe
