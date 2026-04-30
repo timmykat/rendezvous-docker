@@ -2,6 +2,7 @@ import "@oddcamp/cocoon-vanilla-js";
 
 export class AttendanceManager extends HTMLElement {
   connectedCallback() {
+    this.init();
     this.setupEventListeners();
     this.initializeFirstAttendee();
     this.initializeTypeFees();
@@ -12,8 +13,17 @@ export class AttendanceManager extends HTMLElement {
     this.removeEventListeners();
   }
 
+  init = () => {
+    this.feePeriodSelect = this.querySelector("select#registration_fee_period");
+    this.feePeriodHidden = this.querySelector("input#registration_fee_period");
+    this.feeStructure = JSON.parse(this.dataset.fee_structure);
+  };
+
   setupEventListeners = () => {
     // 1. Radio button changes (Event Delegation)
+    if (this.feePeriodSelect) {
+      this.feePeriodSelect.addEventListener("change", this.updateAttendeeFees);
+    }
     this.addEventListener("change", this.radioButtonChangeTasks);
     this.addEventListener("cocoon:after-insert", this.insertAttendeeTasks);
     this.addEventListener("cocoon:after-remove", this.removeAttendeeTasks);
@@ -21,10 +31,32 @@ export class AttendanceManager extends HTMLElement {
   };
 
   removeEventListeners = () => {
+    if (this.feePeriodSelect) {
+      this.feePeriodSelect.removeEventListener(
+        "change",
+        this.updateAttendeeFees,
+      );
+    }
     this.removeEventListener("change", this.radioButtonChangeTasks);
     this.removeEventListener("cocoon:after-insert", this.insertAttendeeTasks);
     this.removeEventListener("cocoon:after-remove", this.removeAttendeeTasks);
     document.removeEventListener("RECALCULATE", this.getAttendeeTotals);
+  };
+
+  updateAttendeeFees = (e) => {
+    const attendees = this.querySelectorAll(".card.attendee");
+    const period = e.target.value;
+    const fees = this.feeStructure[period];
+    attendees.forEach((a) => {
+      const radio = a.querySelector('input[type="radio"]:checked');
+      const adultLabel = a.querySelector("span.adult-fee");
+      adultLabel.textContent = fees["adult"];
+      const youthLabel = a.querySelector("span.youth-fee");
+      youthLabel.textContent = fees["youth"];
+      const value = radio.value;
+      a.dataset.fee = fees[value];
+    });
+    this.getAttendeeTotals();
   };
 
   radioButtonChangeTasks = (e) => {

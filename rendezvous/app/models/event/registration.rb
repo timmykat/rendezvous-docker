@@ -81,17 +81,24 @@ module Event
     }
 
     enum step: {
-      creating:       'creating',
+      creating: 'creating',
       special_events: 'special events',
-      review:         'review',
-      payment:        'payment',
-      finished:       'finished'
+      review: 'review',
+      payment: 'payment',
+      finished: 'finished'
     }
 
     enum paid_method: {
       credit_card: 'credit card',
       cash_or_check: 'cash or check',
       invoice: 'invoice'
+    }
+
+    enum fee_period: {
+      early: 'early',
+      late: 'late',
+      on_site: 'on site',
+      day_of: 'day off'
     }
 
     AGE_GROUPS = %w[adult youth child].freeze
