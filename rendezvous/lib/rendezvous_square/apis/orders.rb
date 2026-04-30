@@ -23,7 +23,7 @@ module RendezvousSquare
           location_id: Apis::Base.get_location_id,
           customer_id: params[:customer_id],
           line_items: create_line_items(params),
-          ticket_name: "2026 Citroen Rendezvous Registration",
+          ticket_name: '2026 Citroen Rendezvous Registration',
           reference_id: params[:registration].id.to_s
         }
       end
@@ -32,7 +32,7 @@ module RendezvousSquare
         {
           location_id: Apis::Base.get_location_id,
           customer_id: Apis::Customers.find_customer(params[:email]),
-          ticket_name: "2026 Citroen Rendezvous Registration - Update",
+          ticket_name: '2026 Citroen Rendezvous Registration - Update',
           reference_id: params[:reference_id].to_s,
           line_items: create_line_items(params)
         }

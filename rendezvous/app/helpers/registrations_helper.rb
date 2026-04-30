@@ -47,6 +47,22 @@ module RegistrationsHelper
     ENV.fetch "#{square_env}_SQUARE_LOCATION_ID"
   end
 
+  def fee_structure
+    orders = Rails.configuration.orders
+    result = {}
+
+    %i[early late].each do |period|
+      period_data = orders[period]
+      next unless period_data
+      result[period] = {
+        adult: period_data[:adult],
+        youth: period_data[:youth]
+      }
+    end
+
+    result
+  end
+
   def get_status_icon(status)
     klass = status.gsub(' ', '-')
     case status

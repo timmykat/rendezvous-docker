@@ -1,7 +1,12 @@
-%attendance-manager
+%attendance-manager{ data: { fee_structure: fee_structure.to_json.html_safe }}
   %h2.h3 Registration Information
   %h3.h4 Attendees
   %p.hint (Adults are 16+, youths are 5-15, and children are under 5)
+  - if current_user.admin?
+    .form-group
+      = f.input :fee_period, id: 'registration_fee_period', as: :select, collection: Event::Registration.fee_periods
+  - else
+    = f.input :fee_period, readonly: true,  id: 'registration_fee_period'
   .row
     .col-12
       #attendees.items

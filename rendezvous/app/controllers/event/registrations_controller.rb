@@ -298,7 +298,7 @@ module Event
     def create_modification(cancellation: false)
       db_reg = @registration.class.find(@registration.id)
 
-      fee_period = db_reg.late_period? ? :late : :early
+      fee_period = db_reg.fee_period
       env = RendezvousSquare::Apis::Base.env_key
       reg_fees = Rails.configuration.orders[env][fee_period]
       lake_cruise_fee = Rails.configuration.orders[env][:lake_cruise][:price]
@@ -552,27 +552,6 @@ module Event
       @step = :welcome
     end
 
-    # def create_square_order
-    #   begin
-    #     order = ::RendezvousSquare::Apis::Order.create({
-    #       registration: @registration,
-    #       customer_id: customer_id,
-    #       redirect_url: redirect_url,
-    #       fee_period: fee_period,
-    #       order_type: "Event Registration"
-    #     })
-    #   rescue Square::Errors::ApiError => e
-    #     flash_alert "There was a problem creating the order: #{e.message}"
-    #     return false
-    #   end
-    #   order
-    # end
-
-    # def send_square_invoice(order)
-    #   params = {
-    #     order_id: order[:id]
-    #   }
-    # end
     def payment_request
       user = @registration.user
       customer_id = user.ensure_square_customer_id!
@@ -581,7 +560,7 @@ module Event
           RendezvousSquare::Apis::Checkout.create_square_payment_link({
                                                                         registration: @registration,
                                                                         customer_id: customer_id,
-                                                                        fee_period: fee_period
+                                                                        fee_period: @registration.fee_period
                                                                       })
         end
       rescue Square::Errors::ApiError => e
@@ -590,7 +569,7 @@ module Event
       end
 
       unless square_payment_link
-        flash_alert "There was an unknown problem creating the payment link."
+        flash_alert 'There was an unknown problem creating the payment link.'
         render :show and return
       end
 
@@ -602,8 +581,8 @@ module Event
     def send_to_square
       @step = :payment
       @registration = Registration.find(params[:id])
-      if !@registration.update(update_payment_params)
-        flash_alert "There was a problem making your payment update; no payment submitted"
+      unless @registration.update(update_payment_params)
+        flash_alert 'There was a problem making your payment update; no payment submitted'
         render :payment
       end
 
@@ -620,7 +599,7 @@ module Event
                                                                         registration: @registration,
                                                                         customer_id: customer_id,
                                                                         redirect_url: redirect_url,
-                                                                        fee_period: fee_period
+                                                                        fee_period: @registration.fee_period
                                                                       })
         end
       rescue Square::Errors::ApiError => e
@@ -677,6 +656,8 @@ module Event
           end
         end
       end
+
+      @registration.fee_period = calculated_fee_period
 
       if @user.present?
         @registration.user = @user
@@ -751,6 +732,7 @@ module Event
         :number_of_adults,
         :number_of_youths,
         :number_of_children,
+        :fee_period,
         :registration_fee,
         :donation,
         :total,

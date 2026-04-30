@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   helper_method :debug_date
   helper_method :event_fees
   helper_method :event_fees_for_period
-  helper_method :fee_period
+  helper_method :calculated_fee_period
   helper_method :get_reg_id
   helper_method :is_debug_date
   helper_method :registration_status
@@ -87,17 +87,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def event_fees_for_period
-    env = RendezvousSquare::Apis::Base.env_key
-    Rails.configuration.orders[env][fee_period]
+  def event_fees_for_period(period = calculated_fee_period)
+    Rails.configuration.orders[period]
   end
 
-  def fee_period
+  def calculated_fee_period
     (current_time <= Rails.configuration.orders[:early][:end_date].to_date.end_of_day) ? :early : :late
   end
 
   def written_reg_form_link
-    "/#{Date.current.year}-Rendezvous-registration-#{fee_period}-boat-cruise.pdf"
+    "/#{Date.current.year}-Rendezvous-registration-#{calculated_fee_period}-boat-cruise.pdf"
   end
 
   # This currently has an absolute max in the DB of 8

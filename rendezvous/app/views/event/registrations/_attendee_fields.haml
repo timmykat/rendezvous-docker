@@ -1,8 +1,9 @@
-- fees = event_fees_for_period
+- adult_fee = fee_structure[@registration.fee_period.to_sym][:adult]
+- youth_fee = fee_structure[@registration.fee_period.to_sym][:youth]
 .nested-fields
   .row
     .col-md-12
-      .card.attendee{ data: { fee: fees[:adult] } }
+      .card.attendee{ data: { fee: adult_fee } }
         .card-body
           .card-title
             .attendee-type YOU
@@ -10,12 +11,12 @@
             .form-group
               = f.input :name, label:  'Name (for name tag)', input_html:  { placeholder:  'Name *' }
             .form-group
-              = f.input :attendee_age, label:  '', collection:  [[" Adult (16+): $#{fees[:adult]}", 'adult'], [" Youth (5-15): $#{fees[:youth]}", 'youth'], [' Child, 0-5 (free)', 'child']], as:  :radio_buttons, item_label_class:  'form-check-label ps-2', item_wrapper_class: 'form-check-inline'
+              = f.input :attendee_age, label:  '', collection:  [[" Adult (16+): $<span class='adult-fee'>#{adult_fee}</span>".html_safe, 'adult'], [" Youth (5-15): $<span class='youth-fee'>#{youth_fee}</span>".html_safe, 'youth'], [' Child, 0-5 (free)', 'child']], as:  :radio_buttons, item_label_class:  'form-check-label ps-2', item_wrapper_class: 'form-check-inline'
             .form-group
               = f.input :volunteer, inline_label:  "Would like to volunteer (<a href='#' data-toggle='modal', data-target='#volunteer-info'>What volunteer tasks are there?</a>)".html_safe
-            .form-group 
+            .form-group
 
-            - unless no_fee_related_changes    
+            - unless no_fee_related_changes
               .row
                 .col-md-12
                   .remove_association_action
