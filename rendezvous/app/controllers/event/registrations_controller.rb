@@ -144,7 +144,6 @@ module Event
         return
       end
       @title = "Let's get you registered!"
-      @registration.fee_period = calculated_fee_period
       build_registration
       @step = :creating
     end
@@ -561,7 +560,7 @@ module Event
           RendezvousSquare::Apis::Checkout.create_square_payment_link({
                                                                         registration: @registration,
                                                                         customer_id: customer_id,
-                                                                        fee_period: fee_period
+                                                                        fee_period: @registration.fee_period
                                                                       })
         end
       rescue Square::Errors::ApiError => e
@@ -600,7 +599,7 @@ module Event
                                                                         registration: @registration,
                                                                         customer_id: customer_id,
                                                                         redirect_url: redirect_url,
-                                                                        fee_period: fee_period
+                                                                        fee_period: @registration.fee_period
                                                                       })
         end
       rescue Square::Errors::ApiError => e
@@ -657,6 +656,8 @@ module Event
           end
         end
       end
+
+      @registration.fee_period = calculated_fee_period
 
       if @user.present?
         @registration.user = @user

@@ -92,11 +92,11 @@ class ApplicationController < ActionController::Base
   end
 
   def calculated_fee_period
-    (current_time <= Rails.configuration.orders[:early][:end_date].to_time) ? :early : :late
+    (current_time <= Rails.configuration.orders[:early][:end_date].to_date.end_of_day) ? :early : :late
   end
 
   def written_reg_form_link
-    "/#{Date.current.year}-Rendezvous-registration-#{fee_period}-boat-cruise.pdf"
+    "/#{Date.current.year}-Rendezvous-registration-#{calculated_fee_period}-boat-cruise.pdf"
   end
 
   # This currently has an absolute max in the DB of 8
