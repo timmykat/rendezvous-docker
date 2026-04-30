@@ -14,9 +14,13 @@ export class AttendanceManager extends HTMLElement {
   }
 
   init = () => {
-    this.feePeriodSelect = this.querySelector("select#registration_fee_period");
-    this.feePeriodHidden = this.querySelector("input#registration_fee_period");
-    this.feeStructure = JSON.parse(this.dataset.fee_structure);
+    this.feePeriodSelect = this.querySelector(
+      "select#event_registration_fee_period",
+    );
+    this.feePeriodHidden = this.querySelector(
+      "input#event_registration_fee_period",
+    );
+    this.feeStructure = JSON.parse(this.dataset.feeStructure);
   };
 
   setupEventListeners = () => {
@@ -44,6 +48,7 @@ export class AttendanceManager extends HTMLElement {
   };
 
   updateAttendeeFees = (e) => {
+    console.log("Update:", e);
     const attendees = this.querySelectorAll(".card.attendee");
     const period = e.target.value;
     const fees = this.feeStructure[period];
