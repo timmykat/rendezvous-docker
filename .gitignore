@@ -53,6 +53,7 @@ rendezvous/public/uploads/*
 rendezvous/public/files/registrations/*
 rendezvous/public/assets/*
 rendezvous/public/qr_codes/*
+rendezvous/public/upc/*
 
 rendezvous.sass-cache
 rendezvous/public/packs

@@ -93,7 +93,7 @@ class ApplicationController < ActionController::Base
   end
 
   def fee_period
-    (current_time <= Rails.configuration.orders[:early][:end_date].to_time) ? :early : :late
+    (current_time <= Rails.configuration.orders[:early][:end_date].to_date.end_of_day) ? :early : :late
   end
 
   def written_reg_form_link
