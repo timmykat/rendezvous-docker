@@ -4,6 +4,8 @@ class RendezvousMailer < ApplicationMailer
 
   layout 'rendezvous_mailer'
 
+  ADMIN_EMAIL = 'tim@wordsareimages.com'.freeze
+
   def send_user_message
     topic = Email::MessageTopics.label(params[:topic]) || 'General'
     subject = params[:subject].to_s.gsub(/[\r\n]/, '')
@@ -15,7 +17,7 @@ class RendezvousMailer < ApplicationMailer
     @reg_link = params[:registration_link]
     @message = params[:message]
 
-    mail(to: 'tim@wordsareimages.com', reply_to: @email, subject: @subject)
+    mail(to: ADMIN_EMAIL, reply_to: @email, subject: @subject)
   end
 
   def send_registration_payment_link(reg_id, payment_link)
@@ -24,8 +26,12 @@ class RendezvousMailer < ApplicationMailer
     @payment_link = payment_link
     @user = @registration.user
     user_email = @user.email
-    recipients = [user_email, 'tim@wordsareimages.com']
-    mail(to: recipients, reply_to: 'tim@wordsareimages.com', subject: subject)
+    mail(
+      to: user_email,
+      cc: ADMIN_EMAIL,
+      reply_to: ADMIN_EMAIL,
+      subject: subject
+    )
   end
 
   def send_modification_payment_link(email, mod_id, payment_link)
@@ -33,8 +39,12 @@ class RendezvousMailer < ApplicationMailer
     @modification = Event::Modification.find_by(id: mod_id)
     @first_name = @modification.registration.user.first_name
     @payment_link = payment_link
-    recipients = [email, 'tim@wordsareimages.com']
-    mail(to: recipients, subject: 'Rendezvous registration update payment request')
+    mail(
+      to: email,
+      cc: ADMIN_EMAIL,
+      reply_to: ADMIN_EMAIL,
+      subject: 'Rendezvous registration update payment request'
+    )
   end
 
   def no_email_found(email)
@@ -62,12 +72,17 @@ class RendezvousMailer < ApplicationMailer
   def registration_confirmation(reg_id)
     @registration = Event::Registration.find_by(id: reg_id)
     @email = @registration.user.email
-    mail(to: @email, subject: "Thanks for registering for the #{Date.current.year} Rendezvous!")
+    mail(
+      to: @email,
+      cc: ADMIN_EMAIL,
+      reply_to: ADMIN_EMAIL,
+      subject: "Thanks for registering for the #{Date.current.year} Rendezvous!"
+    )
   end
 
   def send_registration_open_notice(user)
-      @name = user.first_name
-      @email = user.email
-      mail(to: @email, subject: "Rendezvous registration is open for #{Date.current.year}!")
+    @name = user.first_name
+    @email = user.email
+    mail(to: @email, subject: "Rendezvous registration is open for #{Date.current.year}!")
   end
 end
