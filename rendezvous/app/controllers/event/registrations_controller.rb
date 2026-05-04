@@ -665,6 +665,12 @@ module Event
         registrant_attendee.name = @user.full_name
         @registration.attendees << registrant_attendee
         @registration.user.vehicles.build
+      else
+        new_user = User.new
+        new_user.generate_password
+        @registration.user = new_user
+        registrant_attendee = Attendee.new
+        @registration.attendees << registrant_attendee
       end
     end
 
