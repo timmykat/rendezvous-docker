@@ -170,7 +170,7 @@ module Admin
       @lake_cruise_fees_assessed = @lake_cruise_reg.sum(:lake_cruise_fee)
       @lake_cruise_fees_received = @lake_cruise_reg.where("balance > 0").sum(:lake_cruise_fee)
 
-      @sunday_lunch_reg = Event::Registrations.where("sunday_lunch_number > 0")
+      @sunday_lunch_reg = Event::Registration.where("sunday_lunch_number > 0")
       @sunday_lunch_count = @sunday_lunch_reg.sum(:sunday_lunch_number)
 
       create_table_data
