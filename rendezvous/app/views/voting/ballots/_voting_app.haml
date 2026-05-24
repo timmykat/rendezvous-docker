@@ -1,42 +1,42 @@
-#voting-app
+%voting-app
   = render partial: 'modal_instructions'
-  
-  #tabbed
-    %ul
-      %li
-        %a{ href: '#tabbed-1' } VOTE
-      %li
-        %a{ href: '#tabbed-2' } My Selections
 
-    #tabbed-1
-      .card 
+  %tab-display{ data: { tabbed: true } }
+    %ul{ data: { tab_buttons: true } }
+      %li
+        %button{ data: { tab: "vote" } } VOTE
+      %li
+        %button{ data: { tab: "selections" } } My Selections
+
+    .tab-content{ data: { "tab-content": 'vote' } }
+      .card
         .card-body
           - if @code.nil?
-            .card-text 
+            .card-text
               %p Select your camera and scan the QR code on your next People's Choice selection!
-          - else  
-            .card-title 
-              %h2.h4.d-flex.justify-content-between.align-items-center 
+          - else
+            .card-title
+              %h2.h4.d-flex.justify-content-between.align-items-center
                 Enter selection
                 =link_to icon(:info, size: '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
             .card-text
-              .card 
-                .card-body 
+              .card
+                .card-body
                   .card-text
                     = form_with url: vote_path, method: :post, data: { turbo: false } do |f|
                       .form-group
                         %label Vehicle ID:
                         = f.text_field :code, value: @code, id: "selection", class: 'form-control text-center', data: { voting_target: "selection" }
                         = f.hidden_field :ballot_id, value: @ballot.id
-                      
+
                       #vote-action-container
                         - if @already_selected
                           .warning-wrapper
                             .warning-info
                               You already selected that one!
                         - elsif @limit_reached
-                          .warning-wrapper 
-                            .warning-info 
+                          .warning-wrapper
+                            .warning-info
                               You've reached your vote limit for #{@category}. You need to delete a selection to vote for this one.
                         - elsif !@vehicle.nil?
                           .selection-wrapper
@@ -48,10 +48,12 @@
                           .text-center.d-flex.align-items-center.mt-4
                             = f.submit "Vote", id: 'vote-button', class: "btn btn-primary mr-3"
                         - else
-                          .warning-wrapper 
+                          .warning-wrapper
                             .warning-info
-                              That is not a valid selection.                          
+                              That is not a valid selection.
 
-  
-    #tabbed-2
-      = render partial: 'selections'  
+
+    .tab-content{ data: { "tab-content": 'selections' } }
+      = render partial: 'selections'
+
+  = render partial: 'ballot_data'

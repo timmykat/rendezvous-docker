@@ -27,8 +27,9 @@ module Voting
 
     def categorized_selections
       categorized_selections = Vehicles::VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
-      return categorized_selections unless self.selections.present?
-      self.selections.each do |vehicle|
+      return categorized_selections unless selections.present?
+
+      selections.each do |vehicle|
         categorized_selections[vehicle.judging_category] << vehicle
       end
       categorized_selections.sort_by { |_category, vehicles| vehicles.size }.to_h
@@ -36,17 +37,19 @@ module Voting
 
     def get_status
       return status if status == 'submitted'
+
       status = 'submissible:all'
-      categorized_selections.each do |category, vehicles|
-        if vehicles.length == 0
+      categorized_selections.each_value do |vehicles|
+        if vehicles.empty?
           status = 'submissible:some'
         elsif vehicles.length > 1
           status = 'voting'
           break
         end
       end
-      self.save
-      return status
+      save
+
+      status
     end
 
     def submissible?

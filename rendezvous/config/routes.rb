@@ -138,16 +138,17 @@ Rails.application.routes.draw do
   end
 
   namespace :voting do
-    get '/ballot', to: 'ballots#ballot', as: :get_voting_ballot
-    get '/hand_ballot', to: 'ballots#hand_ballot'
-    post '/hand_count', to: 'ballots#hand_count'
-    post '/ballots/vote', to: 'ballots#vote', as: :vote
-    delete '/ballots/vehicle/delete', to: 'ballots#delete_selection', as: :delete_vehicle_selection
+    resources :ballots, only: %i[show new create] do
+      member do
+        post :vote
+        delete 'selection/:vehicle_id', to: 'ballots#delete_selection', as: :delete_selection
+      end
+      collection do
+        get :current
+      end
+    end
   end
   get '/_ajax/voting/vehicle/:code', to: 'vehicles#ajax_info'
-
-  # resources :donations, { only: %i[new create index] }
-  # get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
 
   # -- Content
   # get '/faq', to: 'main_pages#faq'

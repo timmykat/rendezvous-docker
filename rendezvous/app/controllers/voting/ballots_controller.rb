@@ -1,14 +1,14 @@
 module Voting
   class BallotsController < ApplicationController
 
-    layout 'ballot_layout', only: [:ballot, :hand_ballot]
+    layout 'ballot_layout', only: %i[show new]
 
-    before_action :require_admin, only: [:hand_ballot, :hand_count]
-    before_action :voting_on?, only: [:ballot, :vote]
+    before_action :require_admin, only: %i[new create]
+    before_action :voting_on?, only: %i[show vote]
 
     before_action :set_ballot_count
 
-    PER_CATEGORY_LIMIT = 3
+    PER_CATEGORY_LIMIT = 1
 
     def set_ballot_count
       @ballot_count = Voting::Ballot.count
@@ -21,13 +21,13 @@ module Voting
       redirect_to :root
     end
 
-    def hand_ballot
+    def new
       @ballot = Ballot.new
       @codes = []
       @number_of_categories = Vehicles::VehicleTaxonomy::VEHICLES[:marques].values.sum { |marque_data| marque_data[:categories].keys.count }
     end
 
-    def hand_count
+    def create
       @ballot = Ballot.create(year: Date.current.year, status: 'hand_tally')
       params[:code].each do |code|
         vehicle = Vehicle.find_by_code(code)
@@ -38,17 +38,24 @@ module Voting
       else
         flash_alert 'Something went wrong'
       end
-      redirect_to voting_hand_ballot_path
+      redirect_to create_ballot_path
     end
 
-    def ballot
-      ballot_id = params[:ballot_id] || session[:ballot_id]
+    def current
+      if session[:ballot_id].present?
+        ballot_id = session[:ballot_id]
+        ballot = Voting::Ballot.find(ballot_id)
+        return redirect_to voting_ballot_path(ballot) if ballot.present?
+      end
 
-      if !ballot_id.nil?
-        @ballot = Voting::Ballot.find(ballot_id)
-      else
-        @ballot = Ballot.create(year: Date.current.year, status: 'voting')
-        session[:ballot_id] = @ballot.id
+      ballot = Voting::Ballot.create!(year: Date.current.year, status: 'voting')
+      session[:ballot_id] = ballot.id
+      redirect_to voting_ballot_path(ballot)
+    end
+
+    def show
+      if params[:id].present?
+        @ballot = Voting::Ballot.find(params[:id])
       end
 
       @code = params[:code]
@@ -57,6 +64,7 @@ module Voting
       end
 
       @selections = @ballot.categorized_selections
+      @ballot_data = @selections.to_json
 
       if @vehicle.present?
         @category = @vehicle.judging_category
@@ -78,16 +86,17 @@ module Voting
       vehicle.vote_by(@ballot)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
+      @ballot_data = @selections.to_json
+      redirect_to voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
     end
 
     def delete_selection
-      @ballot = Voting::Ballot.find(params[:ballot_id])
+      @ballot = Voting::Ballot.find(params[:id])
       vehicle_id = params[:vehicle_id]
       @ballot.selections.delete(vehicle_id)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
+      redirect_to voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
     end
 
     private

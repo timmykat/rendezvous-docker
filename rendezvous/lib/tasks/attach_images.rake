@@ -9,7 +9,7 @@ namespace :votable do
     else
       'http://rendezvous.local.wordsareimages.com'
     end
-    
+
     QrCode.all.each do |qr|
       filename = "qr_#{qr.code}.png"
       path = Rails.root.join('public', 'qr_codes', filename)
@@ -17,7 +17,7 @@ namespace :votable do
 
       if !File.exist? path
         puts "No image found for #{qr.code} -- generating"
-        url = get_voting_ballot_url({code: qr.code})
+        url = voting_ballot_url({code: qr.code})
         QrCode.generate_image(path, url)
       end
 
