@@ -1,7 +1,7 @@
 module Voting
   class BallotsController < ApplicationController
 
-    layout 'ballot_layout', only: %i[show new]
+    layout 'ballot_layout'
 
     before_action :require_admin, only: %i[new create]
     before_action :voting_on?, only: %i[show vote]
@@ -53,28 +53,56 @@ module Voting
       redirect_to voting_ballot_path(ballot)
     end
 
-    def show
-      if params[:id].present?
-        @ballot = Voting::Ballot.find(params[:id])
+    def landing
+      if session[:ballot_id].present?
+        @ballot = Voting::Ballot.find(session[:ballot_id])
       end
 
-      @code = params[:code]
-      if @code.present?
-        @vehicle = Vehicle.find_by_code(@code)
-      end
-
-      @selections = @ballot.categorized_selections
-      @ballot_data = @selections.to_json
-
-      if @vehicle.present?
-        @category = @vehicle.judging_category
-        @already_selected = already_selected?(@vehicle)
-        @limit_reached = limit_reached?(@vehicle)
+      if @ballot.present?
+        @selections = @ballot.categorized_selections
+        @ballot_data = @selections.to_json
       end
     end
 
+    # Show this when a QR code shot is taken
+    def preview
+      if ((!params[:id].present? && !session[:ballot_id].present?)||!params[:code].present?)
+        redirect_to landing_voting_ballot_path and return
+      end
+
+      if params[:id].present?
+        @ballot = Voting::Ballot.find(params[:id])
+      elsif session[:ballot_id]
+        @ballot = Voting::Ballot.find(session[:ballot_id])
+      end
+
+      if @ballot.present?
+        @selections = @ballot.categorized_selections
+        @ballot_data = @selections.to_json
+      end
+
+      @vehicle = Vehicle.find_by_code(params[:code])
+    end
+
+    def selections
+      if !params[:id].present? && !session[:ballot_id].present?
+        redirect_to landing_voting_ballot_path and return
+      end
+
+      if params[:id].present?
+        @ballot = Voting::Ballot.find(params[:id])
+      elsif session[:ballot_id]
+        @ballot = Voting::Ballot.find(session[:ballot_id])
+      end
+
+      return unless @ballot.present?
+
+      @selections = @ballot.categorized_selections
+      @ballot_data = @selections.to_json
+    end
+
     def vote
-      @ballot = Voting::Ballot.find(params[:ballot_id])
+      ballot = Voting::Ballot.find(params[:id])
       vehicle = Vehicle.find_by_code(params[:code])
 
       if vehicle.nil? || @ballot.nil?
@@ -84,10 +112,10 @@ module Voting
       end
 
       vehicle.vote_by(@ballot)
-      @ballot.save
+      ballot.save
       @selections = @ballot.categorized_selections
       @ballot_data = @selections.to_json
-      redirect_to voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
+      redirect_to landing_voting_ballot_path(id: @ballot.id)
     end
 
     def delete_selection
@@ -108,6 +136,36 @@ module Voting
     def limit_reached?(vehicle)
       category = vehicle.judging_category
       @selections[category].size >= PER_CATEGORY_LIMIT
+    end
+  end
+
+  def ajax_info
+    vehicle = Vehicle.find_by_code(params[:code])
+    ballot = current_user.ballots.where(year: Date.current.year).first
+
+    if vehicle.nil?
+      data = { status: :not_found }
+    else
+
+      if ballot.selections.include? vehicle
+        data = { errorInfo: '<div class="selection">You\'ve already voted for that one!</div>', status: 'already selected' }
+      end
+
+      if data.nil?
+        category = vehicle.judging_category
+        categorized_selections = ballot.categorized_selections
+        if categorized_selections[category].length == 3
+          data = { errorInfo:  '<div class="selection">You\'ve reached your max in that category.</div>', status: 'maxed out'}
+        else
+          data = { vehicleInfo: vehicle.voting_info_format, status: 'found' }
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.json do
+        render json: data
+      end
     end
   end
 end

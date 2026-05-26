@@ -138,17 +138,20 @@ Rails.application.routes.draw do
   end
 
   namespace :voting do
-    resources :ballots, only: %i[show new create] do
+    resources :ballots, only: %i[new create] do
       member do
+        get :preview
+        get :selections
         post :vote
         delete 'selection/:vehicle_id', to: 'ballots#delete_selection', as: :delete_selection
       end
       collection do
-        get :current
+        get :landing, to: 'ballots#landing'
       end
     end
   end
-  get '/_ajax/voting/vehicle/:code', to: 'vehicles#ajax_info'
+  get '/_ajax/vehicle_info/:code',   to: 'vehicles#ajax_info'
+  get '/_ajax/voting/vehicle/:code', to: 'ballots#ajax_info'
 
   # -- Content
   # get '/faq', to: 'main_pages#faq'
