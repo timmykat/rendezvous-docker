@@ -1,0 +1,19 @@
+.tab-content{ data: { "tab-content": 'downloads' } }
+  .row
+    .col-12
+      .card
+        .card-body
+          .card-title
+            %h2.h4 Downloads
+          .card-text
+            %h3.h5 CSV Files
+            %ul.list-group
+              %li.list-group-item=link_to 'Registrants', admin_download_csv_path(type: 'registrants')
+              %li.list-group-item=link_to 'Volunteers', admin_download_csv_path(type: 'volunteers')
+
+            %h3.h5 Printables
+            %ul.list-group
+              %li.list-group-item=link_to 'Dash Placards', admin_print_path(item: 'placards')
+              %li.list-group-item=link_to 'Blank Placards', admin_print_path(item: 'blank_placards')
+              %li.list-group-item=link_to 'Packet Labels', admin_print_path(item: 'labels')
+              %li.list-group-item=link_to 'Winners\'s Certificates', admin_print_path(item: 'certificates')

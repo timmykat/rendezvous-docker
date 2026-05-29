@@ -9,15 +9,13 @@ module Admin
     NO_USER_ID = 999999
 
     CSV_TYPES = {
-      attendees: {
+      registrants: {
         headers: [
-          'Registration number',
           'Registrant',
-          'Attendee name',
-          'Adult, youth, or child',
-          'Volunteer?',
-          'Donation?',
-          'Date registration paid',
+          'E-mail',
+          'Guests',
+          'Cruise count',
+          'Sunday lunch count',
           "(As of: #{Time.current.strftime '%Y%m%d'})"
         ]
       },
@@ -354,32 +352,49 @@ module Admin
     end
 
     def get_csv_data(type)
-      csv = CSV.generate(headers: true) do |csv_data|
-        csv_data << CSV_TYPES[type.to_sym][:headers]
-        Event::Registration.current.each do |r|
-          case type
-          when 'attendees'
-            r.attendees do |a|
-              csv_data << [
-                r.invoice_number,
-                r.user.last_name_first,
-                a.name,
-                a.attendee_age.titlecase,
-                (a.volunteer? ? 'Yes' : 'No'),
-                # (a.sunday_dinner? ? 'Yes' : 'No'),
-                (!r.donation.blank? && (r.donation.to_d > 0.0)) ? 'Yes' : 'No',
-                r.paid_date
-              ]
-            end
-            break
+      registrations = Event::Registration
+                      .current
+                      .includes(:attendees, :vehicles, :user)
 
-          when 'dash_placards'
+      CSV.generate(headers: true) do |csv_data|
+        csv_data << CSV_TYPES[type.to_sym][:headers]
+
+        case type
+        when 'registrants'
+          registrations.find_each do |r|
+            attendee_names = r.attendees.map(&:name).reject(&:blank?)
+            registrant_name =
+              if r.user.present?
+                r.user.last_name_first
+              else
+                attendee_names.first.to_s
+              end
+            registrant_email =
+              if r.user.present?
+                r.user.email
+              else
+                '(none)'
+              end
+
+            guests = attendee_names.reject { |name| name == registrant_name }.join(', ')
+
+            csv_data << [
+              registrant_name,
+              registrant_email,
+              guests,
+              r.lake_cruise_number,
+              r.sunday_lunch_number
+            ]
+          end
+
+        when 'dash_placards'
+          registrations.each do |r|
             r.vehicles.each_with_index do |v, index|
               csv_data << [
-                "#{r.invoice_number}-#{(index + 1).to_s}",
-                r.user.last_name,
-                r.user.first_name,
-                r.user.full_name,
+                "#{r.invoice_number}-#{index + 1}",
+                r.user&.last_name,
+                r.user&.first_name,
+                r.user&.full_name,
                 v.year,
                 v.marque,
                 v.model,
@@ -387,29 +402,31 @@ module Admin
                 v.other_info
               ]
             end
-            break
+          end
 
-          when 'packet_labels'
+        when 'packet_labels'
+          registrations.each do |r|
             csv_data << [
-              "#{r.user.last_name}",
-              r.attendees.count,
-              r.attendees.map { |a| a.name }.join('<br>'),
+              r.user&.last_name,
+              r.attendees.map(&:name).join(', '),
+              r.attendees.size,
               r.outstanding_balance? ? r.registration_fee : 'paid',
-              (r.donation && (r.donation > 0.0)) ? r.donation : '',
-              get_volunteers(r)
+              r.donation.to_d.positive? ? r.donation : '',
+              r.attendees.count(&:volunteer?)
             ]
-            break
+          end
 
-          when 'volunteers'
-            csv_data << Attendee
-              .joins(registration: :user)
-              .where(registrations: { year: @year }, volunteer: true)
-              .select('attendees.*, users.email as user_email')
-            break
+        when 'volunteers'
+          registrations.each do |r|
+            r.attendees.select(&:volunteer?).each do |a|
+              csv_data << [
+                a.name,
+                r.user&.email
+              ]
+            end
           end
         end
       end
-      csv
     end
   end
 end
