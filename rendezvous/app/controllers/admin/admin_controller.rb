@@ -19,6 +19,14 @@ module Admin
           "(As of: #{Time.current.strftime '%Y%m%d'})"
         ]
       },
+      cruisers: {
+        headers: [
+          'Cruisers',
+          'Registrant',
+          'E-mail',
+          "(As of: #{Time.current.strftime '%Y%m%d'})"
+        ]
+      },
       dash_placards: {
         headers: [
           'number',
@@ -384,6 +392,33 @@ module Admin
               guests,
               r.lake_cruise_number,
               r.sunday_lunch_number
+            ]
+          end
+
+        when 'cruisers'
+          registrations.find_each do |r|
+            next unless r.lake_cruise_number.positive?
+
+            attendee_names = r.attendees.map(&:name).reject(&:blank?)
+            registrant_name =
+              if r.user.present?
+                r.user.last_name_first
+              else
+                attendee_names.first.to_s
+              end
+            registrant_email =
+              if r.user.present?
+                r.user.email
+              else
+                '(none)'
+              end
+
+            guests = attendee_names.reject { |name| name == registrant_name }.join(', ')
+
+            csv_data << [
+              guests,
+              registrant_name,
+              registrant_email
             ]
           end
 
