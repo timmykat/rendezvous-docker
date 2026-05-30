@@ -298,9 +298,10 @@ module Event
     def create_modification(cancellation: false)
       db_reg = @registration.class.find(@registration.id)
 
-      fee_period = db_reg.fee_period
+      fee_period = (db_reg.fee_period || 'late').to_sym
+
       env = RendezvousSquare::Apis::Base.env_key
-      reg_fees = Rails.configuration.orders[env][fee_period]
+      reg_fees = Rails.configuration.orders[fee_period].except(:start_date, :end_date)
       lake_cruise_fee = Rails.configuration.orders[env][:lake_cruise][:price]
 
       m = db_reg.modifications.build
