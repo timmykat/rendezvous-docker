@@ -4,14 +4,14 @@
       - page_regs.each do |r|
         .label-wrapper
           .label
-            .content 
+            .content
               .info
                 .name #{r.user.last_name}
-                .people 
+                .people
                   Citronistas: #{r.number_of_people}
                   %ul{style: 'list-style: none;'}
                     - r.attendees.each do |a|
-                      %li 
+                      %li
                         #{a.name}
                         - if a.volunteer?
                           (volunteer)
@@ -26,7 +26,7 @@
 
             .ident
               .info
-                .title Citroën Rendezvous 2025
+                .title Citroën Rendezvous 2026
                 .loc Saratoga Springs, NY
               .logo
-                = image_tag 'R25_iconique.png', :alt => 'Citroen Rendezvous'
+                = image_tag 'R26-fiftieth.png', alt: 'Citroen Rendezvous'
