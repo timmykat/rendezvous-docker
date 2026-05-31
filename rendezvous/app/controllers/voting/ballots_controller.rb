@@ -41,40 +41,35 @@ module Voting
       redirect_to create_ballot_path
     end
 
-    def current
-      if session[:ballot_id].present?
-        ballot_id = session[:ballot_id]
-        ballot = Voting::Ballot.find(ballot_id)
-        return redirect_to voting_ballot_path(ballot) if ballot.present?
-      end
-
-      ballot = Voting::Ballot.create!(year: Date.current.year, status: 'voting')
-      session[:ballot_id] = ballot.id
-      redirect_to voting_ballot_path(ballot)
-    end
-
     def landing
-      if session[:ballot_id].present?
-        @ballot = Voting::Ballot.find(session[:ballot_id])
+      ballot_id = params[:id] || session[:ballot_id]
+      unless ballot_id
+        redirect_to landing_voting_ballots_path, alert: 'No ballot available!'
+        return
       end
 
-      if @ballot.present?
-        @selections = @ballot.categorized_selections
-        @ballot_data = @selections.to_json
-      end
+      @ballot = Voting::Ballot.find_by_id(ballot_id)
+
+      return unless @ballot.present?
+
+      @selections = @ballot.categorized_selections
+      @ballot_data = @selections.to_json
     end
 
     # Show this when a QR code shot is taken
     def preview
-      if ((!params[:id].present? && !session[:ballot_id].present?)||!params[:code].present?)
-        redirect_to landing_voting_ballot_path and return
+      ballot_id = params[:id] || session[:ballot_id]
+      unless ballot_id
+        redirect_to landing_voting_ballots_path, alert: 'No ballot available!'
+        return
       end
 
-      if params[:id].present?
-        @ballot = Voting::Ballot.find(params[:id])
-      elsif session[:ballot_id]
-        @ballot = Voting::Ballot.find(session[:ballot_id])
+      unless params[:code].present?
+        redirect_to landing_voting_ballots_path, alert: 'No voting code available!'
+        return
       end
+
+      @ballot = Voting::Ballot.find(ballot_id)
 
       if @ballot.present?
         @selections = @ballot.categorized_selections
@@ -86,7 +81,7 @@ module Voting
 
     def selections
       if !params[:id].present? && !session[:ballot_id].present?
-        redirect_to landing_voting_ballot_path and return
+        redirect_to landing_voting_ballots_path and return
       end
 
       if params[:id].present?
@@ -102,20 +97,31 @@ module Voting
     end
 
     def vote
-      ballot = Voting::Ballot.find(params[:id])
+      ballot_id = params[:id] || session[:ballot_id]
+      unless ballot_id
+        redirect_to landing_voting_ballots_path, alert: 'No ballot available!'
+        return
+      end
+
+      unless params[:code].present?
+        redirect_to landing_voting_ballots_path, alert: 'No voting code available!'
+        return
+      end
+
+      @ballot = Voting::Ballot.find(ballot_id)
       vehicle = Vehicle.find_by_code(params[:code])
 
-      if vehicle.nil? || @ballot.nil?
+      if vehicle.nil?
         # Handle error, possibly by rendering a proper error message or redirecting
-        redirect_to @ballot, alert: 'Invalid ballot or vehicle.'
+        redirect_to landing_voting_ballots_path(id: ballot.id), alert: 'No vehicle for that code!'
         return
       end
 
       vehicle.vote_by(@ballot)
-      ballot.save
+      @ballot.save
       @selections = @ballot.categorized_selections
       @ballot_data = @selections.to_json
-      redirect_to landing_voting_ballot_path(id: @ballot.id)
+      redirect_to landing_voting_ballots_path(id: @ballot.id, anchor: 'selections')
     end
 
     def delete_selection
@@ -124,7 +130,7 @@ module Voting
       @ballot.selections.delete(vehicle_id)
       @ballot.save
       @selections = @ballot.categorized_selections
-      redirect_to voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
+      redirect_to landing_voting_ballots_path({ ballot_id: @ballot.id, code: nil, anchor: 'selections' })
     end
 
     private

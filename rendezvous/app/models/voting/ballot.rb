@@ -32,7 +32,7 @@ module Voting
       selections.each do |vehicle|
         categorized_selections[vehicle.judging_category] << vehicle
       end
-      categorized_selections.sort_by { |_category, vehicles| vehicles.size }.to_h
+      categorized_selections.sort_by { |category, _vehicles| category }.to_h
     end
 
     def get_status

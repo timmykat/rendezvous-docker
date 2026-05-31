@@ -1,5 +1,5 @@
 %voting-app{ data: { active: active_tab } }
-  = render partial: 'modal_instructions'
+  = render partial: 'transition_modal'
 
   %tab-display{ data: { tabbed: true } }
     %ul{ data: { tab_buttons: true } }
@@ -10,58 +10,8 @@
       %li#selections
         %button{ data: { tab: "selections" } } My Selections
 
-    .tab-content{ data: { "tab-content": 'landing' } }
-      .card
-        .card-body
-          .card-title
-            %h2.h4.d-flex.justify-content-between.align-items-center
-              People's Choice Voting
-          .card-text
-            %p Select your camera and scan the QR code on your next People's Choice selection!
-            %p Alternatively, on the Vote tab, you can enter the 4-letter code for your choice.
-            %p In either case, the category will be selected automatically.
-
-    .tab-content{ data: { "tab-content": 'vote' } }
-      .card
-        .card-body
-          .card-text
-            %h3.h5.d-flex.justify-content-between.align-items-center
-              Enter selection (prefilled if you used the QR code)
-              =link_to icon(:info, size: '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
-            .card-text
-              .card
-                .card-body
-                  .card-text
-                    = form_with url: vote_voting_ballot_path(@ballot), method: :post, data: { turbo: false } do |f|
-                      .form-group
-                        %label Vehicle ID:
-                        = f.text_field :code, value: @code, id: "selection_code", class: 'form-control text-center', data: { voting_target: "selection" }
-
-                      #vote-action-container
-                        - if @already_selected
-                          .warning-wrapper
-                            .warning-info
-                              You already selected that one!
-                        - elsif @limit_reached
-                          .warning-wrapper
-                            .warning-info
-                              You've reached your vote limit for #{@category}. You need to delete a selection to vote for this one.
-                        - else
-                          .selection-wrapper
-                            .selection-info
-                              .category
-                                Category:
-                                %span.value #{@vehicle&.judging_category}
-                              .info
-                                .vehicle #{@vehicle&.year_marque_model}
-                                .owner
-                                  Owner:
-                                  %span.value #{@vehicle&.user&.full_name}
-                          .text-center.d-flex.align-items-center.mt-4
-                            = f.submit "Confirm Vote", id: 'vote-button', class: "btn btn-primary mr-3"
-
-
-    .tab-content{ data: { "tab-content": 'selections' } }
-      = render partial: 'selections'
+    = render partial: 'tab_landing'
+    = render partial: 'tab_vote'
+    = render partial: 'tab_selections', locals: { selections: selections }
 
   = render partial: 'ballot_data'
