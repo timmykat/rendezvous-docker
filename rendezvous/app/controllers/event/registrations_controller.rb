@@ -13,7 +13,7 @@ module Event
     before_action :check_complete_destination, only: %i[new special_events review]
 
     skip_before_action :verify_authenticity_token, only: :show
-    skip_before_action :set_incoming_destination, only: :complete_after_online_payment
+    # skip_before_action :set_incoming_destination, only: :complete_after_online_payment
 
     helper_method :previous_step
     helper_method :next_step

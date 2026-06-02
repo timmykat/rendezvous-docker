@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_action :prepare_exception_notifier
   before_action :flash_array
-  before_action :set_incoming_destination
+  # before_action :set_incoming_destination
   before_action :get_app_data
   before_action :update_active_user
   before_action :ensure_delete_method, only: :destroy
