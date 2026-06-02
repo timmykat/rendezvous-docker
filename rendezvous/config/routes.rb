@@ -157,14 +157,14 @@ Rails.application.routes.draw do
   get '/legal_information', to: 'main_pages#legal_information'
   get '/schedule', to: 'main_pages#schedule'
 
-  resources :pictures, except: [:index]
-  get '/gallery', to: 'pictures#index'
-  get '/t-shirt-gallery', to: 'pictures#t_shirt_gallery'
-  get '/pictures_recreate_versions', to: 'pictures#recreate_versions'
+  # resources :pictures, except: [:index]
+  get '/gallery', to: redirect('/')
+  get '/t-shirt-gallery', to: redirect('/')
+  # get '/pictures_recreate_versions', to: 'pictures#recreate_versions'
 
-  # -- Picture upload
-  get '/my-pictures', to: 'pictures#my_pictures'
-  post '/pictures/upload(.:format)', to: 'pictures#upload'
+  # # -- Picture upload
+  # get '/my-pictures', to: 'pictures#my_pictures'
+  # post '/pictures/upload(.:format)', to: 'pictures#upload'
 
   # -- AJAX routes
   get '/ajax/find_user_by_email', to: 'users#find_by_email'
