@@ -2,6 +2,7 @@ export class VotingApp extends HTMLElement {
   constructor() {
     super();
     this.codeField = this.querySelector("input#selection_code");
+    this.errorModal = document.querySelector(".modal#duplicate-error");
     this.baseUrl = "/_ajax/vehicle_info";
     this.selectionInfo = this.querySelector(".selection-info");
     this.categoryValue = this.selectionInfo.querySelector(".category .value");
@@ -26,6 +27,10 @@ export class VotingApp extends HTMLElement {
     const regex = /^[A-Z0-9]{4}$/;
     if (!regex.test(code)) return;
 
+    if (selectedCodes.contains(code)) {
+      this.errorModal.style.display = "block";
+    }
+
     const url = `${this.baseUrl}/${code}`;
     console.log("Fetching", url);
     fetch(url)
@@ -46,6 +51,10 @@ export class VotingApp extends HTMLElement {
 
   saveData = () => {
     window.localStorage.setItem("RDV.ballotData", JSON.stringify(ballotData));
+    window.localStorage.setItem(
+      "RDV.selectedCodes",
+      JSON.stringify(selectedCodes),
+    );
   };
 }
 customElements.define("voting-app", VotingApp);

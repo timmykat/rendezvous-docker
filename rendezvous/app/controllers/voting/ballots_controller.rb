@@ -72,8 +72,7 @@ module Voting
       @ballot = Voting::Ballot.find(ballot_id)
 
       if @ballot.present?
-        @selections = @ballot.categorized_selections
-        @ballot_data = @selections.to_json
+        create_js_data
       end
 
       @vehicle = Vehicle.find_by_code(params[:code])
@@ -92,8 +91,7 @@ module Voting
 
       return unless @ballot.present?
 
-      @selections = @ballot.categorized_selections
-      @ballot_data = @selections.to_json
+      create_js_data
     end
 
     def vote
@@ -111,6 +109,8 @@ module Voting
       @ballot = Voting::Ballot.find(ballot_id)
       vehicle = Vehicle.find_by_code(params[:code])
 
+      create_js_data
+
       if vehicle.nil?
         # Handle error, possibly by rendering a proper error message or redirecting
         redirect_to landing_voting_ballots_path(id: ballot.id), alert: 'No vehicle for that code!'
@@ -119,8 +119,7 @@ module Voting
 
       vehicle.vote_by(@ballot)
       @ballot.save
-      @selections = @ballot.categorized_selections
-      @ballot_data = @selections.to_json
+      create_js_data
       redirect_to landing_voting_ballots_path(id: @ballot.id, anchor: 'selections')
     end
 
@@ -129,8 +128,22 @@ module Voting
       vehicle_id = params[:vehicle_id]
       @ballot.selections.delete(vehicle_id)
       @ballot.save
-      @selections = @ballot.categorized_selections
+      create_js_data
       redirect_to landing_voting_ballots_path({ ballot_id: @ballot.id, code: nil, anchor: 'selections' })
+    end
+
+    def create_js_data
+      return unless @ballot.present?
+
+      @selections = @ballot.categorized_selections
+      @ballot_data = @selections.to_json
+      binding.pry
+      all_codes = @selections.map { |vehicle| vehicle.qr_code.code }
+      @selected_codes = if all_codes.nil?
+                          []
+                        else
+                          all_codes.to_json
+                        end
     end
 
     private
