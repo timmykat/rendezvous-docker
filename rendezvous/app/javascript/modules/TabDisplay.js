@@ -21,7 +21,6 @@ export class TabDisplay extends HTMLElement {
   }
 
   setByHash = () => {
-    console.log("load event received");
     const hash = window.location.hash;
     if (!hash) {
       this.ensureHash(this.defaultTab);
@@ -33,7 +32,6 @@ export class TabDisplay extends HTMLElement {
 
     const container = li.closest("[data-tabbed]");
     const btn = li.querySelector("button");
-    console.log(container, btn);
     this.activateTab(container, btn.dataset.tab);
   };
 

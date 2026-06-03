@@ -15,14 +15,12 @@
                     = f.text_field :code, value: @code, id: "selection_code", class: 'form-control text-center', data: { voting_target: "selection" }
 
                   #vote-action-container
-                    - if @already_selected
-                      .warning-wrapper
-                        .warning-info
-                          You already selected that one!
-                    - elsif @limit_reached
-                      .warning-wrapper
-                        .warning-info
-                          You've reached your vote limit for #{@category}. You need to delete a selection to vote for this one.
+                    .previously-selected{ hidden: 'hidden' }
+                      .alert-warning You already selected that one!
+
+                    - if @limit_reached
+                      .alert-danger You need to delete a your current category selection to vote for this.
+
                     - else
                       .selection-wrapper
                         .selection-info
@@ -34,5 +32,6 @@
                             .owner
                               Owner:
                               %span.value #{@vehicle&.user&.full_name}
-                      .text-center.d-flex.align-items-center.mt-4
-                        = f.submit "VOTE", id: 'vote-button', class: "btn btn-primary mr-3", data: { toggle: 'modal', target: '#transition-modal' }
+
+                    .text-center.d-flex.align-items-center.mt-4
+                      = f.submit "VOTE", id: 'vote-button', class: "btn btn-primary mr-3", data: { toggle: 'modal', target: '#transition-modal' }

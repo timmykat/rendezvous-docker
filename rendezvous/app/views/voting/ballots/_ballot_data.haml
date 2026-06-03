@@ -1,3 +1,3 @@
 :javascript
-  const ballotData = #{@ballot_data}
-  const selectedCodes = #{@selected_codes}
+  const ballotData = #{ActiveSupport::JSON.encode(@ballot_data).html_safe};
+  const selectedCodes = #{ActiveSupport::JSON.encode(@selected_codes).html_safe};

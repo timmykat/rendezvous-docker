@@ -1,5 +1,6 @@
 %voting-app{ data: { active: active_tab } }
   = render partial: 'modal'
+  = render partial: 'ballot_data'
 
   %tab-display{ data: { tabbed: true } }
     %ul{ data: { tab_buttons: true } }
@@ -13,5 +14,3 @@
     = render partial: 'tab_landing'
     = render partial: 'tab_vote'
     = render partial: 'tab_selections', locals: { selections: selections }
-
-  = render partial: 'ballot_data'

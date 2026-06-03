@@ -17,7 +17,7 @@
 module Voting
   class Ballot < ApplicationRecord
 
-    STATUSES = ["voting", "hand_tally", "submissible:some", "submissible:all", "submitted"]
+    STATUSES = %w[voting hand_tally submissible:some submissible:all submitted].freeze
 
     validates :status, presence: true, inclusion: STATUSES
     default_scope { where(year: Date.current.year) }

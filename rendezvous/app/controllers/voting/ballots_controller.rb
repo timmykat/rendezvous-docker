@@ -4,7 +4,7 @@ module Voting
     layout 'ballot_layout'
 
     before_action :require_admin, only: %i[new create]
-    before_action :voting_on?, only: %i[show vote]
+    before_action :voting_on?, only: %i[new landing vote]
 
     before_action :set_ballot_count
 
@@ -44,16 +44,18 @@ module Voting
     def landing
       ballot_id = params[:id] || session[:ballot_id]
       unless ballot_id
-        redirect_to landing_voting_ballots_path, alert: 'No ballot available!'
-        return
+        @ballot = Ballot.new
+        @ballot.status = 'voting'
+        @ballot.save
+        session[:ballot_id] = @ballot.id
+      else
+        @ballot = Voting::Ballot.find_by_id(ballot_id)
       end
-
-      @ballot = Voting::Ballot.find_by_id(ballot_id)
 
       return unless @ballot.present?
 
       @selections = @ballot.categorized_selections
-      @ballot_data = @selections.to_json
+      create_js_data
     end
 
     # Show this when a QR code shot is taken
@@ -136,14 +138,8 @@ module Voting
       return unless @ballot.present?
 
       @selections = @ballot.categorized_selections
-      @ballot_data = @selections.to_json
-      binding.pry
-      all_codes = @selections.map { |vehicle| vehicle.qr_code.code }
-      @selected_codes = if all_codes.nil?
-                          []
-                        else
-                          all_codes.to_json
-                        end
+      @ballot_data = @selections
+      @selected_codes = @ballot_data.values.flat_map { |vehicles| vehicles.map(&:code) }
     end
 
     private
