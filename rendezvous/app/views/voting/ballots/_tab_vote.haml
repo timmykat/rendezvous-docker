@@ -9,7 +9,7 @@
           .card
             .card-body
               .card-text
-                = form_with url: vote_voting_ballot_path(@ballot), method: :post, data: { turbo: false } do |f|
+                = form_with url: vote_voting_ballots_path(@ballot), method: :get, data: { turbo: false } do |f|
                   .form-group
                     %label Vehicle ID:
                     = f.text_field :code, value: @code, id: "selection_code", class: 'form-control text-center', data: { voting_target: "selection" }

@@ -54,7 +54,7 @@ module Votable
 
     generate_unique_code
     self.save
-    url = voting_ballot_url({code: self.code})
+    url = vote_voting_ballots_url({ code: self.code } )
     qr = RQRCode::QRCode.new(url)
     qr_png = qr.as_png(border_modules: 4, size: 300)
     qr_image = MiniMagick::Image.read(qr_png.to_s)

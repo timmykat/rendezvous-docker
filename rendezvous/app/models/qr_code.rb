@@ -75,7 +75,7 @@ class QrCode < ApplicationRecord
 
   def self.generate_image(code)
     filepath = File.join(FILE_BASE, "qr_#{code}.png")
-    url = Rails.application.routes.url_helpers.preview_voting_ballot_url({code: code})
+    url = Rails.application.routes.url_helpers.vote_voting_ballots_url({ code: code })
 
     qr = RQRCode::QRCode.new(url)
     qr_png = qr.as_png(border_modules: 4, size: 300)
