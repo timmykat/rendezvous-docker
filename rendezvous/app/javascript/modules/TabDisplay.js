@@ -3,12 +3,12 @@ export class TabDisplay extends HTMLElement {
     this.addEventListener("click", this.tabHandler);
     this.setupTabs();
     this.defaultTab = this.querySelector("li").getAttribute("id");
-    document.addEventListener("turbo:load", () => this.setByHash());
+    document.addEventListener("turbo:load", this.setByHash);
   }
 
   disconnectedCallback() {
     this.removeEventListener("click", this.tabHandler);
-    document.removeEventListener("turbo:load", () => this.setByHash());
+    document.removeEventListener("turbo:load", this.setByHash);
   }
 
   setupTabs() {
@@ -68,6 +68,13 @@ export class TabDisplay extends HTMLElement {
       }
     });
   }
+
+  // Public method
+  setTab = (tab) => {
+    const container = this.querySelector("[data-tabbed]");
+    this.activateTab(container, String(tab));
+    this.ensureHash(String(tab));
+  };
 }
 
 window.customElements.define("tab-display", TabDisplay);

@@ -14,11 +14,13 @@ export class VotingApp extends HTMLElement {
   }
 
   connectedCallback() {
+    document.addEventListener("turbo:load", this.setTab);
     document.addEventListener("turbo:load", this.saveData);
     this.codeField.addEventListener("keyup", this.fetchVehicleData);
   }
 
   disconnectedCallback() {
+    document.removeEventListener("turbo:load", this.setTab);
     document.removeEventListener("turbo:load", this.saveData);
     this.codeField.removeEventListener("keyup", this.fetchVehicleData);
   }
@@ -77,6 +79,13 @@ export class VotingApp extends HTMLElement {
       "RDV.selectedCodes",
       JSON.stringify(selectedCodes),
     );
+  };
+
+  setTab = () => {
+    const tabDisplay = this.querySelector("tab-display");
+    if (!tabDisplay) return;
+
+    tabDisplay.setTab("vote");
   };
 }
 customElements.define("voting-app", VotingApp);

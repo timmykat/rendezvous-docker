@@ -17,7 +17,7 @@
                         %ul.list-group.text-sm
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Enter Ballot by Hand', new_voting_ballot_path
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Results', admin_peoples_choice_results_path
-                          %li.list-group-item.bg-light.bg-gradient= link_to 'Manage QR Codes', admin_manage_qr_codes_path
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'View Ballots', voting_ballots_path
                           %li.list-group-item.bg-light.bg-danger= link_to "Clear Ballots (#{@ballot_count}) -- careful!", admin_ballots_clear_path
                 .col-md-4.col-12
                   .card

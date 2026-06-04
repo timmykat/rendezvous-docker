@@ -3,12 +3,16 @@ module Voting
 
     layout 'ballot_layout'
 
-    before_action :require_admin, only: %i[new create]
+    before_action :require_admin, only: %i[new create index]
     before_action :voting_on?, only: %i[new landing vote]
 
     before_action :set_ballot_count
 
     PER_CATEGORY_LIMIT = 1
+
+    def index
+      @ballots = Ballot.order(year: :desc)
+    end
 
     def set_ballot_count
       @ballot_count = Voting::Ballot.count
@@ -78,6 +82,7 @@ module Voting
       end
 
       @vehicle = Vehicle.find_by_code(params[:code])
+      redirect_to landing_voting_ballots_path(id: ballot_id, code: params[:code], anchor: 'vote')
     end
 
     def selections

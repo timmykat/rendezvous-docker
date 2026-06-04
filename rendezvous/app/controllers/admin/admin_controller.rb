@@ -293,13 +293,13 @@ module Admin
       @amount_due             = @total_amount - @amount_paid
     end
 
-    def peoples_choice_results
-      @results = Vehicle.top_3_by_category
+    def vehicle_dashboard
+      vehicles = Vehicle.all
+      @categorized_vehicles = categorize_vehicles(vehicles)
     end
 
-    def manage_qr_codes
-      @vehicles = Vehicle.all
-      @last_generated = "Not implemented"
+    def peoples_choice_results
+      @results = Vehicle.top_3_by_category
     end
 
     def generate_qr_codes
@@ -357,6 +357,16 @@ module Admin
                     disposition: 'attachment'
         end
       end
+    end
+
+    def categorize_vehicles(vehicles)
+      categorized_vehicles = Vehicles::VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
+      return categorized_vehicles unless vehicles.present?
+
+      vehicles.each do |vehicle|
+        categorized_vehicles[vehicle.judging_category] << vehicle
+      end
+      categorized_vehicles.sort_by { |category, _vehicles| category }.to_h
     end
 
     def get_csv_data(type)

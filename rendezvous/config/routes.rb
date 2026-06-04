@@ -122,13 +122,13 @@ Rails.application.routes.draw do
   namespace :admin do
     get 'dedupe', to: 'admin#dedupe'
     get 'dashboard', to: 'admin#dashboard'
+    get 'vehicle_dashboard', to: 'admin#vehicle_dashboard'
     get 'manage', to: 'admin#manage'
     get 'download_csv', to: 'admin#download_csv', defaults: { format: 'csv' }
     get 'graphs', to: 'admin#registration_graphs'
     get 'cleanup', to: 'users#cleanup'
     post 'cleanup', to: 'users#cleanup'
     get 'print', to: 'admin#print'
-    get 'manage_qr_codes', to: 'admin#manage_qr_codes'
     get 'generate_qr_codes', to: 'admin#generate_qr_codes'
     get 'peoples_choice_results', to: 'admin#peoples_choice_results'
     get 'ballots/clear', to: 'admin#clear_ballots'
@@ -138,7 +138,7 @@ Rails.application.routes.draw do
   end
 
   namespace :voting do
-    resources :ballots, only: %i[new create] do
+    resources :ballots, only: %i[new create index] do
       member do
         get :preview
         get :selections
