@@ -23,6 +23,6 @@
                 %ul.nav.navbar-nav.ml-auto
                   - if !registration_is_open
                     %li.nav-item
-                      %span.badge.badge-danger.mt-2 Registration opens soon
+                      %span.badge.badge-warning.mt-2 Registration is now closed
                   - if public_registration
                     %li.nav-item= link_to 'Sign In', new_user_session_path, class: 'nav-link'
