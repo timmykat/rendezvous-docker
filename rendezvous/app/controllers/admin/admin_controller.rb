@@ -303,15 +303,15 @@ module Admin
     end
 
     def generate_qr_codes
-      regenerate = params[:regenerate] == "true"
+      regenerate = params[:regenerate].present?
       if regenerate
-        Rails.logger.debug "Removing old QR codes"
+        Rails.logger.debug 'Removing old QR codes'
         FileUtils.rm_rf(Dir.glob(Rails.root.join('public', 'qr_codes', '*')))
+        QrCode.destroy_all
       end
-      Rails.logger.debug "Kicking off job"
+      Rails.logger.debug 'Kicking off job'
       QrGenerationJob.perform_later(regenerate)
       flash_notice 'QR generation job started'
-      @vehicles = nil
       redirect_to admin_vehicle_dashboard_path
     end
 

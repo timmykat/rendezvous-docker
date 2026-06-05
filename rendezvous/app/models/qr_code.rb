@@ -43,7 +43,7 @@ class QrCode < ApplicationRecord
       raise
     end
     QrCode.generate_image(qr.code)
-    return qr.code
+    qr
   end
 
   def assigned?

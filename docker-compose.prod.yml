@@ -47,6 +47,9 @@ services:
       redis:
         condition: service_healthy
 
+    volumes:
+      - ./rendezvous/public:/var/www/rendezvous/public
+
     networks:
       - rendezvous
 

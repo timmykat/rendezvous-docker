@@ -1,9 +1,11 @@
 class QrGenerationJob < ApplicationJob
-  queue_as :default
+  queue_as :qr_generation
 
-  def perform(regenerate)
-    Vehicle.find_each  do |v|
-      v.create_qr_code(regenerate)
+  def perform(regenerate = false)
+    scope = regenerate ? Vehicle.all : Vehicle.where(code: nil)
+
+    scope.find_each do |vehicle|
+      vehicle.update!(qr_code: QrCode.generate!)
     end
   end
 end

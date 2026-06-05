@@ -62,6 +62,7 @@ services:
         condition: service_started
 
     volumes:
+      - ./rendezvous/public/qr_codes:/var/www/rendezvous/public/qr_codes
       - ./.ephemeral/tmp/mysqld:/var/run/mysqld
 
   sidekiq:
@@ -81,6 +82,8 @@ services:
 
     command: bundle exec sidekiq -C config/sidekiq.yml
 
+    volumes:
+      - ./rendezvous/public/qr_codes:/var/www/rendezvous/public/qr_codes
   db:
     image: mysql:8.0.32
     platform: linux/amd64
