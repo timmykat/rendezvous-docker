@@ -16,19 +16,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Set up SSH agent
-      - name: Set up SSH keys
-        uses: webfactory/ssh-agent@v0.9.1
-        with:
-          ssh-private-key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
-
-      # Pre-register the host to avoid key verification delays/failures
-      - name: Add server to known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ vars.HOSTINGER_IP }} >> ~/.ssh/known_hosts 2>/dev/null || true
-
-      # Set up and precheck done, start deploy
       - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -37,7 +24,6 @@ jobs:
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
           timeout: 30s # Connection timeout
           command_timeout: 30m # Script execution timeout
-          script_stop: true # Stop on first error
           script: |
             set -e
 
