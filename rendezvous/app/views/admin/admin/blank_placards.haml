@@ -1,8 +1,8 @@
 - @qr_codes.each do |qr_code|
-  .placard
+  .placard.blank
     %header
       .logo
-        %img{ src: asset_url('R25_iconique.png')}
+        %img{ src: asset_url('R26-fiftieth-b+w.png')}
       .text
         Citroen Rendezvous #{Date.current.year}
 
@@ -19,6 +19,7 @@
       %span.value
 
     .qr-code-id
-      = image_tag QrCode.get_image_path(qr_code.code)
+      %span.image
+        = image_tag QrCode.get_image_path(qr_code.code)
+      %span People's Choice ID
       %span.code #{qr_code.code}
-      %span (People's Choice ID)
