@@ -50,7 +50,6 @@ class QrCode < ApplicationRecord
     votable.present?
   end
 
-  private
   def generate_unique_code
     return if code.present?
 
