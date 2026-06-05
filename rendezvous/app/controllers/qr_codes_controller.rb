@@ -7,13 +7,13 @@ class QrCodesController < ApplicationController
     end
 
     Rails.logger.debug 'Submit generation job'
-    VehicleQrGenerationJob.perform_later(params[:all_vehicles])
+    VehicleQrGenerationJob.perform_now(params[:all_vehicles])
     flash_notice 'Vehicle QR generation job started'
     redirect_to admin_vehicle_dashboard_path
   end
 
   def generate_unassigned_codes
-    UnassignedQrGenerationJob.perform_later
+    UnassignedQrGenerationJob.perform_now
     flash_notice 'Unassigned QR generation job started'
     redirect_to admin_vehicle_dashboard_path
   end
