@@ -20,7 +20,11 @@ ENV REDIS_URL=redis://redis:6379/0
 
 RUN echo "RAILS_ENV=$RAILS_ENV NODE_ENV=$NODE_ENV"
 
-RUN adduser --disabled-password --gecos '' webuser
+ARG APP_UID=1001
+ARG APP_GID=1001
+
+RUN groupadd -g ${APP_GID} webuser && \
+    useradd -m -u ${APP_UID} -g ${APP_GID} webuser
 
 RUN mkdir -p $RAILS_ROOT/tmp $RAILS_ROOT/storage \
     && chown -R webuser:webuser $RAILS_ROOT/tmp \
