@@ -35,6 +35,7 @@ services:
       - rendezvous
 
   sidekiq:
+    user: "webuser"
     build: null
     image: ghcr.io/timmykat/rendezvous-docker:${IMAGE_TAG}
     command: bundle exec sidekiq
