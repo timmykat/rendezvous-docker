@@ -40,8 +40,6 @@
                       .card-text
                         %ul.list-group.text-sm
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Print packet labels', admin_print_path({item: 'labels'})
-                          %li.list-group-item.bg-light.bg-gradient= link_to 'Print blank dash placards', admin_print_path({item: 'blank_placards'})
-                          %li.list-group-item.bg-light.bg-gradient= link_to 'Print dash placards', admin_print_path({item: 'placards'})
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Attendees CSV', admin_download_csv_path({type: 'attendees', format: :csv})
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Volunteers list CSV', admin_download_csv_path({type: 'volunteers', format: :csv})
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Registration Graphs', admin_graphs_path

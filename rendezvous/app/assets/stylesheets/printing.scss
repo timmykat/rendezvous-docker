@@ -85,22 +85,30 @@ body {
         padding: 1.8rem 0 0.2rem;
         border-bottom: solid 2px #666;
         line-height: 1.4;
+        position: relative;
 
         .label {
-            width: 50%;
+            position: absolute;
+            bottom: 0;
         }
 
         .value {
+            display: inline-block;
+            margin: 0 auto;
+            text-align: center;
             font-weight: 400;
         }
     }
 
     .qr-code-id {
         position: absolute;
-        display: flex;
-        align-items: center;
+        width: 7.5in;
         left: 0.45in;
         bottom: 0.2in;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
         img {
             width: 1in;

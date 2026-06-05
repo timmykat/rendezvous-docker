@@ -129,7 +129,6 @@ Rails.application.routes.draw do
     get 'cleanup', to: 'users#cleanup'
     post 'cleanup', to: 'users#cleanup'
     get 'print', to: 'admin#print'
-    get 'generate_qr_codes', to: 'admin#generate_qr_codes'
     get 'peoples_choice_results', to: 'admin#peoples_choice_results'
     get 'ballots/clear', to: 'admin#clear_ballots'
     get 'update_user_vehicles/:id', to: 'admin#update_user_vehicles'
@@ -174,6 +173,11 @@ Rails.application.routes.draw do
   delete '/ajax/delete_users', to: 'users#delete_users'
   get '/ajax/user/autocomplete', to: 'users#autocomplete'
   get '/ajax/code/search', to: 'qr_codes#autocomplete'
+
+  get 'generate_vehicle_codes', to: 'qr_codes#generate_vehicle_codes'
+  get 'generate_unassigned_codes', to: 'qr_codes#generate_unassigned_codes'
+
+
 
   namespace :event do
     patch '/ajax/update_fees/:id', to: 'registrations#update_fees'

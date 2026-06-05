@@ -4,19 +4,36 @@
       %h1 Vehicle Dashboard
 
   .row
-    .col-md-6.col-12
+    .col-12
       .card
         .card-body
           .card-title
             %h1.h3 Manage QR Codes
           .card-text
+            %h2.h4 Vehicle Codes
+            %p There are #{@assigned_qr_codes} codes assigned to vehicles
+            %p There are #{@vehicles_without_codes} vehicles without codes
             %p
               %strong Last generated: #{@last_generated}
 
-            %p.button-with-spinner
-              = link_to 'Generate New Codes', admin_generate_qr_codes_path, class: 'btn btn-info button', data: { 'button-spinner' => 'Generating...', turbo: false }
-            %p.button-with-spinner
-              = link_to 'Regenerate All Codes', admin_generate_qr_codes_path({regenerate: true}), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+            .navbar.nav.justify-content-start
+              .nav-item.ml-3.button-with-spinner
+                = link_to 'Generate Missing Vehicle Codes', generate_vehicle_codes_path({ all_vehicles: false }), class: 'btn btn-warning', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+              .nav-item.ml-3.button-with-spinner
+                = link_to 'Regenerate All Vehicle Codes', generate_vehicle_codes_path({ all_vehicles: true }), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+              .nav-item.ml-3
+                = link_to 'Print dash placards', admin_print_path({item: 'placards'}), class: 'btn btn-primary'
+
+            %h2.h4 Unassigned Codes
+            %p There are #{@blank_qr_codes} unassigned codes
+            .navbar.nav.justify-content-start
+              .nav-item.ml-3.button-with-spinner
+                = link_to 'Generate Unassigned Codes (default 30)', generate_unassigned_codes_path, class: 'btn btn-warning', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+              .nav-item.ml-3
+                = link_to 'Print blank dash placards', admin_print_path({item: 'blank_placards'}), class: 'btn btn-primary'
 
   .row
     .col-12

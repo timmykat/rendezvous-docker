@@ -45,6 +45,7 @@ class Vehicle < ApplicationRecord
   after_save :update_reg_join_table
 
   scope :for_sale, -> { where(for_sale: true) }
+  scope :without_code, -> { where(qr_code: nil) }
 
   validates :year, inclusion: { in: (1919..2025).map { |int| int.to_s }, message: "%{value} is not a valid year" }
   validates :marque, presence: true

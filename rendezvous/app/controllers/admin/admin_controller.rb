@@ -296,23 +296,13 @@ module Admin
     def vehicle_dashboard
       vehicles = Vehicle.all
       @categorized_vehicles = categorize_vehicles(vehicles)
+      @assigned_qr_codes = QrCode.assigned.count
+      @blank_qr_codes = QrCode.unassigned.count
+      @vehicles_without_codes = Vehicle.without_code.count
     end
 
     def peoples_choice_results
       @results = Voting::Ballot.top_vehicles_by_category # Defaults to current year and top 3
-    end
-
-    def generate_qr_codes
-      regenerate = params[:regenerate].present?
-      if regenerate
-        Rails.logger.debug 'Removing old QR codes'
-        FileUtils.rm_rf(Dir.glob(Rails.root.join('public', 'qr_codes', '*')))
-        QrCode.destroy_all
-      end
-      Rails.logger.debug 'Kicking off job'
-      QrGenerationJob.perform_later(regenerate)
-      flash_notice 'QR generation job started'
-      redirect_to admin_vehicle_dashboard_path
     end
 
     def clear_ballots
@@ -330,7 +320,7 @@ module Admin
         return
       when 'placards'
         @vehicles = Vehicle.joins(user: :registrations)
-                           .where(registrations: { year: 2025 })
+                           .where(registrations: { year: Date.current.year })
                            .distinct
         render :placards
         return

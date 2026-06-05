@@ -45,5 +45,5 @@
                               - else
                                 %li.text-small= link_to "Mod #{m.id} (#{m.status})", event_modification_path(m.id, registration_id: reg.id)
 
-                      %td.text-left= user.last_name_first
+                      %td.text-left= link_to user.last_name_first, user_path(user.id)
                       %td.text-left= user.email

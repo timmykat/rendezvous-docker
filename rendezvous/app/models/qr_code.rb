@@ -19,16 +19,14 @@ class QrCode < ApplicationRecord
   belongs_to :votable, polymorphic: true, inverse_of: :qr_code, optional: true
 
   has_one_attached :image
+  before_destroy :delete_qr_image
 
   validates :code, presence: true, uniqueness: true
 
   before_validation :generate_unique_code
 
-  scope :unassigned, -> {
-    where(votable_type: nil).where(votable_id: nil)
-  }
-
-  FILE_BASE = Rails.root.join('public', 'qr_codes')
+  scope :unassigned, -> { where(votable_type: nil, votable_id: nil) }
+  scope :assigned,   -> { where.not(votable_type: nil, votable_id: nil) }
 
   include Rails.application.routes.url_helpers
   Rails.application.routes.default_url_options[:host] ||= Rails.application.config.action_mailer.default_url_options[:host]
@@ -73,7 +71,7 @@ class QrCode < ApplicationRecord
   end
 
   def self.generate_image(code)
-    filepath = File.join(FILE_BASE, "qr_#{code}.png")
+    filepath = Rails.root.join('public', 'qr_codes', "qr_#{code}.png")
     url = Rails.application.routes.url_helpers.vote_voting_ballots_url({ code: code })
 
     qr = RQRCode::QRCode.new(url)
@@ -97,6 +95,13 @@ class QrCode < ApplicationRecord
     end
 
     qr_image.write(filepath)
-    return url
+    url
+  end
+
+  private
+
+  def delete_qr_image
+    filepath = Rails.root.join('public', 'qr_codes', "qr_#{code}.png")
+    File.delete(filepath) if File.exist?(filepath)
   end
 end
