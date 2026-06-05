@@ -3,6 +3,14 @@ require 'terser'
 Rails.application.configure do
 
   # Settings specified here will take precedence over those in config/application.rb.
+  #
+  # Set logging
+  config.log_level = :info
+  config.log_formatter = ::Logger::Formatter.new
+
+  stdout_logger = ActiveSupport::Logger.new($stdout)
+  stdout_logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(stdout_logger)
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -48,11 +56,6 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # Use the lowest log level to ensure availability of diagnostic information
-  # when problems arise.
-  config.log_level = :info
-  config.log_to_stdout = true
-
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
@@ -89,9 +92,6 @@ Rails.application.configure do
 
   # Send deprecation notices to registered listeners.
   config.active_support.deprecation = :notify
-
-  # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
