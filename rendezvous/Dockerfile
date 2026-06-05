@@ -23,8 +23,19 @@ RUN echo "RAILS_ENV=$RAILS_ENV NODE_ENV=$NODE_ENV"
 ARG APP_UID=1001
 ARG APP_GID=1001
 
-RUN groupadd -g ${APP_GID} webuser && \
-    useradd -m -u ${APP_UID} -g ${APP_GID} webuser
+RUN set -eux; \
+    if getent group webuser >/dev/null; then \
+      groupmod -g "${APP_GID}" webuser; \
+    else \
+      groupadd -g "${APP_GID}" webuser; \
+    fi; \
+    if id -u webuser >/dev/null 2>&1; then \
+      usermod -u "${APP_UID}" -g "${APP_GID}" -d /home/webuser -m webuser; \
+    else \
+      useradd -m -u "${APP_UID}" -g "${APP_GID}" webuser; \
+    fi; \
+    mkdir -p /var/www/rendezvous/tmp /var/www/rendezvous/storage /var/www/rendezvous/public/qr_codes; \
+    chown -R "${APP_UID}:${APP_GID}" /var/www/rendezvous /home/webuser
 
 RUN mkdir -p $RAILS_ROOT/tmp $RAILS_ROOT/storage \
     && chown -R webuser:webuser $RAILS_ROOT/tmp \
