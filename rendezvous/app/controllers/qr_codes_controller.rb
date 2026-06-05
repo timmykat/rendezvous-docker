@@ -6,15 +6,24 @@ class QrCodesController < ApplicationController
       QrCode.assigned.destroy_all
     end
 
-    Rails.logger.debug 'Submit generation job'
-    VehicleQrGenerationJob.perform_now(params[:all_vehicles])
-    flash_notice 'Vehicle QR generation job started'
+    if params[:sync]
+      VehicleQrGenerationJob.perform_now(params[:all_vehicles])
+    else
+      Rails.logger.debug 'Submitting generation job'
+      VehicleQrGenerationJob.perform_later(params[:all_vehicles])
+      flash_notice 'Vehicle QR generation job started'
+    end
     redirect_to admin_vehicle_dashboard_path
   end
 
   def generate_unassigned_codes
-    UnassignedQrGenerationJob.perform_now
-    flash_notice 'Unassigned QR generation job started'
+    if params[:sync]
+      UnassignedQrGenerationJob.perform_now
+    else
+      Rails.logger.debug 'Submitting generation job'
+      UnassignedQrGenerationJob.perform_later
+      flash_notice 'Unassigned QR generation job started'
+    end
     redirect_to admin_vehicle_dashboard_path
   end
 

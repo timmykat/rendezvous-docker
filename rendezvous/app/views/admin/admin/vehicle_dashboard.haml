@@ -18,10 +18,17 @@
 
             .navbar.nav.justify-content-start
               .nav-item.ml-3.button-with-spinner
-                = link_to 'Generate Missing Vehicle Codes', generate_vehicle_codes_path({ all_vehicles: false }), class: 'btn btn-warning', data: { 'button-spinner' => 'Generating...', turbo: false }
+                = link_to 'Generate Missing Vehicle Codes', generate_vehicle_codes_path({ all_vehicles: false, sync: false }), class: 'btn btn-info', data: { 'button-spinner' => 'Generating...', turbo: false }
 
               .nav-item.ml-3.button-with-spinner
-                = link_to 'Regenerate All Vehicle Codes', generate_vehicle_codes_path({ all_vehicles: true }), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+                = link_to 'Generate Missing Vehicle Codes (sync)', generate_vehicle_codes_path({ all_vehicles: false, sync: true }), class: 'btn btn-warning', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+              .nav-item.ml-3.button-with-spinner
+                = link_to 'Regenerate All Vehicle Codes', generate_vehicle_codes_path({ all_vehicles: true, sync: false }), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+              .nav-item.ml-3.button-with-spinner
+                = link_to 'Regenerate All Vehicle Codes (sync)', generate_vehicle_codes_path({ all_vehicles: true, sync: true }), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+
 
               .nav-item.ml-3
                 = link_to 'Print dash placards', admin_print_path({item: 'placards'}), class: 'btn btn-primary'
@@ -30,7 +37,10 @@
             %p There are #{@blank_qr_codes} unassigned codes
             .navbar.nav.justify-content-start
               .nav-item.ml-3.button-with-spinner
-                = link_to 'Generate Unassigned Codes (default 30)', generate_unassigned_codes_path, class: 'btn btn-warning', data: { 'button-spinner' => 'Generating...', turbo: false }
+                = link_to 'Generate Unassigned Codes (default 30)', generate_unassigned_codes_path({ sync: true }), class: 'btn btn-info', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+              .nav-item.ml-3.button-with-spinner
+                = link_to 'Generate Unassigned Codes (default 30, sync)', generate_unassigned_codes_path({ sync: true }), class: 'btn btn-warning', data: { 'button-spinner' => 'Generating...', turbo: false }
 
               .nav-item.ml-3
                 = link_to 'Print blank dash placards', admin_print_path({item: 'blank_placards'}), class: 'btn btn-primary'

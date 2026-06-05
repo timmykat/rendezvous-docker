@@ -2,7 +2,7 @@ services:
   rails_app:
     build: null
     image: ghcr.io/timmykat/rendezvous-docker:latest
-    user: "webuser"
+    user: "1001:1001"
     command: bundle exec rails server -b 0.0.0.0 -p 3000
 
     ports:
@@ -35,7 +35,7 @@ services:
       - rendezvous
 
   sidekiq:
-    user: "webuser"
+    user: "1001:1001"
     build: null
     image: ghcr.io/timmykat/rendezvous-docker:latest
     command: bundle exec sidekiq
