@@ -1,103 +1,106 @@
 :root {
-  --appWidth: 540px;
+    --appWidth: 540px;
 }
 
 .c_voting_ballots {
-  & > .container {
-    max-width: var(--appWidth);
-  
-    main {
-      margin-top: 0;
+    & > .container {
+        max-width: var(--appWidth);
+
+        main {
+            margin-top: 0;
+        }
     }
-  }
-  .card {
-    background: white;
-  }
+    .card {
+        background: white;
+    }
 }
 
 svg.bi.delete {
-  padding: 0;
+    padding: 0;
 }
 
 #voting-instructions Ul > li {
-  font-size: 1.3rem;
-  line-height: 1.3;
+    font-size: 1.3rem;
+    line-height: 1.3;
 }
 
-#voting-app {
-  input[name='code'] {
-    text-transform: uppercase;
-    font-size: 2.5rem;
-  }
-
-  .selections .btn {
-    display: inline-block;
-    margin-right: 10px;
-    background: white;
-    border-radius: 7px; 
-    color: red;
-    border: solid 1px var(--indigo-dye);
-
-    svg.bi.delete {
-      padding: 0;
+voting-app {
+    input[name="code"] {
+        text-transform: uppercase;
+        font-size: 2.5rem;
     }
-  }
 
-  .tab-content > .tab-pane {
-    display: block !important; /* override Bootstrap */
-    visibility: hidden;
-    position: absolute;
-    z-index: -1;
-  }
-  
-  .tab-content > .tab-pane.active {
-    visibility: visible;
-    position: static;
-    z-index: auto;
-  }
+    .selections .btn {
+        display: inline-block;
+        background: white;
+        border-radius: 7px;
+        color: red;
+        border: solid 1px var(--indigo-dye);
 
-  #vote-action-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+        svg.bi.delete {
+            padding: 0;
+        }
+    }
 
-    .selection-wrapper, .error-wrapper {
-      max-width: var(--appWidth);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: #eee;
-      color: var(--darkblue);
-      padding: 10px;
-      line-height: 1.4;
+    .tab-content > .tab-pane {
+        display: block !important; /* override Bootstrap */
+        visibility: hidden;
+        position: absolute;
+        z-index: -1;
     }
-    .error-wrapper {
-      display: none;
-    }
-    .selection-info, .error-info {
-      font-size: 1.5;
-      border-radius: 10px;
-      margin: 20px 0;
-      padding: 30px;
-      background-color: var(--cambridge-blue);
-      box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
-      font-size: 1.5rem;
-      .category {
-        margin-bottom: 20px;
-        font-weight: bold;
-      }
-    }
-    .error-info {
-      background-color: var(--citroen-red);
-      color: white;
-    }
-  }
 
-  #categories-content-frame {
-    .category {
-      font-size: 1.4rem;
+    .tab-content > .tab-pane.active {
+        visibility: visible;
+        position: static;
+        z-index: auto;
     }
-  }
+
+    #vote-action-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .selection-wrapper,
+        .error-wrapper {
+            max-width: var(--appWidth);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--darkblue);
+            padding: 10px;
+            line-height: 1.4;
+        }
+        .error-wrapper {
+            display: none;
+        }
+        .selection-info {
+            visibility: hidden;
+        }
+        .selection-info,
+        .error-info {
+            font-size: 1.5;
+            border-radius: 10px;
+            margin: 20px 0;
+            padding: 30px;
+            background-color: var(--cambridge-blue);
+            box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.3);
+            font-size: 1.5rem;
+            .category {
+                margin-bottom: 20px;
+                font-weight: bold;
+            }
+        }
+        .error-info {
+            background-color: var(--citroen-red);
+            color: white;
+        }
+    }
+
+    #categories-content-frame {
+        .category {
+            font-size: 1.4rem;
+        }
+    }
 }

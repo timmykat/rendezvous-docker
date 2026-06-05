@@ -1,0 +1,37 @@
+.tab-content{ data: { tab_content: 'vote' } }
+  .card
+    .card-body
+      .card-text
+        %h3.h5.d-flex.justify-content-between.align-items-center
+          Enter selection (prefilled if you used the QR code)
+          =link_to icon(:info, size: '40'), '#', data: { turbo: 'false', toggle: 'modal', target: '#voting-instructions' }, class: 'btn-link text-info p-0 m-0'
+        .card-text
+          .card
+            .card-body
+              .card-text
+                = form_with url: vote_voting_ballots_path(@ballot), method: :get, data: { turbo: false } do |f|
+                  .form-group
+                    %label Vehicle ID:
+                    = f.text_field :code, value: @code, id: "selection_code", class: 'form-control text-center', data: { voting_target: "selection" }
+
+                  #vote-action-container
+                    .previously-selected{ hidden: 'hidden' }
+                      .alert-warning You already selected that one!
+
+                    - if @limit_reached
+                      .alert-danger You need to delete a your current category selection to vote for this.
+
+                    - else
+                      .selection-wrapper
+                        .selection-info
+                          .category
+                            Category:
+                            %span.value #{@vehicle&.judging_category}
+                          .info
+                            .vehicle #{@vehicle&.year_marque_model}
+                            .owner
+                              Owner:
+                              %span.value #{@vehicle&.user&.full_name}
+
+                    .text-center.d-flex.align-items-center.mt-4
+                      = f.submit "VOTE", id: 'vote-button', class: "btn btn-primary mr-3", data: { toggle: 'modal', target: '#transition-modal' }

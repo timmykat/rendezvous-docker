@@ -75,9 +75,9 @@ class QrCode < ApplicationRecord
 
   def self.generate_image(code)
     filepath = File.join(FILE_BASE, "qr_#{code}.png")
-    url = Rails.application.routes.url_helpers.get_voting_ballot_url({code: code})
+    url = Rails.application.routes.url_helpers.vote_voting_ballots_url({ code: code })
 
-    qr = RQRCode::QRCode.new(url) 
+    qr = RQRCode::QRCode.new(url)
     qr_png = qr.as_png(border_modules: 4, size: 300)
     qr_image = MiniMagick::Image.read(qr_png.to_s)
 
@@ -87,7 +87,7 @@ class QrCode < ApplicationRecord
     if File.exist?(logo_path)
       # Open the logo image
       logo = MiniMagick::Image.open(logo_path)
-  
+
       # Resize the logo
       logo.resize("100x100")
 
@@ -98,6 +98,6 @@ class QrCode < ApplicationRecord
     end
 
     qr_image.write(filepath)
-    return url    
+    return url
   end
 end

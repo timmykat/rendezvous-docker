@@ -1,0 +1,25 @@
+.container
+  .row
+    .col-12
+      .card
+        .card-body
+          .card-title
+            %h1.h3 People's Choice Ballots
+          .card-text
+            %table.table
+              %thead
+                %tr
+                  %th Year
+                  %th ID
+                  %th Status
+                  %th Selections
+              %tbody
+                - @ballots.each do |b|
+                  %tr
+                    %td #{b.year}
+                    %td #{b.id}
+                    %td #{b.status}
+                    %td
+                      %ul
+                        - b.selections.each do |v|
+                          %li #{v.year_marque_model}

@@ -37,7 +37,7 @@ module Votable
   def full_qr_path
     Rails.root.join(qr_path)
   end
-  
+
   def full_qr_file_path
     return nil if self.code.nil?
     File.join(full_qr_path, "qr_#{self.code}.png")
@@ -45,7 +45,7 @@ module Votable
 
   def qr_server_path
     return nil if self.code.nil?
-    
+
   end
 
   def create_qr_code(regenerate = false)
@@ -54,8 +54,8 @@ module Votable
 
     generate_unique_code
     self.save
-    url = get_voting_ballot_url({code: self.code})
-    qr = RQRCode::QRCode.new(url) 
+    url = vote_voting_ballots_url({ code: self.code } )
+    qr = RQRCode::QRCode.new(url)
     qr_png = qr.as_png(border_modules: 4, size: 300)
     qr_image = MiniMagick::Image.read(qr_png.to_s)
     logo_path = Rails.root.join('app', 'assets', 'images', 'oval-citroen-logo.png')
@@ -64,7 +64,7 @@ module Votable
     if File.exist?(logo_path)
       # Open the logo image
       logo = MiniMagick::Image.open(logo_path)
-  
+
       # Resize the logo
       logo.resize("100x100")
 

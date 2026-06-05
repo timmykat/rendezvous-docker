@@ -17,7 +17,7 @@
 module Voting
   class Ballot < ApplicationRecord
 
-    STATUSES = ["voting", "hand_tally", "submissible:some", "submissible:all", "submitted"]
+    STATUSES = %w[voting hand_tally submissible:some submissible:all submitted].freeze
 
     validates :status, presence: true, inclusion: STATUSES
     default_scope { where(year: Date.current.year) }
@@ -25,28 +25,53 @@ module Voting
     has_many :ballot_selections, class_name: 'Voting::BallotSelection', dependent: :destroy
     has_many :selections, through: :ballot_selections, source: :votable, source_type: 'Vehicle'
 
+    def self.top_vehicles_by_category(year: Date.current.year, limit: 3)
+      vote_counts = Voting::BallotSelection
+                    .joins(:ballot)
+                    .where(
+                      votable_type: 'Vehicle',
+                      ballots: { year: year }
+                    )
+                    .group(:votable_id)
+                    .select(:votable_id, 'COUNT(*) AS vote_count')
+
+      Vehicle
+        .joins("JOIN (#{vote_counts.to_sql}) AS votes ON votes.votable_id = vehicles.id")
+        .select('vehicles.*, votes.vote_count')
+        .group_by(&:judging_category)
+        .transform_values do |vehicles|
+          vehicles
+            .sort_by { |vehicle| -vehicle.vote_count.to_i }
+            .first(limit)
+            .map { |vehicle| [vehicle, vehicle.vote_count.to_i] }
+        end
+    end
+
     def categorized_selections
       categorized_selections = Vehicles::VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
-      return categorized_selections unless self.selections.present?
-      self.selections.each do |vehicle|
+      return categorized_selections unless selections.present?
+
+      selections.each do |vehicle|
         categorized_selections[vehicle.judging_category] << vehicle
       end
-      categorized_selections.sort_by { |_category, vehicles| vehicles.size }.to_h
+      categorized_selections.sort_by { |category, _vehicles| category }.to_h
     end
 
     def get_status
       return status if status == 'submitted'
+
       status = 'submissible:all'
-      categorized_selections.each do |category, vehicles|
-        if vehicles.length == 0
+      categorized_selections.each_value do |vehicles|
+        if vehicles.empty?
           status = 'submissible:some'
         elsif vehicles.length > 1
           status = 'voting'
           break
         end
       end
-      self.save
-      return status
+      save
+
+      status
     end
 
     def submissible?
