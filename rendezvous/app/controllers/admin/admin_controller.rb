@@ -299,7 +299,7 @@ module Admin
     end
 
     def peoples_choice_results
-      @results = Vehicle.top_3_by_category
+      @results = Voting::Ballot.top_vehicles_by_category # Defaults to current year and top 3
     end
 
     def generate_qr_codes

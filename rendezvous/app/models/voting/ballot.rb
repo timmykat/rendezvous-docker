@@ -25,6 +25,28 @@ module Voting
     has_many :ballot_selections, class_name: 'Voting::BallotSelection', dependent: :destroy
     has_many :selections, through: :ballot_selections, source: :votable, source_type: 'Vehicle'
 
+    def self.top_vehicles_by_category(year: Date.current.year, limit: 3)
+      vote_counts = Voting::BallotSelection
+                    .joins(:ballot)
+                    .where(
+                      votable_type: 'Vehicle',
+                      ballots: { year: year }
+                    )
+                    .group(:votable_id)
+                    .select(:votable_id, 'COUNT(*) AS vote_count')
+
+      Vehicle
+        .joins("JOIN (#{vote_counts.to_sql}) AS votes ON votes.votable_id = vehicles.id")
+        .select('vehicles.*, votes.vote_count')
+        .group_by(&:judging_category)
+        .transform_values do |vehicles|
+          vehicles
+            .sort_by { |vehicle| -vehicle.vote_count.to_i }
+            .first(limit)
+            .map { |vehicle| [vehicle, vehicle.vote_count.to_i] }
+        end
+    end
+
     def categorized_selections
       categorized_selections = Vehicles::VehicleTaxonomy.get_all_categories.map { |k| [k, []] }.to_h
       return categorized_selections unless selections.present?
