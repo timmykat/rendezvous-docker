@@ -1,7 +1,7 @@
 services:
   rails_app:
     build: null
-    image: ghcr.io/timmykat/rendezvous-docker:${IMAGE_TAG}
+    image: ghcr.io/timmykat/rendezvous-docker:latest
     user: "webuser"
     command: bundle exec rails server -b 0.0.0.0 -p 3000
 
@@ -37,7 +37,7 @@ services:
   sidekiq:
     user: "webuser"
     build: null
-    image: ghcr.io/timmykat/rendezvous-docker:${IMAGE_TAG}
+    image: ghcr.io/timmykat/rendezvous-docker:latest
     command: bundle exec sidekiq
     environment:
       RAILS_ENV: production
