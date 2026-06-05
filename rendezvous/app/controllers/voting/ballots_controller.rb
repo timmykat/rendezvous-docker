@@ -1,17 +1,19 @@
 module Voting
   class BallotsController < ApplicationController
 
-    layout 'ballot_layout', only: [:ballot, :hand_ballot]
+    layout 'ballot_layout'
 
-    before_action :require_admin, only: [:hand_ballot, :hand_count]
-    before_action :voting_on?, only: [:ballot, :vote]
+    before_action :require_admin, only: %i[new create index]
+    before_action :voting_on?, only: %i[new landing vote]
+
+    before_action :set_current_ballot, only: %i[landing selections vote delete_selection]
 
     before_action :set_ballot_count
 
-    PER_CATEGORY_LIMIT = 3
+    PER_CATEGORY_LIMIT = 1
 
-    def set_ballot_count
-      @ballot_count = Voting::Ballot.count
+    def index
+      @ballots = Ballot.order(year: :desc)
     end
 
     def voting_on?
@@ -21,13 +23,13 @@ module Voting
       redirect_to :root
     end
 
-    def hand_ballot
+    def new
       @ballot = Ballot.new
       @codes = []
       @number_of_categories = Vehicles::VehicleTaxonomy::VEHICLES[:marques].values.sum { |marque_data| marque_data[:categories].keys.count }
     end
 
-    def hand_count
+    def create
       @ballot = Ballot.create(year: Date.current.year, status: 'hand_tally')
       params[:code].each do |code|
         vehicle = Vehicle.find_by_code(code)
@@ -38,67 +40,86 @@ module Voting
       else
         flash_alert 'Something went wrong'
       end
-      redirect_to voting_hand_ballot_path
+      redirect_to create_ballot_path
     end
 
-    def ballot
-      ballot_id = params[:ballot_id] || session[:ballot_id]
+    def landing
 
-      if !ballot_id.nil?
-        @ballot = Voting::Ballot.find(ballot_id)
-      else
-        @ballot = Ballot.create(year: Date.current.year, status: 'voting')
-        session[:ballot_id] = @ballot.id
-      end
+      create_js_data
+    end
 
-      @code = params[:code]
-      if @code.present?
-        @vehicle = Vehicle.find_by_code(@code)
-      end
-
-      @selections = @ballot.categorized_selections
-
-      if @vehicle.present?
-        @category = @vehicle.judging_category
-        @already_selected = already_selected?(@vehicle)
-        @limit_reached = limit_reached?(@vehicle)
-      end
+    def selections
+      redirect_to landing_voting_ballots_path(anchor: 'selections')
     end
 
     def vote
-      @ballot = Voting::Ballot.find(params[:ballot_id])
+      unless params[:code].present?
+        redirect_to landing_voting_ballots_path, alert: 'No voting code available!'
+        return
+      end
+
       vehicle = Vehicle.find_by_code(params[:code])
 
-      if vehicle.nil? || @ballot.nil?
-        # Handle error, possibly by rendering a proper error message or redirecting
-        redirect_to @ballot, alert: 'Invalid ballot or vehicle.'
+      if vehicle.nil?
+        redirect_to landing_voting_ballots_path, alert: 'No vehicle for that code!'
+        return
+      end
+
+      if limit_reached?(vehicle)
+        category = vehicle.judging_category
+        redirect_to landing_voting_ballots_path(anchor: 'selections'),
+                    alert: "You must delete your current <em>#{category}</em> selection".html_safe
         return
       end
 
       vehicle.vote_by(@ballot)
       @ballot.save
-      @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
+      redirect_to landing_voting_ballots_path(anchor: 'selections')
     end
 
     def delete_selection
-      @ballot = Voting::Ballot.find(params[:ballot_id])
       vehicle_id = params[:vehicle_id]
+      return unless vehicle_id.present?
+
       @ballot.selections.delete(vehicle_id)
       @ballot.save
+      redirect_to landing_voting_ballots_path({ code: nil, anchor: 'selections' })
+    end
+
+    def create_js_data
+
       @selections = @ballot.categorized_selections
-      redirect_to get_voting_ballot_path({ ballot_id: @ballot.id, code: nil, anchor: 'tabbed-2' })
+      @ballot_data = @selections
+      @selected_codes = @ballot_data.values.flat_map { |vehicles| vehicles.map(&:code) }
     end
 
     private
+
+    def set_current_ballot
+      @ballot = Voting::Ballot.find_by_id(session[:ballot_id])
+      return if @ballot.present?
+
+      @ballot = Voting::Ballot.new(status: 'voting')
+      unless @ballot.save
+        redirect_to root_path, alert: 'Could not create ballot.'
+        return
+      end
+
+      session[:ballot_id] = @ballot.id
+    end
+
+    def set_ballot_count
+      @ballot_count = Voting::Ballot.count
+    end
 
     def already_selected?(vehicle)
       @ballot.categorized_selections.values.any? { |vehicles| vehicles.include?(vehicle) }
     end
 
     def limit_reached?(vehicle)
+      @selections = @ballot.categorized_selections
       category = vehicle.judging_category
-      @selections[category].size >= PER_CATEGORY_LIMIT
+      @selections[category].to_a.size >= PER_CATEGORY_LIMIT
     end
   end
 end

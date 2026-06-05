@@ -122,13 +122,13 @@ Rails.application.routes.draw do
   namespace :admin do
     get 'dedupe', to: 'admin#dedupe'
     get 'dashboard', to: 'admin#dashboard'
+    get 'vehicle_dashboard', to: 'admin#vehicle_dashboard'
     get 'manage', to: 'admin#manage'
     get 'download_csv', to: 'admin#download_csv', defaults: { format: 'csv' }
     get 'graphs', to: 'admin#registration_graphs'
     get 'cleanup', to: 'users#cleanup'
     post 'cleanup', to: 'users#cleanup'
     get 'print', to: 'admin#print'
-    get 'manage_qr_codes', to: 'admin#manage_qr_codes'
     get 'generate_qr_codes', to: 'admin#generate_qr_codes'
     get 'peoples_choice_results', to: 'admin#peoples_choice_results'
     get 'ballots/clear', to: 'admin#clear_ballots'
@@ -138,16 +138,19 @@ Rails.application.routes.draw do
   end
 
   namespace :voting do
-    get '/ballot', to: 'ballots#ballot', as: :get_voting_ballot
-    get '/hand_ballot', to: 'ballots#hand_ballot'
-    post '/hand_count', to: 'ballots#hand_count'
-    post '/ballots/vote', to: 'ballots#vote', as: :vote
-    delete '/ballots/vehicle/delete', to: 'ballots#delete_selection', as: :delete_vehicle_selection
+    resources :ballots, only: %i[new create index] do
+      member do
+        get :selections
+        get :vote
+        delete 'selection/:vehicle_id', to: 'ballots#delete_selection', as: :delete_selection
+      end
+      collection do
+        get :landing, to: 'ballots#landing'
+        get :vote, to: 'ballots#vote'
+      end
+    end
   end
-  get '/_ajax/voting/vehicle/:code', to: 'vehicles#ajax_info'
-
-  # resources :donations, { only: %i[new create index] }
-  # get '/donations/:id/thank_you', to: 'donations#thank_you', as: :thank_you
+  get '/_ajax/vehicle_info/:code',   to: 'vehicles#ajax_info'
 
   # -- Content
   # get '/faq', to: 'main_pages#faq'

@@ -3,19 +3,15 @@
     .modal-content
       .modal-header
         %h2.h4 INSTRUCTIONS
-        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button", style: "color: black;"} #{icon(:close, size: '20')}
+        %button.btn-close.ml-auto{"aria-label" => "Close", "data-dismiss" => "modal", type: "button"} #{icon(:close, size: '20', color: 'black')}
       .modal-body
         %ul
-          %li.mb-3 
-            Vote by aiming your camera at the QR code on the dash placard to get the ID. 
-          %li.mb-3 
-            The
-            %strong VOTE
-            button will become active - just click to vote.
-          %li.mb-3 
-            %em Alternatively, 
-            select
-            %strong TYPE IN
-            to enter the car ID from the dash card yourself.
           %li.mb-3
-            You can vote for up to 3 choices per category. The app will keep track of that for you.
+            Vote by aiming your camera at the QR code on the dash placard to get the ID.
+          %li.mb-3 OR
+          %li.mb-3
+            Select the Vote tab and enter the car ID from the dash card yourself.
+          %li.mb-3
+          %li.mb-3 THEN
+          %li.mb-3 the details for the selected vehicle will appear and the vote button will become active.
+          %li.mb-3 Click the Vote button to register your vote.

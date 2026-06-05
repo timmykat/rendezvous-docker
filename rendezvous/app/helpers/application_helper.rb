@@ -20,41 +20,43 @@ module ApplicationHelper
 
   def bootstrap_icon_map
     {
-      add_person: "person-plus-fill",
-      address: "geo-alt",
-      back: "chevron-double-left",
-      bank: "bank",
-      car: "car-front-fill",
-      close: "x-circle",
-      collapse: "chevron-compact-down",
+      add_person: 'person-plus-fill',
+      address: 'geo-alt',
+      back: 'chevron-double-left',
+      bank: 'bank',
+      car: 'car-front-fill',
+      close: 'x-circle',
+      collapse: 'chevron-compact-down',
       delete: 'trash3',
-      email: "envelope-at",
-      expand: "chevron-compact-up",
+      email: 'envelope-at',
+      expand: 'chevron-compact-up',
       info: 'question-circle-fill',
-      left_arrow: "arrow-left-circle-fill",
-      list: "list",
-      minus: "dash-square-fill",
-      mouse: "mouse-2-fill",
-      pdf: "file-earmark-pdf-fill",
-      person_f: "person-standing-dress",
-      person_m: "person-standing",
-      phone: "telephone-fill",
-      plus: "plus-square-fill",
-      registered: "check-square-fill",
-      remove_person: "person-dash-fill",
-      right_arrow: "arrow-right-circle-fill",
-      speaker: "megaphone-fill",
-      spreadsheet: "file-spreadsheet",
-      table: "table",
-      vendor: "person-raised-hand"
+      left_arrow: 'arrow-left-circle-fill',
+      list: 'list',
+      minus: 'dash-square-fill',
+      mouse: 'mouse-2-fill',
+      pdf: 'file-earmark-pdf-fill',
+      person_f: 'person-standing-dress',
+      person_m: 'person-standing',
+      phone: 'telephone-fill',
+      plus: 'plus-square-fill',
+      registered: 'check-square-fill',
+      remove_person: 'person-dash-fill',
+      right_arrow: 'arrow-right-circle-fill',
+      speaker: 'megaphone-fill',
+      spreadsheet: 'file-spreadsheet',
+      table: 'table',
+      vendor: 'person-raised-hand'
     }
   end
 
   def bootstrap_icon(key, icon, args)
     size = args.fetch(:size, '32')
     data = args[:data]
-    href = image_url("bootstrap-icons/bootstrap-icons.svg")
-    content_tag(:svg, width: size, height: size, fill: "currentColor", class: "bi #{key.to_s}", data: data) do
+    color = args[:color]
+    href = image_url('bootstrap-icons/bootstrap-icons.svg')
+    content_tag(:svg, width: size, height: size, fill: 'currentColor',
+                      class: "bi #{key}", data: data, style: "color: #{color}") do
       content_tag(:use, nil, href: "#{href}##{icon}")
     end
   end
@@ -68,7 +70,7 @@ module ApplicationHelper
   end
 
   def refund_date
-    Rails.configuration.registration[:refund_date].to_time.strftime("%B %-d, %Y")
+    Rails.configuration.registration[:refund_date].to_time.strftime('%B %-d, %Y')
   end
 
   def logged_in_user(user)

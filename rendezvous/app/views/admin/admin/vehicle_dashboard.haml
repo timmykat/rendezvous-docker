@@ -1,0 +1,58 @@
+.container-fluid
+  .row
+    .col-12
+      %h1 Vehicle Dashboard
+
+  .row
+    .col-md-6.col-12
+      .card
+        .card-body
+          .card-title
+            %h1.h3 Manage QR Codes
+          .card-text
+            %p
+              %strong Last generated: #{@last_generated}
+
+            %p.button-with-spinner
+              = link_to 'Generate New Codes', admin_generate_qr_codes_path, class: 'btn btn-info button', data: { 'button-spinner' => 'Generating...', turbo: false }
+            %p.button-with-spinner
+              = link_to 'Regenerate All Codes', admin_generate_qr_codes_path({regenerate: true}), class: 'btn btn-danger', data: { 'button-spinner' => 'Generating...', turbo: false }
+
+  .row
+    .col-12
+      %tab-display#dashboard{ data: { tabbed: true } }
+        %ul{ data: { tab_buttons: true } }
+          - @categorized_vehicles.each_with_index do |(category, vehicles), index|
+            %li
+              %button{ data: { tab: index } } #{category}
+
+        - @categorized_vehicles.each_with_index do |(category, vehicles), index|
+          .tab-content{ data: { tab_content: index } }
+            .row
+              .col-12
+                .card
+                  .card-body
+                    .card-title
+                      %h2 #{category}
+                    .card-text
+                      %table
+                        %thead
+                          %tr
+                            %th Owner
+                            %th Vehicle
+                            %th Code
+                            %th QR Image
+                        %tbody
+                          - vehicles.each do |v|
+                            %tr
+                              %td #{v.user.full_name}
+                              %td #{v.year_marque_model}
+                              - code = v&.qr_code&.code
+                              - file_path = v.server_qr_file_path
+                              - if code && file_path
+                                %td= code
+                                %td.pt-2.pb-2
+                                  %div{style: 'padding: 5px 20px'}
+                                    = image_tag qr_code_url(v.qr_code.code), {style: 'width: 150px; height: 150px;'}
+                              - else
+                                %td{ class: 'pt-2 pb-2', colspan: '2' } (no image yet)

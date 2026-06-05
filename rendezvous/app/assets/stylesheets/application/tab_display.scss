@@ -31,7 +31,7 @@ tab-display > ul {
     }
 }
 
-tab-display [data-tabbed].active {
+tab-display ul li.active {
     background: #fff;
     font-weight: bold;
     position: relative;
