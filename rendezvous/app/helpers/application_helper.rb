@@ -89,6 +89,10 @@ module ApplicationHelper
     Config::SiteSetting.instance.voting_on
   end
 
+  def display_vote_button?
+    Config::SiteSetting.instance.display_vote_button
+  end
+
   def before_cutoff_date?
     current_time <= Rails.configuration.registration[:registration_window][:close].to_time
   end

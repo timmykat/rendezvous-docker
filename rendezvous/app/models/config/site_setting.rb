@@ -14,6 +14,8 @@
 #
 class Config::SiteSetting < ApplicationRecord
 
+  validate :display_vote_button_requires_voting_on
+
   private_class_method :new
 
   @instance = nil
@@ -25,5 +27,14 @@ class Config::SiteSetting < ApplicationRecord
   def self.reload_instance
     @instance = Config::SiteSetting.first  # Reload to ensure updated data
   end
-  
+
+  private
+
+  def display_vote_button_requires_voting_on
+    return unless display_vote_button?
+    return if voting_on?
+
+    errors.add(:display_vote_button, 'can only be enabled when voting is on')
+  end
+
 end

@@ -85,7 +85,7 @@
                     =link_to 'REGISTER', event_welcome_path, class: 'ml-3 px-5 btn btn-lg btn-register'
                     =link_to "Prefer paper? #{icon(:pdf)}".html_safe, written_reg_form_link(), class: 'ml-3'
 
-      - if voting_on?
+      - if display_vote_button?
         .container-fluid.px-0
           .row.no-gutters.py-3
             .col-12

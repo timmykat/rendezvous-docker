@@ -1,8 +1,8 @@
-.container 
+.container
   .row.justify-content-center
     .col-md-8
       .card
-        .card-body 
+        .card-body
           .card-text
             %h1.h3 Manage Site Settings
             = simple_form_for @instance, url: config_site_settings_update_path, method: :post do |f|
@@ -12,12 +12,35 @@
                 = f.input :registration_is_open, as: :boolean
               .form-group
                 = f.input :voting_on
+              .form-group
+                = f.input :display_vote_button
+
               %fieldset
-                .form-group 
+                .form-group
                   = f.input :debug_dates, as: :boolean
-                .form-group 
+                .form-group
                   = f.input :debug_test_date, as: :date
               .form-group
-                = f.input :square_environment, as: :select, collection: ['SANDBOX', 'PROD'], label: 'Select Square Environment', include_blank: '-- Default is SANDBOX --'               
-              .form-group 
+                = f.input :square_environment, as: :select, collection: ['SANDBOX', 'PROD'], label: 'Select Square Environment', include_blank: '-- Default is SANDBOX --'
+              .form-group
                 = f.submit 'Save Settings'
+
+:javascript
+  document.addEventListener("turbo:load", function () {
+    const votingOn = document.getElementById("config_site_setting_voting_on");
+    const displayVoteButton = document.getElementById("config_site_setting_display_vote_button");
+
+    if (!votingOn || !displayVoteButton) return;
+
+    function syncDisplayVoteButton() {
+      if (votingOn.checked) {
+        displayVoteButton.disabled = false;
+      } else {
+        displayVoteButton.checked = false;
+        displayVoteButton.disabled = true;
+      }
+    }
+
+    syncDisplayVoteButton();
+    votingOn.addEventListener("change", syncDisplayVoteButton);
+  });

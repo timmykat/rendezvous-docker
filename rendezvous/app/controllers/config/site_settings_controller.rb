@@ -33,7 +33,8 @@ class Config::SiteSettingsController < ApplicationController
       :login_on,
       :registration_is_open,
       :square_environment,
-      :voting_on
+      :voting_on,
+      :display_vote_button
     )
   end
 end
