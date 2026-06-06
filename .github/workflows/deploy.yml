@@ -1,8 +1,8 @@
 name: Deploy
 
 on:
-  workflow_dispatch: # 👈 manual button
-  workflow_run: # 👈 automatic trigger
+  workflow_dispatch:
+  workflow_run:
     workflows: ["Build and Push To Registry"]
     types:
       - completed
@@ -22,10 +22,10 @@ jobs:
           host: ${{ vars.HOSTINGER_IP }}
           username: ${{ vars.HOSTINGER_USER }}
           key: ${{ secrets.RENDEZVOUS_REPO_SSH_KEY }}
-          timeout: 30s # Connection timeout
-          command_timeout: 30m # Script execution timeout
+          timeout: 30s
+          command_timeout: 30m
           script: |
-            set -e
+            set -Eeuo pipefail
 
             exec 9>/tmp/deploy.lock
             flock -n 9 || {
@@ -33,7 +33,6 @@ jobs:
               exit 1
             }
 
-            # Determine correct SHA depending on trigger
             if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
               TAG="latest"
             else
@@ -41,8 +40,10 @@ jobs:
             fi
 
             IMAGE="ghcr.io/${{ github.repository }}:$TAG"
+            PREVIOUS_TAG="$(cat .current_version 2>/dev/null || true)"
 
             echo "Deploying image: $IMAGE"
+            echo "Previous version: ${PREVIOUS_TAG:-none}"
 
             cd /var/www/rendezvous-docker-prod
 
@@ -51,57 +52,62 @@ jobs:
             git reset --hard origin/main
 
             echo "-- Pull image --"
-            docker pull $IMAGE
+            docker pull "$IMAGE"
 
-            echo "-- Clean assets and replace --"
-            docker ps -a --filter "name=temp"
-            docker stop temp 2>/dev/null || true
-            docker rm -f temp || true
-            docker create --name temp $IMAGE
-            rm -rf ./rendezvous/public/assets
-            rm -rf ./rendezvous/public/packs
-            rm -f ./rendezvous/public/manifest.json
-            docker cp temp:/var/www/rendezvous/public/assets ./rendezvous/public/
-            docker cp temp:/var/www/rendezvous/public/packs ./rendezvous/public/ || true
-            docker cp temp:/var/www/rendezvous/public/manifest.json ./rendezvous/public/manifest.json || true
-            docker rm temp
-
-            echo "-- Restart app --"
+            echo "-- Export env --"
             export SECRET_KEY_BASE="${{ secrets.SECRET_KEY_BASE }}"
             export RAILS_ENV=production
             export REDIS_URL=redis://redis:6379/0
-            export IMAGE_TAG=$TAG
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate
+            export IMAGE_TAG="$TAG"
 
-            CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}")
+            echo "-- Start dependencies --"
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d db redis
+
+            echo "-- Run migrations in one-off container --"
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app \
+              bundle exec rails db:migrate
+
+            echo "-- Restart app containers --"
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate rails_app sidekiq
+
+            echo "-- Find app container --"
+            CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}" | head -n 1)
+
+            if [ -z "$CONTAINER_ID" ]; then
+              echo "rails_app container not running!"
+              docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+              exit 1
+            fi
+
             echo "-- Health check -- container $CONTAINER_ID"
+            HEALTH_OK=0
 
-            sleep 3
+            sleep 5
 
-            for i in {1..10}; do
+            for i in {1..15}; do
               echo "Attempt $i..."
 
-              if docker exec "$CONTAINER_ID" curl -f http://localhost:3000/up; then
+              if docker exec "$CONTAINER_ID" curl -fsS http://localhost:3000/up; then
                 echo "Health check passed!"
+                HEALTH_OK=1
                 break
               fi
 
-              sleep 3
+              sleep 4
             done
 
-            if [ $? -ne 0 ]; then
-              echo "Health check failed! Rolling back..."
+            if [ "$HEALTH_OK" -ne 1 ]; then
+              echo "Health check failed for tag $TAG"
               docker logs "$CONTAINER_ID" || true
+
+              if [ -n "${PREVIOUS_TAG:-}" ]; then
+                echo "-- Rolling back to $PREVIOUS_TAG --"
+                export IMAGE_TAG="$PREVIOUS_TAG"
+                docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate rails_app sidekiq
+              fi
+
               exit 1
             fi
-
-            echo "-- Find container --"
-            if [ -z "$CONTAINER_ID" ]; then
-              echo "Container not running!"
-              exit 1
-            fi
-
-            docker exec -e RAILS_ENV=production "$CONTAINER_ID" bundle exec rails db:migrate
 
             echo "-- Save deployed version --"
             echo "$TAG" > .current_version

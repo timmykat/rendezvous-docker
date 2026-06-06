@@ -37,7 +37,7 @@ services:
   sidekiq:
     user: "webuser"
     build: null
-    image: ghcr.io/timmykat/rendezvous-docker:latest
+    image: ghcr.io/timmykat/rendezvous-docker:${IMAGE_TAG}
     command: bundle exec sidekiq
     environment:
       RAILS_ENV: production
@@ -81,7 +81,7 @@ services:
   newrelic-infra:
     profiles: ["disabled"]
     container_name: newrelic-infra
-    image: newrelic/infrastructure-bundle:latest
+    image: newrelic/infrastructure-bundle:${IMAGE_TAG}
     cap_add:
       - SYS_PTRACE
     pid: host
