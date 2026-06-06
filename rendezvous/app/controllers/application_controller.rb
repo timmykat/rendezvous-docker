@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
   end
 
   def login_on
-    Config::SiteSetting.instance.login_on
+    Config::SiteSetting.instance.login_on?
   end
 
   def debug_date

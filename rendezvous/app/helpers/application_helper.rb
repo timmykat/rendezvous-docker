@@ -86,11 +86,11 @@ module ApplicationHelper
   end
 
   def voting_on?
-    Config::SiteSetting.instance.voting_on
+    Config::SiteSetting.instance.voting_on?
   end
 
   def display_vote_button?
-    Config::SiteSetting.instance.display_vote_button
+    Config::SiteSetting.instance.display_vote_button?
   end
 
   def before_cutoff_date?
@@ -114,7 +114,7 @@ module ApplicationHelper
   end
 
   def registration_is_open
-    Config::SiteSetting.instance.registration_is_open
+    Config::SiteSetting.instance.registration_is_open?
   end
 
   def public_registration

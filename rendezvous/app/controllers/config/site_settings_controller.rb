@@ -1,6 +1,6 @@
 class Config::SiteSettingsController < ApplicationController
 
-  layout "admin_layout"
+  layout 'admin_layout'
 
   before_action :require_admin
 
@@ -12,10 +12,9 @@ class Config::SiteSettingsController < ApplicationController
   def update
     @instance = Config::SiteSetting.instance
     if @instance.update(site_settings_params)
-      Config::SiteSetting.reload_instance
-      flash_notice "The site settings were updated"
+      flash_notice 'The site settings were updated'
     else
-      flash_alert "There was a problem updating the site settings"
+      flash_alert 'There was a problem updating the site settings'
     end
     redirect_to admin_dashboard_path
   end

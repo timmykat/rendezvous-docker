@@ -4,7 +4,7 @@ module Voting
     layout 'ballot_layout'
 
     before_action :require_admin, only: %i[new create index]
-    before_action :voting_on?, only: %i[new landing vote]
+    before_action :ensure_voting_is_on, only: %i[new landing vote]
 
     before_action :set_current_ballot, only: %i[landing selections vote delete_selection]
 
@@ -16,8 +16,8 @@ module Voting
       @ballots = Ballot.order(year: :desc)
     end
 
-    def voting_on?
-      return if Config::SiteSetting.instance.voting_on
+    def ensure_voting_is_on?
+      return if Config::SiteSetting.instance.voting_on?
 
       flash_alert "People's Choice voting has not begun yet!"
       redirect_to :root
