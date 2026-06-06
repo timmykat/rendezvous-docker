@@ -8,8 +8,6 @@ module Voting
 
     before_action :set_current_ballot, only: %i[landing selections vote delete_selection]
 
-    before_action :set_ballot_count
-
     PER_CATEGORY_LIMIT = 1
 
     def index
@@ -106,10 +104,6 @@ module Voting
       end
 
       session[:ballot_id] = @ballot.id
-    end
-
-    def set_ballot_count
-      @ballot_count = Voting::Ballot.count
     end
 
     def already_selected?(vehicle)

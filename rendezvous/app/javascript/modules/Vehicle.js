@@ -23,8 +23,10 @@ export class Vehicle extends HTMLElement {
     this.otherModelText = this.querySelector("input.model.text");
     this.marqueDataField = this.querySelector("input.marque.data");
     this.modelDataField = this.querySelector("input.model.data");
+    this.codeDisplayField = this.querySelector("input#qr_code_display");
     this.qrIdField = this.querySelector("[data-qr-id-field]");
-    this.codeFieldBadge = this.querySelector(".badge");
+    this.originalQrId = this.qrIdField.value;
+    this.newCodeSelect = this.querySelector("select.new-code");
 
     if (!this.marqueSelect || !this.modelSelect) {
       console.warn(
@@ -49,6 +51,7 @@ export class Vehicle extends HTMLElement {
       this.handleFieldChangeDebounce,
     );
     this.yearSelect.addEventListener("change", this.updateLabel);
+    this.newCodeSelect.addEventListener("change", this.updateCode);
   }
 
   removeEventListeners() {
@@ -63,6 +66,7 @@ export class Vehicle extends HTMLElement {
       this.handleFieldChangeDebounce,
     );
     this.yearSelect.removeEventListener("change", this.updateLabel);
+    this.newCodeSelect.removeEventListener("change", this.updateCode);
   }
 
   handleFieldChange = () => {
@@ -148,6 +152,20 @@ export class Vehicle extends HTMLElement {
     const fullName = `${year} ${marque} ${model}`;
     console.log("Updating label", fullName);
     this.label.textContent = fullName;
+  };
+
+  updateCode = (e) => {
+    const t = e.target;
+    const newQrCodeId = t.value;
+    const displayValue = t.options[t.selectedIndex].text;
+    console.log(newQrCodeId, displayValue);
+    if (newQrCodeId) {
+      this.codeDisplayField.classList.add("text-danger");
+      this.qrIdField.value = newQrCodeId;
+    } else {
+      this.codeDisplayField.classList.remove("text-danger");
+      this.qrIdField.value = this.originalQrID;
+    }
   };
 }
 window.customElements.define("rendezvous-vehicle", Vehicle);

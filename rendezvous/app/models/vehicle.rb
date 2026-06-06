@@ -55,7 +55,11 @@ class Vehicle < ApplicationRecord
   end
 
   def qr_code_id=(id)
-    @qr_code_id = id
+    if id.present?
+      self.qr_code = QrCode.find_by(id: id)
+    else
+      self.qr_code = nil
+    end
   end
 
   def self.find_by_code(code)
@@ -99,6 +103,10 @@ class Vehicle < ApplicationRecord
     return false unless current_reg_id
 
     @bringing = registrations_vehicles.exists?(registration_id: current_reg_id)
+  end
+
+  def being_brought_this_year?
+    registrations.where(year: Date.current.year).exists?
   end
 
   private

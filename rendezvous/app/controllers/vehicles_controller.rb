@@ -21,7 +21,7 @@ class VehiclesController < ApplicationController
   end
 
   def update
-    @vehicle = Vehicle.find(params[:i])
+    @vehicle = Vehicle.find(params[:id])
     if @vehicle.update(vehicle_params)
       flash_notice 'Updated'
       redirect_to vehicle_path(@vehicle.id)
@@ -72,7 +72,8 @@ class VehiclesController < ApplicationController
       :marque,
       :model,
       :user_id,
-      qr_code_attributes: [:id, :code, :_destroy]
+      :qr_code_id,
+      qr_code_attributes: %i[id code _destroy]
     )
   end
 end

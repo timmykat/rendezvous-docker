@@ -46,7 +46,7 @@
             .form-group
               = f.input :other_info, input_html:  { class: 'input-sm', placeholder:  'Unusual Citroen model, distinguishing features, historical notes, etc.' }
 
-          - if @user.current_registration.present?
+          - if @user&.current_registration.present?
             .col-md-12
               .form-group
                 = f.input :bringing, as: :boolean, label: "I am bringing this vehicle to this year's Rendezvous"
@@ -62,7 +62,7 @@
               .form-group
                 - if vehicle.qr_code.present?
                   %label Voting code for Peoples Choice Award
-                  = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'form-control'
+                  = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'original-code form-control'
 
               .form-group
                 %label Add or replace a voting code
@@ -70,9 +70,10 @@
                   %p Please generate unattached QR codes.
                 - else
                   .code-handling
-                    = text_field_tag :code, nil, class: 'form-control mr-2', data: { 'code-autocomplete': ''}
-                    .badge.badge-success.hide
-                      OK
+                    = select_tag :code,
+                      options_for_select([['(None)', '']] + @available_qr_codes.map { |qr| [qr.code, qr.id] }),
+                      class: 'new-code form-control mr-2'
+
                     = f.input :qr_code_id, as: :hidden, input_html: { data: { 'qr-id-field': ''} }
 
             .form-group

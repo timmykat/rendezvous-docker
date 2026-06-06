@@ -8,7 +8,18 @@
       .card
         .card-body
           .card-title
-            %h1.h3 Manage QR Codes
+            %h2.h3 People's Choice
+          .card-text
+            .navbar.nav.justify-content-start
+              .nav-item.ml-3= link_to 'Enter Ballot by Hand', new_voting_ballot_path, class: 'btn btn-primary'
+              .nav-item.ml-3= link_to 'View Ballots', voting_ballots_path, class: 'btn btn-info'
+              .nav-item.ml-3= link_to 'Results', admin_peoples_choice_results_path, class: 'btn btn-success'
+              .nav-item.ml-3 Number of ballots: #{@ballot_count} ->
+              .nav-item.ml-3= link_to "Caution! Clear Ballots", admin_ballots_clear_path, class: 'btn btn-danger'
+      .card
+        .card-body
+          .card-title
+            %h2.h3 Manage QR Codes
           .card-text
             %h2.h4 Vehicle Codes
             %p There are #{@assigned_qr_codes} codes assigned to vehicles
@@ -33,7 +44,7 @@
               .nav-item.ml-3
                 = link_to 'Print dash placards', admin_print_path({item: 'placards'}), class: 'btn btn-primary'
 
-            %h2.h4 Unassigned Codes
+            %h3.h4 Unassigned Codes
             %p There are #{@blank_qr_codes} unassigned codes
             .navbar.nav.justify-content-start
               .nav-item.ml-3.button-with-spinner
@@ -47,39 +58,47 @@
 
   .row
     .col-12
-      %tab-display#dashboard{ data: { tabbed: true } }
-        %ul{ data: { tab_buttons: true } }
-          - @categorized_vehicles.each_with_index do |(category, vehicles), index|
-            %li
-              %button{ data: { tab: index } } #{category}
+      .card
+        .card-body
+          %tab-display#dashboard{ data: { tabbed: true } }
+            %ul{ data: { tab_buttons: true } }
+              - @categorized_vehicles.each_with_index do |(category, vehicles), index|
+                %li
+                  %button{ data: { tab: index } } #{category}
 
-        - @categorized_vehicles.each_with_index do |(category, vehicles), index|
-          .tab-content{ data: { tab_content: index } }
-            .row
-              .col-12
-                .card
-                  .card-body
-                    .card-title
-                      %h2 #{category}
-                    .card-text
-                      %table
-                        %thead
-                          %tr
-                            %th Owner
-                            %th Vehicle
-                            %th Code
-                            %th QR Image
-                        %tbody
-                          - vehicles.each do |v|
-                            %tr
-                              %td #{v.user.full_name}
-                              %td #{v.year_marque_model}
-                              - code = v&.qr_code&.code
-                              - file_path = v.server_qr_file_path
-                              - if code && file_path
-                                %td= code
-                                %td.pt-2.pb-2
-                                  %div{style: 'padding: 5px 20px'}
-                                    = image_tag qr_code_url(v.qr_code.code), {style: 'width: 150px; height: 150px;'}
-                              - else
-                                %td{ class: 'pt-2 pb-2', colspan: '2' } (no image yet)
+            - @categorized_vehicles.each_with_index do |(category, vehicles), index|
+              .tab-content{ data: { tab_content: index } }
+                .row
+                  .col-12
+                    .card
+                      .card-body
+                        .card-title
+                          %h2.h4 #{category}
+                        .card-text
+                          %table
+                            %thead
+                              %tr
+                                %th.text-center At Rendezvous?
+                                %th.text-center Vehicle
+                                %th.text-center Owner
+                                %th.text-center Code
+                                %th.text-center QR Image
+                            %tbody
+                              - vehicles.each do |v|
+                                %tr
+                                  %td.text-center
+                                    - if v.being_brought_this_year?
+                                      .badge.badge-success Yes
+                                    - else
+                                      .badge.badge-danger No
+                                  %td=link_to v.year_marque_model, edit_vehicle_path(v.id)
+                                  %td #{v.user.full_name}
+                                  - code = v&.qr_code&.code
+                                  - file_path = v.server_qr_file_path
+                                  - if code && file_path
+                                    %td= code
+                                    %td.pt-2.pb-2
+                                      %div{style: 'padding: 5px 20px'}
+                                        = image_tag qr_code_url(v.qr_code.code), {style: 'width: 150px; height: 150px;'}
+                                  - else
+                                    %td{ class: 'pt-2 pb-2', colspan: '2' } (no image yet)

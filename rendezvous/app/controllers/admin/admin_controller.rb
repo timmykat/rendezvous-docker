@@ -299,6 +299,7 @@ module Admin
       @assigned_qr_codes = QrCode.assigned.count
       @blank_qr_codes = QrCode.unassigned.count
       @vehicles_without_codes = Vehicle.without_code.count
+      @ballot_count = Voting::Ballot.where(year: Date.current.year).count
     end
 
     def peoples_choice_results
