@@ -63,8 +63,7 @@ class Vehicle < ApplicationRecord
   end
 
   def self.find_by_code(code)
-    qr_code = QrCode.where("UPPER(code) = ?", code.upcase).first
-    Vehicle.where(qr_code: qr_code).first
+    joins(:qr_code).find_by("UPPER(qr_codes.code) = ?", code.to_s.upcase)
   end
 
   def full_spec

@@ -5,6 +5,7 @@
 #  id                   :bigint           not null, primary key
 #  debug_dates          :boolean
 #  debug_test_date      :date
+#  display_vote_button  :boolean          default(FALSE), not null
 #  login_on             :boolean          default(FALSE)
 #  registration_is_open :boolean
 #  square_environment   :string(255)

@@ -9,16 +9,16 @@
             %table.table
               %thead
                 %tr
+                  %th Type
                   %th Year
                   %th ID
-                  %th Status
                   %th Selections
               %tbody
                 - @ballots.each do |b|
                   %tr
+                    %td #{b.ballot_type}
                     %td #{b.year}
                     %td #{b.id}
-                    %td #{b.status}
                     %td
                       %ul
                         - b.selections.each do |v|

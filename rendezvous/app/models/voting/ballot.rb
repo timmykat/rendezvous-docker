@@ -2,28 +2,32 @@
 #
 # Table name: ballots
 #
-#  id         :bigint           not null, primary key
-#  status     :string(255)
-#  year       :string(255)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  voter_id   :string(36)
+#  id          :bigint           not null, primary key
+#  ballot_type :string(255)      not null
+#  status      :string(255)
+#  year        :string(255)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  voter_id    :string(36)
 #
 # Indexes
 #
-#  index_ballots_on_voter_id  (voter_id)
-#  index_ballots_on_year      (year)
+#  index_ballots_on_ballot_type  (ballot_type)
+#  index_ballots_on_voter_id     (voter_id)
+#  index_ballots_on_year         (year)
 #
 module Voting
   class Ballot < ApplicationRecord
 
-    STATUSES = %w[voting hand_tally submissible:some submissible:all submitted].freeze
-
-    validates :status, presence: true, inclusion: STATUSES
     default_scope { where(year: Date.current.year) }
 
     has_many :ballot_selections, class_name: 'Voting::BallotSelection', dependent: :destroy
     has_many :selections, through: :ballot_selections, source: :votable, source_type: 'Vehicle'
+
+    enum ballot_type: {
+      electronic: 'electronic',
+      paper: 'paper'
+    }
 
     def self.top_vehicles_by_category(year: Date.current.year, limit: 3)
       vote_counts = Voting::BallotSelection

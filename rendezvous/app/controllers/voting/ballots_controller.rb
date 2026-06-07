@@ -10,11 +10,13 @@ module Voting
 
     PER_CATEGORY_LIMIT = 1
 
+    NUMBER_OF_CATEGORIES = 9
+
     def index
       @ballots = Ballot.order(year: :desc)
     end
 
-    def ensure_voting_is_on?
+    def ensure_voting_is_on
       return if Config::SiteSetting.instance.voting_on?
 
       flash_alert "People's Choice voting has not begun yet!"
@@ -22,23 +24,39 @@ module Voting
     end
 
     def new
-      @ballot = Ballot.new
+      @e_ballot_count = Voting::Ballot.where(year: Date.current.year, ballot_type: 'electronic').count
+      @paper_ballot_count = Voting::Ballot.where(year: Date.current.year, ballot_type: 'paper').count
+      @ballot = Voting::Ballot.new
       @codes = []
-      @number_of_categories = Vehicles::VehicleTaxonomy::VEHICLES[:marques].values.sum { |marque_data| marque_data[:categories].keys.count }
+      @number_of_categories = NUMBER_OF_CATEGORIES
     end
 
     def create
-      @ballot = Ballot.create(year: Date.current.year, status: 'hand_tally')
+      @ballot = Ballot.create(year: Date.current.year, ballot_type: 'paper')
+      unfound_codes = []
       params[:code].each do |code|
+        code = code.to_s.strip
+        next if code.blank?
+
         vehicle = Vehicle.find_by_code(code)
-        vehicle.vote_by(@ballot) unless vehicle.nil?
+        unless vehicle.present?
+          unfound_codes << code
+          next
+        end
+
+        vehicle.vote_by(@ballot)
       end
+
       if @ballot.save
-        flash_notice 'Ballot successfully counted'
+        if unfound_codes.empty?
+          flash_notice 'All selections successfully counted'
+        else
+          flash_alert "Code(s) not found: #{unfound_codes.join(', ')}"
+        end
       else
         flash_alert 'Something went wrong'
       end
-      redirect_to create_ballot_path
+      redirect_to new_voting_ballot_path
     end
 
     def landing
@@ -97,7 +115,7 @@ module Voting
       @ballot = Voting::Ballot.find_by_id(session[:ballot_id])
       return if @ballot.present?
 
-      @ballot = Voting::Ballot.new(status: 'voting')
+      @ballot = Voting::Ballot.new(ballot_type: 'electronic')
       unless @ballot.save
         redirect_to root_path, alert: 'Could not create ballot.'
         return

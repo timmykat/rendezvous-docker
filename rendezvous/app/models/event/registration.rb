@@ -8,6 +8,7 @@
 #  created_by_admin    :boolean          default(FALSE), not null
 #  donation            :decimal(8, 2)    default(0.0)
 #  events              :text(65535)
+#  fee_period          :string(255)      default("early"), not null
 #  invoice_number      :string(255)
 #  is_admin_created    :boolean          default(FALSE), not null
 #  lake_cruise_fee     :decimal(8, 2)    default(0.0)
@@ -37,6 +38,7 @@
 #
 #  index_registrations_on_balance            (balance)
 #  index_registrations_on_cc_transaction_id  (cc_transaction_id)
+#  index_registrations_on_fee_period         (fee_period)
 #  index_registrations_on_invoice_number     (invoice_number)
 #  index_registrations_on_paid_amount        (paid_amount)
 #  index_registrations_on_paid_date          (paid_date)
