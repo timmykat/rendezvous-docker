@@ -194,12 +194,15 @@ module Admin
       @year ||= Time.current.year
 
       base = Event::Registration.where(year: @year)
+                                .where.not(status: 'cancelled')
 
       @registrations = Event::Registration
+        .joins(:user)
         .where(year: @year)
-        .order(Arel.sql("balance != 0 DESC, created_at DESC"))
+        .where.not(status: 'cancelled')
+        .order(:'users.last_name', :'users.first_name')
 
-      if @registrations.nil?
+      if @registrations.blank?
         @registrations = []
         @users = []
         return

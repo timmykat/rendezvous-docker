@@ -21,10 +21,10 @@
       %table#registration-table.table.tablesorter.striped
         %thead
           %tr
+            %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Name
             %th.tablesorter-header.filter-false.text-center Actions
             %th.tablesorter-header.filter-false.text-center Status
             %th.tablesorter-header.filter-false.text-center Payment Status
-            %th.tablesorter-header.filter-parsed{'data-placeholder' => 'Search'} Name
             %th.tablesorter-header.filter-false.text-center Fees
             %th.tablesorter-header.filter-false.text-center Total
             %th.tablesorter-header.filter-false.text-center Paid
@@ -33,6 +33,11 @@
           - @registrations.each do |reg|
             - Rails.logger.debug reg
             %tr.text-center
+              %td.text-left
+                - if reg.user
+                  = link_to reg.user.last_name_first, user_path(reg.user)
+                - else
+                  *** Missing User (ID: #{reg.id})
               %td.text-left
                 %ul.list-unstyled
                   %li= link_to 'View', event_registration_path(reg)
@@ -53,12 +58,6 @@
                     - reg.modifications.each do |m|
                       %li.text-small= link_to "#{m.id} (#{m.status})", event_modification_path(m.id, registration_id: reg.id)
               %td= reg.payment_status.humanize
-
-              %td.text-left
-                - if reg.user
-                  = link_to reg.user.last_name_first, user_path(reg.user)
-                - else
-                  *** Missing User (ID: #{reg.id})
 
               %td.text-right{style: 'whitespace: nowrap;' }
                 %ul.list-unstyled
