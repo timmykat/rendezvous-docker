@@ -14,7 +14,7 @@
     "channels": "^0.0.4",
     "copyfile": "^0.1.2",
     "dropzone": "^6.0.0-beta.2",
-    "esbuild": "^0.27.4",
+    "esbuild": "^0.28.1",
     "html5-qrcode": "^2.3.8",
     "jquery": "^3.7.1",
     "jquery-ui": "^1.14.1",
