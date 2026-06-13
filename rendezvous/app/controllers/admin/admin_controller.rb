@@ -321,21 +321,29 @@ module Admin
       when 'blank_placards'
         @qr_codes = QrCode.unassigned.limit(30)
         render :blank_placards
+        return
 
       when 'placards'
         @vehicles = Vehicle.joins(user: :registrations)
                            .where(registrations: { year: Date.current.year })
                            .distinct
         render :placards
+        return
 
       when 'labels'
         @registrations = Event::Registration.current
         render :labels
         return
-      when 'certificates'
+
+    when 'certificates'
         @winners = nil
         render :certificates
+        return
 
+      when 'qr_code_stickers'
+        @qr_codes = QrCode.limit(60)
+        render :voting_code_stickers
+        return
       end
     end
 

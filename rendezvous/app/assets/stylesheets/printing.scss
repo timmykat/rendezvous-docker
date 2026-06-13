@@ -127,105 +127,183 @@ body {
 }
 
 /* label styling */
-.wrapper-page {
-    width: 8.5in;
-    height: 11in;
-    padding: 0.5in 0.156in;
-    box-sizing: border-box;
-    page-break-after: always;
-}
-
-.wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-content: flex-start;
-    gap: 0in 0.2037in;
-    height: 10in; // full page minus top/bottom padding
-    box-sizing: border-box;
-
-    .label-wrapper {
-        width: 3.98in;
-        height: 3.333in; // Height of each label
+.registration-labels {
+    .wrapper-page {
+        width: 8.5in;
+        height: 11in;
+        padding: 0.5in 0.156in;
         box-sizing: border-box;
-        position: relative;
-        page-break-inside: avoid;
-        flex: 0 0 auto;
+        page-break-after: always;
+    }
 
-        // Optional border for debugging
-        // border: 1px dashed red;
+    .wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-content: flex-start;
+        gap: 0in 0.2037in;
+        height: 10in; // full page minus top/bottom padding
+        box-sizing: border-box;
 
-        .label {
-            width: 100%;
-            height: 100%;
+        .label-wrapper {
+            width: 3.98in;
+            height: 3.333in; // Height of each label
             box-sizing: border-box;
-            padding: 20px 15px;
-            border: solid 1px #eee;
-            font-family: var(--mainFont);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            position: relative;
+            page-break-inside: avoid;
+            flex: 0 0 auto;
 
-            .content {
+            // Optional border for debugging
+            // border: 1px dashed red;
+
+            .label {
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+                padding: 20px 15px;
+                border: solid 1px #eee;
+                font-family: var(--mainFont);
                 display: flex;
-            }
+                flex-direction: column;
+                justify-content: space-between;
 
-            .info {
-                font-size: 1rem;
-                flex-grow: 2;
-
-                .people {
-                    font-size: 0.8rem;
-                    line-height: 1.3;
-                    padding-left: 10px;
-                    margin-bottom: 20px;
-                    border-left: solid 2px var(--funRed);
+                .content {
+                    display: flex;
                 }
-
-                > * {
-                    margin-bottom: 10px;
-                }
-            }
-
-            .name {
-                font-size: 1.25rem;
-                font-weight: bold;
-                line-height: 1.3;
-                text-transform: uppercase;
-            }
-
-            .ident {
-                position: absolute;
-                padding: 0.1in;
-                left: 0;
-                bottom: 0;
-                display: flex;
-                align-items: center;
 
                 .info {
-                    .title {
-                        font-family: var(--displayFont);
-                        font-size: 1rem;
-                    }
+                    font-size: 1rem;
+                    flex-grow: 2;
 
-                    .loc {
+                    .people {
                         font-size: 0.8rem;
+                        line-height: 1.3;
+                        padding-left: 10px;
+                        margin-bottom: 20px;
+                        border-left: solid 2px var(--funRed);
+                    }
+
+                    > * {
+                        margin-bottom: 10px;
                     }
                 }
 
-                .logo {
-                    max-width: 1.5in;
-                    img {
-                        width: 100%;
+                .name {
+                    font-size: 1.25rem;
+                    font-weight: bold;
+                    line-height: 1.3;
+                    text-transform: uppercase;
+                }
+
+                .ident {
+                    position: absolute;
+                    padding: 0.1in;
+                    left: 0;
+                    bottom: 0;
+                    display: flex;
+                    align-items: center;
+
+                    .info {
+                        .title {
+                            font-family: var(--displayFont);
+                            font-size: 1rem;
+                        }
+
+                        .loc {
+                            font-size: 0.8rem;
+                        }
+                    }
+
+                    .logo {
+                        max-width: 1.5in;
+                        img {
+                            width: 100%;
+                        }
                     }
                 }
-            }
 
-            .pep {
-                margin-top: 20px;
-                font-size: 1.25rem;
-                color: var(--funRed);
+                .pep {
+                    margin-top: 20px;
+                    font-size: 1.25rem;
+                    color: var(--funRed);
+                }
             }
         }
+    }
+}
+
+/* Avery 5164 — 1" x 2 5/8" labels */
+.voting-code-stickers {
+    /* Avery 5160 — 1" x 2 5/8" labels, 30 per sheet */
+    .wrapper-page {
+        width: 8.5in;
+        height: 11in;
+        padding: 0.5in 0.1875in;
+        box-sizing: border-box;
+        page-break-after: always;
+    }
+
+    .wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-content: flex-start;
+        gap: 0;
+        height: 10in; // 10 rows x 1in
+        box-sizing: border-box;
+    }
+
+    .label-wrapper {
+        width: 2.625in;
+        height: 1in;
+        box-sizing: border-box;
+        page-break-inside: avoid;
+        flex: 0 0 auto;
+    }
+
+    .label {
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 0.08in 0.1in;
+        font-family: var(--mainFont);
+        display: grid;
+        grid-template-columns: 0.72in 1fr;
+        align-items: center;
+        column-gap: 0.12in;
+        overflow: hidden;
+        // border: 1px dashed #ccc; // debug only
+    }
+
+    .qr {
+        width: 0.72in;
+        height: 0.72in;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img,
+        canvas,
+        svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+        }
+    }
+
+    .code {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        font-family: var(--mainFont);
+        font-size: 0.34in;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: 0.06in;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
     }
 }
