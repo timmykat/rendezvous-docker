@@ -61,7 +61,7 @@
             %fieldset
               .form-group
                 - if vehicle.qr_code.present?
-                  %label Voting code for Peoples Choice Award
+                  %label Voting code
                   = text_field_tag :qr_code_display, vehicle.qr_code&.code, readonly: true, class: 'original-code form-control'
 
               .form-group
@@ -70,7 +70,7 @@
                   %p Please generate unattached QR codes.
                 - else
                   .code-handling
-                    = select_tag :code,
+                    = select_tag :new_code,
                       options_for_select([['(None)', '']] + @available_qr_codes.map { |qr| [qr.code, qr.id] }),
                       class: 'new-code form-control mr-2'
 

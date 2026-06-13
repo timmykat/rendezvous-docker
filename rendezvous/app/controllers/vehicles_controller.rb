@@ -22,13 +22,28 @@ class VehiclesController < ApplicationController
 
   def update
     @vehicle = Vehicle.find(params[:id])
-    if @vehicle.update(vehicle_params)
-      flash_notice 'Updated'
-      redirect_to vehicle_path(@vehicle.id)
-    else
-      flash_alert @vehicle.errors.full_messages.to_sentence
-      render :edit
+    new_code_id = params[:new_code].presence
+
+    ActiveRecord::Base.transaction do
+      @vehicle.update!(vehicle_params)
+
+      if new_code_id.present?
+        qr_code = QrCode.find(new_code_id)
+
+        if @vehicle.qr_code&.id != qr_code.id
+          @vehicle.qr_code&.update!(votable: nil)
+          qr_code.update!(votable: @vehicle)
+        end
+      else
+        @vehicle.qr_code&.update!(votable: nil)
+      end
     end
+
+    flash_notice 'Updated'
+    redirect_to vehicle_path(@vehicle)
+  rescue ActiveRecord::RecordInvalid => e
+    flash_alert e.record.errors.full_messages.to_sentence
+    render :edit
   end
 
   def create
