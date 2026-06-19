@@ -326,12 +326,16 @@ module Admin
       when 'placards'
         @vehicles = Vehicle.joins(user: :registrations)
                            .where(registrations: { year: Date.current.year })
-                           .distinct
+                           .select('vehicles.*, users.last_name, users.first_name')
+                           .order('users.last_name ASC, users.first_name ASC')
         render :placards
         return
 
       when 'labels'
         @registrations = Event::Registration.current
+                                            .joins(:user)
+                                            .order('users.last_name ASC', 'users.first_name ASC')
+
         render :labels
         return
 

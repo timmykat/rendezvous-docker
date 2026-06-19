@@ -17,6 +17,7 @@ class VehiclesController < ApplicationController
 
   def edit
     @vehicle = Vehicle.find(params[:id])
+    @user = @vehicle.user
     @available_qr_codes = QrCode.unassigned
   end
 
