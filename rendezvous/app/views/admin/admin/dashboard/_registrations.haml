@@ -6,6 +6,7 @@
           .card-title
             %h2= "Registrations for #{@year} (#{@reg_count})"
           .card-text
+            %button.filter-toggle.btn.btn-info' Toggle Balance Due
             = form_with url: admin_dashboard_path, method: :get do |f|
               - last_five_years = (0..4).map { |i| (Date.current.year - i).to_s }
               - options = options_for_select(last_five_years, @year)
@@ -32,7 +33,7 @@
         %tbody
           - @registrations.each do |reg|
             - Rails.logger.debug reg
-            %tr.text-center
+            %tr.text-center{ data: { balance_due: (reg.balance > 0) ? 'true' : 'false' } }
               %td.text-left
                 - if reg.user
                   = link_to reg.user.last_name_first, user_path(reg.user)
@@ -74,3 +75,15 @@
                 %td.text-center.owed= "(#{number_to_currency(reg.balance.abs)})"
               - else
                 %td.text-center $0.00
+:javascript
+  const registrations = document.querySelectorAll("#registration-table tbody tr[data-balance-due='false']")
+  const filterButton = document.querySelector('button.filter-toggle')
+  filterButton.addEventListener('click', () => {
+    registrations.forEach(r => {
+      if (r.hasAttribute('hidden')) {
+        r.removeAttribute('hidden')
+      } else {
+        r.setAttribute('hidden', '')
+      }
+    })
+  })
