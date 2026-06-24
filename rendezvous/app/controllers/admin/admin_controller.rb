@@ -19,6 +19,18 @@ module Admin
           "(As of: #{Time.current.strftime '%Y%m%d'})"
         ]
       },
+      outstanding_fees: {
+        headers: [
+          'Name',
+          'Email',
+          'Fee Period',
+          'Registration Fee',
+          'Lake Cruise Fee',
+          'Modifications',
+          'Amount Paid',
+          'Balance Owed'
+        ]
+      },
       cruisers: {
         headers: [
           'Cruisers',
@@ -410,6 +422,34 @@ module Admin
               r.sunday_lunch_number
             ]
           end
+
+      when 'outstanding_fees'
+        registrations.find_each do |r|
+          next unless r.outstanding_balance?
+
+          registrant_name =
+            if r.user.present?
+              r.user.last_name_first
+            else
+              attendee_names.first.to_s
+            end
+          registrant_email =
+            if r.user.present?
+              r.user.email
+            else
+              '(none)'
+            end
+            csv_data << [
+              regsistrant_name,
+              registrant_email,
+              r.fee_period,
+              r.registration_fee,
+              r.lake_cruise_fee,
+              r.modifications.positive? ? 'Has modification(s)' : '',
+              r.paid_amount,
+              r.balance
+            ]
+        end
 
         when 'cruisers'
           registrations.find_each do |r|
