@@ -440,7 +440,7 @@ module Admin
               '(none)'
             end
             csv_data << [
-              regsistrant_name,
+              registrant_name,
               registrant_email,
               r.fee_period,
               r.registration_fee,
