@@ -424,18 +424,15 @@ module Admin
           end
 
       when 'outstanding_fees'
-        binding.pry
         registrations.find_each do |r|
           next unless r.balance > 0.0
 
-          registrant_name =
-            if r.user.present?
-              r.user.last_name_first
-            else
-              attendee_names.first.to_s
-            end
+          user = r.user
+
+          registrant_name = user.last_name_first
+
           registrant_email =
-            if r.user.present?
+            if user.email.present?
               r.user.email
             else
               '(none)'
@@ -446,7 +443,7 @@ module Admin
               r.fee_period,
               r.registration_fee,
               r.lake_cruise_fee,
-              r.modifications.positive? ? 'Has modification(s)' : '',
+              r.modifications.count.positive? ? 'Has modification(s)' : '',
               r.paid_amount,
               r.balance
             ]
