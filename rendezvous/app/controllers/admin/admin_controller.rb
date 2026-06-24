@@ -424,8 +424,9 @@ module Admin
           end
 
       when 'outstanding_fees'
+        binding.pry
         registrations.find_each do |r|
-          next unless r.outstanding_balance?
+          next unless r.balance > 0.0
 
           registrant_name =
             if r.user.present?
