@@ -1,0 +1,45 @@
+- @registrations.each do |r|
+  .invoice
+    .wrapper
+      %h1 Rendezvous 2026 Invoice
+
+      %p.name= r.user.full_name
+      %p.email= r.user.email
+      %table
+        %tr
+          %td Number of people: #{r.attendees.count}
+          %td.text-right= number_to_currency(r.registration_fee)
+        %tr
+          %td Lake cruise number: #{r.lake_cruise_number}
+          %td.text-right= number_to_currency(r.lake_cruise_fee)
+        %tr
+          %td Donation indicated: #{r.donation}
+          %td.text-right= number_to_currency(r.donation)
+        %tr
+          %td Registration fees total:
+          %td.text-right= number_to_currency(r.donation)
+        %tr
+          %td Paid amount:
+          %td.text-right= number_to_currency(r.total)
+        %tr
+          %td.balance Balance owed:
+          %td.balance.text-right= number_to_currency(r.balance)
+
+      %p Please send a check payable to Citroen Rendezvous LLC to:
+
+      %p
+        Citroen Rendezvous LLC
+        %br
+        28 11th Street
+        %br
+        Providence, RI 02906
+
+      %p OR
+
+      %p
+        to pay by credit card, send me a message at
+        %span.email tim@wordsareimages.com
+        and I can send you a payment link from Square.
+
+      %p Best regards,
+      %p Tim Kinnel

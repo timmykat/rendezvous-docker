@@ -41,6 +41,46 @@ body {
     background-color: white;
 }
 
+h1 {
+    font-family: var(--mainFont);
+    font-size: 1.8rem;
+}
+.name {
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+.email {
+    font-family: "Times New Roman", Times, serif;
+    font-style: italic;
+    font-size: 1.1em;
+}
+.invoice {
+    font-family: var(--citroenFont);
+    font-size: 18px;
+    width: 8.5in;
+    height: 11in;
+    box-sizing: border-box;
+    padding: 1in 2in;
+
+    table {
+        margin-left: 2em;
+        tr td {
+            min-width: 2in;
+            padding: 1em 0;
+            border-bottom: solid 2px #ccc;
+
+            &.text-right {
+                text-align: right;
+            }
+
+            &.balance {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
 /* placard styling */
 .placard {
     font-family: var(--mainFont);

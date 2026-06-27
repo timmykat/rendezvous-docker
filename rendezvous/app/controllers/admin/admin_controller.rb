@@ -332,7 +332,7 @@ module Admin
       case item
       when 'blank_placards'
         @qr_codes = QrCode.unassigned.limit(30)
-        render :blank_placards
+        render "admin/admin/printing/blank_placards"
         return
 
       when 'placards'
@@ -340,25 +340,28 @@ module Admin
                            .where(registrations: { year: Date.current.year })
                            .select('vehicles.*, users.last_name, users.first_name')
                            .order('users.last_name ASC, users.first_name ASC')
-        render :placards
+        render "admin/admin/printing/placards"
         return
 
       when 'labels'
         @registrations = Event::Registration.current
                                             .joins(:user)
                                             .order('users.last_name ASC', 'users.first_name ASC')
-
-        render :labels
+        render "admin/admin/printing/labels"
         return
 
-    when 'certificates'
-        @winners = nil
-        render :certificates
+      when 'invoices'
+        @registrations = Event::Registration.current
+                                            .joins(:user)
+                                            .where('registrations.balance > 0.0')
+                                            .order('users.last_name ASC', 'users.first_name ASC')
+        render "admin/admin/printing/invoices"
         return
+
 
       when 'qr_code_stickers'
         @qr_codes = QrCode.limit(60)
-        render :voting_code_stickers
+        render "admin/admin/printing/:voting_code_stickers"
         return
       end
     end

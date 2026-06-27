@@ -39,6 +39,7 @@
                         %h3 Utilities
                       .card-text
                         %ul.list-group.text-sm
+                          %li.list-group-item.bg-light.bg-gradient= link_to 'Print invoices', admin_print_path({item: 'invoices'})
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Print packet labels', admin_print_path({item: 'labels'})
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Attendees CSV', admin_download_csv_path({type: 'attendees', format: :csv})
                           %li.list-group-item.bg-light.bg-gradient= link_to 'Volunteers list CSV', admin_download_csv_path({type: 'volunteers', format: :csv})
