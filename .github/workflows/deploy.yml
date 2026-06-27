@@ -67,6 +67,17 @@ jobs:
             docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app \
               bundle exec rails db:migrate
 
+            echo "-- Sync image assets to bound public directory --"
+            HOST_PUBLIC="/var/www/rendezvous-docker-prod/rendezvous/public"
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app bash -lc '
+              set -Eeuo pipefail
+              cd /var/www/rendezvous
+              mkdir -p app/assets/builds public tmp
+              chown -R webuser:webuser app/assets/builds public tmp || true
+              yarn build:css
+              RAILS_ENV=production bundle exec rails assets:clobber
+              RAILS_ENV=production bundle exec rails assets:precompile
+
             echo "-- Restart app containers --"
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate rails_app sidekiq
 
