@@ -60,6 +60,18 @@ jobs:
             export REDIS_URL=redis://redis:6379/0
             export IMAGE_TAG="$TAG"
 
+            echo "-- Preflight writable dirs --"
+            for p in \
+              /var/www/rendezvous-docker-prod/rendezvous/log \
+              /var/www/rendezvous-docker-prod/rendezvous/tmp \
+              /var/www/rendezvous-docker-prod/rendezvous/public \
+              /var/www/rendezvous-docker-prod/rendezvous/app/assets/builds
+            do
+              mkdir -p "$p"
+              stat -c '%u:%g %A %n' "$p"
+              test -w "$p" || { echo "Not writable: $p"; exit 1; }
+            done
+
             echo "-- Start dependencies --"
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d db redis
 
@@ -67,17 +79,9 @@ jobs:
             docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app \
               bundle exec rails db:migrate
 
-            echo "-- Sync image assets to bound public directory --"
-            HOST_PUBLIC="/var/www/rendezvous-docker-prod/rendezvous/public"
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app bash -lc '
-              set -Eeuo pipefail
-              cd /var/www/rendezvous
-              mkdir -p app/assets/builds public tmp
-              chown -R webuser:webuser app/assets/builds public tmp || true
-              yarn build:css
-              RAILS_ENV=production bundle exec rails assets:clobber
-              RAILS_ENV=production bundle exec rails assets:precompile
-            '
+            echo "-- Build + precompile assets --"
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app \
+              bash -lc 'cd /var/www/rendezvous && yarn build:css && RAILS_ENV=production bundle exec rails assets:clobber assets:precompile'
 
             echo "-- Restart app containers --"
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate rails_app sidekiq
