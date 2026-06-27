@@ -10,6 +10,7 @@ services:
 
     volumes:
       - ./rendezvous/public:/var/www/rendezvous/public
+      - ./rendezvous/log:/var/www/rendezvous/log
 
     environment:
       RAILS_ENV: production
@@ -57,6 +58,7 @@ services:
 
     volumes:
       - ./rendezvous/public:/var/www/rendezvous/public
+      - ./rendezvous/log:/var/www/rendezvous/log
 
     networks:
       - rendezvous
