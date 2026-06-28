@@ -40,13 +40,13 @@ jobs:
             fi
 
             IMAGE="ghcr.io/${{ github.repository }}:$TAG"
-            PREVIOUS_TAG="$(cat .current_version 2>/dev/null || true)"
             COMPOSE="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
 
             echo "Deploying image: $IMAGE"
-            echo "Previous version: ${PREVIOUS_TAG:-none}"
 
             cd /var/www/rendezvous-docker-prod
+            PREVIOUS_TAG="$(cat .current_version 2>/dev/null || true)"
+            echo "Previous version: ${PREVIOUS_TAG:-none}"
 
             echo "-- Update repo --"
             git fetch origin main
@@ -61,38 +61,38 @@ jobs:
             export REDIS_URL=redis://redis:6379/0
             export IMAGE_TAG="$TAG"
 
-            echo "-- Preflight writable dirs --"
-            for p in \
-              /var/www/rendezvous-docker-prod/rendezvous/log \
-              /var/www/rendezvous-docker-prod/rendezvous/tmp \
-              /var/www/rendezvous-docker-prod/rendezvous/public \
-              /var/www/rendezvous-docker-prod/rendezvous/app/assets/builds
-            do
-              mkdir -p "$p"
-              stat -c '%u:%g %A %n' "$p"
-              test -w "$p" || { echo "Not writable: $p"; exit 1; }
-            done
+            echo "-- Ensure runtime-writable paths owned by webuser --"
+            $COMPOSE run --rm --no-deps -T --user root rails_app bash -lc '
+              set -e
+              mkdir -p /var/www/rendezvous/{log,tmp,public/assets,app/assets/builds}
+              chown -R 1001:1001 /var/www/rendezvous/log \
+                                /var/www/rendezvous/tmp \
+                                /var/www/rendezvous/public/assets \
+                                /var/www/rendezvous/app/assets/builds
+              find /var/www/rendezvous/app/assets/builds -type d -exec chmod 755 {} \;
+              find /var/www/rendezvous/app/assets/builds -type f -exec chmod 644 {} \;
+            '
 
             echo "-- Start dependencies --"
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d db redis
+            $COMPOSE up -d db redis
 
             echo "-- Run migrations in one-off container --"
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --user 1001:1001 rails_app \
+            $COMPOSE run --rm --no-deps -T --user 1001:1001 rails_app \
               bundle exec rails db:migrate
 
             echo "-- Build + precompile assets --"
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --user 1001:1001 rails_app \
+            $COMPOSE run --rm --no-deps -T --user 1001:1001 rails_app \
               bash -lc 'cd /var/www/rendezvous && yarn build:css && RAILS_ENV=production bundle exec rails assets:clobber assets:precompile'
 
             echo "-- Restart app containers --"
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate rails_app sidekiq
+            $COMPOSE up -d --force-recreate rails_app sidekiq
 
             echo "-- Find app container --"
             CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}" | head -n 1)
 
             if [ -z "$CONTAINER_ID" ]; then
               echo "rails_app container not running!"
-              docker compose -f docker-compose.yml -f docker-compose.prod.yml ps
+              $COMPOSE ps
               exit 1
             fi
 
@@ -120,7 +120,7 @@ jobs:
               if [ -n "${PREVIOUS_TAG:-}" ]; then
                 echo "-- Rolling back to $PREVIOUS_TAG --"
                 export IMAGE_TAG="$PREVIOUS_TAG"
-                docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --force-recreate rails_app sidekiq
+                $COMPOSE up -d --force-recreate rails_app sidekiq
               fi
 
               exit 1
