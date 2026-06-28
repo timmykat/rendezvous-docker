@@ -56,13 +56,21 @@ RUN yarn install --frozen-lockfile
 
 # ---- App code ----
 COPY . .
+RUN chown -R "${APP_UID}:${APP_GID}" /var/www/rendezvous
 
 RUN mkdir -p /var/www/rendezvous/app/assets/builds \
- && chown -R 1001:1001 /var/www/rendezvous/app/assets/builds \
+ && chown -R "${APP_UID}:${APP_GID}" /var/www/rendezvous/app/assets/builds \
  && chmod -R u+rwX,go+rX /var/www/rendezvous/app/assets/builds
+
+USER ${APP_UID}
+
+# Build and copy assets so they can be copied to a public bind mount on deploy
+RUN mkdir -p /opt/app-image-public-assets && \
+    cp -a /var/www/rendezvous/public/assets/. /opt/app-image-public-assets/
 
 RUN if [ "${SKIP_ASSETS}" != "true" ]; then \
       yarn build && yarn build:css && bundle exec rake assets:precompile; \
+      cp -a /var/www/rendezvous/public/assets /opt/app-image-public-assets; \
     else \
       echo "Skipping asset build"; \
     fi
