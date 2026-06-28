@@ -76,11 +76,11 @@ jobs:
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d db redis
 
             echo "-- Run migrations in one-off container --"
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app \
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --user 1001:1001 rails_app \
               bundle exec rails db:migrate
 
             echo "-- Build + precompile assets --"
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm rails_app \
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm --user 1001:1001 rails_app \
               bash -lc 'cd /var/www/rendezvous && yarn build:css && RAILS_ENV=production bundle exec rails assets:clobber assets:precompile'
 
             echo "-- Restart app containers --"
