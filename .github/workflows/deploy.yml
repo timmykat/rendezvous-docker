@@ -41,6 +41,7 @@ jobs:
 
             IMAGE="ghcr.io/${{ github.repository }}:$TAG"
             PREVIOUS_TAG="$(cat .current_version 2>/dev/null || true)"
+            COMPOSE="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
 
             echo "Deploying image: $IMAGE"
             echo "Previous version: ${PREVIOUS_TAG:-none}"
