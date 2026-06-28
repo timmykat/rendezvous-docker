@@ -40,7 +40,7 @@ jobs:
             fi
 
             IMAGE="ghcr.io/${{ github.repository }}:$TAG"
-            COMPOSE="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
+            COMPOSE=(docker compose -f docker-compose.yml -f docker-compose.prod.yml)
 
             echo "Deploying image: $IMAGE"
 
@@ -62,7 +62,7 @@ jobs:
             export IMAGE_TAG="$TAG"
 
             echo "-- Ensure runtime-writable paths owned by webuser --"
-            $COMPOSE run --rm --no-deps -T --user root rails_app bash -lc '
+            "${COMPOSE[@]}" run --rm --no-deps -T --user root rails_app bash -lc '
               set -e
               mkdir -p /var/www/rendezvous/{log,tmp,public/assets,app/assets/builds}
               chown -R 1001:1001 /var/www/rendezvous/log \
@@ -74,25 +74,25 @@ jobs:
             '
 
             echo "-- Start dependencies --"
-            $COMPOSE up -d db redis
+            "${COMPOSE[@]}" up -d db redis
 
             echo "-- Run migrations in one-off container --"
-            $COMPOSE run --rm --no-deps -T --user 1001:1001 rails_app \
+            "${COMPOSE[@]}" run --rm --no-deps -T --user 1001:1001 rails_app \
               bundle exec rails db:migrate
 
             echo "-- Build + precompile assets --"
-            $COMPOSE run --rm --no-deps -T --user 1001:1001 rails_app \
+            "${COMPOSE[@]}" run --rm --no-deps -T --user 1001:1001 rails_app \
               bash -lc 'cd /var/www/rendezvous && yarn build:css && RAILS_ENV=production bundle exec rails assets:clobber assets:precompile'
 
             echo "-- Restart app containers --"
-            $COMPOSE up -d --force-recreate rails_app sidekiq
+            "${COMPOSE[@]}" up -d --force-recreate rails_app sidekiq
 
             echo "-- Find app container --"
             CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}" | head -n 1)
 
             if [ -z "$CONTAINER_ID" ]; then
               echo "rails_app container not running!"
-              $COMPOSE ps
+              "${COMPOSE[@]}" ps
               exit 1
             fi
 
@@ -120,7 +120,7 @@ jobs:
               if [ -n "${PREVIOUS_TAG:-}" ]; then
                 echo "-- Rolling back to $PREVIOUS_TAG --"
                 export IMAGE_TAG="$PREVIOUS_TAG"
-                $COMPOSE up -d --force-recreate rails_app sidekiq
+                "${COMPOSE[@]}" up -d --force-recreate rails_app sidekiq
               fi
 
               exit 1
