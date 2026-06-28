@@ -64,31 +64,28 @@ jobs:
             echo "-- Ensure runtime-writable paths owned by webuser --"
             "${COMPOSE[@]}" run --rm --no-deps -T --user root rails_app bash -lc '
               set -e
-              mkdir -p /var/www/rendezvous/{log,tmp,public/assets,app/assets/builds}
-              chown -R 1001:1001 /var/www/rendezvous/log \
-                                /var/www/rendezvous/tmp \
-                                /var/www/rendezvous/public/assets \
-                                /var/www/rendezvous/app/assets/builds
-              find /var/www/rendezvous/app/assets/builds -type d -exec chmod 755 {} \;
-              find /var/www/rendezvous/app/assets/builds -type f -exec chmod 644 {} \;
+              mkdir -p /var/www/rendezvous/{log,tmp,storage,public/assets}
+              chown -R 1001:1001 /var/www/rendezvous/log /var/www/rendezvous/tmp /var/www/rendezvous/storage /var/www/rendezvous/public
             '
 
             echo "-- Start dependencies --"
             "${COMPOSE[@]}" up -d db redis
 
-            echo "-- Run migrations in one-off container --"
-            "${COMPOSE[@]}" run --rm --no-deps -T --user 1001:1001 rails_app \
-              bundle exec rails db:migrate
+            echo "-- Run migrations --"
+            "${COMPOSE[@]}" run --rm --no-deps -T --user 1001:1001 rails_app bundle exec rails db:migrate
 
-            echo "-- Build + precompile assets --"
-            "${COMPOSE[@]}" run --rm --no-deps -T --user 1001:1001 rails_app \
-              bash -lc 'cd /var/www/rendezvous && yarn build:css && RAILS_ENV=production bundle exec rails assets:clobber assets:precompile'
+            echo "-- Sync precompiled assets from image into shared public volume --"
+            "${COMPOSE[@]}" run --rm --no-deps -T --user 1001:1001 rails_app bash -lc '
+              set -e
+              mkdir -p /var/www/rendezvous/public/assets
+              cp -a /opt/app-image-public-assets/. /var/www/rendezvous/public/assets/
+            '
 
             echo "-- Restart app containers --"
-            "${COMPOSE[@]}" up -d --force-recreate rails_app sidekiq
+            "${COMPOSE[@]}" up -d --force-recreate rails_app sidekiq nginx
 
             echo "-- Find app container --"
-            CONTAINER_ID=$(docker ps --filter "name=rails_app" --format="{{.ID}}" | head -n 1)
+            CONTAINER_ID=$("${COMPOSE[@]}" ps -q rails_app)
 
             if [ -z "$CONTAINER_ID" ]; then
               echo "rails_app container not running!"
