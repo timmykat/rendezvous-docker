@@ -57,6 +57,10 @@ RUN yarn install --frozen-lockfile
 # ---- App code ----
 COPY . .
 
+RUN mkdir -p /var/www/rendezvous/app/assets/builds \
+ && chown -R 1001:1001 /var/www/rendezvous/app/assets/builds \
+ && chmod -R u+rwX,go+rX /var/www/rendezvous/app/assets/builds
+
 RUN if [ "${SKIP_ASSETS}" != "true" ]; then \
       yarn build && yarn build:css && bundle exec rake assets:precompile; \
     else \
