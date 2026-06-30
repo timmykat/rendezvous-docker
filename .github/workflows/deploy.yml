@@ -82,7 +82,7 @@ jobs:
             '
 
             echo "-- Restart app containers --"
-            "${COMPOSE[@]}" up -d --force-recreate rails_app sidekiq nginx
+            "${COMPOSE[@]}" up -d --force-recreate rails_app sidekiq
 
             echo "-- Find app container --"
             CONTAINER_ID=$("${COMPOSE[@]}" ps -q rails_app)
