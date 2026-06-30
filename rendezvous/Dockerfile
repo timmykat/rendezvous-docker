@@ -66,8 +66,7 @@ RUN mkdir -p /var/www/rendezvous/app/assets/builds \
 
  # Build and copy assets so they can be copied to a public bind mount on deploy
  RUN mkdir -p /opt/app-image-public-assets \
-    && cp -a /var/www/rendezvous/public/assets/. /opt/app-image-public-assets/ \
-    && chown -R "${APP_UID}:${APP_GID}" /opt/app-image-public-assets
+  && chown -R "${APP_UID}:${APP_GID}" /opt/app-image-public-assets
 
 USER ${APP_UID}
 RUN if [ "${SKIP_ASSETS}" != "true" ]; then \
