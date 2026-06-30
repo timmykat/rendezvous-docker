@@ -78,7 +78,7 @@ jobs:
             "${COMPOSE[@]}" run --rm --no-deps -T --user 1001:1001 rails_app bash -lc '
               set -e
               mkdir -p /var/www/rendezvous/public/assets
-              cp -a /opt/app-image-public-assets/. /var/www/rendezvous/public/assets/
+              cp -a /opt/app-image-public-assets/. /var/www/rendezvous/public/
             '
 
             echo "-- Restart app containers --"
