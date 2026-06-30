@@ -13,14 +13,14 @@
           %td Lake cruise number: #{r.lake_cruise_number}
           %td.text-right= number_to_currency(r.lake_cruise_fee)
         %tr
-          %td Donation indicated: #{r.donation}
+          %td Donation:
           %td.text-right= number_to_currency(r.donation)
         %tr
           %td Registration fees total:
-          %td.text-right= number_to_currency(r.donation)
+          %td.text-right= number_to_currency(r.total)
         %tr
           %td Paid amount:
-          %td.text-right= number_to_currency(r.total)
+          %td.text-right= number_to_currency(r.paid_amount)
         %tr
           %td.balance Balance owed:
           %td.balance.text-right= number_to_currency(r.balance)
